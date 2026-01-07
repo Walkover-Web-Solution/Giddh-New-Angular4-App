@@ -504,5 +504,8 @@
     "bill_from": "Bill From",
     "ship_from": "Ship From",
     "template_set_as_default_successfully": "Template set as default successfully",
-    "are_you_sure_you_want_to_delete":"Are you sure you want to delete \"<b>${template.name}</b>\" template?"
+    "are_you_sure_you_want_to_delete":"Are you sure you want to delete \"<b>${template.name}</b>\" template?",
+    "account_custom_fields": "Account Custom Fields",
+    "select_custom_fields": "Select Custom Fields"
+    
 }

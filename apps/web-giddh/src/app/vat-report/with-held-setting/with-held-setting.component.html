@@ -1,11 +1,8 @@
-<ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate [file]="'vat-report'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
     <div class="position-relative w-100">
-        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideTaxSidebarMenuState">
-        <tax-sidebar (navigateEvent)="handleNavigation()"
-            [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideTaxSidebarMenuState">
+            <tax-sidebar (navigateEvent)="handleNavigation()" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
     <div class="obligations p-3">
@@ -14,7 +11,7 @@
         </div>
         <form (ngSubmit)="handleFormSubmit()" *ngIf="!isLoading">
             <div class="container-fluid ml-0">
-                    <div class="row align-items-center row-gap-15">
+                <div class="row align-items-center row-gap-15">
                     <input-field
                         class="tax-percentage-width"
                         [name]="'tax-percentage'"
@@ -25,15 +22,15 @@
                         [required]="true"
                         [formControl]="taxPercentage"
                         [matSuffix]="'%'"
-                    >
-                    </input-field>
-                    
+                    ></input-field>
+
                     <div class="col flex-grow-0">
-                        <button mat-raised-button color="primary" type="submit" [disabled]="taxPercentage.invalid">{{
-                            commonLocaleData?.app_submit }}</button>
+                        <button matButton="filled" type="submit" [disabled]="taxPercentage.invalid">
+                            {{ commonLocaleData?.app_submit }}
+                        </button>
                     </div>
                 </div>
             </div>
-         </form>
+        </form>
     </div>
-</ng-container>
+</div>

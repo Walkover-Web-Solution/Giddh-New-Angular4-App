@@ -11,17 +11,18 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BalanceSheetData, ProfitLossRequest } from '../../models/api-models/tb-pl-bs';
 import { BalanceSheetReportGridComponent } from './components/balance-sheet-grid/balance-sheet-report-grid.component';
-import { cloneDeep } from '../../lodash-optimized';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { ReportType } from '../multi-currency.const';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
 import { prepareBalanceSheetData } from '../../store/tl-pl/tl-pl.reducer';
+import { cloneDeep, forEach } from '../../lodash-optimized';
 
 @Component({
-    selector: 'balance-sheet-report',
+selector: 'balance-sheet-report',
     templateUrl: './balance-sheet-report.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [MultiCurrencyReportsComponentStore]
+    providers: [MultiCurrencyReportsComponentStore],
+    standalone: false
 })
 export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /** Reference to the balance sheet grid component */
@@ -53,7 +54,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
                 let data = prepareBalanceSheetData(cloneDeep(response));
                 if (data && data.liabilities) {
                     this.initData(data.liabilities);
-                    data.liabilities.forEach(childGroup => {
+                    (Array.isArray(data.liabilities) ? data.liabilities : []).forEach(childGroup => {
                         childGroup['isVisible'] = true;
                         childGroup['isCreated'] = true;
                         childGroup['isIncludedInSearch'] = true;
@@ -61,7 +62,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
                 }
                 if (data && data.assets) {
                     this.initData(data.assets);
-                    data.assets.forEach(childGroup => {
+                    (Array.isArray(data.assets) ? data.assets : []).forEach(childGroup => {
                         childGroup['isVisible'] = true;
                         childGroup['isCreated'] = true;
                         childGroup['isIncludedInSearch'] = true;
@@ -82,11 +83,11 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
      * @memberof BalanceSheetReportComponent
      */
     public initData(groupList: ChildGroup[]): void {
-        groupList.forEach((childGroup: ChildGroup) => {
+        (Array.isArray(groupList) ? groupList : []).forEach((childGroup: ChildGroup) => {
             childGroup['isVisible'] = false;
             childGroup['isCreated'] = false;
             childGroup['isIncludedInSearch'] = true;
-            childGroup.accounts.forEach((account: Account) => {
+            (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
                 account['isIncludedInSearch'] = true;
                 account['isCreated'] = false;
                 account['isVisible'] = false;
@@ -114,7 +115,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
      * @memberof BalanceSheetReportComponent
      */
     public filterData(): void {
-        this.componentStore.getMultiCurrencyReport(ReportType.BalanceSheet);
+        this.componentStore.getMultiCurrencyReport(ReportType.BALANCE_SHEET);
     }
     /**
      * Updates the last sync date
@@ -135,7 +136,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
      * @memberof BalanceSheetReportComponent
      */
     public searchData(event: any): void {
-        this.componentStore.createMultiCurrencyReport({ reportType: ReportType.BalanceSheet, payload: event });
+        this.componentStore.createMultiCurrencyReport({ reportType: ReportType.BALANCE_SHEET, payload: event });
     }
 
     /**

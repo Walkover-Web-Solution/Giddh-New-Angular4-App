@@ -5,7 +5,8 @@ import { giddhRoundOff } from "apps/web-giddh/src/app/shared/helpers/helperFunct
 import { VoucherTypeEnum } from "../../vouchers.const";
 
 @Directive({
-    selector: '[entryOtherTax]'
+    selector: '[entryOtherTax]',
+    standalone:false
 })
 export class EntryOtherTaxDirective implements OnChanges {
     /** Entry */

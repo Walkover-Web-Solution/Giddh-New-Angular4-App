@@ -11,7 +11,9 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InvoicePurchaseActions {
 
     public SendGSTR3BEmail$: Observable<Action> = createEffect(() => this.action$

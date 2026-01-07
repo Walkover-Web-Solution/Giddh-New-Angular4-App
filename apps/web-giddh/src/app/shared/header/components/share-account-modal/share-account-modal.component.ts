@@ -8,7 +8,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
-import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { clone, cloneDeep } from '../../../../lodash-optimized';
 import { IOption, RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
@@ -18,7 +18,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
     selector: 'share-account-modal',
     templateUrl: './share-account-modal.component.html',
-    styleUrls: [`./share-account-modal.component.scss`]
+    styleUrls: [`./share-account-modal.component.scss`],
+    standalone: false
 })
 
 export class ShareAccountModalComponent implements OnInit, OnDestroy {

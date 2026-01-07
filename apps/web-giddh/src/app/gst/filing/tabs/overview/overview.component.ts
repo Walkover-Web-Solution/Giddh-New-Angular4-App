@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
     selector: 'filing-overview',
     templateUrl: './overview.component.html',
     styleUrls: ['overview.component.scss'],
+    standalone:false
 })
 export class FilingOverviewComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: GstDatePeriod = new GstDatePeriod();
@@ -35,7 +36,7 @@ export class FilingOverviewComponent implements OnInit, OnDestroy {
             this.showTransaction = this.route.routerState.snapshot.url.includes('transaction');
             this.showHsnSummary = this.route.routerState.snapshot.url.includes('hsn-summary');
         });
-        
+
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.showTransaction = this.route.routerState.snapshot.url.includes('transaction');
             this.showHsnSummary = this.route.routerState.snapshot.url.includes('hsn-summary');

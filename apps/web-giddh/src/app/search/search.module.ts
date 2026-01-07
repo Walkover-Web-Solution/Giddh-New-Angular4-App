@@ -24,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 @NgModule({
     declarations: [
@@ -60,7 +61,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatCheckboxModule,
         MatInputModule,
         MatChipsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        HamburgerMenuModule
     ]
 })
 export class SearchModule {

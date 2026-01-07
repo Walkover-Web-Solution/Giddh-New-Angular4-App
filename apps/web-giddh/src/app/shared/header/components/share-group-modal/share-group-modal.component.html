@@ -31,22 +31,16 @@
                             [required]="true"
                             (selectedOption)="$event && (selectedPermission = $event.label)"
                             [labelValue]="selectedPermission"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="d-flex justify-content-end column-gap-1">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                [disabled]="shareGroupForm.invalid || isUserRestricted"
-                                (click)="shareGroup()"
-                            >
+                            <button matButton="filled" [disabled]="shareGroupForm.invalid || isUserRestricted" (click)="shareGroup()">
                                 {{ commonLocaleData?.app_share }}
                             </button>
-                            <button mat-stroked-button type="button" mat-dialog-close (click)="closeModal()">
+                            <button matButton="outlined" type="button" mat-dialog-close (click)="closeModal()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -58,8 +52,7 @@
             [restrictedModule]="restrictedModules.Users"
             [isUserRestricted]="isUserRestricted"
             (onUpgradePlan)="buyPlan($event)"
-        >
-        </restricted-module-message>
+        ></restricted-module-message>
         <!--shared with array-->
         <div class="pt-2" *ngIf="(activeGroupSharedWith$ | async)?.length">
             <mat-list role="list" class="shared-list group-shared-list">
@@ -82,10 +75,9 @@
                                     [name]="'selectedPermission' + i"
                                     [labelValue]="val?.roleName"
                                     (selectedOption)="$event && updatePermission(val, $event)"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                                 <button
-                                    mat-stroked-button
+                                    matButton="outlined"
                                     color="primary"
                                     (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)"
                                     aria-label="delete icon"

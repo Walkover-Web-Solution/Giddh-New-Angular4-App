@@ -1,6 +1,7 @@
 // ==========================================================================
-// SCSS FUNCTIONS
+// ANGULAR 21 MATERIAL 3 SCSS FUNCTIONS
 // ==========================================================================
+// Modern utility functions for Angular 21 Material 3 theming system
 
 /**
  * Lighten a color by mixing it with white
@@ -21,7 +22,6 @@
 @function alpha-color($color, $alpha) {
     @return rgba($color, $alpha);
 }
-
 /**
  * Lighten a color and apply alpha transparency
  * @param {Color} $color - The base color

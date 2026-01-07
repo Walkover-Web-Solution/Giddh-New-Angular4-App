@@ -15,7 +15,8 @@ import { ToasterService } from '../../services/toaster.service';
     selector: 'view-subscription',
     templateUrl: './view-subscription.component.html',
     styleUrls: ['./view-subscription.component.scss'],
-    providers: [ViewSubscriptionComponentStore, SubscriptionComponentStore, BuyPlanComponentStore]
+    providers: [ViewSubscriptionComponentStore, SubscriptionComponentStore, BuyPlanComponentStore],
+    standalone: false
 })
 export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     /** Mat menu instance reference */

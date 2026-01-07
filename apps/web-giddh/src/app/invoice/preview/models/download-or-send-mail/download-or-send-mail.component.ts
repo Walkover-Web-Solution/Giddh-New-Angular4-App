@@ -1,5 +1,5 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -9,19 +9,21 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { Router } from '@angular/router';
-import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
+import { findIndex, isEmpty } from '../../../../lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 import { saveAs } from 'file-saver';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 enum InvoicesEnum {
     Invoices = 'invoices'
 };
 @Component({
     selector: 'download-or-send-mail-invoice',
     templateUrl: './download-or-send-mail.component.html',
-    styleUrls: ['./download-or-send-mail.component.scss']
+    styleUrls: ['./download-or-send-mail.component.scss'],
+    standalone:false
 })
 
 export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
@@ -44,7 +46,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public isErrOccured$: Observable<boolean>;
     public invoiceType: string[] = [];
     public isSendSmsEnabled: boolean = false;
-    public isElectron = isElectron;
+    public isElectron = Configuration.isElectron;
     public voucherRequest = null;
     public accountUniqueName: string = '';
     public selectedInvoiceNo: string = '';
@@ -80,7 +82,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private _router: Router,
         private generalService: GeneralService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private changeDetection: ChangeDetectorRef
     ) {
         this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -128,6 +131,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     if (result.body.attachments?.length > 0) {
                         this.voucherHasAttachments = true;
                     }
+
+                    this.changeDetection.detectChanges();
                 }
             });
         } else {
@@ -141,6 +146,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
                         this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        this.changeDetection.detectChanges();
                     });
 
                     reader.readAsDataURL(o);
@@ -156,9 +162,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
                     this.showPdfWrap = true;
                     this.showEditButton = true;
+                    this.changeDetection.detectChanges();
                 } else {
                     this.showPdfWrap = false;
                     this.showEditButton = false;
+                    this.changeDetection.detectChanges();
                 }
             });
         }
@@ -166,6 +174,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.invoiceSettings) {
                 this.isSendSmsEnabled = o.invoiceSettings.sendInvLinkOnSms;
+                this.changeDetection.detectChanges();
             } else {
                 this.store.dispatch(this._invoiceActions.getInvoiceSetting());
             }
@@ -177,6 +186,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 if (o.templateDetails?.templateUniqueName) {
                     this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails?.templateUniqueName));
                 }
+                this.changeDetection.detectChanges();
             }
         });
     }
@@ -234,8 +244,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
     /**
      * Handle on select invoice copy
-     * 
-     * @param event 
+     *
+     * @param event
      */
     public onSelectInvoiceCopy(event: MatCheckboxChange): void {
         if (event) {
@@ -304,8 +314,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 } else {
                     this._toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                 }
+                this.changeDetection.detectChanges();
             }, (error => {
                 this._toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
+                this.changeDetection.detectChanges();
             }));
         } else {
             this.downloadInvoiceEvent.emit(this.invoiceType);

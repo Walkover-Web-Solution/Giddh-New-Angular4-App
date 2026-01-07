@@ -28,11 +28,13 @@ import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.
 import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
+import { cloneDeep, find, forEach, get, includes, indexOf, keys, map, slice } from '../../../lodash-optimized';
 @Component({
     selector: 'purchase-register-component',
     templateUrl: './purchase.register.component.html',
     styleUrls: ['./purchase.register.component.scss'],
-    providers: [ReportsComponentStore, SalesPersonComponentStore]
+    providers: [ReportsComponentStore, SalesPersonComponentStore],
+    standalone: false
 })
 export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     /** Directive to get reference of element */
@@ -72,9 +74,9 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public isTcsTdsApplicable: boolean;
     /**
      * Configuration for table columns.
-     * 
+     *
      * Each key represents a column, and its value is an array with the following structure:
-     * 
+     *
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
@@ -198,7 +200,7 @@ constructor(
                 if (!this.currentBranch?.uniqueName) {
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -208,7 +210,7 @@ constructor(
                         };
                     }
                 } else {
-                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
+                    const selectedBranch = cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
@@ -261,8 +263,8 @@ constructor(
     }
     /**
      * Handle group by change
-     * 
-     * @param response 
+     *
+     * @param response
      */
     public handleGroupByChange(response: IOption): void {
         if (response?.value === GroupBy.SalesPerson) {
@@ -285,7 +287,7 @@ constructor(
         let indexMonths = 0;
         let weekCount = 1;
         let reportsModelCombined: PurchaseReportsModel = new PurchaseReportsModel();
-        _.forEach(response, (item) => {
+        forEach(response, (item) => {
             let reportsModel: PurchaseReportsModel = new PurchaseReportsModel();
             reportsModel.purchase = item.debitTotal;
             reportsModel.returns = item.creditTotal;
@@ -408,7 +410,7 @@ constructor(
                     selectedFinancialYear = this.selectedCompany.financialYears[0];
                 }
                 if (selectedFinancialYear) {
-                    this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                    this.currentActiveFinacialYear = cloneDeep(selectedFinancialYear);
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
@@ -554,7 +556,7 @@ constructor(
      */
     private setPurchaseRegisterTotal(transaction: any): void {
         if (transaction) {
-            const item = _.cloneDeep(transaction);
+            const item = cloneDeep(transaction);
             this.purchaseRegisterTotal.purchase += item.debitTotal;
             this.purchaseRegisterTotal.returns += item.creditTotal;
             this.purchaseRegisterTotal.taxTotal += item.taxTotal;
@@ -697,7 +699,7 @@ constructor(
         };
         this.componentStore.getAccounts(params);
     }
-    
+
     /**
      * This will toggle the datepicker
      *
@@ -754,7 +756,7 @@ constructor(
         if (!from || !to) {
             return;
         }
-        
+
         let requestObject = this.reportForm.value;
         if (this.reportForm?.get('groupBy')?.value === GroupBy.SalesPerson) {
             requestObject.interval = undefined;

@@ -10,7 +10,8 @@ import { AgingReportActions } from '../../actions/aging-report.actions';
 @Component({
     selector: 'aging-dropdown',
     templateUrl: 'aging.dropdown.component.html',
-    styleUrls: ['./aging.dropdown.component.scss']
+    styleUrls: ['./aging.dropdown.component.scss'],
+    standalone:false
 })
 export class AgingDropdownComponent implements OnDestroy {
     /* This will hold local JSON data */

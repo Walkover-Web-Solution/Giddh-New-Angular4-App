@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'new-old-invoices'"
     (localeData)="localeData = $event"
@@ -20,8 +20,8 @@
                                 #SelectYear="ngModel"
                                 [options]="yearOptions"
                                 [labelValue]="selectedYear"
-                                [required]="true">
-                            </reactive-dropdown-field>
+                                [required]="true"
+                            ></reactive-dropdown-field>
                         </div>
                         <div class="max-width-500">
                             <reactive-dropdown-field
@@ -32,16 +32,13 @@
                                 #SelectType="ngModel"
                                 [options]="GetTypeOptions"
                                 [required]="true"
-                                (selectedOption)="resetData()">
-                            </reactive-dropdown-field>
+                                (selectedOption)="resetData()"
+                            ></reactive-dropdown-field>
                             <div class="height-25px position-absolute" *ngIf="SelectType.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_type }}</div>
                             </div>
                         </div>
-                        <div
-                            class="max-width-500 flex-column"
-                            *ngIf="selectedType === selectedTypeEnum.MONTH"
-                        >
+                        <div class="max-width-500 flex-column" *ngIf="selectedType === selectedTypeEnum.MONTH">
                             <reactive-dropdown-field
                                 [placeholder]="localeData?.select_month_placeholder"
                                 [label]="localeData?.select_month_label"
@@ -49,17 +46,14 @@
                                 [(ngModel)]="selectedmonth"
                                 #SelectMonth="ngModel"
                                 [options]="monthOptions"
-                                [required]="true">
-                            </reactive-dropdown-field>
+                                [required]="true"
+                            ></reactive-dropdown-field>
                             <div class="height-25px position-absolute" *ngIf="SelectMonth.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_month }}</div>
                             </div>
                         </div>
 
-                        <div
-                            class="max-width-500 flex-column"
-                            *ngIf="selectedType === selectedTypeEnum.QUATER"
-                        >
+                        <div class="max-width-500 flex-column" *ngIf="selectedType === selectedTypeEnum.QUATER">
                             <reactive-dropdown-field
                                 [placeholder]="localeData?.select_quarter_placeholder"
                                 [label]="localeData?.select_quarter_label"
@@ -67,14 +61,14 @@
                                 [(ngModel)]="selectedQuater"
                                 #SelectQuater="ngModel"
                                 [options]="quaterOptions"
-                                [required]="true">
-                            </reactive-dropdown-field>
+                                [required]="true"
+                            ></reactive-dropdown-field>
                             <div class="height-25px position-absolute" *ngIf="SelectQuater.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_quarter }}</div>
                             </div>
                         </div>
                         <div class="btn-group">
-                            <button mat-raised-button color="primary" type="submit" [disabled]="carried.invalid">
+                            <button matButton="filled" type="submit" [disabled]="carried.invalid">
                                 {{ commonLocaleData?.app_go }}
                             </button>
                         </div>
@@ -144,8 +138,7 @@
                                     [amount]="newVsOldInvoicesData?.totalSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -161,8 +154,7 @@
                                     [amount]="newVsOldInvoicesData?.totalSales.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -189,8 +181,7 @@
                                     [amount]="newVsOldInvoicesData?.totalSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -215,20 +206,14 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(
-                                        newVsOldInvoicesData?.newSales,
-                                        'new',
-                                        'client',
-                                        newVsOldInvoicesData?.newSales.month
-                                    )
+                                    showClientList(newVsOldInvoicesData?.newSales, 'new', 'client', newVsOldInvoicesData?.newSales.month)
                                 "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -244,8 +229,7 @@
                                     [amount]="newVsOldInvoicesData?.newSales.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -260,20 +244,14 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(
-                                        newVsOldInvoicesData?.newSales,
-                                        'new',
-                                        'invoice',
-                                        newVsOldInvoicesData?.newSales.month
-                                    )
+                                    showClientList(newVsOldInvoicesData?.newSales, 'new', 'invoice', newVsOldInvoicesData?.newSales.month)
                                 "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -291,20 +269,14 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(
-                                        newVsOldInvoicesData?.oldSales,
-                                        'old',
-                                        'client',
-                                        newVsOldInvoicesData?.oldSales.month
-                                    )
+                                    showClientList(newVsOldInvoicesData?.oldSales, 'old', 'client', newVsOldInvoicesData?.oldSales.month)
                                 "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.oldSales?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -320,8 +292,7 @@
                                     [amount]="newVsOldInvoicesData?.oldSales?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -336,20 +307,14 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(
-                                        newVsOldInvoicesData?.oldSales,
-                                        'old',
-                                        'invoice',
-                                        newVsOldInvoicesData?.oldSales.month
-                                    )
+                                    showClientList(newVsOldInvoicesData?.oldSales, 'old', 'invoice', newVsOldInvoicesData?.oldSales.month)
                                 "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.oldSales?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -379,8 +344,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -396,8 +360,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -424,8 +387,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -455,8 +417,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -472,8 +433,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -500,8 +460,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -531,8 +490,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -548,8 +506,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -576,8 +533,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -607,8 +563,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -624,8 +579,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -652,8 +606,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -685,8 +638,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -702,8 +654,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -730,8 +681,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -805,8 +755,7 @@
                                     [amount]="newVsOldInvoicesData?.totalSales?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -822,8 +771,7 @@
                                     [amount]="newVsOldInvoicesData?.totalSales?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -850,8 +798,7 @@
                                     [amount]="newVsOldInvoicesData?.totalSales?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -883,20 +830,14 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(
-                                        newVsOldInvoicesData?.newSales,
-                                        'new',
-                                        'client',
-                                        newVsOldInvoicesData?.newSales.month
-                                    )
+                                    showClientList(newVsOldInvoicesData?.newSales, 'new', 'client', newVsOldInvoicesData?.newSales.month)
                                 "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -912,8 +853,7 @@
                                     [amount]="newVsOldInvoicesData?.newSales.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -928,20 +868,14 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(
-                                        newVsOldInvoicesData?.newSales,
-                                        'new',
-                                        'invoice',
-                                        newVsOldInvoicesData?.newSales.month
-                                    )
+                                    showClientList(newVsOldInvoicesData?.newSales, 'new', 'invoice', newVsOldInvoicesData?.newSales.month)
                                 "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -959,20 +893,14 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(
-                                        newVsOldInvoicesData?.oldSales,
-                                        'old',
-                                        'client',
-                                        newVsOldInvoicesData?.oldSales.month
-                                    )
+                                    showClientList(newVsOldInvoicesData?.oldSales, 'old', 'client', newVsOldInvoicesData?.oldSales.month)
                                 "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.oldSales?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -988,8 +916,7 @@
                                     [amount]="newVsOldInvoicesData?.oldSales?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -1004,20 +931,14 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(
-                                        newVsOldInvoicesData?.oldSales,
-                                        'old',
-                                        'invoice',
-                                        newVsOldInvoicesData?.oldSales.month
-                                    )
+                                    showClientList(newVsOldInvoicesData?.oldSales, 'old', 'invoice', newVsOldInvoicesData?.oldSales.month)
                                 "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.oldSales?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -1047,8 +968,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -1064,8 +984,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -1092,8 +1011,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -1123,8 +1041,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -1140,8 +1057,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -1168,8 +1084,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -1199,8 +1114,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
@@ -1216,8 +1130,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
@@ -1244,8 +1157,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -1256,4 +1168,4 @@
     <ng-container *ngIf="isLoading || monthOptions?.length === 0">
         <giddh-page-loader></giddh-page-loader>
     </ng-container>
-</ng-container>
+</div>

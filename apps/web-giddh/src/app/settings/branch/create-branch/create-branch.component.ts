@@ -23,13 +23,15 @@ import { MatSelect } from '@angular/material/select';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { InventoryService } from '../../../services/inventory.service';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration } from '../../../app.constant';
 import { ServiceConfig } from '../../../services/service.config';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'create-branch',
     templateUrl: './create-branch.component.html',
-    styleUrls: ['./create-branch.component.scss']
+    styleUrls: ['./create-branch.component.scss'],
+    standalone:false
 })
 export class CreateBranchComponent implements OnInit, OnDestroy {
     /** Hold Mat Select Reference */
@@ -198,8 +200,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.loadAddresses('GET', { count: 0 });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
 
-        this.imgPath = isElectron ? 'assets/images/branch-image.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/branch-image.svg';
-
+        this.imgPath = Configuration.isElectron ? 'assets/images/branch-image.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/branch-image.svg';
         this.branchForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
@@ -253,7 +254,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
-        this.addresses.forEach(address => {
+        (Array.isArray(this.addresses) ? this.addresses : []).forEach(address => {
             if (!selectedAddresses?.includes(address?.uniqueName)) {
                 address.isDefault = false;
             }
@@ -285,7 +286,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         event.preventDefault();
         if (!option.isDefault) {
-            this.addresses.forEach(address => {
+            (Array.isArray(this.addresses) ? this.addresses : []).forEach(address => {
                 if (address?.value !== option?.value) {
                     address.isDefault = false;
                 }
@@ -338,7 +339,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public handleFormClear(): void {
-        this.addresses.forEach(address => {
+        (Array.isArray(this.addresses) ? this.addresses : []).forEach(address => {
             if (address) {
                 address.isDefault = false;
             }

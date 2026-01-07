@@ -1,3 +1,10 @@
+/**
+ * @fileoverview General service for business logic and data management
+ * @author Giddh Development Team
+ * @since 2026
+ */
+
+import { environment } from './../../environments/environment.generated';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -6,7 +13,6 @@ import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../them
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
-import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
@@ -22,16 +28,21 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
+import { Configuration } from '../app.constant';
+import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
+/**
+ * GeneralService class - Handles generalservice functionality
+ * @export
+ * @class GeneralService
+ */
+
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
     public isCurrencyPipeLoaded: boolean = false;
-
-    /** White label loading state management */
-    public whiteLabelLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    public whiteLabelData: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-    private whiteLabelLoadingPromise: Promise<any> | null = null;
 
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
@@ -84,7 +95,7 @@ export class GeneralService {
         this._createNewCompany = newCompanyRequest;
     }
 
-    public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
+    public eventHandler: Subject<{ name: string, payload: any }> = new Subject();
     public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private _user: UserDetails;
@@ -547,7 +558,7 @@ export class GeneralService {
     public addValueInArray(array: Array<string>, value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -573,7 +584,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -595,7 +606,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     index = loop;
                 }
@@ -647,125 +658,15 @@ export class GeneralService {
      * @return {*}  {string}
      * @memberof GeneralService
      */
-    /**
-     * Centralized white label loading with loader management
-     * This ensures the loader stays visible until white label data is fully loaded
-     */
-    public async initializeWhiteLabel(): Promise<any> {
-        // Return existing promise if already loading
-        if (this.whiteLabelLoadingPromise) {
-            return this.whiteLabelLoadingPromise;
-        }
-
-        this.whiteLabelLoadingPromise = this.loadWhiteLabelData();
-        const result = await this.whiteLabelLoadingPromise;
-
-        // Mark as loaded and update BehaviorSubjects
-        this.whiteLabelLoaded.next(true);
-        this.whiteLabelData.next(result);
-
-        return result;
-    }
-
-    /**
-     * Internal method to load white label data with comprehensive fallback
-     */
-    private async loadWhiteLabelData(): Promise<any> {
-        console.log('🔄 Starting white label data loading...');
-
-        // First, try to get from localStorage
-        const localData = await this.getWhiteLabelWithRetry();
-        if (localData) {
-            console.log('✅ White label data found in localStorage');
-            return localData;
-        }
-
-        // If not in localStorage, fetch from API
-        console.log('🌐 Fetching white label data from API...');
-        try {
-            const response = await fetch(`${this.config.apiUrl}white-label`);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-
-            if (data && data.giddhWhiteLabel) {
-                // Store in localStorage for future use
-                localStorage.setItem('whiteLabel', JSON.stringify(data));
-                console.log('✅ White label data fetched and stored');
-                return data;
-            } else {
-                throw new Error('Invalid white label response structure');
-            }
-        } catch (error) {
-            console.error('❌ Failed to fetch white label data:', error);
-            // Return null to indicate no white label data available
-            return null;
-        }
-    }
-
-    /**
-     * Attempts to get whiteLabel data from localStorage with retry mechanism
-     * @param maxRetries Maximum number of retry attempts (default: 10)
-     * @param delay Delay between retries in milliseconds (default: 50)
-     * @returns Promise<any> whiteLabel data or null if not found after retries
-     */
-    private async getWhiteLabelWithRetry(maxRetries: number = 10, delay: number = 50): Promise<any> {
-        for (let attempt = 1; attempt <= maxRetries; attempt++) {
-            try {
-                const whiteLabelString = localStorage.getItem('whiteLabel');
-                if (whiteLabelString) {
-                    const whiteLabelData = JSON.parse(whiteLabelString);
-                    if (whiteLabelData && whiteLabelData.giddhWhiteLabel && whiteLabelData.giddhWhiteLabel.domainName) {
-                        return whiteLabelData;
-                    }
-                }
-            } catch (error) {
-                console.warn(`WhiteLabel parse error on attempt ${attempt}:`, error);
-            }
-
-            // Wait before next retry (except on last attempt)
-            if (attempt < maxRetries) {
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-        }
-        return null;
-    }
-
-    public async getGiddhRegionUrl(): Promise<string> {
+    public getGiddhRegionUrl(): string {
         const countryRegion = localStorage.getItem('Country-Region');
         const region = COUNTRY_REGION_MAP[countryRegion] || null;
 
-        // Use centralized white label loading
-        const whiteLabelData = await this.initializeWhiteLabel();
+        // Use environment-specific AppUrl instead of hardcoded giddh.com
+        const baseUrl = environment.AppUrl || 'https://giddh.com';
+        const loginPath = '/login';
 
-        // Check if white label data exists and has domainName
-        if (whiteLabelData && whiteLabelData.giddhWhiteLabel && whiteLabelData.giddhWhiteLabel.domainName) {
-            // If domainName is books.giddh.com, use original region logic
-            if (whiteLabelData.giddhWhiteLabel.domainName === 'https://books.giddh.com') {
-                return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
-            }
-            return whiteLabelData.giddhWhiteLabel.domainName + '/login';
-        }
-
-        // Priority 2: Handle current URL logic
-        const currentHostname = window.location.hostname;
-
-        // If current URL is books.giddh.com, redirect using region logic
-        if (currentHostname === 'books.giddh.com') {
-            return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
-        }
-
-        // For non-books.giddh.com URLs, allow page to open
-        if (currentHostname !== 'books.giddh.com') {
-            // Return current URL to allow page to open properly
-            return window.location.origin + this.router.url;
-        }
-
-        // Fallback when no whiteLabel data exists
-        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+        return region === 'gl' ? `${baseUrl}${loginPath}` : `${baseUrl}/${region}${loginPath}`;
     }
 
     /**
@@ -975,7 +876,7 @@ export class GeneralService {
                 // Check if "" is not present at 0th and 1st index
                 let count = 0;
                 let initials = '';
-                nameArray.forEach(word => {
+                (Array.isArray(nameArray) ? nameArray : []).forEach(word => {
                     if (word && count < 2) {
                         initials += ` ${word[0]}`;
                         count++;
@@ -1074,7 +975,7 @@ export class GeneralService {
         } else {
             this.router.navigate([route], parameter);
         }
-        if (isElectron && isSocialLogin) {
+        if (Configuration.isElectron && isSocialLogin) {
             setTimeout(() => {
                 window.location.reload();
             }, 200);
@@ -1259,7 +1160,6 @@ export class GeneralService {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
-
 
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
             if (this.voucherApiVersion === 2) {
@@ -1453,7 +1353,7 @@ export class GeneralService {
     public addObjectInArray(array: any[], value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1479,7 +1379,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1501,7 +1401,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     index = loop;
                 }
@@ -1664,7 +1564,7 @@ export class GeneralService {
             discountsList,
             discountAccountsDetails
         } = requestObj;
-        discountsList.forEach(acc => {
+        (Array.isArray(discountsList) ? discountsList : []).forEach(acc => {
             if (discountAccountsDetails) {
                 let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName || s.uniqueName === acc?.uniqueName);
                 if (!hasItem) {
@@ -2360,7 +2260,7 @@ export class GeneralService {
             const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
             return whiteLabelData?.body || null;
         } catch (error) {
-            console.error('Error parsing whiteLabel data from localStorage:', error);
+
             return null;
         }
     }
@@ -2719,7 +2619,7 @@ export class GeneralService {
             try {
                 return callback();
             } catch (error) {
-                console.warn('Error checking unsaved changes:', error);
+
                 return false;
             }
         });
@@ -2731,11 +2631,11 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public markAllFormsAsPristine(): void {
-        this.markFormsAsPristineCallbacks.forEach(callback => {
+        (Array.isArray(this.markFormsAsPristineCallbacks) ? this.markFormsAsPristineCallbacks : []).forEach(callback => {
             try {
                 callback();
             } catch (error) {
-                console.warn('Error marking forms as pristine:', error);
+
             }
         });
     }

@@ -4,7 +4,6 @@ import { FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Va
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
-import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
 import { CreateDiscount } from "apps/web-giddh/src/app/models/api-models/Inventory";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
 import { SettingsDiscountService } from "apps/web-giddh/src/app/services/settings.discount.service";
@@ -15,6 +14,7 @@ import { ReplaySubject, debounceTime, take, takeUntil } from "rxjs";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BREAKPOINT_SCREEN_SIZE } from "apps/web-giddh/src/app/app.constant";
 import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
+import { cloneDeep, filter, find, findIndex, forEach, get, keys, map, set, some } from '../../../../lodash-optimized';
 
 /** Inteface for create payload for getAllDiscount API */
 export interface CustomerVendorDiscountBasic {
@@ -27,7 +27,9 @@ export interface CustomerVendorDiscountBasic {
 
 @Component({
     selector: "customer-wise",
+
     templateUrl: "./customer-wise.component.html",
+    standalone: false,
     styleUrls: ["./customer-wise.component.scss"]
 })
 export class CustomerWiseComponent implements OnInit, OnDestroy {
@@ -109,7 +111,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         private changeDetectorRef: ChangeDetectorRef,
         private scrollDispatcher: ScrollDispatcher,
         private breakPointObservar: BreakpointObserver,
-        private generalService: GeneralService
+        private generalService: GeneralService,
     ) { }
 
     /**
@@ -153,9 +155,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         });
 
         this.getDiscounts();
-        
+
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
+            const dataLength = event?.getDataLength ? event.getDataLength() : event?.dataLength || 0;
+            if (event && typeof event.getRenderedRange === 'function' && (dataLength - event.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
                 this.pagination.user.page++;
                 this.getCustomerVendorDiscountUserList(true);
             }
@@ -231,8 +234,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 if (this.userList?.length && !isLoadMore) {
                     this.selectUser(this.userList[0]);
                 }
-                this.changeDetectorRef.detectChanges();
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -368,6 +371,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.currentUserStocks = [];
             }
             this.isStockLoading = false;
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -394,7 +398,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
         const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
 
-        responseData?.body?.results.forEach((res, index) => {
+        (Array.isArray(responseData?.body?.results) ? responseData?.body?.results : []).forEach((res, index) => {
             this.variantsWithoutDiscount.push([]);
             if (res?.hasVariants) {
                 this.variantsWithoutDiscount[index] = res.dropDownVariants?.map(variant => {
@@ -412,12 +416,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
             let variants = (this.discountForm.get('discountInfo') as UntypedFormArray).at(index).get('variants') as UntypedFormArray;
 
-            res?.variants.forEach((variant, variantIndex) => {
+            (Array.isArray(res?.variants) ? res?.variants : []).forEach((variant, variantIndex) => {
                 if (Object.keys(variant).length > 2) {
                     let variantUnitCode = null;
                     if (variant?.stockUnitUniqueName) {
                         if (variantUnitCode === null) {
-                            res?.units.forEach(element => {
+                            (Array.isArray(res?.units) ? res?.units : []).forEach(element => {
                                 if (element?.uniqueName === variant?.stockUnitUniqueName) {
                                     variantUnitCode = element?.code;
                                 }
@@ -458,6 +462,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             });
         });
         this.currentUserStocks = responseData?.body?.results;
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -573,6 +578,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     this.showSaveDiscardButton = true;
                     this.toaster.errorToast(response?.body);
                 }
+                this.changeDetectorRef.detectChanges();
             });
         } else {
             if (type === "user") {
@@ -710,7 +716,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             return false;
         });
         let checkMandatory: boolean = false;
-        filteredArray.forEach((stock) => {
+        (Array.isArray(filteredArray) ? filteredArray : []).forEach((stock) => {
             checkMandatory = stock.variants.some(item => (item.discounts !== null || item.price !== null));
             stock.variants = stock.variants?.map(variant => {
                 if (variant.discounts === null) {
@@ -723,7 +729,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.toaster.warningToast(this.localeData?.invalid_form_msg);
             return;
         } else {
-            filteredArray.forEach((stock) => {
+            (Array.isArray(filteredArray) ? filteredArray : []).forEach((stock) => {
                 let reqObj = {
                     customerVendorAccountUniqueName: this.discountForm.value.customerVendorAccountUniqueName,
                     customerVendorGroupUniqueName: this.discountForm.value.customerVendorGroupUniqueName,
@@ -767,6 +773,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     } else {
                         this.toaster.errorToast(response?.message)
                     }
+                    this.changeDetectorRef.detectChanges();
                 });
             });
         }
@@ -807,7 +814,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      */
     private filterKeys(obj: any, keysToKeep: any[]): any {
         const filteredObject = {};
-        keysToKeep.forEach(key => {
+        (Array.isArray(keysToKeep) ? keysToKeep : []).forEach(key => {
             if (obj.hasOwnProperty(key)) {
                 filteredObject[key] = obj[key];
             }
@@ -829,10 +836,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             count: PAGINATION_LIMIT
         }
         this.dialogRef = this.dialog.open(this.addSearchModal, {
-            width: '580px',
-            role: 'alertdialog',
-            ariaLabel: 'Add search Dialog'
-        });
+                    width: '580px',
+                    role: 'alertdialog',
+                    ariaLabel: 'Add search Dialog'
+                });
     }
 
     /**
@@ -885,7 +892,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             hasVariants: response?.body?.variants.length > 1
                         }));
                         let variants = (this.discountForm.get('discountInfo') as UntypedFormArray).at(stockIndex).get('variants') as UntypedFormArray;
-                        response.body?.variants.forEach(variant => {
+                        (Array.isArray(response.body?.variants) ? response.body?.variants : []).forEach(variant => {
                             variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, stockUnitUniqueName: variant?.units[0].uniqueName, variantUnitCode: variant?.units[0].code }));
                         });
                         this.currentUserStocks.push(event);
@@ -893,6 +900,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             top: this.stocksContainer.nativeElement.scrollHeight,
                             behavior: 'smooth'
                         });
+                        this.changeDetectorRef.detectChanges();
                     }
 
                 });

@@ -4,5 +4,13 @@
     [file]="'trial-profit-balance/export'"
     (localeData)="localeData = $event"
 >
-    <a href="javascript:void(0);" aria-label="download" (click)="downloadPlXls()" *ngIf="enableDownload" class="cursor-pointer new-icon-img"><img src="{{ imgPath }}" alt="download img"  /></a>
+    <a
+        href="javascript:void(0);"
+        aria-label="download"
+        (click)="downloadPlXls()"
+        *ngIf="enableDownload"
+        class="cursor-pointer new-icon-img"
+    >
+        <img src="{{ imgPath }}" alt="download img" />
+    </a>
 </div>

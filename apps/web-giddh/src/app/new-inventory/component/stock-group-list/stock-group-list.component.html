@@ -3,7 +3,14 @@
         <!-- Date Picker Header -->
         <div class="date-picker-header mb-3">
             <div class="custom-datepicker">
-                <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
+                <div
+                    class="custom-datepicker"
+                    [matMenuTriggerFor]="universalDatepicker"
+                    #universalDatepickerTrigger="matMenuTrigger"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-controls="universalDatepicker"
+                >
                     <input
                         matInput
                         type="text"
@@ -20,52 +27,52 @@
         <!-- Mat Table -->
         <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
             <!-- Date Column -->
-            <ng-container matColumnDef="date">
+            <div matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef>Date</th>
                 <td mat-cell *matCellDef="let element" data-title="Date">{{ element.date }}</td>
-            </ng-container>
+            </div>
 
             <!-- Voucher Type Column -->
-            <ng-container matColumnDef="voucherType">
+            <div matColumnDef="voucherType">
                 <th mat-header-cell *matHeaderCellDef>Voucher Type</th>
                 <td mat-cell *matCellDef="let element" data-title="Voucher Type">{{ element.voucherType }}</td>
-            </ng-container>
+            </div>
 
             <!-- Account Name Column -->
-            <ng-container matColumnDef="accountName">
+            <div matColumnDef="accountName">
                 <th mat-header-cell *matHeaderCellDef>Account Name</th>
                 <td mat-cell *matCellDef="let element" data-title="Account Name">{{ element.accountName }}</td>
-            </ng-container>
+            </div>
 
             <!-- Inwards Column -->
-            <ng-container matColumnDef="inwards">
+            <div matColumnDef="inwards">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Inwards</th>
                 <td mat-cell *matCellDef="let element" data-title="Inwards" class="text-right">{{ element.inwards }}</td>
-            </ng-container>
+            </div>
 
             <!-- Outwards Column -->
-            <ng-container matColumnDef="outwards">
+            <div matColumnDef="outwards">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Outwards</th>
                 <td mat-cell *matCellDef="let element" data-title="Outwards" class="text-right">{{ element.outwards }}</td>
-            </ng-container>
+            </div>
 
             <!-- Rate Column -->
-            <ng-container matColumnDef="rate">
+            <div matColumnDef="rate">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
                 <td mat-cell *matCellDef="let element" data-title="Rate" class="text-right">{{ element.rate }}</td>
-            </ng-container>
+            </div>
 
             <!-- Value Column -->
-            <ng-container matColumnDef="value">
+            <div matColumnDef="value">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Value</th>
                 <td mat-cell *matCellDef="let element" data-title="Value" class="text-right">{{ element.value }}</td>
-            </ng-container>
+            </div>
 
             <!-- Qty Column -->
-            <ng-container matColumnDef="qty">
+            <div matColumnDef="qty">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Qty</th>
                 <td mat-cell *matCellDef="let element" data-title="Qty" class="text-right">{{ element.qty }}</td>
-            </ng-container>
+            </div>
 
             <!-- Header and Row Definitions -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -79,15 +86,25 @@
             <div class="col-lg-3 col-md-6 col-12">
                 <div class="text-left pl-3">
                     <label class="text-light font-size-15">Profit/Loss</label>
-                    <p class="text-primary">1,02,377.50 <span class="by-date">(Apr 1, 2018 - Dec 11, 2020)</span></p>
+                    <p class="text-primary">
+                        1,02,377.50
+                        <span class="by-date">(Apr 1, 2018 - Dec 11, 2020)</span>
+                    </p>
                 </div>
             </div>
             <div class="col-lg-2 col-md-6 col-12">
-                <label class="text-light font-size-15"
-                    >Transaction Count : <span class="total-transction text-primary">1.00</span></label
-                >
-                <p>Inward: <span class="total-inward">0.00</span></p>
-                <p>Outward: <span class="total-outward">0.00</span></p>
+                <label class="text-light font-size-15">
+                    Transaction Count :
+                    <span class="total-transction text-primary">1.00</span>
+                </label>
+                <p>
+                    Inward:
+                    <span class="total-inward">0.00</span>
+                </p>
+                <p>
+                    Outward:
+                    <span class="total-outward">0.00</span>
+                </p>
             </div>
             <div class="col-lg-7 col-md-12">
                 <div class="d-flex justify-content-end stock-value">

@@ -1,27 +1,26 @@
-import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import FroalaEditor from 'froala-editor';
 import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, skip, take, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import 'froala-editor/js/plugins.pkgd.min.js';
-import 'froala-editor/js/froala_editor.pkgd.min.js';
+import { FroalaLoaderService } from '../services/froala-loader.service';
+declare var FroalaEditor: any;
 import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
 import { cloneDeep, isEqual } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { GeneralService } from '../../services/general.service';
 import { TitleCasePipe } from '@angular/common';
 import { TriggerComponentStore } from '../triggers/uitilty/trigger.store';
-import { IOption, PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
+import { Configuration, IOption, PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
 import { AccountingGroupEnum } from '../Enums/common.enum';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
-
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
     styleUrls: ['./template-froala.component.scss'],
-    providers: [CustomEmailComponentStore, TriggerComponentStore]
+    providers: [CustomEmailComponentStore, TriggerComponentStore],
+    standalone: false
 })
 export class TemplateFroalaComponent implements OnInit {
     /** Instance of select multiple fields*/
@@ -69,7 +68,7 @@ export class TemplateFroalaComponent implements OnInit {
     /** Hold email suggestion suffix */
     public emailSuggestionSuffix: string = '}';
     /** Instance of is electron variable */
-    public isElectron: any = isElectron;
+    public isElectron: any = Configuration.isElectron;
     /** Hold froala editor options */
     public froalaOptions: any;
     /** Retry counter for Froala initialization */
@@ -161,7 +160,6 @@ export class TemplateFroalaComponent implements OnInit {
     public hasUnsavedChanges: boolean = false;
     /** Holds super admin email */
     public superAdminEmail: string[] = ['COMPANY_SUPER_ADMINS_EMAIL'];
-
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
@@ -171,12 +169,12 @@ export class TemplateFroalaComponent implements OnInit {
         public dialogRef: MatDialogRef<any>,
         private generalService: GeneralService,
         private titleCasePipe: TitleCasePipe,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private changesDetectionRef: ChangeDetectorRef,
+        private froalaLoaderService: FroalaLoaderService
     ) {
-        // Initialize Froala options after environment detection
-        this.froalaOptions = this.getFroalaOptions();
+        // Froala options will be initialized after dynamic loading
     }
-
     /**
      * Initializes the component and performs necessary operations.
      *
@@ -187,9 +185,11 @@ export class TemplateFroalaComponent implements OnInit {
      * @returns {void}
      * @memberof TemplateFroalaComponent
      */
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         document.querySelector('body').classList.add('hide-chat-widget');
         this.isTrigger = this.inputData?.isTrigger;
+        // Load Froala dynamically before initializing the form
+        await this.loadFroalaEditor();
         this.initializeForm();
         this.getEmailContents();
         if (this.isTrigger) {
@@ -198,13 +198,11 @@ export class TemplateFroalaComponent implements OnInit {
                 filter(Boolean),
                 take(1)
             ).subscribe(() => this.dialogRef.close(true));
-
             this.emailConditionSuggestions$.pipe(
                 takeUntil(this.destroyed$),
                 filter(suggestions => suggestions?.length > 0),
                 distinctUntilChanged()
             ).subscribe(suggestions => this.addConditionControls(suggestions));
-
             this.triggerStore.triggerDetails$.pipe(
                 takeUntil(this.destroyed$),
                 filter(Boolean),
@@ -224,8 +222,6 @@ export class TemplateFroalaComponent implements OnInit {
                 }
             });
             this.componentStore.getEmailConditionSuggestion(TriggerModuleEnum.VoucherDue);
-
-
             /** Search for voucher list dropdown */
             this.voucherListDropdown.valueChanges.pipe(this.searchPipe).subscribe((search: string) => {
                 if (!search) {
@@ -234,7 +230,6 @@ export class TemplateFroalaComponent implements OnInit {
                     this.filteredVoucherList = this.voucherList.filter(voucher => voucher?.label?.toLowerCase()?.includes(search?.toLowerCase()));
                 }
             });
-
             /** Search for account group dropdown */
             this.accountGroupDropdown.valueChanges.pipe(this.searchPipe, filter(search => search !== null && search !== undefined)).subscribe(search => {
                 this.getFlattenAccountGroupList({
@@ -244,7 +239,6 @@ export class TemplateFroalaComponent implements OnInit {
                     query: search || ''
                 });
             });
-
             /** Search for action dropdown */
             this.actionListDropdown.valueChanges.pipe(this.searchPipe).subscribe((search: string) => {
                 if (!search) {
@@ -256,7 +250,6 @@ export class TemplateFroalaComponent implements OnInit {
         } else {
             this.getEmailTemplates();
         }
-
         this.emailContentSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const emailSuggestions = this.inputData?.activeTab ? response?.customerVendorSuggestions : response?.voucherSuggestions;
@@ -264,7 +257,6 @@ export class TemplateFroalaComponent implements OnInit {
                     value: item,
                     key: item
                 }));
-
                 if (!this.froalaEditor) {
                     this.froalaOptions = this.getFroalaOptions();
                 }
@@ -277,14 +269,13 @@ export class TemplateFroalaComponent implements OnInit {
                 this.ccEmails = mappedEmail;
                 this.bccEmails = mappedEmail;
                 this.replyToEmails = this.mapEmailSuggestions(this.superAdminEmail);
-
                 if (this.isTrigger) {
                     this.voucherList = this.generalService.getVoucherTypeList(this.commonLocaleData, response?.voucherNames);
                     this.filteredVoucherList = this.voucherList;
                 }
+                this.changesDetectionRef.detectChanges();
             }
         });
-
         this.emailTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && !this.isTrigger) {
                 if (response?.bcc?.length) {
@@ -303,7 +294,6 @@ export class TemplateFroalaComponent implements OnInit {
                     this.selectedToEmails = response.to;
                 }
                 this.clickedOutsideEmail();
-                
                 // Patch existing form instead of recreating it
                 this.emailForm.patchValue({
                     to: response.to ?? [],
@@ -313,15 +303,14 @@ export class TemplateFroalaComponent implements OnInit {
                     emailSubject: response.emailSubject ?? null,
                     html: response.html ?? null
                 }, { emitEvent: false });
+                this.changesDetectionRef.detectChanges();
             }
         });
-
         this.updateCustomEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.dialogRef.close(response);
             }
         });
-
         (this.isTrigger ? this.customTriggerForm : this.emailForm).valueChanges.pipe(
             takeUntil(this.destroyed$),
             debounceTime(300),
@@ -334,7 +323,6 @@ export class TemplateFroalaComponent implements OnInit {
             }
         });
     }
-
     /**
      * This will handle the search pipe for ngx-mat-select-search
      *
@@ -346,7 +334,6 @@ export class TemplateFroalaComponent implements OnInit {
         debounceTime(700),
         takeUntil(this.destroyed$)
     );
-
     /**
      * This will update the html form control with the froala html
      *
@@ -360,7 +347,6 @@ export class TemplateFroalaComponent implements OnInit {
             currentForm.get('html')?.patchValue(htmlContent, { emitEvent: false });
         }
     }
-
     /**
      * This will return the froala options
      *
@@ -369,7 +355,7 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public getFroalaOptions() : any {
         return {
-            key: FROALA_EDITOR_KEY,
+            key: null,
             attribution: false,
             heightMin: 300,
             heightMax: 300,
@@ -412,12 +398,10 @@ export class TemplateFroalaComponent implements OnInit {
             events: {
                 initialized: (event) => {
                     this.froalaEditor = event.getEditor();
-                    
                     // Add additional delay for Electron environment
                     const setupDelay = this.isElectron ? 200 : 0;
                     setTimeout(() => {
                         this.setupFroalaEventHandlers();
-                        
                         // Set initial content from form control with additional delay for Electron
                         const contentDelay = this.isElectron ? 300 : 0;
                         setTimeout(() => {
@@ -447,7 +431,6 @@ export class TemplateFroalaComponent implements OnInit {
             }
         }
     }
-
     /**
      * Updates the focus state for the email types ('to', 'cc', 'bcc', 'replyTo').
      * @returns {void}
@@ -460,7 +443,6 @@ export class TemplateFroalaComponent implements OnInit {
         this.emailFocusStates.isBcc = emailType === EmailType.Bcc;
         this.emailFocusStates.isReplyTo = emailType === EmailType.ReplyTo;
     }
-
     /**
      * Sets up Froala event handlers
      *
@@ -472,16 +454,13 @@ export class TemplateFroalaComponent implements OnInit {
             this.froalaEditor.events.on(
                 'keydown',
                 (e) => {
-                    console.log("Triggered : ", e);         
                     if ((e.which == FroalaEditor.KEYCODE.ENTER || e.which == FroalaEditor.KEYCODE.BACKSPACE) && this.froalaTribute?.isActive) {
-                        console.log("Run : ", e);  
                         return false;
                     }
                 }
             );
         }
     }
-
     /**
      * Retries Froala editor initialization
      *
@@ -494,7 +473,6 @@ export class TemplateFroalaComponent implements OnInit {
             this.froalaOptions = this.getFroalaOptions();
         }, this.froalaInitRetryDelay * this.froalaInitRetryCount);
     }
-
     /**
      * Initializes tribute with retry mechanism for Electron
      *
@@ -506,7 +484,6 @@ export class TemplateFroalaComponent implements OnInit {
         if (!tributeSuggestions || tributeSuggestions.length === 0) {
             return;
         }
-
         const attemptInitialization = (attempt: number = 1) => {
             if (this.froalaEditor && this.froalaEditor.el) {
                 this.initializeTribute(tributeSuggestions);
@@ -516,7 +493,6 @@ export class TemplateFroalaComponent implements OnInit {
         };
         attemptInitialization();
     }
-
     /**
      * Initializes the Froala editor with tribute suggestions.
      *
@@ -532,32 +508,26 @@ export class TemplateFroalaComponent implements OnInit {
         if (this.froalaTribute) {
             this.froalaTribute.detach(this.froalaEditor.el);
         }
-
         if (this.subjectTribute) {
             this.subjectTribute.detach(this.subjectInputField.nativeElement);
         }
-
         this.froalaTribute = new Tribute({
             trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
             selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}</span>`
         });
-
         this.subjectTribute = new Tribute({
             trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
             selectTemplate: (item) => `${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}`
         });
-        
         if (this.froalaEditor) {
             this.froalaTribute.attach(this.froalaEditor.el);
         }
-        
         if (this.subjectInputField && this.subjectInputField.nativeElement) {
             this.subjectTribute.attach(this.subjectInputField.nativeElement);
         }
     }
-
     /**
      * Maps email suggestions to a format suitable for the dropdown options.
      *
@@ -577,7 +547,6 @@ export class TemplateFroalaComponent implements OnInit {
             label: result
         })) || [];
     }
-
     /**
      * Fetches email conditions from the server and updates the store.
      *
@@ -592,7 +561,6 @@ export class TemplateFroalaComponent implements OnInit {
     public getEmailTemplates(): void {
         this.componentStore.getAllEmailTemplate(this.inputData?.activeTab ? this.inputData?.activeTab : this.inputData);
     }
-
     /**
      * Fetches email content suggestions from the server and updates the store.
      *
@@ -607,7 +575,6 @@ export class TemplateFroalaComponent implements OnInit {
     public getEmailContents(): void {
         this.componentStore.getEmailContentSuggestions(this.inputData?.activeTab ? this.inputData.activeTab : this.inputData);
     }
-
     /**
      * Initializes the email form with the provided template data.
      *
@@ -644,7 +611,6 @@ export class TemplateFroalaComponent implements OnInit {
             }, { emitEvent: false });
         }
     }
-
     /**
      * Returns a validator that ensures at least one of the specified fields has a value.
      *
@@ -656,16 +622,13 @@ export class TemplateFroalaComponent implements OnInit {
             if (!(group instanceof FormGroup)) {
                 return null;
             }
-
             const hasValue = fields.some(field => {
                 const control = group.get(field);
                 return control && control.get('value')?.value;
             });
-
             return hasValue ? null : { atLeastOneRequired: true };
         };
     }
-
     /**
      * Returns execution time form group
      *
@@ -680,7 +643,6 @@ export class TemplateFroalaComponent implements OnInit {
             dayOfMonth: [value?.dayOfMonth ?? '']
         });
     }
-
     /**
      * Adds condition controls to the form group.
      *
@@ -690,27 +652,23 @@ export class TemplateFroalaComponent implements OnInit {
     private addConditionControls(conditions: any): void {
         const dynamicControls = new FormGroup({});
         const requiredFields: string[] = [];
-
-        conditions.forEach((condition: any) => {
+        (Array.isArray(conditions) ? conditions : []).forEach((condition: any) => {
             Object.entries(condition).forEach(([conditionData, conditionKey]) => {
                 if (conditionData === 'variable') {
                     const fieldName = conditionKey as string;
                     requiredFields.push(fieldName);
-
                     dynamicControls.addControl(fieldName, new FormGroup({
                         key: new FormControl(null),
                         value: new FormControl(null)
                     }));
                 }
             });
-
             this.emailConditionSuggestionsLabelOptions[condition.variable] = {
                 dropdownLabel: this.getLabel(condition.variable),
                 inputLabel: this.getLabel(condition.variable, 'Value'),
                 options: this.getOptionByArrayOfStrings(condition.conditions as string[])
             };
         });
-
         dynamicControls.setValidators(this.atLeastOneValidator(requiredFields));
         this.customTriggerForm.addControl('conditions', dynamicControls);
         if (this.inputData?.triggerUniqueName) {
@@ -719,7 +677,6 @@ export class TemplateFroalaComponent implements OnInit {
             }, 50);
         }
     }
-
     /**
      * Returns an array of options based on the provided array of strings.
      *
@@ -732,7 +689,6 @@ export class TemplateFroalaComponent implements OnInit {
             label: this.getLabel(item)
         }));
     }
-
     /**
      * Returns a formatted label based on the provided label and optional concatString.
      *
@@ -743,7 +699,6 @@ export class TemplateFroalaComponent implements OnInit {
     private getLabel(label: string, concatString?: string): string {
         return this.titleCasePipe.transform(`${label?.replace('_', ' ')}${concatString ? ` ${concatString}` : ''}`);
     }
-
     /**
      * Handles the submission of the email form.
      *
@@ -758,22 +713,17 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public onSubmit(type: string): void {
         this.setToCcBcc(this.emailForm);
-
         if (this.emailForm.invalid) {
             return;
         }
-
         const formValue = cloneDeep(this.emailForm.value);
         delete formValue?.voucherTypes;
-
         // Prepare request based on type
         const req = this.prepareRequest(type, formValue);
-        
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
         this.componentStore.updateCustomTemplate(req);
     }
-
     /**
      * Handles the submission of the trigger form.
      *
@@ -783,14 +733,11 @@ export class TemplateFroalaComponent implements OnInit {
     public createUpdateTrigger(): void {
         this.setToCcBcc(this.customTriggerForm);
         this.customTriggerForm.markAllAsTouched();
-
         if (this.customTriggerForm.invalid) {
             this.showFormValidityError();
             return;
         }
-
         const formValue = cloneDeep(this.customTriggerForm.value);
-
         if (!formValue.executionTime.dayOfWeek) {
             delete formValue.executionTime.dayOfWeek;
         }
@@ -803,7 +750,6 @@ export class TemplateFroalaComponent implements OnInit {
         if (!formValue.voucherTypes?.length) {
             delete formValue.voucherTypes;
         }
-
         if (formValue.conditions) {
             Object.keys(formValue.conditions).forEach(key => {
                 if (!(formValue.conditions[key].key && formValue.conditions[key].value)) {
@@ -811,17 +757,14 @@ export class TemplateFroalaComponent implements OnInit {
                 }
             });
         }
-        
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
-        
         if (this.inputData?.triggerUniqueName) {
             this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
         } else {
             this.triggerStore.createTrigger(formValue);
         }
     }
-
     /**
      * Handles the form validity error.
      *
@@ -834,7 +777,6 @@ export class TemplateFroalaComponent implements OnInit {
             this.isFormInvalid = true;
         }, 0);
     }
-
     /**
      * Sets the values of the form fields for To, Bcc, Cc, and ReplyTo.
      *
@@ -847,7 +789,6 @@ export class TemplateFroalaComponent implements OnInit {
         form.get(EmailType.Cc)?.patchValue(this.selectedCcEmails, { emitEvent: false });
         form.get(EmailType.ReplyTo)?.patchValue(this.selectedReplyToEmails, { emitEvent: false });
     }
-
     /**
      * Prepares the request object based on the submission type
      * @param type - Type of submission ('save' or 'send')
@@ -856,30 +797,25 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private prepareRequest(type: string, formValue: any): any {
         const isActiveTab = this.inputData?.activeTab;
-
         if (!isActiveTab) {
             return {
                 voucherType: this.inputData,
                 model: this.emailForm.value
             };
         }
-
         const model = {
             ...formValue,
             customerVendorUniqueNames: Array.isArray(this.inputData?.accountUniqueName) ? this.inputData?.accountUniqueName : [this.inputData?.accountUniqueName]
         };
-
         // Only add sendMail flag when type is 'send'
         if (type === 'send') {
             model.sendMail = true;
         }
-
         return {
             voucherType: isActiveTab,
             model
         };
     }
-
     /**
      * Show/Hide bcc/cc/replyTo field
      * @returns {void}
@@ -889,7 +825,7 @@ export class TemplateFroalaComponent implements OnInit {
     public toggleBccCc(emailType: string): void {
         this.setEmailFocus(emailType);
         if (this.childComponents.length > 0) {
-            this.childComponents.forEach(result => {
+            (Array.isArray(this.childComponents) ? this.childComponents : []).forEach(result => {
                 result?.trigger?.closePanel();
             });
         }
@@ -897,7 +833,6 @@ export class TemplateFroalaComponent implements OnInit {
         this.showCc = emailType === EmailType.Cc ? true : this.showCc;
         this.showReplyTo = emailType === EmailType.ReplyTo ? true : this.showReplyTo;
     }
-
     /**
      * Releases the memory
      *
@@ -908,7 +843,6 @@ export class TemplateFroalaComponent implements OnInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
     /**
      * Clicked inside Email section
      *
@@ -919,7 +853,6 @@ export class TemplateFroalaComponent implements OnInit {
         this.hiddenEmailList = '';
         this.clickedInsideEmailSection = true;
     }
-
     /**
      * Clicked outside Email section
      *
@@ -936,7 +869,6 @@ export class TemplateFroalaComponent implements OnInit {
             this.showCc = this.selectedCcEmails.length > 0;
         }
     }
-
     /**
      * Get all Emails
      *
@@ -945,7 +877,6 @@ export class TemplateFroalaComponent implements OnInit {
     private getAllStaticEmails(): void {
         this.allStaticEmails = '';
         this.hiddenEmailList = '';
-
         // Helper function to append emails
         const appendEmails = (emails: string[], prefix = '', limit = this.noOfMaximumEmailsShow - (this.allStaticEmails.trim() === "" ? 0 : this.allStaticEmails.split(',').length)) => {
             for (let i = 0; i < Math.min(emails.length, limit); i++) {
@@ -955,25 +886,20 @@ export class TemplateFroalaComponent implements OnInit {
                 this.allStaticEmails += `${i === 0 ? prefix : ""}${emails[i]}`;
             }
         };
-
         // Add To emails
         appendEmails(this.selectedToEmails);
-
         // Add Cc emails if there is space
         if (this.selectedToEmails.length < this.noOfMaximumEmailsShow) {
             appendEmails(this.selectedCcEmails);
         }
-
         // Add Bcc emails if there is space
         if (this.allStaticEmails.split(',').length < this.noOfMaximumEmailsShow) {
             appendEmails(this.selectedBccEmails, 'Bcc: ');
         }
-
         // Calculate hidden emails
         const totalEmails = this.getTotalEmailsCount;
         const visibleEmails = this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedReplyToEmails.length;
         const hiddenEmailsCount = totalEmails - this.noOfMaximumEmailsShow;
-
         if (hiddenEmailsCount > 0) {
             if (visibleEmails <= this.noOfMaximumEmailsShow) {
                 this.hiddenEmailList += ` ${hiddenEmailsCount} Bcc`;
@@ -983,7 +909,6 @@ export class TemplateFroalaComponent implements OnInit {
             }
         }
     }
-
     /**
      * Handles entity change
      *
@@ -1000,7 +925,6 @@ export class TemplateFroalaComponent implements OnInit {
             entity: event.value
         });
     }
-
     /**
      * Retrieves the flattened account group list from the store.
      *
@@ -1013,7 +937,6 @@ export class TemplateFroalaComponent implements OnInit {
             model: [AccountingGroupEnum.SundryDebtors, AccountingGroupEnum.SundryCreditors]
         });
     }
-
     /**
      * Handles the change of time action
      * 
@@ -1023,14 +946,12 @@ export class TemplateFroalaComponent implements OnInit {
     public onTimeActionChange(event?: IOption): void {
         this.customTriggerForm?.get('executionTime')?.get('dayOfMonth')?.setValue(null, { emitEvent: false });
         this.customTriggerForm?.get('executionTime')?.get('dayOfWeek')?.setValue(null, { emitEvent: false });
-
         if (event?.value) {
             this.showDayOfWeek = event.value === OtherTimeOptionsEnum.DayOfWeek;
             this.selectedTimeAction = event.value;
             this.setTimeActionValidator();
         }
     }
-
     /**
      * Sets the validators for the day of month and day of week fields.
      *
@@ -1039,25 +960,20 @@ export class TemplateFroalaComponent implements OnInit {
     public setTimeActionValidator(): void {
         const executionTime = this.customTriggerForm?.get('executionTime');
         if (!executionTime) return;
-
         const dayOfMonth = executionTime.get('dayOfMonth');
         const dayOfWeek = executionTime.get('dayOfWeek');
-
         dayOfMonth?.clearValidators();
         dayOfWeek?.clearValidators();
-
         if (this.showDayOfWeek === null) {
         } else if (this.showDayOfWeek) {
             dayOfWeek?.setValidators([Validators.required]);
         } else {
             dayOfMonth?.setValidators([Validators.required]);
         }
-
         dayOfMonth?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
         dayOfWeek?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
         executionTime.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     }
-
     /**
      * Callback for translation response complete
      *
@@ -1085,7 +1001,6 @@ export class TemplateFroalaComponent implements OnInit {
             ];
         }
     }
-
     /**
      * Get label value from options
      *
@@ -1097,7 +1012,6 @@ export class TemplateFroalaComponent implements OnInit {
     public getLabelValue(options: IOption[], value: string): string {
         return options?.find(option => option?.value?.toUpperCase() === value?.toUpperCase())?.label || '';
     }
-
     /**
      * Get day action label value
      *
@@ -1107,10 +1021,8 @@ export class TemplateFroalaComponent implements OnInit {
     public getDayActionLabelValue(): string {  
         const executionTime = this.customTriggerForm?.get('executionTime');
         if (!executionTime) return '';
-
         const dayOfMonth = executionTime.get('dayOfMonth');
         const dayOfWeek = executionTime.get('dayOfWeek');
-
         if (dayOfWeek?.value) {
             this.selectedTimeAction = OtherTimeOptionsEnum.DayOfWeek;
             return this.getLabelValue(this.timeOtherOptions, OtherTimeOptionsEnum.DayOfWeek);
@@ -1120,7 +1032,6 @@ export class TemplateFroalaComponent implements OnInit {
         }
         return '';
     }
-
     /**
      * Shows leave confirmation dialog
      *
@@ -1131,13 +1042,11 @@ export class TemplateFroalaComponent implements OnInit {
     private showLeaveConfirmation(): Promise<boolean> {
         return new Promise((resolve) => {
             const dialogRef = this.pageLeaveUtilityService.openDialog();
-
             dialogRef.afterClosed().subscribe((result) => {
                 resolve(Boolean(result));
             });
         });
     }
-
     /**
      * Handles dialog close with unsaved changes check
      *
@@ -1155,7 +1064,6 @@ export class TemplateFroalaComponent implements OnInit {
             this.dialogRef.close();
         }
     }
-
     /**
      * Validates if the email recipients (to, cc, bcc) have been modified
      *
@@ -1165,14 +1073,26 @@ export class TemplateFroalaComponent implements OnInit {
     private validateEmailRecipientsUnchanged(): boolean {
         const currentForm = this.isTrigger ? this.customTriggerForm.value : this.emailForm.value;
         const { to, bcc, cc } = currentForm;
-        
         const formRecipients = { to, bcc, cc };
         const selectedRecipients = {
             to: this.selectedToEmails,
             bcc: this.selectedBccEmails,
             cc: this.selectedCcEmails
         };
-        
         return isEqual(formRecipients, selectedRecipients);
+    }
+    /**
+     * Dynamically load Froala Editor for bundle size optimization
+     * @returns Promise that resolves when Froala is loaded
+     */
+    private async loadFroalaEditor(): Promise<void> {
+        try {
+            await this.froalaLoaderService.loadFroala();
+            // Initialize Froala options after dynamic loading
+            this.froalaOptions = this.getFroalaOptions();
+        } catch (error) {
+            // Fallback: Initialize with basic options if dynamic loading fails
+            this.froalaOptions = this.getFroalaOptions();
+        }
     }
 }

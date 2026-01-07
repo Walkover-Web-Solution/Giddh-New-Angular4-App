@@ -1,12 +1,7 @@
-<ng-container
-    appTranslate
-    [file]="'all-features'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'all-features'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="dialog-header">
         <span>{{ localeData?.page_heading }}</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close>
+        <button matIconButton aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -26,18 +21,20 @@
                                 <span>{{ localeData?.command_control_g }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i> <span>{{ commonLocaleData?.app_alt_c }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ commonLocaleData?.app_alt_c }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mb-2">
                         <p class="font-size-15 d-flex align-items-center">
-                            <i class="icon-unique-code mr-2"></i
-                            ><span class="font-weight-semibold">{{ localeData?.unique_code }}</span>
+                            <i class="icon-unique-code mr-2"></i>
+                            <span class="font-weight-semibold">{{ localeData?.unique_code }}</span>
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.unique_name_everything }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.unique_name_everything }}</span>
                             </li>
                         </ul>
                     </div>
@@ -48,97 +45,124 @@
                         </p>
                         <ul class="all-features-list">
                             <li [routerLink]="['/pages/proforma-invoice/invoice/sales']">
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.sales_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.sales_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.copy_from_previous_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.copy_from_previous_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i
-                                ><span>{{ localeData?.generate_sales_update_account }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.generate_sales_update_account }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.recurring_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.recurring_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.eway_bill_generation }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.eway_bill_generation }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.edit_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.edit_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.invoice_copies }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.invoice_copies }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.generate_bulk_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.generate_bulk_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.generate_compound_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.generate_compound_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.bulk_update_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.bulk_update_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.default_expiry_date }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.default_expiry_date }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.invoice_lock_date }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.invoice_lock_date }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.show_seal }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.show_seal }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.auto_paid }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.auto_paid }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.auto_email }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.auto_email }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.invoice_through_sms }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.invoice_through_sms }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.custom_invoice_number }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.custom_invoice_number }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.custom_invoice_template }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.custom_invoice_template }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.integrate_gmail_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.integrate_gmail_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.set_default_email }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.set_default_email }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.download_invoice_ledger }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.download_invoice_ledger }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.customer_invoice_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.customer_invoice_report }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.search_description }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.search_description }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.income_account }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.income_account }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.zero_value_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.zero_value_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.multicurrency_support }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.multicurrency_support }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.e_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.e_invoice }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mb-2">
                         <p class="font-size-15 d-flex align-items-center">
                             <i class="icon-invoice-new mr-2"></i>
-                            <span class="font-weight-semibold"> {{ localeData?.cash_invoice }}</span>
+                            <span class="font-weight-semibold">{{ localeData?.cash_invoice }}</span>
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.generate_cash_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.generate_cash_invoice }}</span>
                             </li>
                         </ul>
                     </div>
@@ -149,30 +173,36 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.add_branch }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.add_branch }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.inventory_branch_transfer }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.inventory_branch_transfer }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.consolidate_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.consolidate_report }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.separate_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.separate_report }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mb-2">
                         <p class="font-size-15 d-flex align-items-center">
                             <i class="icon-warehouse1 mr-2"></i>
-                            <span class="font-weight-semibold"> {{ commonLocaleData?.app_warehouse }}</span>
+                            <span class="font-weight-semibold">{{ commonLocaleData?.app_warehouse }}</span>
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_edit_warehouse }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_edit_warehouse }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.warehouse_management }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.warehouse_management }}</span>
                             </li>
                         </ul>
                     </div>
@@ -183,22 +213,28 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ commonLocaleData?.app_taxes }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ commonLocaleData?.app_taxes }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.integration }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.integration }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.payment_gateway }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.payment_gateway }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.profile }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.profile }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ commonLocaleData?.app_financial_year }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ commonLocaleData?.app_financial_year }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.permission }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.permission }}</span>
                             </li>
                         </ul>
                     </div>
@@ -209,16 +245,20 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.file_gst_all_branch }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.file_gst_all_branch }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.manage_inventory }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.manage_inventory }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.view_branch_data }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.view_branch_data }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.file_gst_different_gstin }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.file_gst_different_gstin }}</span>
                             </li>
                         </ul>
                     </div>
@@ -232,22 +272,28 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.custom_heading_name }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.custom_heading_name }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.default_expiry_days }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.default_expiry_days }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.next_step_estimate }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.next_step_estimate }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.auto_change_status }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.auto_change_status }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.auto_email }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.auto_email }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.enable_send_sms }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.enable_send_sms }}</span>
                             </li>
                         </ul>
                     </div>
@@ -258,34 +304,44 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.purchase_bill }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.purchase_bill }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.purchase_management }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.purchase_management }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.reverse_charge_option }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.reverse_charge_option }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.edit_purchase_bill }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.edit_purchase_bill }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.attached_purchase_bill }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.attached_purchase_bill }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.expense_account }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.expense_account }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_edit_delete_po }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_edit_delete_po }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.advance_search_vendor }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.advance_search_vendor }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.send_email }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.send_email }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.multicurrency_support }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.multicurrency_support }}</span>
                             </li>
                         </ul>
                     </div>
@@ -296,17 +352,20 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_credit_note }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_credit_note }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.edit_credit_note }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.edit_credit_note }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i
-                                ><span>{{ localeData?.custom_template_credit_debit_note }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.custom_template_credit_debit_note }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.e_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.e_invoice }}</span>
                             </li>
                         </ul>
                     </div>
@@ -317,35 +376,44 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_financial_groups }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_financial_groups }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_financial_accounts }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_financial_accounts }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.share_groups }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.share_groups }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.export_groups }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.export_groups }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.share_accounts }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.share_accounts }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.edit_groups_accounts }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.edit_groups_accounts }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.delete_groups_accounts }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.delete_groups_accounts }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mb-2">
                         <p class="font-size-15 d-flex align-items-center">
-                            <i class="icon-tag-new mr-2"></i> <span class="font-weight-semibold">{{ localeData?.tags }}</span>
+                            <i class="icon-tag-new mr-2"></i>
+                            <span class="font-weight-semibold">{{ localeData?.tags }}</span>
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.manage_tags }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.manage_tags }}</span>
                             </li>
                         </ul>
                     </div>
@@ -356,7 +424,8 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.manage_trigger }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.manage_trigger }}</span>
                             </li>
                         </ul>
                     </div>
@@ -367,7 +436,8 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.manage_discount }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.manage_discount }}</span>
                             </li>
                         </ul>
                     </div>
@@ -378,16 +448,20 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ commonLocaleData?.app_buy_plan }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ commonLocaleData?.app_buy_plan }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.update_plan }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.update_plan }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.renew_plan }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.renew_plan }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.check_transactions }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.check_transactions }}</span>
                             </li>
                         </ul>
                     </div>
@@ -398,19 +472,24 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.import_groups }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.import_groups }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.import_accounts }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.import_accounts }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.import_inventory }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.import_inventory }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.import_entries }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.import_entries }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.import_trial_balance }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.import_trial_balance }}</span>
                             </li>
                         </ul>
                     </div>
@@ -421,7 +500,8 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.company_import_export }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.company_import_export }}</span>
                             </li>
                         </ul>
                     </div>
@@ -435,31 +515,40 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_stock_group }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_stock_group }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_custom_unit }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_custom_unit }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.custom_field_inventory }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.custom_field_inventory }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.fix_tax_stock }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.fix_tax_stock }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.manage_receipt_note }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.manage_receipt_note }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.manage_delivery_challan }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.manage_delivery_challan }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.account_wise_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.account_wise_report }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.group_wise_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.group_wise_report }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.stock_wise_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.stock_wise_report }}</span>
                             </li>
                         </ul>
                     </div>
@@ -470,40 +559,52 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.export_ledger }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.export_ledger }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.columnar_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.columnar_report }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.email_ledger }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.email_ledger }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.share_ledger }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.share_ledger }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.generate_vouchers_ledger }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.generate_vouchers_ledger }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.download_vouchers_ledger }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.download_vouchers_ledger }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.edit_delete_entry }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.edit_delete_entry }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.edit_voucher_generate }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.edit_voucher_generate }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.bulk_voucher_delete }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.bulk_voucher_delete }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.attach_file }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.attach_file }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.check_cancelled_entries }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.check_cancelled_entries }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.multicurrency_support }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.multicurrency_support }}</span>
                             </li>
                         </ul>
                     </div>
@@ -514,13 +615,16 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.temporary_merge_accounts }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.temporary_merge_accounts }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.temporary_merge_groups }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.temporary_merge_groups }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.search_with_description }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.search_with_description }}</span>
                             </li>
                         </ul>
                     </div>
@@ -531,22 +635,28 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.customer_report_note }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.customer_report_note }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.bulk_emails_sms }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.bulk_emails_sms }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.download_report_csv }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.download_report_csv }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_customer }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_customer }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.add_comment }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.add_comment }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.aging_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.aging_report }}</span>
                             </li>
                         </ul>
                     </div>
@@ -557,19 +667,24 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.vendor_report_note }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.vendor_report_note }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.bulk_email_sms }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.bulk_email_sms }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.download_report_csv }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.download_report_csv }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_vendor }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_vendor }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.add_comment }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.add_comment }}</span>
                             </li>
                         </ul>
                     </div>
@@ -580,7 +695,8 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.user_wise }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.user_wise }}</span>
                             </li>
                         </ul>
                     </div>
@@ -591,8 +707,8 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i
-                                ><span>{{ localeData?.overdue_pl_bank_account_ratio_analysis }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.overdue_pl_bank_account_ratio_analysis }}</span>
                             </li>
                         </ul>
                     </div>
@@ -603,13 +719,16 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.shopify }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.shopify }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.woocommerce }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.woocommerce }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.zencommerce }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.zencommerce }}</span>
                             </li>
                         </ul>
                     </div>
@@ -622,14 +741,16 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i
-                                ><span>{{ localeData?.define_manufacturing_process }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.define_manufacturing_process }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.create_manufacturing }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.create_manufacturing }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.manufacturing_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.manufacturing_report }}</span>
                             </li>
                         </ul>
                     </div>
@@ -640,23 +761,28 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.accounting_group_search }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.accounting_group_search }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mb-2">
                         <p class="font-size-15 d-flex align-items-center">
-                            <i class="icon-GSTR mr-2"></i> <span class="font-weight-semibold">{{ localeData?.gstr }}</span>
+                            <i class="icon-GSTR mr-2"></i>
+                            <span class="font-weight-semibold">{{ localeData?.gstr }}</span>
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.gstr1 }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.gstr1 }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.gstr2 }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.gstr2 }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.gstr3b }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.gstr3b }}</span>
                             </li>
                         </ul>
                     </div>
@@ -667,98 +793,124 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.daybook }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.daybook }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.trial_balance }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.trial_balance }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.profit_loss }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.profit_loss }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.balance_sheet }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.balance_sheet }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.customer_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.customer_report }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.vendor_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.vendor_report }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ commonLocaleData?.app_inventory }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ commonLocaleData?.app_inventory }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.sales_register }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.sales_register }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.purchase_register }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.purchase_register }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.new_vs_old_invoice }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.new_vs_old_invoice }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.eway_bill }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.eway_bill }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ commonLocaleData?.app_reverse_charge }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ commonLocaleData?.app_reverse_charge }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.petty_cash_management }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.petty_cash_management }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ commonLocaleData?.app_receipt }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ commonLocaleData?.app_receipt }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.monthly_columnar_report }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.monthly_columnar_report }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mb-2">
                         <p class="font-size-15 d-flex align-items-center">
                             <i class="icon-desktop mr-2"></i>
-                            <span class="font-weight-semibold"> {{ localeData?.desktop_app }}</span>
+                            <span class="font-weight-semibold">{{ localeData?.desktop_app }}</span>
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.windows }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.windows }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.mac }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.mac }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mb-2">
                         <p class="font-size-15 d-flex align-items-center">
-                            <i class="icon-mobile mr-2"></i> <span class="font-weight-semibold">{{ localeData?.mobile_app }}</span>
+                            <i class="icon-mobile mr-2"></i>
+                            <span class="font-weight-semibold">{{ localeData?.mobile_app }}</span>
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.android }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.android }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mb-2">
                         <p class="font-size-15 d-flex align-items-center">
-                            <i class="icon-security mr-2"></i> <span class="font-weight-semibold">{{ localeData?.security }}</span>
+                            <i class="icon-security mr-2"></i>
+                            <span class="font-weight-semibold">{{ localeData?.security }}</span>
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.two_way_auth }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.two_way_auth }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.auth_key }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.auth_key }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.session }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.session }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ commonLocaleData?.app_upcoming }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ commonLocaleData?.app_upcoming }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.feature_request }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.feature_request }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.changelog }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.changelog }}</span>
                             </li>
                         </ul>
                     </div>
@@ -769,26 +921,32 @@
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.tally_giddh_plugin }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.tally_giddh_plugin }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mb-2">
                         <p class="font-size-15 d-flex align-items-center">
-                            <i class="icon-support1 mr-2"></i> <span class="font-weight-semibold">{{ localeData?.support }}</span>
+                            <i class="icon-support1 mr-2"></i>
+                            <span class="font-weight-semibold">{{ localeData?.support }}</span>
                         </p>
                         <ul class="all-features-list">
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.talk_to_sales }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.talk_to_sales }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ commonLocaleData?.app_send_email }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ commonLocaleData?.app_send_email }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.help_doc }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.help_doc }}</span>
                             </li>
                             <li>
-                                <i class="icon-tick mr-2"></i><span>{{ localeData?.schedule_demo }}</span>
+                                <i class="icon-tick mr-2"></i>
+                                <span>{{ localeData?.schedule_demo }}</span>
                             </li>
                         </ul>
                     </div>
@@ -796,4 +954,4 @@
             </div>
         </div>
     </mat-dialog-content>
-</ng-container>
+</div>

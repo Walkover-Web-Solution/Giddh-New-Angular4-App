@@ -1,7 +1,7 @@
 <div [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeTaxesModal()">
     <div class="dialog-header">
         <span>{{ commonLocaleData?.app_tax_applicable }}</span>
-        <button mat-icon-button aria-label="close" (click)="closeTaxesModal()">
+        <button matIconButton aria-label="close" (click)="closeTaxesModal()">
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -9,7 +9,7 @@
         <div class="container-fluid px-0">
             <div class="row">
                 <div class="col-sm-12 mb-2">
-                    <span> {{ defaultOtherTaxesModal?.itemLabel }} </span>
+                    <span>{{ defaultOtherTaxesModal?.itemLabel }}</span>
                 </div>
                 <div class="col-sm-6 col-xs-12">
                     <div class="select-tax-dropdown d-flex flex-column">
@@ -24,11 +24,10 @@
                             [showClearIcon]="true"
                             (onClear)="selectedTaxUniqueName = null; defaultOtherTaxesModal.appliedOtherTax = null"
                             (selectedOption)="applyTax($event)"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
 
                         <label class="label-select-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
-                            {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
+                            {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase }}
                         </label>
                     </div>
                 </div>
@@ -42,19 +41,12 @@
                         [options]="calculationMethodOptions"
                         [labelValue]="calculationMethodLabel"
                         [required]="true"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
             </div>
             <div class="mt-2">
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="button"
-                    [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
-                    (click)="saveTaxes()"
-                >
-                    {{commonLocaleData?.app_apply}}
+                <button matButton="filled" type="button" [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod" (click)="saveTaxes()">
+                    {{ commonLocaleData?.app_apply }}
                 </button>
             </div>
         </div>

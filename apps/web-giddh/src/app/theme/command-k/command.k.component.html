@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'command-k'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'command-k'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <section>
         <section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
             <!-- header -->
@@ -30,17 +25,10 @@
                             (mousemove)="onItemMouseMove(i)"
                             (click)="onItemClick(item, $event)"
                         >
-                            <a 
-                                [attr.href]="getItemHref(item)" 
-                                class="item-link"
-                                tabindex="-1"
-                            >
+                            <a [attr.href]="getItemHref(item)" class="item-link" tabindex="-1">
                                 <!-- Item Icon -->
                                 <div class="item-icon">
-                                    <span 
-                                        class="icon" 
-                                        [ngClass]="getItemIconClass(item.type)"
-                                    ></span>
+                                    <span class="icon" [ngClass]="getItemIconClass(item.type)"></span>
                                 </div>
 
                                 <!-- Item Content -->
@@ -50,20 +38,21 @@
                                             <p class="item-name" [id]="getItemId(item)">
                                                 {{ item.name }}
                                             </p>
-                                            
+
                                             <small *ngIf="item.type === 'MENU'" class="item-type">
                                                 {{ localeData?.menu }}
                                             </small>
-                                            
+
                                             <div *ngIf="item?.parentGroups" class="item-breadcrumb">
                                                 <small>
                                                     <span *ngFor="let parent of item.parentGroups; let idx = index">
-                                                        <span *ngIf="idx > 0">&nbsp;❯&nbsp;</span>{{ parent.name }}
+                                                        <span *ngIf="idx > 0">&nbsp;❯&nbsp;</span>
+                                                        {{ parent.name }}
                                                     </span>
                                                 </small>
                                             </div>
                                         </div>
-                                        
+
                                         <div *ngIf="item.type === 'ACCOUNT'" class="item-unique-name">
                                             <span class="font-size-14">{{ item?.uniqueName }}</span>
                                         </div>
@@ -80,22 +69,12 @@
                 <div class="no-results">
                     <div class="no-results-content" [class.text-center]="showChannelCreateBtn">
                         <p class="no-results-message">{{ localeData?.no_records_found }}</p>
-                        
+
                         <div *ngIf="showChannelCreateBtn" class="no-results-actions">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                (click)="triggerAddManage('group')"
-                                mat-dialog-close
-                            >
+                            <button matButton="filled" (click)="triggerAddManage('group')" mat-dialog-close>
                                 {{ commonLocaleData?.app_create_group }}
                             </button>
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                (click)="triggerAddManage('account')"
-                                mat-dialog-close
-                            >
+                            <button matButton="filled" (click)="triggerAddManage('account')" mat-dialog-close>
                                 {{ commonLocaleData?.app_create_account }}
                             </button>
                         </div>
@@ -132,4 +111,4 @@
             <i mat-dialog-close class="icon-cross close-navigation"></i>
         </div>
     </ng-template>
-</ng-container>
+</div>

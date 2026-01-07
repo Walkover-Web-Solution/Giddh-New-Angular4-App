@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep } from '../lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -31,7 +31,8 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
-    styleUrls: [`./daybook.component.scss`]
+    styleUrls: [`./daybook.component.scss`],
+    standalone:false
 })
 
 export class DaybookComponent implements OnInit, OnDestroy {
@@ -189,7 +190,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
@@ -326,7 +327,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
@@ -365,8 +366,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public exportDaybook() {
         this.daybookExportRequestType = 'post';
         this.modalDialogRef = this.dialog.open(this.exportDaybookModal, {
-            width: '630px'
-        });
+                    width: '630px',
+                });
     }
 
     public hideExportDaybookModal(response: any) {
@@ -483,6 +484,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             } else if (isInventory && !entry.isExpanded) {
                 this.checkIsStockEntryAvailable();
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -587,10 +589,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.setTxnForEdit(txn?.uniqueName));
         this.lc.selectedTxnUniqueName = txn?.uniqueName;
         this.modalDialogRef = this.dialog.open(this.updateLedgerModal, {
-            width: '70%',
-            height: '650px',
-            disableClose: true
-        });
+                    width: '70%',
+                    disableClose: true
+                });
 
         this.modalDialogRef.afterOpened().subscribe(response => {
             this.updateLedgerComponent?.loadDefaultSearchSuggestions();

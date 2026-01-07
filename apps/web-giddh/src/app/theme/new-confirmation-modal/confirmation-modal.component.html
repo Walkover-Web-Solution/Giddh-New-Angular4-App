@@ -5,10 +5,7 @@
         </span>
     </div>
     <mat-dialog-content class="dialog-body font-size-15">
-        <p
-            [ngClass]="inputData?.configuration?.messageCssClass"
-            [innerHTML]="inputData?.configuration?.messageText"
-        ></p>
+        <p [ngClass]="inputData?.configuration?.messageCssClass" [innerHTML]="inputData?.configuration?.messageText"></p>
         <p [ngClass]="inputData?.configuration?.footerCssClass">{{ inputData?.configuration?.footerText }}</p>
         <div class="d-flex column-gap-15 mt-4 justify-content-end">
             <ng-container *ngFor="let button of inputData?.configuration?.buttons">
@@ -38,7 +35,7 @@
                 <ng-template #elseBlock>
                     <button
                         *ngIf="!inputData?.configuration?.disableRipple"
-                        mat-stroked-button
+                        matButton="outlined"
                         class="confirmation-buttons"
                         (click)="sendResponse(button?.text)"
                         [ngClass]="button?.cssClass"
@@ -49,7 +46,7 @@
                     <button
                         *ngIf="inputData?.configuration?.disableRipple"
                         [disableRipple]="true"
-                        mat-stroked-button
+                        matButton="outlined"
                         class="confirmation-buttons"
                         (click)="sendResponse(button?.text)"
                         [ngClass]="button?.cssClass"

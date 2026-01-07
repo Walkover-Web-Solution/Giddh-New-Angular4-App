@@ -1,11 +1,11 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, of, ReplaySubject } from "rxjs";
 import { takeUntil, take, debounceTime, distinctUntilChanged, delay, skip, filter } from 'rxjs/operators';
 import * as dayjs from "dayjs";
-import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
+import { BranchHierarchyType, Configuration, PAGINATION_LIMIT } from "../../app.constant";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
@@ -19,11 +19,14 @@ import { AccountsAction } from "../../actions/accounts.actions";
 import { AccountRequestV2 } from "../../models/api-models/Account";
 import { cloneDeep } from "../../lodash-optimized";
 import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { ServiceConfig } from "../../services/service.config";
 @Component({
     selector: "preview",
     templateUrl: "./preview.component.html",
     styleUrls: ["./preview.component.scss"],
-    providers: [ContactComponentStore]
+    providers: [ContactComponentStore],
+    standalone:false
 })
 export class ContactPreviewComponent implements OnInit, OnDestroy {
     /** Reference to the virtual scroll viewport used for scrolling contact lists */
@@ -175,7 +178,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
-        private accountsAction: AccountsAction
+        private accountsAction: AccountsAction,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
     }
 
@@ -188,7 +192,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.componentStore.currentCompanyBranches$;
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map((branch: any) => ({

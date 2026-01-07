@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
@@ -13,7 +13,6 @@ import { AppState } from '../../../store';
 import { ReportFiltersComponent } from '../report-filters/report-filters.component';
 import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import * as dayjs from "dayjs";
-import { cloneDeep } from '../../../lodash-optimized';
 import { ActivatedRoute, Router } from '@angular/router';
 import { INVENTORY_COMMON_COLUMNS, InventoryReportType, InventoryModuleName } from '../../inventory.enum';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -23,15 +22,20 @@ import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
 import { ServiceConfig } from '../../../services/service.config';
 import { InventoryComponentStore } from '../inventory.store';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment.generated';
+import { cloneDeep, filter, find, map } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-reports',
     templateUrl: './reports.component.html',
     styleUrls: ['./reports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [InventoryComponentStore]
+    providers: [InventoryComponentStore],
+    standalone:false
+
 })
-export class ReportsComponent implements OnInit {
+export class ReportsComponent implements OnInit, OnDestroy {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
     /** Instance of sort header */
     @ViewChild(MatSort) sort: MatSort;
@@ -187,7 +191,7 @@ export class ReportsComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -353,7 +357,7 @@ export class ReportsComponent implements OnInit {
 
     /**
      * Handle filters change event
-     * 
+     *
      * @private
      * @param {*} event
      * @memberof ReportsComponent
@@ -379,7 +383,7 @@ export class ReportsComponent implements OnInit {
 
     /**
      * Handle dynamic columns change event
-     * 
+     *
      * @private
      * @param {*} event
      * @memberof ReportsComponent

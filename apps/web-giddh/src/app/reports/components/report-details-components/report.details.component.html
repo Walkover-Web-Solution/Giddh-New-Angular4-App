@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'reports/sales-register'"
     (localeData)="localeData = $event"
@@ -10,10 +10,8 @@
         <div class="report-breadcrum d-md-none d-lg-none">
             <ul class="list-inline d-inline-block vertical-align-middle nav-report">
                 <li class="active">
-                    <a href="javascript:void(0);" aria-label="report" (click)="goToDashboard()">{{
-                        commonLocaleData?.app_report
-                    }}</a>
-                    <span class="d-inline-block pl-1"> ></span>
+                    <a href="javascript:void(0);" aria-label="report" (click)="goToDashboard()">{{ commonLocaleData?.app_report }}</a>
+                    <span class="d-inline-block pl-1">></span>
                 </li>
                 <li>
                     <a href="javascript:void(0);" aria-label="heading">{{ localeData?.page_heading }}</a>
@@ -23,33 +21,33 @@
     </div>
     <div class="container-fluid font-size-15 mt-2">
         <div class="d-flex justify-content-between" [formGroup]="reportForm">
-            <div class="d-flex mb-3 column-gap-15">
-                <div
-                    *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
-                >
+            <div class="d-flex flex-wrap mb-3 column-gap-15 row-gap-15">
+                <div *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)">
                     <reactive-dropdown-field
                         [name]="'branches'"
                         [label]="commonLocaleData?.app_company_name"
                         [placeholder]="commonLocaleData?.app_select_entity"
                         [options]="currentCompanyBranches"
-                        (selectedOption)="currentBranch.uniqueName =  $event?.value; handleBranchChange($event)"
+                        (selectedOption)="currentBranch.uniqueName = $event?.value; handleBranchChange($event)"
                         [labelValue]="currentBranch?.name"
                         [required]="true"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
-                <div> 
+                <div>
                     <reactive-dropdown-field
                         [name]="'groupBy'"
                         [label]="localeData?.group_by"
                         [placeholder]="commonLocaleData?.app_select"
                         [options]="groupByOptions"
                         formControlName="groupBy"
-                        [labelValue]="reportForm?.get('groupBy')?.value === groupByEnum.Duration ? groupByOptions?.[0]?.label : groupByOptions?.[1]?.label"
+                        [labelValue]="
+                            reportForm?.get('groupBy')?.value === groupByEnum.Duration
+                                ? groupByOptions?.[0]?.label
+                                : groupByOptions?.[1]?.label
+                        "
                         [required]="true"
                         (selectedOption)="handleGroupByChange($event)"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
                 <ng-container *ngIf="reportForm?.get('groupBy')?.value === groupByEnum.Duration; else salesPersonBlock">
                     <div class="mr-3 dropdown-width">
@@ -58,23 +56,31 @@
                             [label]="commonLocaleData?.app_financial_year"
                             [placeholder]="activeFinacialYr?.uniqueName"
                             [options]="financialOptions"
-                            (selectedOption)="currentActiveFinacialYear.value =  $event?.value; selectFinancialYearOption($event)"
+                            (selectedOption)="currentActiveFinacialYear.value = $event?.value; selectFinancialYearOption($event)"
                             [labelValue]="activeFinacialYr?.uniqueName"
                             [required]="true"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="mr-3">
                         <mat-form-field appearance="outline" class="duration-dropdown w-100">
                             <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
                             <mat-select #durationMatSelect [value]="getSelectedDuration()">
-                                <mat-option (click)="populateRecords(durationEnum.Monthly)" [value]="commonLocaleData?.app_duration?.monthly">
+                                <mat-option
+                                    (click)="populateRecords(durationEnum.Monthly)"
+                                    [value]="commonLocaleData?.app_duration?.monthly"
+                                >
                                     {{ commonLocaleData?.app_duration?.monthly }}
                                 </mat-option>
-                                <mat-option (click)="populateRecords(durationEnum.Quarterly)" [value]="commonLocaleData?.app_duration?.quarterly">
+                                <mat-option
+                                    (click)="populateRecords(durationEnum.Quarterly)"
+                                    [value]="commonLocaleData?.app_duration?.quarterly"
+                                >
                                     {{ commonLocaleData?.app_duration?.quarterly }}
                                 </mat-option>
-                                <mat-option [value]="commonLocaleData?.app_duration?.weekly" class="dropdown-tick-icon-position pointer-event-none">
+                                <mat-option
+                                    [value]="commonLocaleData?.app_duration?.weekly"
+                                    class="dropdown-tick-icon-position pointer-event-none"
+                                >
                                     <span
                                         class="w-100 d-flex justify-content-between pointer-event-all"
                                         [matMenuTriggerFor]="monthMenu"
@@ -92,14 +98,14 @@
                         </mat-form-field>
                         <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
                             <div class="grid-columns-3 d-grid column-gap-05 p-2">
-                              <button 
-                                mat-menu-item 
-                                *ngFor="let month of monthNames"
-                                (click)="durationMatSelect.close(); populateRecords(durationEnum.Weekly, month)"
-                                aria-label="Select month"
-                              >
-                                {{ month | slice: 0:3 }}
-                              </button>
+                                <button
+                                    mat-menu-item
+                                    *ngFor="let month of monthNames"
+                                    (click)="durationMatSelect.close(); populateRecords(durationEnum.Weekly, month)"
+                                    aria-label="Select month"
+                                >
+                                    {{ month | slice: 0 : 3 }}
+                                </button>
                             </div>
                         </mat-menu>
                     </div>
@@ -132,12 +138,14 @@
                         </mat-form-field>
                     </div>
                     <div class="custom-datepicker-wrapper">
-                        <div class="custom-datepicker"
-                                                          [matMenuTriggerFor]="universalDatepicker"
-                             #universalDatepickerTrigger="matMenuTrigger"
-                             role="button"
-                             aria-haspopup="true"
-                             aria-controls="universalDatepicker">
+                        <div
+                            class="custom-datepicker"
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universalDatepicker"
+                        >
                             <input
                                 matInput
                                 type="text"
@@ -162,7 +170,7 @@
                         >
                             <mat-option class="mt-0">
                                 <ngx-mat-select-search
-                                    [placeholderLabel]="commonLocaleData?.app_select"  
+                                    [placeholderLabel]="commonLocaleData?.app_select"
                                     [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                     [formControl]="account"
                                     [clearSearchInput]="false"
@@ -177,15 +185,15 @@
                     </mat-form-field>
                 </div>
             </div>
-                <button
-                    mat-raised-button
-                    (click)="export()"
-                    color="primary"
-                    [matTooltip]="commonLocaleData?.app_export"
-                    [matTooltipPosition]="'above'"
-                >
-                    {{ commonLocaleData?.app_export }}
-                </button>
+            <button
+                mat-raised-button
+                (click)="export()"
+                color="primary"
+                [matTooltip]="commonLocaleData?.app_export"
+                [matTooltipPosition]="'above'"
+            >
+                {{ commonLocaleData?.app_export }}
+            </button>
         </div>
         <giddh-table
             *ngIf="localeData"
@@ -197,8 +205,7 @@
             (handleClickEvent)="$event && goToDetailedSales($event.item)"
         ></giddh-table>
     </div>
-</ng-container>
-
+</div>
 
 <!-- Universal Datepicker Menu -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

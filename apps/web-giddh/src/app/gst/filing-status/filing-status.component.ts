@@ -13,7 +13,8 @@ import { PageEvent } from "@angular/material/paginator";
 @Component({
     selector: 'filing-status',
     templateUrl: './filing-status.component.html',
-    styleUrls: ['./filing-status.component.scss']
+    styleUrls: ['./filing-status.component.scss'],
+    standalone: false
 })
 export class FilingStatusComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */
@@ -133,19 +134,19 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         this.getGstrReferences();
     }
 
-    /**	
-     * Handle Page Change Event	
-     *	
-     * @param {*} event	
-     * @memberof FilingStatusComponent	
-     */	
-     public pageChanged(event: PageEvent): void {	
-        if (event) {	
-            this.pageIndex = event.pageIndex;	
+    /**
+     * Handle Page Change Event
+     *
+     * @param {*} event
+     * @memberof FilingStatusComponent
+     */
+     public pageChanged(event: PageEvent): void {
+        if (event) {
+            this.pageIndex = event.pageIndex;
             this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
-            this.pagination.count = event.pageSize;	
-            this.getGstrReferences();	
-        }	
+            this.pagination.count = event.pageSize;
+            this.getGstrReferences();
+        }
     }
 
     /**
@@ -189,7 +190,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      *
      * @private
      * @param {*} data
-     * @return {*} 
+     * @return {*}
      * @memberof FilingStatusComponent
      */
     private generateToasterMessage(data: any): string {

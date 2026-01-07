@@ -5,7 +5,8 @@ import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from "@angular/material/snack-bar"
     selector: 'snackbar',
     templateUrl: './snackbar.component.html',
     styleUrls: ['./snackbar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SnackBarComponent implements OnInit {
     /** Instance of set timeout method */

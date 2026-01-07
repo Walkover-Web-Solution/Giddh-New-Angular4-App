@@ -23,7 +23,7 @@ import { createSelector } from 'reselect';
 import { DaybookQueryRequest, ExportBodyRequest } from '../../../../models/api-models/DaybookRequest';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
-import { differenceBy, each, flatten, flattenDeep, map, omit, union } from 'apps/web-giddh/src/app/lodash-optimized';
+import { differenceBy, each, flatten, flattenDeep, map, omit, union } from '../../../../lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { Router } from '@angular/router';
@@ -37,7 +37,8 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
 @Component({
     selector: 'account-operations',
     templateUrl: './account-operations.component.html',
-    styleUrls: [`./account-operations.component.scss`]
+    styleUrls: [`./account-operations.component.scss`],
+    standalone: false
 })
 
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -534,8 +535,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             data.taxes = [];
             this.activeAccountTaxHierarchy$.pipe(take(1)).subscribe((t) => {
                 if (t) {
-                    t.inheritedTaxes.forEach(tt => {
-                        tt.applicableTaxes.forEach(ttt => {
+                    (Array.isArray(t.inheritedTaxes) ? t.inheritedTaxes : []).forEach(tt => {
+                        (Array.isArray(tt.applicableTaxes) ? tt.applicableTaxes : []).forEach(ttt => {
                             data.taxes.push(ttt?.uniqueName);
                         });
                     });
@@ -863,8 +864,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             exportType: "MASTER_EXPORT"
         }
         this.dialog.open(ExportMasterDialogComponent, {
-            width: '750px',
-            data: exportData
-        });
+                    width: '750px',
+                    data: exportData
+                });
     }
 }

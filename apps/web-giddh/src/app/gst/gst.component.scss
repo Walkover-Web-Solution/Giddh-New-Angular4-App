@@ -73,7 +73,7 @@ svg.icon.gstr-icon {
 }
 
 .return-content .line::before {
-    content: "";
+    content: '';
     display: block;
     width: 9px;
     height: 9px;
@@ -129,7 +129,7 @@ hr {
 }
 
 .return-body .notification .activity-graph .notify:not(:last-child)::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 14px;
     left: 4px;
@@ -201,7 +201,7 @@ hr {
     display: block;
     position: absolute;
     z-index: 1000000;
-    content: "";
+    content: '';
     left: 0px;
     top: 0px;
     width: 200px;

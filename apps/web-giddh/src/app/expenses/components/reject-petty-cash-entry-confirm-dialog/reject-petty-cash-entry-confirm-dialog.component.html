@@ -4,7 +4,8 @@
 <mat-dialog-content class="dialog-body petty-cash-reject-modal">
     <div class="clear-both modal-top">
         <p class="font-size-12 text-light mb-2">
-            <span>{{ selectedItem?.entryDate }} </span> |
+            <span>{{ selectedItem?.entryDate }}</span>
+            |
             <span>{{ byCreator }}</span>
         </p>
         <div class="row mb-2">
@@ -50,10 +51,10 @@
     </div>
 
     <div class="d-flex column-gap-1">
-        <button mat-raised-button color="primary" [disabled]="!rejectReason?.value" (click)="submitReject()">
+        <button matButton="filled" [disabled]="!rejectReason?.value" (click)="submitReject()">
             {{ commonLocaleData?.app_submit }}
         </button>
-        <button mat-stroked-button role="button" (click)="rejectEntry?.emit(false)">
+        <button matButton="outlined" role="button" (click)="rejectEntry?.emit(false)">
             {{ commonLocaleData?.app_cancel }}
         </button>
     </div>

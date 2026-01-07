@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'settings/branch'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'settings/branch'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
     <div class="container-fluid setting-data">
         <div class="create-branch-page mb-3">
@@ -19,8 +14,8 @@
                                 </div>
                                 <div class="label-wrapper mb-3">
                                     <label>{{ localeData?.country_currency }}:</label>
-                                    <span
-                                        ><img
+                                    <span>
+                                        <img
                                             *ngIf="companyDetails?.country?.countryCode"
                                             src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
                                                 companyDetails?.country?.countryCode
@@ -28,8 +23,8 @@
                                         />
                                         {{ companyDetails?.country?.countryName }} -
                                         {{ companyDetails?.country?.currencyCode }}
-                                        {{ companyDetails?.country?.currencyName }}</span
-                                    >
+                                        {{ companyDetails?.country?.currencyName }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -43,17 +38,13 @@
             </div>
             <form [formGroup]="branchForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="branch-form">
-                    <div
-                        class="filter-dropdown-branch mb-3"
-                        *ngIf="allBranches?.length > 1 && (isCompany || isConsolidatedBranch)"
-                    >
+                    <div class="filter-dropdown-branch mb-3" *ngIf="allBranches?.length > 1 && (isCompany || isConsolidatedBranch)">
                         <reactive-dropdown-field
                             [label]="localeData?.parent_branch"
                             [placeholder]="localeData?.select_parent_branch"
                             [options]="branches"
                             formControlName="parentBranchUniqueName"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="branch-form-field">
                         <div class="address-dropdown">
@@ -87,10 +78,13 @@
                         </div>
                     </div>
                     <div class="branch-form-field">
-                        <div
-                            class="address-dropdown form-group mb-0"
-                        >
-                            <mat-form-field appearance="outline" class="initial-height w-100" [ngClass]="{ 'hide-select-arrow': !branchForm?.get('address')?.value?.length }" (click)="trigger.open()">
+                        <div class="address-dropdown form-group mb-0">
+                            <mat-form-field
+                                appearance="outline"
+                                class="initial-height w-100"
+                                [ngClass]="{ 'hide-select-arrow': !branchForm?.get('address')?.value?.length }"
+                                (click)="trigger.open()"
+                            >
                                 <mat-label>{{ localeData?.addresses }}</mat-label>
                                 <mat-chip-grid #chipGrid class="d-flex flex-wrap column-gap-05 row-gap-1">
                                     <ng-container *ngFor="let chipItem of branchForm?.get('address')?.value">
@@ -109,7 +103,7 @@
                                         [matChipInputFor]="chipGrid"
                                     />
                                 </mat-chip-grid>
-                                <mat-select-trigger> </mat-select-trigger>
+                                <mat-select-trigger></mat-select-trigger>
                                 <mat-select
                                     formControlName="address"
                                     panelClass="linked-entities-options"
@@ -130,15 +124,11 @@
                                         </a>
                                     </div>
                                     <ng-container *ngFor="let option of filteredAddresses">
-                                        <mat-option
-                                            [value]="option"
-                                            (click)="selectAddress(option)"
-                                            class="align-items-center"
-                                        >
+                                        <mat-option [value]="option" (click)="selectAddress(option)" class="align-items-center">
                                             <div class="d-flex justify-content-between">
                                                 <span>
                                                     <div>
-                                                        {{ option.label || "-" }}
+                                                        {{ option.label || '-' }}
                                                     </div>
                                                     <div>
                                                         <p *ngIf="option.taxType && option.taxNumber">
@@ -172,10 +162,10 @@
                 <div class="pl-3 pr-3">
                     <div class="row">
                         <div class="button-group">
-                            <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">
+                            <button matButton="outlined" type="reset" (click)="handleFormClear()" class="btn custom-btn">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
-                            <button mat-raised-button color="primary" type="submit" [disabled]="branchForm?.invalid">
+                            <button matButton="filled" type="submit" [disabled]="branchForm?.invalid">
                                 {{ localeData?.create_branch }}
                             </button>
                         </div>
@@ -185,12 +175,7 @@
         </div>
     </div>
     <ng-template #asideAccountAsidePane>
-        <ng-container
-            appTranslate
-            [file]="'settings/profile'"
-            (localeData)="profileLocaleData = $event"
-            [requireCommonData]="false"
-        >
+        <ng-container appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event" [requireCommonData]="false">
             <create-address
                 [keyboardShortcut]="'esc'"
                 (onShortcutPress)="closeAddressAsidePane()"
@@ -205,4 +190,4 @@
             ></create-address>
         </ng-container>
     </ng-template>
-</ng-container>
+</div>

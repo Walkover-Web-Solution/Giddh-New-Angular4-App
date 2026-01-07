@@ -3,10 +3,11 @@ import { Store, select } from "@ngrx/store";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { AppState } from "../../../../store";
 import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
-import { isEqual } from "apps/web-giddh/src/app/lodash-optimized";
+import { isEqual } from '../../../../lodash-optimized';
 
 @Directive({
-    selector: '[entryTotal]'
+    selector: '[entryTotal]',
+    standalone:false
 })
 export class EntryTotalDirective implements OnChanges, OnDestroy {
     /** Entry */

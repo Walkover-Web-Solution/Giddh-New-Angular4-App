@@ -22,6 +22,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
     selector: 'company-branch',
     templateUrl: './company-branch.component.html',
     styleUrls: ['./company-branch.component.scss'],
+    standalone: false
 })
 
 export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {

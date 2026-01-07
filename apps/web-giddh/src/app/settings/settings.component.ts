@@ -24,7 +24,8 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.scss']
+    styleUrls: ['./settings.component.scss'],
+    standalone:false
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */

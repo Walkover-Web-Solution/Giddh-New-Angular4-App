@@ -10,7 +10,8 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
     selector: 'app-eWayBill-credentials-modal',
     templateUrl: './eWayBillCredentials.component.html',
-    styleUrls: [`./eWayBillCredentials.component.scss`]
+    styleUrls: [`./eWayBillCredentials.component.scss`],
+    standalone:false
 })
 
 export class EWayBillCredentialsComponent implements OnInit {

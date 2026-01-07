@@ -26,7 +26,8 @@ const CIDR_RANGE = 'cidr_range';
 @Component({
     selector: 'setting-permission-form',
     templateUrl: './form.component.html',
-    styleUrls: ['./form.component.scss']
+    styleUrls: ['./form.component.scss'],
+    standalone: false
 })
 export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
@@ -131,7 +132,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             if (p && p.roles) {
                 let roles = cloneDeep(p.roles);
                 let allRoleArray = [];
-                roles.forEach((role) => {
+                (Array.isArray(roles) ? roles : []).forEach((role) => {
                     allRoleArray.push({
                         label: role?.name,
                         value: role?.uniqueName

@@ -54,7 +54,7 @@ export function warehouseReducer(state: WarehouseState = initialState, action: C
             return { ...state, defaultWarehouseData: null };
         case WarehouseActions.RESET_UPDATE_WAREHOUSE:
             return { ...state, warehouseUpdated: false };
-            case WarehouseActions.RESET_WAREHOUSES:
+        case WarehouseActions.RESET_WAREHOUSES:
             return { ...state, warehouses: null };
         default: return state;
     }

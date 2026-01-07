@@ -1,9 +1,10 @@
 import { CdkVirtualScrollViewport, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren, NgZone } from "@angular/core";
+import { Angular21ChangeDetectionService } from "../../../../services/angular21-change-detection.service";
 import { select, Store } from "@ngrx/store";
 import { AccountsAction } from "apps/web-giddh/src/app/actions/accounts.actions";
 import { GroupWithAccountsAction } from "apps/web-giddh/src/app/actions/groupwithaccounts.actions";
-import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
+import { cloneDeep } from '../../../../lodash-optimized';
 import { AccountResponseV2 } from "apps/web-giddh/src/app/models/api-models/Account";
 import { IGroupsWithAccounts } from "apps/web-giddh/src/app/models/interfaces/groups-with-accounts.interface";
 import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
@@ -20,7 +21,8 @@ import { IOption } from "apps/web-giddh/src/app/app.constant";
     selector: "master",
     templateUrl: "./master.component.html",
     styleUrls: ["./master.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of cdk virtual scroller */
@@ -84,7 +86,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         private scrollDispatcher: ScrollDispatcher,
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private ngZone: NgZone,
+        private changeDetectionService: Angular21ChangeDetectionService
     ) {
 
     }
@@ -193,7 +197,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && event?.getDataLength() - event?.getRenderedRange().end < 50) {
+            const dataLength = event?.getDataLength ? event.getDataLength() : event?.dataLength || 0;
+            if (event && typeof event.getRenderedRange === 'function' && dataLength - event.getRenderedRange().end < 50) {
                 if (!this.loadMoreInProgress && this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.page < this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.totalPages) {
                     this.loadMoreInProgress = true;
                     this.getMasters(this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.groupUniqueName, event?.elementRef?.nativeElement?.id, false, true);
@@ -210,7 +215,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 this.store.pipe(select(state => state.groupwithaccounts.activeAccount), take(1)).subscribe(acc => activeAccount = acc);
 
                 // reset search string when you're in search case for move group || move account || merge account
-                if (event.name === eventsConst.groupMoved || event.name === eventsConst.accountMoved || event.name === eventsConst.accountMerged) {
+                if (event.name === eventsConst.groupMoved.toString() || event.name === eventsConst.accountMoved.toString() || event.name === eventsConst.accountMerged.toString()) {
                     this.isSearchingGroups = false;
                 }
 
@@ -297,7 +302,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
             this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
         }
 
-        this.changeDetectorRef.detectChanges();
+        this.changeDetectionService.safeChangeDetection(this.changeDetectorRef, this.ngZone);
     }
 
     /**
@@ -336,7 +341,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 this.scrollToRight.emit(true);
             }
             this.loadMoreInProgress = false;
-            this.changeDetectorRef.detectChanges();
+            this.changeDetectionService.safeChangeDetection(this.changeDetectorRef, this.ngZone);
         });
     }
 
@@ -624,10 +629,10 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
     /**
      * Handles archive status filter
-     * 
-     * @param groupUniqueName 
-     * @param currentIndex 
-     * @param value 
+     *
+     * @param groupUniqueName
+     * @param currentIndex
+     * @param value
      * @memberof MasterComponent
      */
     public onArchiveStatusFilter(groupUniqueName: any, currentIndex: number, value: string): void {

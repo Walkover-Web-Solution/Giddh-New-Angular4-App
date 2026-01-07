@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'inventory'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'inventory'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <div class="inventory-advance-search">
         <div class="dialog-header">
             <span>{{ localeData?.advance_search_filter?.advance_search }}</span>
@@ -32,7 +27,7 @@
                                     (onClear)="
                                         advanceSearchFormObj.type.value = {
                                             label: commonLocaleData?.app_rate,
-                                            value: 'rate'
+                                            value: 'rate',
                                         }
                                     "
                                     [label]="localeData?.advance_search_filter?.type"
@@ -64,8 +59,7 @@
                                     (onClear)="advanceSearchFormObj.amount = ''"
                                     [autocomplete]="'off'"
                                     [label]="localeData?.advance_search_filter?.amount"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                         </div>
                     </div>
@@ -75,8 +69,7 @@
                         <div class="button-group d-flex justify-content-end column-gap-1">
                             <button
                                 id="search-btn"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 (click)="advanceSearchAction()"
                                 [disabled]="
                                     !advanceSearchFormObj.filterBy ||
@@ -87,10 +80,10 @@
                             >
                                 {{ commonLocaleData?.app_search }}
                             </button>
-                            <button mat-stroked-button (click)="initializeForm()">
+                            <button matButton="outlined" (click)="initializeForm()">
                                 {{ commonLocaleData?.app_reset }}
                             </button>
-                            <button mat-stroked-button type="button" (click)="advanceFilterClose()">
+                            <button matButton="outlined" type="button" (click)="advanceFilterClose()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -99,4 +92,4 @@
             </form>
         </mat-dialog-content>
     </div>
-</ng-container>
+</div>

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Authentication service for business logic and data management
+ * @author Giddh Development Team
+ * @since 2026
+ */
+
 import { catchError, map, retry } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -18,8 +24,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
+import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
+/**
+ * AuthenticationService class - Handles authenticationservice functionality
+ * @export
+ * @class AuthenticationService
+ */
+
 export class AuthenticationService {
 
     constructor(private errorHandler: GiddhErrorHandler,

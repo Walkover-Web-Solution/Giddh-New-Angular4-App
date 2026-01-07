@@ -15,7 +15,8 @@ import { CountryNames } from '../../shared/Enums/common.enum';
 @Component({
   selector: 'app-template-edit-dialog',
   templateUrl: './template-edit-dialog.component.html',
-  styleUrls: ['./template-edit-dialog.component.scss']
+  styleUrls: ['./template-edit-dialog.component.scss'],
+  standalone:false
 })
 export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   /** This will hold local JSON data */

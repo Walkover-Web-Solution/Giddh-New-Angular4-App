@@ -24,7 +24,8 @@ import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/
     templateUrl: './advance-search.component.html',
     styleUrls: ['./advance-search.component.scss'],
     providers: [SalesPersonComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
@@ -372,7 +373,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public prepareRequest() {
-        let dataToSend = _.cloneDeep(this.advanceSearchForm?.value);
+        let dataToSend = cloneDeep(this.advanceSearchForm?.value);
         if (dataToSend.dateOnCheque) {
             dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
         }

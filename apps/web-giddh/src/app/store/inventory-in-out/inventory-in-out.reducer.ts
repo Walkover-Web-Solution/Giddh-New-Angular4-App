@@ -2,6 +2,7 @@ import { StocksResponse } from '../../models/api-models/Inventory';
 import { CustomActions } from '../custom-actions';
 import { InventoryReport, InventoryUser } from '../../models/api-models/Inventory-in-out';
 import { INVENTORY_ENTRY_ACTIONS, INVENTORY_REPORT_ACTIONS, INVENTORY_USER_ACTIONS } from '../../actions/inventory/inventory.const';
+import { cloneDeep } from '../../lodash-optimized';
 
 /**
  * Keeping Track of the CompanyState
@@ -48,7 +49,7 @@ export function InventoryInOutReducer(state: InventoryInOutState = initialState,
             return { ...state, userSuccess: false };
         }
         case INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE: {
-            let userState = _.cloneDeep(state.inventoryUsers);
+            let userState = cloneDeep(state.inventoryUsers);
             userState.push(action.payload.body);
             return { ...state, userSuccess: true, inventoryUsers: userState };
         }

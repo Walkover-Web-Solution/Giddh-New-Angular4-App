@@ -1,28 +1,23 @@
 <div class="dialog-header" appTranslate (commonLocaleData)="commonLocaleData = $event">
     <span>{{ commonLocaleData?.app_send_email }}</span>
-    <button mat-icon-button aria-label="close" (click)="hideModal()">
+    <button matIconButton aria-label="close" (click)="hideModal()">
         <i class="icon-cross"></i>
     </button>
 </div>
 <mat-dialog-content class="dialog-body">
     <div class="row mb-2">
         <div class="col-sm-12">
-            <input
-                type="text"
-                class="form-control"
-                [placeholder]="commonLocaleData?.app_enter_email"
-                [(ngModel)]="emailId"
-            />
+            <input type="text" class="form-control" [placeholder]="commonLocaleData?.app_enter_email" [(ngModel)]="emailId" />
         </div>
     </div>
     <!-- region buttons -->
     <div class="row mt-4 mb-2">
         <div class="col-sm-12">
             <div class="btn-group" role="group">
-                <button mat-raised-button color="primary" type="button" (click)="sendEmail()">
+                <button matButton="filled" type="button" (click)="sendEmail()">
                     {{ commonLocaleData?.app_send }}
                 </button>
-                <button mat-stroked-button type="button" (click)="hideModal()">
+                <button matButton="outlined" type="button" (click)="hideModal()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

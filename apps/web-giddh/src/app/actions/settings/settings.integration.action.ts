@@ -13,7 +13,9 @@ import { CustomActions } from '../../store/custom-actions';
 import { CompanyActions } from "../company.actions";
 import { LocaleService } from '../../services/locale.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsIntegrationActions {
 
     public GetSMSKey$: Observable<Action> = createEffect(() => this.action$

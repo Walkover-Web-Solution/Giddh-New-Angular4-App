@@ -30,6 +30,7 @@ dayjs.extend(customParseFormat);
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
+import { cloneDeep, findIndex } from '../../lodash-optimized';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -292,17 +293,17 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                 isVerifyAddNewMobileNoSuccess: false
             });
         case LoginActions.SOCIAL_LOGOUT_ATTEMPT: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.isSocialLogoutAttempted = true;
             return newState;
         }
         case LoginActions.RESET_SOCIAL_LOGOUT_ATTEMPT: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.isSocialLogoutAttempted = false;
             return newState;
         }
         case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let GOOGLE_RESPONSE: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
             if (GOOGLE_RESPONSE?.status === 'success') {
                 newState.isLoggedInWithSocialAccount = true;
@@ -594,7 +595,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             let dateResponse: BaseResponse<string, any> = action.payload;
             const chosenLabel = dateResponse['chosenLabel'];
             if (dateResponse?.status === 'success') {
-                let latestState = _.cloneDeep(state);
+                let latestState = cloneDeep(state);
                 let data: any = dateResponse.body;
                 if (!data.fromDate) {
                     latestState.todaySelected = true;
@@ -608,12 +609,12 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             }
             return state;
         case CompanyActions.RESET_APPLICATION_DATE: {
-            let latestState = _.cloneDeep(state);
+            let latestState = cloneDeep(state);
             latestState.applicationDate = null;
             return Object.assign({}, state, latestState);
         }
         case CompanyActions.SET_CONTACT_NO: {
-            let s = _.cloneDeep(state);
+            let s = cloneDeep(state);
             s.user.user.mobileNo = action.payload;
             return s;
         }
@@ -628,7 +629,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CompanyActions.CREATE_COMPANY_RESPONSE: {
             let companyResp: BaseResponse<CompanyResponse, CompanyRequest> = action.payload;
             if (companyResp?.status === 'success') {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.isCompanyCreationInProcess = false;
                 d.isCompanyCreationSuccess = true;
                 d.isCompanyCreated = true;
@@ -649,14 +650,14 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CompanyActions.CREATE_NEW_COMPANY_RESPONSE: {
             let companyResp: BaseResponse<CompanyResponse, CompanyCreateRequest> = action.payload;
             if (companyResp?.status === 'success') {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.isCompanyCreationInProcess = false;
                 d.isCompanyCreationSuccess = true;
                 d.isCompanyCreated = true;
                 d.companies.push(companyResp.body);
                 return Object.assign({}, state, d);
             } else {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.isCompanyCreationInProcess = false;
                 d.isCompanyCreationSuccess = false;
                 d.isCompanyCreated = false;
@@ -696,9 +697,9 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CompanyActions.SET_MULTIPLE_CURRENCY_FIELD:
             let companyInfo: { companyUniqueName: string, isMultipleCurrency: boolean } = action.payload;
 
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
 
-            let companiesList = _.cloneDeep(newState.companies);
+            let companiesList = cloneDeep(newState.companies);
 
             let selectedCompanyIndex = companiesList?.findIndex((company) => company?.uniqueName === companyInfo?.companyUniqueName);
 
@@ -734,8 +735,8 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response?.status === 'success') {
-                let d = _.cloneDeep(state);
-                let currentCompanyIndx = _.findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
+                let d = cloneDeep(state);
+                let currentCompanyIndx = findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
                 if (currentCompanyIndx !== -1) {
                     d.companies[currentCompanyIndx].country = response.body?.country;
                     return Object.assign({}, state, d);
@@ -746,8 +747,8 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response?.status === 'success') {
-                let d = _.cloneDeep(state);
-                let currentCompanyIndx = _.findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
+                let d = cloneDeep(state);
+                let currentCompanyIndx = findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
                 if (currentCompanyIndx !== -1) {
                     d.companies[currentCompanyIndx].country = response.body?.country;
                     return Object.assign({}, state, d);
@@ -757,7 +758,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         }
         case LoginActions.LoginWithPasswdResponse: {
             let res: BaseResponse<any, any> = action.payload;
-            let newStates = _.cloneDeep(state);
+            let newStates = cloneDeep(state);
             newStates.isLoginWithPasswordInProcess = false;
             if (res?.status === 'success') {
                 newStates.user = res.body;

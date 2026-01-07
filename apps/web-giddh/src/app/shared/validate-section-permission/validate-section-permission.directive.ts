@@ -5,7 +5,8 @@ import { takeUntil } from "rxjs/operators";
 import { AppState } from "../../store";
 
 @Directive({
-    selector: '[validateSectionPermission]'
+    selector: '[validateSectionPermission]',
+    standalone: false
 })
 
 export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy {
@@ -17,7 +18,7 @@ export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private elementRef: ElementRef, 
+        private elementRef: ElementRef,
         private renderer: Renderer2,
         private store: Store<AppState>) {
 

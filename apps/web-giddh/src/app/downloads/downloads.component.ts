@@ -7,7 +7,8 @@ import { takeUntil } from "rxjs/operators";
     selector: "downloads",
     templateUrl: "./downloads.component.html",
     styleUrls: ["./downloads.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DownloadsComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */

@@ -17,6 +17,7 @@ import { SalesPersonService } from "../../../sales-person/utility/sales-person.s
 import { OverlayModule } from "@angular/cdk/overlay";
 import { MobileNumberInputComponent } from "../../../mobile-number-input";
 import { A11yModule } from "@angular/cdk/a11y";
+import { KeyboardNavigationModule } from "../../../helpers/directives/enter-next/keyboard-navigation.module";
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import { A11yModule } from "@angular/cdk/a11y";
         MatTooltipModule,
         OverlayModule,
         MobileNumberInputComponent,
-        A11yModule
+        A11yModule,
+        KeyboardNavigationModule
     ],
     exports: [
         AccountUpdateNewDetailsComponent,

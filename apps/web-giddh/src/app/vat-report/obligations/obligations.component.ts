@@ -23,7 +23,8 @@ export interface ObligationsStatus {
     selector: 'obligations-component',
     templateUrl: './obligations.component.html',
     styleUrls: ['./obligations.component.scss'],
-    providers: [VatReportComponentStore]
+    providers: [VatReportComponentStore],
+    standalone:false
 })
 
 export class ObligationsComponent implements OnInit, OnDestroy {
@@ -320,11 +321,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         }
 
         const dialogRef = this.dialog.open(FileReturnComponent, {
-            data: dataToSend,
-            width: '60vw',
-            height: '80vh',
-            disableClose: true
-        });
+                    data: dataToSend,
+                    width: '60vw',
+                    height: '80vh',
+                    disableClose: true
+                });
 
         dialogRef.afterClosed().subscribe(response => {
             if (response.status === 'success') {
@@ -350,11 +351,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         }
         this.dialog.open(ViewReturnComponent, {
-            data: dataToSend,
-            width: '60vw',
-            height: '80vh',
-            disableClose: true
-        });
+                    data: dataToSend,
+                    width: '60vw',
+                    height: '80vh',
+                    disableClose: true
+                });
     }
 
     /**

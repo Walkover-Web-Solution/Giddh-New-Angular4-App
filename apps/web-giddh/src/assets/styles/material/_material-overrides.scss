@@ -1,17 +1,18 @@
-@import "./components/_form-field.scss";
-@import "./components/_snackbar.scss";
-@import "./components/_menu.scss";
-@import "./components/_dialog.scss";
-@import "./components/_radio.scss";
-@import "./components/_checkbox.scss";
-@import "./components/_datepicker.scss";
-@import "./components/_button.scss";
-@import "./components/_expansion.scss";
-@import "./components/_stepper.scss";
-@import "./components/_paginator.scss";
-@import "./components/_slide-toggle.scss";
+// Angular 21 Material 3 Component Overrides
+@use "../abstracts/mixins" as *;
+@use "./components/form-field";
+@use "./components/snackbar";
+@use "./components/menu";
+@use "./components/dialog";
+@use "./components/radio";
+@use "./components/checkbox";
+@use "./components/datepicker";
+@use "./components/button";
+@use "./components/expansion";
+@use "./components/stepper";
+@use "./components/paginator";
+@use "./components/slide-toggle"; // MDC Disabled Elements and their children
 
-// MDC Disabled Elements and their children
 .mdc-checkbox--disabled,
 .mdc-text-field--disabled,
 .mat-mdc-tab-disabled,
@@ -24,21 +25,10 @@
 .mat-mdc-outlined-button[disabled],
 .mat-button-toggle-disabled,
 .mdc-radio--disabled,
-.mdc-radio--disabled + label,
+.mdc-radio--disabled+label,
 .mdc-switch--disabled,
-.mdc-switch--disabled + label,
-.mat-sort-header-disabled .mat-sort-header-container .form-control:disabled {
-    @include cursor(not-allowed);
-    @include pointer-events(auto);
-    * {
-        @include cursor(not-allowed);
-        @include pointer-events(auto);
-    }
-}
-
-// Table
-table tr {
-    &:hover {
-        background-color: inherit !important;
-    }
+.mdc-switch--disabled+label,
+.mat-sort-header-disabled .mat-sort-header-container .form-control:disabled { @include cursor(not-allowed); @include pointer-events(auto); * { @include cursor(not-allowed); @include pointer-events(auto); }
+} // Table
+table tr { &:hover { background-color: inherit !important; }
 }

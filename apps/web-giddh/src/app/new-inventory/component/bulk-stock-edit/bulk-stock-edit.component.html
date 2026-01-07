@@ -1,7 +1,7 @@
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <text-field [type]="'text'" [formControl]="formControl" [autoFocus]="true" [cssClass]="'font-size-15'"></text-field>
 </ng-template>
-<ng-container
+<div
     appTranslate
     [file]="'inventory/bulk-stock-edit'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -20,8 +20,7 @@
                 [commonLocaleData]="commonLocaleData"
                 [iconClass]="'icon-options font-size-16'"
                 [cssClass]="'bulk-stock-hide-show-button'"
-            >
-            </select-table-column>
+            ></select-table-column>
         </div>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
@@ -38,20 +37,22 @@
                                     searchString !== null) &&
                                 !isLoading
                             "
-                            mat-stroked-button
+                            matButton="outlined"
                             (click)="isApiCalled = true; resetSearch()"
                             aria-label="cross icon"
                         >
-                            <span class="icon-cross position-relative"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="icon-cross position-relative"></span>
+                            {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                     <div>
                         <div class="d-flex align-items-center">
                             <p *ngIf="!isLoading" class="mr-5">
-                                {{ localeData?.total_inventory_count }} : <span>{{ totalInventoryCount }}</span>
+                                {{ localeData?.total_inventory_count }} :
+                                <span>{{ totalInventoryCount }}</span>
                             </p>
                             <button
-                                mat-stroked-button
+                                matButton="outlined"
                                 class="btn-stroked-icon bulk-stock-hide-show-button p-0 ml-2"
                                 (click)="openAdvanceFilter()"
                                 [matTooltip]="commonLocaleData?.app_advanced_filter"
@@ -74,13 +75,10 @@
                                             <!-- Variant Name -->
                                             <th class="cursor-pointer" *ngIf="tableHeaderShowHide.variantName">
                                                 <div class="d-flex align-items-center">
-                                                    <div
-                                                        (click)="toggleInput('variantName'); $event.stopPropagation()"
-                                                        class="w-100"
-                                                    >
+                                                    <div (click)="toggleInput('variantName'); $event.stopPropagation()" class="w-100">
                                                         <p *ngIf="!tableHeadInput.variantName">
-                                                            <span class="icon-search mr-1"></span
-                                                            >{{ localeData?.variant_name }}
+                                                            <span class="icon-search mr-1"></span>
+                                                            {{ localeData?.variant_name }}
                                                         </p>
                                                         <div
                                                             *ngIf="tableHeadInput.variantName"
@@ -88,15 +86,12 @@
                                                             [ngClass]="{ 'active': tableHeadInput.variantName }"
                                                         >
                                                             <ng-container
-                                                                *ngTemplateOutlet="
-                                                                    searchTemplate;
-                                                                    context: { formControl: thVariantName }
-                                                                "
+                                                                *ngTemplateOutlet="searchTemplate; context: { formControl: thVariantName }"
                                                             ></ng-container>
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('variant_name')"
                                                         aria-label="sort icon"
@@ -108,12 +103,7 @@
                                             <!-- Variant UN -->
                                             <th class="cursor-pointer" *ngIf="tableHeaderShowHide.variantUniqueName">
                                                 <div class="d-flex align-items-center">
-                                                    <div
-                                                        (click)="
-                                                            toggleInput('variantUniqueName'); $event.stopPropagation()
-                                                        "
-                                                        class="w-100"
-                                                    >
+                                                    <div (click)="toggleInput('variantUniqueName'); $event.stopPropagation()" class="w-100">
                                                         <p *ngIf="!tableHeadInput.variantUniqueName">
                                                             <span class="icon-search mr-1"></span>
                                                             {{ localeData?.variant_unique_name }}
@@ -132,7 +122,7 @@
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('variant_unique_name')"
                                                         aria-label="sort icon"
@@ -144,10 +134,7 @@
                                             <!--  Stock Name -->
                                             <th *ngIf="tableHeaderShowHide.stockName" class="cursor-pointer">
                                                 <div class="d-flex align-items-center">
-                                                    <div
-                                                        (click)="toggleInput('stockName'); $event.stopPropagation()"
-                                                        class="w-100"
-                                                    >
+                                                    <div (click)="toggleInput('stockName'); $event.stopPropagation()" class="w-100">
                                                         <p *ngIf="!tableHeadInput.stockName">
                                                             <span class="icon-search mr-1"></span>
                                                             {{ localeData?.stock_name }}
@@ -158,15 +145,12 @@
                                                             [ngClass]="{ 'active': tableHeadInput.stockName }"
                                                         >
                                                             <ng-container
-                                                                *ngTemplateOutlet="
-                                                                    searchTemplate;
-                                                                    context: { formControl: thStockName }
-                                                                "
+                                                                *ngTemplateOutlet="searchTemplate; context: { formControl: thStockName }"
                                                             ></ng-container>
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_name')"
                                                         aria-label="sort icon"
@@ -178,12 +162,7 @@
                                             <!--  Stock UN -->
                                             <th *ngIf="tableHeaderShowHide.stockUniqueName" class="cursor-pointer">
                                                 <div class="d-flex align-items-center">
-                                                    <div
-                                                        (click)="
-                                                            toggleInput('stockUniqueName'); $event.stopPropagation()
-                                                        "
-                                                        class="w-100"
-                                                    >
+                                                    <div (click)="toggleInput('stockUniqueName'); $event.stopPropagation()" class="w-100">
                                                         <p *ngIf="!tableHeadInput.stockUniqueName">
                                                             <span class="icon-search mr-1"></span>
                                                             {{ localeData?.stock_unique_name }}
@@ -202,7 +181,7 @@
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_unique_name')"
                                                         aria-label="sort icon"
@@ -212,17 +191,9 @@
                                                 </div>
                                             </th>
                                             <!--  Stock Group Name -->
-                                            <th
-                                                *ngIf="tableHeaderShowHide.stockGroupName"
-                                                class="cursor-pointer min-width-240"
-                                            >
+                                            <th *ngIf="tableHeaderShowHide.stockGroupName" class="cursor-pointer min-width-240">
                                                 <div class="d-flex align-items-center">
-                                                    <div
-                                                        (click)="
-                                                            toggleInput('stockGroupName'); $event.stopPropagation()
-                                                        "
-                                                        class="w-100"
-                                                    >
+                                                    <div (click)="toggleInput('stockGroupName'); $event.stopPropagation()" class="w-100">
                                                         <p *ngIf="!tableHeadInput.stockGroupName">
                                                             <span class="icon-search mr-1"></span>
                                                             {{ localeData?.stock_group_name }}
@@ -241,7 +212,7 @@
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_group_name')"
                                                         aria-label="sort icon"
@@ -275,10 +246,7 @@
                                                         [ngClass]="{ 'active': tableHeadInput.hsn }"
                                                     >
                                                         <ng-container
-                                                            *ngTemplateOutlet="
-                                                                searchTemplate;
-                                                                context: { formControl: thHsn }
-                                                            "
+                                                            *ngTemplateOutlet="searchTemplate; context: { formControl: thHsn }"
                                                         ></ng-container>
                                                     </div>
                                                 </div>
@@ -286,10 +254,7 @@
                                             <!-- SAC -->
                                             <th *ngIf="tableHeaderShowHide.sacNo" class="cursor-pointer min-width-140">
                                                 <div class="d-flex align-items-center">
-                                                    <div
-                                                        (click)="toggleInput('sac'); $event.stopPropagation()"
-                                                        class="w-100"
-                                                    >
+                                                    <div (click)="toggleInput('sac'); $event.stopPropagation()" class="w-100">
                                                         <p *ngIf="!tableHeadInput.sac">
                                                             <span class="icon-search mr-1"></span>
                                                             {{ commonLocaleData?.app_sac }}
@@ -300,10 +265,7 @@
                                                             [ngClass]="{ 'active': tableHeadInput.sac }"
                                                         >
                                                             <ng-container
-                                                                *ngTemplateOutlet="
-                                                                    searchTemplate;
-                                                                    context: { formControl: thSac }
-                                                                "
+                                                                *ngTemplateOutlet="searchTemplate; context: { formControl: thSac }"
                                                             ></ng-container>
                                                         </div>
                                                     </div>
@@ -326,10 +288,7 @@
                                                         [ngClass]="{ 'active': tableHeadInput.skuCode }"
                                                     >
                                                         <ng-container
-                                                            *ngTemplateOutlet="
-                                                                searchTemplate;
-                                                                context: { formControl: thSkuCode }
-                                                            "
+                                                            *ngTemplateOutlet="searchTemplate; context: { formControl: thSkuCode }"
                                                         ></ng-container>
                                                     </div>
                                                 </div>
@@ -362,7 +321,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <p>{{ localeData?.purchase_rate }}</p>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('purchase_rate')"
                                                         aria-label="sort icon"
@@ -408,7 +367,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <p>{{ localeData?.sales_rate }}</p>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('sales_rate')"
                                                         aria-label="sort icon"
@@ -427,25 +386,15 @@
                                                 <p>{{ localeData?.sales_unit }}</p>
                                             </th>
                                             <!-- Fixed Assets Units (Menu) -->
-                                            <th
-                                                *ngIf="
-                                                    inventoryType === 'FIXED_ASSETS' &&
-                                                    tableHeaderShowHide.fixedAssetUnits
-                                                "
-                                            >
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetUnits">
                                                 <p>{{ localeData?.fixed_asset_units }}</p>
                                             </th>
                                             <!-- Fixed Assets Rate -->
-                                            <th
-                                                *ngIf="
-                                                    inventoryType === 'FIXED_ASSETS' &&
-                                                    tableHeaderShowHide.fixedAssetRate
-                                                "
-                                            >
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetRate">
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <p>{{ localeData?.fixed_asset_rate }}</p>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('fixed_asset_rate')"
                                                         aria-label="sort icon"
@@ -455,21 +404,11 @@
                                                 </div>
                                             </th>
                                             <!-- Fixed Assets AN -->
-                                            <th
-                                                *ngIf="
-                                                    inventoryType === 'FIXED_ASSETS' &&
-                                                    tableHeaderShowHide.fixedAssetAccountName
-                                                "
-                                            >
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetAccountName">
                                                 <p>{{ localeData?.fixed_asset_account_name }}</p>
                                             </th>
                                             <!-- Fixed Assets Account UN -->
-                                            <th
-                                                *ngIf="
-                                                    inventoryType === 'FIXED_ASSETS' &&
-                                                    tableHeaderShowHide.fixedAssetAccountUniqueName
-                                                "
-                                            >
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetAccountUniqueName">
                                                 <p>{{ localeData?.fixed_asset_account_unique_name }}</p>
                                             </th>
                                             <!-- Archive -->
@@ -499,12 +438,7 @@
                                                 <p>{{ localeData?.purchase_tax_inclusive }}</p>
                                             </th>
                                             <!-- FixedAsset Tax Inclusive -->
-                                            <th
-                                                *ngIf="
-                                                    inventoryType === 'FIXED_ASSETS' &&
-                                                    tableHeaderShowHide.fixedAssetTaxInclusive
-                                                "
-                                            >
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetTaxInclusive">
                                                 <p>{{ localeData?.fixed_asset_tax_inclusive }}</p>
                                             </th>
                                             <!-- Discount Field -->
@@ -519,25 +453,14 @@
                                         </tr>
                                     </thead>
                                     <tbody formArrayName="fields">
-                                        <ng-container
-                                            *ngFor="
-                                                let row of bulkStockEditForm.get('fields')['controls'];
-                                                let i = index
-                                            "
-                                        >
+                                        <ng-container *ngFor="let row of bulkStockEditForm.get('fields')['controls']; let i = index">
                                             <tr
                                                 [formGroupName]="i"
                                                 (clickOutside)="selectTableRowIndex == i && hideTableInput()"
-                                                (click)="
-                                                    selectTableRowIndex != i && showTableInput($event, i);
-                                                    hideTableHeadInput()
-                                                "
+                                                (click)="selectTableRowIndex != i && showTableInput($event, i); hideTableHeadInput()"
                                             >
                                                 <!-- Variant Name -->
-                                                <td
-                                                    *ngIf="tableHeaderShowHide.variantName"
-                                                    (click)="getInputIndex(i, 'variantName')"
-                                                >
+                                                <td *ngIf="tableHeaderShowHide.variantName" (click)="getInputIndex(i, 'variantName')">
                                                     <div class="border-line">
                                                         <text-field
                                                             [type]="'text'"
@@ -545,8 +468,7 @@
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('variantName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!-- Variant UN -->
@@ -561,15 +483,11 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('variantUniqueName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Stock Name -->
-                                                <td
-                                                    *ngIf="tableHeaderShowHide.stockName"
-                                                    (click)="getInputIndex(i, 'stockName')"
-                                                >
+                                                <td *ngIf="tableHeaderShowHide.stockName" (click)="getInputIndex(i, 'stockName')">
                                                     <div class="border-line">
                                                         <text-field
                                                             [type]="'text'"
@@ -577,8 +495,7 @@
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('stockName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Stock UN -->
@@ -593,8 +510,7 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('stockUniqueName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Stock Group Name -->
@@ -611,8 +527,7 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('stockGroupName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="stockGroupUniqueName"
@@ -624,8 +539,7 @@
                                                             "
                                                             [required]="true"
                                                             [showLabel]="false"
-                                                        >
-                                                        </reactive-dropdown-field>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!--  Stock Group Unique Name -->
@@ -640,8 +554,7 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('stockGroupUniqueName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!-- Stock Unit -->
@@ -654,18 +567,12 @@
                                                         <div
                                                             class="custom-padding"
                                                             [matTooltip]="
-                                                                row.get('stockUnitName').value +
-                                                                '(' +
-                                                                row.get('stockUnitCode').value +
-                                                                ')'
+                                                                row.get('stockUnitName').value + '(' + row.get('stockUnitCode').value + ')'
                                                             "
                                                             matTooltipPosition="above"
                                                         >
                                                             {{
-                                                                row.get("stockUnitName").value +
-                                                                    "(" +
-                                                                    row.get("stockUnitCode").value +
-                                                                    ")"
+                                                                row.get('stockUnitName').value + '(' + row.get('stockUnitCode').value + ')'
                                                             }}
                                                         </div>
                                                     </div>
@@ -684,8 +591,7 @@
                                                             [matTooltip]="row.get('hsnNo').value"
                                                             matTooltipPosition="above"
                                                             [allowDecimalDigitsOnly]="true"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!-- SAC -->
@@ -702,15 +608,11 @@
                                                             [matTooltip]="row.get('sacNo').value"
                                                             [allowDecimalDigitsOnly]="true"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!-- SKU Code -->
-                                                <td
-                                                    *ngIf="tableHeaderShowHide.skuCode"
-                                                    (click)="getInputIndex(i, 'skuCode')"
-                                                >
+                                                <td *ngIf="tableHeaderShowHide.skuCode" (click)="getInputIndex(i, 'skuCode')">
                                                     <div class="border-line">
                                                         <text-field
                                                             [type]="'text'"
@@ -718,8 +620,7 @@
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('skuCode').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Purchases Account Name -->
@@ -738,28 +639,22 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('purchaseAccountName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="purchaseAccountUniqueName"
                                                             [options]="purchaseAccountList"
-                                                            [openDropdown]="
-                                                                selectTableRowName === 'purchaseAccountName'
-                                                            "
+                                                            [openDropdown]="selectTableRowName === 'purchaseAccountName'"
                                                             [showLabel]="false"
                                                             (selectedOption)="
                                                                 row.get('purchaseAccountName').setValue($event.label);
-                                                                row
-                                                                    .get('purchaseAccountUniqueName')
-                                                                    .setValue($event.value)
+                                                                row.get('purchaseAccountUniqueName').setValue($event.value)
                                                             "
                                                             (onClear)="
                                                                 row.get('purchaseAccountName').setValue('');
                                                                 row.get('purchaseAccountUniqueName').setValue('')
                                                             "
-                                                        >
-                                                        </reactive-dropdown-field>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!--  Purchases Account UN -->
@@ -777,8 +672,7 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('purchaseAccountUniqueName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Purchases Rate -->
@@ -796,8 +690,7 @@
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('purchaseRate').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Purchases Unit  (Menu)-->
@@ -816,21 +709,17 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('purchaseUnitsCode').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="purchaseUnits"
                                                             [openDropdown]="selectTableRowName === 'purchaseUnits'"
                                                             [options]="stockMainUnits"
                                                             [labelValue]="row.get('purchaseUnitsCode').value"
-                                                            (selectedOption)="
-                                                                row.get('purchaseUnitsCode').setValue($event.label)
-                                                            "
+                                                            (selectedOption)="row.get('purchaseUnitsCode').setValue($event.label)"
                                                             (onClear)="row.get('purchaseUnitsCode').setValue('')"
                                                             [showLabel]="false"
-                                                        >
-                                                        </reactive-dropdown-field>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!--  Sales Account Name -->
@@ -849,8 +738,7 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('salesAccountName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="salesAccountUniqueName"
@@ -865,8 +753,7 @@
                                                                 row.get('salesAccountName').setValue('');
                                                                 row.get('salesAccountUniqueName').setValue('')
                                                             "
-                                                        >
-                                                        </reactive-dropdown-field>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!--  Sales Account UN -->
@@ -884,8 +771,7 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('salesAccountUniqueName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Sales Rate -->
@@ -903,8 +789,7 @@
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('salesRate').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Sales Unit (Menu) -->
@@ -923,30 +808,23 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('salesUnitsCode').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="salesUnits"
                                                             [options]="stockMainUnits"
                                                             [openDropdown]="selectTableRowName === 'salesUnits'"
                                                             [labelValue]="row.get('salesUnitsCode').value"
-                                                            (selectedOption)="
-                                                                row.get('salesUnitsCode').setValue($event.label)
-                                                            "
+                                                            (selectedOption)="row.get('salesUnitsCode').setValue($event.label)"
                                                             (onClear)="row.get('salesUnitsCode').setValue('')"
                                                             [showLabel]="false"
-                                                        >
-                                                        </reactive-dropdown-field>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Units (Menu)-->
                                                 <td
                                                     (click)="getInputIndex(i, 'fixedAssetUnits')"
-                                                    *ngIf="
-                                                        inventoryType === 'FIXED_ASSETS' &&
-                                                        tableHeaderShowHide.fixedAssetUnits
-                                                    "
+                                                    *ngIf="inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetUnits"
                                                 >
                                                     <div class="border-line">
                                                         <text-field
@@ -956,30 +834,23 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('fixedAssetUnitsCode').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="fixedAssetUnits"
                                                             [options]="stockMainUnits"
                                                             [labelValue]="row.get('fixedAssetUnitsCode').value"
-                                                            (selectedOption)="
-                                                                row.get('fixedAssetUnitsCode').setValue($event.label)
-                                                            "
+                                                            (selectedOption)="row.get('fixedAssetUnitsCode').setValue($event.label)"
                                                             (onClear)="row.get('fixedAssetUnitsCode').setValue('')"
                                                             [openDropdown]="selectTableRowName === 'fixedAssetUnits'"
                                                             [showLabel]="false"
-                                                        >
-                                                        </reactive-dropdown-field>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Rate -->
                                                 <td
                                                     (click)="getInputIndex(i, 'fixedAssetRate')"
-                                                    *ngIf="
-                                                        inventoryType === 'FIXED_ASSETS' &&
-                                                        tableHeaderShowHide.fixedAssetRate
-                                                    "
+                                                    *ngIf="inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetRate"
                                                 >
                                                     <div class="border-line">
                                                         <text-field
@@ -988,17 +859,13 @@
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('fixedAssetRate').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets AN -->
                                                 <td
                                                     (click)="getInputIndex(i, 'fixedAssetAccountName')"
-                                                    *ngIf="
-                                                        inventoryType === 'FIXED_ASSETS' &&
-                                                        tableHeaderShowHide.fixedAssetAccountName
-                                                    "
+                                                    *ngIf="inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetAccountName"
                                                 >
                                                     <div class="border-line">
                                                         <text-field
@@ -1008,36 +875,29 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('fixedAssetAccountName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="fixedAssetAccountUniqueName"
                                                             [options]="fixedAssetAccountList"
-                                                            [openDropdown]="
-                                                                selectTableRowName === 'fixedAssetAccountName'
-                                                            "
+                                                            [openDropdown]="selectTableRowName === 'fixedAssetAccountName'"
                                                             [showLabel]="false"
                                                             (selectedOption)="
                                                                 row.get('fixedAssetAccountName').setValue($event.label);
-                                                                row
-                                                                    .get('fixedAssetAccountUniqueName')
-                                                                    .setValue($event.value)
+                                                                row.get('fixedAssetAccountUniqueName').setValue($event.value)
                                                             "
                                                             (onClear)="
                                                                 row.get('fixedAssetAccountName').setValue('');
                                                                 row.get('fixedAssetAccountUniqueName').setValue('')
                                                             "
-                                                        >
-                                                        </reactive-dropdown-field>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Account UN -->
                                                 <td
                                                     (click)="getInputIndex(i, 'fixedAssetAccountUniqueName')"
                                                     *ngIf="
-                                                        inventoryType === 'FIXED_ASSETS' &&
-                                                        tableHeaderShowHide.fixedAssetAccountUniqueName
+                                                        inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetAccountUniqueName
                                                     "
                                                 >
                                                     <div class="border-line">
@@ -1047,8 +907,7 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('fixedAssetAccountUniqueName').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                     </div>
                                                 </td>
                                                 <!-- Archive -->
@@ -1067,12 +926,9 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            <div
-                                                                [matMenuTriggerFor]="menu"
-                                                                #menuTrigger="matMenuTrigger"
-                                                            >
+                                                            <div [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
                                                                 {{
-                                                                    row.get("archive").value
+                                                                    row.get('archive').value
                                                                         ? commonLocaleData?.app_yes
                                                                         : commonLocaleData?.app_no
                                                                 }}
@@ -1082,14 +938,12 @@
                                                                     mat-menu-item
                                                                     (click)="
                                                                         $event.stopPropagation();
-                                                                        row
-                                                                            .get('archive')
-                                                                            .patchValue(!row.get('archive').value);
+                                                                        row.get('archive').patchValue(!row.get('archive').value);
                                                                         menuTrigger.closeMenu()
                                                                     "
                                                                 >
                                                                     {{
-                                                                        row.get("archive").value
+                                                                        row.get('archive').value
                                                                             ? commonLocaleData?.app_no
                                                                             : commonLocaleData?.app_yes
                                                                     }}
@@ -1112,8 +966,7 @@
                                                             [readonly]="true"
                                                             [matTooltip]="row.get('taxes').value"
                                                             matTooltipPosition="above"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                         <mat-select
                                                             #taxSelect
                                                             *ngIf="selectTableRowIndex === i"
@@ -1127,12 +980,8 @@
                                                         >
                                                             <mat-option class="mt-0">
                                                                 <ngx-mat-select-search
-                                                                    [placeholderLabel]="
-                                                                        commonLocaleData?.app_sales_person_placeholder
-                                                                    "
-                                                                    [noEntriesFoundLabel]="
-                                                                        commonLocaleData?.app_no_result_found
-                                                                    "
+                                                                    [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
+                                                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                                                     [formControl]="taxDropdown"
                                                                 >
                                                                     <i class="icon-cross" ngxMatSelectSearchClear></i>
@@ -1143,17 +992,17 @@
                                                                 [value]="tax?.uniqueName"
                                                                 [disabled]="tax.isDisabled"
                                                                 (click)="$event.stopPropagation()"
-                                                                (onSelectionChange)="
-                                                                    !tax.isDisabled ? selectTax(tax, i) : ''
-                                                                "
-                                                                >{{ tax.name }}</mat-option
+                                                                (onSelectionChange)="!tax.isDisabled ? selectTax(tax, i) : ''"
                                                             >
+                                                                {{ tax.name }}
+                                                            </mat-option>
                                                             <mat-option
                                                                 class="create-update-no-data"
                                                                 [disabled]="true"
                                                                 *ngIf="!getTaxesForRow(i)?.length"
-                                                                >{{ commonLocaleData?.app_no_result_found }}</mat-option
                                                             >
+                                                                {{ commonLocaleData?.app_no_result_found }}
+                                                            </mat-option>
                                                         </mat-select>
                                                         <!-- <mat-select
                                                             class="vertical-margin"
@@ -1202,29 +1051,24 @@
                                                                 #salesTaxInclusiveMenuTrigger="matMenuTrigger"
                                                             >
                                                                 {{
-                                                                    row.get("salesTaxInclusive").value
+                                                                    row.get('salesTaxInclusive').value
                                                                         ? localeData?.inclusive
                                                                         : localeData?.exclusive
                                                                 }}
                                                             </div>
-                                                            <mat-menu
-                                                                #salesTaxInclusiveMenu="matMenu"
-                                                                [hasBackdrop]="false"
-                                                            >
+                                                            <mat-menu #salesTaxInclusiveMenu="matMenu" [hasBackdrop]="false">
                                                                 <button
                                                                     mat-menu-item
                                                                     (click)="
                                                                         $event.stopPropagation();
                                                                         row
                                                                             .get('salesTaxInclusive')
-                                                                            .patchValue(
-                                                                                !row.get('salesTaxInclusive').value
-                                                                            );
+                                                                            .patchValue(!row.get('salesTaxInclusive').value);
                                                                         salesTaxInclusiveMenuTrigger.closeMenu()
                                                                     "
                                                                 >
                                                                     {{
-                                                                        row.get("salesTaxInclusive").value
+                                                                        row.get('salesTaxInclusive').value
                                                                             ? localeData?.exclusive
                                                                             : localeData?.inclusive
                                                                     }}
@@ -1256,29 +1100,24 @@
                                                                 #purchaseTaxInclusiveMenuTrigger="matMenuTrigger"
                                                             >
                                                                 {{
-                                                                    row.get("purchaseTaxInclusive").value
+                                                                    row.get('purchaseTaxInclusive').value
                                                                         ? localeData?.inclusive
                                                                         : localeData?.exclusive
                                                                 }}
                                                             </div>
-                                                            <mat-menu
-                                                                #purchaseTaxInclusiveMenu="matMenu"
-                                                                [hasBackdrop]="false"
-                                                            >
+                                                            <mat-menu #purchaseTaxInclusiveMenu="matMenu" [hasBackdrop]="false">
                                                                 <button
                                                                     mat-menu-item
                                                                     (click)="
                                                                         $event.stopPropagation();
                                                                         row
                                                                             .get('purchaseTaxInclusive')
-                                                                            .patchValue(
-                                                                                !row.get('purchaseTaxInclusive').value
-                                                                            );
+                                                                            .patchValue(!row.get('purchaseTaxInclusive').value);
                                                                         purchaseTaxInclusiveMenuTrigger.closeMenu()
                                                                     "
                                                                 >
                                                                     {{
-                                                                        row.get("purchaseTaxInclusive").value
+                                                                        row.get('purchaseTaxInclusive').value
                                                                             ? localeData?.exclusive
                                                                             : localeData?.inclusive
                                                                     }}
@@ -1290,10 +1129,7 @@
                                                 <!-- FixedAsset Tax Inclusive -->
                                                 <td
                                                     (click)="getInputIndex(i, 'fixedAssetTaxInclusive')"
-                                                    *ngIf="
-                                                        inventoryType === 'FIXED_ASSETS' &&
-                                                        tableHeaderShowHide.fixedAssetTaxInclusive
-                                                    "
+                                                    *ngIf="inventoryType === 'FIXED_ASSETS' && tableHeaderShowHide.fixedAssetTaxInclusive"
                                                 >
                                                     <div class="border-line">
                                                         <div
@@ -1310,29 +1146,24 @@
                                                                 #fixedAssetTaxInclusiveMenuTrigger="matMenuTrigger"
                                                             >
                                                                 {{
-                                                                    row.get("fixedAssetTaxInclusive").value
+                                                                    row.get('fixedAssetTaxInclusive').value
                                                                         ? localeData?.inclusive
                                                                         : localeData?.exclusive
                                                                 }}
                                                             </div>
-                                                            <mat-menu
-                                                                #fixedAssetTaxInclusiveMenu="matMenu"
-                                                                [hasBackdrop]="false"
-                                                            >
+                                                            <mat-menu #fixedAssetTaxInclusiveMenu="matMenu" [hasBackdrop]="false">
                                                                 <button
                                                                     mat-menu-item
                                                                     (click)="
                                                                         $event.stopPropagation();
                                                                         row
                                                                             .get('fixedAssetTaxInclusive')
-                                                                            .patchValue(
-                                                                                !row.get('fixedAssetTaxInclusive').value
-                                                                            );
+                                                                            .patchValue(!row.get('fixedAssetTaxInclusive').value);
                                                                         fixedAssetTaxInclusiveMenuTrigger.closeMenu()
                                                                     "
                                                                 >
                                                                     {{
-                                                                        row.get("fixedAssetTaxInclusive").value
+                                                                        row.get('fixedAssetTaxInclusive').value
                                                                             ? localeData?.exclusive
                                                                             : localeData?.inclusive
                                                                     }}
@@ -1343,18 +1174,14 @@
                                                 </td>
 
                                                 <!-- Discount Field -->
-                                                <td
-                                                    *ngIf="tableHeaderShowHide.discountName"
-                                                    (click)="getInputIndex(i, 'discountName')"
-                                                >
+                                                <td *ngIf="tableHeaderShowHide.discountName" (click)="getInputIndex(i, 'discountName')">
                                                     <div class="border-line">
                                                         <text-field
                                                             *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
                                                             formControlName="discountName"
                                                             [readonly]="true"
-                                                        >
-                                                        </text-field>
+                                                        ></text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex === i"
                                                             formControlName="discountUniqueName"
@@ -1370,16 +1197,10 @@
                                                 </td>
                                                 <!-- Custom Fileds (Menu)-->
                                                 <ng-container
-                                                    *ngIf="
-                                                        tableHeaderDynamicColumns.length &&
-                                                        row?.get('customFields')?.controls?.length
-                                                    "
+                                                    *ngIf="tableHeaderDynamicColumns.length && row?.get('customFields')?.controls?.length"
                                                 >
                                                     <td
-                                                        *ngFor="
-                                                            let customField of row.get('customFields').controls;
-                                                            let j = index
-                                                        "
+                                                        *ngFor="let customField of row.get('customFields').controls; let j = index"
                                                         (click)="getInputIndex(i, customField.get('key')?.value)"
                                                         class="min-width-140"
                                                     >
@@ -1405,22 +1226,17 @@
                                                                         "
                                                                         formControlName="value"
                                                                         [minlength]="
-                                                                            allCustomField[
-                                                                                customField.get('uniqueName')?.value
-                                                                            ]?.dataRange?.min
+                                                                            allCustomField[customField.get('uniqueName')?.value]?.dataRange
+                                                                                ?.min
                                                                         "
                                                                         [maxlength]="
-                                                                            allCustomField[
-                                                                                customField.get('uniqueName')?.value
-                                                                            ]?.dataRange?.max
+                                                                            allCustomField[customField.get('uniqueName')?.value]?.dataRange
+                                                                                ?.max
                                                                         "
                                                                         [pattern]="
-                                                                            allCustomField[
-                                                                                customField.get('uniqueName')?.value
-                                                                            ]?.regex
+                                                                            allCustomField[customField.get('uniqueName')?.value]?.regex
                                                                         "
-                                                                    >
-                                                                    </text-field>
+                                                                    ></text-field>
                                                                     <div
                                                                         *ngIf="
                                                                             customField.get('dataType')?.value ===
@@ -1428,15 +1244,14 @@
                                                                         "
                                                                         class="text-center"
                                                                     >
-                                                                        <mat-slide-toggle
-                                                                            color="primary"
-                                                                            formControlName="value"
-                                                                        >
-                                                                            <span>{{
-                                                                                customField.get("value")?.value
-                                                                                    ? commonLocaleData?.app_true
-                                                                                    : commonLocaleData?.app_false
-                                                                            }}</span>
+                                                                        <mat-slide-toggle color="primary" formControlName="value">
+                                                                            <span>
+                                                                                {{
+                                                                                    customField.get('value')?.value
+                                                                                        ? commonLocaleData?.app_true
+                                                                                        : commonLocaleData?.app_false
+                                                                                }}
+                                                                            </span>
                                                                         </mat-slide-toggle>
                                                                     </div>
                                                                 </ng-container>
@@ -1480,7 +1295,7 @@
         </div>
         <section class="mb-custom-80"></section>
     </div>
-</ng-container>
+</div>
 
 <ng-template #bulkStockAdvanceFilter>
     <bulk-stock-advance-filter

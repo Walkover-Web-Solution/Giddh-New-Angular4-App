@@ -25,13 +25,16 @@ import { ReportType } from '../../../multi-currency-reports/multi-currency.const
 import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { GeneralService } from '../../../services/general.service';
+import { Configuration } from '../../../app.constant';
+import { includes, indexOf } from '../../../lodash-optimized';
 
 @Component({
-    selector: '[grid-row]',
+selector: '[grid-row]',
     styleUrls: ['./grid-row.component.scss'],
     templateUrl: './grid-row.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [FinancialReportsComponentStore]
+    providers: [FinancialReportsComponentStore],
+    standalone: false
 })
 export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
@@ -109,10 +112,44 @@ export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
         const separator = url.includes('?') ? '&' : '?';
         url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
 
-        if (isElectron) {
-            const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
-            ipcRenderer.send('open-url', electronUrl);
+        if (Configuration.isElectron) {
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+                        (window as any).electronAPI.send('open-url', electronUrl);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+                            electron.ipcRenderer.send('open-url', electronUrl);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+
+                    }
+                }
+
+                // Fallback to regular window.open if IPC not available
+                if (!electronIpcAvailable) {
+
+                    (window as any).open(url, '_blank');
+                }
+            } catch (error) {
+
+                (window as any).open(url, '_blank');
+            }
         } else {
             (window as any).open(url, '_blank');
         }
@@ -179,7 +216,7 @@ export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
      public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
         const model = {
             request: {
-                reportType: ReportType.TrialBalance,
+                reportType: ReportType.TRIAL_BALANCE,
                 from: this.from,
                 to: this.to,
                 branchUniqueName: this.generalService.currentBranchUniqueName

@@ -1,13 +1,5 @@
-<ng-container
-    appTranslate
-    [file]="'gst'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
-    <div
-        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState"
-    >
+<div appTranslate [file]="'gst'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
             [exclude]="'#primary-new-header'"
@@ -49,17 +41,14 @@
     <div
         class="tax-engine"
         [ngClass]="{
-            'content-disabled':
-                (gstr1OverviewDataInProgress$ | async) ||
-                (gstr2OverviewDataInProgress$ | async) ||
-                !activeCompanyGstNumber
+            'content-disabled': (gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async) || !activeCompanyGstNumber,
         }"
     >
         <div class="header-band filings-header clear-both">
             <div class="header-info pull-left">
                 <ul class="list-inline list-middle">
                     <li>
-                        <span class="font-weight-regular"> {{ localeData?.gst_summary_for }} </span>
+                        <span class="font-weight-regular">{{ localeData?.gst_summary_for }}</span>
                     </li>
                     <li>
                         <giddh-datepicker
@@ -70,8 +59,7 @@
                             [placeholder]="date?.value ?? '--'"
                             [appearance]="'outline'"
                             (monthYearSelected)="setMonthAndYear($event)"
-                        >
-                        </giddh-datepicker>
+                        ></giddh-datepicker>
                     </li>
                 </ul>
             </div>
@@ -91,35 +79,30 @@
                     [ngClass]="{ 'content-disabled': !isMonthSelected || !activeCompanyGstNumber }"
                 >
                     <div class="d-flex justify-content-between align-items-center column-gap-1">
-                        <img src="{{ imgPath }}summary.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="summary img" />
+                        <img src="{{ imgPath }}gst/summary.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="summary img" />
                         <b>{{ localeData?.gstr3b_summary }}</b>
                     </div>
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        aria-label="summary"
-                        (click)="navigateTogstR3B(GstReport.Gstr3b)"
-                    >
+                    <button matButton="filled" aria-label="summary" (click)="navigateTogstR3B(GstReport.Gstr3b)">
                         {{ localeData?.view_summary }}
                     </button>
                 </div>
                 <!-- ============================ GSTR3B SUMMARY ================================== -->
                 <div class="seperate-border mt-2"></div>
                 <!-- ============================ GSTR1 ================================== -->
-                <div class="mt-2 parent position-relative ">
+                <div class="mt-2 parent position-relative">
                     <div
                         class="return-content p-3"
                         [ngClass]="{
-                            'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async)
+                            'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async),
                         }"
                     >
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <img src="{{ imgPath }}cart.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="cart-img" />
+                                <img src="{{ imgPath }}gst/cart.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="cart-img" />
                                 <div class="mt-1">
                                     <div class="font-size-16">
-                                        <b class="text-middle"
-                                            >{{ localeData?.gstr1_label }}
+                                        <b class="text-middle">
+                                            {{ localeData?.gstr1_label }}
                                             <ng-container *ngIf="isMonthSelected">
                                                 ({{ dayjs(selectedMonth).format(giddhDateFormatMonthYear) }})
                                             </ng-container>
@@ -136,8 +119,7 @@
                             </div>
                             <button
                                 *ngIf="gstr1TransactionCounts"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 aria-label="summary"
                                 class="mt-2"
                                 (click)="navigateToOverview(GstReport.Gstr1)"
@@ -149,16 +131,16 @@
                         <div class="content-graph" *ngIf="gstr1TransactionCounts">
                             <div class="sales-colm">
                                 <div class="text-muted text-uppercase font-size-12">
-                                    <b> {{ localeData?.all_transactions }} </b>
+                                    <b>{{ localeData?.all_transactions }}</b>
                                 </div>
                                 <div class="line"></div>
                                 <div class="count">
-                                    <a (click)="navigateToOverview(GstReport.Gstr1)" href="javascript:void(0);" aria-label="transaction"
-                                        ><span class="font-size-24"
-                                            ><b> {{ gstr1TransactionCounts }} </b></span
-                                        >
-                                        <span>{{ commonLocaleData?.app_transactions }}</span></a
-                                    >
+                                    <a (click)="navigateToOverview(GstReport.Gstr1)" href="javascript:void(0);" aria-label="transaction">
+                                        <span class="font-size-24">
+                                            <b>{{ gstr1TransactionCounts }}</b>
+                                        </span>
+                                        <span>{{ commonLocaleData?.app_transactions }}</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +150,11 @@
                                 <div class="row empty-return-row">
                                     <div
                                         class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                        [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales']"
+                                        [routerLink]="[
+                                            voucherApiVersion === 2
+                                                ? '/pages/vouchers/sales/create'
+                                                : '/pages/proforma-invoice/invoice/sales',
+                                        ]"
                                     >
                                         <svg
                                             id="Layer_1"
@@ -245,7 +231,7 @@
                 <!-- ============================ GSTR1 ================================== -->
                 <div class="seperate-border mt-2"></div>
                 <!-- ============================ GSTR2 ================================== -->
-                <div class="mt-2 position-relative ">
+                <div class="mt-2 position-relative">
                     <div class="text-overdue ss" *ngIf="!isMonthSelected">
                         <i class="text-middle">{{ localeData?.month_report_download_note_gstr2 }}</i>
                     </div>
@@ -253,96 +239,97 @@
                     <div
                         class="return-content p-3"
                         [ngClass]="{
-                            'content-disabled':
-                                !isMonthSelected || !activeCompanyGstNumber || (gstr2OverviewDataInProgress$ | async)
+                            'content-disabled': !isMonthSelected || !activeCompanyGstNumber || (gstr2OverviewDataInProgress$ | async),
                         }"
                     >
-                    <button
-                        *ngIf="gstr2TransactionCounts"
-                        mat-raised-button
-                        color="primary"
-                        aria-label="summary"
-                        class="pull-right mt-2"
-                        (click)="navigateToOverview(GstReport.Gstr2)"
-                    >
-                        {{ localeData?.view_summary }}
-                    </button>
+                        <button
+                            *ngIf="gstr2TransactionCounts"
+                            matButton="filled"
+                            aria-label="summary"
+                            class="pull-right mt-2"
+                            (click)="navigateToOverview(GstReport.Gstr2)"
+                        >
+                            {{ localeData?.view_summary }}
+                        </button>
 
-                    <div>
-                        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="bag img"  />
-                        <div class="mt-1">
-                            <div class="font-size-16">
-                                <b
-                                    >{{ localeData?.gstr2_label }}
+                        <div>
+                            <img src="{{ imgPath }}gst/bag.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="bag img" />
+                            <div class="mt-1">
+                                <div class="font-size-16">
+                                    <b>
+                                        {{ localeData?.gstr2_label }}
 
-                                    <ng-container *ngIf="isMonthSelected">
-                                        ({{ dayjs(selectedMonth).format(giddhDateFormatMonthYear) }})
-                                    </ng-container>
-                                    <ng-container *ngIf="!isMonthSelected">
-                                        ({{ dayjs(currentPeriod?.from, giddhDateFormat).format(giddhDateFormatWithSpace) }}
-                                        -
-                                        {{ dayjs(currentPeriod?.to, giddhDateFormat).format(giddhDateFormatWithSpace) }})
-                                    </ng-container>
-                                </b>
-                            </div>
-                            <p>{{ localeData?.inward_supplies_details }}</p>
-                        </div>
-                    </div>
-
-                    <div class="content-graph gstr2-push-disabled" *ngIf="gstr2TransactionCounts">
-                        <div class="purchase-colm">
-                            <div class="text-muted text-uppercase font-size-12">
-                                <b> {{ localeData?.all_transactions }} </b>
-                            </div>
-                            <div class="line"></div>
-                            <div class="count">
-                                <a (click)="navigateToOverview(GstReport.Gstr2)"  href="javascript:void(0);"  aria-label="transaction"
-                                    ><span class="font-size-24"
-                                        ><b> {{ gstr2TransactionCounts }} </b></span
-                                    >
-                                    <span>&nbsp;{{ localeData?.app_transactions }}</span></a
-                                >
+                                        <ng-container *ngIf="isMonthSelected">
+                                            ({{ dayjs(selectedMonth).format(giddhDateFormatMonthYear) }})
+                                        </ng-container>
+                                        <ng-container *ngIf="!isMonthSelected">
+                                            ({{ dayjs(currentPeriod?.from, giddhDateFormat).format(giddhDateFormatWithSpace) }}
+                                            -
+                                            {{ dayjs(currentPeriod?.to, giddhDateFormat).format(giddhDateFormatWithSpace) }})
+                                        </ng-container>
+                                    </b>
+                                </div>
+                                <p>{{ localeData?.inward_supplies_details }}</p>
                             </div>
                         </div>
 
-                        <div class="purchase-colm">
-                            <div class="text-muted text-uppercase font-size-12">
-                                <b>{{ localeData?.uncategorized }}</b>
+                        <div class="content-graph gstr2-push-disabled" *ngIf="gstr2TransactionCounts">
+                            <div class="purchase-colm">
+                                <div class="text-muted text-uppercase font-size-12">
+                                    <b>{{ localeData?.all_transactions }}</b>
+                                </div>
+                                <div class="line"></div>
+                                <div class="count">
+                                    <a (click)="navigateToOverview(GstReport.Gstr2)" href="javascript:void(0);" aria-label="transaction">
+                                        <span class="font-size-24">
+                                            <b>{{ gstr2TransactionCounts }}</b>
+                                        </span>
+                                        <span>&nbsp;{{ localeData?.app_transactions }}</span>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="line"></div>
-                            <div class="count">
-                                <a
-                                    href="javascript:void(0);"  aria-label="transaction"
-                                    ><span class="font-size-24"
-                                        ><b>{{ commonLocaleData?.app_numbers?.zero }}</b></span
-                                    >
-                                    <span>&nbsp;{{ localeData?.app_transactions }}</span></a
-                                >
-                            </div>
-                        </div>
 
-                        <div class="text-overdue ss mt-5">
-                            <span class="theme-primary-color">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-middle">
-                                    <path
-                                        d="M437.2 74.8C388.8 26.4 324.4-.2 256-.2c-68.4 0-132.8 26.7-181.2 75.1C26.4 123.2-.2 187.6-.2 256c0 68.4 26.7 132.8 75.1 181.2 48.4 48.4 112.7 75.1 181.2 75.1 68.4 0 132.8-26.7 181.2-75.1s75.1-112.7 75.1-181.2c-.2-68.4-26.8-132.8-75.2-181.2z"
-                                    ></path>
-                                    <path
-                                        fill="#FFF"
-                                        d="M256.5 348.9c-17.7 0-32 14.1-32 31.6s14.3 31.6 32 31.6 32-14.2 32-31.6c.1-17.4-14.3-31.6-32-31.6zm-.8-246.2c-25.8 0-45.7 22.6-42.5 47.9 2.7 20.9 22.5 125.3 29.2 159.9 1.3 6.5 7 12.3 13.7 12.3h.3c6.5 0 12.1-5.7 13.3-12 6.5-34.1 26.5-138.9 29.1-160.2 3.3-25.6-17-47.9-43.1-47.9z"
-                                    ></path>
-                                </svg>
-                            </span>
-                            <i class="text-vertical-align-middle p-0 ml-1">{{ localeData?.gstr2_push_disabled }}</i>
+                            <div class="purchase-colm">
+                                <div class="text-muted text-uppercase font-size-12">
+                                    <b>{{ localeData?.uncategorized }}</b>
+                                </div>
+                                <div class="line"></div>
+                                <div class="count">
+                                    <a href="javascript:void(0);" aria-label="transaction">
+                                        <span class="font-size-24">
+                                            <b>{{ commonLocaleData?.app_numbers?.zero }}</b>
+                                        </span>
+                                        <span>&nbsp;{{ localeData?.app_transactions }}</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="text-overdue ss mt-5">
+                                <span class="theme-primary-color">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-middle">
+                                        <path
+                                            d="M437.2 74.8C388.8 26.4 324.4-.2 256-.2c-68.4 0-132.8 26.7-181.2 75.1C26.4 123.2-.2 187.6-.2 256c0 68.4 26.7 132.8 75.1 181.2 48.4 48.4 112.7 75.1 181.2 75.1 68.4 0 132.8-26.7 181.2-75.1s75.1-112.7 75.1-181.2c-.2-68.4-26.8-132.8-75.2-181.2z"
+                                        ></path>
+                                        <path
+                                            fill="#FFF"
+                                            d="M256.5 348.9c-17.7 0-32 14.1-32 31.6s14.3 31.6 32 31.6 32-14.2 32-31.6c.1-17.4-14.3-31.6-32-31.6zm-.8-246.2c-25.8 0-45.7 22.6-42.5 47.9 2.7 20.9 22.5 125.3 29.2 159.9 1.3 6.5 7 12.3 13.7 12.3h.3c6.5 0 12.1-5.7 13.3-12 6.5-34.1 26.5-138.9 29.1-160.2 3.3-25.6-17-47.9-43.1-47.9z"
+                                        ></path>
+                                    </svg>
+                                </span>
+                                <i class="text-vertical-align-middle p-0 ml-1">{{ localeData?.gstr2_push_disabled }}</i>
+                            </div>
                         </div>
-                    </div>
 
                         <!--   -->
                         <div class="content-graph" *ngIf="!gstr2TransactionCounts">
                             <div class="d-flex justify-content-around empty-return-row">
                                 <div
                                     class="text-center filing-steps cursor-pointer d-flex flex-column justify-content-center align-items-center"
-                                    [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/purchase/create' : '/pages/proforma-invoice/invoice/purchase']"
+                                    [routerLink]="[
+                                        voucherApiVersion === 2
+                                            ? '/pages/vouchers/purchase/create'
+                                            : '/pages/proforma-invoice/invoice/purchase',
+                                    ]"
                                 >
                                     <svg
                                         id="Layer_1"
@@ -398,17 +385,10 @@
                 <!-- =================================== FINAL RETURN ============================= -->
                 <div class="return-content p-3" *ngIf="false">
                     <span class="btn-toolbar pull-right">
-                        <button
-                            mat-raised-button
-                            color="primary"
-                        >{{ localeData?.file_now }}</button>
+                        <button matButton="filled">{{ localeData?.file_now }}</button>
                     </span>
                     <div>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 512 512"
-                            class="icon icon-xxlg-md text-middle"
-                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-xxlg-md text-middle">
                             <path
                                 d="M344.4 116.1c-33.5 0-64.3 11.8-88.4 31.5-24.1-19.7-54.9-31.5-88.4-31.5-77.1 0-139.9 62.8-139.9 139.9 0 77.1 62.8 139.9 139.9 139.9 77.1 0 139.9-62.8 139.9-139.9 0-38.2-15.4-72.9-40.3-98.2 21.3-16.7 48.1-26.7 77.1-26.7 68.9 0 124.9 56 124.9 124.9s-56 124.9-124.9 124.9c-16 0-31.5-3-46.3-8.8-3.8-1.5-8.2.3-9.7 4.2-1.5 3.8.3 8.2 4.2 9.7 16.5 6.6 33.9 9.9 51.8 9.9 77.1 0 139.9-62.8 139.9-139.9.1-77.1-62.7-139.9-139.8-139.9zM167.6 380.9c-68.9 0-124.9-56-124.9-124.9s56-124.9 124.9-124.9c29.1 0 55.9 10 77.1 26.7-24.9 25.3-40.3 59.9-40.3 98.2 0 23.3 5.8 46.3 16.9 66.7 2 3.6 6.5 5 10.2 3 3.6-2 5-6.5 3-10.2-9.9-18.1-15.1-38.7-15.1-59.5 0-34.4 14-65.6 36.5-88.2 22.6 22.6 36.5 53.8 36.5 88.2.1 68.9-55.9 124.9-124.8 124.9z"
                             ></path>
@@ -423,19 +403,11 @@
                 <!-- =================================== FINAL RETURN ============================= -->
                 <!-- =================================== TAX RETURN ============================= -->
                 <div class="return-content p-3" *ngIf="false">
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        class="btn-toolbar pull-right"
-                    >
+                    <button matButton="filled" class="btn-toolbar pull-right">
                         {{ localeData?.record_payment }}
                     </button>
                     <div>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 512 512"
-                            class="icon icon-xxlg-md text-middle"
-                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-xxlg-md text-middle">
                             <path
                                 d="M256 56.8C146.2 56.8 56.8 146.2 56.8 256c0 109.8 89.3 199.2 199.2 199.2 109.8 0 199.2-89.3 199.2-199.2 0-109.8-89.4-199.2-199.2-199.2zm0 383.4c-101.5 0-184.2-82.6-184.2-184.2S154.5 71.8 256 71.8 440.2 154.5 440.2 256 357.5 440.2 256 440.2z"
                             ></path>
@@ -468,4 +440,4 @@
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
     ></filing-header>
-</ng-container>
+</div>

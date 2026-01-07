@@ -9,7 +9,9 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { CustomActions } from '../store/custom-actions';
 import { LocaleService } from '../services/locale.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 
 export class CommonActions {
     public static GET_COUNTRY = 'GetCountry';

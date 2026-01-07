@@ -21,17 +21,17 @@
                     <tr *ngFor="let item of doc_issuesVM">
                         <td></td>
                         <td data-title="#">{{ item.num }}</td>
-                        <td [attr.data-title]="localeData?.filing?.document_nature">{{ item.doc ? item.doc : "-" }}</td>
-                        <td [attr.data-title]="localeData?.filing?.s_no_from">{{ item.from ? item.from : "-" }}</td>
-                        <td [attr.data-title]="localeData?.filing?.s_no_to">{{ item.to ? item.to : "-" }}</td>
+                        <td [attr.data-title]="localeData?.filing?.document_nature">{{ item.doc ? item.doc : '-' }}</td>
+                        <td [attr.data-title]="localeData?.filing?.s_no_from">{{ item.from ? item.from : '-' }}</td>
+                        <td [attr.data-title]="localeData?.filing?.s_no_to">{{ item.to ? item.to : '-' }}</td>
                         <td [attr.data-title]="localeData?.filing?.total_number" class="text-center">
-                            {{ item.totnum ? item.totnum : "-" }}
+                            {{ item.totnum ? item.totnum : '-' }}
                         </td>
                         <td [attr.data-title]="localeData?.filing?.total_cancelled" class="text-center">
-                            {{ item.cancel ? item.cancel : "-" }}
+                            {{ item.cancel ? item.cancel : '-' }}
                         </td>
                         <td [attr.data-title]="localeData?.filing?.net_issued" class="text-center">
-                            {{ item.net_issues ? item.net_issues : "-" }}
+                            {{ item.net_issues ? item.net_issues : '-' }}
                         </td>
                     </tr>
                 </tbody>
@@ -40,9 +40,9 @@
 
         <div *ngIf="!doc_issuesVM?.length">
             <div class="filings-empty-state">
-                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
+                <img src="{{ imgPath }}gst/nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg">
-                    <span> {{ localeData?.filing?.no_result_found }} </span>
+                    <span>{{ localeData?.filing?.no_result_found }}</span>
                 </div>
             </div>
         </div>

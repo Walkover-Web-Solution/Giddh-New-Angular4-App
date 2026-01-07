@@ -11,6 +11,7 @@ import { IAccountsInfo } from '../../models/interfaces/account-info.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { cloneDeep, filter, findIndex, map, orderBy, sortBy } from '../../lodash-optimized';
 
 /**
  * Keeping Track of the GroupAndAccountStates
@@ -61,7 +62,7 @@ export interface CurrentGroupAndAccountState {
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
-    return _.orderBy(mockData.map((m) => {
+    return orderBy(mockData.map((m) => {
         m = {
             ...m,
             isActive: false,
@@ -69,7 +70,7 @@ const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResp
             isVisible: true
         };
         m.groups = prepare(m.groups);
-        m.groups = _.sortBy(m.groups, ['name']);
+        m.groups = sortBy(m.groups, ['name']);
         return m;
     }), 'category');
 };
@@ -239,7 +240,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
             let unSharedData: BaseResponse<string, string> = action.payload;
             if (unSharedData?.status === 'success') {
-                let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith)?.filter(ac => unSharedData.request !== ac.userEmail);
+                let myGroupSharedWith = cloneDeep(state.activeGroupSharedWith)?.filter(ac => unSharedData.request !== ac.userEmail);
                 return Object.assign({}, state, {
                     activeGroupSharedWith: myGroupSharedWith
                 });
@@ -248,7 +249,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case AccountsAction.UNSHARE_ACCOUNT_RESPONSE:
             let unSharedAccData: BaseResponse<string, string> = action.payload;
             if (unSharedAccData?.status === 'success') {
-                let myAccountSharedWith = _.cloneDeep(state.activeAccountSharedWith)?.filter(ac => unSharedAccData.request !== ac.userEmail);
+                let myAccountSharedWith = cloneDeep(state.activeAccountSharedWith)?.filter(ac => unSharedAccData.request !== ac.userEmail);
                 return Object.assign({}, state, {
                     activeAccountSharedWith: myAccountSharedWith
                 });
@@ -471,7 +472,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             };
         }
         case GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI: {
-            let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(action.payload.groups);
+            let groupArray: GroupsWithAccountsResponse[] = cloneDeep(action.payload.groups);
             genAddAndManageUi(groupArray, action.payload, null);
             return {
                 ...state,
@@ -539,7 +540,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                     name: accountData.body?.name,
                     uniqueName: accountData.body?.uniqueName
                 };
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 }
@@ -561,7 +562,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                     name: accountData.body?.name,
                     uniqueName: accountData.body?.uniqueName
                 };
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 }

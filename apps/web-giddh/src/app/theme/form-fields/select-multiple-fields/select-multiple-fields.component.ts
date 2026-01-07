@@ -18,7 +18,8 @@ import { cloneDeep } from "../../../lodash-optimized";
             useExisting: forwardRef(() => SelectMultipleFieldsComponent),
             multi: true
         }
-    ]
+    ],
+    standalone: false
 })
 export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChanges {
     /** Trigger instance for auto complete */
@@ -220,7 +221,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                 label = this.chipPrefix + option?.label + this.chipSuffix;
             }
             const isNotSelected = !this.hideSelectedOptions || !(this.selectedValues?.includes(value) || this.selectedValues?.includes(label));
-            
+
             if (matchesSearch && isNotSelected) {
                 filteredOptions.push({ label: option.label, value: option?.value, additional: option });
             }
@@ -347,7 +348,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         if (!this.hideSelectedOptions || !options) {
             return cloneDeep(options) || [];
         }
-        
+
         return options.filter(option => {
             let value = option?.value;
             let label = option?.label;

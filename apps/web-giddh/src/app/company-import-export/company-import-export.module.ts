@@ -9,6 +9,7 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { LaddaModule } from 'angular2-ladda';
 import { SharedModule } from '../shared/shared.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 @NgModule({
     imports: [
         CompanyImportExportRoutingModule,
@@ -21,12 +22,14 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         }),
         SharedModule,
         MatMenuModule,
-        FormFieldsModule
+        FormFieldsModule,
+        CompanyImportExportFormComponent, // Standalone component imported here
+        HamburgerMenuModule
     ],
     exports: [],
     declarations: [
-        CompanyImportExportComponent,
-        CompanyImportExportFormComponent
+        CompanyImportExportComponent
+        // CompanyImportExportFormComponent // Standalone component - should be imported instead
     ],
     providers: [],
 })

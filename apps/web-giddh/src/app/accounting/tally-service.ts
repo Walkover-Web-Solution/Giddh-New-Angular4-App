@@ -8,6 +8,7 @@ import { BlankLedgerVM } from './../ledger/ledger.vm';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { VOUCHERS } from './constants/accounting.constant';
 import { GeneralService } from '../services/general.service';
+import { cloneDeep, each } from '../lodash-optimized';
 
 export interface IPageInfo {
     page: string;
@@ -15,7 +16,9 @@ export interface IPageInfo {
     gridType: string;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class TallyModuleService {
 
     public selectedPageInfo: BehaviorSubject<IPageInfo> = new BehaviorSubject(null);
@@ -66,7 +69,7 @@ export class TallyModuleService {
         let taxAccounts = [];
         let expenseAccounts = [];
         let salesAccounts = [];
-        accounts.forEach((acc) => {
+        (Array.isArray(accounts) ? accounts : []).forEach((acc) => {
             let cashAccount = acc?.parentGroups.find((pg) => pg?.uniqueName === 'cash');
             if (cashAccount) {
                 cashAccounts.push(acc);
@@ -229,14 +232,14 @@ export class TallyModuleService {
     }
 
     public prepareRequestForAPI(data: any): BlankLedgerVM {
-        let requestObj = _.cloneDeep(data);
+        let requestObj = cloneDeep(data);
         let transactions = [];
         // filter transactions which have selected account
-        _.each(requestObj.transactions, (txn: any) => {
+        each(requestObj.transactions, (txn: any) => {
             if (txn.inventory && txn.inventory.length) {
-                _.each(txn.inventory, (inv, i) => {
+                each(txn.inventory, (inv, i) => {
                     let obj = null;
-                    obj = _.cloneDeep(txn);
+                    obj = cloneDeep(txn);
                     if (inv.stock.name && inv.amount) {
                         obj.inventory = inv;
                     } else {

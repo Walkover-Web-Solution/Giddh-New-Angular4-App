@@ -21,7 +21,8 @@ const noop = () => { };
             useExisting: forwardRef(() => GiddhDatepickerComponent),
             multi: true
         }
-    ]
+    ],
+    standalone:false
 })
 
 export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnDestroy {

@@ -133,13 +133,13 @@
     top: 118% !important;
     border-radius: var(--mat-border-radius-0);
     padding: 0px;
-    input[type="checkbox"]:after {
+    input[type='checkbox']:after {
         border: 1px solid var(--border-color);
         width: 15px;
         height: 15px;
         top: 2px;
     }
-    input[type="checkbox"]:before {
+    input[type='checkbox']:before {
         top: 6px;
         width: 9px;
         height: 5px;
@@ -157,7 +157,7 @@
         padding-bottom: 6px !important;
     }
 }
-button[aria-expanded="true"] i {
+button[aria-expanded='true'] i {
     color: var(--color-medium-gray);
 }
 

@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'attachments'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'attachments'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
         <button
             mat-raised-button
@@ -14,7 +9,8 @@
             type="button"
             (click)="closeAttachmentDialog()"
         >
-            <i class="icon-left"></i> {{ commonLocaleData?.app_back }}
+            <i class="icon-left"></i>
+            {{ commonLocaleData?.app_back }}
         </button>
     </div>
     <mat-dialog-content class="dialog-body">
@@ -27,7 +23,8 @@
                         color="primary"
                         [(ngModel)]="selectAll"
                         (change)="selectAllAttachments($event)"
-                        >{{ commonLocaleData?.app_select_all }}
+                    >
+                        {{ commonLocaleData?.app_select_all }}
                     </mat-checkbox>
                     <ng-container *ngIf="voucherPdf">
                         <p class="left-side-subhead">{{ commonLocaleData?.app_voucher }}</p>
@@ -40,17 +37,19 @@
                             <span
                                 class="cursor-pointer font-size-15"
                                 [ngClass]="{
-                                    'active-file': voucherPdf?.uniqueName === previewedFile?.uniqueName
+                                    'active-file': voucherPdf?.uniqueName === previewedFile?.uniqueName,
                                 }"
                                 (click)="showVoucherPreview()"
-                                >{{ voucherPdf?.name || commonLocaleData?.app_not_available }}</span
                             >
+                                {{ voucherPdf?.name || commonLocaleData?.app_not_available }}
+                            </span>
                             <a
                                 class="cursor-pointer"
                                 *ngIf="!isCompany && !isConsolidatedBranch && !selectedItem?.salesBifurcation"
                                 (click)="showDeleteVoucherModal(i)"
-                                ><i class="icon-trash"></i
-                            ></a>
+                            >
+                                <i class="icon-trash"></i>
+                            </a>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="attachments?.length > 0">
@@ -62,22 +61,25 @@
                                         color="primary"
                                         [(ngModel)]="attachment.isChecked"
                                         (change)="selectAttachment($event, attachment)"
-                                        >&nbsp;</mat-checkbox
                                     >
+                                        &nbsp;
+                                    </mat-checkbox>
                                     <span
                                         class="file-name cursor-pointer font-size-15"
                                         [ngClass]="{
-                                            'active-file': attachment?.uniqueName === previewedFile?.uniqueName
+                                            'active-file': attachment?.uniqueName === previewedFile?.uniqueName,
                                         }"
                                         (click)="showFilePreview(attachment)"
-                                        >{{ attachment?.name }}</span
                                     >
+                                        {{ attachment?.name }}
+                                    </span>
                                     <a
                                         class="cursor-pointer"
                                         *ngIf="!isCompany && !isConsolidatedBranch && !selectedItem?.salesBifurcation"
                                         (click)="showDeleteAttachedFileModal(i)"
-                                        ><i class="icon-trash"></i
-                                    ></a>
+                                    >
+                                        <i class="icon-trash"></i>
+                                    </a>
                                 </mat-list-item>
                             </mat-list>
                         </div>
@@ -85,10 +87,7 @@
                 </div>
                 <div class="right-side">
                     <div class="right-side-buttons" *ngIf="previewedFile">
-                        <span
-                            [ngClass]="{ 'disabled': previewedFile?.type === 'unsupported' }"
-                            *ngIf="previewedFile?.type"
-                        >
+                        <span [ngClass]="{ 'disabled': previewedFile?.type === 'unsupported' }" *ngIf="previewedFile?.type">
                             <a
                                 *ngIf="previewedFile?.type === 'pdf'"
                                 [href]="previewedFile?.src"
@@ -97,23 +96,26 @@
                                 [matTooltip]="commonLocaleData?.app_preview"
                                 [matTooltipPosition]="'above'"
                                 aria-label="icon search"
-                                ><i class="icon-search"></i
-                            ></a>
+                            >
+                                <i class="icon-search"></i>
+                            </a>
                             <a
                                 *ngIf="previewedFile?.type === 'image'"
                                 (click)="openPreview()"
                                 [matTooltip]="commonLocaleData?.app_preview"
                                 [matTooltipPosition]="'above'"
                                 aria-label="icon search"
-                                ><i class="icon-search"></i
-                            ></a>
+                            >
+                                <i class="icon-search"></i>
+                            </a>
                             <a
                                 *ngIf="previewedFile?.type === 'unsupported'"
                                 [matTooltip]="commonLocaleData?.app_preview"
                                 [matTooltipPosition]="'above'"
                                 aria-label="icon search"
-                                ><i class="icon-search"></i
-                            ></a>
+                            >
+                                <i class="icon-search"></i>
+                            </a>
                         </span>
                         <span>
                             <a
@@ -121,8 +123,9 @@
                                 [matTooltip]="commonLocaleData?.app_download"
                                 [matTooltipPosition]="'above'"
                                 aria-label="icon file"
-                                ><i class="icon-download-circle"></i
-                            ></a>
+                            >
+                                <i class="icon-download-circle"></i>
+                            </a>
                         </span>
                         <span>
                             <a
@@ -154,4 +157,4 @@
             <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
         </div>
     </mat-dialog-content>
-</ng-container>
+</div>

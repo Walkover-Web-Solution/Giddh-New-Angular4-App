@@ -1,10 +1,8 @@
-<ng-container appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
     <!-- Tax Sidebar code  -->
     <div class="position-relative w-100">
-        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
@@ -26,8 +24,8 @@
                             (currentTaxNumber)="getFormControl('taxNumber')?.patchValue($event)"
                             (fromDate)="getFormControl('from')?.patchValue($event)"
                             (toDate)="getFormControl('to')?.patchValue($event)"
-                            (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)">
-                        </vat-report-filters>
+                            (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)"
+                        ></vat-report-filters>
                     </div>
                 </div>
             </div>
@@ -37,19 +35,26 @@
                     <div class="mt-5" *ngIf="(isLoading$ | async) || isTaxApiInProgress">
                         <giddh-page-loader></giddh-page-loader>
                     </div>
-                    <div class=" mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
+                    <div class="mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
                         <div class="white-box w-100" *ngIf="(taxAuthorityWiseReport$ | async)?.responses?.length; else noData">
                             <!-- Tax Authority Table  -->
                             <div class="table-responsive">
-                                <table mat-table [dataSource]="(taxAuthorityWiseReport$ | async)?.responses"
-                                class="table basic mt-4 sales-report-table">
+                                <table
+                                    mat-table
+                                    [dataSource]="(taxAuthorityWiseReport$ | async)?.responses"
+                                    class="table basic mt-4 sales-report-table"
+                                >
                                     <!-- Reporting Tax Authority -->
                                     <ng-container matColumnDef="reporting_tax_authority">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.reporting_tax_authority }}
                                         </th>
                                         <td mat-cell *matCellDef="let element" width="25%">
-                                            <a href="javascript:;" [routerLink]="['/pages/settings/reports/rate-wise']" [queryParams]="{ uniqueName: element?.taxAuthority?.uniqueName }">
+                                            <a
+                                                href="javascript:;"
+                                                [routerLink]="['/pages/settings/reports/rate-wise']"
+                                                [queryParams]="{ uniqueName: element?.taxAuthority?.uniqueName }"
+                                            >
                                                 {{ element?.taxAuthority?.name }}
                                             </a>
                                         </td>
@@ -58,8 +63,8 @@
                                         </td>
                                     </ng-container>
 
-                                     <!-- Sales with Tax -->
-                                     <ng-container matColumnDef="sales_with_tax">
+                                    <!-- Sales with Tax -->
+                                    <ng-container matColumnDef="sales_with_tax">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.sales_with_tax }}
                                         </th>
@@ -94,8 +99,8 @@
                                         </td>
                                     </ng-container>
 
-                                     <!-- Non Taxable Amount -->
-                                     <ng-container matColumnDef="non_taxable_amount">
+                                    <!-- Non Taxable Amount -->
+                                    <ng-container matColumnDef="non_taxable_amount">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.non_taxable_amount }}
                                         </th>
@@ -130,8 +135,8 @@
                                         </td>
                                     </ng-container>
 
-                                     <!-- Tax Collected -->
-                                     <ng-container matColumnDef="tax_collected">
+                                    <!-- Tax Collected -->
+                                    <ng-container matColumnDef="tax_collected">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.tax_collected }}
                                         </th>
@@ -173,8 +178,7 @@
                                 [pageSizeOptions]="pageSizeOptions"
                                 [hidePageSize]="false"
                                 [pageIndex]="pageIndex"
-                            >
-                            </mat-paginator>
+                            ></mat-paginator>
                             <section class="mb-custom-80"></section>
                         </div>
                     </div>
@@ -182,4 +186,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

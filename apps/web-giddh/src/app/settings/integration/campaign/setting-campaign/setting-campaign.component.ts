@@ -9,7 +9,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integration.service';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep  } from '../../../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
@@ -24,7 +24,8 @@ export interface ActiveTriggers {
 @Component({
     selector: 'app-setting-campaign',
     templateUrl: './setting-campaign.component.html',
-    styleUrls: ['./setting-campaign.component.scss']
+    styleUrls: ['./setting-campaign.component.scss'],
+    standalone: false
 })
 export class SettingCampaignComponent implements OnInit {
     /* Selector for variableComponent type field */

@@ -5,7 +5,7 @@ import { IMfStockSearchRequest, ManufacturingItemRequest } from '../../models/in
 import { IStocksItem } from '../../models/interfaces/stocks-item.interface';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { cloneDeep, orderBy } from '../../lodash-optimized';
+import { cloneDeep, findIndex, orderBy } from '../../lodash-optimized';
 
 export interface ManufacturingState {
     reportData: StocksResponse;

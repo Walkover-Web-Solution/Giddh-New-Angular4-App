@@ -180,7 +180,7 @@
     width: 10px;
     height: 10px;
     background: var(--color-border-light);
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     left: -5px;
@@ -207,7 +207,6 @@
     height: 97%;
     justify-content: space-around;
     background-color: var(--color-white);
-
 }
 
 .inner-your-account:hover,
@@ -217,7 +216,7 @@
 }
 .your-account:after,
 .your-account:before {
-    content: "";
+    content: '';
     display: block;
     width: 100%;
     border: 1px solid var(--border-color);
@@ -274,7 +273,6 @@
     opacity: 0;
     visibility: hidden;
     transition: 0.5s all ease-in;
-
 }
 
 .see-all-features .inner-your-account {
@@ -347,7 +345,6 @@
         &:after {
             display: none;
         }
-
     }
     .plans-box {
         p {
@@ -450,7 +447,6 @@
     }
 }
 @media only screen and (max-width: 1199px) {
-
     .main-row-plans::-webkit-scrollbar {
         height: 5px;
         width: 100%;
@@ -476,7 +472,6 @@
         height: 97%;
         margin-bottom: 15px;
         padding-bottom: 10px;
-
     }
     .plan-footer {
         .success-btn {
@@ -496,8 +491,7 @@
     }
 }
 @media screen and (min-width: 768px) and (orientation: portrait) {
-    .plan-
-    .plan-td.mat-cell:nth-child(odd) {
+    .plan- .plan-td.mat-cell:nth-child(odd) {
         padding-left: 110px !important;
         padding-right: 119px !important;
     }
@@ -640,7 +634,6 @@
 }
 
 @media (min-width: 1281px) {
-
     .plan-td-changes {
         padding-left: 65px !important;
         padding-right: 65px !important;
@@ -658,7 +651,6 @@
 }
 
 @media screen and (min-width: 1280px) and (orientation: landscape) {
-
     .extra-addons-content {
         width: 31% !important;
     }

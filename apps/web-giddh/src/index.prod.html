@@ -1,72 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
+        <script type="text/javascript">
+            // Web environment configuration - PRODUCTION
+            window.isElectron = false;
+            window.webEnvironment = {
+                type: 'production',
+                appUrl: 'https://giddh.com/',
+                apiUrl: 'https://api.giddh.com/',
+            };
+        </script>
         <!-- Google Tag Manager -->
         <script>
             (function (w, d, s, l, i) {
                 w[l] = w[l] || [];
-                w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
                 var f = d.getElementsByTagName(s)[0],
                     j = d.createElement(s),
-                    dl = l != "dataLayer" ? "&l=" + l : "";
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
                 j.async = true;
-                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
                 f.parentNode.insertBefore(j, f);
-            })(window, document, "script", "dataLayer", "GTM-K2L9QG");
+            })(window, document, 'script', 'dataLayer', 'GTM-K2L9QG');
         </script>
         <!-- End Google Tag Manager -->
         <script type="text/javascript">
             // Enhanced white label logo loading with fallback
             window.onload = function () {
-                console.log('🔄 Index.prod.html: Starting white label logo initialization...');
+                let whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
+                const logoUrl = './assets/images/giddh-big-logo.svg';
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || 'https://api.giddh.com';
 
-                let whiteLabelConfig;
-                try {
-                    whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
-                } catch (error) {
-                    console.warn('⚠️ Failed to parse whiteLabel from localStorage:', error);
-                    whiteLabelConfig = null;
-                }
-
-                const logoUrl = "./assets/images/giddh-big-logo.svg";
-                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://api.giddh.com";
-
-                // Set logo with null check (defensive programming)
-                const logoElement = document.getElementById("dynamic-logo");
-                if (logoElement) {
-                    if (whiteLabelConfig?.body?.giddhWhiteLabel?.logo) {
-                        logoElement.src = whiteLabelConfig.body.giddhWhiteLabel.logo;
-                        console.log('✅ White label logo loaded:', whiteLabelConfig.body.giddhWhiteLabel.logo);
-                    } else {
-                        logoElement.src = logoUrl;
-                        console.log('✅ Default logo loaded:', logoUrl);
+                if (whiteLabelConfig) {
+                    // Remove the h1 tag containing the image
+                    const logoContainer = document.querySelector('#main-giddh-loader h1');
+                    if (logoContainer) {
+                        logoContainer.remove();
                     }
                     logoElement.alt = "Giddh Logo";
                 } else {
-                    console.warn('⚠️ Logo element not found - build process may have removed id');
+                    // If no whiteLabel object, set the logo as usual
+                    const logoElement = document.getElementById('dynamic-logo');
+                    if (logoElement) {
+                        logoElement.src = logoUrl;
+                    }
                 }
-
-                // Create preconnect for API domain
-                const preconnectLink = document.createElement("link");
-                preconnectLink.rel = "preconnect";
+                // Create a new preconnect link element
+                const preconnectLink = document.createElement('link');
+                preconnectLink.rel = 'preconnect';
                 preconnectLink.href = apiDomain;
                 document.head.appendChild(preconnectLink);
 
                 console.log('🎯 Index.prod.html: Logo and preconnect setup completed');
             };
         </script>
+        <!-- Removed duplicate window.onerror handler to prevent duplicate error logging -->
         <script defer src="./assets/js/lodash.min.js"></script>
         <script defer src="./assets/js/jquery.min.js"></script>
         <script type="text/javascript">
-            window.onerror = function (msg, url, line, col, error) {
-                var extra = !col ? "" : "\ncolumn: " + col;
-                extra += !error ? "" : "\nerror: " + error;
-                console.error("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
-            };
-        </script>
-        <script type="text/javascript">
-            if (window.location.hostname.indexOf("www") == 0) {
-                window.location = window.location.href.replace("www.", "");
+            if (window.location.hostname.indexOf('www') == 0) {
+                window.location = window.location.href.replace('www.', '');
             }
         </script>
         <meta charset="utf-8" />
@@ -91,12 +84,7 @@
         <link rel="stylesheet" href="./assets/styles/default.css" crossorigin="anonymous" />
         <script type="text/javascript">
             try {
-                var HW_config = { selector: ".notification", account: "7eB4aJ" };
-                window.onload = function () {
-                    if (window["isElectron"]) {
-                        var jQuery = ($ = window.$ = window.jQuery = require("jquery"));
-                    }
-                };
+                var HW_config = { selector: '.notification', account: '7eB4aJ' };
             } catch (error) {
                 console.error(error);
             }
@@ -105,16 +93,16 @@
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://s3-ap-south-1.amazonaws.com" />
     </head>
-    <body class="mat-app-background">
+    <body>
         <!-- Google Tag Manager (noscript) -->
-        <noscript
-            ><iframe
+        <noscript>
+            <iframe
                 src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG"
                 height="0"
                 width="0"
                 style="display: none; visibility: hidden"
-            ></iframe
-        ></noscript>
+            ></iframe>
+        </noscript>
         <!-- End Google Tag Manager (noscript) -->
         <div id="main-giddh-loader">
             <h1>

@@ -1,7 +1,7 @@
 <div>
     <div class="dialog-header">
         <span>{{ commonLocaleData?.app_confirmation }}</span>
-        <button mat-icon-button aria-label="close" (click)="onCancel()">
+        <button matIconButton aria-label="close" (click)="onCancel()">
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -12,10 +12,10 @@
             </div>
         </form>
         <div class="d-flex column-gap-1 align-items-center">
-            <button mat-raised-button color="primary" (click)="onConfirmation()">
+            <button matButton="filled" (click)="onConfirmation()">
                 {{ commonLocaleData?.app_yes }}
             </button>
-            <button mat-stroked-button mat-dialog-close (click)="onCancel()">{{ commonLocaleData?.app_no }}</button>
+            <button matButton="outlined" mat-dialog-close (click)="onCancel()">{{ commonLocaleData?.app_no }}</button>
         </div>
     </mat-dialog-content>
 </div>

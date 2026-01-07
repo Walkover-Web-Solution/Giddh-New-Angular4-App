@@ -15,7 +15,6 @@ import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '..
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { cloneDeep, orderBy } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
@@ -24,13 +23,17 @@ import { ReportType } from '../../../multi-currency-reports/multi-currency.const
 import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { TlPlService } from '../../../services/tl-pl.service';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment.generated';
+import { cloneDeep, find, findIndex, get, map, orderBy } from '../../../lodash-optimized';
 
 @Component({
-    selector: 'financial-filter',
+selector: 'financial-filter',
     templateUrl: './filter.component.html',
     styleUrls: [`./filter.component.scss`],
     providers: [FinancialReportsComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
@@ -197,7 +200,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                     this.cd.detectChanges();
                 }
             });
-    
+
             this.tlPlService.isReportTailed$.pipe(
                 filter(response => response !== null && response !== undefined),
                 debounceTime(200),
@@ -208,7 +211,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         }
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
+        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
         if (!this.showLabels) {
             this.filterForm?.patchValue({ selectedDateOption: '0' });
         }
@@ -350,7 +353,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                                 from: financialYear.financialYearStarts,
                                 fy: index === 0 ? 0 : index * -1
                             });
-                            
+
                             this.toDate = financialYear.financialYearEnds;
                             this.fromDate = financialYear.financialYearStarts;
                             this.filterForm.get('selectedFinancialYearOption').patchValue(v.value);
@@ -428,7 +431,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         }
     }
-    
+
     /**
      * Gets the list of tags
      *
@@ -546,7 +549,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof FinancialReportsFilterComponent
      */
-    public dateSelectedCallback(value?: any): void {        
+    public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
@@ -607,11 +610,11 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         if (this.isProjectWiseAccounting) {
             return;
         }
-        let reportType = ReportType.TrialBalance;
+        let reportType = ReportType.TRIAL_BALANCE;
         if (this.BsExportXLS) {
-            reportType = ReportType.BalanceSheet;
+            reportType = ReportType.BALANCE_SHEET;
         } else if (this.plBsExportXLS) {
-            reportType = ReportType.ProfitLoss;
+            reportType = ReportType.PROFIT_LOSS;
         }
         this.componentStore.getReconcileDateRange({ reportType, branchUniqueName: this.generalService.currentBranchUniqueName });
     }
@@ -629,12 +632,12 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 // Update selected date range to universal date picker
                 this.selectedDateRange = { startDate: dayjs(response.fromDate), endDate: dayjs(response.toDate) };
                 this.selectedDateRangeUi = dayjs(response.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-                
+
                 // Update form values
                 this.filterForm.get('from').patchValue(fromDate);
                 this.filterForm.get('to').patchValue(toDate);
                 this.filterForm?.get('selectedDateOption').patchValue('1');
-                
+
                 // Trigger filter
                 this.filterData();
                 this.cd.detectChanges();

@@ -1,8 +1,9 @@
+// Angular 21 Material 3 Custom Styles
 @use '../abstracts/mixins' as *;
 
 /** Used to make stroked button which holds only icon */
 .btn-stroked-icon {
-    @extend .min-width-unset;
+    min-width: unset !important;
     padding-inline: 10px;
 }
 
@@ -25,9 +26,11 @@
     &-sm {
         width: 500px;
     }
+
     &-md {
         width: 760px;
     }
+
     &-lg {
         width: 1024px;
         max-width: 80vw;
@@ -42,11 +45,13 @@
         }
     }
 }
+
 .mat-form-field-no-line-ripple {
     .mdc-line-ripple {
         display: none;
     }
 }
+
 .mat-form-field-no-background {
     .mdc-text-field--filled {
         &:not(.mdc-text-field--disabled) {
@@ -54,6 +59,7 @@
         }
     }
 }
+
 .mat-form-field-clean {
     @extend .mat-form-field-no-overlay;
     @extend .mat-form-field-no-line-ripple;
@@ -67,11 +73,11 @@
     }
 
     &.mat-mdc-form-field {
-      .mat-mdc-text-field-wrapper {
-          .mat-mdc-form-field-infix {
-              padding-left: 20px !important;
-          }
-      }
+        .mat-mdc-text-field-wrapper {
+            .mat-mdc-form-field-infix {
+                padding-left: 20px !important;
+            }
+        }
 
         .mdc-text-field--outlined {
             .mdc-notched-outline {
@@ -90,22 +96,22 @@
 */
 .cdk-overlay-container {
     &:has(.sidebar-list-view) {
-        .cdk-overlay-pane:not([class*="mat-mdc-tooltip-panel"]) {
+        .cdk-overlay-pane:not([class*='mat-mdc-tooltip-panel']) {
             --common-top-position: calc(var(--top-distance, 0px) + var(--header-height, 60px));
             top: var(--sidebar-list-top-position, var(--common-top-position)) !important;
             right: var(--sidebar-list-right-position, 0) !important;
             left: unset !important;
             bottom: unset !important;
             width: min(40vw, 600px) !important;
-        
             .sidebar-list-view {
                 &.mat-mdc-autocomplete-panel {
                     max-height: unset !important;
                     height: calc(100vh - var(--sidebar-list-top-position, var(--common-top-position))) !important;
-                    border: 1px solid rgba(0, 0, 0, 0.08); 
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 
-                                0 10px 20px rgba(0,0,0,0.18), 
-                                0 15px 40px rgba(0,0,0,0.15) !important;
+                    border: 1px solid rgba(0, 0, 0, 0.08);
+                    box-shadow:
+                        0 1px 3px rgba(0, 0, 0, 0.12),
+                        0 10px 20px rgba(0, 0, 0, 0.18),
+                        0 15px 40px rgba(0, 0, 0, 0.15) !important;
                     padding-bottom: 10px !important;
                     transform: unset !important;
                     .mat-divider:last-child {

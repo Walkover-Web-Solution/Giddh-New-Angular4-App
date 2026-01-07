@@ -21,7 +21,8 @@ const ELEMENT_DATA: GetDomainList[] = [];
 @Component({
     selector: 'portal-white-label',
     templateUrl: './portal-white-label.component.html',
-    styleUrls: ['./portal-white-label.component.scss']
+    styleUrls: ['./portal-white-label.component.scss'],
+    standalone: false
 })
 export class PortalWhiteLabelComponent implements OnInit {
     /** Stores the type of the organization (company or profile)  */
@@ -181,7 +182,7 @@ export class PortalWhiteLabelComponent implements OnInit {
             let validEmails = [];
             let uniqueArray = [];
             if (recipients && recipients.length > 0) {
-                recipients.forEach(email => {
+                (Array.isArray(recipients) ? recipients : []).forEach(email => {
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
                         let invalidEmail = this.localeData?.invalid_email;
@@ -325,7 +326,7 @@ export class PortalWhiteLabelComponent implements OnInit {
         let requestData = [urlWithoutProtocol, this.generatedString];
         this.settingsProfileService.addPortalDomain(requestData).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
-                this.toaster.showSnackBar("success", this.localeData?.add_domain_succesfully);
+                this.toaster.showSnackBar("success", this.localeData?.add_domain_successfully);
                 this.portalWhilteLabelForm.reset();
                 this.getDomainList(false);
                 let event = {
@@ -394,8 +395,8 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public openShareDomainDialog(): void {
         this.dialog.open(this.shareDomain, {
-            width: '500px'
-        });
+                    width: '500px',
+                });
     }
 
     /**
@@ -405,8 +406,8 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public openAddDomainDialog(): void {
         this.dialog.open(this.addDomain, {
-            width: '550px'
-        });
+                    width: '550px',
+                });
     }
 
     /**

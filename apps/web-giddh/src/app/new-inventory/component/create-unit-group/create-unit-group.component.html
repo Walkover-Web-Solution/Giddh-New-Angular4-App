@@ -1,11 +1,6 @@
-<ng-container
-    appTranslate
-    [file]="'inventory/unit'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'inventory/unit'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
-    <ng-container *ngIf="!isLoading">
+    <div *ngIf="!isLoading">
         <form autocomplete="off" novalidate name="unitGroupForm" [formGroup]="unitGroupForm" class="container">
             <div class="row mt-3">
                 <div class="col-sm-6 pr-0">
@@ -16,8 +11,7 @@
                         [placeholder]="localeData?.enter_name"
                         formControlName="name"
                         [showError]="!isValidForm && !unitGroupForm?.get('name')?.value"
-                    >
-                    </input-field>
+                    ></input-field>
                 </div>
                 <div class="col-sm-6">
                     <input-field
@@ -28,8 +22,7 @@
                         formControlName="uniqueName"
                         [showError]="!isValidForm && !unitGroupForm?.get('uniqueName')?.value"
                         [readonly]="unitGroupDetails?.uniqueName === 'maingroup'"
-                    >
-                    </input-field>
+                    ></input-field>
                 </div>
             </div>
             <div class="row mt-4">
@@ -56,7 +49,7 @@
                             {{ commonLocaleData?.app_update }}
                         </button>
                         <button
-                            mat-stroked-button
+                            matButton="outlined"
                             aria-label="clear"
                             type="button"
                             class="btn-sm mr-0"
@@ -68,7 +61,7 @@
                         <button
                             *ngIf="isInsideDialog"
                             aria-label="close"
-                            mat-stroked-button
+                            matButton="outlined"
                             type="button"
                             (click)="closeAsideEvent.emit(false)"
                         >
@@ -79,7 +72,7 @@
                 <div class="col-sm-8">
                     <div class="pull-right d-flex column-gap-15">
                         <button
-                            mat-stroked-button
+                            matButton="outlined"
                             aria-label="delete"
                             type="button"
                             class="btn-sm mr-0"
@@ -92,5 +85,5 @@
                 </div>
             </div>
         </form>
-    </ng-container>
-</ng-container>
+    </div>
+</div>

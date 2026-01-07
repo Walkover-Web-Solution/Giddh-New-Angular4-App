@@ -10,13 +10,16 @@ import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import { Configuration } from '../../../../../../../app.constant';
+import { includes } from '../../../../../../../lodash-optimized';
 
 @Component({
-    selector: '[balance-sheet-grid-row]',
+selector: '[balance-sheet-grid-row]',
     templateUrl: './balance-sheet-grid-row.component.html',
     styleUrls: [`./balance-sheet-grid-row.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [FinancialReportsComponentStore]
+    providers: [FinancialReportsComponentStore],
+    standalone: false
 })
 export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
@@ -76,10 +79,44 @@ export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestro
         const separator = url.includes('?') ? '&' : '?';
         url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
 
-        if (isElectron) {
-            const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
-            ipcRenderer.send('open-url', electronUrl);
+        if (Configuration.isElectron) {
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+                        (window as any).electronAPI.send('open-url', electronUrl);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+                            electron.ipcRenderer.send('open-url', electronUrl);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+
+                    }
+                }
+
+                // Fallback to regular window.open if IPC not available
+                if (!electronIpcAvailable) {
+
+                    (window as any).open(url, '_blank');
+                }
+            } catch (error) {
+
+                (window as any).open(url, '_blank');
+            }
         } else {
             (window as any).open(url, '_blank');
         }
@@ -108,7 +145,7 @@ export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestro
     public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
         const model = {
             request: {
-                reportType: ReportType.BalanceSheet,
+                reportType: ReportType.BALANCE_SHEET,
                 from: this.from,
                 to: this.to,
                 branchUniqueName: this.generalService.currentBranchUniqueName
