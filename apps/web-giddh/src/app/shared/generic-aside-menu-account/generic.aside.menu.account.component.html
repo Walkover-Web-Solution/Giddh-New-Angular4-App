@@ -9,7 +9,7 @@
             <span>{{ actionAccount }}</span>
 
             <div class="d-flex align-items-center column-gap-15">
-                <button mat-raised-button *ngIf="backButtonVisible" (click)="backButtonPressed()">
+                <button matButton="filled" *ngIf="backButtonVisible" (click)="backButtonPressed()">
                     {{ commonLocaleData?.app_back }}
                 </button>
                 <button matIconButton aria-label="close" (click)="closeAsidePane($event)">

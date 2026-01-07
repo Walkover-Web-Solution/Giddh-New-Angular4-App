@@ -57,7 +57,7 @@
                     <button
                         *ngIf="companyList?.length && isSubscriptionModule"
                         class="min-width-160 company-button"
-                        mat-raised-button
+                        matButton="filled"
                         (click)="backToCompany()"
                         [matTooltip]="activeCompany?.name"
                         [matTooltipPosition]="'below'"
@@ -71,7 +71,7 @@
                     <button
                         *ngIf="companyList?.length && isSubscriptionPage"
                         class="min-width-160 bg-white ml-3"
-                        mat-raised-button
+                        matButton="filled"
                         (click)="backToSubscription()"
                         aria-label="back"
                     >

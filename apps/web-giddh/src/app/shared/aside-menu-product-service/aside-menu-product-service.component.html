@@ -6,7 +6,7 @@
                 <span *ngIf="voucherApiVersion === 2">{{ stockType !== 'fixed_assets' ? (stockType | titlecase) : 'Fixed Assets' }}</span>
             </span>
             <div class="d-flex align-items-center column-gap-15">
-                <button mat-raised-button *ngIf="hideFirstStep && !isAddServiceOpen" (click)="backButtonPressed()">
+                <button matButton="filled" *ngIf="hideFirstStep && !isAddServiceOpen" (click)="backButtonPressed()">
                     {{ commonLocaleData?.app_back }}
                 </button>
                 <button matIconButton aria-label="close" (click)="closeAsidePane()">

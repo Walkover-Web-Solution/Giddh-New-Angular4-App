@@ -17,7 +17,7 @@
                         <button matButton="filled" (click)="exportGroupLedger()" aria-label="export">
                             {{ commonLocaleData?.app_export }}
                         </button>
-                        <button mat-raised-button aria-label="share" (click)="openShareGroupDialog()" color="primary">
+                        <button matButton="filled" aria-label="share" (click)="openShareGroupDialog()" color="primary">
                             {{ commonLocaleData?.app_share }}
                         </button>
                     </div>
@@ -31,7 +31,7 @@
             </div>
             <!--account-->
             <div class="col-lg-4 pull-right pr-0 pl-0 full-width" *ngIf="showEditAccount$ | async">
-                <button mat-raised-button aria-label="share" class="pull-right" (click)="openShareAccountDialog()" color="primary">
+                <button matButton="filled" aria-label="share" class="pull-right" (click)="openShareAccountDialog()" color="primary">
                     {{ commonLocaleData?.app_share }}
                 </button>
                 <div class="text-primary text-right mr-2 clear-both pt-1">

@@ -2,7 +2,7 @@
     <div *ngIf="!isLoading && connectedBankAccounts?.length === 0">
         <div class="integration p-3 clear-both section-center position-relative overflow-visible">
             <div class="form-group initial-screen position-absolute text-center mb-5">
-                <button aria-label="connect bank" mat-raised-button class="mr-4" color="primary" (click)="openInstitutionsDialog()">
+                <button aria-label="connect bank" matButton="filled" class="mr-4" color="primary" (click)="openInstitutionsDialog()">
                     {{ localeData?.payment?.connect_bank }}
                 </button>
             </div>
@@ -48,7 +48,7 @@
                 </ng-container>
                 <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope">
                     <div class="form-group">
-                        <button aria-label="connect bank" mat-raised-button class="mr-4" color="primary" (click)="openInstitutionsDialog()">
+                        <button aria-label="connect bank" matButton="filled" class="mr-4" color="primary" (click)="openInstitutionsDialog()">
                             {{ localeData?.payment?.connect_bank }}
                         </button>
                     </div>
