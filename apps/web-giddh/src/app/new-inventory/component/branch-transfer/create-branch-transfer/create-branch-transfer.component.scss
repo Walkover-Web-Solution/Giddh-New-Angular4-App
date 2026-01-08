@@ -61,13 +61,6 @@
 
                 tbody {
                     tr {
-                        &:hover {
-                            td {
-                                background: var(--theme-primary-light);
-                                transition: 200ms ease;
-                            }
-                        }
-
                         td {
                             .show-code-position {
                                 position: absolute;

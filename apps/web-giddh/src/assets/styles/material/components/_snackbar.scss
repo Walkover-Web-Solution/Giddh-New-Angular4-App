@@ -40,12 +40,12 @@
 
             .mdc-snackbar__label,
             .snack-close-button {
-                color: var(--color-black) !important;
+                color: var(--color-white) !important;
             }
         }
 
         .snack-container {
-            background-image: url('../../../images/exclamation-black.svg');
+            background-image: url('../../../images/exclamation-white.svg');
         }
     }
 
@@ -84,12 +84,6 @@
 .mat-mdc-snack-bar-container.warning {
     .mdc-snackbar__surface {
         background-color: var(--color-deep-orange) !important;
-        .mdc-snackbar__label {
-            color: var(--color-black) !important;
-        }
-        .snack-close-button {
-            color: var(--color-black) !important;
-        }
     }
 }
 

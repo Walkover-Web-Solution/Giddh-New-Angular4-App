@@ -2993,7 +2993,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             hsnNumber: [entryData ? entryData?.hsnNumber : ""],
             sacNumber: [entryData ? entryData?.sacNumber : ""],
             totalDiscount: [""], // temp
-            totalTax: [""], // temp
+            totalTax: [0], // temp
             totalTaxWithoutCess: [""], //temp
             totalCess: [""], //temp
             calculateTotal: [true], //temp

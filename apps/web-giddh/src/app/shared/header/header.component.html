@@ -56,7 +56,7 @@
                 <div *ngIf="companyList?.length && (isSubscriptionModule || isSubscriptionPage)">
                     <button
                         *ngIf="companyList?.length && isSubscriptionModule"
-                        class="min-width-160 company-button"
+                        class="min-width-160 company-button bg-white text-black"
                         matButton="filled"
                         (click)="backToCompany()"
                         [matTooltip]="activeCompany?.name"
@@ -70,7 +70,7 @@
                     </button>
                     <button
                         *ngIf="companyList?.length && isSubscriptionPage"
-                        class="min-width-160 bg-white ml-3"
+                        class="min-width-160 bg-white text-black ml-3"
                         matButton="filled"
                         (click)="backToSubscription()"
                         aria-label="back"
@@ -393,7 +393,7 @@
                             </button>
                         </li>
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
-                            <button mat-button class="p-1 font-size-15" (click)="dateSelectedCallback()">
+                            <button matButton="outlined" class="p-1 font-size-15" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
@@ -717,7 +717,7 @@
                 'setting-sidebar': isMobileSidebar,
                 'sidebar-slide-right': asideSettingMenuState,
             }"
-            (closeAsideEvent)="toggleSidebarPane(false, false)"
+            (closeAsideEvent)="forceCloseSidebarPane()"
         ></aside-setting>
     </div>
 </div>

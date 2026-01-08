@@ -80,7 +80,7 @@
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </ng-container>
             <div class="d-flex justify-content-end mt-3" *ngIf="!isLoading && localeData?.payment">
-                <button matButton="filled" type="submit" class="btn mr-1" [disabled]="accountForm?.invalid">
+                <button matButton="filled" type="submit" class="mr-1" [disabled]="accountForm?.invalid">
                     {{ activeBankAccount ? commonLocaleData?.app_update : localeData?.payment?.connect }}
                 </button>
             </div>

@@ -23,7 +23,7 @@
                     <button
                         *ngIf="inputData?.configuration?.disableRipple"
                         [disableRipple]="true"
-                        mat-button
+                        matButton="outlined"
                         class="confirmation-buttons"
                         (click)="sendResponse(button?.text)"
                         [ngClass]="button?.cssClass"

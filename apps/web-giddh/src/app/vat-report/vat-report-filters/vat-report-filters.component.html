@@ -87,10 +87,12 @@
                 ></reactive-dropdown-field>
             </div>
         </ng-container>
-        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany || isUSCompany)" class="export-btn d-flex justify-content-end w100">
+        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany || isUSCompany)" class="export-btn d-flex justify-content-end w120">
             <button matButton="filled" (click)="downloadVatReport()">
-                <i class="icon-download1"></i>
-                {{ commonLocaleData?.app_export }}
+                <span class="d-inline-flex align-items-center">
+                    <i class="icon-download1 mr-1"></i>
+                    <span>{{ commonLocaleData?.app_export }}</span>
+                </span>
             </button>
         </div>
         <div *ngIf="isUKCompany">

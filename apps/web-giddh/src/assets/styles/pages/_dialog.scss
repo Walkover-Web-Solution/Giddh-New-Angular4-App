@@ -56,6 +56,9 @@
     &.mdc-dialog__content {
         &.mat-mdc-dialog-content {
             padding: 15px !important;
+            &.p-0 {
+                padding: 0 !important;
+            }
         }
     }
 }
