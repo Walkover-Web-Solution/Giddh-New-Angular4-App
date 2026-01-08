@@ -283,7 +283,7 @@
                 <div class="pt-3 px-1 overflow-hidden" formArrayName="addresses" *ngIf="addAccountForm.get('addresses')?.length">
                     <ng-container
                         *ngFor="
-                            let gst of addressesControls | slice: 0 : gstDetailsLength;
+                             let gst of addAccountForm.get('addresses')['controls'] | slice: 0 : gstDetailsLength;
                             let i = index;
                             let firstItem = first;
                             let lastItem = last
@@ -431,11 +431,11 @@
                         </div>
                         <div
                             class="d-flex justify-content-between column-gap-15 pb-4"
-                            *ngIf="lastItem && addressesControls?.length > 3 && !moreGstDetailsVisible"
+                            *ngIf="lastItem && addAccountForm.get('addresses')['controls']?.length > 3 && !moreGstDetailsVisible"
                         >
                             <button matButton="outlined" class="text-left w-50 pr-4" (click)="showMoreGst()">
                                 {{ commonLocaleData?.app_show_all }} ({{
-                                    addressesControls?.length
+                                   addAccountForm.get("addresses")["controls"]?.length
                                 }})
                             </button>
                             <button matButton="outlined" class="text-left w-50" (click)="showLessGst()">
@@ -588,7 +588,7 @@
                         </div>
                         <div class="pl-2 mt-1">
                             <button
-                                mat-stroked-button
+                                matButton="outlined"
                                 (click)="removePortalUser(domain, i)"
                                 class="btn-stroked-icon"
                                 aria-label="delete icon"
@@ -626,7 +626,7 @@
                         <div
                             class="row"
                             *ngFor="
-                                let bank of bankDetailsControls;
+                                let bank of addAccountForm.get('accountBankDetails')['controls'];
                                 let i = index;
                                 let firstItem = first;
                                 let lastItem = last
@@ -867,7 +867,7 @@
                             [formGroupName]="companyCustomFieldIndex"
                         >
                             <ng-container
-                                *ngFor="let customFieldsItem of customFieldsControls; let index = index"
+                                *ngFor="let customFieldsItem of addAccountForm.get('customFields')['controls']; let index = index"
                             >
                                 <div class="row mb-3" *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value">
                                     <div class="col-lg-8">
