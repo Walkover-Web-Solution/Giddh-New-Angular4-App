@@ -46,7 +46,7 @@
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100 overflow-visible">
             <div class="table-responsive table-header-sticky">
-                <table mat-table [dataSource]="addresses" class="w-100 table basic giddh-table on-mobile-view">
+                <table mat-table [dataSource]="addresses" class="w-100 table basic giddh-table on-mobile-view border-top">
                     <ng-container matColumnDef="no">
                         <th class="min-wid-check serial-no-column" mat-header-cell *matHeaderCellDef>#</th>
                         <td class="min-width-50" mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}.</td>
@@ -368,7 +368,6 @@
                                 mat-dialog-close
                                 matButton="outlined"
                                 type="button"
-                                class="btn custom-btn"
                                 [attr.aria-label]="commonLocaleData?.app_no"
                             >
                                 {{ commonLocaleData?.app_no }}
