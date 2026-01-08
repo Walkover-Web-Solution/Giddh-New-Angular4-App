@@ -14,6 +14,9 @@
                 background-color: var(--color-success-light);
                 color: var(--color-black);
                 --mat-checkbox-unselected-icon-color: var(--color-black);
+                --mat-checkbox-unselected-hover-icon-color: var(--color-black);
+                --mat-checkbox-unselected-focus-icon-color: var(--color-black);
+                --mat-checkbox-unselected-pressed-icon-color: var(--color-black);
             }
         }
     }

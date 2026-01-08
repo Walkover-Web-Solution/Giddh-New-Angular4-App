@@ -173,7 +173,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
                 if (!this.isCompany) {
-                    this.displayedColumns.push('action');
+                    if (!this.displayedColumns.includes('action')) {
+                        this.displayedColumns.push('action');
+                    }
                 }
             }
         });

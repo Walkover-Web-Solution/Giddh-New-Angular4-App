@@ -1789,7 +1789,7 @@ form {
     }
 
     .filter-dropdown-branch {
-        max-width: 300px;
+        max-width: 350px;
     }
 
     .address-dropdown {
@@ -5997,18 +5997,17 @@ hamburger-menu {
     th,
     td {
         padding: 8px 12px;
-        border-top: 1px solid var(--border-color);
         font-size: var(--font-size-15);
         line-height: 1.5;
     }
 
     thead th {
-        border-bottom: 2px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
         font-weight: var(--font-weight-semibold);
     }
 
     tbody + tbody {
-        border-top: 2px solid var(--border-color);
+        border-top: 1px solid var(--border-color);
     }
 }
 
