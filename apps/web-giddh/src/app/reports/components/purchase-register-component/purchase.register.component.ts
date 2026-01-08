@@ -178,6 +178,7 @@ constructor(
                 this.purchaseRegisterTotal = new PurchaseReportsModel();
                 this.purchaseRegisterTotal.particular = this.getCustomParticular();
                 this.reportRespone = this.filterReportResp(response);
+                this.changeDetectorRef.detectChanges();
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));

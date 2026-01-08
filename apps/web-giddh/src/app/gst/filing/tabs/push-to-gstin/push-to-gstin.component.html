@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="subtabs-box transactions-overview">
+                    <div class="subtabs-box transactions-overview" *ngIf="!gstr1SummaryDetailsInProcess()">
                         <hsn-summary
                             [hsnSummary]="gstr1SummaryDetails.data.hsn"
                             [selectedGst]="selectedGst"
@@ -36,12 +36,8 @@
                             [commonLocaleData]="commonLocaleData"
                         ></hsn-summary>
                     </div>
-                    <div class="filings-empty-state" *ngIf="gstr1SummaryDetailsInProcess">
+                    <div class="filings-empty-state" *ngIf="gstr1SummaryDetailsInProcess()">
                         <giddh-page-loader></giddh-page-loader>
-
-                        <div class="empty-msg">
-                            <span>{{ localeData?.filing?.loading_data }}</span>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -265,6 +265,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
+        this.changeDetectionService.safeChangeDetection(this.changeDetectorRef, this.ngZone);
     }
 
     /**

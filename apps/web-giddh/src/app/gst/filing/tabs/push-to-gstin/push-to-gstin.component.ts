@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/gst-reconcile.actions';
 import { select, Store } from '@ngrx/store';
 import { GstDatePeriod, Gstr1SummaryRequest, Gstr1SummaryResponse } from '../../../../models/api-models/GstReconcile';
@@ -25,7 +25,7 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     public gstr1SummaryDetails: Gstr1SummaryResponse;
-    public gstr1SummaryDetailsInProcess: boolean = false;
+    public gstr1SummaryDetailsInProcess = signal<boolean>(false);
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -42,7 +42,7 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(s => s.gstR.gstr1SummaryDetailsInProcess), takeUntil(this.destroyed$)).subscribe(result => {
-            this.gstr1SummaryDetailsInProcess = result;
+            this.gstr1SummaryDetailsInProcess.set(result);
         });
     }
 
