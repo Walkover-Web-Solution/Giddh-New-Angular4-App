@@ -227,7 +227,11 @@
                         <th mat-header-cell *matHeaderCellDef></th>
                     </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="['customUnit', 'empty1', 'empty2']" class="extra-header-row"></tr>
+                    <tr
+                        mat-header-row
+                        *matHeaderRowDef="['customUnit', 'empty1', 'empty2']"
+                        class="extra-header-row"
+                    ></tr>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="inventory-units-mapped"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns" class="inventory-units-mapped"></tr>
                 </table>

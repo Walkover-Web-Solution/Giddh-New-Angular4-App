@@ -31,7 +31,9 @@
                             <div class="col-xl-6 col-lg-8">
                                 <giddh-datepicker
                                     name="dateOfSupply"
-                                    [placeholder]="branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'"
+                                    [placeholder]="
+                                        branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'
+                                    "
                                     [(ngModel)]="tempDateParams.dateOfSupply"
                                     (dateSelected)="selectDateOfSupply($event)"
                                     [required]="true"
@@ -276,7 +278,9 @@
                             <div class="col-xl-6 col-lg-8">
                                 <giddh-datepicker
                                     name="dateOfSupply"
-                                    [placeholder]="branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'"
+                                    [placeholder]="
+                                        branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'
+                                    "
                                     [(ngModel)]="tempDateParams.dateOfSupply"
                                     (dateSelected)="selectDateOfSupply($event)"
                                     [required]="true"

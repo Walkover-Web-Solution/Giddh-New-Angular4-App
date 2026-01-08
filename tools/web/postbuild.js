@@ -43,73 +43,124 @@ const mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
 
 // PHP script to prepend to index.html
 const phpScript = `<?php
-    $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    if ($requestUri === '/instance-metadata') {
-        header('Content-Type: application/json');
-        $cacheFile = __DIR__ . '/instance-metadata.json';
-        $instanceInfo = null;
-        if (file_exists($cacheFile)) {
-            $instanceInfo = file_get_contents($cacheFile);
-        }
-        if ($instanceInfo === null) {
-            $token = @file_get_contents(
-                "http://169.254.169.254/latest/api/token",
+
+/* -------------------------------------------------
+ * 1. Instance metadata endpoint
+ * ------------------------------------------------- */
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+if ($requestUri === '/instance-metadata') {
+    header('Content-Type: application/json');
+
+    $cacheFile = __DIR__ . '/instance-metadata.json';
+    $instanceInfo = null;
+
+    if (file_exists($cacheFile)) {
+        $instanceInfo = file_get_contents($cacheFile);
+    }
+
+    if ($instanceInfo === null) {
+        $token = @file_get_contents(
+            "http://169.254.169.254/latest/api/token",
+            false,
+            stream_context_create([
+                'http' => [
+                    'method'  => 'PUT',
+                    'header'  => "X-aws-ec2-metadata-token-ttl-seconds: 21600",
+                    'timeout' => 2
+                ]
+            ])
+        );
+
+        if ($token !== false) {
+            $ctx = stream_context_create([
+                'http' => [
+                    'method'  => 'GET',
+                    'header'  => "X-aws-ec2-metadata-token: $token",
+                    'timeout' => 2
+                ]
+            ]);
+
+            $instanceInfo = @file_get_contents(
+                "http://169.254.169.254/latest/dynamic/instance-identity/document",
                 false,
-                stream_context_create([
-                    'http' => [
-                        'method' => 'PUT',
-                        'header' => "X-aws-ec2-metadata-token-ttl-seconds: 21600"
-                    ]
-                ])
+                $ctx
             );
 
-            if ($token !== false) {
-                $ctx = stream_context_create([
-                    'http' => [
-                        'method' => 'GET',
-                        'header' => "X-aws-ec2-metadata-token: $token"
-                    ]
-                ]);
-                $instanceInfo = @file_get_contents(
-                    "http://169.254.169.254/latest/dynamic/instance-identity/document",
-                    false,
-                    $ctx
-                );
-                if ($instanceInfo) {
-                    file_put_contents($cacheFile, $instanceInfo);
-                }
+            if ($instanceInfo) {
+                file_put_contents($cacheFile, $instanceInfo);
             }
         }
-
-        http_response_code(200);
-        echo $instanceInfo;
-        exit;
     }
 
-    $protocol   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
-    $host       = $_SERVER['HTTP_HOST'];
-    $requestUri = $_SERVER['REQUEST_URI'];
-    $fullUrl    = $protocol . "://" . $host . $requestUri;
-    $parsedUrl  = parse_url($fullUrl);
-    $baseUrl    = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+    http_response_code(200);
+    echo $instanceInfo ?: '{}';
+    exit;
+}
 
-    $headers = [
-        "Origin: $baseUrl"
-	];
+/* -------------------------------------------------
+ * 2. Resolve base URL (Origin header)
+ * ------------------------------------------------- */
+$protocol   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+$host       = $_SERVER['HTTP_HOST'];
+$requestUri = $_SERVER['REQUEST_URI'];
+$fullUrl    = $protocol . "://" . $host . $requestUri;
 
-    $targetUrl = getenv("GIDDH_WHITE_LABEL_URL");
+$parsedUrl  = parse_url($fullUrl);
+$baseUrl    = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
 
-    $parsedUrl = parse_url($fullUrl);
-    parse_str($parsedUrl['query'] ?? '', $queryParams);
-    if (!empty($queryParams['region']) && in_array(strtolower($queryParams['region']), ['uk', 'gb', 'UK', 'GB'])) {
-            $targetUrl = getenv("GIDDH_GB_WHITE_LABEL_URL");
+$headers = [
+    "Origin: $baseUrl"
+];
+
+/* -------------------------------------------------
+ * 3. Region detection (query param → cookie)
+ * ------------------------------------------------- */
+parse_str($parsedUrl['query'] ?? '', $queryParams);
+
+$region = null;
+
+/* Priority 1: Query param */
+if (!empty($queryParams['region'])) {
+    $region = strtolower($queryParams['region']);
+
+    if (in_array($region, ['uk', 'gb'])) {
+        setcookie(
+            'region',
+            $region,
+            time() + (86400 * 30), // 30 days
+            '/',
+            '',
+            false,
+            true
+        );
     }
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_URL, $targetUrl);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    curl_close($ch);
+}
+/* Priority 2: Cookie */
+if ($region === null && !empty($_COOKIE['region'])) {
+    $region = strtolower($_COOKIE['region']);
+}
+
+/* -------------------------------------------------
+ * 4. Select target white-label URL
+ * ------------------------------------------------- */
+$targetUrl = getenv("GIDDH_WHITE_LABEL_URL");
+
+if ($region && in_array($region, ['uk', 'gb'])) {
+    $targetUrl = getenv("GIDDH_GB_WHITE_LABEL_URL");
+}
+
+/* -------------------------------------------------
+ * 5. Proxy request via cURL
+ * ------------------------------------------------- */
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $targetUrl);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+$response = curl_exec($ch);
+curl_close($ch);
 ?>`;
 
 // JavaScript to append to index.html

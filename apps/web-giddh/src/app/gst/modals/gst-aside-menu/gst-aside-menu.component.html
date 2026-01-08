@@ -9,9 +9,15 @@
         >
             {{ localeData?.aside_menu?.choose_provider }}
         </ng-container>
-        <ng-container *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{ localeData?.aside_menu?.gst_return_note }}:</ng-container>
-        <ng-container *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{ localeData?.aside_menu?.submit_gst_returns }}:</ng-container>
-        <ng-container *ngIf="selectedService === taxServiceEnum.RECONCILE">{{ localeData?.aside_menu?.gst_reconcile }}</ng-container>
+        <ng-container *ngIf="gstAuthenticated && !pointsAcceptedSubmitted"
+            >{{ localeData?.aside_menu?.gst_return_note }}:</ng-container
+        >
+        <ng-container *ngIf="gstAuthenticated && pointsAcceptedSubmitted"
+            >{{ localeData?.aside_menu?.submit_gst_returns }}:</ng-container
+        >
+        <ng-container *ngIf="selectedService === taxServiceEnum.RECONCILE">{{
+            localeData?.aside_menu?.gst_reconcile
+        }}</ng-container>
     </span>
 </div>
 

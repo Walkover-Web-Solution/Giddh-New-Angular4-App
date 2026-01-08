@@ -256,7 +256,9 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-1 border-none sales-purchase min-width-230 max-width-378">
+                                <div
+                                    class="total-details-box mr-1 border-none sales-purchase min-width-230 max-width-378"
+                                >
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
@@ -272,7 +274,9 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-1 border-none payment-receipt min-width-230 max-width-378">
+                                <div
+                                    class="total-details-box mr-1 border-none payment-receipt min-width-230 max-width-378"
+                                >
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_receipt }}</span>
@@ -502,7 +506,10 @@
                                 class="hover-trigger name-column-td pl-2"
                                 [ngClass]="{ 'hover-trigger--active': selectedCheckedContacts.length }"
                             >
-                                <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
+                                <div
+                                    class="d-flex align-items-center w-100 cursor-pointer"
+                                    (dblclick)="trigger?.openMenu()"
+                                >
                                     <mat-checkbox
                                         color="primary"
                                         class="mr-2 checkbox-left-side-in-table hover-target"
@@ -904,7 +911,10 @@
                                 class="hover-trigger name-column-td pl-2"
                                 [ngClass]="{ 'hover-trigger--active': selectedCheckedContacts.length }"
                             >
-                                <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
+                                <div
+                                    class="d-flex align-items-center w-100 cursor-pointer"
+                                    (dblclick)="trigger?.openMenu()"
+                                >
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"

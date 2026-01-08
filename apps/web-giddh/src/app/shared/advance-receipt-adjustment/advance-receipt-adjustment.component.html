@@ -146,7 +146,9 @@
                                 <div class="form-group">
                                     <reactive-dropdown-field
                                         [autocomplete]="'off'"
-                                        [readonly]="shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null"
+                                        [readonly]="
+                                            shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
+                                        "
                                         *ngIf="voucherApiVersion === 2"
                                         [cssClass]="'text-left'"
                                         [name]="'voucherName' + entry?.uniqueName"

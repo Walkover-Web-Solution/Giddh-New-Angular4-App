@@ -2516,7 +2516,7 @@ export class GeneralService {
                         document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
 
                         if (action === true) {
-                        // User confirmed to leave - clean up and navigate
+                            // User confirmed to leave - clean up and navigate
 
                             pageLeaveUtilityService.removeBrowserConfirmationDialog();
                             cleanupCallback();

@@ -11,7 +11,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
-import { InventoryModule } from './../inventory/inventory.module';
+// import { InventoryModule } from './../inventory/inventory.module';
 import { SharedModule } from './../shared/shared.module';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
@@ -56,7 +56,7 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         SharedModule,
         ClickOutsideModule,
         ElementViewChildModule,
-        InventoryModule,
+        // InventoryModule,
         NgxMaskModule.forRoot(),
         FormsModule,
         FormFieldsModule,

@@ -93,9 +93,15 @@
         <div>
             <mat-form-field appearance="outline" class="initial-height w-100 mb-3">
                 <mat-label>{{ commonLocaleData?.app_status }}</mat-label>
-                <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="balanceStatus">
+                <mat-select
+                    multiple
+                    [placeholder]="commonLocaleData?.app_select_action"
+                    formControlName="balanceStatus"
+                >
                     <mat-option value="paid">{{ commonLocaleData?.app_payment_status?.paid }}</mat-option>
-                    <mat-option value="partial-paid">{{ commonLocaleData?.app_payment_status?.partially_paid }}</mat-option>
+                    <mat-option value="partial-paid">{{
+                        commonLocaleData?.app_payment_status?.partially_paid
+                    }}</mat-option>
                     <mat-option value="unpaid">{{ commonLocaleData?.app_payment_status?.unpaid }}</mat-option>
                     <mat-option value="hold">{{ commonLocaleData?.app_payment_status?.hold }}</mat-option>
                     <mat-option value="cancel">{{ commonLocaleData?.app_payment_status?.cancel }}</mat-option>
@@ -132,7 +138,12 @@
         </div>
         <mat-form-field appearance="outline" class="initial-height w-100">
             <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
-            <textarea matInput rows="2" [placeholder]="commonLocaleData?.app_description" formControlName="description"></textarea>
+            <textarea
+                matInput
+                rows="2"
+                [placeholder]="commonLocaleData?.app_description"
+                formControlName="description"
+            ></textarea>
         </mat-form-field>
     </ng-container>
     <!-- invoice-search-end -->
@@ -423,7 +434,9 @@
                     <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="statuses">
                         <mat-option value="open">{{ commonLocaleData?.app_payment_status?.open }}</mat-option>
                         <mat-option value="converted">{{ commonLocaleData?.app_payment_status?.converted }}</mat-option>
-                        <mat-option value="partially-converted">{{ commonLocaleData?.app_payment_status?.partially_converted }}</mat-option>
+                        <mat-option value="partially-converted">{{
+                            commonLocaleData?.app_payment_status?.partially_converted
+                        }}</mat-option>
                         <mat-option value="expired">{{ commonLocaleData?.app_payment_status?.expired }}</mat-option>
                     </mat-select>
                 </mat-form-field>
