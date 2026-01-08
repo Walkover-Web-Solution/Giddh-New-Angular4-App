@@ -51,11 +51,14 @@
                                                 'active-link':
                                                     (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) && !isTagMenuOpened,
                                             }"
+                                            [attr.data-link]="tab?.link"
+                                            class="navigation-item"
+                                            style="cursor: pointer;"
                                         >
-                                            <a href="javascript:;" aria-label="icon" class="d-block clear-both" [routerLink]="tab?.link">
+                                            <div class="d-block clear-both">
                                                 <span [innerHTML]="tab?.icon"></span>
                                                 <span>{{ tab?.label }}</span>
-                                            </a>
+                                            </div>
                                         </mat-list-item>
                                     </ng-container>
                                 </ng-container>
