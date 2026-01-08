@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <form autocomplete="off" novalidate name="accountForm" [formGroup]="accountForm" class="new-account-form" (ngSubmit)="actionAccount()">
-        <div class="dialog-header" *ngIf="localeData?.payment">
+        <div cdkFocusInitial class="dialog-header" *ngIf="localeData?.payment">
             <span>
                 {{ activeBankAccount ? localeData?.payment?.edit_account : localeData?.payment?.connect_icici_account }}
             </span>

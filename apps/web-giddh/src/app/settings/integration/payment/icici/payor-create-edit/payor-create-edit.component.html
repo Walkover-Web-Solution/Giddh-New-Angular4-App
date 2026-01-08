@@ -7,7 +7,7 @@
         class="new-account-form"
         (ngSubmit)="actionAccountUser()"
     >
-        <div class="dialog-header" *ngIf="localeData?.payment">
+        <div cdkFocusInitial class="dialog-header" *ngIf="localeData?.payment">
             <span>
                 {{ activePayorAccount ? localeData?.payment?.edit_user : localeData?.payment?.add_user }}
             </span>

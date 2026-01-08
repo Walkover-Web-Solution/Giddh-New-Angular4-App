@@ -1,6 +1,6 @@
 <div appTranslate (commonLocaleData)="commonLocaleData = $event">
     <section class="aside-dialog-wrapper" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeAsidePane()">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>
                 {{ commonLocaleData?.app_add }}
                 <span *ngIf="voucherApiVersion === 2">{{ stockType !== 'fixed_assets' ? (stockType | titlecase) : 'Fixed Assets' }}</span>

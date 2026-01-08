@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="dialog-header" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeEvent?.emit()">
+    <div cdkFocusInitial class="dialog-header" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeEvent?.emit()">
         <span>
             {{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}
         </span>

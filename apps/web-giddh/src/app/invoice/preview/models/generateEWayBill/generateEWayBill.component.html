@@ -1,5 +1,5 @@
 <div>
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.generate_eway_bill }}</span>
         <button matIconButton aria-label="close" (click)="onCancel()">
             <i class="icon-cross"></i>
@@ -126,7 +126,7 @@
 
 <!-- add eway bill details modal -->
 <ng-template #template>
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.add_eway }}</span>
         <button matIconButton aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>

@@ -7,7 +7,7 @@
 >
     <giddh-page-loader *ngIf="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading"></giddh-page-loader>
     <div class="advance-search" [hidden]="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ commonLocaleData?.app_advance_search }}</span>
             <div class="d-flex align-items-center column-gap-1">
                 <button

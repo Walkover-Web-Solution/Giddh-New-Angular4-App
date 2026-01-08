@@ -1,5 +1,5 @@
 <div appTranslate [file]="'activity-logs'" (localeData)="localeData = $event">
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.activity_logs }}</span>
         <button matIconButton aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>

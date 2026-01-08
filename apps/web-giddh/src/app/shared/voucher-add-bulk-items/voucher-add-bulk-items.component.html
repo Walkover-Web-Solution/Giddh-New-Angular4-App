@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="bulk-entry" *ngIf="localeData?.add_bulk_items">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span class="font-size-16">{{ localeData?.add_bulk_items }}</span>
             <i mat-dialog-close class="icon-cross" (click)="closeEvent?.emit()"></i>
         </div>

@@ -1,6 +1,6 @@
 <div appTranslate [file]="'inventory/branch-transfer'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <section class="aside-dialog-wrapper">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ commonLocaleData?.app_manage_transporter }}</span>
         </div>
         <mat-dialog-content class="dialog-body">
