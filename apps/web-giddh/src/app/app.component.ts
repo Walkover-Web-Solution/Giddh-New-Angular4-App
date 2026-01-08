@@ -131,11 +131,27 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
                     // Prevent infinite loop: check if target URL is the same as current URL
                     const currentFullUrl = window.location.href;
-                    if (target !== currentFullUrl && !currentFullUrl.includes(target)) {
-                        window.location.href = target;
+                    const currentDomain = window.location.origin;
+                    const targetDomain = new URL(target).origin;
+
+                    // If target domain is different from current domain, use window.location (cross-domain redirect)
+                    // If target domain is same as current domain, use router navigation (same-domain redirect)
+                    if (targetDomain !== currentDomain) {
+                        // Cross-domain redirect (e.g., books.giddh.com → giddh.com)
+                        if (target !== currentFullUrl && !currentFullUrl.includes(target)) {
+                            window.location.href = target;
+                        } else {
+                            // Fallback to router navigation to avoid infinite loop
+                            this.router.navigate(['/login']);
+                        }
                     } else {
-                        // Fallback to router navigation to avoid infinite loop
-                        this.router.navigate(['/login']);
+                        // Same-domain redirect (e.g., apps.saltbooks.com → apps.saltbooks.com/login)
+                        // Use Angular router to avoid infinite redirect loops on same domain
+                        if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
+                            this.router.navigate(['/login'], { queryParams: { returnUrl } });
+                        } else {
+                            this.router.navigate(['/login']);
+                        }
                     }
                 } else {
                     const currentUrl = path + search;
