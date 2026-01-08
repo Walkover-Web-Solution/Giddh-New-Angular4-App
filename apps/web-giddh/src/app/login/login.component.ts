@@ -181,7 +181,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     // tslint:disable-next-line:no-empty
-    public async ngOnInit() {
+    public ngOnInit() {
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
