@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -25,17 +25,15 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     /** Holds Delete Request */
     public deleteRequest: string = null;
     /** Holds company auth key list */
-    public companyAuthKeyList: ICompanyAuthKey[] = [];
-    /** Observable for create/update/delete api call in progress */
-    public isLoading$: Observable<boolean>;
+    public companyAuthKeyList = signal<ICompanyAuthKey[]>([]);
+    /** True if API call is in progress */
+    public isLoading = signal<boolean>(false);
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True if get all company auth keys api call in progress */
-    public isLoading: boolean = false;
     /** Holds Mat Table Display columns */
     public displayedColumns: string[] = ['number', 'userName', 'authKey',  'roleName', 'action'];
     /** Holds create new company auth key dialog ref */
@@ -134,7 +132,7 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
                     } else if (res?.message) {
                         this.toaster.showSnackBar("error", res?.message);
                     }
-                    this.isLoading$ = of(false);
+                    this.isLoading.set(false);
                 });
             }
         });
@@ -147,14 +145,14 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
      * @memberof CompanyAuthKeyComponent
      */
     private getCompanyAuthKeys(): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.companyAuthKeyService.getAllAuthKeys().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.companyAuthKeyList = response?.body;
+                this.companyAuthKeyList.set(response?.body);
             } else if (response?.message) {
                 this.toaster.showSnackBar("error", response?.message);
             }
-            this.isLoading = false;
+            this.isLoading.set(false);
         });
     }
 

@@ -175,6 +175,7 @@ constructor(
                 this.salesRegisterTotal = new ReportsModel();
                 this.salesRegisterTotal.particular = this.getCustomParticular();
                 this.reportRespone = this.filterReportResp(response);
+                this.changeDetectorRef.detectChanges();
             }
         });
 
