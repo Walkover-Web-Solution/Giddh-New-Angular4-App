@@ -12,7 +12,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
-// import { SnackBarModule } from '../theme/snackbar/snackbar.module'; // Module not found
+import { SnackBarModule } from '../theme/snackbar/snackbar.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -25,7 +25,7 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         ReactiveFormsModule,
         BillingDetailRoutingModule,
         MatSnackBarModule,
-        // SnackBarModule, // Module not found
+        SnackBarModule,
         MatCardModule,
         MatCheckboxModule,
         MatFormFieldModule,
