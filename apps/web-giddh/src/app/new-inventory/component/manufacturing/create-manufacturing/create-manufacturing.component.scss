@@ -27,6 +27,7 @@
         }
 
         .form-fields {
+
             .gap-between {
                 gap: 1rem;
             }
@@ -73,7 +74,8 @@
                 tbody {
                     tr {
                         td {
-                            .mat-mdc-outlined-button {
+
+                            .mat-stroked-button {
                                 padding: 4px 6px !important;
                                 line-height: unset !important;
                                 font-size: var(--font-size-12) !important;
@@ -87,7 +89,8 @@
                             td {
                                 &.before-line {
                                     &::before {
-                                        border-top: 2px solid var(--color-silver) !important;
+                                        border-top: 2px solid
+                                            var(--color-silver) !important;
                                     }
                                 }
                             }
@@ -136,6 +139,7 @@
                     width: 10%;
                 }
             }
+
         }
         .total-cost-card {
             padding: 15px 0;
@@ -152,6 +156,7 @@
 
                 .col-5 {
                     flex: unset !important;
+
                 }
             }
         }

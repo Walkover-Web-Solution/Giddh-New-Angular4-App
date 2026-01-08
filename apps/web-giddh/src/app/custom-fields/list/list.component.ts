@@ -9,7 +9,6 @@ import { ToasterService } from "../../services/toaster.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { FieldModules } from "../custom-fields.constant";
 import { GeneralService } from "../../services/general.service";
-import { map } from '../../lodash-optimized';
 
 export interface CustomFieldsInterface {
     fieldName: string;
@@ -22,8 +21,7 @@ export interface CustomFieldsInterface {
     selector: "list",
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomFieldsListComponent implements OnInit, OnDestroy {
     /** List of columns in table */
@@ -116,15 +114,15 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      */
     public deleteCustomField(customFieldUniqueName: any): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '500px',
-                    role: 'alertdialog',
-                    ariaLabel: 'Confirm Dialog',
-                    data: {
+            width: '500px',
+            role: 'alertdialog',
+            ariaLabel: 'Confirm Dialog',
+            data: {
                 title: this.commonLocaleData?.app_delete,
-                    body: this.localeData?.delete_custom_field_title,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                body: this.localeData?.delete_custom_field_title,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {

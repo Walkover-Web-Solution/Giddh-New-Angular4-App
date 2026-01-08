@@ -1,4 +1,9 @@
-<div appTranslate [file]="'settings/integration'" [requireCommonData]="false" (localeData)="localeData = $event">
+<ng-container
+    appTranslate
+    [file]="'settings/integration'"
+    [requireCommonData]="false"
+    (localeData)="localeData = $event"
+>
     <form
         autocomplete="off"
         novalidate
@@ -11,7 +16,7 @@
             <span>
                 {{ activePayorAccount ? localeData?.payment?.edit_user : localeData?.payment?.add_user }}
             </span>
-            <button matIconButton aria-label="close" (click)="closeAccountUserModal()">
+            <button mat-icon-button aria-label="close" (click)="closeAccountUserModal()">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -19,13 +24,15 @@
             <ng-container *ngIf="localeData?.payment">
                 <div class="clear-both">
                     <div class="d-inline-block col-md-6 pl-0">
-                        <label>{{ localeData?.payment?.account_number_label }}</label>
-                        <br />
-                        <span class="font-weight-semibold font-size-15">{{ activeBankAccount?.bankResource?.accountNumber }}</span>
+                        <label>{{ localeData?.payment?.account_number_label }}</label
+                        ><br />
+                        <span class="font-weight-semibold font-size-15">{{
+                            activeBankAccount?.bankResource?.accountNumber
+                        }}</span>
                     </div>
                     <div class="d-inline-block col-md-6 pl-0 pr-0">
-                        <label>{{ localeData?.payment?.linked_account }}</label>
-                        <br />
+                        <label>{{ localeData?.payment?.linked_account }}</label
+                        ><br />
                         <span class="font-weight-semibold font-size-15">{{ activeBankAccount?.account?.name }}</span>
                     </div>
                 </div>
@@ -37,7 +44,8 @@
                         formControlName="loginId"
                         [type]="'text'"
                         [placeholder]="localeData?.payment?.login_id_placeholder"
-                    ></input-field>
+                    >
+                    </input-field>
                 </div>
                 <div class="clear-both mt-2">
                     <reactive-dropdown-field
@@ -77,10 +85,16 @@
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </ng-container>
             <div class="d-flex justify-content-end mt-3" *ngIf="localeData?.payment">
-                <button matButton="filled" type="submit" class="mr-1" [disabled]="accountUserForm?.invalid">
+                <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    class="btn mr-1"
+                    [disabled]="accountUserForm?.invalid"
+                >
                     {{ activePayorAccount ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
                 </button>
             </div>
         </mat-dialog-content>
     </form>
-</div>
+</ng-container>

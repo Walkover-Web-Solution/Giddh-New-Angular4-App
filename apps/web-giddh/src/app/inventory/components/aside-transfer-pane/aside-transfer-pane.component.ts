@@ -16,7 +16,6 @@ import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-u
     selector: 'aside-transfer-pane',
     templateUrl: './aside-transfer-pane.component.html',
     styleUrls: ['./aside-transfer-pane.component.scss'],
-    standalone: false
 })
 
 export class AsideTransferPaneComponent implements OnInit, OnDestroy {

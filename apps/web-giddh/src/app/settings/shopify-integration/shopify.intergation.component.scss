@@ -1,5 +1,6 @@
 .discount {
     min-height: calc(100vh - 120px);
+
 }
 
 .msg91-container {
@@ -15,12 +16,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
 }
 
 .table-one {
     table {
         margin: 0px 0px;
         box-shadow: none;
+
     }
 }
 
@@ -29,6 +32,7 @@
     margin: 10px 0px 0px 0px;
 
     .trigger-form-left-side {
+
         button {
             margin-top: 15px;
         }
@@ -38,5 +42,6 @@
         width: 80%;
         height: 100%;
         padding-left: 20px;
+
     }
 }

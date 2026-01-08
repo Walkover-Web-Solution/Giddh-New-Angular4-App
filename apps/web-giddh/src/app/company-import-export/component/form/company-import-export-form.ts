@@ -7,10 +7,7 @@ import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { MatMenuTrigger, MatMenuModule } from '@angular/material/menu';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -18,13 +15,11 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { CompanyImportExportService } from '../../../services/company-import-export-service';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
-import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'company-import-export-form-component',
     templateUrl: 'company-import-export-form.html',
     styleUrls: [`./company-import-export-form.scss`],
-    standalone: false
 })
 
 export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
@@ -103,7 +98,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
         this.universalDate$.subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
                 this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -134,7 +129,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -162,7 +157,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         if (this.mode === 'export') {
             this.isExportInProcess$ = of(true);
 
-            if (parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
+            if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
                 this.companyImportExportService.ExportRequest(this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         let res = { body: response?.body };
@@ -196,7 +191,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         } else {
             this.isImportInProcess$ = of(true);
 
-            if (parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
+            if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
                 this.companyImportExportService.ImportRequest(this.selectedFile, this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.handleImportEntriesResponse(response);
                 });

@@ -1,8 +1,7 @@
 import { Directive, ElementRef, EventEmitter, OnInit, Output } from "@angular/core";
 
 @Directive({
-    selector: "[onLoad]",
-    standalone: false
+    selector: "[onLoad]"
 })
 export class OnloadDirective implements OnInit {
     /** This will emit the blank event */

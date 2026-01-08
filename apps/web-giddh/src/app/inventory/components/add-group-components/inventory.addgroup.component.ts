@@ -12,7 +12,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { isObject, cloneDeep, forEach, filter as lodashFilter, find, findIndex } from '../../../lodash-optimized';
+import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { InvoiceService } from '../../../services/invoice.service';
 import { IOption } from '../../../app.constant';
@@ -21,7 +21,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
     selector: 'inventory-add-group',
     templateUrl: './inventory.addgroup.component.html',
     styleUrls: [`./inventory.addgroup.component.scss`],
-    standalone:false
 })
 
 export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -169,7 +168,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             }
 
             this.companyTaxesList$.subscribe((tax) => {
-                forEach(tax, (o) => {
+                _.forEach(tax, (o) => {
                     o.isChecked = false;
                     o.isDisabled = false;
                 });
@@ -190,7 +189,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                     this.getParentGroupData();
                     this.taxTempArray = [];
                     this.companyTaxesList$.subscribe((taxes) => {
-                        forEach(taxes, (o) => {
+                        _.forEach(taxes, (o) => {
                             o.isChecked = false;
                             o.isDisabled = false;
                         });
@@ -400,10 +399,10 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
      */
     public selectTax(event: any, tax: any): void {
         if (tax.taxType !== 'gstcess') {
-            let index = findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === tax.taxType);
+            let index = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === tax.taxType);
             if (index > -1 && event.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
-                    forEach(taxes, (companyTax) => {
+                    _.forEach(taxes, (companyTax) => {
                         if (companyTax.taxType === tax.taxType) {
                             companyTax.isChecked = false;
                             companyTax.isDisabled = true;
@@ -420,7 +419,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
             if (index < 0 && event.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
-                    forEach(taxes, (companyTax) => {
+                    _.forEach(taxes, (companyTax) => {
                         if (companyTax.taxType === tax.taxType) {
                             companyTax.isChecked = false;
                             companyTax.isDisabled = true;
@@ -447,11 +446,11 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 });
                 this.taxTempArray.push(tax);
             } else {
-                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === tax?.uniqueName);
+                let idx = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === tax?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 tax.isChecked = false;
                 this.companyTaxesList$.subscribe((taxes) => {
-                    forEach(taxes, (companyTax) => {
+                    _.forEach(taxes, (companyTax) => {
                         if (companyTax.taxType === tax.taxType) {
                             companyTax.isDisabled = false;
                         }
@@ -468,7 +467,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 this.taxTempArray.push(tax);
                 tax.isChecked = true;
             } else {
-                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === tax?.uniqueName);
+                let idx = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === tax?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 tax.isChecked = false;
             }
@@ -488,8 +487,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let event: any = { target: { checked: true } };
 
         this.companyTaxesList$.subscribe(companyTax => {
-            lodashFilter(companyTax, (tax) => {
-                find(taxes, (unq) => {
+            _.filter(companyTax, (tax) => {
+                _.find(taxes, (unq) => {
                     if (unq === tax?.uniqueName) {
                         return taxToMap.push(tax);
                     }
@@ -510,7 +509,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public getInvoiceSettings(): void {
         this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
-                let invoiceSettings = cloneDeep(response.body);
+                let invoiceSettings = _.cloneDeep(response.body);
                 this.inventorySettings = invoiceSettings.companyInventorySettings;
 
                 if (!this.addGroupForm.get("showCodeType")?.value) {

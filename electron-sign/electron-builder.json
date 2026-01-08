@@ -1,6 +1,6 @@
 {
     "appId": "com.giddh.prod",
-    "electronVersion": "39.2.7",
+    "electronVersion": "11.2.3",
     "publish": [
         {
             "provider": "s3",
@@ -50,9 +50,12 @@
             "nsis-web",
             "zip"
         ],
-        "icon": "./resources/icon.ico",
-        "legalTrademarks": "",
-        "signAndEditExecutable": false
+        "icon": "icon.ico",
+        "signingHashAlgorithms": [
+            "sha256"
+        ],
+        "publisherName": "Walkover Technologies Pvt Ltd",
+        "legalTrademarks": "Walkover Technologies Pvt Ltd"
     },
     "nsis": {
         "oneClick": true,

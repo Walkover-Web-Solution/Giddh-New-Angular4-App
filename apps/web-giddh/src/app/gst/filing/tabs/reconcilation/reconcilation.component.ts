@@ -8,15 +8,13 @@ import { GstReconcileActions } from '../../../../actions/gst-reconcile/gst-recon
 import { Observable, ReplaySubject } from 'rxjs';
 import { GstReport } from '../../../constants/gst.constant';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Configuration, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'reconcile',
     templateUrl: './reconcilation.component.html',
-    styleUrls: ['./reconcilation.component.scss'],
-    standalone: false
+    styleUrls: ['./reconcilation.component.scss']
 })
 export class ReconcileComponent implements OnInit, OnDestroy {
     @Input() public data: GstReconcileInvoiceDetails = null;
@@ -63,7 +61,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.fireGstReconcileRequest(GstReconcileActionsEnum.notfoundonportal);
     }
 

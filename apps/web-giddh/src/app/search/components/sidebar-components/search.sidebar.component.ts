@@ -13,12 +13,11 @@ import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GroupService } from '../../../services/group.service';
-import { cloneDeep, concat, find, map } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'search-sidebar',
-    
-    standalone: false,templateUrl: './search.sidebar.component.html',
+    templateUrl: './search.sidebar.component.html',
     styleUrls: [`./search.sidebar.component.scss`],
 })
 export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {

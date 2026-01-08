@@ -4,35 +4,5 @@
     "semi": true,
     "bracketSpacing": true,
     "printWidth": 120,
-    "quoteProps": "preserve",
-    "singleQuote": true,
-    "arrowParens": "avoid",
-    "endOfLine": "lf",
-    "overrides": [
-        {
-            "files": "*.html",
-            "options": {
-                "parser": "angular",
-                "printWidth": 140,
-                "tabWidth": 4,
-                "htmlWhitespaceSensitivity": "ignore"
-            }
-        },
-        {
-            "files": ["*.ts", "*.tsx"],
-            "options": {
-                "parser": "typescript",
-                "singleQuote": true,
-                "trailingComma": "es5"
-            }
-        },
-        {
-            "files": "*.scss",
-            "options": {
-                "parser": "scss",
-                "singleQuote": true,
-                "tabWidth": 4
-            }
-        }
-    ]
+    "quoteProps": "preserve"
 }

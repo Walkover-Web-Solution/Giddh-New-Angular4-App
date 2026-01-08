@@ -2,7 +2,6 @@ import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from './../store/roots';
 import { Injectable } from '@angular/core';
 import { CompanyResponse } from '../models/api-models/Company';
-import { find, findIndex } from '../lodash-optimized';
 
 export interface IScope {
     name: string;
@@ -18,9 +17,7 @@ export interface CompanyData {
     createdBy: any;
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class PermissionDataService {
     private _scopes: IScope[] = [];
     private createdBy: CompanyData;

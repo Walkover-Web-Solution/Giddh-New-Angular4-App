@@ -14,19 +14,17 @@ import { InventoryService } from "../../../services/inventory.service";
 import { GeneralService } from "../../../services/general.service";
 import { OrganizationType } from "../../../models/user-login-state";
 import { ToasterService } from "../../../services/toaster.service";
+import { cloneDeep } from "../../../lodash-optimized";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
 import { Router } from "@angular/router";
 import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { InventoryComponentStore } from "../inventory.store";
-import { cloneDeep, concat, filter, find, forEach, includes, indexOf, map, some } from '../../../lodash-optimized';
 
 @Component({
     selector: "report-filters",
-
     templateUrl: "./report-filters.component.html",
-    standalone: false,
     styleUrls: ["./report-filters.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [InventoryComponentStore]
@@ -183,7 +181,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                this.universalDate = cloneDeep(dateObj);
+                this.universalDate = _.cloneDeep(dateObj);
                 if (this.pullUniversalDate) {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
@@ -603,7 +601,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (res) {
                 this.fromDate = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
-                let universalDate = cloneDeep(res);
+                let universalDate = _.cloneDeep(res);
                 if (universalDate && !this.todaySelected) {
                     this.selectedDateRange = { startDate: dayjs(res[0]), endDate: dayjs(res[1]) };
                     this.selectedDateRangeUi = dayjs(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -887,7 +885,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.hideSelectedOptions || !options) {
             return options || [];
         }
-
+        
         return options.filter(option => {
             return !this.filtersChipList?.some(chip => chip?.uniqueName === option?.uniqueName);
         });

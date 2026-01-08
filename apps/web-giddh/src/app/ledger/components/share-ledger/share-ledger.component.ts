@@ -10,14 +10,12 @@ import * as dayjs from 'dayjs';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'share-ledger',
     templateUrl: './share-ledger.component.html',
     styleUrls: ['./share-ledger.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ShareLedgerComponent implements OnInit, OnDestroy {
@@ -49,14 +47,14 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.dispatch(this.ledgerActions.sharedAccountWith(this.inputData?.accountUniqueName));
         this.store.pipe(select(state => state.ledger.activeAccountSharedWith), takeUntil(this.destroyed$)).subscribe((data) => {
-            this.activeAccountSharedWith = cloneDeep(data);
+            this.activeAccountSharedWith = _.cloneDeep(data);
             this.changeDetectorRef.detectChanges();
         });
     }
 
     public getMagicLink() {
         let magicLinkRequest = new MagicLinkRequest();
-        const data = cloneDeep(this.inputData?.advanceSearchRequest);
+        const data = _.cloneDeep(this.inputData?.advanceSearchRequest);
         data.dataToSend.bsRangeValue = [dayjs(this.inputData?.from, GIDDH_DATE_FORMAT).toDate(), dayjs(this.inputData?.to, GIDDH_DATE_FORMAT).toDate()];
         magicLinkRequest.from = dayjs(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? dayjs(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
         magicLinkRequest.to = dayjs(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? dayjs(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);

@@ -16,7 +16,6 @@ import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-u
     selector: 'aside-menu',
     templateUrl: './aside-menu.component.html',
     styleUrls: ['./aside-menu.component.scss'],
-    standalone: false
 })
 
 export class AsideMenuComponent implements OnInit, OnDestroy {

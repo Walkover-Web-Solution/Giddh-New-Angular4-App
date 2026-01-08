@@ -8,7 +8,7 @@
     .remove-invoice-icon {
         position: absolute;
         right: -15px;
-        top: 14px;
+        top: 14px
     }
 
     .container-lg {
@@ -61,6 +61,7 @@
         .vouchers-form-fields {
             max-width: 415px;
             min-width: 230px;
+
         }
 
         .vouchers-form-fields-detail {
@@ -75,7 +76,7 @@
     .vouchers-secondary-form {
         &.vouchers-form-disable {
             &::before {
-                content: '';
+                content: "";
                 display: block;
                 position: absolute;
                 top: 0;
@@ -173,6 +174,7 @@
             .vouchers-entry-table {
                 table {
                     tr {
+
                         th,
                         td {
                             padding: 16px 8px;
@@ -194,6 +196,7 @@
                         }
 
                         th {
+
                             &:not(:first-child, :nth-child(2)) {
                                 padding-right: 14px !important;
                             }

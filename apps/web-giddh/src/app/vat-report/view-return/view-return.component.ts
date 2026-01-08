@@ -11,7 +11,6 @@ import { GeneralService } from '../../services/general.service';
     selector: 'view-return',
     styleUrls: ['./view-return.component.scss'],
     templateUrl: './view-return.component.html',
-    standalone:false
 })
 export class ViewReturnComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

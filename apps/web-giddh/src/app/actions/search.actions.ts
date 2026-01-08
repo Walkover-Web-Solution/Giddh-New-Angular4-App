@@ -9,9 +9,7 @@ import { SearchRequest } from '../models/api-models/Search';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { CustomActions } from '../store/custom-actions';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SearchActions {
     public static readonly SEARCH_REQUEST = 'SEARCH_REQUEST';
     public static readonly SEARCH_RESPONSE = 'SEARCH_RESPONSE';

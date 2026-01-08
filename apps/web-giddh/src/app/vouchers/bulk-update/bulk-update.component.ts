@@ -21,8 +21,7 @@ import { IOption } from '../../app.constant';
     selector: 'app-bulk-update',
     templateUrl: './bulk-update.component.html',
     styleUrls: ['./bulk-update.component.scss'],
-    providers: [VoucherComponentStore],
-    standalone: false
+    providers: [VoucherComponentStore]
 })
 export class BulkUpdateComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -224,7 +223,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                 this.checkDefaultTemplateSignature(this.defaultTemplates);
 
                 this.templatesList = [];
-                (Array.isArray(response) ? response : []).forEach(tmpl => {
+                response.forEach(tmpl => {
                     this.templatesList.push({ label: tmpl.name, value: tmpl?.uniqueName });
                 });
             }

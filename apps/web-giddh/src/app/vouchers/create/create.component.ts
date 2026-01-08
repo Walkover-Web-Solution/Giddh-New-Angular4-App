@@ -2,7 +2,6 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
-    computed,
     ElementRef,
     HostListener,
     Inject,
@@ -11,14 +10,12 @@ import {
     OnInit,
     TemplateRef,
     ViewChild,
-    signal,
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { select, Store } from "@ngrx/store";
 import {
-    BehaviorSubject,
     Observable,
     ReplaySubject,
     combineLatest,
@@ -55,7 +52,6 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import {
     AccountType,
     BriedAccountsGroup,
-    InteractionType,
     OtherTaxTypeEnum,
     OtherTaxTypes,
     SearchType,
@@ -91,8 +87,7 @@ import {
     ZIP_CODE_SUPPORTED_COUNTRIES,
     ASIDE_PANE_CONFIG,
     IOption,
-    API_BULK_FETCH_LIMIT,
-    Configuration
+    API_BULK_FETCH_LIMIT
 } from "../../app.constant";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -116,18 +111,17 @@ import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
 import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
+import { Country } from "../../shared/mobile-number-input/countries-data";
 import { GiddhDatepickerComponent } from "../../theme/giddh-datepicker/giddh-datepicker.component";
 import { FocusMonitor } from "@angular/cdk/a11y";
 import { Platform } from "@angular/cdk/platform";
 import { GeneralActions } from "../../actions/general/general.actions";
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
-    providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore],
-    standalone: false
+    providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore]
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Instance of voucher date picker */
@@ -156,14 +150,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('shippingDetailsTrigger') shippingDetailsTrigger!: MatMenuTrigger;
     /** Copy Voucher div element for focusing */
     @ViewChild('copyVoucherElement') copyVoucherElement!: ElementRef<HTMLDivElement>;
-    /** Description textarea element for focusing */
-    @ViewChild('inputDescription', { static: false }) inputDescription?: ElementRef<HTMLTextAreaElement>;
-    /** Reference to the "Add new row/line" span element for focusing */
-    @ViewChild('addNewParticular') addNewParticular!: ElementRef<HTMLSpanElement>;
-    /** Reference to the "Add new row/line" span element for focusing */
-    @ViewChild('addNewDeposit') addNewDeposit!: ElementRef<HTMLSpanElement>;
-    /** Reference to the "Add new row/line" span element for focusing */
-    @ViewChild('customerVendorDropdown') customerVendorDropdown!: ReactiveDropdownFieldComponent;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -248,8 +234,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public allCompanyTaxes: TaxResponse[] = [];
     /** Holds company tax list  */
     public companyTaxes: TaxResponse[] = [];
-    /** Reference to the current RCM checkbox element for focus management */
-    private currentRcmCheckboxElement: any;
     /** Holds company discounts */
     public discountsList: any[] = [];
     /** Holds company warehouses */
@@ -442,7 +426,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /* This will hold the existing PO entries with quantity */
     public existingPoEntries: any[] = [];
     /** Show/Hide page loader */
-    public showLoader = signal<boolean>(false);
+    public showLoader: boolean = false;
     /** Holds true if table entry has at least single stock is selected  */
     public hasStock: boolean = false;
     /** This will hold if voucher date is manually changed */
@@ -457,14 +441,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public startTime: number = 0;
     /**Hold barcode scan end time */
     public endTime: number = 0;
-    /** Tracks the last interaction type for conditional focus behavior */
-    public lastInteraction: InteractionType | null = null;
-    /** Timestamp of last interaction to prevent rapid overrides */
-    private lastInteractionTimestamp: number = 0;
-    /** Global event listeners for cleanup */
-    private globalKeydownListener?: (event: KeyboardEvent) => void;
-    private globalMousedownListener?: () => void;
-    private globalClickListener?: () => void;
     /**Hold barcode scan total time */
     public totalTime: number = 0;
     /** This will hold barcode value*/
@@ -543,8 +519,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public activeDepositIndex: number | null = null;
     /** Tracks if sidebar was previously open to restore it on component destroy */
     private wasSidebarOpen = false;
-    /** Invoice templates */
-    public sampleTemplates$: BehaviorSubject<IOption[]> = new BehaviorSubject<IOption[]>([]);
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -574,7 +548,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @type {boolean}
      * @memberof VoucherCreateComponent
      */
-    public showTaxColumn = computed(() => {
+    public get showTaxColumn(): boolean {
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             return false;
         }
@@ -610,7 +584,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             return true;
         }
-    });
+    }
 
     /**
      * True if it's UK company
@@ -679,9 +653,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private focusMonitor: FocusMonitor,
         private platform: Platform,
         private ngZone: NgZone,
-        private generalActions: GeneralActions
+        private generalActions: GeneralActions,
     ) {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 
     /**
@@ -690,9 +664,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ngOnInit(): void {
-        // Set up global interaction tracking
-        this.setupGlobalInteractionTracking();
-
         // Close side menu on voucher create/update page
         this.store.pipe(select(state => state.general.openSideMenu), take(1)).subscribe(response => {
             if (response) {
@@ -762,7 +733,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getCreatedTemplates();
                         this.getAccountOnboardingFormData();
                         this.searchStock();
-
+                        
                         if (!this.invoiceType.isPaymentInvoice && !this.invoiceType.isReceiptInvoice) {
                             this.getWarehouses();
                         }
@@ -1251,9 +1222,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("templateDetails.other.trackingNumber")
                             ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
-                        this.invoiceForm
-                            .get("templateDetails.templateUniqueName")
-                            ?.patchValue(voucherDetails.templateDetails?.templateUniqueName);
 
                         if (voucherDetails.attachedFiles) {
                             this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
@@ -1294,9 +1262,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("templateDetails.other.trackingNumber")
                             ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
-                        this.invoiceForm
-                            .get("templateDetails.templateUniqueName")
-                            ?.patchValue(voucherDetails.templateDetails?.templateUniqueName);
 
                         if (voucherDetails.attachedFiles) {
                             this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
@@ -1390,14 +1355,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         setTimeout(() => {
                             this.copyVoucherElement?.nativeElement?.focus();
                         }, 100);
-                    } else if (this.isUpdateMode) {
-                        setTimeout(() => {
-                            this.customerVendorDropdown.focusInputField();
-                        }, 100);
                     } else {
-                        this.customerVendorDropdownOpen();
+                        this.openAccountDropdown = false;
+                        setTimeout(() => {
+                            this.openAccountDropdown = true;
+                        }, 100);
                     }
                     this.startLoader(false);
+                    this.changeDetection.detectChanges();
                 }
             });
 
@@ -1518,7 +1483,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.selectedFileName = "";
                 this.invoiceForm.get("attachedFiles")?.patchValue([]);
                 this.componentStore.resetAttachmentState();
-                this.changeDetection.detectChanges();
             }
         });
 
@@ -1564,7 +1528,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
                 this.lastVouchersList$ = observableOf([...lastVouchers]);
-                this.changeDetection.detectChanges();
             }
         });
 
@@ -2230,26 +2193,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getCreatedTemplates(): void {
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            let templateType = VoucherTypeEnum.invoice;
-            if (this.voucherType === VoucherTypeEnum.purchase) {
-                templateType = VoucherTypeEnum.purchase_bill;
-            } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                templateType = VoucherTypeEnum.purchase_order;
-            } else if (this.voucherType === VoucherTypeEnum.debitNote || this.voucherType === VoucherTypeEnum.creditNote) {
-                templateType = VoucherTypeEnum.voucher;
-            }
-
             if (!response) {
-                this.componentStore.createdTemplatesIsLoading$.pipe(take(1)).subscribe((isLoading) => {
-                    if (!isLoading) {
-                        this.componentStore.getCreatedTemplates(templateType);
-                    }
-                });
+                this.componentStore.getCreatedTemplates(
+                    this.invoiceType.isDebitNote || this.invoiceType.isCreditNote ? "voucher" : "invoice"
+                );
             } else {
-                // Convert templates to IOption format for dropdown
-                const templateOptions = this.convertTemplatesToOptions(response);
-                this.sampleTemplates$.next(templateOptions);
-
                 const defaultTemplate = response.find((template) => template.isDefault || template.isDefaultForVoucher);
                 if (defaultTemplate && defaultTemplate.sections) {
                     const sections = defaultTemplate.sections;
@@ -2900,7 +2848,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     shippingDate: [""],
                     trackingNumber: [""],
                 }),
-                templateUniqueName: [""]
             }),
             entries: this.formBuilder.array([this.getEntriesFormGroup()]),
             uniqueName: [""],
@@ -2993,7 +2940,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             hsnNumber: [entryData ? entryData?.hsnNumber : ""],
             sacNumber: [entryData ? entryData?.sacNumber : ""],
             totalDiscount: [""], // temp
-            totalTax: [0], // temp
+            totalTax: [""], // temp
             totalTaxWithoutCess: [""], //temp
             totalCess: [""], //temp
             calculateTotal: [true], //temp
@@ -3179,179 +3126,177 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         );
 
         this.bulkStockAsideMenuRef.afterClosed().pipe(take(1)).subscribe((response) => {
-            if (response) {
-                const entries = this.invoiceForm.get("entries") as FormArray;
-                this.invoiceForm.get("entries")["controls"]?.forEach((control: any, entryIndex: number) => {
-                    if (!control.get("transactions.0.account.uniqueName")?.value) {
-                        entries.removeAt(entryIndex);
-                    }
-                });
-
-                let index = entries?.length;
-
-                response?.forEach((item) => {
-                    if (item.additional?.stock) {
-                        this.stockUnits[index] = observableOf(item.additional?.stock?.variant?.unitRates);
-
-                        if (item.additional?.variants) {
-                            this.stockVariants[index] = item.additional?.variants;
+                if (response) {
+                    const entries = this.invoiceForm.get("entries") as FormArray;
+                    this.invoiceForm.get("entries")["controls"]?.forEach((control: any, entryIndex: number) => {
+                        if (!control.get("transactions.0.account.uniqueName")?.value) {
+                            entries.removeAt(entryIndex);
                         }
-                    }
+                    });
 
-                    let entry = {
-                        hsnNumber: item.additional?.stock?.hsnNumber,
-                        sacNumber: item.additional?.stock?.sacNumber,
-                        showCodeType: item.additional?.stock?.hsnNumber ? "hsn" : "sac",
-                        transactions: [
-                            {
-                                account: {
-                                    name: item.additional?.label,
-                                    uniqueName: item.additional?.uniqueName,
-                                },
-                                amount: {
-                                    amountForAccount: giddhRoundOff(
-                                        Number(item.quantity) * Number(item.rate),
-                                        this.company.giddhBalanceDecimalPlaces
-                                    ),
-                                    amountForCompany:
-                                        giddhRoundOff(
+                    let index = entries?.length;
+
+                    response?.forEach((item) => {
+                        if (item.additional?.stock) {
+                            this.stockUnits[index] = observableOf(item.additional?.stock?.variant?.unitRates);
+
+                            if (item.additional?.variants) {
+                                this.stockVariants[index] = item.additional?.variants;
+                            }
+                        }
+
+                        let entry = {
+                            hsnNumber: item.additional?.stock?.hsnNumber,
+                            sacNumber: item.additional?.stock?.sacNumber,
+                            showCodeType: item.additional?.stock?.hsnNumber ? "hsn" : "sac",
+                            transactions: [
+                                {
+                                    account: {
+                                        name: item.additional?.label,
+                                        uniqueName: item.additional?.uniqueName,
+                                    },
+                                    amount: {
+                                        amountForAccount: giddhRoundOff(
                                             Number(item.quantity) * Number(item.rate),
                                             this.company.giddhBalanceDecimalPlaces
-                                        ) * this.invoiceForm.get("exchangeRate")?.value,
+                                        ),
+                                        amountForCompany:
+                                            giddhRoundOff(
+                                                Number(item.quantity) * Number(item.rate),
+                                                this.company.giddhBalanceDecimalPlaces
+                                            ) * this.invoiceForm.get("exchangeRate")?.value,
+                                    },
+                                    stock: {
+                                        name: item.additional?.stock?.name,
+                                        uniqueName: item.additional?.stock?.uniqueName,
+                                        quantity: item.quantity,
+                                        rate: {
+                                            rateForAccount: item.rate,
+                                            amountForAccount: item.rate,
+                                        },
+                                        stockUnit: {
+                                            code: item.additional?.stock?.variant?.unitRates?.length
+                                                ? item.additional?.stock?.variant?.unitRates[0].stockUnitCode
+                                                : "",
+                                            uniqueName: item.additional?.stock?.variant?.unitRates?.length
+                                                ? item.additional?.stock?.variant?.unitRates[0].stockUnitUniqueName
+                                                : "",
+                                        },
+                                        variant: {
+                                            name: item.variantName,
+                                            uniqueName: item.additional?.stock?.variant?.uniqueName,
+                                            salesTaxInclusive: item.additional?.stock?.variant?.salesTaxInclusive,
+                                            purchaseTaxInclusive: item.additional?.stock?.variant?.purchaseTaxInclusive,
+                                        },
+                                        sku: item.additional?.stock?.skuCode,
+                                        skuCodeHeading: item.additional?.stock?.skuCodeHeading,
+                                        customField1: {
+                                            key: item.additional?.stock?.customField1Heading,
+                                            value: item.additional?.stock?.customField1Value,
+                                        },
+                                        customField2: {
+                                            key: item.additional?.stock?.customField2Heading,
+                                            value: item.additional?.stock?.customField2Value,
+                                        },
+                                    },
                                 },
-                                stock: {
-                                    name: item.additional?.stock?.name,
-                                    uniqueName: item.additional?.stock?.uniqueName,
-                                    quantity: item.quantity,
-                                    rate: {
-                                        rateForAccount: item.rate,
-                                        amountForAccount: item.rate,
-                                    },
-                                    stockUnit: {
-                                        code: item.additional?.stock?.variant?.unitRates?.length
-                                            ? item.additional?.stock?.variant?.unitRates[0].stockUnitCode
-                                            : "",
-                                        uniqueName: item.additional?.stock?.variant?.unitRates?.length
-                                            ? item.additional?.stock?.variant?.unitRates[0].stockUnitUniqueName
-                                            : "",
-                                    },
-                                    variant: {
-                                        name: item.variantName,
-                                        uniqueName: item.additional?.stock?.variant?.uniqueName,
-                                        salesTaxInclusive: item.additional?.stock?.variant?.salesTaxInclusive,
-                                        purchaseTaxInclusive: item.additional?.stock?.variant?.purchaseTaxInclusive,
-                                    },
-                                    sku: item.additional?.stock?.skuCode,
-                                    skuCodeHeading: item.additional?.stock?.skuCodeHeading,
-                                    customField1: {
-                                        key: item.additional?.stock?.customField1Heading,
-                                        value: item.additional?.stock?.customField1Value,
-                                    },
-                                    customField2: {
-                                        key: item.additional?.stock?.customField2Heading,
-                                        value: item.additional?.stock?.customField2Value,
-                                    },
-                                },
-                            },
-                        ],
-                    };
+                            ],
+                        };
 
-                    this.invoiceForm.get("entries")["controls"].push(this.getEntriesFormGroup(entry));
+                        this.invoiceForm.get("entries")["controls"].push(this.getEntriesFormGroup(entry));
 
-                    let entryFormGroup = this.getEntryFormGroup(index);
-                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+                        let entryFormGroup = this.getEntryFormGroup(index);
+                        let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
-                    const discountsFormArray = entryFormGroup.get("discounts") as FormArray;
-                    discountsFormArray.clear();
-                    if (item.additional?.stock?.variant?.variantDiscount?.discounts) {
-                        item.additional?.stock?.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
-                            this.discountsList?.forEach((discount) => {
-                                if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
-                                    discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                        const discountsFormArray = entryFormGroup.get("discounts") as FormArray;
+                        discountsFormArray.clear();
+                        if (item.additional?.stock?.variant?.variantDiscount?.discounts) {
+                            item.additional?.stock?.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
+                                this.discountsList?.forEach((discount) => {
+                                    if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
+                                        discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                                    }
+                                });
+                            });
+                        } else {
+                            this.account.applicableDiscounts?.forEach((selectedDiscount) => {
+                                this.discountsList?.forEach((discount) => {
+                                    if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                                        discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                                    }
+                                });
+                            });
+                        }
+
+                        const taxes = this.generalService.fetchTaxesOnPriority(
+                            item.additional.stock?.taxes ?? [],
+                            item.additional.stock?.groupTaxes ?? [],
+                            item.additional.taxes ?? [],
+                            item.additional.groupTaxes ?? []
+                        );
+
+                        const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
+                        taxesFormArray.clear();
+
+                        const selectedTaxes = [];
+                        let otherTax = null;
+                        taxes?.forEach((selectedTax) => {
+                            this.allCompanyTaxes?.forEach((tax) => {
+                                if (tax.uniqueName === selectedTax) {
+                                    if (this.otherTaxTypes.includes(tax.taxType)) {
+                                        otherTax = tax;
+                                    } else {
+                                        selectedTaxes.push(tax);
+                                    }
                                 }
                             });
                         });
-                    } else {
-                        this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                            this.discountsList?.forEach((discount) => {
-                                if (discount?.uniqueName === selectedDiscount?.uniqueName) {
-                                    discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-                                }
-                            });
+
+                        selectedTaxes?.forEach((tax) => {
+                            taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
                         });
-                    }
 
-                    const taxes = this.generalService.fetchTaxesOnPriority(
-                        item.additional.stock?.taxes ?? [],
-                        item.additional.stock?.groupTaxes ?? [],
-                        item.additional.taxes ?? [],
-                        item.additional.groupTaxes ?? []
-                    );
-
-                    const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
-                    taxesFormArray.clear();
-
-                    const selectedTaxes = [];
-                    let otherTax = null;
-                    taxes?.forEach((selectedTax) => {
-                        this.allCompanyTaxes?.forEach((tax) => {
-                            if (tax.uniqueName === selectedTax) {
-                                if (this.otherTaxTypes.includes(tax.taxType)) {
+                        if (!otherTax && this.account?.otherApplicableTaxes?.length) {
+                            this.allCompanyTaxes?.forEach((tax) => {
+                                if (
+                                    this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName &&
+                                    this.otherTaxTypes.includes(tax.taxType)
+                                ) {
                                     otherTax = tax;
-                                } else {
-                                    selectedTaxes.push(tax);
                                 }
-                            }
-                        });
+                            });
+                        }
+
+                        if (otherTax) {
+                            const selectedOtherTax = this.allCompanyTaxes?.filter(
+                                (tax) => tax.uniqueName === otherTax.uniqueName
+                            );
+                            otherTax["taxDetail"] = selectedOtherTax[0].taxDetail;
+                            otherTax["name"] = selectedOtherTax[0].name;
+                            this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod);
+                        }
+
+                        if (
+                            item.additional.stock?.variant?.salesTaxInclusive ||
+                            item.additional.stock?.variant?.purchaseTaxInclusive
+                        ) {
+                            const amount = this.vouchersUtilityService.calculateInclusiveRate(
+                                entryFormGroup?.value,
+                                this.companyTaxes,
+                                this.company.giddhBalanceDecimalPlaces
+                            );
+                            transactionFormGroup.get("amount.amountForAccount").patchValue(amount);
+                            transactionFormGroup
+                                .get("stock.rate.rateForAccount")
+                                ?.patchValue(amount / transactionFormGroup.get("stock.quantity")?.value);
+                        }
+
+                        index++;
                     });
 
-                    selectedTaxes?.forEach((tax) => {
-                        taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
-                    });
-
-                    if (!otherTax && this.account?.otherApplicableTaxes?.length) {
-                        this.allCompanyTaxes?.forEach((tax) => {
-                            if (
-                                this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName &&
-                                this.otherTaxTypes.includes(tax.taxType)
-                            ) {
-                                otherTax = tax;
-                            }
-                        });
-                    }
-
-                    if (otherTax) {
-                        const selectedOtherTax = this.allCompanyTaxes?.filter(
-                            (tax) => tax.uniqueName === otherTax.uniqueName
-                        );
-                        otherTax["taxDetail"] = selectedOtherTax[0].taxDetail;
-                        otherTax["name"] = selectedOtherTax[0].name;
-                        this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod);
-                    }
-
-                    if (
-                        item.additional.stock?.variant?.salesTaxInclusive ||
-                        item.additional.stock?.variant?.purchaseTaxInclusive
-                    ) {
-                        const amount = this.vouchersUtilityService.calculateInclusiveRate(
-                            entryFormGroup?.value,
-                            this.companyTaxes,
-                            this.company.giddhBalanceDecimalPlaces
-                        );
-                        transactionFormGroup.get("amount.amountForAccount").patchValue(amount);
-                        transactionFormGroup
-                            .get("stock.rate.rateForAccount")
-                            ?.patchValue(amount / transactionFormGroup.get("stock.quantity")?.value);
-                    }
-
-                    index++;
-                });
-
-                this.checkIfEntriesHasStock();
-                this.activeEntryIndex = null;
-                this.changeDetection.detectChanges();
-            }
-        });
+                    this.checkIfEntriesHasStock();
+                }
+            });
     }
 
     /**
@@ -3373,7 +3318,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 entryIndex: entryIndex,
                 appliedOtherTax: entry.get("otherTax")?.value,
             },
-            autoFocus: false
         });
 
         this.otherTaxAsideMenuRef
@@ -3389,6 +3333,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
                             const taxFormGroup = taxesFormArray.at(taxIndex) as FormGroup;
+
                             if (
                                 taxFormGroup.get("uniqueName")?.value ===
                                 entryFormGroup.get("otherTax.uniqueName")?.value
@@ -3396,8 +3341,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 taxesFormArray.removeAt(taxIndex);
                             }
                         }
+
                         entryFormGroup.get("otherTax").reset();
-                        entryFormGroup.get("otherTax.isChecked")?.setValue(false);
                         this.calculateReceiptPaymentAmount(entryFormGroup);
                     }
                 }
@@ -3492,15 +3437,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public toggleAccountAsidePane(accountType: AccountType, createNewAccount: boolean = true, customFocusElement?: any): void {
-        if (this.accountAsideMenuRef) return;
-
         this.createNewAccount = createNewAccount;
         if (accountType === this.accountType.customer) {
             this.getParentGroupForCreateAccount();
         } else {
             this.accountParentGroup = "bankaccounts";
         }
-
+        
         // Store focus - if customFocusElement is provided, use its native element
         if (customFocusElement) {
             // Handle MatMenuTrigger reference - use _element property (confirmed working)
@@ -3538,7 +3481,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         group: BriedAccountsGroup,
                     });
                 }
-                this.accountAsideMenuRef = null;
                 this.restoreFocus();
             });
     }
@@ -3652,7 +3594,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateDiscountDialog(): void {
-        this.discountDialogRef = this.openDialogWithFocusManagement(() =>
+        this.discountDialogRef = this.openDialogWithFocusManagement(() => 
             this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG)
         );
 
@@ -3709,9 +3651,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public toggleRcmCheckbox(event: any, element: string): void {
-        // Store the checkbox element reference for focus management
-        this.currentRcmCheckboxElement = event;
-
         let isChecked;
         if (element === "checkbox") {
             isChecked = event?.checked;
@@ -3721,37 +3660,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
-
-        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: "630px",
-            data: {
-                configuration: this.rcmConfiguration,
-            },
-        });
+        
+        const dialogRef = this.openDialogWithFocusManagement(() =>
+            this.dialog.open(NewConfirmationModalComponent, {
+                width: "630px",
+                data: {
+                    configuration: this.rcmConfiguration,
+                },
+            })
+        );
 
         dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
             document.querySelector("body").classList.remove("fixed");
             this.handleRcmChange(response);
-
-            // Focus back on the RCM checkbox after dialog closes
-            setTimeout(() => {
-                if (this.currentRcmCheckboxElement && this.currentRcmCheckboxElement.focus) {
-                    // Use MatCheckbox's built-in focus method
-                    this.currentRcmCheckboxElement.focus();
-                } else {
-                    // Fallback: find the checkbox by selector and focus
-                    const checkboxElement = document.querySelector('mat-checkbox#reverse-charge input');
-                    if (checkboxElement) {
-                        (checkboxElement as HTMLElement).focus();
-                    } else {
-                        // Last fallback: focus the mat-checkbox container
-                        const matCheckboxContainer = document.querySelector('mat-checkbox#reverse-charge');
-                        if (matCheckboxContainer) {
-                            (matCheckboxContainer as HTMLElement).focus();
-                        }
-                    }
-                }
-            }, 150);
         });
         this.changeDetection.detectChanges();
     }
@@ -3881,7 +3802,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.invoiceForm.get("attachedFiles")?.patchValue([response.body?.uniqueName]);
                             if (!this.ocrDataEnabled) {
                                 this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
-                                this.focusOnDeleteAttachment();
                             }
                         } else {
                             this.selectedFileName = "";
@@ -3890,33 +3810,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 this.toasterService.showSnackBar("error", response.message);
                             }
                         }
-                        this.changeDetection.detectChanges();
                     });
             });
         }
     }
 
     /**
-     * Focuses on delete attachment button
-     *
-     * @memberof VoucherCreateComponent
-     */
-    private focusOnDeleteAttachment(): void {
-         setTimeout(() => {
-            const deleteAttachmentButton = document.getElementById("deleteAttachment");
-            if (deleteAttachmentButton) {
-                deleteAttachmentButton?.focus();
-            }
-        }, 200);
-    }
-
-    /**
      * Shows confirmation modal to delete attachment
      *
-     * @param {any} event
      * @memberof VoucherCreateComponent
      */
-    public deleteAttachementConfirmation(event: any): void {
+    public deleteAttachementConfirmation(): void {
         let attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(
             this.localeData,
             this.commonLocaleData
@@ -3934,12 +3838,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .subscribe((response) => {
                 if (response === this.commonLocaleData?.app_yes) {
                     this.componentStore.deleteAttachment(this.invoiceForm.get("attachedFiles")?.value[0]);
-                    this.focusNextElement(event);
                 } else {
                     this.dialog.closeAll();
-                    this.focusOnDeleteAttachment();
                 }
-                this.changeDetection.detectChanges();
             });
     }
 
@@ -3956,7 +3857,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 width: "650px",
             });
             this.emailDialogRef.afterClosed().subscribe(() => {
-                this.customerVendorDropdownOpen();
+                this.openAccountDropdown = true;
             });
         });
     }
@@ -3975,7 +3876,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 height: "80vh",
             });
             dialogRef.afterClosed().subscribe(() => {
-                this.customerVendorDropdownOpen();
+                this.openAccountDropdown = true;
             });
         });
     }
@@ -4021,26 +3922,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Sets interaction type with timestamp protection
-     *
-     * @private
-     * @param {InteractionType} type - Interaction type
-     * @param {string} source - Source of the interaction for debugging
-     * @memberof VoucherCreateComponent
-     */
-    private setInteractionType(type: InteractionType, source: string): void {
-        const now = Date.now();
-        const timeSinceLastInteraction = now - this.lastInteractionTimestamp;
-
-        // If this is a keyboard interaction, always accept it (keyboard has priority)
-        // If this is a mouse interaction, only accept it if enough time has passed or if the last interaction wasn't keyboard
-        if (type === InteractionType.KEYBOARD || (type === InteractionType.MOUSE && (this.lastInteraction !== InteractionType.KEYBOARD || timeSinceLastInteraction > 500))) {
-            this.lastInteraction = type;
-            this.lastInteractionTimestamp = now;
-        }
-    }
-
-    /**
      * Voucher date change callback
      *
      * @memberof VoucherCreateComponent
@@ -4080,36 +3961,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
             dialogRef.afterClosed().subscribe((response) => {
                 this.handleDateChangeConfirmation(response);
-                // Conditional focus based on last interaction type
-                this.ngZone.runOutsideAngular(() => {
-                    setTimeout(() => {
-                        this.ngZone.run(() => {
-                            if (this.voucherDatePicker) {
-                                if (this.lastInteraction === InteractionType.KEYBOARD) {
-                                    // Keyboard interaction - move to next element
-                                    this.voucherDatePicker.focus();
-
-                                    setTimeout(() => {
-                                        const datePickerInput = this.voucherDatePicker.dateInput?.nativeElement;
-                                        if (datePickerInput) {
-                                            const enterEvent = new KeyboardEvent('keydown', {
-                                                key: 'Enter',
-                                                code: 'Enter',
-                                                keyCode: 13,
-                                                which: 13,
-                                                bubbles: true,
-                                                cancelable: true
-                                            });
-                                            datePickerInput.dispatchEvent(enterEvent);
-                                        }
-                                    }, 100);
-                                } else {
-                                    // Mouse or programmatic interaction - stay on datepicker
-                                    this.voucherDatePicker.focus();
-                                }
-                            }
-                        });
-                    });
+                setTimeout(() => {
+                    if (this.voucherDatePicker) {
+                        this.voucherDatePicker.focus();
+                    }
                 });
             });
         }
@@ -4183,14 +4038,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleHsnSacMenuClosed(reason: MenuCloseReason, entry: FormGroup): void {
-        // Focus to description field after closing HSN/SAC menu
-        setTimeout(() => {
-            if (this.lastInteraction === InteractionType.KEYBOARD && this.inputDescription?.nativeElement) {
-                this.inputDescription.nativeElement.focus();
-            }
-        }, 150);
-
         if (!reason) return;
+        
         const isClosedByEscape = reason === 'keydown';
         if (isClosedByEscape) {
             // Reset to saved values when closed by escape key
@@ -4222,7 +4071,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const entries = this.invoiceForm.get("entries") as FormArray;
             setTimeout(() => {
                 this.activeEntryIndex = entries?.length - 1;
-                this.changeDetection.detectChanges();
             }, 10);
         }
     }
@@ -4237,15 +4085,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (deposits?.length === 1) {
             deposits.reset();
             this.calculateBalanceDue();
-            this.activeDepositIndex = null;
-            setTimeout(() => {
-                this.activeDepositIndex = 0;
-            }, 50);
             return;
-        } else if (this.lastInteraction === InteractionType.KEYBOARD && deposits?.length > 1 && this.addNewDeposit.nativeElement) {
-            setTimeout(() => {
-                this.addNewDeposit.nativeElement.focus();
-            }, 100);
         }
         deposits.removeAt(entryIndex);
         this.calculateBalanceDue();
@@ -4266,11 +4106,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         this.checkIfEntriesHasStock();
         this.calculateVoucherTotals();
-        if (this.lastInteraction === InteractionType.KEYBOARD && entries.length >= 1 && this.addNewParticular.nativeElement) {
-            setTimeout(() => {
-                this.addNewParticular.nativeElement.focus();
-            }, 100);
-        }
     }
 
     /**
@@ -5626,11 +5461,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             totalAdjustedAmount: 0,
             convertedTotalAdjustedAmount: 0,
         };
-        this.totalDepositAmount = 0;
-        this.advanceReceiptAdjustmentData = null;
-        this.vouchersForAdjustment = [];
-        this.adjustPaymentBalanceDueData = 0;
-        this.totalAdvanceReceiptsAdjustedAmount = 0;
 
         this.invoiceForm.get("type").patchValue(this.voucherType);
         this.invoiceForm.get("date")?.patchValue(this.universalDate);
@@ -5661,20 +5491,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.rcmCheckbox["checked"] = false;
         }
         this.checkRcm();
-
-        // Only trigger forceClear if not in update mode or if there's no existing account data
-        const accountFormGroup = this.invoiceForm.get('account');
-        const hasExistingAccountData = accountFormGroup?.get('customerName')?.value ||
-                                     accountFormGroup?.get('uniqueName')?.value ||
-                                     accountFormGroup?.get('email')?.value;
-
-
-        // Don't trigger forceClear during initial load or when in update mode with data
-        if (initialLoad || this.isUpdateMode || hasExistingAccountData) {
-            this.forceClear = false;
-        } else {
-            this.forceClear = true;
-        }
+        this.forceClear = true;
         if (openAccountDropdown) {
             this.openAccountDropdown = false;
         }
@@ -5793,11 +5610,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.advanceReceiptAdjustmentData = cloneDeep(this.originalVoucherAdjustments);
                 this.calculateAdjustedVoucherTotal(this.originalVoucherAdjustments?.adjustments);
             }
-            this.openDialogWithFocusManagement(() =>
-                this.dialog.open(this.adjustmentModal, {
-                    width: "800px",
-                })
-            );
+            this.dialog.open(this.adjustmentModal, {
+                width: "800px",
+            });
         } else {
             this.isAdjustAmount = false;
             this.adjustPaymentBalanceDueData = 0;
@@ -6403,7 +6218,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public startLoader(isLoading: boolean): void {
-        this.showLoader.set(isLoading);
+        this.showLoader = isLoading;
     }
 
     /**
@@ -6745,7 +6560,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private handleEnterPress(event: KeyboardEvent): void {
         const activeElement = document.activeElement;
         const isInputFocused = activeElement && (activeElement.tagName === HtmlElementEnum.Button || activeElement.tagName === HtmlElementEnum.Textarea);
-
+        
         if (!isInputFocused && event.key === KeyCodesEnum.ENTER) {
             if (event.shiftKey) {
                 // Shift+Enter: Generate voucher without preventing default
@@ -6956,13 +6771,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getVoucherDetails(params: any): void {
-        // Only proceed if params are complete
-        if (!params || !params.uniqueName || !this.voucherType || !this.invoiceType) {
-            return;
-        }
-
         this.startLoader(true);
-
         if (this.invoiceType.isPurchaseOrder) {
             this.componentStore.getPurchaseOrderDetails(params?.uniqueName);
         } else if (this.invoiceType.isEstimateInvoice) {
@@ -7261,9 +7070,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 data: { activeSalePersonUniqueName: this.invoiceForm.get('salesPersonUniqueName').value || "" }
             })
         );
-
-        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => {
-            this.getSalesPersonList();
+        
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { 
+            this.getSalesPersonList(); 
             this.activeSalePersonIsTransfer = res.isTransfer;
         })).subscribe();
     }
@@ -7328,65 +7137,51 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.activeEntryIndex = null;
         setTimeout(() => {
             this.activeEntryIndex = index;
-            this.changeDetection.detectChanges();
         }, 1);
     }
 
-    /**
-    * Programmatically click to file input
-    *
-    * @memberof VoucherCreateComponent
-    */
+     /**
+     * Programmatically click to file input
+     *
+     * @memberof VoucherCreateComponent
+     */
     public triggerFileInput(): void {
         this.fileInput?.nativeElement.click();
     }
 
     /**
      * Enhanced dialog opener with automatic focus management
-     *
+     * 
      * @private
      * @param dialogOpener Function that opens the dialog and returns MatDialogRef
      * @returns MatDialogRef with focus management attached
      * @memberof VoucherCreateComponent
      */
     private openDialogWithFocusManagement<T>(dialogOpener: () => MatDialogRef<T>): MatDialogRef<T> {
-        if (this.lastInteraction !== InteractionType.KEYBOARD) {
-            return dialogOpener();
-        }
         // Store current focus
         this.lastFocusedElement = document.activeElement as HTMLElement;
-
+        
         // Open dialog
         const dialogRef = dialogOpener();
-
+        
         // Auto-restore focus when dialog closes
         dialogRef.afterClosed().pipe(take(1)).subscribe(() => this.restoreFocus());
-
+        
         return dialogRef;
     }
 
     /**
-     * Restores focus to the next focusable element after dialog closes
-     *
+     * Restores focus to the previously focused element
+     * 
      * @private
      * @memberof VoucherCreateComponent
      */
     private restoreFocus(): void {
-        if (this.lastInteraction !== InteractionType.KEYBOARD) {
-            return;
-        }
-        if (!this.lastFocusedElement) return;
-
+        if (!this.lastFocusedElement?.focus) return;
+        
         setTimeout(() => {
             try {
-                // Find the next focusable element using simple utility logic
-                const nextElement = this.findNextFocusableElementSimple(this.lastFocusedElement);
-                if (nextElement) {
-                    nextElement.focus();
-                } else {
-                    // Fallback to the original element if no next element found
-                    this.lastFocusedElement?.focus();
-                }
+                this.lastFocusedElement?.focus();
             } catch {
                 // Fallback to first focusable element
                 document.querySelector<HTMLElement>('input, button, select, textarea, [tabindex]:not([tabindex="-1"])')?.focus();
@@ -7396,54 +7191,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Finds the next focusable element after the given element using simple logic
-     *
-     * @private
-     * @param {HTMLElement} currentElement - The current element
-     * @returns {HTMLElement | null} The next focusable element or null
-     * @memberof VoucherCreateComponent
-     */
-    private findNextFocusableElementSimple(currentElement: HTMLElement): HTMLElement | null {
-        const form = currentElement.closest('form');
-        if (!form) return null;
-
-        const selector = 'input:not([tabindex="-1"]):not([disabled]), select:not([tabindex="-1"]):not([disabled]), textarea:not([tabindex="-1"]):not([disabled]), button:not([tabindex="-1"]):not([disabled]), [tabindex]:not([tabindex="-1"])';
-        const elements = Array.from(form.querySelectorAll(selector)) as HTMLElement[];
-        const currentIndex = elements.indexOf(currentElement);
-
-        for (let i = currentIndex + 1; i < elements.length; i++) {
-            if (this.isElementAvailableSimple(elements[i])) {
-                return elements[i];
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Checks if an element is available for focus using simple logic
-     *
-     * @private
-     * @param {HTMLElement} element - Element to check
-     * @returns {boolean} True if element is available for focus
-     * @memberof VoucherCreateComponent
-     */
-    private isElementAvailableSimple(element: HTMLElement): boolean {
-        if (element.offsetParent === null) return false;
-        const style = window.getComputedStyle(element);
-        if (style.display === 'none' || style.visibility === 'hidden') return false;
-
-        if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
-            return !element.disabled && !element.readOnly;
-        }
-        if (element instanceof HTMLSelectElement || element instanceof HTMLButtonElement) {
-            return !element.disabled;
-        }
-        return true;
-    }
-
-    /**
      * Simple focus storage for dialogs without afterClosed subscriptions
-     *
+     * 
      * @private
      * @memberof VoucherCreateComponent
      */
@@ -7457,7 +7206,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Moves focus to the next focusable element using Angular CDK, simulating Tab key behavior
-     *
+     * 
      * @public
      * @param {Event} event - The keyboard event
      * @memberof VoucherCreateComponent
@@ -7467,48 +7216,29 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        if (this.lastInteraction !== InteractionType.KEYBOARD) {
+        const currentElement = event.target as HTMLElement;
+        if (!currentElement) {
             return;
         }
 
-            const currentElement = event.target as HTMLElement;
-            if (!currentElement) {
-                return;
-            }
-
-            // Check if this is a dropdown close event (from tax-dropdown or discount-dropdown)
-            const isDropdownCloseEvent = currentElement.classList.contains('total-tax-amount') ||
-                currentElement.classList.contains('total-discount-amount');
-
-            // For dropdown close events, always proceed and set keyboard interaction
-            if (isDropdownCloseEvent) {
-                this.setInteractionType(InteractionType.KEYBOARD, 'Dropdown close event');
-        } else if (this.lastInteraction !== InteractionType.KEYBOARD) {
-            // For non-dropdown events, check interaction type
-            return;
-            }
-
-            // Use Angular CDK to find focusable elements within the component's view
-            const focusableElements = this.getFocusableElements();
-            const currentIndex = focusableElements.indexOf(currentElement);
-
-            if (currentIndex !== -1 && currentIndex < focusableElements.length - 1) {
-                const nextElement = focusableElements[currentIndex + 1];
-
-                // Add a small delay to ensure the dropdown has fully closed
-                setTimeout(() => {
-                    // Use NgZone for Angular-optimized async operations
-                    this.ngZone.run(() => {
-                        // Use FocusMonitor for better focus management
-                        this.focusMonitor.focusVia(nextElement, 'keyboard');
-                    });
-            }, 150);
-            }
+        // Use Angular CDK to find focusable elements within the component's view
+        const focusableElements = this.getFocusableElements();
+        const currentIndex = focusableElements.indexOf(currentElement);
+        
+        if (currentIndex !== -1 && currentIndex < focusableElements.length - 1) {
+            const nextElement = focusableElements[currentIndex + 1];
+            
+            // Use NgZone for Angular-optimized async operations
+            this.ngZone.runOutsideAngular(() => {
+                // Use FocusMonitor for better focus management
+                this.focusMonitor.focusVia(nextElement, 'keyboard');
+            });
+        }
     }
 
     /**
      * Gets all focusable elements using Angular CDK patterns
-     *
+     * 
      * @private
      * @returns {HTMLElement[]} Array of focusable elements
      * @memberof VoucherCreateComponent
@@ -7531,80 +7261,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         ).filter(element => {
             // Additional Angular-specific filtering
             return element.offsetParent !== null && // Element is visible
-                !element.hasAttribute('aria-hidden') && // Not hidden from screen readers
-                element.tabIndex !== -1; // Can receive focus
+                   !element.hasAttribute('aria-hidden') && // Not hidden from screen readers
+                   element.tabIndex !== -1; // Can receive focus
         });
-    }
-
-    /**
-     * Checks if customer/vendor is selected
-     *
-     * @returns {boolean} True if customer/vendor is selected
-     * @memberof VoucherCreateComponent
-     */
-    public isCustomerVendorSelected(): boolean {
-        return this.invoiceType.isCashInvoice
-            ? this.invoiceForm.controls['account'].get('customerName')?.value
-            : this.invoiceForm.controls['account'].get('uniqueName')?.value;
-    }
-
-    /**
-     * Converts sample templates to IOption format for dropdown usage
-     *
-     * @param {any[]} templates - Array of template objects
-     * @returns {IOption[]} Converted templates in IOption format
-     * @memberof VoucherCreateComponent
-     */
-    public convertTemplatesToOptions(templates: any[]): IOption[] {
-        if (!templates || !Array.isArray(templates)) {
-            return [];
-        }
-
-        return templates.map(template => ({
-            value: template?.uniqueName || template?.templateType,
-            label: template?.name || template?.templateType
-        }));
-    }
-
-    /**
-     * Sets up global interaction tracking for the entire page
-     *
-     * @private
-     * @memberof VoucherCreateComponent
-     */
-    private setupGlobalInteractionTracking(): void {
-        // Create event listeners with proper binding
-        this.globalKeydownListener = (event: KeyboardEvent) => {
-            if (['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Tab', 'Escape'].includes(event.key)) {
-                this.setInteractionType(InteractionType.KEYBOARD, 'Global keydown');
-            }
-        };
-
-        this.globalMousedownListener = () => {
-            this.setInteractionType(InteractionType.MOUSE, 'Global mousedown');
-        };
-
-        this.globalClickListener = () => {
-            this.setInteractionType(InteractionType.MOUSE, 'Global click');
-        };
-
-        // Add event listeners to document
-        document.addEventListener('keydown', this.globalKeydownListener);
-        document.addEventListener('mousedown', this.globalMousedownListener);
-        document.addEventListener('click', this.globalClickListener);
-    }
-
-    /**
-     * Opens customer/vendor dropdown
-     *
-     * @private
-     * @memberof VoucherCreateComponent
-     */
-    private customerVendorDropdownOpen(): void {
-        this.openAccountDropdown = false;
-        setTimeout(() => {
-            this.openAccountDropdown = true;
-            this.changeDetection.detectChanges();
-        }, 50);
     }
 }

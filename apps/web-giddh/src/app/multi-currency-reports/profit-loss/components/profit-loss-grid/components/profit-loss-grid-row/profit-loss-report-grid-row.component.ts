@@ -5,11 +5,10 @@ import {
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 
 @Component({
-selector: '[profit-loss-report-grid-row]',
+    selector: '[profit-loss-report-grid-row]',
     templateUrl: './profit-loss-report-grid-row.component.html',
     styleUrls: ['./profit-loss-report-grid-row.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfitLossReportGridRowComponent implements OnChanges {
     /** Holds the group detail data for a specific child group in the report */

@@ -1,4 +1,5 @@
 .adjustment {
+
     .mat-expansion-panel {
         box-shadow: unset;
         border: 1px solid var(--border-color);
@@ -26,9 +27,12 @@
 
                     td {
                         border-bottom-style: unset !important;
+
                     }
                 }
             }
         }
+
     }
+
 }

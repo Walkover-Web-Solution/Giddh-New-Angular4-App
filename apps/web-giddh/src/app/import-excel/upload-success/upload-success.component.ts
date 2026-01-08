@@ -8,8 +8,7 @@ import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'upload-success',
-    
-    standalone: false,styleUrls: ['./upload-success.component.scss'],
+    styleUrls: ['./upload-success.component.scss'],
     templateUrl: './upload-success.component.html',
 })
 

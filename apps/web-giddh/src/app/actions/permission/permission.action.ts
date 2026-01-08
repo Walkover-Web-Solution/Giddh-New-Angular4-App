@@ -11,9 +11,7 @@ import { CreateNewRoleRequest, CreateNewRoleResponse, IRoleCommonResponseAndRequ
 import { CustomActions } from '../../store/custom-actions';
 import { LocaleService } from '../../services/locale.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class PermissionActions {
 
     public GetAllPages$: Observable<Action> = createEffect(() => this.action$

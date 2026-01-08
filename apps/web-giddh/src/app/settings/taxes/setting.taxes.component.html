@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'settings/taxes'"
     (localeData)="localeData = $event"
@@ -11,7 +11,7 @@
             <div>
                 <watch-video [cssClass]="'text-primary mr-3'" [moduleName]="'TAX_CREATION'"></watch-video>
                 <button
-                    matButton="filled"
+                    mat-raised-button
                     *ngIf="voucherApiVersion === 2"
                     color="primary"
                     [matTooltip]="localeData?.create_new_tax"
@@ -19,8 +19,7 @@
                     (click)="openCreateUpdateDialog()"
                     aria-label="create new tax"
                 >
-                    <i class="icon icon-plus font-size-12 mr-1"></i>
-                    {{ localeData?.new_tax }}
+                    <i class="icon icon-plus font-size-12 mr-1"></i> {{ localeData?.new_tax }}
                 </button>
             </div>
         </div>
@@ -41,9 +40,7 @@
                     <!-- Tax Number Column -->
                     <ng-container matColumnDef="taxNumber">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax }}</th>
-                        <td mat-cell *matCellDef="let element" [matTooltip]="element?.taxNumber" matTooltipPosition="above">
-                            {{ element?.taxNumber }}
-                        </td>
+                        <td mat-cell *matCellDef="let element" [matTooltip]="element?.taxNumber" matTooltipPosition="above">{{ element?.taxNumber }}</td>
                     </ng-container>
 
                     <!-- Name Column -->
@@ -124,7 +121,7 @@
                         <td mat-cell *matCellDef="let element">
                             <div class="d-flex column-gap-1 justify-content-center" *ngIf="voucherApiVersion === 2">
                                 <button
-                                    matButton="outlined"
+                                    mat-stroked-button
                                     [matTooltip]="commonLocaleData?.app_edit"
                                     [matTooltipPosition]="'above'"
                                     class="min-width-unset"
@@ -133,7 +130,7 @@
                                     <i class="icon-edit-pencil" aria-hidden="true"></i>
                                 </button>
                                 <button
-                                    matButton="outlined"
+                                    mat-stroked-button
                                     [matTooltip]="commonLocaleData?.app_delete"
                                     [matTooltipPosition]="'above'"
                                     class="min-width-unset"
@@ -174,4 +171,4 @@
             (closeEvent)="createUpdateDialogRef?.close()"
         ></aside-menu-create-tax-component>
     </ng-template>
-</div>
+</ng-container>

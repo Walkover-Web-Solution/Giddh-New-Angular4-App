@@ -8,7 +8,6 @@ import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module'
 import { SalesPersonComponentStore } from '../utility/sales-person.store';
 import { filter, ReplaySubject, takeUntil } from 'rxjs';
 import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
-import { KeyboardNavigationModule } from '../../helpers/directives/enter-next/keyboard-navigation.module';
 
 @Component({
     selector: 'archive',
@@ -20,8 +19,7 @@ import { KeyboardNavigationModule } from '../../helpers/directives/enter-next/ke
         ReactiveFormsModule,
         MatButtonModule,
         MatDialogModule,
-        FormFieldsModule,
-        KeyboardNavigationModule
+        FormFieldsModule
     ]
 })
 export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
@@ -90,22 +88,6 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
-    }
-
-    /**
-     * Handles option selection from dropdown and focuses next element
-     * 
-     * @param {any} selectedOption - The selected option
-     * @memberof ArchiveSalesPersonComponent
-     */
-    public onOptionSelected(selectedOption: any): void {
-        // Focus the submit button after option selection
-        setTimeout(() => {
-            const submitButton = document.querySelector('button[type="submit"]') as HTMLElement;
-            if (submitButton) {
-                submitButton.focus();
-            }
-        }, 100);
     }
 
     /**

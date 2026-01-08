@@ -14,12 +14,11 @@ export class DecoratorsModule {
         return {
             ngModule: DecoratorsModule,
             providers: [
-        NeedsAuthentication,
-        UserAuthenticated,
-        NewUserAuthGuard,
-        NeedsAuthorization,
-        PageLeaveConfirmationGuard
-    
+                NeedsAuthentication,
+                UserAuthenticated,
+                NewUserAuthGuard,
+                NeedsAuthorization,
+                PageLeaveConfirmationGuard
             ]
         };
     }

@@ -9,14 +9,11 @@ import { ImportStatementComponent } from '../../ledger/components/import-stateme
 import { MatDialog } from '@angular/material/dialog';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 import { ServiceConfig } from '../../services/service.config';
-import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment.generated';
 
 @Component({
     selector: 'import-type-select',
-    templateUrl: './import-type-select.component.html',
     styleUrls: ['./import-type-select.component.scss'],
-    standalone: false
+    templateUrl: './import-type-select.component.html'
 })
 
 export class ImportTypeSelectComponent implements OnInit, OnDestroy {
@@ -31,7 +28,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds a reference to the `VoucherType` enum */
-    public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import
+    public voucherType: typeof VoucherType = VoucherType;
     /** Holds images folder path */
     public imgPath: string = "";
 
@@ -45,7 +42,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];

@@ -9,6 +9,7 @@
 
     .stock-value {
         padding-right: 80px;
+
     }
 }
 
@@ -17,7 +18,7 @@
 }
 
 .td-search-box {
-    .input-container {
+.input-container {
         input {
             height: 36px;
             min-width: 100%;
@@ -31,9 +32,11 @@
 
 .inventory-report-table {
     overflow-x: visible !important;
+
 }
 
 ::ng-deep {
+
     .inventory-transaction-list {
         tbody {
             .mat-no-data-row:last-child {
@@ -45,6 +48,7 @@
             }
         }
     }
+
 }
 
 .transaction-report-wrapper {
@@ -72,6 +76,7 @@
     .stock-mat-salect {
         min-width: 199px;
     }
+
 }
 
 .account-name-column {

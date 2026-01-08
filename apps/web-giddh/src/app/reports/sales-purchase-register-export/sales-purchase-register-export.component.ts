@@ -13,7 +13,6 @@ import { ToasterService } from "../../services/toaster.service";
     selector: "sales-purchase-register-export",
     templateUrl: "./sales-purchase-register-export.component.html",
     styleUrls: ["./sales-purchase-register-export.component.scss"],
-    standalone: false
 })
 export class SalesPurchaseRegisterExportComponent implements OnInit {
     /** Form Group for export  form */

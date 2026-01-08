@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
@@ -25,7 +25,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
-import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 
 @NgModule({
     declarations: [
@@ -64,10 +63,8 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
         MatIconModule,
         MatDialogModule,
         BankIntegrationModule,
-        MatTooltipModule,
-        TranslateDirectiveModule
+        MatTooltipModule
     ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class HomeModule {
 }

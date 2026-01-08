@@ -10,12 +10,21 @@
         </a>
 
         {{ localeData?.depreciation_data_message }} &nbsp;
-        <a href="javascript:void(0);" aria-label="dismiss" class="text-underline" (click)="removeDepreciationMessage()">
-            {{ localeData?.depreciation_dismiss }}
-        </a>
+        <a
+            href="javascript:void(0);"
+            aria-label="dismiss"
+            class="text-underline"
+            (click)="removeDepreciationMessage()"
+            >{{ localeData?.depreciation_dismiss }}</a
+        >
     </p>
 </div>
-<div appTranslate [file]="'header'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'header'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div
         (mouseover)="expandSidebar()"
         (mouseout)="collapseSidebar(false, true)"
@@ -23,18 +32,13 @@
         [ngClass]="{
             'open': isSidebarExpanded,
             'visibility-hidden': companyList?.length === 0 && !isSubscriptionModule,
-            'hide-sidebar': isSubscriptionModule,
+            'hide-sidebar': isSubscriptionModule
         }"
         (clickOutside)="closeSidebarMobile($event)"
     >
         <div class="menu-wrapper">
-            <primary-sidebar
-                [isOpen]="sideMenu?.isopen"
-                [isSidebarExpanded]="isSidebarExpanded"
-                [apiMenuItems]="apiMenuItems"
-                [isGoToBranch]="isGoToBranch"
-                [showCommandDialog]="showCommandDialog"
-            ></primary-sidebar>
+            <primary-sidebar [isOpen]="sideMenu?.isopen" [isSidebarExpanded]="isSidebarExpanded" [apiMenuItems]="apiMenuItems" [isGoToBranch]="isGoToBranch" [showCommandDialog]="showCommandDialog">
+            </primary-sidebar>
         </div>
         <div class="mobile-menu-icon" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
             <span
@@ -56,8 +60,8 @@
                 <div *ngIf="companyList?.length && (isSubscriptionModule || isSubscriptionPage)">
                     <button
                         *ngIf="companyList?.length && isSubscriptionModule"
-                        class="min-width-160 company-button bg-white text-black"
-                        matButton="filled"
+                        class="min-width-160 company-button"
+                        mat-raised-button
                         (click)="backToCompany()"
                         [matTooltip]="activeCompany?.name"
                         [matTooltipPosition]="'below'"
@@ -70,8 +74,8 @@
                     </button>
                     <button
                         *ngIf="companyList?.length && isSubscriptionPage"
-                        class="min-width-160 bg-white text-black ml-3"
-                        matButton="filled"
+                        class="min-width-160 bg-white ml-3"
+                        mat-raised-button
                         (click)="backToSubscription()"
                         aria-label="back"
                     >
@@ -83,13 +87,18 @@
                     </button>
                 </div>
                 <div class="logo-wrapper pl-5">
-                    <img [src]="giddhLogoSrc" width="127" height="25" alt="brand-logo" />
+                    <img
+                        [src]="giddhLogoSrc"
+                        width="127"
+                        height="25"
+                        alt="brand-logo"
+                    />
                 </div>
                 <ul class="nav universal-date h-100" *ngIf="selectedCompany | async">
                     <ng-container *ngIf="!isSubscriptionModule">
                         <li>
                             <button
-                                matIconButton
+                                mat-icon-button
                                 aria-label="Search"
                                 class="icon-circle"
                                 (click)="showNavigationModal()"
@@ -102,7 +111,7 @@
                         <li>
                             <button
                                 *ngIf="voucherApiVersion === 2"
-                                matIconButton
+                                mat-icon-button
                                 aria-label="menu-option"
                                 #menuTrigger="matMenuTrigger"
                                 [matMenuTriggerFor]="menu"
@@ -130,9 +139,12 @@
                                                     <span class="d-flex">
                                                         <i class="icon-credit-note-new theme-foreground-color mr-2"></i>
                                                     </span>
-                                                    <span>
-                                                        {{ localeData?.credit }}
-                                                        <a [matTooltip]="localeData?.credit_information" [matTooltipPosition]="'above'">
+                                                    <span
+                                                        >{{ localeData?.credit }}
+                                                        <a
+                                                            [matTooltip]="localeData?.credit_information"
+                                                            [matTooltipPosition]="'above'"
+                                                        >
                                                             <i class="icon-info ml-3"></i>
                                                         </a>
                                                     </span>
@@ -141,13 +153,19 @@
                                             <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
-                                                    <a class="cursor-pointer" (click)="navigateToSubItemLink('/vouchers/sales/create')">
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/sales/create')"
+                                                    >
                                                         {{ localeData?.invoice }}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <span class="dot d-block"></span>
-                                                    <a class="cursor-pointer" (click)="navigateToSubItemLink('/vouchers/purchase/create')">
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/purchase/create')"
+                                                    >
                                                         {{ localeData?.bill }}
                                                     </a>
                                                 </li>
@@ -182,9 +200,12 @@
                                                 <span class="d-flex">
                                                     <i class="icon-invoice-new theme-foreground-color mr-2"></i>
                                                 </span>
-                                                <span>
-                                                    {{ localeData?.cash }}
-                                                    <a [matTooltip]="localeData?.cash_information" [matTooltipPosition]="'above'">
+                                                <span
+                                                    >{{ localeData?.cash }}
+                                                    <a
+                                                        [matTooltip]="localeData?.cash_information"
+                                                        [matTooltipPosition]="'above'"
+                                                    >
                                                         <i class="icon-info ml-3"></i>
                                                     </a>
                                                 </span>
@@ -192,21 +213,28 @@
                                             <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
-                                                    <a class="cursor-pointer" (click)="navigateToSubItemLink('/vouchers/cash/create')">
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/cash/create')"
+                                                    >
                                                         {{ localeData?.invoice }}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <span class="dot d-block"></span>
-                                                    <a class="cursor-pointer" (click)="navigateToSubItemLink('/vouchers/cash-bill/create')">
-                                                        {{ localeData?.bill }}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
                                                         class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/vouchers/cash-credit-note/create')"
+                                                        (click)="navigateToSubItemLink('/vouchers/cash-bill/create')"
+                                                        >{{ localeData?.bill }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <span class="dot d-block"></span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="
+                                                            navigateToSubItemLink('/vouchers/cash-credit-note/create')
+                                                        "
                                                     >
                                                         {{ localeData?.credit_note }}
                                                     </a>
@@ -215,7 +243,9 @@
                                                     <span class="dot d-block"></span>
                                                     <a
                                                         class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/vouchers/cash-debit-note/create')"
+                                                        (click)="
+                                                            navigateToSubItemLink('/vouchers/cash-debit-note/create')
+                                                        "
                                                     >
                                                         {{ localeData?.debit_note }}
                                                     </a>
@@ -233,7 +263,7 @@
                                                 <span class="d-flex">
                                                     <i class="icon-branch-transfer theme-foreground-color mr-2"></i>
                                                 </span>
-                                                <span>{{ localeData?.branch_transfer }}</span>
+                                                <span> {{ localeData?.branch_transfer }} </span>
                                             </div>
                                             <ul class="d-flex column-gap-2">
                                                 <li>
@@ -249,7 +279,10 @@
                                                 </li>
                                                 <li>
                                                     <span class="dot d-block"></span>
-                                                    <a class="cursor-pointer" (click)="navigateToSubItemLink('deliverychallan')">
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('deliverychallan')"
+                                                    >
                                                         {{ localeData?.delivery_challan }}
                                                     </a>
                                                 </li>
@@ -260,14 +293,16 @@
                                                 <span class="d-flex">
                                                     <i class="icon-stock theme-foreground-color mr-2"></i>
                                                 </span>
-                                                <span>{{ localeData?.stock }}</span>
+                                                <span> {{ localeData?.stock }} </span>
                                             </div>
                                             <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
                                                         class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/inventory/v2/stock/product/create')"
+                                                        (click)="
+                                                            navigateToSubItemLink('/inventory/v2/stock/product/create')
+                                                        "
                                                     >
                                                         {{ localeData?.product }}
                                                     </a>
@@ -276,7 +311,9 @@
                                                     <span class="dot d-block"></span>
                                                     <a
                                                         class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/inventory/v2/stock/service/create')"
+                                                        (click)="
+                                                            navigateToSubItemLink('/inventory/v2/stock/service/create')
+                                                        "
                                                     >
                                                         {{ localeData?.service }}
                                                     </a>
@@ -285,7 +322,11 @@
                                                     <span class="dot d-block"></span>
                                                     <a
                                                         class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/inventory/v2/stock/fixedassets/create')"
+                                                        (click)="
+                                                            navigateToSubItemLink(
+                                                                '/inventory/v2/stock/fixedassets/create'
+                                                            )
+                                                        "
                                                     >
                                                         {{ localeData?.fixed_assets }}
                                                     </a>
@@ -299,8 +340,13 @@
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                             "
                                         >
-                                            <span>{{ localeData?.go_to_branch_information }}</span>
-                                            <button matButton="filled" class="mt-4" (click)="gotToBranchTab()">
+                                            <span>{{ localeData?.go_to_branch_information }} </span>
+                                            <button
+                                                mat-raised-button
+                                                color="primary"
+                                                class="mt-4"
+                                                (click)="gotToBranchTab()"
+                                            >
                                                 {{ localeData?.go_to_branch }}
                                             </button>
                                         </div>
@@ -316,7 +362,10 @@
                                                     <i class="icon-estimate-new mr-2"></i>
                                                 </span>
                                                 <span>
-                                                    <a class="cursor-pointer" (click)="navigateToSubItemLink('/vouchers/estimates/create')">
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/estimates/create')"
+                                                    >
                                                         {{ localeData?.estimate }}
                                                     </a>
                                                 </span>
@@ -326,7 +375,10 @@
                                                     <i class="icon-proforma mr-2"></i>
                                                 </span>
                                                 <span>
-                                                    <a class="cursor-pointer" (click)="navigateToSubItemLink('/vouchers/proformas/create')">
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/proformas/create')"
+                                                    >
                                                         {{ localeData?.proforma }}
                                                     </a>
                                                 </span>
@@ -338,7 +390,9 @@
                                                 <span>
                                                     <a
                                                         class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/vouchers/purchase-order/create')"
+                                                        (click)="
+                                                            navigateToSubItemLink('/vouchers/purchase-order/create')
+                                                        "
                                                     >
                                                         {{ localeData?.purchase_order }}
                                                     </a>
@@ -349,7 +403,10 @@
                                                     <i class="icon-invoice-new mr-2"></i>
                                                 </span>
                                                 <span>
-                                                    <a class="cursor-pointer" (click)="navigateToSubItemLink('/vouchers/receipt/create')">
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/receipt/create')"
+                                                    >
                                                         {{ commonLocaleData?.app_voucher_types?.receipt }}
                                                     </a>
                                                 </span>
@@ -359,7 +416,10 @@
                                                     <i class="icon-invoice-new mr-2"></i>
                                                 </span>
                                                 <span>
-                                                    <a class="cursor-pointer" (click)="navigateToSubItemLink('/vouchers/payment/create')">
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/payment/create')"
+                                                    >
                                                         {{ commonLocaleData?.app_voucher_types?.payment }}
                                                     </a>
                                                 </span>
@@ -371,7 +431,9 @@
                                                 <span>
                                                     <a
                                                         class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/inventory/v2/manufacturing/create')"
+                                                        (click)="
+                                                            navigateToSubItemLink('/inventory/v2/manufacturing/create')
+                                                        "
                                                     >
                                                         {{ localeData?.manufacturing }}
                                                     </a>
@@ -388,16 +450,16 @@
                             [matTooltip]="localeData?.notifications"
                             [matTooltipPosition]="'below'"
                         >
-                            <button matIconButton aria-label="notification" class="icon-circle notification" (click)="openNotifications()">
+                            <button mat-icon-button aria-label="notification" class="icon-circle">
                                 <i class="icon-bell-new"></i>
                             </button>
                         </li>
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
-                            <button matButton="outlined" class="p-1 font-size-15" (click)="dateSelectedCallback()">
+                            <button mat-button class="p-1 font-size-15" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
-                        <li class="not-today cursor-pointer position-relative">
+                        <li class="not-today cursor-pointer position-relative ">
                             <span class="icon-calender-new calendar-addon" (click)="toggleGiddhDatepicker(true)"></span>
                             <div class="input-date" [ngClass]="{ 'today-date pl-2': isTodaysDateSelected }">
                                 <input
@@ -406,7 +468,7 @@
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                     class="giddh-datepicker date-range-picker border-none border-radius-4 m-0"
-                                    [ngClass]="{ 'text-center': !isTodaysDateSelected }"
+                                    [ngClass]="{'text-center': !isTodaysDateSelected }"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -438,14 +500,17 @@
                             </mat-menu>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" aria-label="master" id="add-manage" (click)="showManageGroupsModal()">
-                                <i class="icon-master-new1"></i>
-                                {{ commonLocaleData?.app_master }}
-                            </a>
+                            <a
+                                href="javascript:void(0);"
+                                aria-label="master"
+                                id="add-manage"
+                                (click)="showManageGroupsModal()"
+                                ><i class="icon-master-new1"></i> {{ commonLocaleData?.app_master }}</a
+                            >
                         </li>
                         <li class="header-utility-icons">
                             <button
-                                matIconButton
+                                mat-icon-button
                                 aria-label="settings"
                                 [matTooltip]="commonLocaleData?.app_settings"
                                 [matTooltipPosition]="'below'"
@@ -459,7 +524,7 @@
                     <li class="header-utility-icons">
                         <a href="javascript:void(0);" aria-label="help-info" (click)="toggleHelpSupportPane(true)">
                             <button
-                                matIconButton
+                                mat-icon-button
                                 aria-label="help"
                                 [matTooltip]="commonLocaleData?.app_help"
                                 [matTooltipPosition]="'below'"
@@ -467,11 +532,16 @@
                             >
                                 <i class="icon-question-new"></i>
                             </button>
-                            <span class="pl-1 help-text">{{ commonLocaleData?.app_help }}</span>
+                            <span class="pl-1 help-text"> {{ commonLocaleData?.app_help }}</span>
                         </a>
                     </li>
                     <li>
-                        <div class="profile-wrapper" [matMenuTriggerFor]="profileMenu" role="button" aria-label="profile-picture">
+                        <div
+                            class="profile-wrapper"
+                            [matMenuTriggerFor]="profileMenu"
+                            role="button"
+                            aria-label="profile-picture"
+                        >
                             <div class="profile-picture text-center cursor-pointer">
                                 <span>{{ userName }}</span>
                             </div>
@@ -489,11 +559,19 @@
                                     </p>
                                 </div>
                                 <mat-divider></mat-divider>
-                                <button mat-menu-item class="font-size-16" [routerLink]="['/pages/user-details/mobile-number']">
+                                <button
+                                    mat-menu-item
+                                    class="font-size-16"
+                                    [routerLink]="['/pages/user-details/mobile-number']"
+                                >
                                     {{ commonLocaleData?.app_user_settings }}
                                 </button>
                                 <mat-divider></mat-divider>
-                                <button mat-menu-item class="font-size-16" [routerLink]="['/pages/user-details/subscription']">
+                                <button
+                                    mat-menu-item
+                                    class="font-size-16"
+                                    [routerLink]="['/pages/user-details/subscription']"
+                                >
                                     {{ commonLocaleData?.app_subscription }}
                                 </button>
                                 <mat-divider></mat-divider>
@@ -515,28 +593,20 @@
 
     <div
         class="plan-wrapper"
-        *ngIf="
-            showAlertMessage.isSubscriptionEnded &&
-            subscribedPlan !== undefined &&
-            subscribedPlan?.status !== 'expired' &&
-            remainingSubscriptionDays !== false &&
-            remainingSubscriptionDays <= 7 &&
-            isCurrentSubscriptionTrialOrCancelled
-        "
+        *ngIf="showAlertMessage.isSubscriptionEnded &&
+        subscribedPlan !== undefined &&
+        subscribedPlan?.status !== 'expired' &&
+        remainingSubscriptionDays !== false &&
+        remainingSubscriptionDays <= 7 &&
+        isCurrentSubscriptionTrialOrCancelled"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
         <div class="warning-msg-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-size-15 mr-2"></i>
-                {{ getSubscriptionEndNote() }}
-                <a
-                    href="javascript:void(0);"
-                    class="theme-primary-color cursor-pointer text-decoration-underline"
-                    aria-label="go to plan"
-                    (click)="goToSelectPlan()"
-                >
-                    {{ localeData?.click_here }}
-                </a>
+                <i class="icon-traingle-info font-size-15 mr-2"></i> {{ getSubscriptionEndNote() }}
+                <a href="javascript:void(0);" class="theme-primary-color cursor-pointer text-decoration-underline" aria-label="go to plan" (click)="goToSelectPlan()">{{
+                    localeData?.click_here
+                }}</a>
             </p>
             <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isSubscriptionEnded = false"></i>
         </div>
@@ -544,20 +614,14 @@
 
     <div
         class="plan-wrapper"
-        *ngIf="showAlertMessage.isSubscriptionRenewalExpired && subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
+        *ngIf="showAlertMessage.isSubscriptionRenewalExpired &&
+        subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
         <div class="warning-msg-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-size-15 mr-2"></i>
-                {{ getSubscriptionEndedNote() }}
-                <a
-                    *ngIf="subscribedPlan?.duration === 'YEARLY'"
-                    href="javascript:;"
-                    class="theme-primary-color cursor-pointer text-decoration-underline"
-                    aria-label="get select "
-                    (click)="goToSelectPlan()"
-                >
+                <i class="icon-traingle-info font-size-15 mr-2"></i> {{ getSubscriptionEndedNote() }}
+                <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="theme-primary-color cursor-pointer text-decoration-underline" aria-label="get select " (click)="goToSelectPlan()">
                     {{ localeData?.click_here }}
                 </a>
             </p>
@@ -567,21 +631,16 @@
 
     <div
         class="plan-wrapper"
-        *ngIf="showAlertMessage.isTransactionLimitExceeded && subscribedPlan !== undefined && subscribedPlan.additionalCharges"
+        *ngIf="showAlertMessage.isTransactionLimitExceeded &&
+        subscribedPlan !== undefined && subscribedPlan.additionalCharges"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
         <div class="warning-msg-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-size-15 mr-2"></i>
-                {{ getSubscriptionTransactionEndedNote() }}
-                <a
-                    href="javascript:void(0);"
-                    class="theme-primary-color cursor-pointer text-decoration-underline"
-                    aria-label="get plan"
-                    (click)="goToSelectPlan()"
-                >
-                    {{ localeData?.click_here }}
-                </a>
+                <i class="icon-traingle-info font-size-15 mr-2"></i> {{ getSubscriptionTransactionEndedNote() }}
+                <a href="javascript:void(0);" class="theme-primary-color cursor-pointer text-decoration-underline" aria-label="get plan" (click)="goToSelectPlan()">{{
+                    localeData?.click_here
+                }}</a>
             </p>
             <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isTransactionLimitExceeded = false"></i>
         </div>
@@ -595,14 +654,8 @@
         <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
                 <i class="icon-traingle-info font-size-15 mr-2"></i>
-                <span
-                    *ngIf="obligation.daysRemaining"
-                    [innerHTML]="getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining)"
-                ></span>
-                <span
-                    *ngIf="obligation.daysRemaining === 0 && !obligation.isExpired"
-                    [innerHTML]="localeData?.obligation_today_expired"
-                ></span>
+                <span *ngIf="obligation.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining)"></span>
+                <span *ngIf="obligation.daysRemaining === 0 && !obligation.isExpired" [innerHTML]="localeData?.obligation_today_expired"></span>
                 <span *ngIf="obligation.isExpired" [innerHTML]="localeData?.obligation_expired_passed"></span>
             </p>
             <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isObligationExpired = false"></i>
@@ -617,14 +670,8 @@
         <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
                 <i class="icon-traingle-info font-size-15 mr-2"></i>
-                <span
-                    *ngIf="liabilities.daysRemaining"
-                    [innerHTML]="getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining)"
-                ></span>
-                <span
-                    *ngIf="liabilities.daysRemaining === 0 && !liabilities.isExpired"
-                    [innerHTML]="localeData?.liabilities_today_expired"
-                ></span>
+                <span *ngIf="liabilities.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining)"></span>
+                <span *ngIf="liabilities.daysRemaining === 0 && !liabilities.isExpired" [innerHTML]="localeData?.liabilities_today_expired"></span>
                 <span *ngIf="liabilities.isExpired" [innerHTML]="localeData?.liabilities_expired_passed"></span>
             </p>
             <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isLiabilitiesExpired = false"></i>
@@ -633,7 +680,7 @@
     <ng-template #expiredPlanModel>
         <div class="dialog-header">
             <span>{{ localeData?.ready_to_upgrade }}</span>
-            <button matIconButton aria-label="close" mat-dialog-close>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -644,12 +691,12 @@
             <div class="clear-both">
                 <ul class="list-inline upgrade-plan">
                     <li>
-                        <button matButton="filled" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
+                        <button mat-raised-button color="primary" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
                             {{ localeData?.renew_plan }}
                         </button>
                     </li>
                     <li>
-                        <button matButton="filled" (click)="goToSelectPlan()">
+                        <button mat-raised-button color="primary" (click)="goToSelectPlan()">
                             {{ localeData?.change_plan }}
                         </button>
                     </li>
@@ -660,9 +707,8 @@
                             class="cursor-pointer"
                             aria-label="contact us"
                             (click)="openScheduleModel(); dialogRefExpirePlanRef?.close()"
+                            >{{ localeData?.contact_us }}</a
                         >
-                            {{ localeData?.contact_us }}
-                        </a>
                     </li>
                 </ul>
             </div>
@@ -672,7 +718,7 @@
     <ng-template #crossedTxLimitModel>
         <div class="dialog-header">
             <span>{{ localeData?.ready_to_upgrade }}</span>
-            <button matIconButton aria-label="close" mat-dialog-close>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -684,7 +730,7 @@
             <div class="clear-both">
                 <ul class="list-inline">
                     <li>
-                        <button matButton="filled" (click)="goToSelectPlan()">
+                        <button mat-raised-button color="primary" (click)="goToSelectPlan()">
                             {{ commonLocaleData?.app_buy_plan }}
                         </button>
                     </li>
@@ -695,9 +741,8 @@
                             class="cursor-pointer"
                             aria-label="schedule"
                             (click)="openScheduleModel(); dialogRefCrossLimitRef?.close()"
+                            >{{ localeData?.contact_us }}</a
                         >
-                            {{ localeData?.contact_us }}
-                        </a>
                     </li>
                 </ul>
             </div>
@@ -715,17 +760,17 @@
         <aside-setting
             [ngClass]="{
                 'setting-sidebar': isMobileSidebar,
-                'sidebar-slide-right': asideSettingMenuState,
+                'sidebar-slide-right': asideSettingMenuState
             }"
-            (closeAsideEvent)="forceCloseSidebarPane()"
+            (closeAsideEvent)="toggleSidebarPane(false, false)"
         ></aside-setting>
     </div>
-</div>
+</ng-container>
 <div class="overlay-cal" *ngIf="isCalendlyModelActivate">
     <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
-                <button matButton="outlined" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
+                <button mat-stroked-button class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
                     <i class="icon-cross text-black"></i>
                 </button>
                 <object [data]="calendlyUrl" title="calendar"></object>

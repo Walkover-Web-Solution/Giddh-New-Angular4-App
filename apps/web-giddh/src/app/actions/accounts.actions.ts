@@ -19,11 +19,8 @@ import { ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import { IUpdateDbRequest } from "../models/interfaces/ulist.interface";
 import { CommonActions } from './common.actions';
 import { LocaleService } from '../services/locale.service';
-import { forEach, set } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class AccountsAction {
     public static CREATE_ACCOUNT = 'CreateAccount';
     public static CREATE_ACCOUNT_RESPONSE = 'CreateAccountResponse';
@@ -129,7 +126,7 @@ export class AccountsAction {
                         type: 'EmptyAction'
                     };
                 } else {
-                    this._generalServices.eventHandler.next({ name: eventsConst.accountAdded.toString(), payload: action.payload });
+                    this._generalServices.eventHandler.next({ name: eventsConst.accountAdded, payload: action.payload });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_created"));
                 }
                 setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
@@ -200,7 +197,7 @@ export class AccountsAction {
 
     /**
      * Update Account V2 Patch
-     *
+     * 
      * @param {CustomActions} action
      * @return {Observable<Action>}
      * @memberof AccountsAction
@@ -214,7 +211,7 @@ export class AccountsAction {
                     this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
-
+                    
                         const updateIndexDb: IUpdateDbRequest = {
                             newUniqueName: response.body.uniqueName,
                             oldUniqueName: response.queryString.accountUniqueName,
@@ -263,7 +260,7 @@ export class AccountsAction {
                     return { type: 'EmptyAction' };
                 } else {
                     this._generalServices.invokeEvent.next(["accountUpdated", resData]);
-                    this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated.toString(), payload: resData });
+                    this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
                     if (!action.payload?.queryString?.isMasterOpen) {
                         this.store.dispatch(this.getAccountDetails(resData.body?.uniqueName));
@@ -468,7 +465,7 @@ export class AccountsAction {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     let data: BaseResponse<string, AccountMoveRequest> = action.payload;
-                    this._generalServices.eventHandler.next({ name: eventsConst.accountMoved.toString(), payload: data });
+                    this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_moved"), '');
                 }
                 return {
@@ -498,9 +495,9 @@ export class AccountsAction {
                 } else {
                     this._toasty.successToast(action.payload?.body, '');
                     let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
-                    this._generalServices.eventHandler.next({ name: eventsConst.accountMerged.toString(), payload: data });
+                    this._generalServices.eventHandler.next({ name: eventsConst.accountMerged, payload: data });
                     if (data.request && data.request.length) {
-                        (Array.isArray(data.request) ? data.request : []).forEach(uniqueAccountName => {
+                        data.request.forEach(uniqueAccountName => {
                             const request: IUpdateDbRequest = {
                                 uniqueName: this._generalServices.currentBranchUniqueName,
                                 deleteUniqueName: uniqueAccountName?.uniqueName,
@@ -564,7 +561,7 @@ export class AccountsAction {
                 } else {
                     this._generalServices.invokeEvent.next(["accountdeleted", action.payload.request?.groupUniqueName]);
                     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request?.groupUniqueName));
-                    this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted.toString(), payload: action.payload });
+                    this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted, payload: action.payload });
                     const request: IUpdateDbRequest = {
                         uniqueName: this._generalServices.currentBranchUniqueName,
                         deleteUniqueName: action.payload.queryString,

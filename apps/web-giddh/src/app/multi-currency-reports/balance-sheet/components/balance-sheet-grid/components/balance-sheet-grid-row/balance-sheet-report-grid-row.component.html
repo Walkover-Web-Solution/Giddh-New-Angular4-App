@@ -12,7 +12,12 @@
     <div class="col-4 group text-right">
         <span>
             <span class="d-inline-flex">
-                <amount-field [amount]="groupDetail.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                <amount-field
+                    [amount]="groupDetail.closingBalance.amount"
+                    [currencySymbol]="false"
+                    [currencyCode]="false"
+                >
+                </amount-field>
             </span>
             {{ groupDetail.closingBalance | recType }}
         </span>
@@ -20,7 +25,12 @@
     <div class="col-4 group text-right">
         <span>
             <span class="d-inline-flex">
-                <amount-field [amount]="groupDetail.forwardedBalance.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                <amount-field
+                    [amount]="groupDetail.forwardedBalance.amount"
+                    [currencySymbol]="false"
+                    [currencyCode]="false"
+                >
+                </amount-field>
             </span>
             {{ groupDetail.forwardedBalance | recType }}
         </span>
@@ -66,7 +76,8 @@
                             [amount]="account.closingBalance.amount"
                             [currencySymbol]="false"
                             [currencyCode]="false"
-                        ></amount-field>
+                        >
+                        </amount-field>
                     </span>
                     {{ account.closingBalance | recType }}
                 </span>
@@ -78,7 +89,8 @@
                             [amount]="account.openingBalance.amount"
                             [currencySymbol]="false"
                             [currencyCode]="false"
-                        ></amount-field>
+                        >
+                        </amount-field>
                     </span>
                     {{ account.openingBalance | recType }}
                 </span>

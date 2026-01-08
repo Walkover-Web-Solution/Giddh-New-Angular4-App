@@ -2,6 +2,11 @@
     margin-top: 10px;
     padding: 0 15px 0 0;
 
+    .toggle-childgroup {
+        display: flex;
+        column-gap: 30px;
+    }
+
     .input-width {
         width: unset;
         min-width: 530px;
@@ -19,6 +24,13 @@
 .footer-wrapper {
     margin-top: 45px;
     max-width: 560px;
+
+    .right-aligned-buttons {
+        .mat-stroked-button {
+            margin-right: 0 !important;
+            margin-left: 15px;
+        }
+    }
 }
 
 .mat-select {

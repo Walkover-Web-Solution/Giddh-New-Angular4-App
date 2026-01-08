@@ -8,13 +8,13 @@
 
 .export-border {
     &::after {
-        content: '';
+        content: "";
         display: block;
         position: absolute;
         width: 1px;
-        height: 95%;
+        height: 55%;
         background-color: var(--color-medium-gray);
-        top: 49%;
+        top: 46%;
         right: -55px;
         transform: translateY(-50%);
     }

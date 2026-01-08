@@ -17,6 +17,7 @@
             margin-right: 0;
             margin-left: 6px;
         }
+
     }
 }
 .money-back-guarantee {
@@ -35,11 +36,12 @@
             color: var(--text-primary-color);
         }
     }
-    [class*='col-'] {
+    [class*="col-"] {
         padding: 0 10px;
     }
 }
 @media only screen and (max-width: 1360px) and (min-width: 767px) {
+
     .inventory-last-box > div {
         width: 50%;
         float: left;

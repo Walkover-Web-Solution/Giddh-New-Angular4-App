@@ -1,17 +1,14 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { InventoryService } from "../../../services/inventory.service";
 import { takeUntil } from "rxjs/operators";
 import { ReplaySubject } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ToasterService } from "../../../services/toaster.service";
 import { ASIDE_PANE_CONFIG } from "../../../app.constant";
-import { remove } from '../../../lodash-optimized';
 
 @Component({
     selector: "custom-units",
-    
     templateUrl: "./custom-units.component.html",
-    standalone: false,
     styleUrls: ["./custom-units.component.scss"]
 })
 export class CustomUnitsComponent implements OnInit, OnDestroy {
@@ -51,8 +48,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     constructor(
         private inventoryService: InventoryService,
         private dialog: MatDialog,
-        private toaster: ToasterService,
-        private changeDetection: ChangeDetectorRef
+        private toaster: ToasterService
     ) {
 
     }
@@ -124,7 +120,6 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
                 }
             }
             this.isGroupListLoading = false;
-            this.changeDetection.detectChanges();
         });
     }
 
@@ -143,7 +138,6 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
                 this.unitMappings = response.body;
             }
             this.isUnitListLoading = false;
-            this.changeDetection.detectChanges();
         });
     }
 
@@ -164,7 +158,6 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("error", response?.message);
             }
             this.isLoading = false;
-            this.changeDetection.detectChanges();
         });
     }
 

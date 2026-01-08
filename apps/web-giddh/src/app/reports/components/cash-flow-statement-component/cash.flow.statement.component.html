@@ -1,4 +1,9 @@
-<div appTranslate [file]="'reports/cashflow-statement'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'reports/cashflow-statement'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <section class="clear-both text-center pt-5">
         <div class="container-fluid">
@@ -9,14 +14,12 @@
                         <p class="mb-3">{{ activeCompany?.name }}</p>
                         <p class="font-weight-semibold mb-2">{{ localeData?.cashflow_statement }}</p>
                     </div>
-                    <div
-                        class="custom-datepicker custom-new-datepicker"
-                        [matMenuTriggerFor]="universalDatepicker"
-                        #universalDatepickerTrigger="matMenuTrigger"
-                        role="button"
-                        aria-haspopup="true"
-                        aria-controls="universalDatepicker"
-                    >
+                    <div class="custom-datepicker custom-new-datepicker"
+                         [matMenuTriggerFor]="universalDatepicker"
+                         #universalDatepickerTrigger="matMenuTrigger"
+                         role="button"
+                         aria-haspopup="true"
+                         aria-controls="universalDatepicker">
                         <input
                             matInput
                             type="text"
@@ -28,7 +31,8 @@
                     </div>
                     <button
                         type="button"
-                        matButton="filled"
+                        mat-raised-button
+                        color="primary"
                         class="mr-0 download-btn"
                         (click)="downloadReport()"
                         [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName"
@@ -61,4 +65,4 @@
             ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</div>
+</ng-container>

@@ -10,8 +10,7 @@ import { PageEvent } from '@angular/material/paginator';
 @Component({
     selector: 'liability-detailed-report',
     templateUrl: './liability-detailed-report.component.html',
-    styleUrls: ['./liability-detailed-report.component.scss'],
-    standalone:false
+    styleUrls: ['./liability-detailed-report.component.scss']
 })
 export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

@@ -1,16 +1,13 @@
 <div class="dialog-header d-flex align-items-center flex-row-reverse">
     <span>{{ localeData?.connect_banks }}</span>
-    <button matIconButton aria-label="close" (click)="onCancel()">
+    <button mat-icon-button aria-label="close" (click)="onCancel()">
         <i class="icon-cross"></i>
     </button>
 </div>
 <mat-dialog-content id="my-frame" class="dialog-body">
     <div *ngIf="step === 1">
         <div class="form-group">
-            <label>
-                {{ localeData?.search_provider_label }}
-                <sup>*</sup>
-            </label>
+            <label>{{ localeData?.search_provider_label }} <sup>*</sup></label>
             <reactive-dropdown-field
                 [options]="searchResults"
                 [(ngModel)]="selectedProvider.name"
@@ -19,26 +16,37 @@
                 [enableDynamicSearch]="true"
                 (selectedOption)="typeaheadOnSelect($event)"
                 [placeholder]="localeData?.search_provider_placeholder"
-            ></reactive-dropdown-field>
+            >
+            </reactive-dropdown-field>
         </div>
-        <button matButton="filled" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">
+        <button mat-raised-button color="primary" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">
             {{ commonLocaleData?.app_next }}
         </button>
     </div>
 
     <div *ngIf="step === 2">
         <p class="lead grey-color">{{ selectedProvider.name }}</p>
-        <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off" (ngSubmit)="onSubmitLoginForm()">
+        <form
+            #formDiv
+            name="loginForm"
+            [formGroup]="loginForm"
+            novalidate=""
+            autocomplete="off"
+            (ngSubmit)="onSubmitLoginForm()"
+        >
             <div formArrayName="row" class="row">
-                <div class="col-12" *ngFor="let item of loginForm.get('row')['controls']; let i = index; let f = first; let l = last">
+                <div
+                    class="col-12"
+                    *ngFor="let item of loginForm.get('row')['controls']; let i = index; let f = first; let l = last"
+                >
                     <div [formGroupName]="i" class="form-group">
                         <ng-container formArrayName="field">
                             <ng-container *ngFor="let fields of item.get('field').controls; let idx = index">
                                 <ng-container [formGroupName]="idx">
                                     <label>
-                                        {{ item.get('label')?.value }}
-                                        <sup *ngIf="fields.get('isOptional')?.value === 'false'">*</sup>
-                                    </label>
+                                        {{ item.get("label")?.value }}
+                                        <sup *ngIf="fields.get('isOptional')?.value === 'false'">*</sup></label
+                                    >
                                     <input
                                         [type]="fields.get('type')?.value"
                                         [required]="fields.get('isOptional')?.value === 'false'"
@@ -52,11 +60,18 @@
                                             fields.get('type')?.value !== 'radio'
                                         "
                                     />
-                                    <select class="form-control" *ngIf="fields.get('type')?.value === 'option'" formControlName="value">
+                                    <select
+                                        class="form-control"
+                                        *ngIf="fields.get('type')?.value === 'option'"
+                                        formControlName="value"
+                                    >
                                         <option [ngValue]="null" [selected]="true">
                                             {{ commonLocaleData?.app_select_type }}
                                         </option>
-                                        <option *ngFor="let list of fields.get('option')?.value" [ngValue]="list.optionValue">
+                                        <option
+                                            *ngFor="let list of fields.get('option')?.value"
+                                            [ngValue]="list.optionValue"
+                                        >
                                             {{ list.displayText }}
                                         </option>
                                     </select>
@@ -78,7 +93,7 @@
             </div>
 
             <button
-                matButton="outlined"
+                mat-stroked-button
                 type="button"
                 (click)="resetBankForm()"
                 [disabled]="bankSyncInProgress"
@@ -86,11 +101,16 @@
             >
                 {{ commonLocaleData?.app_back }}
             </button>
-            <button matButton="filled" type="submit" *ngIf="isRefreshWithCredentials" [disabled]="bankSyncInProgress">
+            <button
+                mat-raised-button color="primary"
+                type="submit"
+                *ngIf="isRefreshWithCredentials"
+                [disabled]="bankSyncInProgress"
+            >
                 {{ commonLocaleData?.app_submit }}
             </button>
             <button
-                matButton="filled"
+                mat-raised-button color="primary"
                 type="button"
                 *ngIf="!isRefreshWithCredentials"
                 (click)="refreshAccount(loginForm)"
@@ -98,8 +118,8 @@
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-            <small *ngIf="bankSyncInProgress" class="grey-color clear-both mt-4 row">
-                {{ commonLocaleData?.app_status }}:
+            <small *ngIf="bankSyncInProgress" class="grey-color clear-both mt-4 row"
+                >{{ commonLocaleData?.app_status }}:
                 <span class="text-primary">{{ localeData?.authenticating }}</span>
             </small>
         </form>
@@ -107,10 +127,7 @@
     <div class="text-center mt-3">
         <div class="row">
             <div class="text-left col-xs-12 col-sm-8">
-                <small>
-                    <i class="fa fa-lock"></i>
-                    {{ localeData?.privacy }}
-                </small>
+                <small><i class="fa fa-lock"></i> {{ localeData?.privacy }} </small>
             </div>
             <div class="text-right col-xs-12 col-sm-4">
                 <img

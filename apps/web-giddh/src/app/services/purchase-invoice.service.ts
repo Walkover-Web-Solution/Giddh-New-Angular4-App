@@ -7,7 +7,6 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GST_RETURN_API, PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { get } from '../lodash-optimized';
 
 export interface Account {
     name: string;
@@ -78,9 +77,7 @@ export class GeneratePurchaseInvoiceRequest {
     public taxes: ITaxResponse[];
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class PurchaseInvoiceService {
     private companyUniqueName: string;
 

@@ -1,11 +1,13 @@
-<span class="position-relative tax-control-cmp">
+<span
+    class="position-relative tax-control-cmp"
+>
     <ng-container *ngIf="!showMatFormField">
-        <label class="font-size-12" *ngIf="showHeading">
-            {{ customHeading ? customHeading : commonLocaleData?.app_tax }}
-            <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup>
-        </label>
+        <label class="font-size-12" *ngIf="showHeading"
+            >{{ customHeading ? customHeading : commonLocaleData?.app_tax }}
+            <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
+        >
         <a id="tax" class="clear-both">
-            <div class="multi-select adjust position-relative" id="tax-control-multi-select">
+            <div class="multi-select adjust position-relative " id="tax-control-multi-select">
                 <input
                     (keydown.enter)="$event.preventDefault(); toggleTaxMenu(true)"
                     matInput

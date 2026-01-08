@@ -4,8 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 @Component({
     selector: 'layout-main',
     templateUrl: './layout.component.html',
-    styleUrls: ['./layout.component.scss'],
-    standalone: false
+    styleUrls: ['./layout.component.scss']
 })
 
 export class LayoutComponent {

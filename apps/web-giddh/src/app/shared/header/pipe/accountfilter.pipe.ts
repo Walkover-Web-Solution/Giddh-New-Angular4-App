@@ -4,8 +4,7 @@ import { cloneDeep, each, isUndefined } from '../../../lodash-optimized';
 @Pipe({
     // tslint:disable-next-line:pipe-naming
     name: 'grpsrch',
-    pure: true,
-    standalone: false
+    pure: true
 })
 
 export class AccountFilterPipe implements PipeTransform {

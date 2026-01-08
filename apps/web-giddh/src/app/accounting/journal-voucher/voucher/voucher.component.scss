@@ -53,8 +53,8 @@
 }
 
 ::ng-deep .account-wrapper {
-    .from-or-to-acc[type='text'],
-    .form-control.debit-credit[type='text'] {
+    .from-or-to-acc[type="text"],
+    .form-control.debit-credit[type="text"] {
         border: 1px solid var(--border-color) !important;
     }
 }

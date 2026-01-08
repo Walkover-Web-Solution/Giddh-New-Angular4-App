@@ -1,8 +1,15 @@
-<div appTranslate [file]="'project-wise-account'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'project-wise-account'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div>
         <!-- Dialog Header -->
         <div class="dialog-header">
-            <span class="font-size-16">{{ inputData?.isCreateFlow ? localeData?.create_project : localeData?.update_project }}</span>
+            <span class="font-size-16">{{
+                inputData?.isCreateFlow ? localeData?.create_project : localeData?.update_project
+            }}</span>
         </div>
 
         <!-- Dialog Body -->
@@ -32,14 +39,14 @@
 
                 <!-- Form Buttons -->
                 <div class="col-12 d-flex column-gap-1 mt-4">
-                    <button matButton="filled" type="submit" [disabled]="isSavingProject$ | async">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="isSavingProject$ | async">
                         {{ inputData.isCreateFlow ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
                     </button>
-                    <button matButton="outlined" mat-dialog-close>
+                    <button mat-stroked-button mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
             </form>
         </div>
     </div>
-</div>
+</ng-container>

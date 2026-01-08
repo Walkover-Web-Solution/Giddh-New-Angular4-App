@@ -10,9 +10,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { CustomActions } from '../../store/custom-actions';
 import { CUSTOM_STOCK_UNIT_ACTIONS } from './inventory.const';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class CustomStockUnitAction {
 
     public CreateStockUnit$: Observable<Action> = createEffect(() => this.action$

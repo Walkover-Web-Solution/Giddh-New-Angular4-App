@@ -13,9 +13,7 @@ import { INVOICE_ACTIONS } from '../invoice.const';
 import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, VoucherClass, PurchaseRecordRequest } from '../../../models/api-models/Sales';
 import { SalesRegisteDetailedResponse, ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class InvoiceReceiptActions {
 
     public UPDATE_INVOICE_RECEIPT_REQUEST$: Observable<Action> = createEffect(() => this.action$

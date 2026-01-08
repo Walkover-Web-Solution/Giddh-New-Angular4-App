@@ -192,7 +192,7 @@ tfoot td .table-sec.form-group {
 }
 .branch-transfer-report .input-wrapper:before {
     position: absolute;
-    content: '';
+    content: "";
     display: block;
     height: 36px;
     width: 1px;
@@ -291,18 +291,20 @@ tfoot td .table-sec.form-group {
     display: flex;
     justify-content: center;
     align-items: center;
-    i {
+    i{
         font-size: var(--font-size-12);
     }
 }
-.add-new-line .recept-modal .modal-title {
+.add-new-line
+
+.recept-modal .modal-title {
     color: var(--color-white);
 }
 .transfer-type-checked:before {
     border: 1px solid var(--theme-primary-color);
 }
 .transfer-type-checked:after {
-    content: ' ';
+    content: " ";
     position: absolute;
     width: 8px;
     height: 8px;

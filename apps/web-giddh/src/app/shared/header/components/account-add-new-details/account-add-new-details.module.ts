@@ -17,7 +17,6 @@ import { SalesPersonService } from '../../../sales-person/utility/sales-person.s
 import { MobileNumberInputComponent } from '../../../mobile-number-input';
 import { A11yModule } from '@angular/cdk/a11y';
 import { DecimalDigitsModule } from '../../../helpers/directives/decimalDigits/decimalDigits.module';
-import { KeyboardNavigationModule } from '../../../helpers/directives/enter-next/keyboard-navigation.module';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
@@ -38,8 +37,7 @@ import { KeyboardNavigationModule } from '../../../helpers/directives/enter-next
         MatTooltipModule,
         MobileNumberInputComponent,
         A11yModule,
-        DecimalDigitsModule,
-        KeyboardNavigationModule
+        DecimalDigitsModule
     ],
     providers: [SalesPersonService]
 })

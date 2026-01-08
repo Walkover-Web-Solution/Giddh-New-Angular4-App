@@ -4,7 +4,6 @@ import { ILogsItem } from '../../models/interfaces/logs.interface';
 import { AUDIT_LOGS_ACTIONS, AUDIT_LOGS_ACTIONS_V2 } from '../../actions/audit-logs/audit-logs.const';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { cloneDeep } from '../../lodash-optimized';
 
 export interface AuditLogsState {
     logs: ILogsItem[];
@@ -41,14 +40,14 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
             return Object.assign({}, state, initialState);
         }
         case AUDIT_LOGS_ACTIONS.GET_LOGS: {
-            newState = cloneDeep(initialState);
+            newState = _.cloneDeep(initialState);
             newState.getLogInProcess = true;
             return newState;
         }
         case AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE: {
             data = action.payload as BaseResponse<LogsResponse, LogsRequest>;
             if (data?.status === 'success') {
-                newState = cloneDeep(state);
+                newState = _.cloneDeep(state);
                 newState.currentPage = 1;
                 newState.currentLogsRequest = data.request;
                 newState.getLogInProcess = false;
@@ -61,14 +60,14 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
             return Object.assign({}, state, { getLogInProcess: false });
         }
         case AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS: {
-            newState = cloneDeep(state);
+            newState = _.cloneDeep(state);
             newState.LoadMoreInProcess = true;
             return newState;
         }
         case AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE: {
             data = action.payload as BaseResponse<LogsResponse, LogsRequest>;
             if (data?.status === 'success') {
-                newState = cloneDeep(state);
+                newState = _.cloneDeep(state);
                 newState.currentPage = data.queryString.page;
                 newState.getLogInProcess = false;
                 newState.LoadMoreInProcess = false;
@@ -86,14 +85,14 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
 
         case AUDIT_LOGS_ACTIONS_V2.GET_LOGS_REQUEST: {
-            newState = cloneDeep(state);
+            newState = _.cloneDeep(state);
             newState.getLogInProcess = true;
             return Object.assign({}, state, newState);
         }
         case AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2: {
             auditLogsData = action.payload as BaseResponse<AuditLogsResponse, GetAuditLogsRequest>;
             if (auditLogsData?.status === 'success') {
-                newState = cloneDeep(state);
+                newState = _.cloneDeep(state);
                 newState.currentPage = auditLogsData.body?.page;
                 newState.auditLogsRequest = auditLogsData.request;
                 newState.auditLogs = auditLogsData.body?.results;

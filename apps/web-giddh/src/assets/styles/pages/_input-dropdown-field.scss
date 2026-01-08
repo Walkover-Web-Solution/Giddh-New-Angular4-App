@@ -114,21 +114,11 @@ body {
 }
 
 .create-new-option {
-    &.mat-mdc-option {
-        &.mdc-list-item--selected {
-            &:not(.mat-mdc-option-active) {
-                background-color: unset !important;
-            }
-            &.mat-mdc-option-active {
-                background-color: var(--mat-option-focus-state-layer-color, color-mix(in srgb, var(--mat-sys-on-surface) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent)) !important;
-            }
-        }
-        .mdc-list-item__primary-text {
-            width: 100%;
-        }
-        .mat-pseudo-checkbox {
-            display: none !important;
-        }
+    .mdc-list-item__primary-text {
+        width: 100%;
+    }
+    .mat-pseudo-checkbox {
+        display: none !important;
     }
 }
 

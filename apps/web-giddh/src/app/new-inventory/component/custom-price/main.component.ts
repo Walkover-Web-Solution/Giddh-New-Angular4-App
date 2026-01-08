@@ -2,8 +2,6 @@ import { Component } from "@angular/core";
 
 @Component({
     selector: "customprice",
-    
-    templateUrl: './main.component.html',
-    standalone: false
+    templateUrl: './main.component.html'
 })
 export class MainComponent { }

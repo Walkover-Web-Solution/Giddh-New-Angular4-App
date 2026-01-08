@@ -7,11 +7,8 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { TRIGGER_API } from './apiurls/settings.trigger.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SettingsTriggersService {
     private companyUniqueName: string;
 

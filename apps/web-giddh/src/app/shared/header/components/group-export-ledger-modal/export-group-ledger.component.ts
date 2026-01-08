@@ -2,7 +2,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/
 import { Component, EventEmitter, OnInit, Output, ViewChild, Input } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { some, cloneDeep } from '../../../../lodash-optimized';
+import { some } from '../../../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -18,8 +18,7 @@ import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwit
 @Component({
     selector: 'export-group-ledger',
     templateUrl: './export-group-ledger.component.html',
-    styleUrls: ['./export-group-ledger.component.scss'],
-    standalone: false
+    styleUrls: ['./export-group-ledger.component.scss']
 })
 
 export class ExportGroupLedgerComponent implements OnInit {
@@ -100,7 +99,7 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.dateRange.to = dayjs(dayjs()).format(GIDDH_DATE_FORMAT);
 
         if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
-            (Array.isArray(this._permissionDataService.getData) ? this._permissionDataService.getData : []).forEach(f => {
+            this._permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
                     let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
                     this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
@@ -112,7 +111,7 @@ export class ExportGroupLedgerComponent implements OnInit {
 
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);

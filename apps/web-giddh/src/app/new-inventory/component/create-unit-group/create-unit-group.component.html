@@ -1,6 +1,11 @@
-<div appTranslate [file]="'inventory/unit'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
+<ng-container
+    appTranslate
+    [file]="'inventory/unit'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
-    <div *ngIf="!isLoading">
+    <ng-container *ngIf="!isLoading">
         <form autocomplete="off" novalidate name="unitGroupForm" [formGroup]="unitGroupForm" class="container">
             <div class="row mt-3">
                 <div class="col-sm-6 pr-0">
@@ -11,7 +16,8 @@
                         [placeholder]="localeData?.enter_name"
                         formControlName="name"
                         [showError]="!isValidForm && !unitGroupForm?.get('name')?.value"
-                    ></input-field>
+                    >
+                    </input-field>
                 </div>
                 <div class="col-sm-6">
                     <input-field
@@ -22,14 +28,15 @@
                         formControlName="uniqueName"
                         [showError]="!isValidForm && !unitGroupForm?.get('uniqueName')?.value"
                         [readonly]="unitGroupDetails?.uniqueName === 'maingroup'"
-                    ></input-field>
+                    >
+                    </input-field>
                 </div>
             </div>
             <div class="row mt-4">
                 <div class="col-sm-4 pr-0">
                     <div class="d-flex column-gap-15">
                         <button
-                            matButton="filled"
+                            mat-raised-button
                             aria-label="save"
                             color="primary"
                             type="button"
@@ -39,7 +46,7 @@
                             {{ commonLocaleData?.app_save }}
                         </button>
                         <button
-                            matButton="filled"
+                            mat-raised-button
                             aria-label="update"
                             color="primary"
                             type="button"
@@ -49,7 +56,7 @@
                             {{ commonLocaleData?.app_update }}
                         </button>
                         <button
-                            matButton="outlined"
+                            mat-stroked-button
                             aria-label="clear"
                             type="button"
                             class="btn-sm mr-0"
@@ -61,7 +68,7 @@
                         <button
                             *ngIf="isInsideDialog"
                             aria-label="close"
-                            matButton="outlined"
+                            mat-stroked-button
                             type="button"
                             (click)="closeAsideEvent.emit(false)"
                         >
@@ -72,7 +79,7 @@
                 <div class="col-sm-8">
                     <div class="pull-right d-flex column-gap-15">
                         <button
-                            matButton="outlined"
+                            mat-stroked-button
                             aria-label="delete"
                             type="button"
                             class="btn-sm mr-0"
@@ -85,5 +92,5 @@
                 </div>
             </div>
         </form>
-    </div>
-</div>
+    </ng-container>
+</ng-container>

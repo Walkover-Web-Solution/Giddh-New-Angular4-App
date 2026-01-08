@@ -105,6 +105,7 @@ xplat
 *.json
 apps/electron-giddh
 apps/web-giddh-e2e
+magic.html
 *.js
 *.css
 *.md

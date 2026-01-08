@@ -17,13 +17,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ServiceConfig } from '../../services/service.config';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
-import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'purchase-setting',
     templateUrl: './purchase-setting.component.html',
-    styleUrls: ['./purchase-setting.component.scss'],
-    standalone: false
+    styleUrls: ['./purchase-setting.component.scss']
 })
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
@@ -105,7 +103,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public initSettings(): void {
         this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
-                this.invoiceSettings = cloneDeep(response.body);
+                this.invoiceSettings = _.cloneDeep(response.body);
 
                 if (!this.invoiceSettings.purchaseBillSettings.enableVoucherDownload) {
                     this.invoiceSettings.purchaseBillSettings.enableVoucherDownload = false;
@@ -119,7 +117,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
                     this.invoiceSettings.invoiceSettings.generateAutoPurchaseNumber = false;
                 }
 
-                this.originalEmail = cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
+                this.originalEmail = _.cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
 
                 if (this.invoiceSettings.purchaseBillSettings.lockDate) {
                     this.lockDate = dayjs(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
@@ -147,7 +145,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public updateForm(): void {
-        let formToSave = cloneDeep(this.invoiceSettings);
+        let formToSave = _.cloneDeep(this.invoiceSettings);
 
         if (formToSave.purchaseBillSettings.lockDate instanceof Date) {
             formToSave.purchaseBillSettings.lockDate = dayjs(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);

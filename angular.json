@@ -12,12 +12,12 @@
             "schematics": {},
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
-                        "index": "apps/web-giddh/src/index.electron.html",
+                        "index": "apps/web-giddh/src/index.html",
                         "main": "apps/web-giddh/src/main.electron.ts",
-                        "polyfills": [],
-                        "tsConfig": "apps/web-giddh/tsconfig.electron.json",
+                        "polyfills": "apps/web-giddh/src/polyfills.ts",
+                        "tsConfig": "apps/web-giddh/tsconfig.app.json",
                         "assets": [
                             {
                                 "glob": "**/*",
@@ -56,19 +56,31 @@
                     "configurations": {
                         "local": {
                             "outputPath": "dist/apps/web-giddh",
+                            "customWebpackConfig": {
+                                "path": "apps/web-giddh/webpack.electron.partial.js",
+                                "mergeRules": {
+                                    "externals": "replace"
+                                }
+                            },
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/web-giddh/src/environments/environment.ts",
+                                    "with": "apps/web-giddh/src/environments/environment.local.electron.ts"
+                                }
+                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.local.html",
                                 "output": "/index.html"
                             },
-                            "optimization": {
-                                "scripts": true,
-                                "styles": true,
-                                "fonts": true
-                            },
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": false,
                             "extractLicenses": false,
                             "vendorChunk": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -79,19 +91,30 @@
                         },
                         "stage": {
                             "outputPath": "dist/apps/web-giddh",
+                            "customWebpackConfig": {
+                                "path": "apps/web-giddh/webpack.stage.partial.js",
+                                "mergeRules": {
+                                    "externals": "replace"
+                                }
+                            },
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/web-giddh/src/environments/environment.ts",
+                                    "with": "apps/web-giddh/src/environments/environment.stage.ts"
+                                }
+                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.stage.html",
                                 "output": "/index.html"
                             },
-                            "optimization": {
-                                "scripts": true,
-                                "styles": true,
-                                "fonts": true
-                            },
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
+                            "namedChunks": false,
+                            "aot": true,
                             "extractLicenses": false,
                             "vendorChunk": true,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -102,19 +125,30 @@
                         },
                         "prod": {
                             "outputPath": "dist/apps/web-giddh",
+                            "customWebpackConfig": {
+                                "path": "apps/web-giddh/webpack.electron.prod.partial.js",
+                                "mergeRules": {
+                                    "externals": "replace"
+                                }
+                            },
                             "index": {
-                                "input": "apps/web-giddh/src/index.electron.html",
+                                "input": "apps/web-giddh/src/index.electron.prod.html",
                                 "output": "/index.html"
                             },
-                            "optimization": {
-                                "scripts": true,
-                                "styles": true,
-                                "fonts": true
-                            },
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/web-giddh/src/environments/environment.ts",
+                                    "with": "apps/web-giddh/src/environments/environment.prod.electron.ts"
+                                }
+                            ],
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
+                            "namedChunks": true,
+                            "aot": true,
                             "extractLicenses": false,
                             "vendorChunk": true,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -125,19 +159,30 @@
                         },
                         "test": {
                             "outputPath": "dist/apps/web-giddh",
+                            "customWebpackConfig": {
+                                "path": "apps/web-giddh/webpack.electron.partial.js",
+                                "mergeRules": {
+                                    "externals": "replace"
+                                }
+                            },
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/web-giddh/src/environments/environment.ts",
+                                    "with": "apps/web-giddh/src/environments/environment.test.ts"
+                                }
+                            ],
                             "index": {
-                                "input": "apps/web-giddh/src/index.electron.html",
+                                "input": "apps/web-giddh/src/index.test.html",
                                 "output": "/index.html"
                             },
-                            "optimization": {
-                                "scripts": true,
-                                "styles": true,
-                                "fonts": true
-                            },
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
+                            "namedChunks": true,
+                            "aot": true,
                             "extractLicenses": false,
                             "vendorChunk": true,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -149,15 +194,21 @@
                     }
                 },
                 "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "builder": "@angular-builders/custom-webpack:dev-server",
                     "options": {
                         "host": "localhost",
                         "port": 4200,
-                        "buildTarget": "electron-giddh:build:local"
+                        "browserTarget": "electron-giddh:build:local",
+                        "customWebpackConfig": {
+                            "path": "apps/web-giddh/webpack.electron.partial.js",
+                            "mergeRules": {
+                                "externals": "replace"
+                            }
+                        }
                     },
                     "configurations": {
                         "prod": {
-                            "buildTarget": "electron-giddh:build:prod"
+                            "browserTarget": "electron-giddh:build:prod"
                         }
                     }
                 }
@@ -195,7 +246,7 @@
             },
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
                         "baseHref": "/",
                         "allowedCommonJsDependencies": [
@@ -208,8 +259,9 @@
                         "outputPath": "dist/apps/web-giddh",
                         "index": "apps/web-giddh/src/index.html",
                         "main": "apps/web-giddh/src/main.ts",
-                        "polyfills": [],
+                        "polyfills": "apps/web-giddh/src/polyfills.ts",
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
+                        "aot": true,
                         "assets": [
                             {
                                 "glob": "**/*",
@@ -244,28 +296,48 @@
                             "node_modules/froala-editor/js/froala_editor.pkgd.min.js",
                             "node_modules/tributejs/dist/tribute.js"
                         ],
+                        "customWebpackConfig": {
+                            "path": "apps/web-giddh/webpack.partial.js",
+                            "mergeRules": {
+                                "externals": "replace"
+                            }
+                        },
                         "optimization": false,
                         "outputHashing": "none",
                         "sourceMap": true,
+                        "namedChunks": true,
                         "extractLicenses": false,
-                        "vendorChunk": true
+                        "vendorChunk": true,
+                        "buildOptimizer": false
                     },
                     "configurations": {
                         "local": {
                             "outputPath": "dist/apps/web-giddh",
+                            "customWebpackConfig": {
+                                "path": "apps/web-giddh/webpack.local.partial.js",
+                                "mergeRules": {
+                                    "externals": "replace"
+                                }
+                            },
                             "baseHref": "/",
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/web-giddh/src/environments/environment.ts",
+                                    "with": "apps/web-giddh/src/environments/environment.local.ts"
+                                }
+                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.local.html",
                                 "output": "/index.html"
                             },
-                            "optimization": {
-                                "scripts": false,
-                                "styles": false,
-                                "fonts": false
-                            },
-                            "outputHashing": "none",
-                            "sourceMap": true,
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
                             "vendorChunk": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -276,15 +348,31 @@
                         },
                         "stage": {
                             "outputPath": "dist/apps/web-giddh",
+                            "customWebpackConfig": {
+                                "path": "apps/web-giddh/webpack.stage.partial.js",
+                                "mergeRules": {
+                                    "externals": "replace"
+                                }
+                            },
                             "baseHref": "/",
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/web-giddh/src/environments/environment.ts",
+                                    "with": "apps/web-giddh/src/environments/environment.stage.ts"
+                                }
+                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.stage.html",
                                 "output": "/index.html"
                             },
-                            "optimization": false,
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "vendorChunk": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -295,60 +383,70 @@
                         },
                         "prod": {
                             "outputPath": "dist/apps/web-giddh",
+                            "customWebpackConfig": {
+                                "path": "apps/web-giddh/webpack.prod.partial.js",
+                                "mergeRules": {
+                                    "externals": "replace"
+                                }
+                            },
                             "baseHref": "/",
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/web-giddh/src/environments/environment.ts",
+                                    "with": "apps/web-giddh/src/environments/environment.prod.ts"
+                                }
+                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.prod.html",
                                 "output": "/index.html"
                             },
-                            "optimization": {
-                                "scripts": true,
-                                "styles": {
-                                    "minify": true,
-                                    "inlineCritical": false
-                                },
-                                "fonts": true
-                            },
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractLicenses": true,
-                            "vendorChunk": true,
                             "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "8mb",
-                                    "maximumError": "12mb"
-                                },
-                                {
-                                    "type": "bundle",
-                                    "name": "vendor",
-                                    "maximumWarning": "4mb",
-                                    "maximumError": "6mb"
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "10mb"
                                 }
                             ]
                         },
                         "test": {
                             "outputPath": "dist/apps/web-giddh",
+                            "customWebpackConfig": {
+                                "path": "apps/web-giddh/webpack.test.partial.js",
+                                "mergeRules": {
+                                    "externals": "replace"
+                                }
+                            },
                             "baseHref": "/",
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/web-giddh/src/environments/environment.ts",
+                                    "with": "apps/web-giddh/src/environments/environment.test.ts"
+                                }
+                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.test.html",
                                 "output": "/index.html"
                             },
-                            "optimization": false,
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "vendorChunk": true,
-                            "namedChunks": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "15mb",
-                                    "maximumError": "20mb"
-                                },
-                                {
-                                    "type": "bundle",
-                                    "name": "vendor",
-                                    "maximumWarning": "7mb",
+                                    "maximumWarning": "2mb",
                                     "maximumError": "10mb"
                                 }
                             ]
@@ -357,21 +455,18 @@
                     "defaultConfiguration": ""
                 },
                 "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "builder": "@angular-builders/custom-webpack:dev-server",
                     "options": {
                         "host": "localhost",
                         "port": 3000,
-                        "buildTarget": "web-giddh:build"
+                        "browserTarget": "web-giddh:build"
                     },
                     "configurations": {
-                        "local": {
-                            "buildTarget": "web-giddh:build:local"
-                        },
                         "prod": {
-                            "buildTarget": "web-giddh:build:prod"
+                            "browserTarget": "web-giddh:build:prod"
                         },
                         "development": {
-                            "buildTarget": "web-giddh:build:development"
+                            "browserTarget": "web-giddh:build:development"
                         }
                     }
                 },

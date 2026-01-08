@@ -1,11 +1,9 @@
 import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -13,7 +11,6 @@ import { takeUntil } from 'rxjs/operators';
     selector: 'aside-help-support',
     templateUrl: './aside-help-support.component.html',
     styleUrls: [`./aside-help-support.component.scss`],
-    standalone: false
 })
 
 export class AsideHelpSupportComponent implements OnInit, OnDestroy {
@@ -48,7 +45,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
 
     /**

@@ -28,7 +28,11 @@
                                     readonly
                                 />
                             </div>
-                            <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                            <mat-menu
+                                #universalDatepicker="matMenu"
+                                class="universal-datepicker-menu-panel"
+                                xPosition="after"
+                            >
                                 <ng-template matMenuContent>
                                     <app-datepicker-wrapper
                                         [inputStartDate]="selectedDateRange?.startDate"
@@ -65,12 +69,16 @@
                             <div class="row">
                                 <div class="col-3">
                                     <mat-slide-toggle color="primary" formControlName="includeParticulars" class="mt-2">
-                                        <span class="pull-left" *ngIf="advanceSearchForm.get('includeParticulars')?.value">
-                                            {{ commonLocaleData?.app_include }}
-                                        </span>
-                                        <span class="pull-right" *ngIf="!advanceSearchForm.get('includeParticulars')?.value">
-                                            {{ commonLocaleData?.app_exclude }}
-                                        </span>
+                                        <span
+                                            class="pull-left"
+                                            *ngIf="advanceSearchForm.get('includeParticulars')?.value"
+                                            >{{ commonLocaleData?.app_include }}</span
+                                        >
+                                        <span
+                                            class="pull-right"
+                                            *ngIf="!advanceSearchForm.get('includeParticulars')?.value"
+                                            >{{ commonLocaleData?.app_exclude }}</span
+                                        >
                                     </mat-slide-toggle>
                                 </div>
                                 <div class="col-9">
@@ -84,9 +92,17 @@
                                             [showMatLabel]="true"
                                             [options]="accounts$ | async"
                                             [chipListUniqueName]="advanceSearchForm?.controls['particulars']?.value"
-                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['particulars']?.patchValue($event)"
-                                            (selectedOption)="advanceSearchForm?.controls['defaultParticularsLabel']?.patchValue($event)"
-                                            [selectedValues]="advanceSearchForm?.controls['defaultParticularsLabel']?.value"
+                                            (selectedOptionUniqueName)="
+                                                advanceSearchForm?.controls['particulars']?.patchValue($event)
+                                            "
+                                            (selectedOption)="
+                                                advanceSearchForm?.controls['defaultParticularsLabel']?.patchValue(
+                                                    $event
+                                                )
+                                            "
+                                            [selectedValues]="
+                                                advanceSearchForm?.controls['defaultParticularsLabel']?.value
+                                            "
                                             [enableDynamicSearch]="true"
                                             (scrollEnd)="handleScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
@@ -110,12 +126,16 @@
                             <div class="row">
                                 <div class="col-3">
                                     <mat-slide-toggle color="primary" formControlName="includeVouchers" class="mt-2">
-                                        <span class="pull-left" *ngIf="advanceSearchForm.get('includeVouchers')?.value">
-                                            {{ commonLocaleData?.app_include }}
-                                        </span>
-                                        <span class="pull-right" *ngIf="!advanceSearchForm.get('includeVouchers')?.value">
-                                            {{ commonLocaleData?.app_exclude }}
-                                        </span>
+                                        <span
+                                            class="pull-left"
+                                            *ngIf="advanceSearchForm.get('includeVouchers')?.value"
+                                            >{{ commonLocaleData?.app_include }}</span
+                                        >
+                                        <span
+                                            class="pull-right"
+                                            *ngIf="!advanceSearchForm.get('includeVouchers')?.value"
+                                            >{{ commonLocaleData?.app_exclude }}</span
+                                        >
                                     </mat-slide-toggle>
                                 </div>
                                 <div class="col-9">
@@ -129,9 +149,15 @@
                                             [showMatLabel]="true"
                                             [options]="voucherTypeList | async"
                                             [chipListUniqueName]="advanceSearchForm?.controls['vouchers']?.value"
-                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['vouchers']?.patchValue($event)"
-                                            (selectedOption)="advanceSearchForm?.controls['defaultVouchersLabel']?.patchValue($event)"
-                                            [selectedValues]="advanceSearchForm?.controls['defaultVouchersLabel']?.value"
+                                            (selectedOptionUniqueName)="
+                                                advanceSearchForm?.controls['vouchers']?.patchValue($event)
+                                            "
+                                            (selectedOption)="
+                                                advanceSearchForm?.controls['defaultVouchersLabel']?.patchValue($event)
+                                            "
+                                            [selectedValues]="
+                                                advanceSearchForm?.controls['defaultVouchersLabel']?.value
+                                            "
                                         ></select-multiple-fields>
                                     </div>
                                 </div>
@@ -149,12 +175,12 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <mat-slide-toggle color="primary" formControlName="includeTag" class="mt-2">
-                                        <span class="pull-left" *ngIf="advanceSearchForm.get('includeTag')?.value">
-                                            {{ commonLocaleData?.app_include }}
-                                        </span>
-                                        <span class="pull-right" *ngIf="!advanceSearchForm.get('includeTag')?.value">
-                                            {{ commonLocaleData?.app_exclude }}
-                                        </span>
+                                        <span class="pull-left" *ngIf="advanceSearchForm.get('includeTag')?.value">{{
+                                            commonLocaleData?.app_include
+                                        }}</span>
+                                        <span class="pull-right" *ngIf="!advanceSearchForm.get('includeTag')?.value">{{
+                                            commonLocaleData?.app_exclude
+                                        }}</span>
                                     </mat-slide-toggle>
                                 </div>
                                 <div class="col-sm-9">
@@ -168,8 +194,12 @@
                                             [placeholder]="localeData?.select_tags"
                                             [options]="tags$ | async"
                                             [chipListUniqueName]="advanceSearchForm?.controls['tags']?.value"
-                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['tags']?.patchValue($event)"
-                                            (selectedOption)="advanceSearchForm?.controls['tagsLabel']?.patchValue($event)"
+                                            (selectedOptionUniqueName)="
+                                                advanceSearchForm?.controls['tags']?.patchValue($event)
+                                            "
+                                            (selectedOption)="
+                                                advanceSearchForm?.controls['tagsLabel']?.patchValue($event)
+                                            "
                                             [selectedValues]="advanceSearchForm?.controls['tagsLabel']?.value"
                                         ></select-multiple-fields>
                                     </div>
@@ -193,12 +223,16 @@
                                             id="includeSalesPersons"
                                             [formControl]="advanceSearchForm?.controls['includeSalesPersons']"
                                         >
-                                            <span class="pull-left" *ngIf="advanceSearchForm.get('includeSalesPersons')?.value">
-                                                {{ commonLocaleData?.app_include }}
-                                            </span>
-                                            <span class="pull-right" *ngIf="!advanceSearchForm.get('includeSalesPersons')?.value">
-                                                {{ commonLocaleData?.app_exclude }}
-                                            </span>
+                                            <span
+                                                class="pull-left"
+                                                *ngIf="advanceSearchForm.get('includeSalesPersons')?.value"
+                                                >{{ commonLocaleData?.app_include }}</span
+                                            >
+                                            <span
+                                                class="pull-right"
+                                                *ngIf="!advanceSearchForm.get('includeSalesPersons')?.value"
+                                                >{{ commonLocaleData?.app_exclude }}</span
+                                            >
                                         </mat-slide-toggle>
                                     </div>
                                 </div>
@@ -214,7 +248,9 @@
                                             >
                                                 <mat-option class="mt-0">
                                                     <ngx-mat-select-search
-                                                        [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
+                                                        [placeholderLabel]="
+                                                            commonLocaleData?.app_sales_person_placeholder
+                                                        "
                                                         [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                                         [formControl]="salesPersonDropdown"
                                                     >
@@ -251,7 +287,8 @@
                                             [name]="'amountRange'"
                                             formControlName="amountRange"
                                             [placeholder]="commonLocaleData?.app_select_range"
-                                        ></reactive-dropdown-field>
+                                        >
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="col-6 col-sm-6">
@@ -273,7 +310,9 @@
                 <mat-accordion class="w-100 m-2" multi>
                     <mat-expansion-panel [expanded]="isExpanded" class="mt-2">
                         <mat-expansion-panel-header>
-                            <mat-panel-title (click)="toggleOtherDetails()">{{ commonLocaleData?.app_other_details }}</mat-panel-title>
+                            <mat-panel-title (click)="toggleOtherDetails()">{{
+                                commonLocaleData?.app_other_details
+                            }}</mat-panel-title>
                         </mat-expansion-panel-header>
 
                         <div class="col-xs-12 col-sm-12 mt-4">
@@ -285,19 +324,25 @@
                                     <div class="col-sm-7 col-xs-12" formGroupName="inventory">
                                         <div class="row">
                                             <div class="pr-0 col-sm-3 col-12">
-                                                <mat-slide-toggle color="primary" formControlName="includeInventory" class="mt-2">
+                                                <mat-slide-toggle
+                                                    color="primary"
+                                                    formControlName="includeInventory"
+                                                    class="mt-2"
+                                                >
                                                     <span
                                                         class="pull-left"
-                                                        *ngIf="advanceSearchForm.get('inventory.includeInventory')?.value"
+                                                        *ngIf="
+                                                            advanceSearchForm.get('inventory.includeInventory')?.value
+                                                        "
+                                                        >{{ commonLocaleData?.app_include }}</span
                                                     >
-                                                        {{ commonLocaleData?.app_include }}
-                                                    </span>
                                                     <span
                                                         class="pull-right"
-                                                        *ngIf="!advanceSearchForm.get('inventory.includeInventory')?.value"
+                                                        *ngIf="
+                                                            !advanceSearchForm.get('inventory.includeInventory')?.value
+                                                        "
+                                                        >{{ commonLocaleData?.app_exclude }}</span
                                                     >
-                                                        {{ commonLocaleData?.app_exclude }}
-                                                    </span>
                                                 </mat-slide-toggle>
                                             </div>
                                             <div class="col-sm-9 col-12">
@@ -311,12 +356,14 @@
                                                         [showMatLabel]="true"
                                                         [options]="stockListDropDown$ | async"
                                                         [chipListUniqueName]="
-                                                            advanceSearchForm?.controls['inventory'].controls['inventories']?.value
+                                                            advanceSearchForm?.controls['inventory'].controls[
+                                                                'inventories'
+                                                            ]?.value
                                                         "
                                                         (selectedOptionUniqueName)="
-                                                            advanceSearchForm?.controls['inventory'].controls['inventories']?.patchValue(
-                                                                $event
-                                                            )
+                                                            advanceSearchForm?.controls['inventory'].controls[
+                                                                'inventories'
+                                                            ]?.patchValue($event)
                                                         "
                                                         (selectedOption)="
                                                             advanceSearchForm?.controls['inventory'].controls[
@@ -324,8 +371,9 @@
                                                             ]?.patchValue($event)
                                                         "
                                                         [selectedValues]="
-                                                            advanceSearchForm?.controls['inventory'].controls['defaultInventoriesLabel']
-                                                                ?.value
+                                                            advanceSearchForm?.controls['inventory'].controls[
+                                                                'defaultInventoriesLabel'
+                                                            ]?.value
                                                         "
                                                         [enableDynamicSearch]="true"
                                                         (scrollEnd)="handleStockScrollEnd()"
@@ -415,7 +463,8 @@
                                                     [appearance]="'outline'"
                                                     formControlName="dateOnCheque"
                                                     [showToggleIcon]="false"
-                                                ></giddh-datepicker>
+                                                >
+                                                </giddh-datepicker>
                                             </div>
                                         </div>
                                     </div>
@@ -426,10 +475,16 @@
                 </mat-accordion>
 
                 <div class="col-xs-12 col-sm-12 text-right pt-3">
-                    <button matButton="filled" class="mr-3" type="button" (click)="emitAdvanceSearchParams()">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        class="mr-3"
+                        type="button"
+                        (click)="emitAdvanceSearchParams()"
+                    >
                         {{ commonLocaleData?.app_search }}
                     </button>
-                    <button matButton="outlined" type="button" (click)="onCancel()">
+                    <button mat-stroked-button type="button" (click)="onCancel()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

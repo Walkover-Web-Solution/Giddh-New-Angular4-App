@@ -2,8 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
     name: 'accountNumberMask',
-    pure: true,
-    standalone: false
+    pure: true
 })
 export class AccountNumberMaskPipe implements PipeTransform {
     public constructor() { }

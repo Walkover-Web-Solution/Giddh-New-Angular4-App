@@ -2,7 +2,6 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../custom-actions';
 import { AgingDropDownoptions, DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest } from '../../models/api-models/Contact';
 import { AgingReportActions } from '../../actions/aging-report.actions';
-import { cloneDeep } from '../../lodash-optimized';
 
 export interface AgingReportState {
     setDueRangeRequestInFlight: boolean;
@@ -76,7 +75,7 @@ export function agingReportReducer(state = initialState, action: CustomActions):
         case AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE: {
             // no payload means error from server
             if (action.payload) {
-                let data: DueAmountReportResponse = cloneDeep(action.payload) as DueAmountReportResponse;
+                let data: DueAmountReportResponse = _.cloneDeep(action.payload) as DueAmountReportResponse;
                 let noData = false;
                 let getAgingReportRequestInFlight = false;
                 if (data.results?.length < 1) {

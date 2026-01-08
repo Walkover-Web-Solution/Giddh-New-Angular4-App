@@ -3,24 +3,21 @@
     <div class="clear-both mr-3 create-btn" *ngIf="isTabletScreen">
         <div class="mr-3" *ngIf="showClearFilter()">
             <label class="d-none">&nbsp;</label>
-            <button matButton="outlined" type="button" (click)="clearFilters()">Clear Filter</button>
+            <button mat-stroked-button type="button" (click)="clearFilters()">Clear Filter</button>
         </div>
         <div>
             <label class="d-none">&nbsp;</label>
-            <button
-                *ngIf="!isCompany && !isConsolidatedBranch"
-                matButton="filled"
-                class="pull-right mr-0"
-                (click)="goToCreateNewPage()"
-                type="button"
-            >
+            <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-raised-button color="primary" class="pull-right mr-0" (click)="goToCreateNewPage()" type="button">
                 Create Manufacture
             </button>
         </div>
     </div>
     <div class="col-12 col-sm-12 mf-report-head" [ngClass]="{ 'parent': fromParentComponent }">
         <div class="row">
-            <div class="col-12" [ngClass]="currentCompanyBranches?.length > 2 ? 'manufacturing-head' : 'no-branch-head'">
+            <div
+                class="col-12"
+                [ngClass]="currentCompanyBranches?.length > 2 ? 'manufacturing-head' : 'no-branch-head'"
+            >
                 <div class="row">
                     <div
                         class="col-xl-3 col-lg-4 col-md-6 mb-3"
@@ -36,7 +33,8 @@
                                 (selectedOption)="handleBranchChange($event)"
                                 [placeholder]="'Select Entity'"
                                 [labelValue]="currentBranch?.name"
-                            ></reactive-dropdown-field>
+                            >
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div
@@ -48,8 +46,8 @@
                         "
                     >
                         <label class="d-block font-size-15 pb-1">From - To</label>
-                        <div
-                            class="custom-datepicker"
+                        <div 
+                            class="custom-datepicker" 
                             [matMenuTriggerFor]="universalDatepicker"
                             #universalDatepickerTrigger="matMenuTrigger"
                             role="button"
@@ -96,10 +94,13 @@
                         "
                         *ngIf="!isTabletScreen"
                     >
-                        <div class="d-flex" [ngClass]="showClearFilter() ? 'justify-content-between' : 'justify-content-end'">
+                        <div
+                            class="d-flex"
+                            [ngClass]="showClearFilter() ? 'justify-content-between' : 'justify-content-end'"
+                        >
                             <div *ngIf="showClearFilter()">
                                 <label class="d-block">&nbsp;</label>
-                                <button matButton="outlined" type="button" (click)="clearFilters()">
+                                <button mat-stroked-button type="button" (click)="clearFilters()">
                                     Clear Filter
                                 </button>
                             </div>
@@ -107,7 +108,8 @@
                                 <label class="d-block">&nbsp;</label>
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                    matButton="filled"
+                                    mat-raised-button
+                                    color="primary"
                                     class="pull-right mr-0 mobile-none"
                                     (click)="goToCreateNewPage()"
                                     type="button"
@@ -141,7 +143,8 @@
                             [(ngModel)]="mfStockSearchRequest.product"
                             [options]="stockListDropDown"
                             (selectedOption)="setActiveStockGroup($event)"
-                        ></reactive-dropdown-field>
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-xl-2 col-lg-3 col-md-6 col-12">
                         <label class="d-block">Warehouse</label>
@@ -161,7 +164,8 @@
                             [name]="'searchBy'"
                             [(ngModel)]="mfStockSearchRequest.searchBy"
                             [options]="filtersForSearchBy"
-                        ></reactive-dropdown-field>
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Operation</label>
@@ -170,7 +174,8 @@
                             [name]="'searchOperation'"
                             [(ngModel)]="mfStockSearchRequest.searchOperation"
                             [options]="filtersForSearchOperation"
-                        ></reactive-dropdown-field>
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Value</label>
@@ -186,7 +191,7 @@
                     </div>
                     <div class="form-group col-xl-1 col-lg-1 col-md-6">
                         <label class="d-block d-none-xs">&nbsp;</label>
-                        <button matButton="filled" type="submit">Go</button>
+                        <button mat-raised-button color="primary" type="submit">Go</button>
                     </div>
                 </div>
             </form>
@@ -209,15 +214,19 @@
                 <table mat-table [dataSource]="reportData.results" class="table basic border giddh-table on-mobile-view manufacture-table">
                     <!-- Date Column -->
                     <ng-container matColumnDef="date">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Date
+                        </th>
                         <td mat-cell *matCellDef="let item" data-title="Date" (dblclick)="editMFItem(item)">
-                            {{ dayjs(item.date, 'DD-MM-YYYY') | date: 'd MMM y' }}
+                            {{ dayjs(item.date, "DD-MM-YYYY") | date : "d MMM y" }}
                         </td>
                     </ng-container>
 
                     <!-- Voucher Number Column -->
                     <ng-container matColumnDef="voucherNumber">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Voucher No.</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Voucher No.
+                        </th>
                         <td mat-cell *matCellDef="let item" data-title="Voucher No." class="cursor-pointer" (dblclick)="editMFItem(item)">
                             {{ item.voucherNumber }}
                         </td>
@@ -225,7 +234,9 @@
 
                     <!-- Stock Name Column -->
                     <ng-container matColumnDef="stockName">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Finished Product</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Finished Product
+                        </th>
                         <td mat-cell *matCellDef="let item" data-title="Product Name" (dblclick)="editMFItem(item)">
                             {{ item.stockName }}
                         </td>
@@ -233,7 +244,9 @@
 
                     <!-- Manufacturing Quantity Column -->
                     <ng-container matColumnDef="manufacturingQuantity">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Qty Outwards</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Qty Outwards
+                        </th>
                         <td mat-cell *matCellDef="let item" data-title="Qty Outwards" (dblclick)="editMFItem(item)">
                             {{ item.manufacturingQuantity }}
                         </td>
@@ -241,7 +254,9 @@
 
                     <!-- Manufacturing Unit Column -->
                     <ng-container matColumnDef="manufacturingUnit">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Unit</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Unit
+                        </th>
                         <td mat-cell *matCellDef="let item" data-title="Unit" (dblclick)="editMFItem(item)">
                             {{ item.manufacturingUnit }}
                         </td>
@@ -267,7 +282,10 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of item.linkedStocks">
+                                <div
+                                    class="d-flex flex-md-row flex-column nested-div"
+                                    *ngFor="let row of item.linkedStocks"
+                                >
                                     <div class="d-flex flex-column">
                                         <span>{{ row.stockName }}</span>
                                     </div>
@@ -284,14 +302,16 @@
 
                     <!-- Warehouse Column -->
                     <ng-container matColumnDef="warehouse">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Warehouse</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Warehouse
+                        </th>
                         <td mat-cell *matCellDef="let item" data-title="Warehouse" (dblclick)="editMFItem(item)">
                             {{ item.warehouse?.name }}
                         </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="row-gray-background"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
                 <mat-paginator
                     *ngIf="reportData?.totalItems > pageSizeOptions[0]"

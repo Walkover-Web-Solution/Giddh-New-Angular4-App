@@ -11,8 +11,7 @@ import { InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
     selector: 'download-voucher',
     templateUrl: './download-voucher.component.html',
     styleUrls: ['./download-voucher.component.scss'],
-    providers: [VoucherComponentStore],
-    standalone: false
+    providers: [VoucherComponentStore]
 })
 export class DownloadVoucherComponent implements OnInit, OnDestroy {
     /** Last vouchers get in progress Observable */

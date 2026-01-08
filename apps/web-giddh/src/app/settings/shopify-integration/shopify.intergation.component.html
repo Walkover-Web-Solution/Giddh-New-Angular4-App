@@ -7,8 +7,13 @@
     <div class="mt-4 p-3">
         <p class="section-head mb-1">{{ localeData?.ecommerce?.shopify_form_heading }}</p>
         <span *ngIf="isEcommerceShopifyUserVerified">{{ localeData?.ecommerce?.shopify_connected_message }}</span>
-        <a href="https://apps.shopify.com/giddh-accounting" target="_blank" *ngIf="!isEcommerceShopifyUserVerified" class="text-underline">
-            <span>{{ localeData?.ecommerce?.connect_shopify }}</span>
-        </a>
+        <a
+            href="https://apps.shopify.com/giddh-accounting"
+            target="_blank"
+            *ngIf="!isEcommerceShopifyUserVerified"
+            class="text-underline"
+        >
+            <span>{{ localeData?.ecommerce?.connect_shopify }}</span></a
+        >
     </div>
 </ng-container>

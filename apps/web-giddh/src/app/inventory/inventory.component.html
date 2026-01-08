@@ -2,18 +2,20 @@
     <div class="relative">
         <hamburger-menu></hamburger-menu>
         <div class="inventory-control">
-            <mat-tab-group
+            <mat-tab-group 
                 #inventoryStaticTabs
                 class="table-header-sticky"
-                mat-stretch-tabs="false"
+                mat-stretch-tabs="false" 
                 mat-align-tabs="start"
                 [selectedIndex]="activeTabIndex"
-                (selectedTabChange)="redirectUrlToActiveTab($event)"
-            >
-                <mat-tab label="Inventory">
+                (selectedTabChange)="redirectUrlToActiveTab($event)">
+                <mat-tab
+                    label="Inventory"
+                >
                     <!--sidebar-->
                     <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
-                        <inventory-sidebar *ngIf="!isTabletScreen || (isTabletScreen && activeView !== 'group')"></inventory-sidebar>
+                        <inventory-sidebar *ngIf="!isTabletScreen || (isTabletScreen && activeView !== 'group')">
+                        </inventory-sidebar>
                         <!--/sidebar-->
 
                         <section
@@ -25,7 +27,11 @@
                             <section class="container-fluid clear-both inventory-head">
                                 <div *ngIf="shouldShowInventoryReport$ | async" class="wrap-top-inventory">
                                     <div *ngIf="isTabletScreen && activeView === 'group'" class="mb-3">
-                                        <button matButton="filled" [routerLink]="['/pages/inventory/']" (click)="activeView = null">
+                                        <button
+                                            mat-raised-button color="primary"
+                                            [routerLink]="['/pages/inventory/']"
+                                            (click)="activeView = null"
+                                        >
                                             Back
                                         </button>
                                     </div>
@@ -57,25 +63,45 @@
                                 <div *ngIf="(shouldShowInventoryReport$ | async) && activeView === 'stock'">
                                     <invetory-stock-report
                                         [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues"
-                                    ></invetory-stock-report>
+                                    >
+                                    </invetory-stock-report>
                                 </div>
                                 <div *ngIf="(shouldShowInventoryReport$ | async) && activeView === 'group'">
                                     <invetory-group-stock-report
                                         [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues"
-                                    ></invetory-group-stock-report>
+                                    >
+                                    </invetory-group-stock-report>
                                 </div>
                                 <div *ngIf="!activeView">
                                     <welcome-inventory></welcome-inventory>
                                 </div>
-                                <inventory-header></inventory-header>
+                                <inventory-header> </inventory-header>
                             </section>
                         </section>
                     </ng-container>
                 </mat-tab>
 
-                <mat-tab label="Report">
+                <mat-tab
+                    label="Job Work"
+                >
                     <ng-container *ngIf="activeTabIndex === 1">
-                        <new-branch-transfer-list></new-branch-transfer-list>
+                        <jobwork></jobwork>
+                    </ng-container>
+                </mat-tab>
+
+                <mat-tab
+                    label="Manufacturing"
+                >
+                    <ng-container *ngIf="activeTabIndex === 2">
+                        <manufacturing></manufacturing>
+                    </ng-container>
+                </mat-tab>
+
+                <mat-tab
+                    label="Report"
+                >
+                    <ng-container *ngIf="activeTabIndex === 3">
+                        <new-branch-transfer-list> </new-branch-transfer-list>
                     </ng-container>
                 </mat-tab>
             </mat-tab-group>
@@ -86,6 +112,6 @@
 <!-- branch transfer modal -->
 <ng-template #branchtransfertemplate>
     <div class="modal-body radius-none pr-0 pl-0 pt-0 p-0">
-        <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode"></new-branch-transfer>
+        <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode"> </new-branch-transfer>
     </div>
 </ng-template>

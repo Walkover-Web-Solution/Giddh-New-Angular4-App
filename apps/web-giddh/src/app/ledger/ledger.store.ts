@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore} from "@ngrx/component-store";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { ToasterService } from "../services/toaster.service";
-import { catchError, EMPTY, Observable, switchMap , tap} from "rxjs";
+import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
 import { LedgerService } from "../services/ledger.service";
 import { SearchService } from "../services/search.service";
@@ -52,7 +52,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ ledgerBalance: null });
                 return this.ledgerService.getLedgerBalance(req.trxRequest, req.payload).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -100,7 +100,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ uploadVoucherSuccess: false });
                 return this.ledgerService.uploadVoucher(req.url, req.file).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.statusText === "OK") {
                                 return this.patchState({
@@ -136,7 +136,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ signedUrlSuccess: null });
                 return this.ledgerService.getSignedUrl(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -172,7 +172,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ importVoucherSuccess: null });
                 return this.ledgerService.importVoucher(req.requestObject, req.signedUrlResponse).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -200,7 +200,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
 
     /**
      * Handles the retrieval of project accounts and updates the state.
-     *
+     * 
      *  @memberof LedgerComponentStore
      */
     readonly getProjectAccount = this.effect((data: Observable<any>) => {
@@ -208,7 +208,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ accountSearch: null });
                 return this.searchService.searchAccountV3(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ accountSearch: res.body });
@@ -238,7 +238,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ isLedgerViewChange: null });
                 return this.accountService.UpdateAccountWithoutGroupUniqueName(req.model, req.accountUniqueName).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 res.body?.message && this.toasterService.showSnackBar('success', res.body.message);

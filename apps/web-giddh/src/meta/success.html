@@ -29,14 +29,11 @@
     </div>
 
     <div class="copy-right">
-        <p>
-            All right are reserved &copy; 2020 Walkover
-            <a [href]="giddhDomainUrl" target="_Blank">{{ domainName }}</a>
-        </p>
+        <p>All right are reserved &copy; 2020 Walkover <a [href]="giddhDomainUrl" target="_Blank">{{ domainName }}</a></p>
     </div>
 </div>
 <script type="text/javascript">
     const whiteLabel = this.generalService.getDecodedWhiteLabel();
-    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || 'https://books.giddh.com/';
+    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
     var domainName = whiteLabel?.giddhWhiteLabel?.domainName || 'Giddh.com';
 </script>

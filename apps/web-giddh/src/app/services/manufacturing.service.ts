@@ -9,11 +9,8 @@ import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufactu
 import { StocksResponse } from '../models/api-models/Inventory';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { concat, get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ManufacturingService {
     private companyUniqueName: string;
 

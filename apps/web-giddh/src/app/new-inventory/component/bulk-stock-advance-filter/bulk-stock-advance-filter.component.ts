@@ -2,9 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, Output } from '@angu
 import { EventEmitter } from '@angular/core';
 @Component({
     selector: 'bulk-stock-advance-filter',
-    
     templateUrl: './bulk-stock-advance-filter.component.html',
-    standalone: false,
     styleUrls: ['./bulk-stock-advance-filter.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

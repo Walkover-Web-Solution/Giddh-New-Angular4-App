@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY, of, mergeMap, tap } from "rxjs";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
 import { AppState } from "../store";
 import { Store } from "@ngrx/store";
 import { ToasterService } from "../services/toaster.service";
@@ -18,9 +18,7 @@ const DEFAULT_STATE: MultiCurrencyReportsState = {
     filterRequestData: null
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurrencyReportsState> {
 
     constructor(
@@ -52,7 +50,7 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
             switchMap((req) => {
                 this.patchState({ reportDataList: null, filterRequestData: null, inProgressReport: true });
                 return this.TlPlService.getMultiCurrencyReport(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res.body) {
                                 res.body.response.message && this.toaster.showSnackBar("error", res.body.response.message);
@@ -85,7 +83,7 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
         return data.pipe(
             switchMap((req) => {
                 return this.TlPlService.createMultiCurrencyReport(req.reportType, req.payload).pipe(
-                    tap(
+                    tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res.body?.file) {
                                 this.toaster.showSnackBar("success", res.body.file);

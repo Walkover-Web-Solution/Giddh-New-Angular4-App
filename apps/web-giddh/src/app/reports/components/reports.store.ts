@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { tapResponse } from "@ngrx/operators";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { SearchService } from "../../services/search.service";
 import { ToasterService } from "../../services/toaster.service";
@@ -21,9 +20,7 @@ export const DEFAULT_STATE: ReportsState = {
     salesPurchaseListInProgress: false
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ReportsComponentStore extends ComponentStore<ReportsState> implements OnDestroy {
 
     constructor(
@@ -42,7 +39,7 @@ export class ReportsComponentStore extends ComponentStore<ReportsState> implemen
 
     /**
      * Get accounts
-     *
+     * 
      * @memberof ReportsComponentStore
      */
     readonly getAccounts = this.effect((data: Observable<any>) => {
@@ -73,7 +70,7 @@ export class ReportsComponentStore extends ComponentStore<ReportsState> implemen
 
     /**
      * Get sales purchase list
-     *
+     * 
      * @memberof ReportsComponentStore
      */
     readonly getSalesPurchaseList = this.effect((data: Observable<{ payload: any, params: { branchUniqueName: string; from: string; to: string }, isSalesRegister: boolean }>) => {

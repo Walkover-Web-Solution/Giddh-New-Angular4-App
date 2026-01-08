@@ -15,17 +15,15 @@ import { ConfirmationModalConfiguration } from '../../../theme/confirmation-moda
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { OrganizationType } from '../../../models/user-login-state';
+import { cloneDeep } from '../../../lodash-optimized';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { cloneDeep, find, map, set } from '../../../lodash-optimized';
 
 @Component({
     selector: 'adjust-inventory-list',
-
     templateUrl: './adjust-inventory-list.component.html',
-    standalone: false,
     styleUrls: ['./adjust-inventory-list.component.scss'],
     providers: [AdjustInventoryListComponentStore]
 })
@@ -152,7 +150,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
 
             // Handle universal date change
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -173,9 +171,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
                 if (!this.isCompany) {
-                    if (!this.displayedColumns.includes('action')) {
-                        this.displayedColumns.push('action');
-                    }
+                    this.displayedColumns.push('action');
                 }
             }
         });
@@ -479,7 +475,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
 
     /**
      * Toggles the datepicker menu
-     *
+     * 
      * @param {boolean} isOpen - Whether to open or close the datepicker
      * @memberof AdjustInventoryListComponent
      */
@@ -637,10 +633,10 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         this.inventoryAdjustConfirmationConfiguration = this.generalService.deleteInventoryAdjustAdjustConfiguration(this.localeData, this.commonLocaleData);
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-                    width: '630px',
-                    data: {
+            width: '630px',
+            data: {
                 configuration: this.inventoryAdjustConfirmationConfiguration
-                }
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {

@@ -7,7 +7,9 @@
     <section class="audit-log" *ngFor="let log of logs$ | async; let i = index">
         <p class="audit-log-heading">
             {{ log.operationType }}
-            <span *ngIf="log && log.accountName && log.accountName != null">- {{ log.accountName }} ({{ log.accountUniqueName }})</span>
+            <span *ngIf="log && log.accountName && log.accountName != null">
+                - {{ log.accountName }} ({{ log.accountUniqueName }})</span
+            >
         </p>
         <div class="mt-1 border-top-btm clear-both">
             <div>
@@ -30,15 +32,26 @@
                 <label class="pull-left ml-4">{{ localeData?.company }}:</label>
                 <p class="pull-left ml-1">{{ log.companyName }}</p>
             </div>
-            <div *ngIf="log.log && log.log?.sharedWith && log.log?.sharedWith != undefined && log.log?.sharedWith?.name?.length > 0">
+            <div
+                *ngIf="
+                    log.log &&
+                    log.log?.sharedWith &&
+                    log.log?.sharedWith != undefined &&
+                    log.log?.sharedWith?.name?.length > 0
+                "
+            >
                 <label class="pull-left ml-4">{{ localeData?.shared_with }}:</label>
                 <p class="pull-left ml-1">
                     {{ log.log?.sharedWith?.name }}
                     <span
-                        *ngIf="log.log?.sharedWith?.email && log.log?.sharedWith?.email != null && log.log?.sharedWith?.email?.length > 0"
+                        *ngIf="
+                            log.log?.sharedWith?.email &&
+                            log.log?.sharedWith?.email != null &&
+                            log.log?.sharedWith?.email?.length > 0
+                        "
                     >
-                        | {{ log.log?.sharedWith?.email }}
-                    </span>
+                        | {{ log.log?.sharedWith?.email }}</span
+                    >
                 </p>
             </div>
             <div *ngIf="log && log.log && log.log?.description != undefined && log.log?.description?.length > 0">
@@ -51,7 +64,11 @@
             class="mt-1 table-container"
             *ngIf="log.log != null && log.log?.transactions != undefined && log.log?.transactions?.length > 0"
         >
-            <table mat-table [dataSource]="log.log.transactions" class="table border w-100">
+            <table
+                mat-table
+                [dataSource]="log.log.transactions"
+                class="table border w-100"
+            >
                 <!-- Index Column -->
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef class="col-3 text-center serial-no-column">#</th>
@@ -67,9 +84,7 @@
                 <!-- Particular Column -->
                 <ng-container matColumnDef="particular">
                     <th mat-header-cell *matHeaderCellDef class="col-3 text-center">{{ localeData?.particular }}</th>
-                    <td mat-cell *matCellDef="let transaction">
-                        {{ transaction.particular?.name }} ({{ transaction.particular?.uniqueName }})
-                    </td>
+                    <td mat-cell *matCellDef="let transaction">{{ transaction.particular?.name }} ({{ transaction.particular?.uniqueName }})</td>
                 </ng-container>
 
                 <!-- Amount Column -->
@@ -77,7 +92,12 @@
                     <th mat-header-cell *matHeaderCellDef class="col-3 text-center">{{ localeData?.amount }}</th>
                     <td mat-cell *matCellDef="let transaction">
                         <span class="d-inline-flex">
-                            <amount-field [amount]="transaction.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                            <amount-field
+                                [amount]="transaction.amount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
                         </span>
                     </td>
                 </ng-container>
@@ -94,10 +114,20 @@
         </div>
         <div
             class="mt-1 text-center table-container"
-            *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined"
+            *ngIf="
+                log &&
+                log.log &&
+                log.log.old != undefined &&
+                log.log.updated != undefined &&
+                log.log.updated.transactions != undefined
+            "
         >
             <label>{{ localeData?.updated }}</label>
-            <table mat-table [dataSource]="log.log.updated.transactions" class="giddh-table table">
+            <table
+                mat-table
+                [dataSource]="log.log.updated.transactions"
+                class="giddh-table table"
+            >
                 <!-- Index Column -->
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef class="text-center serial-no-column">#</th>
@@ -113,9 +143,7 @@
                 <!-- Particular Column -->
                 <ng-container matColumnDef="particular">
                     <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.particular }}</th>
-                    <td mat-cell *matCellDef="let transaction">
-                        {{ transaction.particular?.name }} ({{ transaction.particular?.uniqueName }})
-                    </td>
+                    <td mat-cell *matCellDef="let transaction">{{ transaction.particular?.name }} ({{ transaction.particular?.uniqueName }})</td>
                 </ng-container>
 
                 <!-- Amount Column -->
@@ -123,7 +151,12 @@
                     <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.amount }}</th>
                     <td mat-cell *matCellDef="let transaction">
                         <span class="d-inline-flex">
-                            <amount-field [amount]="transaction.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                            <amount-field
+                                [amount]="transaction.amount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
                         </span>
                     </td>
                 </ng-container>
@@ -139,7 +172,11 @@
             </table>
             <br />
             <label>{{ localeData?.old }}</label>
-            <table mat-table [dataSource]="log.log.old.transactions" class="giddh-table table">
+            <table
+                mat-table
+                [dataSource]="log.log.old.transactions"
+                class="giddh-table table"
+            >
                 <!-- Index Column -->
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef class="text-center">#</th>
@@ -155,9 +192,7 @@
                 <!-- Particular Column -->
                 <ng-container matColumnDef="particular">
                     <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.particular }}</th>
-                    <td mat-cell *matCellDef="let transaction">
-                        {{ transaction.particular?.name }} ({{ transaction.particular?.uniqueName }})
-                    </td>
+                    <td mat-cell *matCellDef="let transaction">{{ transaction.particular?.name }} ({{ transaction.particular?.uniqueName }})</td>
                 </ng-container>
 
                 <!-- Amount Column -->
@@ -165,7 +200,12 @@
                     <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.amount }}</th>
                     <td mat-cell *matCellDef="let transaction">
                         <span class="d-inline-flex">
-                            <amount-field [amount]="transaction.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                            <amount-field
+                                [amount]="transaction.amount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
                         </span>
                     </td>
                 </ng-container>
@@ -192,7 +232,11 @@
             "
         >
             <label>{{ localeData?.updated }}</label>
-            <table mat-table [dataSource]="[log.log.updated]" class="giddh-table table">
+            <table
+                mat-table
+                [dataSource]="[log.log.updated]"
+                class="giddh-table table"
+            >
                 <!-- Opening Balance Date Column -->
                 <ng-container matColumnDef="openingBalanceDate">
                     <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.opening_balance_date }}</th>
@@ -228,7 +272,11 @@
             </table>
             <br />
             <label>{{ localeData?.old }}</label>
-            <table mat-table [dataSource]="[log.log.old]" class="giddh-table table">
+            <table
+                mat-table
+                [dataSource]="[log.log.old]"
+                class="giddh-table table"
+            >
                 <!-- Opening Balance Date Column -->
                 <ng-container matColumnDef="openingBalanceDate">
                     <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.opening_balance_date }}</th>
@@ -271,8 +319,7 @@
         </div>
     </section>
     <button
-        matButton="filled"
-        class="pull-left mt-4 mb-4"
+        mat-raised-button color="primary" class="pull-left mt-4 mb-4"
         [ladda]="loadMoreInProcess$ | async"
         (click)="loadMoreLogs()"
         *ngIf="(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)"

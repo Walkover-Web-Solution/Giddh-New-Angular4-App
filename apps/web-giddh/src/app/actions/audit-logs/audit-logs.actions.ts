@@ -10,9 +10,7 @@ import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS, AUDIT_LOGS_ACTIONS_V2 } from './audit-logs.const';
 import { CustomActions } from '../../store/custom-actions';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class AuditLogsActions {
 
     public GET_LOGS$: Observable<Action> = createEffect(() => this.action$

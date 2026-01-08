@@ -3,21 +3,17 @@
         appearance="outline"
         floatLabel="always"
         class="pointer-event-none mobile-input"
-        [ngClass]="{
-            'mat-form-field-invalid': mobileControl.invalid && (mobileControl.dirty || mobileControl.touched),
-        }"
+        [ngClass]="{ 'mat-form-field-invalid': mobileControl.invalid && (mobileControl.dirty || mobileControl.touched) }"
     >
         <mat-label>{{ label }}</mat-label>
         <div class="input-wrapper d-flex column-gap-1">
             <div class="country-select-wrapper" (click)="$event.stopPropagation()">
                 <mat-select
-                    #countrySelect
                     cdkMonitorElementFocus
                     [formControl]="countryControl"
                     panelWidth="400px"
                     [id]="id ? id + '-country' : undefined"
                     (selectionChange)="onCountryChange($event.value)"
-                    (openedChange)="openedChange($event)"
                 >
                     <mat-select-trigger>
                         <span *ngIf="selectedCountry" class="selected-country-trigger">
@@ -32,7 +28,9 @@
                             </ng-template>
                             <!-- <span class="dial-code">{{ selectedCountry.dialCode }}</span> -->
                         </span>
-                        <span *ngIf="!selectedCountry" class="placeholder-text">{{ localeData?.select_country || 'Select Country' }}</span>
+                        <span *ngIf="!selectedCountry" class="placeholder-text">{{
+                            localeData?.select_country || "Select Country"
+                        }}</span>
                     </mat-select-trigger>
                     <mat-option *ngFor="let country of countries" [value]="country">
                         <span class="country-option">
@@ -49,10 +47,11 @@
                             <span class="d-inline-flex align-items-center">
                                 <span
                                     class="native-name"
-                                    *ngIf="country.nativeName !== country.name && country.nativeName !== country.dialCode"
+                                    *ngIf="
+                                        country.nativeName !== country.name && country.nativeName !== country.dialCode
+                                    "
+                                    >({{ country.nativeName }})</span
                                 >
-                                    ({{ country.nativeName }})
-                                </span>
                                 <span class="dial-code text-gray">{{ country.dialCode }}</span>
                             </span>
                         </span>
@@ -61,7 +60,6 @@
             </div>
             <input
                 #mobileInput
-                appEnterNext
                 matInput
                 type="tel"
                 class="flex-grow-1"
@@ -71,7 +69,6 @@
                 [placeholder]="placeholder || localeData?.enter_mobile_number || 'Enter mobile number'"
                 (input)="onMobileInput($event)"
                 (keypress)="onKeyPress($event)"
-                (focus)="onMobileFocus()"
                 (click)="$event.stopPropagation()"
                 autocomplete="tel"
             />
@@ -87,34 +84,34 @@
         </mat-error> -->
     </mat-form-field>
     <!-- <p class="font-size-12 text-gray">{{ getFullPhoneNumber() }}</p> -->
-    <span class="text-danger" *ngIf="mobileControl.hasError('required')">
-        {{ localeData?.mobile_number_required || 'Mobile number is required' }}
-    </span>
+    <span class="text-danger" *ngIf="mobileControl.hasError('required')">{{
+        localeData?.mobile_number_required || "Mobile number is required"
+    }}</span>
     <span class="text-danger" *ngIf="mobileControl.hasError('invalidLength')">
-        {{ getTranslatedMessage('invalid_length', { country: selectedCountry?.name }) }}
+        {{ getTranslatedMessage("invalid_length", { country: selectedCountry?.name }) }}
     </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('invalidPattern')">
-        {{ getTranslatedMessage('invalid_mobile_number', { country: selectedCountry?.name }) }}
+        {{ getTranslatedMessage("invalid_mobile_number", { country: selectedCountry?.name }) }}
     </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('wrongCountry')">
-        {{ getTranslatedMessage('wrong_country') }}
+        {{ getTranslatedMessage("wrong_country") }}
     </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('invalidNumber') || mobileControl.hasError('parseError')">
-        {{ getTranslatedMessage('invalid_number') }}
+        {{ getTranslatedMessage("invalid_number") }}
     </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('notMobile')">
         {{ getTranslatedMessage('not_mobile') }}
     </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('obviouslyInvalid')">
-        {{ getTranslatedMessage('obviously_invalid') }}
+        {{ getTranslatedMessage("obviously_invalid") }}
     </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('impossibleNumber')">
-        {{ getTranslatedMessage('impossible_number', { country: selectedCountry?.name }) }}
+        {{ getTranslatedMessage("impossible_number", { country: selectedCountry?.name }) }}
     </span>
     <!-- <span class="text-danger" *ngIf="mobileControl.hasError('parseError')">
         {{ getTranslatedMessage("parse_error") }}
     </span> -->
     <span class="text-danger" *ngIf="mobileControl.hasError('invalidFormat')">
-        {{ getTranslatedMessage('invalid_format') }}
+        {{ getTranslatedMessage("invalid_format") }}
     </span>
 </div>

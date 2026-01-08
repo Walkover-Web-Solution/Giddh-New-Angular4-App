@@ -1,11 +1,20 @@
-/** * ANGULAR 21 MATERIAL 3 SCSS VARIABLES * ==================================== * Global variables for consistent Material 3 design system * Compatible with Angular 21 theming architecture */
+/**
+ * SCSS VARIABLES
+ * ==============
+ * Global variables for consistent design system
+ */
 
-/** * MATERIAL 3 CONTAINER QUERY BREAKPOINTS * ====================================== * Variables for component-based responsive design using CSS Container Queries * These define standard container sizes for consistent Material 3 component behavior */
+/**
+ * CONTAINER QUERY BREAKPOINTS
+ * ===========================
+ * Variables for component-based responsive design using CSS Container Queries
+ * These define standard container sizes for consistent component behavior
+ */
 
 // Container query breakpoints for component sizing
-$container-xs: 250px; // Extra small - tight spaces (sidebar widgets, mobile cards)
-$container-sm: 350px; // Small cards (dashboard widgets, form sections)
-$container-md: 500px; // Medium components (data tables, content areas)
-$container-lg: 650px; // Large components (detailed forms, reports)
-$container-xl: 800px; // Extra large (full-width sections, dashboards)
+$container-xs: 250px;   // Extra small - tight spaces (sidebar widgets, mobile cards)
+$container-sm: 350px;   // Small cards (dashboard widgets, form sections)
+$container-md: 500px;   // Medium components (data tables, content areas)
+$container-lg: 650px;   // Large components (detailed forms, reports)
+$container-xl: 800px;   // Extra large (full-width sections, dashboards)
 $container-xxl: 1000px; // Maximum component size (main content areas)

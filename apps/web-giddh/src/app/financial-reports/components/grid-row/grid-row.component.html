@@ -1,11 +1,14 @@
 <div
     class="row row-2 tb-pl-bs-grid-row"
-    [ngClass]="{ 'tailed-row': groupDetail.checked }"
+    [ngClass]="{'tailed-row': groupDetail.checked}"
     [financial-accordion]="groupDetail"
     [hidden]="!groupDetail.isVisible"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
 >
-    <div class="col-4 group d-flex align-items-center row-height" [style.padding-left]="padding + 'px !important'">
+    <div
+        class="col-4 group d-flex align-items-center row-height"
+        [style.padding-left]="padding + 'px !important'"
+    >
         <mat-checkbox
             *ngIf="!groupDetail.customGroup"
             color="primary"
@@ -14,28 +17,36 @@
             [checked]="groupDetail?.checked"
             (click)="$event.stopPropagation()"
             class="tailed-checkbox"
-        ></mat-checkbox>
+        >
+        </mat-checkbox>
         <span [innerHTML]="groupDetail?.groupName | uppercase | highlight: search"></span>
     </div>
     <div class="col-2 group text-right">
         <span class="d-inline-flex">
-            <amount-field [amount]="groupDetail.forwardedBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
-        </span>
-        {{ groupDetail.forwardedBalance | recType }}
+            <amount-field
+                [amount]="groupDetail.forwardedBalance?.amount"
+                [currencySymbol]="false"
+                [currencyCode]="false"
+            >
+            </amount-field> </span
+        >{{ groupDetail.forwardedBalance | recType }}
     </div>
     <div class="col-2 group text-right">
         <span class="d-inline-flex">
-            <amount-field [amount]="groupDetail.debitTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+            <amount-field [amount]="groupDetail.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
         </span>
     </div>
     <div class="col-2 group text-right">
         <span class="d-inline-flex">
-            <amount-field [amount]="groupDetail.creditTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+            <amount-field [amount]="groupDetail.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
         </span>
     </div>
     <div class="col-2 group text-right">
         <span class="d-inline-flex">
-            <amount-field [amount]="groupDetail.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+            <amount-field [amount]="groupDetail.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
         </span>
         {{ groupDetail.closingBalance | recType }}
     </div>
@@ -68,16 +79,13 @@
 <ng-template #templateSection let-account>
     <section
         class="row-2 account overflow-visible"
-        [ngClass]="{ 'tailed-row': account.checked }"
+        [ngClass]="{'tailed-row': account.checked}"
         *ngIf="account.isVisible"
         (dblclick)="accountInfo(account, $event); menuTrigger.openMenu()"
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
-            <div
-                class="col-4 account user-select-none d-flex align-items-center row-height"
-                [style.padding-left]="padding + 20 + 'px !important'"
-            >
+            <div class="col-4 account user-select-none d-flex align-items-center row-height" [style.padding-left]="padding + 20 + 'px !important'">
                 <mat-checkbox
                     color="primary"
                     (change)="onItemChecked($event, account?.uniqueName, 'account')"
@@ -86,7 +94,10 @@
                     (click)="$event.stopPropagation()"
                     class="tailed-checkbox"
                 ></mat-checkbox>
-                <div class="p-0 border-right-none" [innerHTML]="account.name | lowercase | highlight: search"></div>
+                <div
+                    class="p-0 border-right-none"
+                    [innerHTML]="account.name | lowercase | highlight: search"
+                ></div>
                 <span class="position-absolute" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="accountDetailModalTemplate">&nbsp;</span>
                 <!-- Material Menu -->
                 <mat-menu #accountDetailModalTemplate="matMenu">
@@ -103,28 +114,41 @@
                             (modalOpened)="handleModalOpened($event)"
                             (modalClosed)="hideModal()"
                             (modalClosedTemporary)="openAccountModal.emit($event); hideModal()"
-                        ></span>
+                        >
+                        </span>
                     </ng-container>
                 </mat-menu>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field
+                        [amount]="account.openingBalance?.amount"
+                        [currencySymbol]="false"
+                        [currencyCode]="false"
+                    >
+                    </amount-field>
                 </span>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="account.debitTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="account.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="account.creditTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="account.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field
+                        [amount]="account.closingBalance?.amount"
+                        [currencySymbol]="false"
+                        [currencyCode]="false"
+                    >
+                    </amount-field>
                 </span>
                 {{ account.closingBalance | recType }}
             </div>

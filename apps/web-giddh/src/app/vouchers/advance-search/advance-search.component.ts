@@ -13,8 +13,7 @@ import { SalesPersonComponent } from '../../shared/sales-person/sales-person.com
     selector: 'app-advance-search',
     templateUrl: './advance-search.component.html',
     styleUrls: ['./advance-search.component.scss'],
-    providers: [SalesPersonComponentStore],
-    standalone:false
+    providers: [SalesPersonComponentStore]
 })
 export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -189,7 +188,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
             this.filteredSalesPersonList = res as IOption[];
         });
-
+        
         /** Search for action dropdown */
         this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
         takeUntil(this.destroyed$)).subscribe((search: string) => {

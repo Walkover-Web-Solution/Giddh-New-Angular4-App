@@ -22,8 +22,7 @@ import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 @Component({
     selector: 'invoice-bulk-update-modal-component',
     templateUrl: './invoiceBulkUpdateModal.component.html',
-    styleUrls: ['./invoiceBulkUpdateModal.component.scss'],
-    standalone:false
+    styleUrls: ['./invoiceBulkUpdateModal.component.scss']
 })
 
 export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDestroy {
@@ -203,7 +202,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                 }
                 this.checkDefaultTemplateSignature(this.defaultTemplates, templateType);
                 this.allTemplatesOptions = [];
-                (Array.isArray(templates) ? templates : []).forEach(tmpl => {
+                templates.forEach(tmpl => {
                     this.allTemplatesOptions.push({
                         label: tmpl.name, value: tmpl?.uniqueName
                     });
@@ -371,12 +370,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             let selectedVouchers = [];
 
             if (this.voucherApiVersion === 2) {
-                (Array.isArray(this.selectedInvoicesLists) ? this.selectedInvoicesLists : []).forEach(item => {
+                this.selectedInvoicesLists.forEach(item => {
                     selectedVouchers.push(item?.uniqueName);
                 });
                 requestModel.voucherUniqueNames = selectedVouchers;
             } else {
-                (Array.isArray(this.selectedInvoicesLists) ? this.selectedInvoicesLists : []).forEach(item => {
+                this.selectedInvoicesLists.forEach(item => {
                     selectedVouchers.push(item?.voucherNumber);
                 });
                 requestModel.voucherNumbers = selectedVouchers;
@@ -384,7 +383,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
 
             let invoiceUniqueName = [];
             if (this.selectedInvoicesLists?.length) {
-                (Array.isArray(this.selectedInvoicesLists) ? this.selectedInvoicesLists : []).forEach(invoice => {
+                this.selectedInvoicesLists.forEach(invoice => {
                     if (invoice.voucherNumber) {
                         invoiceUniqueName.push(invoice.voucherNumber)
                     }

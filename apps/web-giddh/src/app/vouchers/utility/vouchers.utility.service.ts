@@ -5,14 +5,10 @@ import { API_BULK_FETCH_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM } from "../../
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
-// Removed fast-clean dependency - using native JavaScript methods
+import * as cleaner from 'fast-clean';
 import { ReceiptItem } from "../../models/api-models/recipt";
 
-@Injectable(
-    {
-        providedIn: 'root'
-    }
-)
+@Injectable()
 export class VouchersUtilityService {
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
 
@@ -374,8 +370,9 @@ export class VouchersUtilityService {
                 delete entry.otherTax;
             });
 
-            // Replace fast-clean with native JavaScript null/undefined cleanup
-            invoiceForm = this.cleanObject(invoiceForm);
+            invoiceForm = cleaner?.clean(invoiceForm, {
+                nullCleaner: true
+            });
 
             return invoiceForm;
         }
@@ -389,37 +386,9 @@ export class VouchersUtilityService {
      * @memberof VouchersUtilityService
      */
     public cleanObject(object: any): any {
-        return this.removeNullUndefined(object);
-    }
-
-    /**
-     * Remove null and undefined values from object (replaces fast-clean functionality)
-     * @param obj Object to clean
-     * @returns Cleaned object
-     */
-    private removeNullUndefined(obj: any): any {
-        if (obj === null || obj === undefined) {
-            return obj;
-        }
-        
-        if (Array.isArray(obj)) {
-            return obj.map(item => this.removeNullUndefined(item)).filter(item => item !== null && item !== undefined);
-        }
-        
-        if (typeof obj === 'object') {
-            const cleaned: any = {};
-            for (const key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    const value = this.removeNullUndefined(obj[key]);
-                    if (value !== null && value !== undefined) {
-                        cleaned[key] = value;
-                    }
-                }
-            }
-            return cleaned;
-        }
-        
-        return obj;
+        return cleaner?.clean(object, {
+            nullCleaner: true
+        });
     }
 
     private getAddress(address: any): string {

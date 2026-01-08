@@ -5,12 +5,8 @@ import { LocaleService } from "./locale.service";
 import { CommonActions } from "../actions/common.actions";
 import { AppState } from "../store";
 import { Store } from "@ngrx/store";
-import { remove } from '../lodash-optimized';
-import { Configuration } from '../app.constant';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class PageLeaveUtilityService {
     constructor(
         private dialog: MatDialog,
@@ -65,42 +61,9 @@ export class PageLeaveUtilityService {
      */
     public removeBrowserConfirmationDialog(): void {
         this.store.dispatch(this.commonAction.hasUnsavedChanges(false));
-        if (Configuration.isElectron) {
-            try {
-                let electronIpcAvailable = false;
-
-                // Try electronAPI first (secure context)
-                if ((window as any).electronAPI && (window as any).electronAPI.send) {
-                    try {
-                        (window as any).electronAPI.send('has-unsaved-changes', false);
-                        electronIpcAvailable = true;
-                    } catch (ipcError) {
-
-                    }
-                }
-
-                // Try legacy electron require (fallback)
-                if (!electronIpcAvailable && (window as any).require) {
-                    try {
-                        const electron = (window as any).require('electron');
-                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
-                            electron.ipcRenderer.send('has-unsaved-changes', false);
-                            electronIpcAvailable = true;
-                        }
-                    } catch (requireError) {
-
-                    }
-                }
-
-                // Fallback to regular browser behavior if IPC not available
-                if (!electronIpcAvailable) {
-
-                    window.onbeforeunload = null;
-                }
-            } catch (error) {
-
-                window.onbeforeunload = null;
-            }
+        if ((window as any).require) {
+            const { ipcRenderer } = (window as any).require('electron');
+            ipcRenderer.send('has-unsaved-changes', false);
         } else {
             window.onbeforeunload = null;
         }
@@ -117,42 +80,10 @@ export class PageLeaveUtilityService {
             this.store.dispatch(this.commonAction.hasUnsavedChanges(true));
         }
 
-        if (Configuration.isElectron) {
-            try {
-                let electronIpcAvailable = false;
-
-                // Try electronAPI first (secure context)
-                if ((window as any).electronAPI && (window as any).electronAPI.send) {
-                    try {
-                        (window as any).electronAPI.send('has-unsaved-changes', true);
-                        electronIpcAvailable = true;
-                    } catch (ipcError) {
-
-                    }
-                }
-
-                // Try legacy electron require (fallback)
-                if (!electronIpcAvailable && (window as any).require) {
-                    try {
-                        const electron = (window as any).require('electron');
-                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
-                            electron.ipcRenderer.send('has-unsaved-changes', true);
-                            electronIpcAvailable = true;
-                        }
-                    } catch (requireError) {
-
-                    }
-                }
-
-                // Fallback to regular browser behavior if IPC not available
-                if (!electronIpcAvailable) {
-
-                    window.onbeforeunload = () => 'true';
-                }
-            } catch (error) {
-
-                window.onbeforeunload = () => 'true';
-            }
+        if ((window as any).require) {
+            // Running in Electron
+            const { ipcRenderer } = (window as any).require('electron');
+            ipcRenderer.send('has-unsaved-changes', true);
         } else {
             window.onbeforeunload = () => 'true';
         }

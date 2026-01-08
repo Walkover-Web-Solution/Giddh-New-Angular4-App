@@ -14,7 +14,6 @@ import { GeneralService } from '../../services/general.service';
     selector: 'file-return',
     styleUrls: ['./file-return.component.scss'],
     templateUrl: './file-return.component.html',
-    standalone:false
 })
 export class FileReturnComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -104,10 +103,10 @@ export class FileReturnComponent implements OnInit, OnDestroy {
 
         this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData);
         let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
-                    width: '630px',
-                    data: {
+            width: '630px',
+            data: {
                 configuration: this.fileReturnConfirmationConfiguration
-                },
+            },
             disableClose: true
         });
 
@@ -121,7 +120,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
                     } else {
                         if (res?.errors) {
                             let errorMessage = '';
-                            (Array.isArray(res.errors) ? res.errors : []).forEach(error => errorMessage += error.message + '\n');
+                            res.errors.forEach(error => errorMessage += error.message + '\n');
                             this.toaster.showSnackBar('error', errorMessage);
                         } else if (res?.message) {
                             this.toaster.showSnackBar('error', res.message);

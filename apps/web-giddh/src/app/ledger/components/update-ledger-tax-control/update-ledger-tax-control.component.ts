@@ -38,8 +38,7 @@ export class UpdateLedgerTaxData {
     selector: 'update-ledger-tax-control',
     templateUrl: 'update-ledger-tax-control.component.html',
     styleUrls: [`./update-ledger-tax-control.component.scss`],
-    providers: [TAX_CONTROL_VALUE_ACCESSOR],
-    standalone:false
+    providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, AfterViewInit {
 
@@ -213,7 +212,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
             }
         }
         if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type && this.allowedSelectionOfAType.type.length) {
-            (Array.isArray(this.allowedSelectionOfAType.type) ? this.allowedSelectionOfAType.type : []).forEach(taxType => {
+            this.allowedSelectionOfAType.type.forEach(taxType => {
                 const selectedTaxes = this.taxRenderData?.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
                 if (selectedTaxes && selectedTaxes.length >= this.allowedSelectionOfAType.count) {

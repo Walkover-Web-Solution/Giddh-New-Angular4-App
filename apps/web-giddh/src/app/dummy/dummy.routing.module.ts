@@ -4,14 +4,13 @@ import { DummyComponent } from "./dummy.component";
 
 @NgModule({
     imports: [
-        RouterModule.forChild([ { path: '',
-        component: DummyComponent }
-    
+        RouterModule.forChild([
+            {
+                path: '', component: DummyComponent
+            }
         ])
     ],
-    exports: [
-        RouterModule
-    ]
+    exports: [RouterModule]
 })
 export class DummyRoutingModule {
 }

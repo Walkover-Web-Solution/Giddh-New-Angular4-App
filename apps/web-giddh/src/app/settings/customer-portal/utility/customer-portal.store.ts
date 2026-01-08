@@ -1,7 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsIntegrationService } from "../../../services/settings.integration.service";
@@ -43,7 +43,7 @@ export class CustomerPortalComponentStore extends ComponentStore<CustomerPortalS
             switchMap(({ method, payload }) => {
                 this.patchState({ payuDetailsInProgress: true });
                 return this.settingsIntegrationService.payuCrudOperation(method, payload).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 if (method === HttpMethod.POST || method === HttpMethod.DELETE) {

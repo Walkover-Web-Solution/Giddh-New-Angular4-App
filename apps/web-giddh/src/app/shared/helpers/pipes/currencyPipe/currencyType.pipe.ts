@@ -7,7 +7,7 @@ import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { REMOVE_TRAILING_ZERO_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { giddhRoundOff } from '../../helperFunctions';
 
-@Pipe({ name: 'giddhCurrency', pure: true, standalone: false })
+@Pipe({ name: 'giddhCurrency', pure: true })
 
 export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

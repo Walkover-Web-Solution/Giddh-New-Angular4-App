@@ -16,8 +16,7 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
 @Component({
     selector: 'aside-menu-product-service',
     styleUrls: ['./aside-menu-product-service.component.scss'],
-    templateUrl: './aside-menu-product-service.component.html',
-    standalone: false
+    templateUrl: './aside-menu-product-service.component.html'
 })
 export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -173,7 +172,6 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
             this.isAddStockOpen = false;
             this.isAddServiceOpen = false;
         }
-        this.focusButton();
     }
 
     /**
@@ -189,24 +187,6 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
             {
                 ...ASIDE_PANE_CONFIG,
                 hasBackdrop: false
-            }
-        );
-        this.accountTemplateRef.afterClosed().subscribe(() => {
-            this.focusButton();
-        });
-    }
-
-    /**
-     * Find the first visible button in the component
-     *
-     * @memberof AsideMenuProductServiceComponent
-     */
-    private focusButton(): void {
-         setTimeout(() => {
-                const visibleButton = document.querySelector('.aside-panel-ledger button[matButton="filled"]:not([hidden])') as HTMLButtonElement;
-                if (visibleButton) {
-                    visibleButton.focus();
-                }
-        }, 200);
+            });
     }
 }

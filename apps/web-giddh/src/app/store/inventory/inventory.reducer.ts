@@ -5,7 +5,6 @@ import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { cloneDeep, concat, filter, findIndex, map, orderBy } from '../../lodash-optimized';
 
 /**
  * Keeping Track of the CompanyState
@@ -185,7 +184,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
 
         case InventoryActionsConst.GetInventoryGroupResponse:
             if ((action.payload as BaseResponse<StockGroupResponse, string>)?.status === 'success') {
-                groupArray = cloneDeep(state.groupsWithStocks);
+                groupArray = _.cloneDeep(state.groupsWithStocks);
                 group = (action.payload as BaseResponse<StockGroupResponse, string>).body;
                 if (groupArray) {
                     for (let el of groupArray) {
@@ -220,7 +219,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
 
         case InventoryActionsConst.InventoryGroupToggleOpen:
             groupUniqueName = action.payload;
-            groupArray = cloneDeep(state.groupsWithStocks);
+            groupArray = _.cloneDeep(state.groupsWithStocks);
             if (groupUniqueName && groupArray) {
                 for (let el of groupArray) {
                     activeGroupData = setRecursivlyActive(el.childStockGroups ? el.childStockGroups : [], groupUniqueName, null);
@@ -252,7 +251,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case InventoryActionsConst.AddNewGroupResponse:
             let groupStockResponse = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
             if (groupStockResponse?.status === 'success') {
-                groupArray = cloneDeep(state.groupsWithStocks);
+                groupArray = _.cloneDeep(state.groupsWithStocks);
                 if (groupStockResponse.request.isSelfParent || !groupStockResponse.request.isSubGroup) {
                     groupArray.push({
                         name: groupStockResponse.body?.name,
@@ -319,8 +318,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case InventoryActionsConst.UpdateGroupResponse:
             let resp = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
             if (resp?.status === 'success') {
-                groupArray = cloneDeep(state.groupsWithStocks);
-                let activeGroup = cloneDeep(state.activeGroup);
+                groupArray = _.cloneDeep(state.groupsWithStocks);
+                let activeGroup = _.cloneDeep(state.activeGroup);
                 if (resp.request.isSelfParent || !resp.request.isSubGroup) {
                     groupArray.map(gr => {
                         if (gr?.uniqueName === activeGroup?.uniqueName) {
@@ -371,7 +370,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case InventoryActionsConst.RemoveGroupResponse:
             let removeGrpResp = action.payload as BaseResponse<string, string>;
             if (removeGrpResp?.status === 'success') {
-                groupArray = cloneDeep(state.groupsWithStocks);
+                groupArray = _.cloneDeep(state.groupsWithStocks);
                 for (let el of groupArray) {
                     if (el?.uniqueName === removeGrpResp.request) {
                         groupArray = groupArray?.filter(grp => grp?.uniqueName !== removeGrpResp.request);
@@ -434,7 +433,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case InventoryActionsConst.CreateStockResponse:
             let createStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
             if (createStockResp?.status === 'success') {
-                groupArray = cloneDeep(state.groupsWithStocks);
+                groupArray = _.cloneDeep(state.groupsWithStocks);
                 if (groupArray && groupArray?.length) {
                     for (let el of groupArray) {
                         if (el?.uniqueName === createStockResp.queryString.stockGroupUniqueName) {
@@ -478,8 +477,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case InventoryActionsConst.UpdateStockResponse:
             let updateStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
             if (updateStockResp?.status === 'success') {
-                groupArray = cloneDeep(state.groupsWithStocks);
-                let activeGroupUniqueName = cloneDeep(updateStockResp.queryString.stockGroupUniqueName);
+                groupArray = _.cloneDeep(state.groupsWithStocks);
+                let activeGroupUniqueName = _.cloneDeep(updateStockResp.queryString.stockGroupUniqueName);
                 updateStockIteminGroupArray(groupArray, activeGroupUniqueName, updateStockResp);
                 return Object.assign({}, state, {
                     groupsWithStocks: groupArray,
@@ -495,7 +494,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case InventoryActionsConst.RemoveStockResponse:
             let remStockResp: BaseResponse<string, string> = action.payload;
             if (remStockResp?.status === 'success') {
-                groupArray = cloneDeep(state.groupsWithStocks);
+                groupArray = _.cloneDeep(state.groupsWithStocks);
                 removeStockItemAndReturnIt(groupArray, remStockResp.queryString.stockGroupUniqueName, remStockResp.queryString.stockUniqueName, null);
 
                 return Object.assign({}, state, {
@@ -533,7 +532,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                         }
                     }
                 }
-                groupArray = orderBy(groupArray, ['name']);
+                groupArray = _.orderBy(groupArray, ['name']);
                 if (action.payload?.queryString?.page > 1) {
                     return Object.assign({}, state, { getStocksInProgress: false, stocksTotalPages: (action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body?.totalPages, groupsWithStocks: [...state.groupsWithStocks.concat(groupArray)] });
                 } else {
@@ -563,7 +562,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             return Object.assign({}, state, { moveStockSuccess: false });
         case InventoryActionsConst.MoveStockResponse:
             let moveStockResp: BaseResponse<string, string> = action.payload;
-            groupArray = cloneDeep(state.groupsWithStocks);
+            groupArray = _.cloneDeep(state.groupsWithStocks);
             removeStockItemAndReturnIt(groupArray, moveStockResp.queryString.activeGroup?.uniqueName, moveStockResp.queryString.stockUniqueName, null);
             return Object.assign({}, state, {
                 groupsWithStocks: groupArray,

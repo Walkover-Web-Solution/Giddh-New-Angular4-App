@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdjustInventoryComponentStore } from './utility/adjust-inventory.store';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -18,12 +18,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AdjustmentInventory, DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG } from '../../../app.constant';
-import { cloneDeep, concat, filter, forEach, get, set } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'adjust-inventory',
-
     templateUrl: './adjust-inventory.component.html',
-    standalone: false,
     styleUrls: ['./adjust-inventory.component.scss'],
     providers: [AdjustInventoryComponentStore]
 })
@@ -136,8 +134,7 @@ export class AdjustInventoryComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private location: Location,
-        private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private changeDetectorRef: ChangeDetectorRef
+        private settingsFinancialYearActions: SettingsFinancialYearActions
     ) {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         /** Activate router observable */
@@ -266,7 +263,6 @@ export class AdjustInventoryComponent implements OnInit {
         this.componentStore.stockGroupClosingBalance$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && !this.referenceNumber) {
                 this.stockGroupClosingBalance.closing = response;
-                this.changeDetectorRef.detectChanges();
             }
         });
         this.dataSource = new MatTableDataSource<any>([]);
@@ -317,7 +313,6 @@ export class AdjustInventoryComponent implements OnInit {
                 } else {
                     this.dataSource = new MatTableDataSource<any>([]);
                 }
-                this.changeDetectorRef.detectChanges();
             });
 
         /** Create inventory success observable */
@@ -454,7 +449,6 @@ export class AdjustInventoryComponent implements OnInit {
         this.showHideDiv = false;
         setTimeout(() => {
             this.showHideDiv = true;
-            this.changeDetectorRef.detectChanges();
         });
         this.adjustInventoryCreateEditForm.updateValueAndValidity();
     }
@@ -727,7 +721,7 @@ export class AdjustInventoryComponent implements OnInit {
             const inventoryMap = new Map(this.inventoryData.map(item => [item.variant.uniqueName, item]));
             const mainResult = [];
             const variantWiseOnly = [];
-            (Array.isArray(this.dataSource.data) ? this.dataSource.data : []).forEach(result => {
+            this.dataSource.data.forEach(result => {
                 const updatedVariant = inventoryMap.get(result.variant.uniqueName);
                 if (updatedVariant) {
                     mainResult.push(updatedVariant);
@@ -929,7 +923,7 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public masterToggle(): void {
         if (this.isEntityStockGroup) {
-            (Array.isArray(this.dataSource?.filteredData) ? this.dataSource?.filteredData : []).forEach(row => this.selection.select(row));
+            this.dataSource?.filteredData.forEach(row => this.selection.select(row));
         } else {
             if (this.isAllSelected()) {
                 this.selection.clear();
@@ -938,7 +932,7 @@ export class AdjustInventoryComponent implements OnInit {
                     ? this.dataSource.filteredData.filter(data => data?.closingAfterAdjustment)
                     : this.dataSource.filteredData;
 
-                (Array.isArray(data) ? data : []).forEach(row => this.selection.select(row));
+                data.forEach(row => this.selection.select(row));
             }
         }
     }

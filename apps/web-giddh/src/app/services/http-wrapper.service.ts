@@ -4,11 +4,8 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { LoaderService } from "../loader/loader.service";
 import { GeneralService } from "./general.service";
-import { get, keys, map } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class HttpWrapperService {
     constructor(
         private http: HttpClient,

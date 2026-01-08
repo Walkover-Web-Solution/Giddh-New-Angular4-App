@@ -5,16 +5,13 @@ import { UserAuthenticated } from '../decorators/UserAuthenticated';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([ { path: '',
-        component: SignupComponent,
-        canActivate: [UserAuthenticated
-    ]
+        RouterModule.forChild([
+            {
+                path: '', component: SignupComponent, canActivate: [UserAuthenticated]
             }
         ])
     ],
-    exports: [
-        RouterModule
-    ]
+    exports: [RouterModule]
 })
 export class SignupRoutingModule {
 }

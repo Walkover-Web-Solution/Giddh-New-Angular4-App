@@ -7,13 +7,10 @@ import { PageComponent } from "./page.component";
     imports: [
         RouterModule.forChild([
             {
-                path: '',
-                component: PageComponent,
-                canActivate: [UserAuthenticated]
+                path: '', component: PageComponent, canActivate: [UserAuthenticated]
             }
         ])
-    ],
-    exports: [RouterModule]
+    ]
 })
 
 export class PageRoutingModule {

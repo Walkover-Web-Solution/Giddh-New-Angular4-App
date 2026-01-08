@@ -8,17 +8,15 @@ import { CustomStockUnitAction } from "../../actions/inventory/custom-stock-unit
 import { Router } from "@angular/router";
 import { cloneDeep } from "../../lodash-optimized";
 import { ToasterService } from "../../services/toaster.service";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, NgZone } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { GeneralService } from "../../services/general.service";
-import { Angular21ChangeDetectionService } from "../../services/angular21-change-detection.service";
 
 
 @Component({
     selector: 'unit-mapping',
     templateUrl: './unit-mapping.component.html',
     styleUrls: ['./unit-mapping.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Default,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class UnitMappingComponent implements OnInit, OnDestroy {
@@ -48,9 +46,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
         private customStockAction: CustomStockUnitAction,
         private router: Router,
         private changeDetection: ChangeDetectorRef,
-        private generalService: GeneralService,
-        private ngZone: NgZone,
-        private changeDetectionService: Angular21ChangeDetectionService
+        private generalService: GeneralService
     ) {
         this.stockUnit$ = this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
@@ -76,10 +72,10 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
                 this.unitsArray = [];
                 let giddhUnits = resp[1];
                 let gstUnit = resp[0]?.body;
-                (Array.isArray(giddhUnits) ? giddhUnits : []).forEach((res: any) => {
+                giddhUnits.forEach(res => {
                     this.unitsArray.push({ giddhUnit: res?.code, mappedGstUnit: gstUnit[res?.code], giddhUnitName: res?.name });
                 });
-                this.changeDetectionService.triggerChangeDetection(this.changeDetection, this.ngZone);
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -120,7 +116,6 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
                     label: `${result.code}-${result.name}`
                 }
             });
-            this.changeDetectionService.triggerChangeDetection(this.changeDetection, this.ngZone);
         });
     }
 
@@ -139,10 +134,8 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
         this.commonService.updateStockUnits(unitsArray).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.toasty.showSnackBar("success", response?.body);
-                this.changeDetectionService.triggerChangeDetection(this.changeDetection, this.ngZone);
             } else {
                 this.toasty.showSnackBar("error", response?.message);
-                this.changeDetectionService.safeChangeDetection(this.changeDetection, this.ngZone);
             }
         });
 

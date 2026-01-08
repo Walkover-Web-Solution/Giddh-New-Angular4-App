@@ -32,8 +32,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 @Component({
     selector: 'invetory-group-stock-report',
     templateUrl: './group.stockreport.component.html',
-    styleUrls: ['./group.stockreport.component.scss'],
-    standalone: false
+    styleUrls: ['./group.stockreport.component.scss']
 })
 
 export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
@@ -246,7 +245,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 const stockGroup = cloneDeep(a);
                 const stockList = [];
                 this.activeGroupName = stockGroup.name;
-                (Array.isArray(stockGroup.stocks) ? stockGroup.stocks : []).forEach((stock) => {
+                stockGroup.stocks.forEach((stock) => {
                     stockList.push({ label: `${stock.name} (${stock?.uniqueName})`, value: stock?.uniqueName });
                 });
                 this.stockList$ = observableOf(stockList);
@@ -441,7 +440,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         newEntities.push(this.selectedCmp);
                     }
-                    (Array.isArray(newEntities) ? newEntities : []).forEach(element => {
+                    newEntities.forEach(element => {
                         element['label'] = element.name;
                     });
                     this.entities$ = observableOf(orderBy(newEntities, 'name'));
@@ -529,7 +528,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     /**
      * Open aside pane dialog
-     *
+     * 
      * @memberof InventoryGroupStockReportComponent
      */
     public openAsidePaneDialog(): void {
@@ -538,7 +537,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     /**
      * Open branch transfer dialog
-     *
+     * 
      * @memberof InventoryGroupStockReportComponent
      */
     public openBranchTransferDialog(): void {
@@ -599,20 +598,16 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public showProductSearchBox() {
         this.showProductSearch = !this.showProductSearch;
         setTimeout(() => {
-            if (this.productName && this.productName.nativeElement) {
-                this.productName.nativeElement.focus();
-                this.productName.nativeElement.value = null;
-            }
+            this.productName?.nativeElement.focus();
+            this.productName.nativeElement.value = null;
         }, 200);
     }
 
     public showSourceSearchBox() {
         this.showSourceSearch = !this.showSourceSearch;
         setTimeout(() => {
-            if (this.sourceName && this.sourceName.nativeElement) {
-                this.sourceName.nativeElement.focus();
-                this.sourceName.nativeElement.value = null;
-            }
+            this.sourceName?.nativeElement.focus();
+            this.sourceName.nativeElement.value = null;
         }, 200);
     }
 
@@ -632,10 +627,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.showProductSearch = false;
         this.GroupStockReportRequest.stockName = null;
         this.GroupStockReportRequest.source = null;
-        if (this.productName && this.productName.nativeElement) {
-            this.productName.nativeElement.value = null;
-        }
-        if (this.sourceName && this.sourceName.nativeElement) {
+        this.productName.nativeElement.value = null;
+        if (this.sourceName) {
             this.sourceName.nativeElement.value = null;
         }
         //Reset Date with universal date
@@ -793,7 +786,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         } else {
             this.GroupStockReportRequest.number = null;
         }
-        if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || (this.productName && this.productName.nativeElement && this.productName.nativeElement.value) || this.GroupStockReportRequest.entity || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.number) {
+        if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || this.productName?.nativeElement.value || this.GroupStockReportRequest.entity || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.number) {
             this.isFilterCorrect = true;
         } else {
             this.isFilterCorrect = false;

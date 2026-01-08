@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'ledger/export-ledger'"
     (localeData)="localeData = $event"
@@ -11,11 +11,13 @@
         </div>
         <mat-dialog-content class="dialog-body max-height-65vh" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
-                <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
-                <div class="clear-both">
+                <p class="mb-2">
+                    {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
+                </p>
+                <div class="pb-5 clear-both">
                     <div class="form-inline">
                         <div class="form-group">
-                            <label class="w120 justify-content-start">{{ commonLocaleData?.app_date_range }}:</label>
+                            <label class="w120 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
                             <div class="custom-datepicker-wrapper">
                                 <div
                                     class="custom-datepicker"
@@ -50,7 +52,7 @@
                         <span>{{ exportRequest.ledgerView ? localeData?.t_view : localeData?.statement_view }}</span>
                     </mat-slide-toggle>
                 </div>
-                <div class="clear-both export-type" [ngClass]="{ 'pb-4': emailTypeSelected !== emailTypeBillToBill }">
+                <div class="pb-4 clear-both export-type">
                     <label class="w125">{{ commonLocaleData?.app_type }}:</label>
                     <div>
                         <mat-radio-group
@@ -59,33 +61,33 @@
                             name="emailTypeSelected"
                             [(ngModel)]="emailTypeSelected"
                         >
-                            <mat-radio-button id="detailed" (change)="handleReportTypeChange($event)" [value]="emailTypeDetail">
-                                {{ localeData?.ledger }}
-                            </mat-radio-button>
+                            <mat-radio-button
+                                id="detailed"
+                                (change)="handleReportTypeChange($event)"
+                                [value]="emailTypeDetail"
+                                >{{ localeData?.ledger }}</mat-radio-button
+                            >
                             <mat-radio-button
                                 *ngIf="!exportRequest.ledgerView"
                                 id="columnar"
                                 (change)="handleReportTypeChange($event)"
                                 [value]="emailTypeColumnar"
+                                >{{ localeData?.columnar }}</mat-radio-button
                             >
-                                {{ localeData?.columnar }}
-                            </mat-radio-button>
                             <mat-radio-button
                                 id="bill"
                                 *ngIf="voucherApiVersion === 2 && enableBillToBill && !exportRequest.ledgerView"
                                 (change)="handleReportTypeChange($event)"
                                 [value]="emailTypeBillToBill"
+                                >{{ localeData?.bill_to_bill }}</mat-radio-button
                             >
-                                {{ localeData?.bill_to_bill }}
-                            </mat-radio-button>
                             <mat-radio-button
                                 *ngIf="!exportRequest.ledgerView"
                                 id="voucher"
                                 (change)="handleReportTypeChange($event)"
                                 [value]="'voucher'"
+                                >{{ commonLocaleData?.app_voucher }}</mat-radio-button
                             >
-                                {{ commonLocaleData?.app_voucher }}
-                            </mat-radio-button>
                         </mat-radio-group>
                     </div>
                 </div>
@@ -93,8 +95,16 @@
                     <div class="pb-2 clear-both export-type d-flex column-gap-15">
                         <div class="d-flex align-items-center">
                             <label class="w125">{{ localeData?.attachment }}:</label>
-                            <mat-slide-toggle color="primary" name="attachmentExport" [(ngModel)]="exportRequest.attachmentExport">
-                                <span>{{ exportRequest.attachmentExport ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}</span>
+                            <mat-slide-toggle
+                                color="primary"
+                                name="attachmentExport"
+                                [(ngModel)]="exportRequest.attachmentExport"
+                            >
+                                <span>{{
+                                    exportRequest.attachmentExport
+                                        ? commonLocaleData?.app_yes
+                                        : commonLocaleData?.app_no
+                                }}</span>
                             </mat-slide-toggle>
                         </div>
                         <i
@@ -125,17 +135,29 @@
                             </div>
                         </div>
                     </div>
-                    <mat-divider [ngClass]="{ 'mt-2': exportRequest.attachmentExport && !selectedFormatList?.trim().length }"></mat-divider>
+                    <mat-divider
+                        [ngClass]="{ 'mt-2': exportRequest.attachmentExport && !selectedFormatList?.trim().length }"
+                    ></mat-divider>
                     <div class="pb-4 pt-2 clear-both export-type">
                         <label class="w125">{{ commonLocaleData?.app_voucher }}:</label>
-                        <mat-slide-toggle color="primary" name="voucherExport" [(ngModel)]="exportRequest.voucherExport">
-                            <span>{{ exportRequest.voucherExport ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}</span>
+                        <mat-slide-toggle
+                            color="primary"
+                            name="voucherExport"
+                            [(ngModel)]="exportRequest.voucherExport"
+                        >
+                            <span>{{
+                                exportRequest.voucherExport ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
                         </mat-slide-toggle>
                     </div>
                     <ng-container *ngIf="exportRequest.voucherExport">
                         <div class="pb-2 mb-3">
                             <mat-radio-group name="mergePdfSelection" [(ngModel)]="exportRequest.mergePdf">
-                                <mat-radio-button color="primary" [value]="false" aria-label="Export as multiple PDFs in single zip file">
+                                <mat-radio-button
+                                    color="primary"
+                                    [value]="false"
+                                    aria-label="Export as multiple PDFs in single zip file"
+                                >
                                     {{ localeData?.multiple_pdf }}
                                 </mat-radio-button>
                                 <mat-radio-button color="primary" [value]="true" aria-label="Export as single PDF">
@@ -145,7 +167,7 @@
                         </div>
                         <div
                             [ngClass]="{
-                                'mat-form-field-invalid': !exportRequest.copyTypes?.length && !isValidForm,
+                                'mat-form-field-invalid': !exportRequest.copyTypes?.length && !isValidForm
                             }"
                         >
                             <mat-form-field appearance="outline" class="w-100 mb-3">
@@ -164,13 +186,23 @@
                         </div>
                     </ng-container>
                 </ng-container>
-                <div class="pb-4 export-type" [hidden]="['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)">
-                    <label class="w125 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}:</label>
-                    <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType" (ngModelChange)="onLedgerView($event)">
-                        <mat-radio-button id="csv" [value]="'CSV'" *ngIf="!exportRequest.ledgerView">
-                            {{ commonLocaleData?.app_csv }}
-                        </mat-radio-button>
-                        <mat-radio-button id="excel" [value]="'XLSX'">{{ commonLocaleData?.app_excel }}</mat-radio-button>
+                <div
+                    class="pb-4 export-type"
+                    [hidden]="['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)"
+                >
+                    <label class="w125 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
+                    <mat-radio-group
+                        color="primary"
+                        name="fileType"
+                        [(ngModel)]="fileType"
+                        (ngModelChange)="onLedgerView($event)"
+                    >
+                        <mat-radio-button id="csv" [value]="'CSV'" *ngIf="!exportRequest.ledgerView">{{
+                            commonLocaleData?.app_csv
+                        }}</mat-radio-button>
+                        <mat-radio-button id="excel" [value]="'XLSX'">{{
+                            commonLocaleData?.app_excel
+                        }}</mat-radio-button>
                     </mat-radio-group>
                 </div>
                 <ng-template [ngIf]="exportRequest.ledgerView">
@@ -179,16 +211,21 @@
                             class="col position-relative"
                             [ngClass]="{
                                 'export-ledger-right-tview': inputData?.isLedgerAccountAllowsMultiCurrency,
-                                'export-border': inputData?.isLedgerAccountAllowsMultiCurrency,
+                                'export-border': inputData?.isLedgerAccountAllowsMultiCurrency
                             }"
                         >
-                            <div class="pb-4 export-type" [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)">
+                            <div
+                                class="pb-4 export-type"
+                                [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)"
+                            >
                                 <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                                 <label class="radio-inline p-0">
                                     <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
-                                        <span class="pull-left">
-                                            {{ exportRequest.sort ? commonLocaleData?.app_ascending : commonLocaleData?.app_descending }}
-                                        </span>
+                                        <span class="pull-left">{{
+                                            exportRequest.sort
+                                                ? commonLocaleData?.app_ascending
+                                                : commonLocaleData?.app_descending
+                                        }}</span>
                                     </mat-slide-toggle>
                                 </label>
                             </div>
@@ -203,13 +240,15 @@
                                             name="showInAccountCurrency"
                                             [(ngModel)]="exportRequest.showInAccountCurrency"
                                         >
-                                            <span class="pull-left">
-                                                {{
-                                                    !exportRequest.showInAccountCurrency
-                                                        ? commonLocaleData?.app_company + ' ' + commonLocaleData?.app_currency
-                                                        : commonLocaleData?.app_account + ' ' + commonLocaleData?.app_currency
-                                                }}
-                                            </span>
+                                            <span class="pull-left">{{
+                                                !exportRequest.showInAccountCurrency
+                                                    ? commonLocaleData?.app_company +
+                                                      " " +
+                                                      commonLocaleData?.app_currency
+                                                    : commonLocaleData?.app_account +
+                                                      " " +
+                                                      commonLocaleData?.app_currency
+                                            }}</span>
                                         </mat-slide-toggle>
                                     </label>
                                 </div>
@@ -223,13 +262,18 @@
                         [ngClass]="{ 'export-ledger-right': inputData?.isLedgerAccountAllowsMultiCurrency }"
                     >
                         <ng-template [ngIf]="!exportRequest.ledgerView">
-                            <div class="pb-4 export-type" [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)">
+                            <div
+                                class="pb-4 export-type"
+                                [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)"
+                            >
                                 <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                                 <label class="radio-inline p-0">
                                     <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
-                                        <span class="pull-left">
-                                            {{ exportRequest.sort ? commonLocaleData?.app_ascending : commonLocaleData?.app_descending }}
-                                        </span>
+                                        <span class="pull-left">{{
+                                            exportRequest.sort
+                                                ? commonLocaleData?.app_ascending
+                                                : commonLocaleData?.app_descending
+                                        }}</span>
                                     </mat-slide-toggle>
                                 </label>
                             </div>
@@ -242,20 +286,25 @@
                                             name="showInAccountCurrency"
                                             [(ngModel)]="exportRequest.showInAccountCurrency"
                                         >
-                                            <span class="pull-left">
-                                                {{
-                                                    !exportRequest.showInAccountCurrency
-                                                        ? commonLocaleData?.app_company + ' ' + commonLocaleData?.app_currency
-                                                        : commonLocaleData?.app_account + ' ' + commonLocaleData?.app_currency
-                                                }}
-                                            </span>
+                                            <span class="pull-left">{{
+                                                !exportRequest.showInAccountCurrency
+                                                    ? commonLocaleData?.app_company +
+                                                      " " +
+                                                      commonLocaleData?.app_currency
+                                                    : commonLocaleData?.app_account +
+                                                      " " +
+                                                      commonLocaleData?.app_currency
+                                            }}</span>
                                         </mat-slide-toggle>
                                     </label>
                                 </div>
                             </ng-container>
                         </ng-template>
                         <ng-container
-                            *ngIf="!exportRequest.ledgerView && !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)"
+                            *ngIf="
+                                !exportRequest.ledgerView &&
+                                !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)
+                            "
                         >
                             <div class="pb-4">
                                 <label class="w125">{{ localeData?.entry_no }} :</label>
@@ -265,9 +314,11 @@
                                         name="showEntryVoucherNo"
                                         [(ngModel)]="exportRequest.showEntryVoucherNo"
                                     >
-                                        <span class="pull-left">
-                                            {{ exportRequest.showEntryVoucherNo ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
-                                        </span>
+                                        <span class="pull-left">{{
+                                            exportRequest.showEntryVoucherNo
+                                                ? commonLocaleData?.app_yes
+                                                : commonLocaleData?.app_no
+                                        }}</span>
                                     </mat-slide-toggle>
                                 </label>
                             </div>
@@ -279,9 +330,11 @@
                                         name="showVoucherNumber"
                                         [(ngModel)]="exportRequest.showVoucherNumber"
                                     >
-                                        <span class="pull-left">
-                                            {{ exportRequest.showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
-                                        </span>
+                                        <span class="pull-left">{{
+                                            exportRequest.showVoucherNumber
+                                                ? commonLocaleData?.app_yes
+                                                : commonLocaleData?.app_no
+                                        }}</span>
                                     </mat-slide-toggle>
                                 </label>
                             </div>
@@ -289,35 +342,56 @@
                     </div>
                     <div class="col">
                         <ng-container
-                            *ngIf="!exportRequest.ledgerView && !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)"
+                            *ngIf="
+                                !exportRequest.ledgerView &&
+                                !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)
+                            "
                         >
                             <div class="pb-4">
                                 <label class="w125">{{ localeData?.voucher_total }}:</label>
                                 <label class="radio-inline p-0">
-                                    <mat-slide-toggle color="primary" name="showVoucherTotal" [(ngModel)]="exportRequest.showVoucherTotal">
-                                        <span class="pull-left">
-                                            {{ exportRequest.showVoucherTotal ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
-                                        </span>
+                                    <mat-slide-toggle
+                                        color="primary"
+                                        name="showVoucherTotal"
+                                        [(ngModel)]="exportRequest.showVoucherTotal"
+                                    >
+                                        <span class="pull-left">{{
+                                            exportRequest.showVoucherTotal
+                                                ? commonLocaleData?.app_yes
+                                                : commonLocaleData?.app_no
+                                        }}</span>
                                     </mat-slide-toggle>
                                 </label>
                             </div>
                             <div class="pb-4">
                                 <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                                 <label class="radio-inline p-0">
-                                    <mat-slide-toggle color="primary" name="showEntryVoucher" [(ngModel)]="exportRequest.showEntryVoucher">
-                                        <span class="pull-left">
-                                            {{ exportRequest.showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
-                                        </span>
+                                    <mat-slide-toggle
+                                        color="primary"
+                                        name="showEntryVoucher"
+                                        [(ngModel)]="exportRequest.showEntryVoucher"
+                                    >
+                                        <span class="pull-left">{{
+                                            exportRequest.showEntryVoucher
+                                                ? commonLocaleData?.app_yes
+                                                : commonLocaleData?.app_no
+                                        }}</span>
                                     </mat-slide-toggle>
                                 </label>
                             </div>
                             <div class="pb-4">
                                 <label class="w125">{{ localeData?.description }}:</label>
                                 <label class="radio-inline p-0">
-                                    <mat-slide-toggle color="primary" name="showDescription" [(ngModel)]="exportRequest.showDescription">
-                                        <span class="pull-left">
-                                            {{ exportRequest.showDescription ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
-                                        </span>
+                                    <mat-slide-toggle
+                                        color="primary"
+                                        name="showDescription"
+                                        [(ngModel)]="exportRequest.showDescription"
+                                    >
+                                        <span class="pull-left">{{
+                                            exportRequest.showDescription
+                                                ? commonLocaleData?.app_yes
+                                                : commonLocaleData?.app_no
+                                        }}</span>
                                     </mat-slide-toggle>
                                 </label>
                             </div>
@@ -325,9 +399,17 @@
                         <div class="pb-4" [hidden]="emailTypeSelected !== 'columnar'">
                             <label class="w125">{{ localeData?.cr_dr }}</label>
                             <label class="radio-inline p-0">
-                                <mat-slide-toggle color="primary" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">
-                                    <span class="pull-left" *ngIf="balanceTypeAsSign">{{ localeData?.plus_minus_toggle }}</span>
-                                    <span class="pull-right" *ngIf="!balanceTypeAsSign">{{ localeData?.cr_dr_toggle }}</span>
+                                <mat-slide-toggle
+                                    color="primary"
+                                    name="balanceTypeAsSign"
+                                    [(ngModel)]="balanceTypeAsSign"
+                                >
+                                    <span class="pull-left" *ngIf="balanceTypeAsSign">{{
+                                        localeData?.plus_minus_toggle
+                                    }}</span>
+                                    <span class="pull-right" *ngIf="!balanceTypeAsSign">{{
+                                        localeData?.cr_dr_toggle
+                                    }}</span>
                                 </mat-slide-toggle>
                             </label>
                         </div>
@@ -338,29 +420,34 @@
         <mat-dialog-actions align="end">
             <div class="pb-3 d-flex column-gap-1">
                 <button
-                    matButton="filled"
+                    mat-raised-button
+                    color="primary"
                     (click)="exportLedger()"
                     [disabled]="
-                        isLoading || (emailTypeSelected === 'voucher' && !exportRequest.attachmentExport && !exportRequest.voucherExport)
+                        isLoading ||
+                        (emailTypeSelected === 'voucher' &&
+                            !exportRequest.attachmentExport &&
+                            !exportRequest.voucherExport)
                     "
                 >
                     {{ commonLocaleData?.app_download }}
                 </button>
                 <button
-                    matButton="filled"
+                    mat-raised-button
+                    color="primary"
                     class="show-columnar-button"
                     [hidden]="emailTypeSelected !== 'columnar'"
                     (click)="showColumnarReport()"
                 >
                     {{ commonLocaleData?.app_show }}
                 </button>
-                <button matButton="outlined" mat-dialog-close type="button">
+                <button mat-stroked-button mat-dialog-close type="button">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>
         </mat-dialog-actions>
     </div>
-</div>
+</ng-container>
 <!-- Angular Material datepicker menu -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
     <ng-template matMenuContent>
@@ -380,6 +467,7 @@
             (closeCalender)="toggleGiddhDatepicker(false)"
             [keepCalendarOpeningWithRange]="false"
             [showRangeLabelOnInput]="false"
-        ></app-datepicker-wrapper>
+        >
+        </app-datepicker-wrapper>
     </ng-template>
 </mat-menu>

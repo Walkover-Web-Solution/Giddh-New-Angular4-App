@@ -6,8 +6,7 @@ import { take } from 'rxjs/operators';
 @Component({
     selector: 'confirm-modal',
     templateUrl: './confirm-modal.component.html',
-    styleUrls: ['./confirm-modal.component.scss'],
-    standalone: false
+    styleUrls: ['./confirm-modal.component.scss']
 })
 export class ConfirmModalComponent implements OnInit, OnDestroy {
     @Input() public title: string = '';

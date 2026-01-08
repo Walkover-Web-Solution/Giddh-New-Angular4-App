@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, NgZone, ChangeDetectionStrategy } from '@angular/core';
-import { Angular21ChangeDetectionService } from '../services/angular21-change-detection.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { AppState } from '../store';
 import { Store, select } from '@ngrx/store';
@@ -14,14 +13,11 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
 import { ASIDE_PANE_CONFIG, GetBifurcationType, IOption } from '../app.constant';
 import { GeneralService } from '../services/general.service';
-import { find, slice } from '../lodash-optimized';
 
 @Component({
     selector: 'new-vs-old-invoices',
     templateUrl: './new-vs-old-Invoices.component.html',
     styleUrls: [`./new-vs-old-Invoices.component.scss`],
-    standalone: false,
-    changeDetection: ChangeDetectionStrategy.Default
 })
 
 export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
@@ -66,10 +62,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private newVsOldInvoicesService: NewVsOldInvoicesService,
         private dialog: MatDialog,
-        private generalService: GeneralService,
-        private changeDetectorRef: ChangeDetectorRef,
-        private ngZone: NgZone,
-        private changeDetectionService: Angular21ChangeDetectionService
+        private generalService: GeneralService
     ) {
         this.NewVsOldInvoicesQueryRequest = new NewVsOldInvoicesRequest();
     }
@@ -86,7 +79,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 for (startYear; startYear <= endYear; startYear++) {
                     this.yearOptions.push({ label: String(startYear), value: String(startYear) });
                 }
-                this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
             }
         });
 
@@ -103,7 +95,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                     this.selectedmonth = ("0" + (dayjs(response[1]).format("M"))).slice(-2)?.toString();
                     this.getSalesBifurcation();
                 }
-                this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
             }
         });
     }
@@ -171,9 +162,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 this.totalSalesAmount = this.newVsOldInvoicesData?.totalSales?.total;
                 this.newSalesInvCount = this.newVsOldInvoicesData?.newSales?.invoiceCount;
                 this.totalSalesInvCount = this.newVsOldInvoicesData?.totalSales?.invoiceCount;
-                this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
-            } else {
-                this.changeDetectionService.safeChangeDetection(this.changeDetectorRef, this.ngZone);
             }
             this.isLoading = false;
 
@@ -208,7 +196,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
             this.quaterOptions = [{ label: this.localeData?.quarters?.q1, value: '01' }, { label: this.localeData?.quarters?.q2, value: '02' }, { label: this.localeData?.quarters?.q3, value: '03' }, { label: this.localeData?.quarters?.q4, value: '04' }];
 
             this.getBifurcationClientsString();
-            this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
         }
     }
 
@@ -227,7 +214,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         if (this.columnName) {
             this.bifurcationClients = this.localeData?.bifurcation_clients?.replace("[COLUMN_NAME]", this.columnName);
         }
-        this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
     }
 
     /**

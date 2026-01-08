@@ -1,4 +1,4 @@
-<div appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <div class="app-container">
         <div class="wrapper">
             <div class="d-flex justify-content-between">
@@ -6,11 +6,17 @@
                     <strong>{{ domain.name }}</strong>
                 </p>
                 <div>
-                    <img class="giddh-logo" [src]="giddhLogoSrc" width="127" height="25" alt="brand-logo" />
+                    <img
+                        class="giddh-logo"
+                        [src]="giddhLogoSrc"
+                        width="127"
+                        height="25"
+                        alt="brand-logo"
+                    />
                 </div>
             </div>
-            <mat-card class="mat-card mat-focus-indicator domain-setting-card mt-3 mb-3 mat-elevation-z3">
-                <div class="d-flex align-items-center justify-content-start mb-2">
+            <mat-card class="mat-card mat-focus-indicator domain-setting-card mt-3 mb-3 mat-elevation-z3"
+                ><div class="d-flex align-items-center justify-content-start mb-2">
                     <p class="domain-text">
                         {{ commonLocaleData?.domain_verification }}
                     </p>
@@ -42,9 +48,9 @@
                                                     [matTooltip]="commonLocaleData?.app_copy"
                                                 ></i>
                                             </span>
-                                            <span class="success ml-1 copied-url" *ngIf="element.isCopiedHostName">
-                                                {{ commonLocaleData?.app_copied }}
-                                            </span>
+                                            <span class="success ml-1 copied-url" *ngIf="element.isCopiedHostName">{{
+                                                commonLocaleData?.app_copied
+                                            }}</span>
                                         </div>
                                     </td>
                                 </ng-container>
@@ -61,9 +67,9 @@
                                                 [matTooltip]="commonLocaleData?.app_copy"
                                             ></i>
                                         </span>
-                                        <span class="success ml-1 copied-url" *ngIf="element.isCopiedValue">
-                                            {{ commonLocaleData?.app_copied }}
-                                        </span>
+                                        <span class="success ml-1 copied-url" *ngIf="element.isCopiedValue">{{
+                                            commonLocaleData?.app_copied
+                                        }}</span>
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="status">
@@ -74,9 +80,12 @@
                                         <span
                                             [ngClass]="{ 'verified': element?.status, 'unverified': !element?.status }"
                                             class="status font-size-12"
+                                            >{{
+                                                element.status
+                                                    ? commonLocaleData?.app_verified
+                                                    : commonLocaleData?.app_unverified
+                                            }}</span
                                         >
-                                            {{ element.status ? commonLocaleData?.app_verified : commonLocaleData?.app_unverified }}
-                                        </span>
                                     </td>
                                 </ng-container>
 
@@ -91,7 +100,7 @@
                         </div>
                     </div>
                 </mat-card-content>
-            </mat-card>
+                </mat-card>
         </div>
     </div>
-</div>
+</ng-container>

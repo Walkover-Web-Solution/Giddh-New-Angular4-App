@@ -10,8 +10,7 @@ export interface IAutoCompleteScrollEvent {
 
 @Directive({
     selector: 'mat-autocomplete[optionsScroll]',
-    exportAs: 'mat-autocomplete[optionsScroll]',
-    standalone: false
+    exportAs: 'mat-autocomplete[optionsScroll]'
 })
 
 export class OptionsScrollDirective implements OnDestroy {

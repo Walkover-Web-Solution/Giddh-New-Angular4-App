@@ -18,8 +18,7 @@ import { IOption } from "../../app.constant";
     selector: 'gst-setting',
     templateUrl: './gst-setting.component.html',
     styleUrls: ['./gst-setting.component.scss'],
-    providers: [GstSettingComponentStore],
-    standalone: false
+    providers: [GstSettingComponentStore]
 })
 
 export class GstSettingComponent implements OnInit, OnDestroy {
@@ -107,7 +106,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 let mappings = this.gstSettingForm.get('gstData') as FormArray;
                 mappings.clear();
                 this.lutItemList = response;
-                (Array.isArray(response) ? response : []).forEach((item) => {
+                response.forEach((item) => {
                     this.addNewLutItem(item);
                 });
             }
@@ -262,16 +261,16 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             mappings.removeAt(index);
         } else {
             const dialogRef = this.dialog.open(ConfirmModalComponent, {
-                        width: '540px',
-                        data: {
+                width: '540px',
+                data: {
                     title: this.commonLocaleData?.app_confirmation,
-                        body: this.localeData?.confirm_delete_message,
-                        ok: this.commonLocaleData?.app_yes,
-                        cancel: this.commonLocaleData?.app_no
-                    },
+                    body: this.localeData?.confirm_delete_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                },
                 disableClose: true
             });
-
+            
             dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     if (index === 0) {

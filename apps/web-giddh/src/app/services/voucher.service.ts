@@ -21,12 +21,9 @@ import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
 import { COMMON_API } from "./apiurls/common.api";
 import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
 import { LEDGER_API } from "./apiurls/ledger.api";
-import { concat, forEach, get, includes, keys } from '../lodash-optimized';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class VoucherService {
     private companyUniqueName: string;
 

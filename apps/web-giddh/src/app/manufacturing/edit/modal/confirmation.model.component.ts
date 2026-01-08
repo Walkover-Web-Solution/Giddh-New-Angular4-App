@@ -2,8 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
     selector: 'delete-manufacturing-confirmation-modal',
-    templateUrl: './confirmation.model.component.html',
-    standalone:false
+    templateUrl: './confirmation.model.component.html'
 })
 
 export class DeleteManufacturingConfirmationModelComponent {

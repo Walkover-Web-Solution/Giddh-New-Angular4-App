@@ -1,17 +1,15 @@
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { DummyComponent } from "./dummy.component";
 import { DummyRoutingModule } from "./dummy.routing.module";
-import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 
 @NgModule({
     declarations: [
         DummyComponent
     ],
     imports: [
-        CommonModule,
-        DummyRoutingModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        DummyRoutingModule
     ],
     exports: [
         DummyComponent

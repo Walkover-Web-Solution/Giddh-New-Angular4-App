@@ -79,8 +79,7 @@ export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note
 
 @Component({
     templateUrl: './accounting.component.html',
-    styleUrls: ['./accounting.component.scss'],
-    standalone:false
+    styleUrls: ['./accounting.component.scss']
 })
 
 export class AccountingComponent implements OnInit, OnDestroy {

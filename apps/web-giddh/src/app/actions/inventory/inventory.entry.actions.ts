@@ -10,9 +10,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InventoryEntry, InventoryUser } from '../../models/api-models/Inventory-in-out';
 import { Observable } from 'rxjs';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class InventoryEntryActions {
 
     public addNewEntry$: Observable<Action> = createEffect(() => this.action$

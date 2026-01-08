@@ -14,11 +14,10 @@ import { GeneralActions } from './general/general.actions';
 import { CompanyActions } from './company.actions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ActivatedRoute, Router } from '@angular/router';
+import { sortBy } from '../lodash-optimized';
 import { COMMON_ACTIONS } from './common.const';
 import { AppState } from '../store';
 import { Inject, Injectable, NgZone } from '@angular/core';
-import { environment } from '../../environments/environment.generated';
-import { Configuration } from '../app.constant';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -34,11 +33,8 @@ import { SettingsProfileActions } from "./settings/profile/settings.profile.acti
 import { LocaleService } from '../services/locale.service';
 import { COUNTRY_REGION_MAP } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
-import { findIndex, get, sortBy, startsWith } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class LoginActions {
 
     public static RESET_SOCIAL_LOGOUT_ATTEMPT = 'RESET_SOCIAL_LOGOUT_ATTEMPT';
@@ -346,23 +342,14 @@ export class LoginActions {
     public logoutSuccess$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.LogOut),
-            map((action: CustomActions) => {
-                if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
-                    window.location.href = this._generalService.getGiddhRegionUrl();
-                } else if (Configuration.isElectron) {
-                    this._router.navigate(['/login']).then(() => {
-                        // Wait for navigation to complete before reloading
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 500);
-                    }).catch(() => {
-                        // Fallback if navigation fails
-                        setTimeout(() => {
-                            window.location.href = '/login';
-                        }, 100);
-                    });
+            switchMap(async (action: CustomActions) => {
+                if (PRODUCTION_ENV && !isElectron) {
+                    window.location.href = await this._generalService.getGiddhRegionUrl();
+                } else if (isElectron) {
+                    this._router.navigate(['/login']);
+                    window.location.reload();
                 } else {
-                    window.location.href = (this.serviceConfig.AppUrl || environment.AppUrl) + 'login/';
+                    window.location.href = await this._generalService.getGiddhRegionUrl();
                 }
                 return { type: 'EmptyAction' };
             })));

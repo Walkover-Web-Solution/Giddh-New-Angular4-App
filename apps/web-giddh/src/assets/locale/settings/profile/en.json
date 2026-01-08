@@ -77,7 +77,7 @@
     "domain_registrar": "Login to your Domain Registrar to add the following details in your DNS setting.",
     "invalid_email": "[EMAIL] is invalid email!",
     "primary_domain_set": "Primary domain set successfully",
-    "add_domain_successfully": "Domain added successfully",
+    "add_domain_succesfully": "Domain added successfully",
     "delete_domain":"Domain deleted successfully",
     "export_type": "Export Type",
     "select_export_type": "Select Export Type",

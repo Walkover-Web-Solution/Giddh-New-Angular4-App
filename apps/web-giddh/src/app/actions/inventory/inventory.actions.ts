@@ -13,11 +13,8 @@ import { Router } from '@angular/router';
 import { CustomActions } from '../../store/custom-actions';
 import { BranchTransferResponse, LinkedStocksResponse, TransferDestinationRequest, TransferProductsRequest } from '../../models/api-models/BranchTransfer';
 import { SalesActions } from '../sales/sales.action';
-import { forEach } from '../../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class InventoryAction {
     /** Holds Get bulk list stock key name  */
     public static GET_BULK_STOCK_LIST = 'GetBulkStockList';
@@ -595,7 +592,7 @@ export class InventoryAction {
     public getBulkStockListResponse(value: BaseResponse<any, any>): CustomActions {
         const data = value.status === 'error' ? value : value.body;
         if (data?.results && data?.results.length > 0) {
-            (Array.isArray(data.results) ? data.results : []).forEach((result: any) => {
+            data.results.forEach((result: any) => {
                 result.variantName = result?.variantName ? result.variantName : null,
                     result.variantUniqueName = result?.variantUniqueName ? result.variantUniqueName : null,
                     result.stockName = result?.stockName ? result.stockName : null,

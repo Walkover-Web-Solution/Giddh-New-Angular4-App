@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TransferComponent } from '../transfer/transfer.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ViewSubscriptionComponentStore } from './utility/view-subscription.store';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 
 @Component({
     selector: 'verify-ownership-dilaog',
     templateUrl: './verify-ownership-dilaog.component.html',
     styleUrls: ['./verify-ownership-dilaog.component.scss'],
-    providers: [SubscriptionComponentStore],
-    standalone: false
+    providers: [SubscriptionComponentStore]
 })
 export class VerifyOwnershipDialogComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

@@ -23,8 +23,7 @@ import { CustomerPortalComponentStore } from './utility/customer-portal.store';
     selector: 'customer-portal',
     templateUrl: './customer.portal.component.html',
     styleUrls: ['./customer.portal.component.scss'],
-    providers: [CustomerPortalComponentStore],
-    standalone: false
+    providers: [CustomerPortalComponentStore]
 })
 export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /* This will hold local JSON data */
@@ -600,13 +599,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
 
     public deleteRazorPayDetails() {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '585px',
-                    data: {
+            width: '585px',
+            data: {
                 title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.collection?.delete_credentials_message,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                body: this.localeData?.collection?.delete_credentials_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
         });
 
         confirmModalDialogRef.afterClosed().subscribe(response => {
@@ -676,13 +675,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      */
     public deletePaypalDetails(): void {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '585px',
-                    data: {
+            width: '585px',
+            data: {
                 title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.collection?.delete_credentials_message,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                body: this.localeData?.collection?.delete_credentials_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
         });
 
         confirmModalDialogRef.afterClosed().subscribe(response => {
@@ -952,13 +951,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      */
     public deletePayuDetails(): void {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '585px',
-                    data: {
+            width: '585px',
+            data: {
                 title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.collection?.delete_credentials_message,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                body: this.localeData?.collection?.delete_credentials_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
         });
 
         confirmModalDialogRef.afterClosed().subscribe(response => {

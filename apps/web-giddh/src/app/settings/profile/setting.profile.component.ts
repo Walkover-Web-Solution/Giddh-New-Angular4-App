@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ToasterService } from '../../services/toaster.service';
@@ -21,11 +21,10 @@ import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
-import { Configuration, IOption, PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { IOption, PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 import { ExportFileNameComponent } from '../export-file-name/export-file-name.component';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -37,9 +36,7 @@ export interface IGstObj {
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
     styleUrls: ['./setting.profile.component.scss'],
-    host: { 'class': 'settings-profile' },
-    changeDetection: ChangeDetectionStrategy.Default,
-    standalone:false
+    host: { 'class': 'settings-profile' }
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
     /** True if we need to hide tab and show manage address section only */
@@ -183,7 +180,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private companyService: CompanyService,
         @Inject(ServiceConfig) private serviceConfig,
         private changeDetectorRef: ChangeDetectorRef,
-        private ngZone: NgZone,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private _toasty: ToasterService,
@@ -202,7 +198,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
-                this.triggerChangeDetection();
             }
         });
 
@@ -261,13 +256,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             });
         this.store.pipe(select(appStore => appStore.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.businessType) {
-                this.companyProfileObj = {
-                    ...this.companyProfileObj,
-                    businessTypes: res.businessType.map(businessType => ({
-                        label: businessType, value: businessType
-                    }))
-                };
-                this.triggerChangeDetection();
+                this.companyProfileObj.businessTypes = res.businessType.map(businessType => ({
+                    label: businessType, value: businessType
+                }));
             }
         });
 
@@ -280,20 +271,18 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             } else if ((params['referrer']) === 'export') {
                 this.activeTabIndex = 2;
             }
-            this.triggerChangeDetection();
         });
-          this.imgPath = Configuration.isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/warehouse-vector.svg';
+
+        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
-                    this.triggerChangeDetection();
                 });
             }
             this.activeLocale = response?.value;
-            this.triggerChangeDetection();
         });
     }
 
@@ -335,7 +324,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
-                this.triggerChangeDetection();
             }
         });
 
@@ -365,7 +353,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         ledgerView: response.ledgerView
                     }
                 }
-                this.triggerChangeDetection();
             }
         });
         this.store.pipe(select(appState => appState.settings.currentBranch), takeUntil(this.destroyed$)).subscribe((response) => {
@@ -374,14 +361,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
                     this.handleBranchProfileResponse(response);
                 }
-                this.triggerChangeDetection();
             }
         });
 
         this.store.pipe(take(1)).subscribe(s => {
             if (s.session.user) {
                 this.countryCode = s.session.user.countryCode ? s.session.user.countryCode : '91';
-                this.triggerChangeDetection();
             }
         });
 
@@ -402,7 +387,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         } else {
             this.handleTabChanged("export");
         }
-        this.triggerChangeDetection();
     }
 
     public addGst() {
@@ -438,7 +422,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
             companyDetails.addresses.push(newGstObj);
             this.companyProfileObj = companyDetails;
-            this.triggerChangeDetection();
         } else {
             this._toasty.errorToast('Please enter valid ' + this.formFields['taxName'].label + ' to add more ' + this.formFields['taxName'].label + ' details.');
         }
@@ -451,7 +434,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (selectedState && selectedState.value) {
             profileObj.addresses[indx].stateName = '';
             this.companyProfileObj = profileObj;
-            this.triggerChangeDetection();
         }
         this.checkGstDetails();
     }
@@ -508,7 +490,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (this.companyProfileObj && this.companyProfileObj.addresses) {
             let profileObj = this.companyProfileObj;
             let defaultGstObjIndx;
-            (Array.isArray(profileObj.addresses) ? profileObj.addresses : []).forEach((obj, indx) => {
+            profileObj.addresses.forEach((obj, indx) => {
                 if (profileObj.addresses[indx] && profileObj.addresses[indx].isDefault) {
                     defaultGstObjIndx = indx;
                 }
@@ -574,23 +556,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public onReset() {
         this.initProfileObj();
-    }
-
-    /**
-     * Triggers change detection for Angular 21 compatibility
-     */
-    private triggerChangeDetection(): void {
-        // Use setTimeout to avoid calling detectChanges during component initialization
-        setTimeout(() => {
-            try {
-                this.ngZone.run(() => {
-                    this.changeDetectorRef.detectChanges();
-                });
-            } catch (error) {
-                // Silently handle change detection errors during initialization
-
-            }
-        }, 0);
     }
 
     public ngOnDestroy() {
@@ -1038,7 +1003,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this._toasty.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
-            this.triggerChangeDetection();
+            this.changeDetectorRef.detectChanges();
         }, () => {
             this.isAddressChangeInProgress = false;
         });
@@ -1137,7 +1102,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleDefaultAddress(addressDetails: any): void {
-        (Array.isArray(this.addresses) ? this.addresses : []).forEach(add => {
+        this.addresses.forEach(add => {
             if (add?.uniqueName !== addressDetails?.uniqueName) {
                 add.isDefault = false;
             }
@@ -1254,7 +1219,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false
             };
             this.addresses = this.settingsUtilityService.getFormattedBranchAddresses(response.addresses);
-            this.triggerChangeDetection();
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -1276,7 +1241,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             };
             this.settingsProfileService.getCompanyAddresses(method, paginationParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.shouldShowAddressLoader = false;
-        this.triggerChangeDetection();
                 if (response && response.body && response.status === 'success') {
                     this.updateAddressPagination(response.body);
                     this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results);

@@ -1,5 +1,10 @@
-<div appTranslate [file]="'settings/integration'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <div class="p-3 clear-both mb-2">
+<ng-container
+    appTranslate
+    [file]="'settings/integration'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class=" p-3 clear-both mb-2">
         <div class="row pb-2 mt-3">
             <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-1 col-xxl-2 d-flex align-items-center">
                 <label class="font-size-15 font-weight-semibold">{{ localeData?.tally?.api_url }}</label>
@@ -7,11 +12,15 @@
             <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 d-flex justify-content-start">
                 <div class="form-group mb-0">
                     <div class="d-flex align-items-center justify-content-end">
-                        <a class="tally-url text-underline" [href]="apiUrl" target="_blank">{{ apiUrl }}</a>
+                        <a class="tally-url text-underline" [href]="apiUrl" target="_blank"
+                            >{{ apiUrl }}
+                        </a>
                         <span class="input-group-btn ml-1 cursor-pointer">
                             <i class="icon-copy-file" (click)="copyUrl()" [matTooltip]="commonLocaleData?.app_copy"></i>
                         </span>
-                        <span class="success copied-url copy-text-position" *ngIf="isCopied">{{ commonLocaleData?.app_copied }}</span>
+                        <span class="success copied-url copy-text-position" *ngIf="isCopied">{{
+                            commonLocaleData?.app_copied
+                        }}</span>
                     </div>
                 </div>
             </div>
@@ -19,16 +28,16 @@
         <div class="form-group clear-both mb-0 doc-link ml-3">
             <ul>
                 <li>
-                    <a target="_blank" class="btn link-color" [routerLink]="['/pages/user-details/auth-key']">
-                        {{ localeData?.email?.auth_key_label }}
-                    </a>
+                    <a target="_blank" class="btn link-color" [routerLink]="['/pages/user-details/auth-key']">{{
+                        localeData?.email?.auth_key_label
+                    }}</a>
                 </li>
                 <li>
-                    <a target="_blank" class="btn link-color" [href]="syncWithTallyHelpDocUrl">
-                        {{ localeData?.tally?.help_documentation }}
-                    </a>
+                    <a target="_blank" class="btn link-color" [href]="syncWithTallyHelpDocUrl">{{
+                        localeData?.tally?.help_documentation
+                    }}</a>
                 </li>
             </ul>
         </div>
     </div>
-</div>
+</ng-container>

@@ -8,8 +8,7 @@ import { Directive, HostBinding, HostListener } from "@angular/core";
  */
 @Directive({
     selector: '[hasFocus]',
-    exportAs: 'hasFocus',
-    standalone: false
+    exportAs: 'hasFocus'
 })
 export class HasFocusDirective {
     /** True, if the host element has focus. Adds the class 'has-focus' on the host element */

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { LoaderModule } from "../loader/loader.module";
 import { HeaderModule } from "../shared/header/header.module";
@@ -21,8 +21,7 @@ import { PageRoutingModule } from "./page.routing.module";
     ],
     exports: [
         PageComponent
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    ]
 })
 
 export class PageModule {

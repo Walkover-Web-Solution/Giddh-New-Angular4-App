@@ -2,8 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
     name: 'myNumberToWordsPipe',
-    pure: true,
-    standalone: false
+    pure: true
 })
 
 export class NumberToWordsPipe implements PipeTransform {

@@ -16,9 +16,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { ComponentCanDeactivate } from '../../../decorators/page-leave-confirmation-guard';
 import { CommonActions } from '../../../actions/common.actions';
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
-import { filter, forEach, includes } from '../../../lodash-optimized';
 
 /**
  * Data with nested structure.
@@ -43,9 +40,7 @@ interface SidebarFlatNode {
 }
 @Component({
     selector: 'inventory-sidebar',
-    
     templateUrl: './inventory-sidebar.component.html',
-    standalone: false,
     styleUrls: [`./inventory-sidebar.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -131,7 +126,7 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
      * @memberof InventorySidebarComponent
     */
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentUrl = this.router.url;
         this.setupNavigationListener();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {

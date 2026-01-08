@@ -1,4 +1,5 @@
 import { Inject, Injectable, Optional } from "@angular/core";
+import { environment } from "src/environments/environment";
 import { Observable, catchError, map } from "rxjs";
 import { HttpWrapperService } from "../../../services/http-wrapper.service";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
@@ -9,9 +10,7 @@ import { API_BULK_FETCH_LIMIT, HttpMethod, HttpMethodType } from "../../../app.c
 import { SALES_PERSON_API, SALES_PERSON_ARCHIVE_API } from "./sales.person.api";
 import { SalesPersonDeleteArchivedModel } from "./sales-person.constant";
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SalesPersonService {
     constructor(
         private http: HttpWrapperService,
@@ -29,7 +28,7 @@ export class SalesPersonService {
      * @memberof SalesPersonService
      */
     public salesPerson(httpMethod: HttpMethodType = HttpMethod.GET, model: any = {}, uniqueName: string = null, params: any = {}): Observable<BaseResponse<any, any>> {
-        let url = this.config?.apiUrl +
+        let url = this.config?.apiUrl + 
         SALES_PERSON_API?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         if (uniqueName) {
             url += `/${encodeURIComponent(uniqueName)}`;

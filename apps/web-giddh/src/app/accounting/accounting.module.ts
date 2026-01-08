@@ -11,7 +11,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
-// import { InventoryModule } from './../inventory/inventory.module';
+import { InventoryModule } from './../inventory/inventory.module';
 import { SharedModule } from './../shared/shared.module';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
@@ -29,7 +29,6 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
-import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 @NgModule({
     declarations: [
@@ -56,7 +55,7 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         SharedModule,
         ClickOutsideModule,
         ElementViewChildModule,
-        // InventoryModule,
+        InventoryModule,
         NgxMaskModule.forRoot(),
         FormsModule,
         FormFieldsModule,
@@ -68,8 +67,7 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         KeyboardShortutModule,
         ScrollingModule,
         MatTooltipModule,
-        MatInputModule,
-        HamburgerMenuModule
+        MatInputModule
     ],
 })
 export class AccountingModule {

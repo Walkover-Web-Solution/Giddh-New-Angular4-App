@@ -3,8 +3,7 @@ import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permis
 
 @Component({
     selector: 'delete-role-confirmation-model',
-    templateUrl: './confirmation.model.component.html',
-    standalone:false
+    templateUrl: './confirmation.model.component.html'
 })
 
 export class DeleteRoleConfirmationModelComponent implements OnInit {

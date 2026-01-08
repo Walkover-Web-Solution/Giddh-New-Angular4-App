@@ -19,8 +19,7 @@ import { IOption } from '../../../app.constant';
 @Component({
     selector: 'inventory-custom-stock',
     templateUrl: './inventory.customstock.component.html',
-    styleUrls: ['./inventory.customstock.component.scss'],
-    standalone: false
+    styleUrls: ['./inventory.customstock.component.scss']
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChanges {
     /** Instance of custom Unit Form */
@@ -148,7 +147,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                     this.addDefaultMapping();
                 } else {
                     this.customUnitObj.mappings = [];
-                    (Array.isArray(res.mappings) ? res.mappings : []).forEach(mapping => {
+                    res.mappings.forEach(mapping => {
                         this.customUnitObj.mappings.push(mapping);
                     });
                 }
@@ -181,8 +180,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      */
     public saveUnit(): any {
         this.isValidForm = true;
-        let customMapping = cloneDeep(this.customUnitObj);
-        (Array.isArray(customMapping.mappings) ? customMapping.mappings : []).forEach((mapping) => {
+        let customMapping = cloneDeep(this.customUnitObj)
+        customMapping.mappings.forEach((mapping) => {
             let checkValidation: boolean = false;
             if (mapping?.stockUnitY?.code || mapping?.quantity || mapping?.stockUnitX?.code) {
                 checkValidation = true;

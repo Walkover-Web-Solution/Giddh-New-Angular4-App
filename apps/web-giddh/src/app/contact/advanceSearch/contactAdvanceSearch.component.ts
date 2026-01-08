@@ -6,8 +6,7 @@ import { ContactAdvanceSearchCommonModal } from '../../models/api-models/Contact
 @Component({
     selector: 'app-contact-advance-search-component',
     templateUrl: './contactAdvanceSearch.component.html',
-    styleUrls: [`./contactAdvanceSearch.component.scss`],
-    standalone:false
+    styleUrls: [`./contactAdvanceSearch.component.scss`]
 })
 
 export class ContactAdvanceSearchComponent implements OnInit, OnChanges {

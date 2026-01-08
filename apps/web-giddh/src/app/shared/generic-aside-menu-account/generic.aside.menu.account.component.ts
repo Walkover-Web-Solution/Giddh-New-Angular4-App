@@ -12,8 +12,7 @@ import { IOption } from '../../app.constant';
 @Component({
     selector: 'generic-aside-menu-account',
     styleUrls: [`./generic.aside.menu.account.component.scss`],
-    templateUrl: './generic.aside.menu.account.component.html',
-    standalone: false
+    templateUrl: './generic.aside.menu.account.component.html'
 })
 export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public selectedGrpUniqueName: string;

@@ -15,7 +15,7 @@
                 <mat-slide-toggle color="primary" formControlName="openingAmount" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('openingAmount')?.value
+                            exportForm.get("openingAmount")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -27,7 +27,7 @@
                 <mat-slide-toggle color="primary" formControlName="openingQuantity" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('openingQuantity')?.value
+                            exportForm.get("openingQuantity")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -39,7 +39,9 @@
                 <mat-slide-toggle color="primary" formControlName="hsnNumber" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('hsnNumber')?.value ? inputData?.commonLocaleData?.app_yes : inputData?.commonLocaleData?.app_no
+                            exportForm.get("hsnNumber")?.value
+                                ? inputData?.commonLocaleData?.app_yes
+                                : inputData?.commonLocaleData?.app_no
                         }}
                     </span>
                 </mat-slide-toggle>
@@ -49,7 +51,9 @@
                 <mat-slide-toggle color="primary" formControlName="sacNumber" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('sacNumber')?.value ? inputData?.commonLocaleData?.app_yes : inputData?.commonLocaleData?.app_no
+                            exportForm.get("sacNumber")?.value
+                                ? inputData?.commonLocaleData?.app_yes
+                                : inputData?.commonLocaleData?.app_no
                         }}
                     </span>
                 </mat-slide-toggle>
@@ -58,7 +62,11 @@
                 <label class="label-width">{{ inputData?.localeData?.tax }} :</label>
                 <mat-slide-toggle color="primary" formControlName="tax" class="ml-2 toggle-width">
                     <span>
-                        {{ exportForm.get('tax')?.value ? inputData?.commonLocaleData?.app_yes : inputData?.commonLocaleData?.app_no }}
+                        {{
+                            exportForm.get("tax")?.value
+                                ? inputData?.commonLocaleData?.app_yes
+                                : inputData?.commonLocaleData?.app_no
+                        }}
                     </span>
                 </mat-slide-toggle>
             </div>
@@ -67,7 +75,7 @@
                 <mat-slide-toggle color="primary" formControlName="purchaseAccount" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('purchaseAccount')?.value
+                            exportForm.get("purchaseAccount")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -79,7 +87,7 @@
                 <mat-slide-toggle color="primary" formControlName="purchaseRate" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('purchaseRate')?.value
+                            exportForm.get("purchaseRate")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -91,7 +99,7 @@
                 <mat-slide-toggle color="primary" formControlName="purchaseStockUnitCode" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('purchaseStockUnitCode')?.value
+                            exportForm.get("purchaseStockUnitCode")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -106,7 +114,7 @@
                 <mat-slide-toggle color="primary" formControlName="salesAccount" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('salesAccount')?.value
+                            exportForm.get("salesAccount")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -118,7 +126,9 @@
                 <mat-slide-toggle color="primary" formControlName="salesRate" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('salesRate')?.value ? inputData?.commonLocaleData?.app_yes : inputData?.commonLocaleData?.app_no
+                            exportForm.get("salesRate")?.value
+                                ? inputData?.commonLocaleData?.app_yes
+                                : inputData?.commonLocaleData?.app_no
                         }}
                     </span>
                 </mat-slide-toggle>
@@ -128,7 +138,7 @@
                 <mat-slide-toggle color="primary" formControlName="salesStockUnitCode" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('salesStockUnitCode')?.value
+                            exportForm.get("salesStockUnitCode")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -140,7 +150,7 @@
                 <mat-slide-toggle color="primary" formControlName="customField1Heading" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('customField1Heading')?.value
+                            exportForm.get("customField1Heading")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -152,7 +162,7 @@
                 <mat-slide-toggle color="primary" formControlName="customField1Value" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('customField1Value')?.value
+                            exportForm.get("customField1Value")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -164,7 +174,7 @@
                 <mat-slide-toggle color="primary" formControlName="customField2Heading" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('customField2Heading')?.value
+                            exportForm.get("customField2Heading")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -176,7 +186,7 @@
                 <mat-slide-toggle color="primary" formControlName="customField2Value" class="ml-2 toggle-width">
                     <span>
                         {{
-                            exportForm.get('customField2Value')?.value
+                            exportForm.get("customField2Value")?.value
                                 ? inputData?.commonLocaleData?.app_yes
                                 : inputData?.commonLocaleData?.app_no
                         }}
@@ -187,17 +197,21 @@
                 <label class="label-width">{{ inputData?.localeData?.sku_code }} :</label>
                 <mat-slide-toggle color="primary" formControlName="skuCode" class="ml-2 toggle-width">
                     <span>
-                        {{ exportForm.get('skuCode')?.value ? inputData?.commonLocaleData?.app_yes : inputData?.commonLocaleData?.app_no }}
+                        {{
+                            exportForm.get("skuCode")?.value
+                                ? inputData?.commonLocaleData?.app_yes
+                                : inputData?.commonLocaleData?.app_no
+                        }}
                     </span>
                 </mat-slide-toggle>
             </div>
         </div>
     </form>
     <div class="d-flex justify-content-end column-gap-1 mt-3">
-        <button matButton="filled" (click)="exportInventory()">
+        <button mat-raised-button color="primary" (click)="exportInventory()">
             {{ inputData?.commonLocaleData?.app_download }}
         </button>
-        <button matButton="outlined" aria-label="close" mat-dialog-close type="button">
+        <button mat-stroked-button aria-label="close" mat-dialog-close type="button">
             {{ inputData?.commonLocaleData?.app_cancel }}
         </button>
     </div>

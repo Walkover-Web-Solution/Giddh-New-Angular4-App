@@ -9,8 +9,7 @@ import { SettingIntegrationComponentStore } from '../../../settings/integration/
     selector: 'bank-link',
     styleUrls: ['./bank-link.component.scss'],
     templateUrl: './bank-link.component.html',
-    providers: [SettingIntegrationComponentStore],
-    standalone: false
+    providers: [SettingIntegrationComponentStore]
 })
 
 export class BankLinkComponent implements OnInit, OnDestroy {

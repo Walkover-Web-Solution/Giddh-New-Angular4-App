@@ -21,14 +21,12 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MMMM_YYYY } from 'apps/web-gidd
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { forEach, indexOf, keys } from '../../../../lodash-optimized';
 
 @Component({
-selector: 'profit-loss-report-grid',
+    selector: 'profit-loss-report-grid',
     templateUrl: './profit-loss-report-grid.component.html',
     styleUrls: [`./profit-loss-report-grid.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Reference to the search input element */
@@ -123,10 +121,10 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
                         this.toggleVisibility(this.plData.expArr, changes.expandAll.currentValue);
                         this.toggleVisibility(this.plData.incArr, changes.expandAll.currentValue);
                         if (this.plData.incArr) {
-                            (Array.isArray(this.plData.incArr) ? this.plData.incArr : []).forEach((group: any) => {
+                            this.plData.incArr.forEach((group: any) => {
                                 if (group.isIncludedInSearch) {
                                     group.isVisible = true;
-                                    (Array.isArray(group.accounts) ? group.accounts : []).forEach((account: any) => {
+                                    group.accounts.forEach((account: any) => {
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -135,10 +133,10 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
                             });
                         }
                         if (this.plData.expArr) {
-                            (Array.isArray(this.plData.expArr) ? this.plData.expArr : []).forEach((group: any) => {
+                            this.plData.expArr.forEach((group: any) => {
                                 if (group.isIncludedInSearch) {
                                     group.isVisible = true;
-                                    (Array.isArray(group.accounts) ? group.accounts : []).forEach((account: any) => {
+                                    group.accounts.forEach((account: any) => {
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -220,7 +218,7 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      */
     private toggleVisibility(data: ChildGroup[], isVisible: boolean): void {
         let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
-        (Array.isArray(data) ? data : []).forEach((group: ChildGroup) => {
+        data.forEach((group: ChildGroup) => {
             if (group.isIncludedInSearch) {
                 if (!group.level1) {
                     if (parentGroups?.indexOf(group?.uniqueName) === -1) {
@@ -233,7 +231,7 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
                 } else {
                     group.isOpen = true;
                 }
-                (Array.isArray(group.accounts) ? group.accounts : []).forEach((account: Account) => {
+                group.accounts.forEach((account: Account) => {
                     if (account.isIncludedInSearch) {
                         account.isCreated = true;
                         account.isVisible = isVisible;

@@ -1,7 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY ,tap } from "rxjs";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
@@ -41,7 +41,7 @@ export class ViewSubscriptionComponentStore extends ComponentStore<ViewSubscript
             switchMap((req) => {
                 this.patchState({ viewSubscriptionInProgress: true });
                 return this.subscriptionService.viewSubscriptionById(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({

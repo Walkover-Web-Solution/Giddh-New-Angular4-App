@@ -37,8 +37,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
     selector: 'new-branch-transfer',
     templateUrl: './new.branch.transfer.add.component.html',
-    styleUrls: ['./new.branch.transfer.component.scss'],
-    standalone: false
+    styleUrls: ['./new.branch.transfer.component.scss']
 })
 
 export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestroy {
@@ -467,7 +466,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.allWarehouses = [];
 
         if (data && data.length > 0) {
-            (Array.isArray(data) ? data : []).forEach(d => {
+            data.forEach(d => {
                 if (d && !d.isCompany) {
                     d.warehouses?.forEach(warehouse => {
                         warehouse.taxNumber = warehouse.taxNumber || '';
@@ -936,7 +935,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.overallTotal = 0;
 
         if (this.transferType === 'products') {
-            (Array.isArray(this.branchTransfer.products) ? this.branchTransfer.products : []).forEach(product => {
+            this.branchTransfer.products.forEach(product => {
                 let overallTotal = 0;
                 if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
                     overallTotal = parseFloat(product.stockDetails.rate) * parseFloat(product.stockDetails.quantity);
@@ -950,7 +949,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.overallTotal += Number(this._generalService.convertExponentialToNumber((overallTotal)));
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'deliverynote') {
-            (Array.isArray(this.branchTransfer.destinations) ? this.branchTransfer.destinations : []).forEach(product => {
+            this.branchTransfer.destinations.forEach(product => {
                 let overallTotal = 0;
                 if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {
                     overallTotal = parseFloat(product.warehouse.stockDetails.rate) * parseFloat(product.warehouse.stockDetails.quantity);
@@ -964,7 +963,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.overallTotal += Number(this._generalService.convertExponentialToNumber(overallTotal));
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'receiptnote') {
-            (Array.isArray(this.branchTransfer.sources) ? this.branchTransfer.sources : []).forEach(product => {
+            this.branchTransfer.sources.forEach(product => {
                 let overallTotal = 0;
                 if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {
                     overallTotal = parseFloat(product.warehouse.stockDetails.rate) * parseFloat(product.warehouse.stockDetails.quantity);
@@ -994,14 +993,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.branchTransfer.transporterDetails.dispatchedDate = dayjs(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
         }
 
-        (Array.isArray(this.branchTransfer.sources) ? this.branchTransfer.sources : []).forEach(source => {
+        this.branchTransfer.sources.forEach(source => {
             if (source?.warehouse) {
                 const [address, pin] = source.warehouse.address.split('\nPIN: ');
                 source.warehouse.address = address;
                 source.warehouse.pincode = pin;
             }
         });
-        (Array.isArray(this.branchTransfer.destinations) ? this.branchTransfer.destinations : []).forEach(destination => {
+        this.branchTransfer.destinations.forEach(destination => {
             if (destination?.warehouse) {
                 const [address, pin] = destination.warehouse.address.split('\nPIN: ');
                 destination.warehouse.address = address;
@@ -1011,7 +1010,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.branchTransfer.entity = this.branchTransferMode;
         this.branchTransfer.transferType = this.transferType;
 
-        (Array.isArray(this.branchTransfer.products) ? this.branchTransfer.products : []).forEach(product => {
+        this.branchTransfer.products.forEach(product => {
             if (product.showCodeType === "hsn") {
                 product.sacNumber = "";
             } else {
@@ -1153,7 +1152,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.allWarehouses = allWarehouses;
                 }
 
-                (Array.isArray(this.branchTransfer.sources) ? this.branchTransfer.sources : []).forEach(source => {
+                this.branchTransfer.sources.forEach(source => {
                     if (source?.warehouse?.address) {
                         const pin = source.warehouse.pincode;
                         if (pin) {
@@ -1161,7 +1160,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         }
                     }
                 });
-                (Array.isArray(this.branchTransfer.destinations) ? this.branchTransfer.destinations : []).forEach(destination => {
+                this.branchTransfer.destinations.forEach(destination => {
                     if (destination?.warehouse?.address) {
                         const pin = destination.warehouse.pincode;
                         if (pin) {
@@ -1170,7 +1169,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     }
                 });
                 if (this.branchTransfer.products?.length > 0) {
-                    (Array.isArray(this.branchTransfer.products) ? this.branchTransfer.products : []).forEach(product => {
+                    this.branchTransfer.products.forEach(product => {
                         if (product.hsnNumber) {
                             product.showCodeType = "hsn";
                         } else {
@@ -1367,7 +1366,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
-
+    
 
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string): void {
@@ -1385,7 +1384,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 let stockList = cloneDeep(o);
 
                 if (stockList && stockList.results) {
-                    (Array.isArray(stockList.results) ? stockList.results : []).forEach(key => {
+                    stockList.results.forEach(key => {
                         this.stockList.push({ label: key.name, value: key?.uniqueName, additional: key });
                     });
                 }

@@ -3,8 +3,6 @@ import { Router } from "@angular/router";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { ServiceConfig } from "../../../services/service.config";
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
 
 export interface PeriodicElement {
     name: string;
@@ -98,9 +96,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 @Component({
     selector: "inventory-product-service-list",
-    
     templateUrl: "./inventory-product-service-list.component.html",
-    standalone: false,
     styleUrls: ["./inventory-product-service-list.component.scss"],
 
 })
@@ -118,7 +114,7 @@ export class ProductServiceListComponent implements OnInit {
 
     public ngOnInit() {
         /* added image path */
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
 
 

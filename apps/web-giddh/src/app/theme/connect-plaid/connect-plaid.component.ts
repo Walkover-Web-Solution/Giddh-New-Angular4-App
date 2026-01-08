@@ -10,8 +10,7 @@ import { CommonActions } from "../../actions/common.actions";
 
 @Component({
     selector: "connect-plaid",
-    templateUrl: "./connect-plaid.component.html",
-    standalone: false
+    templateUrl: "./connect-plaid.component.html"
 })
 export class ConnectPlaidComponent implements OnInit {
     /** This will hold plaid link handler */

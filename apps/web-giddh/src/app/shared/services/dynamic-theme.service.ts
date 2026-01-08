@@ -51,18 +51,18 @@ export class DynamicThemeService {
             const theme = this.extractAndValidateThemeColor(whiteLabelConfig);
             
             if (!theme) {
-
+                console.error('Invalid color or No white label configuration provided, using default theme');
                 this.removeMaterialVariablesCSS();
                 return false;
             }
 
             this.loadMaterialVariablesCSS();
             this.generateAndApplyColorPalettes(theme);
-
+            console.log('White label theme applied successfully:', { theme });
             return true;
             
         } catch (error) {
-
+            console.error('Error applying white label theme:', error);
             this.removeMaterialVariablesCSS();
             return false;
         }
@@ -164,7 +164,7 @@ export class DynamicThemeService {
         
         // Append to head
         document.head.appendChild(this.materialVariablesStyle);
-
+        console.log('Material variables CSS loaded for white label theme');
     }
 
     /**
@@ -177,7 +177,7 @@ export class DynamicThemeService {
         if (this.materialVariablesStyle) {
             document.head.removeChild(this.materialVariablesStyle);
             this.materialVariablesStyle = null;
-
+            console.log('Material variables CSS removed - using default theme');
         }
     }
 

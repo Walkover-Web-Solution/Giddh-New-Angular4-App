@@ -6,11 +6,10 @@ import { EmailForwardingComponentStore } from '../../store/email-forwarding.stor
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
-selector: 'onboarding',
+    selector: 'onboarding',
     templateUrl: './onboarding.component.html',
     styleUrls: ['./onboarding.component.scss'],
-    providers: [EmailForwardingComponentStore],
-    standalone: false
+    providers: [EmailForwardingComponentStore]
 })
 export class OnboardingComponent implements OnInit, OnDestroy {
     /** Subject to handle component destruction */

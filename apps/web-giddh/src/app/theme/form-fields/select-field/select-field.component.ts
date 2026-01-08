@@ -10,8 +10,7 @@ import { IOption } from "../../../app.constant";
     selector: "select-field",
     styleUrls: ["./select-field.component.scss"],
     templateUrl: "./select-field.component.html",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     /** Holds template of options on the component itself */

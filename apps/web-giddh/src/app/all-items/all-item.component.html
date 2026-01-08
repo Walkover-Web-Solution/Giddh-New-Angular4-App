@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'all-items'"
     (localeData)="localeData = $event"
@@ -30,19 +30,22 @@
                         (click)="menuIndex = -1; itemIndex = -1"
                         (ngModelChange)="searchAllItems($event)"
                         [autoFocus]="true"
-                    ></text-field>
+                    >
+                    </text-field>
                 </div>
             </div>
             <div class="all-item-block">
                 <ng-container *ngFor="let item of filteredItems$ | async; index as filteredMenuIndex">
                     <div class="main-item" *ngIf="item?.items?.length">
                         <p *ngIf="!item?.link" class="mb-4 d-flex align-items-center">
-                            <i class="{{ item?.icon }} mr-2"></i>
-                            {{ item?.label }}
+                            <i class="{{ item?.icon }} mr-2"></i> {{ item?.label }}
                         </p>
-                        <p *ngIf="item?.link" [routerLink]="[item?.link]" class="cursor-pointer mb-4 d-flex align-items-center">
-                            <i class="{{ item?.icon }} mr-2"></i>
-                            {{ item?.label }}
+                        <p
+                            *ngIf="item?.link"
+                            [routerLink]="[item?.link]"
+                            class="cursor-pointer mb-4 d-flex align-items-center"
+                        >
+                            <i class="{{ item?.icon }} mr-2"></i> {{ item?.label }}
                         </p>
                         <div class="sub-item-block">
                             <div class="row responsive-sub-items">
@@ -55,10 +58,7 @@
                                         [tabindex]="subItemIndex"
                                     >
                                         <mat-card-title>
-                                            <p>
-                                                <i class="{{ subItem?.icon }} mr-2"></i>
-                                                {{ subItem?.label }}
-                                            </p>
+                                            <p><i class="{{ subItem?.icon }} mr-2"></i> {{ subItem?.label }}</p>
                                         </mat-card-title>
                                         <mat-card-content class="p-0">
                                             <p class="font-size-12">{{ subItem?.description }}</p>
@@ -71,10 +71,7 @@
                                         (click)="handleItemClick(subItem)"
                                     >
                                         <mat-card-title>
-                                            <p>
-                                                <i class="{{ subItem?.icon }} mr-2"></i>
-                                                {{ subItem?.label }}
-                                            </p>
+                                            <p><i class="{{ subItem?.icon }} mr-2"></i> {{ subItem?.label }}</p>
                                         </mat-card-title>
                                         <mat-card-content class="p-0">
                                             <p class="font-size-12">{{ subItem?.description }}</p>
@@ -88,25 +85,26 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>
 <!--Modal for All Items -->
 <ng-template #allItemModal>
     <div (click)="$event.stopPropagation()">
         <div class="dialog-header">
             <span>{{ createNewModalTitle }}</span>
-            <button matIconButton aria-label="close" (click)="closeAllDialogs()">
+            <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
                 <i class="icon-cross"></i>
             </button>
         </div>
         <mat-dialog-content class="dialog-body">
             <div class="d-flex">
                 <ng-container *ngFor="let item of subMenuItems">
-                    <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional?.queryParams">
+                    <mat-card
+                        class="single-item"
+                        (click)="redirectSubItemLink(item)"
+                        [queryParams]="item?.additional?.queryParams"
+                    >
                         <mat-card-title>
-                            <h4>
-                                <i class="{{ item?.icon }} mr-2"></i>
-                                {{ item?.label }}
-                            </h4>
+                            <h4><i class="{{ item?.icon }} mr-2"></i> {{ item?.label }}</h4>
                         </mat-card-title>
                         <mat-card-content class="p-0">
                             <p>{{ item?.description }}</p>

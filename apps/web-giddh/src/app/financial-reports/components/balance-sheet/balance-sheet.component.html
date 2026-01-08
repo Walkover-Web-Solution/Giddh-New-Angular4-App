@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'trial-profit-balance/balance-sheet'"
     (localeData)="localeData = $event"
@@ -15,7 +15,8 @@
         [(expandAll)]="expandAll"
         [BsExportXLS]="true"
         (showReportTally)="showReportTallyOption = $event"
-    ></financial-filter>
+    >
+    </financial-filter>
     <div *ngIf="showLoader | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
@@ -37,4 +38,4 @@
             <p>{{ localeData?.no_data_found }}</p>
         </div>
     </div>
-</div>
+</ng-container>

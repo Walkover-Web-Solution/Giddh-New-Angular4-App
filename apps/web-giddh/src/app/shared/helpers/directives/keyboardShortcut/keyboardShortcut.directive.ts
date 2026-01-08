@@ -51,8 +51,7 @@ export class DialogPriorityService {
 }
 
 @Directive({
-    selector: '[keyboardShortcut]',
-    standalone: false
+    selector: '[keyboardShortcut]'
 })
 export class KeyboardShortcutDirective implements OnInit, OnDestroy {
     @Input() keyboardShortcut: string | string[] | Record<string, boolean> = '';

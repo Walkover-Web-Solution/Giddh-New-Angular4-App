@@ -4,7 +4,6 @@ import {
     Component,
     ElementRef,
     EventEmitter,
-    Inject,
     Input,
     NgZone,
     OnChanges,
@@ -16,6 +15,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
+import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
@@ -26,18 +26,13 @@ import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
-import { Configuration } from '../../../../../app.constant';
-import { environment } from '../../../../../../environments/environment.generated';
-import { each, forEach } from '../../../../../lodash-optimized';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'trial-balance-grid',
     templateUrl: './trial-balance-grid.component.html',
     styleUrls: [`./trial-balance-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [FinancialReportsComponentStore],
-    standalone:false
+    providers: [FinancialReportsComponentStore]
 })
 export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -85,14 +80,13 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
         private zone: NgZone,
         private financialReportsComponentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService,
-        @Inject(ServiceConfig) private serviceConfig,
+        private generalService: GeneralService
     ) {
 
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -265,7 +259,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {
                     request: {
-                        reportType: ReportType.TRIAL_BALANCE,
+                        reportType: ReportType.TrialBalance,
                         from: this.from,
                         to: this.to,
                         branchUniqueName: this.generalService.currentBranchUniqueName
@@ -287,7 +281,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof TrialBalanceGridComponent
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        (Array.isArray(groupAccountDetails) ? groupAccountDetails : []).forEach(groupAccount => {
+        groupAccountDetails.forEach(groupAccount => {
             if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
                     uniqueName: groupAccount.uniqueName,
@@ -321,5 +315,5 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                 this.uncheckAll();
             }
         });
-    }
+    } 
 }

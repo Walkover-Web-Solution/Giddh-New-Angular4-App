@@ -16,7 +16,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AllFeaturesComponent } from '../all-features/all-features.component';
 import { SubscriptionsUser } from '../../../models/api-models/Subscriptions';
-import { uniqBy, isEmpty, cloneDeep } from '../../../lodash-optimized';
+import { uniqBy } from '../../../lodash-optimized';
 
 
 /** This will use for static data for plan table  */
@@ -33,8 +33,7 @@ const TABLE_DATA: any[] = [
 @Component({
     selector: 'subscriptions-plans',
     styleUrls: ['./subscriptions-plans.component.scss'],
-    templateUrl: './subscriptions-plans.component.html',
-    standalone: false
+    templateUrl: './subscriptions-plans.component.html'
 })
 export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     @Input() public subscriptions: any;
@@ -92,8 +91,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && !isEmpty(response)) {
-                let companyInfo = cloneDeep(response);
+            if (response && !_.isEmpty(response)) {
+                let companyInfo = _.cloneDeep(response);
                 this.currentCompany = companyInfo?.name;
             } else {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());

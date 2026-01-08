@@ -3,13 +3,10 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { GeoLocationSearch } from '../models/other-models/geo-location-search';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { HttpWrapperService } from './http-wrapper.service';
-import { get } from '../lodash-optimized';
 
 declare var _: any;
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class LocationService {
     private GoogleApiURL: string = 'cities?q=:q';
     private _: any;

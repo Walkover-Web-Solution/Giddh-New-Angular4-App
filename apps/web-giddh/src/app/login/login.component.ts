@@ -1,9 +1,3 @@
-/**
- * @fileoverview Login component for handling user interface and interactions
- * @author Giddh Development Team
- * @since 2026
- */
-
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
@@ -29,29 +23,20 @@ import {
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
-import { environment } from '../../environments/environment.generated';
 import { LoaderService } from "../loader/loader.service";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { CommonActions } from "../actions/common.actions";
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
-import { cloneDeep, filter, get, indexOf, map, set } from '../lodash-optimized';
 
 declare var initSendOTP: any;
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: false
+    selector: "login",
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.scss"]
 })
-/**
- * LoginComponent class - Handles logincomponent functionality
- * @export
- * @class LoginComponent
- */
-
 export class LoginComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
     @ViewChild("emailVerifyTemplate", { static: true }) public emailVerifyTemplate: TemplateRef<any>;
@@ -126,10 +111,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private dialog: MatDialog
     ) {
-        // Use relative paths for assets to avoid port/domain issues in Electron
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
-        this.urlPath = Configuration.isElectron ? "" : "";
-        this.giddhDomainUrl = this.serviceConfig.AppUrl || environment.AppUrl || 'https://giddh.com';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || (this.serviceConfig.AppUrl || AppUrl)) + APP_FOLDER;
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -221,7 +205,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // get user object when google auth is complete
         if (!Configuration.isElectron) {
-            // Only enable for web since Electron uses native OAuth
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (!res && user) {
@@ -295,8 +278,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         });
 
-        if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
-            window.location.href = this.generalService.getGiddhRegionUrl();
+        if (PRODUCTION_ENV && !isElectron) {
+            window.location.href = await this.generalService.getGiddhRegionUrl();
         }
     }
 
@@ -386,7 +369,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // Handle dialog close event to replace onHidden functionality
         this.twoWayAuthDialogRef.afterClosed().subscribe(() => {
-            this.onHiddenAuthModal({ dismissReason: KeyCodesEnum.ESC });
+            this.onHiddenAuthModal({dismissReason: KeyCodesEnum.ESC});
         });
     }
 
@@ -414,42 +397,28 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
-            // Use native Electron OAuth exclusively for Electron
-            try {
-                const { ipcRenderer } = (window as any).require("electron");
+            // electronOauth2
+            const { ipcRenderer } = (window as any).require("electron");
+            if (provider === "google") {
+                // google
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                });
 
-                if (provider === "google") {
-                    // Send authentication request to main process
-                    ipcRenderer.send("authenticate", provider);
-
-                    // Listen for response from main process
-                    ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
-                        // Handle error response from main process
-                        if (arg && arg.error) {
-                            this.toaster.errorToast('Google authentication failed: ' + arg.error);
-                            return;
-                        }
-
-                        // Handle successful response
-                        if (arg && arg.access_token) {
-                            this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
-                        } else {
-                            this.toaster.errorToast('Google authentication failed - invalid token format');
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('Electron Google login error:', error);
-                this.toaster.errorToast('Google login is not available in this Electron version');
+            } else {
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                });
             }
         } else {
-            // Web social authentication
+            //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
-                // Only call authService.signIn for web (non-Electron) environments
-                if (!Configuration.isElectron) {
-                    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
 
+                this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+
+                if (!isElectron) {
                     setTimeout(() => {
                         this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
                     }, 500);
@@ -503,7 +472,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     public resetPassword(form) {
         let ObjToSend = form?.value;
-        ObjToSend.uniqueKey = cloneDeep(this.userUniqueKey);
+        ObjToSend.uniqueKey = _.cloneDeep(this.userUniqueKey);
         this.store.dispatch(this.loginAction.resetPasswordRequest(ObjToSend));
     }
 
@@ -522,8 +491,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     public signInWithOtp(): void {
         this.loaderService.show();
         let configuration = {
-            widgetId: this.serviceConfig?.OTP_WIDGET_ID || environment.OTP_WIDGET_ID,
-            tokenAuth: this.serviceConfig?.OTP_TOKEN_AUTH || environment.OTP_TOKEN_AUTH,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID ,
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,
             success: (data: any) => {
                 this.ngZone.run(() => {
 
@@ -538,36 +507,16 @@ export class LoginComponent implements OnInit, OnDestroy {
         /* OTP LOGIN */
         if (window['initSendOTP'] === undefined) {
             let scriptTag = document.createElement('script');
-            scriptTag.src = Configuration.isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
+            scriptTag.src = isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             scriptTag.onload = () => {
-                try {
-                    if (typeof window['initSendOTP'] === 'function') {
-                        window['initSendOTP'](configuration);
-                    } else {
-
-                        this.toaster.errorToast('Unable to load OTP service. Please try again.');
-                    }
-                } catch (error) {
-
-                    this.toaster.errorToast('An error occurred while loading OTP service.');
-                }
-                this.loaderService.hide();
-            };
-            scriptTag.onerror = () => {
-
-                this.toaster.errorToast('Failed to load OTP service. Please check your connection.');
+                initSendOTP(configuration);
                 this.loaderService.hide();
             };
             document.body.appendChild(scriptTag);
         } else {
-            try {
-                window['initSendOTP'](configuration);
-            } catch (error) {
-
-                this.toaster.errorToast('An error occurred while loading OTP service.');
-            }
+            initSendOTP(configuration);
             this.loaderService.hide();
         }
     }
@@ -598,7 +547,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public async appleLogin(): Promise<void> {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = environment.production || Configuration.isElectron ? 'https://api.giddh.com' : whiteLabel?.giddhWhiteLabel?.apiDomain ? `${whiteLabel.giddhWhiteLabel.apiDomain}` : 'https://apitest.giddh.com';
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : whiteLabel?.giddhWhiteLabel?.apiDomain ?`${whiteLabel.giddhWhiteLabel.apiDomain}` : 'https://apitest.giddh.com';
         const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
         window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');

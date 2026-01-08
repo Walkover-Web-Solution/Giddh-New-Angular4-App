@@ -15,8 +15,7 @@ import { LedgerViewEnum } from '../../models/api-models/Ledger';
 @Component({
     selector: 'other-settings',
     templateUrl: './other-settings.component.html',
-    styleUrls: ['./other-settings.component.scss'],
-    standalone: false
+    styleUrls: ['./other-settings.component.scss']
 })
 export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Stores the company number system */

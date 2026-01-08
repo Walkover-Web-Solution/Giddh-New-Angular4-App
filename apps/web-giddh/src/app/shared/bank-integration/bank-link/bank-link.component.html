@@ -1,7 +1,12 @@
-<div appTranslate [file]="'settings/integration'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'settings/integration'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="dialog-header">
         <span>{{ localeData?.payment?.link_bank }}</span>
-        <button matIconButton aria-label="close" (click)="closeDialog()">
+        <button mat-icon-button aria-label="close" (click)="closeDialog()">
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -20,10 +25,17 @@
                             [options]="bankLinks"
                             (selectedOption)="selectedOption($event)"
                             [labelValue]="defaultSelectedBank"
-                        ></reactive-dropdown-field>
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div>
-                        <button matButton="filled" class="m-3" type="submit" (click)="linkBankAccount()" [disabled]="!selectedBank">
+                        <button
+                            mat-raised-button color="primary"
+                            class="m-3"
+                            type="submit"
+                            (click)="linkBankAccount()"
+                            [disabled]="!selectedBank"
+                        >
                             {{ localeData?.payment?.link }}
                         </button>
                     </div>
@@ -31,4 +43,4 @@
             </div>
         </div>
     </mat-dialog-content>
-</div>
+</ng-container>

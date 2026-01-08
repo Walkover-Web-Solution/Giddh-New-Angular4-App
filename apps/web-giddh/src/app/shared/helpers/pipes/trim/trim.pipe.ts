@@ -2,8 +2,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
     name: 'trim',
-    pure: true,
-    standalone: false
+    pure: true
 })
 export class TrimPipe implements PipeTransform {
     /**

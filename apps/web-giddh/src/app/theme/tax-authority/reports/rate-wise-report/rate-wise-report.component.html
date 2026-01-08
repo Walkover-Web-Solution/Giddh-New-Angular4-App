@@ -1,13 +1,15 @@
-<div appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
 
     <!-- Tax Sidebar code  -->
     <div class="position-relative w-100">
-        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState">
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
-
+    
     <!-- Tax Authority code  -->
     <div class="tax-authority-report section-center pt-3">
         <div class="container-fluid ml-0">
@@ -29,8 +31,8 @@
                             (fromDate)="getFormControl('from')?.patchValue($event)"
                             (toDate)="getFormControl('to')?.patchValue($event)"
                             (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)"
-                            (taxAuthorityUniqueName)="getFormControl('taxAuthorityUniqueName')?.patchValue($event)"
-                        ></vat-report-filters>
+                            (taxAuthorityUniqueName)="getFormControl('taxAuthorityUniqueName')?.patchValue($event)">
+                        </vat-report-filters>
                     </div>
                 </div>
             </div>
@@ -40,29 +42,19 @@
                     <div class="mt-5" *ngIf="(isLoading$ | async) || isTaxApiInProgress">
                         <giddh-page-loader></giddh-page-loader>
                     </div>
-                    <div class="mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
-                        <div class="white-box w-100" *ngIf="(taxWiseReport$ | async)?.responses?.length; else noData">
+                    <div class=" mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
+                        <div class="white-box w-100" *ngIf="(taxWiseReport$ | async)?.responses?.length; else noData ">
                             <!-- Tax Authority Table  -->
                             <div class="table-responsive">
-                                <table
-                                    mat-table
-                                    [dataSource]="(taxWiseReport$ | async)?.responses"
-                                    class="table basic mt-4 sales-report-table"
-                                >
+                                <table mat-table [dataSource]="(taxWiseReport$ | async)?.responses"
+                                class="table basic mt-4 sales-report-table">
                                     <!-- Tax Name -->
                                     <ng-container matColumnDef="tax_name">
                                         <th mat-header-cell *matHeaderCellDef>
-                                            {{ commonLocaleData?.app_tax + ' ' + commonLocaleData?.app_name }}
+                                            {{ commonLocaleData?.app_tax + ' ' +  commonLocaleData?.app_name }}
                                         </th>
                                         <td mat-cell *matCellDef="let element">
-                                            <a
-                                                href="javascript:;"
-                                                [routerLink]="['/pages/settings/reports/account-wise']"
-                                                [queryParams]="{
-                                                    taxAuthorityUniqueName: element?.taxAuthority?.uniqueName,
-                                                    taxUniqueName: element?.tax?.uniqueName,
-                                                }"
-                                            >
+                                            <a href="javascript:;" [routerLink]="['/pages/settings/reports/account-wise']" [queryParams]="{ taxAuthorityUniqueName: element?.taxAuthority?.uniqueName, taxUniqueName: element?.tax?.uniqueName }">
                                                 {{ element?.tax?.name }}
                                             </a>
                                         </td>
@@ -71,8 +63,8 @@
                                         </td>
                                     </ng-container>
 
-                                    <!-- Total Sales -->
-                                    <ng-container matColumnDef="total_sales">
+                                     <!-- Total Sales -->
+                                     <ng-container matColumnDef="total_sales">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ commonLocaleData?.app_total + ' ' + commonLocaleData?.app_sales }}
                                         </th>
@@ -107,17 +99,19 @@
                                         </td>
                                     </ng-container>
 
-                                    <!-- Tax Percentage -->
-                                    <ng-container matColumnDef="tax_percentage">
-                                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax_percentage }} (%)</th>
+                                     <!-- Tax Percentage -->
+                                     <ng-container matColumnDef="tax_percentage">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ localeData?.tax_percentage }} (%)
+                                        </th>
                                         <td mat-cell *matCellDef="let element" width="18%">
                                             {{ element?.taxPercentage }}
                                         </td>
                                         <td class="bg-gray font-weight-semibold" mat-footer-cell *matFooterCellDef></td>
                                     </ng-container>
 
-                                    <!-- Tax Collected -->
-                                    <ng-container matColumnDef="tax_collected">
+                                     <!-- Tax Collected -->
+                                     <ng-container matColumnDef="tax_collected">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.tax_collected }}
                                         </th>
@@ -157,7 +151,8 @@
                                 [pageSizeOptions]="pageSizeOptions"
                                 [hidePageSize]="false"
                                 [pageIndex]="pageIndex"
-                            ></mat-paginator>
+                            >
+                            </mat-paginator>
                             <section class="mb-custom-80"></section>
                         </div>
                     </div>
@@ -165,4 +160,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

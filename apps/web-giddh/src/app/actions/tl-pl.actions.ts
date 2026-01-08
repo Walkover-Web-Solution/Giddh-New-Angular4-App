@@ -9,9 +9,7 @@ import { TlPlService } from '../services/tl-pl.service';
 import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossDateRangeResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { CustomActions } from '../store/custom-actions';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class TBPlBsActions {
 
     public static readonly GET_TRIAL_BALANCE_REQUEST = 'GET_TRIAL_BALANCE_REQUEST';

@@ -60,7 +60,7 @@ import { FinancialReportsModule } from '../financial-reports/financial-reports.m
         Daterangepicker,
         DatepickerWrapperModule,
         MatInputModule,
-
+        
         SharedModule,
         GiddhPageLoaderModule,
         NoDataModule,

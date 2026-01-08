@@ -1,17 +1,22 @@
 <div>
     {{ commonLocaleData?.app_address }} {{ addressNo }}
-    <p>{{ address.address ? address.address + ', ' : '' }}{{ address.state?.name }}</p>
+    <p>{{ address.address ? address.address + ", " : "" }}{{
+        address.state?.name }}</p>
     <p>
-        {{
-            address.gstNumber
-                ? (company.taxType === taxTypes.GST
-                      ? commonLocaleData?.app_gstin + ': '
-                      : company.taxType === taxTypes.TRN
-                        ? commonLocaleData?.app_trn + ': '
-                        : company.taxType === taxTypes.VAT
-                          ? commonLocaleData?.app_vat + ': '
-                          : '') + address.gstNumber
-                : ''
+        {{ 
+            address.gstNumber 
+            ? 
+                (
+                    company.taxType === taxTypes.GST 
+                    ? commonLocaleData?.app_gstin + ": " 
+                    : company.taxType === taxTypes.TRN 
+                    
+                        ? commonLocaleData?.app_trn + ": " 
+                        : company.taxType === taxTypes.VAT 
+                            ? commonLocaleData?.app_vat + ": " 
+                            : ""
+                ) + address.gstNumber
+            : ""
         }}
     </p>
 </div>

@@ -4,9 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from '../theme/snackbar/snackbar.component';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ToasterService {
 
     constructor(private toaster: ToastrService, private snackBar: MatSnackBar) {

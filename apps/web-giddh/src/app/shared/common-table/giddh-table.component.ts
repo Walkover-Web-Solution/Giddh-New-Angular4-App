@@ -4,8 +4,7 @@ import { ColumnDefinition } from './giddh-table.component.const';
 @Component({
     selector: 'giddh-table',
     templateUrl: './giddh-table.component.html',
-    styleUrls: ['./giddh-table.component.scss'],
-    standalone: false
+    styleUrls: ['./giddh-table.component.scss']
 })
 
 export class GiddhTableComponent implements OnInit, OnDestroy {

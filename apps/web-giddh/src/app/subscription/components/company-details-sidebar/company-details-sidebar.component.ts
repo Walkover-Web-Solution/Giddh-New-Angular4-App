@@ -8,8 +8,7 @@ import { ReplaySubject } from 'rxjs';
 @Component({
     selector: 'company-details-sidebar',
     styleUrls: ['./company-details-sidebar.component.scss'],
-    templateUrl: './company-details-sidebar.component.html',
-    standalone: false
+    templateUrl: './company-details-sidebar.component.html'
 })
 
 export class CompanyDetailsSidebarComponent implements OnInit {

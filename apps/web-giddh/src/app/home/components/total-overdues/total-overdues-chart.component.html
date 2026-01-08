@@ -10,14 +10,14 @@
             <strong>{{ localeData?.chart_title }}</strong>
             <div class="pull-right dashboard-filter">
                 <i class="icon-refresh" (click)="refreshChart()"></i>
-                <div
-                    [matMenuTriggerFor]="universalDatepicker"
+                <div 
+                    [matMenuTriggerFor]="universalDatepicker" 
                     #universalDatepickerTrigger="matMenuTrigger"
                     role="button"
                     aria-haspopup="true"
                     aria-controls="universalDatepicker"
                     class="custom-datepicker"
-                >
+                    >
                     <input
                         matInput
                         type="text"
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <mat-card-content class="position-relative">
+        <mat-card-content class="position-relative ">
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
@@ -50,7 +50,8 @@
                                     [amount]="invoiceDue"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
                                     [currencyCode]="activeCompany?.baseCurrency"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
                         </span>
                     </div>
@@ -72,7 +73,8 @@
                                     [amount]="billDue"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
                                     [currencyCode]="activeCompany?.baseCurrency"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
                         </span>
                     </div>

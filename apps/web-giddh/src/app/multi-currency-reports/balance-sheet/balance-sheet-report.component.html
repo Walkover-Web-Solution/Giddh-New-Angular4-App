@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'trial-profit-balance/balance-sheet'"
     (localeData)="localeData = $event"
@@ -29,4 +29,4 @@
     <div *ngIf="!(showLoader | async) && !data" class="no-data">
         <h2>{{ localeData?.no_data_found }}</h2>
     </div>
-</div>
+</ng-container>

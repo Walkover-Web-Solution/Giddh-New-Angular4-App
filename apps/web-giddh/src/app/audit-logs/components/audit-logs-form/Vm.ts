@@ -3,7 +3,6 @@ import * as dayjs from 'dayjs';
 import { Observable } from 'rxjs';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { IOption } from '../../../app.constant';
-import { set } from '../../../lodash-optimized';
 
 export class AuditLogsSidebarVM {
     /** Audit log form's user list Observer */

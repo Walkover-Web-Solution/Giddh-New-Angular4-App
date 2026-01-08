@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { tap } from "rxjs/operators";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { ToasterService } from "../services/toaster.service";
 import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
@@ -16,9 +15,7 @@ export const DEFAULT_LEDGER_STATE: FinancialReportsState = {
     reconcileDateRange: null
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class FinancialReportsComponentStore extends ComponentStore<FinancialReportsState> implements OnDestroy {
 
     constructor(
@@ -42,7 +39,7 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
             switchMap((req) => {
                 this.patchState({ tailedReportIsSuccess: null });
                 return this.tlPlService.tailedReportAccountGroup(req.request, req.payload).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -73,7 +70,7 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
 
     /**
      * Get reconcile option
-     *
+     * 
      * @memberof FinancialReportsComponentStore
      */
     readonly getReconcileDateRange = this.effect((data: Observable<any>) => {
@@ -81,7 +78,7 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
             switchMap((req) => {
                 this.patchState({ reconcileDateRange: undefined });
                 return this.tlPlService.getReconcileDateRange(req.reportType, req.branchUniqueName).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({

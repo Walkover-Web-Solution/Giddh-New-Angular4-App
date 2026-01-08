@@ -8,7 +8,7 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/c
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs';
 import { ShareRequestForm } from '../../models/api-models/Permission';
-import { forIn, sortBy, cloneDeep, groupBy } from '../../lodash-optimized';
+import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
@@ -17,8 +17,7 @@ import { NewConfirmationModalComponent } from '../../theme/new-confirmation-moda
 @Component({
     selector: 'setting-permission',
     templateUrl: './setting.permission.component.html',
-    styleUrls: ['./setting.permission.component.scss'],
-    standalone: false
+    styleUrls: ['./setting.permission.component.scss']
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
     /** Edit User Dialog Reference */
@@ -61,8 +60,8 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let data = cloneDeep(response);
-                let sortedArr = groupBy(this.prepareDataForUI(data), 'emailId');
+                let data = _.cloneDeep(response);
+                let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
                 let arr = [];
                 forIn(sortedArr, (value) => {
                     if (value[0].emailId === this.loggedInUserEmail) {
@@ -70,7 +69,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
                     }
                     arr.push({ name: value[0].userName, rows: value });
                 });
-                this.usersList = sortBy(arr, ['name']);
+                this.usersList = _.sortBy(arr, ['name']);
             }
         });
     }
@@ -133,8 +132,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public showModalForEdit(user?: any): void {
         this.selectedUser = user ? user : '';
         this.editDialogRef = this.dialog.open(this.editUserModal, {
-                    width: '1200px',
-                });
+            width: '1200px',
+            maxWidth: '90vw'
+        });
     }
     public closeEditUserModal(event?: any): void {
         if (event && this.hasUnsavedChanges) {

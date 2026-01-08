@@ -2,9 +2,7 @@ import { of } from 'rxjs';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class DataResolver  {
     public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return of({ res: 'I am data' });

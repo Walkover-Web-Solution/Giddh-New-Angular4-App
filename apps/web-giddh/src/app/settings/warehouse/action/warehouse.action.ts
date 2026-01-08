@@ -13,9 +13,7 @@ import { CustomActions } from '../../../store/custom-actions';
  * @export
  * @class WarehouseActions
  */
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class WarehouseActions {
 
     /** Action to create warehouse */

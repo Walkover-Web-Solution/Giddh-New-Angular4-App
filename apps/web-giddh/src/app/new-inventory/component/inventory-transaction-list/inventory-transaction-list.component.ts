@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList, Output, EventEmitter, Inject } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList, Output, EventEmitter, Inject } from "@angular/core";
 import { GeneralService } from "../../../services/general.service";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
@@ -11,6 +11,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
+import { cloneDeep } from "../../../lodash-optimized";
 import { BalanceStockTransactionReportRequest, InventoryReportBalanceResponse, StockTransactionReportRequest } from "../../../models/api-models/Inventory";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
@@ -21,19 +22,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { OrganizationType } from "../../../models/user-login-state";
 import { ServiceConfig } from "../../../services/service.config";
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
-import { cloneDeep, filter, forEach, includes, set } from '../../../lodash-optimized';
 
 @Component({
     selector: "inventory-transaction-list",
-
     templateUrl: "./inventory-transaction-list.component.html",
-    standalone: false,
     styleUrls: ["./inventory-transaction-list.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InventoryTransactionListComponent implements OnInit, OnDestroy {
+export class InventoryTransactionListComponent implements OnInit {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
     /** Instance of  account name searching column */
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
@@ -172,7 +168,7 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.stockReportRequest.count = PAGINATION_LIMIT;
 
         this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
@@ -310,7 +306,7 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         this.stockReportRequest.count = event.pageSize;
         this.getStockTransactionalReport(false);
     }
-
+    
 
 
     /**
@@ -381,7 +377,7 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      */
     public resetFilter(): void {
         this.showAccountSearchInput = false;
-        (Array.isArray(this.voucherTypes) ? this.voucherTypes : []).forEach(response => {
+        this.voucherTypes.forEach(response => {
             response.checked = false;
         });
         this.searchAccountName.reset();

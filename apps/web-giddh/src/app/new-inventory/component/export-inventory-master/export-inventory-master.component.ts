@@ -9,9 +9,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-export-inventory-master',
-  
   templateUrl: './export-inventory-master.component.html',
-    standalone: false,
   styleUrls: ['./export-inventory-master.component.scss']
 })
 export class ExportInventoryMasterComponent implements OnInit {

@@ -1,1 +1,1 @@
-export * from './confirmation-modal.module';
+export * from './confirm-modal.module';

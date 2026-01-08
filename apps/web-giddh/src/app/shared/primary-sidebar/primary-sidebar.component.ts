@@ -6,7 +6,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { clone, cloneDeep, each, filter, find, forEach, includes, isEmpty, isEqual, isNull, isUndefined, map, orderBy, remove, slice, some, sortBy, uniq } from '../../lodash-optimized';
+import { slice } from '../../lodash-optimized';
 import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponse, AccountResponseV2, AddAccountRequest } from '../../models/api-models/Account';
@@ -27,8 +27,7 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
     selector: 'primary-sidebar',
     templateUrl: './primary-sidebar.component.html',
     styleUrls: ['./primary-sidebar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
@@ -295,7 +294,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 return;
             }
 
-            let orderedCompanies = orderBy(companies, 'name');
+            let orderedCompanies = _.orderBy(companies, 'name');
             this.companyList = orderedCompanies;
         });
         this.updateIndexDbSuccess$.subscribe(res => {
@@ -316,7 +315,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 // Use the clean currentUrl for baseUrl instead of parsing router.url again
                 const baseUrl = this.currentUrl;
                 this.isActiveRoute = baseUrl;
-                (Array.isArray(this.allItems) ? this.allItems : []).forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
+                this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
                     if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
                         return true;
                     }
@@ -394,9 +393,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     */
     public showNavigationModal(): void {
         this.commandkDialogRef = this.dialog.open(this.navigationModal, {
-                    width: '630px',
-                    height: '600'
-                });
+            width: '630px',
+            height: '600'
+        });
     }
 
     /**
@@ -603,7 +602,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.currentOrganizationType === OrganizationType.Company && branches?.length > 1).then((res) => {
                         this.findListFromDb(res);
                     }, (err: any) => {
-
+                        console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
                     });
             });
         }
@@ -766,7 +765,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
           if (node.isExpanded) {
             node.isExpanded = false;
           } else {
-            (Array.isArray(this.allItems) ? this.allItems : []).forEach(item => {
+            this.allItems.forEach(item => {
               if (item.level === 0 && item !== node) {
                 item.isExpanded = false;
               }

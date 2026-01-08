@@ -6,11 +6,8 @@ import { distinctUntilChanged, map, switchMap, take, takeUntil, tap } from 'rxjs
 import { userLoginStateEnum } from '../models/user-login-state';
 import { ROUTES } from '../routes-array';
 import { ReplaySubject } from 'rxjs';
-import { findIndex, forEach, get, includes, startsWith } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class UserAuthenticated  {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(public router: Router, private store: Store<AppState>, private zone: NgZone) {
@@ -44,7 +41,7 @@ export class UserAuthenticated  {
                             let tempParams = p.lastState.substr(p.lastState.lastIndexOf('?'));
                             let urlParams = new URLSearchParams(tempParams);
                             let queryParams = {};
-                            (Array.isArray(urlParams) ? urlParams : []).forEach((val, key) => {
+                            urlParams.forEach((val, key) => {
                                 queryParams[key] = val;
                             });
                             this.router.navigate([p.lastState?.replace(tempParams, '')], { queryParams });

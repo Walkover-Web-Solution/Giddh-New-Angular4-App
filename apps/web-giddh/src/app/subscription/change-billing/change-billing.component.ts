@@ -19,8 +19,7 @@ import { IOption } from '../../app.constant';
     selector: 'change-billing',
     templateUrl: './change-billing.component.html',
     styleUrls: ['./change-billing.component.scss'],
-    providers: [ChangeBillingComponentStore],
-    standalone:false
+    providers: [ChangeBillingComponentStore]
 })
 export class ChangeBillingComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */

@@ -77,7 +77,7 @@
     "login_to_your_domain_registrar_to_add_the_following_details_in_your_dns_setting": "अपने डोमेन रजिस्ट्रार में लॉगिन करें और निम्नलिखित विवरण को अपने DNS सेटिंग में जोड़ें।",
     "invalid_email": "[EMAIL] अमान्य ईमेल है!",
     "primary_domain_set": "प्रमुख डोमेन सफलतापूर्वक सेट किया गया",
-    "add_domain_successfully": "डोमेन सफलतापूर्वक जोड़ा गया",
+    "add_domain_succesfully": "डोमेन सफलतापूर्वक जोड़ा गया",
     "delete_domain": "डोमेन सफलतापूर्वक हटाया गया",
     "export_type": "निर्यात प्रकार",
     "select_export_type": "निर्यात प्रकार चुनें",

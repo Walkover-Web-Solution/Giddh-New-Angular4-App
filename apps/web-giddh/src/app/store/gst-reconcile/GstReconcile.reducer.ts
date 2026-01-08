@@ -2,7 +2,6 @@ import { CustomActions } from '../custom-actions';
 import { GST_RECONCILE_ACTIONS } from '../../actions/gst-reconcile/gst-reconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
-import { cloneDeep } from '../../lodash-optimized';
 
 export interface GstReconcileState {
     isGenerateOtpInProcess: boolean;
@@ -85,7 +84,7 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
 
         case GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_RESPONSE:
             let response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest> = action.payload;
-            let newState: GstReconcileState = cloneDeep(state);
+            let newState: GstReconcileState = _.cloneDeep(state);
             newState.isGstReconcileInvoiceInProcess = false;
 
             if (response?.status === 'success') {

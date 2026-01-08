@@ -13,8 +13,7 @@ import { ScrollDispatcher } from '@angular/cdk/scrolling';
 @Component({
     selector: 'stockgrp-list',
     styleUrls: ['stockgrplist.component.scss'],
-    templateUrl: 'stockgrplist.component.html',
-    standalone: false
+    templateUrl: 'stockgrplist.component.html'
 })
 export class StockgrpListComponent implements OnInit, OnDestroy {
     public activeStock$: Observable<StockDetailResponse>;
@@ -33,9 +32,9 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
     public getStocksInProgress: boolean = false;
 
     constructor(
-        private store: Store<AppState>,
+        private store: Store<AppState>, 
         private sideBarAction: SidebarAction,
-        private inventoryAction: InventoryAction,
+        private inventoryAction: InventoryAction, 
         private invViewService: InvViewService,
         private scrollDispatcher: ScrollDispatcher
     ) {
@@ -61,11 +60,9 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.inventory.getStocksInProgress)).subscribe(response => this.getStocksInProgress = response);
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && typeof event.getRenderedRange === 'function' && event.getDataLength && event.getDataLength() - event.getRenderedRange().end < 50) {
-            this.loadMore.emit(true);
-        } else if (event && typeof event.getRenderedRange === 'function' && event.dataLength && event.dataLength - event.getRenderedRange().end < 50) {
-            this.loadMore.emit(true);
-        }
+            if (event?.getDataLength() - event?.getRenderedRange().end < 50) {
+                this.loadMore.emit(true);
+            }
         });
     }
 

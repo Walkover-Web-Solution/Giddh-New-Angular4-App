@@ -3,8 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
     selector: 'giddh-ledger-paginator',
     templateUrl: './giddh-ledger-paginator.component.html',
-    styleUrls: ['./giddh-ledger-paginator.component.scss'],
-    standalone: false
+    styleUrls: ['./giddh-ledger-paginator.component.scss']
 })
 export class GiddhLedgerPaginatorComponent {
     /** This will hold common JSON data */

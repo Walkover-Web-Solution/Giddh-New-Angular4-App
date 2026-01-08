@@ -4,14 +4,13 @@ import { TokenVerifyComponent } from "./token-verify.component";
 
 @NgModule({
     imports: [
-        RouterModule.forChild([ { path: '',
-        component: TokenVerifyComponent }
-    
+        RouterModule.forChild([
+            {
+                path: '', component: TokenVerifyComponent
+            }
         ])
     ],
-    exports: [
-        RouterModule
-    ]
+    exports: [RouterModule]
 })
 
 export class TokenVerifyRoutingModule {

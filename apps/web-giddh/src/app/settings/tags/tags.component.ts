@@ -1,5 +1,5 @@
 import { take } from 'rxjs/operators';
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
@@ -18,7 +18,6 @@ export interface TagInterface {
 
 @Component({
     selector: 'setting-tags',
-    standalone: false,
     templateUrl: './tags.component.html',
     styleUrls: ['./tags.component.scss'],
 })
@@ -34,7 +33,7 @@ export class SettingsTagsComponent implements OnInit {
     /** Holds confirmation message */
     public confirmationMessage: string = '';
     /** True if api call in progress */
-    public isLoading = signal<boolean>(false);
+    public isLoading: boolean = false;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -75,7 +74,7 @@ export class SettingsTagsComponent implements OnInit {
      */
     public getTags(): void {
         this.tags = [];
-        this.isLoading.set(true);
+        this.isLoading = true;
         this.settingsTagService.GetAllTags().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 map(response?.body, (tag) => {
@@ -87,7 +86,7 @@ export class SettingsTagsComponent implements OnInit {
                     this.tagInput.nativeElement.focus();
                 }, 100);
             }
-            this.isLoading.set(false);
+            this.isLoading = false;
         });
     }
 
@@ -205,9 +204,9 @@ export class SettingsTagsComponent implements OnInit {
         message = message?.replace("[TAG_NAME]", tag.name);
         this.confirmationMessage = message;
         this.dialog.open(this.confirmationModal, {
-                    panelClass: 'modal-dialog',
-                    width: '1000px',
-                });
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
     }
 
     /**

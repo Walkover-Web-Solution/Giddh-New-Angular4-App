@@ -20,7 +20,7 @@
         }
 
         .snack-container {
-            background-image: url('../../../images/failure.svg');
+            background-image: url("../../../images/failure.svg");
         }
     }
 
@@ -30,7 +30,7 @@
         }
 
         .snack-container {
-            background-image: url('../../../images/success.svg');
+            background-image: url("../../../images/success.svg");
         }
     }
 
@@ -40,12 +40,12 @@
 
             .mdc-snackbar__label,
             .snack-close-button {
-                color: var(--color-white) !important;
+                color: var(--color-black) !important;
             }
         }
 
         .snack-container {
-            background-image: url('../../../images/exclamation-white.svg');
+            background-image: url("../../../images/exclamation-black.svg");
         }
     }
 
@@ -60,7 +60,7 @@
         }
 
         .snack-container {
-            background-image: url('../../../images/info-white.svg');
+            background-image: url("../../../images/info-white.svg");
         }
     }
 }
@@ -84,6 +84,12 @@
 .mat-mdc-snack-bar-container.warning {
     .mdc-snackbar__surface {
         background-color: var(--color-deep-orange) !important;
+        .mdc-snackbar__label {
+            color: var(--color-black) !important;
+        }
+        .snack-close-button {
+            color: var(--color-black) !important;
+        }
     }
 }
 

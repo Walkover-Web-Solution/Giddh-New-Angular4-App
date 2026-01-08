@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 /**
  * Consolidated mixin to define all theme color variables
@@ -6,30 +6,60 @@
  * @param {Map} $theme - Angular Material theme map
  */
 @mixin define-theme-colors($theme) {
-    // Define the mapping between your custom names and M3 theme roles
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+
     $theme-color-map: (
-        "primary":           primary,
-        "primary-contrast":  on-primary,
-        "accent":            tertiary,       // M3 'tertiary' replaces 'accent'
-        "accent-contrast":   on-tertiary,
-        "warn":              error,          // M3 'error' replaces 'warn'
-        "warn-contrast":     on-error,
-        "foreground":        on-surface,
-        "background":        surface,
-        "border":            outline         // M3 'outline' is the standard for borders/dividers
+        "primary": (
+            $primary,
+            "default",
+        ),
+        "primary-contrast": (
+            $primary,
+            "default-contrast",
+        ),
+        "accent": (
+            $accent,
+            "default",
+        ),
+        "accent-contrast": (
+            $accent,
+            "default-contrast",
+        ),
+        "warn": (
+            $warn,
+            "default",
+        ),
+        "warn-contrast": (
+            $warn,
+            "default-contrast",
+        ),
+        "foreground": (
+            $foreground,
+            "text",
+        ),
+        "background": (
+            $background,
+            "background",
+        ),
+        "border": (
+            $foreground,
+            "divider",
+        ),
     );
 
-    // Generate CSS custom properties
-    @each $name, $role in $theme-color-map {
-        --theme-#{$name}-color: #{mat.get-theme-color($theme, $role)};
-    }
+    @each $name, $palette-info in $theme-color-map {
+        $palette: nth($palette-info, 1);
+        $variant: nth($palette-info, 2);
 
-    // Generate utility classes for text color
-    @each $name, $role in $theme-color-map {
+        --theme-#{$name}-color: #{mat.get-color-from-palette($palette, $variant)};
+
         .theme-#{$name}-color {
             color: var(--theme-#{$name}-color) !important;
         }
-        
         .theme-#{$name}-bg-color {
             background-color: var(--theme-#{$name}-color) !important;
         }

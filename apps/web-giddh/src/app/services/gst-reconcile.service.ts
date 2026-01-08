@@ -10,11 +10,8 @@ import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverVie
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gst-r.api';
 import { GST_RETURN_API } from './apiurls/purchase-invoice.api';
-import { concat, get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class GstReconcileService {
     private companyUniqueName: string;
 

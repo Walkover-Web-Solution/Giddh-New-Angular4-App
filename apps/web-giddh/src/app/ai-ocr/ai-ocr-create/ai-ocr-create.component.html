@@ -1,4 +1,9 @@
-<div appTranslate [file]="'ai-ocr'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
+<ng-container
+    appTranslate
+    [file]="'ai-ocr'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
     <div class="container-fluid">
         <div class="row mx-0">
             <div class="col-4 pt-4 pb-4 pb-4">
@@ -32,4 +37,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

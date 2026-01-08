@@ -18,8 +18,7 @@ interface ExportSettingType {
 @Component({
     selector: 'export-file-name',
     templateUrl: './export-file-name.component.html',
-    styleUrls: ['./export-file-name.component.scss'],
-    standalone: false
+    styleUrls: ['./export-file-name.component.scss']
 })
 
 export class ExportFileNameComponent implements OnInit, OnDestroy {
@@ -94,7 +93,7 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
         this.settingsProfileService.getModuleExportSetting().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response.status === 'success') {
                 this.moduleExportSettingArray.clear();
-                (Array.isArray(response.body) ? response.body : []).forEach((item: ExportSettingType) => {
+                response.body.forEach((item: ExportSettingType) => {
                     item.supportedVariableList = Object.keys(item.supportedVariableMap).map((key) => {
                         return {
                             label: key,

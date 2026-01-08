@@ -93,8 +93,6 @@ import { AllTemplatesComponent } from "./template/all-templates/all-templates.co
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
-import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
-import { ResizableDirective } from "../shared/directives/resizable.directive";
 
 @NgModule({
     declarations: [
@@ -191,9 +189,7 @@ import { ResizableDirective } from "../shared/directives/resizable.directive";
         SelectTableColumnModule,
         MatButtonToggleModule,
         TributeMentionModule,
-        MobileNumberInputComponent,
-        KeyboardNavigationModule,
-        ResizableDirective
+        MobileNumberInputComponent
     ],
     exports: [
         VoucherCreateComponent,

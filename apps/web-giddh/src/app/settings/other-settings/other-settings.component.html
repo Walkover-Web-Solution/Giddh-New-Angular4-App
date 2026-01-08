@@ -5,22 +5,21 @@
             <!-- branch profile element start -->
             <div class="other-detail-section">
                 <div class="mb-3">
-                    <label>{{ localeData?.number_system_label }}</label>
-                    <span>{{ numberSystem }}</span>
+                    <label>{{ localeData?.number_system_label }}</label> <span>{{ numberSystem }}</span>
                 </div>
                 <div class="mb-3">
                     <label>{{ localeData?.inventory_type }}</label>
-                    <span>{{ profileData?.manageInventory ? commonLocaleData?.app_product : commonLocaleData?.app_service }}</span>
+                    <span>{{
+                        profileData?.manageInventory ? commonLocaleData?.app_product : commonLocaleData?.app_service
+                    }}</span>
                 </div>
                 <div class="mb-3">
                     <label>{{ localeData?.ledger_default_view }}</label>
-                    <span>
-                        {{
-                            profileData?.ledgerView === ledgerViewEnum.TView
-                                ? commonLocaleData?.app_ledger_view?.t_view
-                                : commonLocaleData?.app_ledger_view?.statement_view
-                        }}
-                    </span>
+                    <span>{{
+                        profileData?.ledgerView === ledgerViewEnum.TView
+                            ? commonLocaleData?.app_ledger_view?.t_view
+                            : commonLocaleData?.app_ledger_view?.statement_view
+                    }}</span>
                 </div>
             </div>
             <!-- branch profile element end -->
@@ -35,7 +34,9 @@
                     [label]="localeData?.digits_after_decimal"
                     [options]="decimalDigitSource"
                     [placeholder]="commonLocaleData?.app_select_type"
-                    (selectedOption)="profileData.balanceDecimalPlaces = $event.value; profileUpdated('balanceDecimalPlaces')"
+                    (selectedOption)="
+                        profileData.balanceDecimalPlaces = $event.value; profileUpdated('balanceDecimalPlaces')
+                    "
                     [(ngModel)]="profileData.balanceDecimalPlaces"
                     [labelValue]="getDropdownLabel(decimalDigitSource, profileData.balanceDecimalPlaces)"
                     [isFilterEnabled]="true"
@@ -49,7 +50,9 @@
                     [label]="localeData?.number_system_label"
                     [options]="numberSystemSource"
                     [placeholder]="commonLocaleData?.app_select_type"
-                    (selectedOption)="profileData.balanceDisplayFormat = $event.value; profileUpdated('balanceDisplayFormat')"
+                    (selectedOption)="
+                        profileData.balanceDisplayFormat = $event.value; profileUpdated('balanceDisplayFormat')
+                    "
                     [(ngModel)]="profileData.balanceDisplayFormat"
                     [labelValue]="getDropdownLabel(numberSystemSource, profileData.balanceDisplayFormat)"
                     [isFilterEnabled]="true"
@@ -114,8 +117,7 @@
                             value="true"
                             [checked]="profileData?.manageInventory"
                             (change)="inventoryTypeUpdated(true)"
-                        >
-                            {{ commonLocaleData?.app_product }}
+                            >{{ commonLocaleData?.app_product }}
                         </mat-radio-button>
                         <mat-radio-button
                             color="primary"

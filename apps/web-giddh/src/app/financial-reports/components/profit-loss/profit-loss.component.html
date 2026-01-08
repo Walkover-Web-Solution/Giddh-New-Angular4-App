@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'trial-profit-balance/profit-loss'"
     (localeData)="localeData = $event"
@@ -36,12 +36,9 @@
             [cogsData]="cogsData"
         ></profit-loss-grid>
     </div>
-    <div
-        *ngIf="!(showLoader | async) && !(isFetchingProfitAndLoss$ | async) && !data"
-        class="d-flex align-items-center justify-content-center tb-pl-bs-data"
-    >
+    <div *ngIf="!(showLoader | async) && !(isFetchingProfitAndLoss$ | async) && !data" class="d-flex align-items-center justify-content-center tb-pl-bs-data">
         <div class="d-flex">
             <p>{{ localeData?.no_data_found }}</p>
         </div>
     </div>
-</div>
+</ng-container>

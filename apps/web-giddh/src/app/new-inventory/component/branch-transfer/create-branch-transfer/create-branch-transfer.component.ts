@@ -8,6 +8,7 @@ import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { ASIDE_PANE_CONFIG, IOption, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { cloneDeep, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
 import { IAllTransporterDetails, IEwayBillTransporter, IEwayBillfilter } from 'apps/web-giddh/src/app/models/api-models/Invoice';
@@ -25,15 +26,10 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { Configuration } from '../../../../app.constant';
-import { environment } from '../../../../../environments/environment.generated';
-import { cloneDeep, concat, filter, find, forEach, get, includes, isEmpty, keys, map, remove, set, some } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'app-create-branch-transfer',
-
     templateUrl: './create-branch-transfer.component.html',
-    standalone: false,
     styleUrls: ['./create-branch-transfer.component.scss']
 })
 export class CreateBranchTransferComponent implements OnInit, OnDestroy {
@@ -211,7 +207,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /* added image path */
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.showContent = false;
@@ -227,7 +223,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 /** Universal date observer */
                 this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
                     if (dateObj) {
-                        let universalDate = cloneDeep(dateObj);
+                        let universalDate = _.cloneDeep(dateObj);
                         setTimeout(() => {
                             this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                                 this.todaySelected = response;
@@ -1322,7 +1318,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.allWarehouses = [];
 
         if (data && data.length > 0) {
-            (Array.isArray(data) ? data : []).forEach(res => {
+            data.forEach(res => {
                 if (res && !res.isCompany && !res.isConsolidatedBranch) {
                     res.warehouses?.forEach(warehouse => {
                         warehouse.taxNumber = warehouse.taxNumber || '';
@@ -1876,7 +1872,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
     /**
      * This function resets the warehouse list based on the following conditions:
-     *
+     * 
      * @param isUpdateMode - A boolean indicating whether the form is in update mode.
      * @param formGroup - The form group containing the warehouse's unique name.
      * @param isInitialized - A boolean indicating if the warehouse list has already been initialized.
@@ -1896,7 +1892,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         return isInitialized;
     }
 
-
+    
     /**
      * This will be use for branch exists
      *
@@ -1985,7 +1981,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     if (productFormGroup.get('uniqueName')?.value) {
                         const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
                         this.stockVariants[index] = [];
-                        (Array.isArray(response?.body?.variants) ? response?.body?.variants : []).forEach(item => {
+                        response?.body?.variants.forEach(item => {
                             if (!item.archive) {
                                 this.stockVariants[index].push({
                                     label: item.name,

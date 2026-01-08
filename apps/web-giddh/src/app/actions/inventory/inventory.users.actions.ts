@@ -11,9 +11,7 @@ import { InventoryUser } from '../../models/api-models/Inventory-in-out';
 import { Observable } from 'rxjs';
 import { IPaginatedResponse } from '../../models/interfaces/paginated-response.interface';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class InventoryUsersActions {
 
     public addNewUser$: Observable<Action> = createEffect(() => this.action$

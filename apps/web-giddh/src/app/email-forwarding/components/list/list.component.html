@@ -1,10 +1,15 @@
-<div appTranslate [file]="'email-forwarding'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'email-forwarding'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu></hamburger-menu>
     <div class="container-fluid p-3">
         <!-- Header Section -->
         <div class="row mb-3">
             <div class="col-12">
-                <button matButton="filled" (click)="createNew()">
+                <button mat-raised-button color="primary" (click)="createNew()">
                     <i class="icon-plus mr-2"></i>
                     {{ localeData?.new_email_address }}
                 </button>
@@ -28,7 +33,7 @@
                             <td mat-cell *matCellDef="let statement" class="w-25">
                                 <span class="font-weight-medium mr-1">{{ statement.forwardedMail }}</span>
                                 <button
-                                    matIconButton
+                                    mat-icon-button
                                     (click)="onCopyForwardedMail($event)"
                                     [matTooltip]="commonLocaleData?.app_copy"
                                     matTooltipPosition="after"
@@ -45,14 +50,14 @@
                         <ng-container matColumnDef="bankAccountName">
                             <th mat-header-cell *matHeaderCellDef>{{ localeData?.bank_account_name }}</th>
                             <td mat-cell *matCellDef="let statement">
-                                {{ statement.account?.name || '-' }}
+                                {{ statement.account?.name || "-" }}
                             </td>
                         </ng-container>
 
                         <!-- Original Email Column -->
                         <ng-container matColumnDef="originalEmail">
                             <th mat-header-cell *matHeaderCellDef>{{ localeData?.original_email }}</th>
-                            <td mat-cell *matCellDef="let statement">{{ statement.originalEmail || '-' }}</td>
+                            <td mat-cell *matCellDef="let statement">{{ statement.originalEmail || "-" }}</td>
                         </ng-container>
 
                         <!-- Actions Column -->
@@ -62,7 +67,7 @@
                             </th>
                             <td mat-cell *matCellDef="let statement" class="text-center">
                                 <button
-                                    matIconButton
+                                    mat-icon-button
                                     [matTooltip]="commonLocaleData?.app_delete"
                                     matTooltipPosition="after"
                                     color="warn"
@@ -86,4 +91,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

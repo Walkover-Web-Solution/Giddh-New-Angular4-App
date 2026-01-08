@@ -11,11 +11,8 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { AdvanceReceiptRequest, VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { ADVANCE_RECEIPTS_API } from './apiurls/advance-receipt-adjustment.api';
 import { PAGINATION_LIMIT } from '../app.constant';
-import { concat, forEach, get, keys } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SalesService {
     private companyUniqueName: string;
 

@@ -1,11 +1,9 @@
 import { Directive, HostListener, Input } from '@angular/core';
 
 import { Account, ChildGroup } from '../../models/api-models/Search';
-import { forEach } from '../../lodash-optimized';
 
 @Directive({
-    selector: '[financial-accordion]',
-    standalone: false
+    selector: '[financial-accordion]'
 })
 export class FinancialAccordionDirective {
     // tslint:disable-next-line:no-input-rename
@@ -23,7 +21,7 @@ export class FinancialAccordionDirective {
             return;
         }
         if (this.data.accounts) {
-            (Array.isArray(this.data.accounts) ? this.data.accounts : []).forEach((account: Account) => {
+            this.data.accounts.forEach((account: Account) => {
                 if (account.isIncludedInSearch) {
                     account.isVisible = !account.isVisible;
                     isChildVisible = account.isVisible;
@@ -31,7 +29,7 @@ export class FinancialAccordionDirective {
             });
         }
         if (this.data.childGroups) {
-            (Array.isArray(this.data.childGroups) ? this.data.childGroups : []).forEach((account: ChildGroup) => {
+            this.data.childGroups.forEach((account: ChildGroup) => {
                 if (account.isIncludedInSearch) {
                     account.isVisible = !account.isVisible;
                     isChildVisible = account.isVisible;

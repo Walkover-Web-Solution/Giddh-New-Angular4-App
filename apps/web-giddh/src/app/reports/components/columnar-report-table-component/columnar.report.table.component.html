@@ -5,14 +5,7 @@
                 <thead class="thead-background1" [hidden]="!columnarReportResponse?.accounts?.length">
                     <tr>
                         <ng-container *ngFor="let item of columnsName; let inx = index">
-                            <th
-                                [ngClass]="{
-                                    'serial-no-column': inx === 0,
-                                    'text-center': !['#', localeData?.name_of_ledger, localeData?.parent_group].includes(item),
-                                }"
-                            >
-                                {{ item }}
-                            </th>
+                            <th [ngClass]="{ 'serial-no-column': inx === 0, 'text-center' : !['#', localeData?.name_of_ledger, localeData?.parent_group].includes(item) }">{{ item }}</th>
                         </ng-container>
                     </tr>
                 </thead>
@@ -30,12 +23,12 @@
                             class="text-center"
                             *ngIf="isShowClosingOpeningBalance$ | async"
                         >
-                            <span *ngIf="isCrDrChecked">
-                                {{
-                                    columnarReportResponse?.openingBalance[item.accountUniqueName]?.type === 'DEBIT' &&
+                            <span *ngIf="isCrDrChecked"
+                                >{{
+                                    columnarReportResponse?.openingBalance[item.accountUniqueName]?.type === "DEBIT" &&
                                     columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount > 0
-                                        ? '-'
-                                        : ''
+                                        ? "-"
+                                        : ""
                                 }}
                             </span>
                             <span class="d-inline-flex">
@@ -43,11 +36,17 @@
                                     [amount]="columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
-                            <span *ngIf="!isCrDrChecked && columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount > 0">
+                            <span
+                                *ngIf="
+                                    !isCrDrChecked &&
+                                    columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount > 0
+                                "
+                            >
                                 {{
-                                    columnarReportResponse?.openingBalance[item.accountUniqueName]?.type === 'DEBIT'
+                                    columnarReportResponse?.openingBalance[item.accountUniqueName]?.type === "DEBIT"
                                         ? localeData?.dr
                                         : localeData?.cr
                                 }}
@@ -59,19 +58,34 @@
                             class="text-center"
                             *ngIf="isShowClosingOpeningBalance$ | async"
                         >
-                            <span *ngIf="isCrDrChecked && columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount > 0">
-                                {{ columnarReportResponse?.closingBalance[item.accountUniqueName]?.type === 'DEBIT' ? '-' : '' }}
+                            <span
+                                *ngIf="
+                                    isCrDrChecked &&
+                                    columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount > 0
+                                "
+                            >
+                                {{
+                                    columnarReportResponse?.closingBalance[item.accountUniqueName]?.type === "DEBIT"
+                                        ? "-"
+                                        : ""
+                                }}
                             </span>
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
-                            <span *ngIf="!isCrDrChecked && columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount > 0">
+                            <span
+                                *ngIf="
+                                    !isCrDrChecked &&
+                                    columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount > 0
+                                "
+                            >
                                 {{
-                                    columnarReportResponse?.closingBalance[item.accountUniqueName]?.type === 'DEBIT'
+                                    columnarReportResponse?.closingBalance[item.accountUniqueName]?.type === "DEBIT"
                                         ? localeData?.dr
                                         : localeData?.cr
                                 }}
@@ -79,40 +93,58 @@
                         </td>
                         <!--Grand  Total -->
                         <td [attr.data-title]="localeData?.grand_total" class="text-center">
-                            <span *ngIf="isCrDrChecked && columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0">
-                                {{ columnarReportResponse?.grandTotal[item.accountUniqueName]?.type === 'DEBIT' ? '-' : '' }}
-                            </span>
+                            <span
+                                *ngIf="
+                                    isCrDrChecked &&
+                                    columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0
+                                "
+                            >
+                                {{
+                                    columnarReportResponse?.grandTotal[item.accountUniqueName]?.type === "DEBIT"
+                                        ? "-"
+                                        : ""
+                                }}</span
+                            >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
-                            <span *ngIf="!isCrDrChecked && columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0">
+                            <span
+                                *ngIf="
+                                    !isCrDrChecked &&
+                                    columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0
+                                "
+                            >
                                 {{
-                                    columnarReportResponse?.grandTotal[item.accountUniqueName]?.type === 'DEBIT'
+                                    columnarReportResponse?.grandTotal[item.accountUniqueName]?.type === "DEBIT"
                                         ? localeData?.dr
                                         : localeData?.cr
-                                }}
-                            </span>
+                                }}</span
+                            >
                         </td>
                         <ng-container *ngFor="let months of columnarReportResponse.data; let inx2 = index">
                             <!-- months data -->
                             <td class="text-center" [attr.data-title]="monthName[inx2]">
                                 <span *ngIf="isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount > 0">
-                                    {{ months?.accountsData[inx]?.monthlyBalance?.type === 'DEBIT' ? '-' : '' }}
-                                </span>
+                                    {{ months?.accountsData[inx]?.monthlyBalance?.type === "DEBIT" ? "-" : "" }}</span
+                                >
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="months.accountsData[inx]?.monthlyBalance?.amount"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
-                                    ></amount-field>
+                                    >
+                                    </amount-field>
                                 </span>
-                                <span *ngIf="!isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount > 0">
-                                    {{ months?.accountsData[inx]?.monthlyBalance?.type === 'DEBIT' ? localeData?.dr : localeData?.cr }}
-                                </span>
+                                <span *ngIf="!isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount > 0">{{
+                                    months?.accountsData[inx]?.monthlyBalance?.type === "DEBIT"
+                                        ? localeData?.dr
+                                        : localeData?.cr
+                                }}</span>
                             </td>
                         </ng-container>
                     </tr>
@@ -121,7 +153,11 @@
         </div>
         <div
             class="no-data"
-            *ngIf="columnarReportResponse && columnarReportResponse.accounts && columnarReportResponse.accounts.length === 0"
+            *ngIf="
+                columnarReportResponse &&
+                columnarReportResponse.accounts &&
+                columnarReportResponse.accounts.length === 0
+            "
         >
             <no-data [secondaryMessageClass]="'p-0'"></no-data>
         </div>

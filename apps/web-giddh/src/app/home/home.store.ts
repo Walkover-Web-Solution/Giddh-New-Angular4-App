@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { tap } from "rxjs/operators";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "../services/toaster.service";
 import { ContactService } from "../services/contact.service";
@@ -19,9 +18,7 @@ const DEFAULT_STATE: HomeState = {
     isBankRefreshingError: false
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class HomeComponentStore extends ComponentStore<HomeState> {
 
     constructor(
@@ -44,7 +41,7 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
             switchMap((req: any) => {
                 this.patchState({ bankMessage: null, isBankRefreshing: true, isBankRefreshingError: false });
                 return this.contactService.refreshGoCardlessBankTransactions(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
                                 this.toaster.showSnackBar("success", res.body);

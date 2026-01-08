@@ -1,11 +1,14 @@
-<div
+<ng-container
     appTranslate
     [file]="'gst'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState"
+    >
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
             [isMonthSelected]="isMonthSelected"
@@ -32,9 +35,16 @@
                     ></filing-header>
                 </div>
 
-                <div class="nav-band" [hidden]="(gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async)">
+                <div
+                    class="nav-band"
+                    [hidden]="(gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async)"
+                >
                     <div class="p-3">
-                        <mat-tab-group mat-stretch-tabs="false" [selectedIndex]="activeTabIndex" (selectedTabChange)="onTabChange($event)">
+                        <mat-tab-group
+                            mat-stretch-tabs="false"
+                            [selectedIndex]="activeTabIndex"
+                            (selectedTabChange)="onTabChange($event)"
+                        >
                             <!-- Overview -->
                             <mat-tab [label]="localeData?.filing?.tabs?.overview">
                                 <filing-overview
@@ -46,13 +56,11 @@
                                     [isTransactionSummary]="isTransactionSummary"
                                     [localeData]="localeData"
                                     [commonLocaleData]="commonLocaleData"
-                                ></filing-overview>
+                                >
+                                </filing-overview>
                             </mat-tab>
                             <!-- Reconcilation -->
-                            <mat-tab
-                                [label]="localeData?.filing?.tabs?.reconcilation"
-                                *ngIf="selectedGst === GstReport.Gstr2 || selectedGst === GstReport.Gstr1"
-                            >
+                            <mat-tab [label]="localeData?.filing?.tabs?.reconcilation" *ngIf="selectedGst === GstReport.Gstr2 || selectedGst === GstReport.Gstr1">
                                 <div *ngIf="selectedTab === localeData?.filing?.tabs?.reconcilation || activeTabIndex === 1">
                                     <reconcile
                                         [activeCompanyGstNumber]="activeCompanyGstNumber"
@@ -64,28 +72,22 @@
                                 </div>
                             </mat-tab>
                             <!-- File Return -->
-                            <mat-tab
-                                [label]="localeData?.filing?.tabs?.push_to_portal"
-                                *ngIf="isCompany && selectedGst !== GstReport.Gstr2 && showGstFiling"
-                            >
+                            <mat-tab [label]="localeData?.filing?.tabs?.push_to_portal" *ngIf="isCompany && selectedGst !== GstReport.Gstr2 && showGstFiling">
                                 <div class="transactions-overview">
                                     <div class="gstr-transactions-summary mt-5 mb-5 text-center">
                                         <div class="gst-return-date">
-                                            <img src="{{ imgPath }}return-date.svg" />
+                                            <img src="assets/images/return-date.svg" />
                                             <p>{{ localeData?.filing?.click_to_proceed }}</p>
                                             <button
-                                                matButton="filled"
+                                                mat-raised-button
+                                                color="primary"
                                                 (click)="fileReturn = { isAuthenticate: true }"
-                                                [disabled]="
-                                                    (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
-                                                        restrictedModules.TaxFilling
-                                                    )
-                                                "
+                                                [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                                             >
                                                 {{ localeData?.filing?.push_to_portal }}
                                             </button>
                                         </div>
-
+            
                                         <p *ngIf="fileReturnSucces" class="mt-4">
                                             {{ getGstReturnFieldText() }}
                                         </p>
@@ -95,13 +97,16 @@
                         </mat-tab-group>
                     </div>
                 </div>
-                <div class="filings-empty-state" *ngIf="(gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async)">
+                <div
+                    class="filings-empty-state"
+                    *ngIf="(gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async)"
+                >
                     <giddh-page-loader></giddh-page-loader>
                     <div class="empty-msg">
-                        <span>{{ getLoadingGstText(selectedGst | titlecase) }}</span>
+                        <span> {{ getLoadingGstText(selectedGst | titlecase) }} </span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</ng-container>

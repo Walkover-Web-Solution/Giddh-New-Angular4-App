@@ -1,14 +1,17 @@
-<div appTranslate [file]="'trial-profit-balance'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu></hamburger-menu>
-    <mat-tab-group
-        mat-stretch-tabs="false"
+    <mat-tab-group mat-stretch-tabs="false"
         mat-align-tabs="start"
         [selectedIndex]="selectedTabIndex"
         (selectedIndexChange)="tabChanged($event)"
         [disableRipple]="true"
         animationDuration="0ms"
-        class="table-header-sticky"
-    >
+        class="table-header-sticky" >
         <!-- Trial Balance Tab -->
         <mat-tab label="{{ localeData?.tabs?.trial_balance }}">
             <div class="container-fluid pt-2" *ngIf="selectedTabIndex === 0">
@@ -30,4 +33,4 @@
             </div>
         </mat-tab>
     </mat-tab-group>
-</div>
+</ng-container>

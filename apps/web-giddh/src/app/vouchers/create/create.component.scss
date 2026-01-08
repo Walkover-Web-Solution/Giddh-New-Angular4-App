@@ -47,7 +47,7 @@
     .vouchers-secondary-form {
         &.vouchers-form-disable {
             &::before {
-                content: '';
+                content: "";
                 display: block;
                 position: absolute;
                 top: 0;
@@ -230,12 +230,10 @@
                     }
 
                     .remove-attachment {
-                        $size: 25px;
-                        height: $size;
-                        width: $size;
-                        line-height: $size;
+                        height: 25px;
+                        width: 25px;
                         padding: 2px;
-                        color: var(--theme-foreground-color);
+                        color: black;
                     }
                 }
 

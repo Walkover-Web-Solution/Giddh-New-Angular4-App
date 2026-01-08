@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     GstOverViewRequest,
@@ -18,18 +18,15 @@ import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.cons
 import { GeneralService } from '../../services/general.service';
 import { FormControl } from '@angular/forms';
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules, Configuration } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GstComponentStore } from '../gst.store';
-import { ServiceConfig } from '../../services/service.config';
-import { environment } from '../../../environments/environment.generated';
 
 @Component({
     selector: 'file-gstr3',
     templateUrl: './gstR3.component.html',
     styleUrls: ['gstR3.component.scss'],
-    providers: [GstComponentStore],
-    standalone: false
+    providers: [GstComponentStore]
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
     /** Aside authentication dialog open */
@@ -76,8 +73,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public date: FormControl<string | null> = new FormControl<string | null>('');
     /** Holds displayed columns */
     public gstrUserTableDataDisplayedColumns: string[] = ['number', 'label', 'value'];
-    /** Image path for assets */
-    public imgPath: string = '';
     /** Holds gstr user table data */
     public gstrUserTableData: any[] = []
     /** Holds displayed columns */
@@ -121,8 +116,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver,
         private dialog: MatDialog,
-        private componentStore: GstComponentStore,
-        @Inject(ServiceConfig) private serviceConfig
+        private componentStore: GstComponentStore
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(state => state.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
@@ -137,7 +131,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
@@ -153,14 +146,13 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
             this.isCompany = params['isCompany'] === 'true';
             if (!this.selectedMonth) {
-                const fromDate = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT);
-                this.selectedMonth = fromDate.isValid() ? fromDate.toISOString() : dayjs().startOf('month').toISOString();
+                this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
                 this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
             }
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
-
+        
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
@@ -408,7 +400,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.itc_available
             });
 
-            (Array.isArray(this.gstr3BData.itc_elg.itc_avl) ? this.gstr3BData.itc_elg.itc_avl : []).forEach(item => {
+            this.gstr3BData.itc_elg.itc_avl.forEach(item => {
                 switch (item.ty) {
                     case 'IMPG':
                         tableData.push({
@@ -488,7 +480,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.itc_reversed
             });
 
-            (Array.isArray(this.gstr3BData.itc_elg.itc_rev) ? this.gstr3BData.itc_elg.itc_rev : []).forEach(item => {
+            this.gstr3BData.itc_elg.itc_rev.forEach(item => {
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({
@@ -545,7 +537,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.ineligible_itc
             });
 
-            (Array.isArray(this.gstr3BData.itc_elg.itc_inelg) ? this.gstr3BData.itc_elg.itc_inelg : []).forEach(item => {
+            this.gstr3BData.itc_elg.itc_inelg.forEach(item => {
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({
@@ -819,10 +811,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public fileGstr3B(): void {
         const monthYear = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MM-YYYY');
         const currentDateTime = this.generalService.getCurrentDateTime();
-        this.componentStore.fileGstr3B({
-            period: this.currentPeriod,
-            gstNumber: this.activeCompanyGstNumber,
-            via: TaxServiceEnum.TAXPRO,
+        this.componentStore.fileGstr3B({ 
+            period: this.currentPeriod, 
+            gstNumber: this.activeCompanyGstNumber, 
+            via: TaxServiceEnum.TAXPRO, 
             monthYear,
             currentDateTime
         });
@@ -843,7 +835,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
     /**
     * Navigates to the page for buy plan.
-    *
+    * 
     * @param subscriptionId
     * @memberof FileGstR3Component
     */

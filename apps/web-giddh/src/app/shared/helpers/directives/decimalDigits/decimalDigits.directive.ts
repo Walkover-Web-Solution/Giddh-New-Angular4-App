@@ -5,8 +5,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Directive({
-    selector: '[decimalDigitsDirective]',
-    standalone: false
+    selector: '[decimalDigitsDirective]'
 })
 export class DecimalDigitsDirective implements OnDestroy {
     @Input() public decimalPoints: number = 2;

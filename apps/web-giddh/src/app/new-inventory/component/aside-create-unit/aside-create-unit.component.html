@@ -1,4 +1,4 @@
-<div appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <section class="aside-dialog-wrapper">
         <div class="header-create-unit dialog-header">
             <span>{{ commonLocaleData?.app_create_unit }}</span>
@@ -7,4 +7,4 @@
             <create-unit [unitGroupDetails]="unitGroupDetails" (closeAsideEvent)="closeAsidePane($event)"></create-unit>
         </mat-dialog-content>
     </section>
-</div>
+</ng-container>

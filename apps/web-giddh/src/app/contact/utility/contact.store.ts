@@ -1,7 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { ContactService } from "../../services/contact.service";
@@ -27,11 +27,7 @@ export const DEFAULT_CONTACT_STATE: ContactState = {
     exportAccountStatementResponse: null
 };
 
-@Injectable(
-    {
-        providedIn: 'root'
-    }
-)
+@Injectable()
 export class ContactComponentStore extends ComponentStore<ContactState> implements OnDestroy {
 
     constructor(private toasterService: ToasterService,
@@ -70,7 +66,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
             switchMap((req) => {
                 this.patchState({ sendBulkEmailIsSuccess: false });
                 return this.contactService.sendBulkEmailTemplate(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 res?.body && this.toasterService.showSnackBar('success', res?.body);
@@ -138,7 +134,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                     params.postData,
                     params.branchUniqueName
                 ).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({
@@ -169,7 +165,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
             })
         );
     });
-
+    
 
     readonly getAccountStatementList = this.effect((data$: Observable<any>) => {
         return data$.pipe(
@@ -177,7 +173,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                 // Optionally patch state to indicate loading if needed
                 this.patchState({ getAccountStatementInProgress: true, accountStatementList: [] });
                 return this.contactService.getAccountStatementList(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({
@@ -214,7 +210,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     });
 
     /**
-     * Export account statement
+     * Export account statement 
      *
      * @memberof ContactComponentStore
      */
@@ -225,7 +221,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                     exportAccountStatementResponse: null
                 });
                 return this.contactService.exportAccountStatement(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.patchState({

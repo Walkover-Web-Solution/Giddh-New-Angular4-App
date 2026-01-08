@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { LocaleService } from "../../../services/locale.service";
@@ -16,9 +16,7 @@ export const DEFAULT_STATE: SalesBifurcationDetailsState = {
     salesBifurcationDetailsListInProgress: false
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcationDetailsState> implements OnDestroy {
     constructor(
         private toasterService: ToasterService,
@@ -45,7 +43,7 @@ export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcatio
             switchMap(({ params }) => {
                 this.patchState({ salesBifurcationDetailsList: null, salesBifurcationDetailsListInProgress: true });
                 return this.salesBifurcationDetailsService.salesBifurcationDetails(params).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({

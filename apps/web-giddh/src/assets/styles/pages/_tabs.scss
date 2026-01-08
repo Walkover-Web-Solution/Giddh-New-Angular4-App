@@ -1,5 +1,7 @@
 .mat-mdc-tab-group {
     .mat-mdc-tab-header {
+        border-bottom: 1px solid var(--border-color);
+
         .mat-mdc-tab {
             .mdc-tab__text-label {
                 .voucher-svg {
@@ -28,9 +30,7 @@
 .tabs-box-wrap {
     &.mat-mdc-tab-group {
         .mat-mdc-tab-header {
-            .mat-mdc-tab-label-container {
-                border: none;
-            }
+            border: none;
         }
     }
     .mat-mdc-tab-labels {

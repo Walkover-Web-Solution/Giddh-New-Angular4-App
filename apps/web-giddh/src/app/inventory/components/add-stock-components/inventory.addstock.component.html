@@ -1,8 +1,8 @@
 <form #formDiv name="addEditStockForm" class="row" [formGroup]="addStockForm" novalidate="" autocomplete="off">
     <section class="w-100">
         <div class="dialog-header">
-            <span>{{ isUpdatingStockForm ? 'Update Stock' : 'Create Stock' }}</span>
-            <button matIconButton aria-label="close" (click)="closeAsidePane()">
+            <span>{{ isUpdatingStockForm ? "Update Stock" : "Create Stock" }}</span>
+            <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -27,7 +27,7 @@
                             <label class="d-block">&nbsp;</label>
                             <button
                                 type="button"
-                                matButton="outlined"
+                                mat-stroked-button
                                 (click)="moveStock()"
                                 [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
                             >
@@ -38,17 +38,11 @@
 
                     <div class="clear-both row">
                         <div class="form-group col-sm-5 col-12">
-                            <label>
-                                Stock Name
-                                <sup>*</sup>
-                            </label>
+                            <label>Stock Name <sup>*</sup></label>
                             <input type="text" name="name" class="form-control" formControlName="name" />
                         </div>
                         <div class="form-group col-sm-5 col-12">
-                            <label>
-                                Stock Unit
-                                <sup>*</sup>
-                            </label>
+                            <label>Stock Unit <sup>*</sup></label>
                             <reactive-dropdown-field
                                 [options]="stockUnitsDropDown$ | async"
                                 formControlName="stockUnitUniqueName"
@@ -99,7 +93,9 @@
                                                     formControlName="showCodeType"
                                                     value="sac"
                                                 />
-                                                <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
+                                                <label for="sacCodeType" class="ml-1 radio-custom-label"
+                                                    >SAC Code</label
+                                                >
                                             </span>
                                             <input
                                                 type="number"
@@ -121,7 +117,12 @@
 
                                         <div class="form-group col-sm-4 col-12">
                                             <label>Tax</label>
-                                            <button type="button" class="form-control text-left" [matMenuTriggerFor]="taxMenu" matButton="outlined">
+                                            <button
+                                                type="button"
+                                                class="form-control text-left"
+                                                [matMenuTriggerFor]="taxMenu"
+                                                mat-button
+                                            >
                                                 Selected ({{ taxTempArray?.length }})
                                                 <span class="pull-right"><span class="caret"></span></span>
                                             </button>
@@ -141,7 +142,9 @@
                                                         {{ tax.name }}
                                                     </mat-checkbox>
                                                 </div>
-                                                <div *ngIf="(companyTaxesList$ | async)?.length < 1" mat-menu-item>No Tax Found</div>
+                                                <div *ngIf="(companyTaxesList$ | async)?.length < 1" mat-menu-item>
+                                                    No Tax Found
+                                                </div>
                                             </mat-menu>
                                         </div>
                                     </div>
@@ -207,14 +210,14 @@
                                             <label>
                                                 <span
                                                     *ngIf="
-                                                        !customField1HeadingEditing && !addStockForm.controls['customField1Heading']?.value
+                                                        !customField1HeadingEditing &&
+                                                        !addStockForm.controls['customField1Heading']?.value
                                                     "
+                                                    >Custom field 1</span
                                                 >
-                                                    Custom field 1
-                                                </span>
-                                                <span *ngIf="!customField1HeadingEditing">
-                                                    {{ addStockForm.controls['customField1Heading']?.value }}
-                                                </span>
+                                                <span *ngIf="!customField1HeadingEditing">{{
+                                                    addStockForm.controls["customField1Heading"]?.value
+                                                }}</span>
                                                 <input
                                                     type="text"
                                                     placeholder="Custom field 1"
@@ -228,9 +231,14 @@
                                                     <i
                                                         *ngIf="!customField1HeadingEditing"
                                                         class="icon-edit-pencil"
-                                                        (click)="customField1HeadingEditing = !customField1HeadingEditing"
+                                                        (click)="
+                                                            customField1HeadingEditing = !customField1HeadingEditing
+                                                        "
                                                     ></i>
-                                                    <i class="icon-cross text-danger" (click)="removeCustomField('remove', 1)"></i>
+                                                    <i
+                                                        class="icon-cross text-danger"
+                                                        (click)="removeCustomField('remove', 1)"
+                                                    ></i>
                                                 </span>
                                             </label>
                                             <input
@@ -249,14 +257,14 @@
                                             <label>
                                                 <span
                                                     *ngIf="
-                                                        !customField2HeadingEditing && !addStockForm.controls['customField2Heading']?.value
+                                                        !customField2HeadingEditing &&
+                                                        !addStockForm.controls['customField2Heading']?.value
                                                     "
+                                                    >Custom field 2</span
                                                 >
-                                                    Custom field 2
-                                                </span>
-                                                <span *ngIf="!customField2HeadingEditing">
-                                                    {{ addStockForm.controls['customField2Heading']?.value }}
-                                                </span>
+                                                <span *ngIf="!customField2HeadingEditing">{{
+                                                    addStockForm.controls["customField2Heading"]?.value
+                                                }}</span>
                                                 <input
                                                     type="text"
                                                     placeholder="Custom field 2"
@@ -270,9 +278,14 @@
                                                     <i
                                                         *ngIf="!customField2HeadingEditing"
                                                         class="icon-edit-pencil"
-                                                        (click)="customField2HeadingEditing = !customField2HeadingEditing"
+                                                        (click)="
+                                                            customField2HeadingEditing = !customField2HeadingEditing
+                                                        "
                                                     ></i>
-                                                    <i class="icon-cross text-danger" (click)="removeCustomField('remove', 2)"></i>
+                                                    <i
+                                                        class="icon-cross text-danger"
+                                                        (click)="removeCustomField('remove', 2)"
+                                                    ></i>
                                                 </span>
                                             </label>
                                             <input
@@ -285,7 +298,11 @@
                                         </div>
                                         <!-- field 2 end -->
                                         <div class="form-group col-sm-4 col-12">
-                                            <div class="new-custom-btn" (click)="addCustomField()" *ngIf="!customField2 || !customField1">
+                                            <div
+                                                class="new-custom-btn"
+                                                (click)="addCustomField()"
+                                                *ngIf="!customField2 || !customField1"
+                                            >
                                                 + Custom field
                                             </div>
                                         </div>
@@ -299,7 +316,9 @@
                 <div class="row">
                     <div class="col-sm-6 col-12">
                         <div class="checkbox">
-                            <mat-checkbox formControlName="enablePurchase" color="primary">Purchase Information</mat-checkbox>
+                            <mat-checkbox formControlName="enablePurchase" color="primary">
+                                Purchase Information
+                            </mat-checkbox>
                         </div>
                         <div class="form-group">
                             <label class="bold-head">Account Name</label>
@@ -353,14 +372,14 @@
                                     </div>
                                     <div class="pull-right unit-add">
                                         <button
-                                            matButton="outlined"
+                                            mat-stroked-button
                                             class="mr-0"
                                             (click)="addPurchaseUnitRates(i)"
                                             *ngIf="l"
                                         >
                                             <i class="icon-plus text-green"></i>
                                         </button>
-                                        <button matButton="outlined" (click)="removePurchaseUnitRates(i)" *ngIf="!l">
+                                        <button mat-stroked-button (click)="removePurchaseUnitRates(i)" *ngIf="!l">
                                             <i class="icon-cross text-red"></i>
                                         </button>
                                     </div>
@@ -371,7 +390,9 @@
 
                     <div class="col-sm-6 col-12">
                         <div class="checkbox">
-                            <mat-checkbox formControlName="enableSales" color="primary">Sales Information</mat-checkbox>
+                            <mat-checkbox formControlName="enableSales" color="primary">
+                                Sales Information
+                            </mat-checkbox>
                         </div>
                         <div class="form-group">
                             <label>Account Name</label>
@@ -423,10 +444,10 @@
                                         />
                                     </div>
                                     <div class="pull-right unit-add">
-                                        <button matButton="outlined" class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
+                                        <button mat-stroked-button class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
                                             <i class="icon-plus text-green"></i>
                                         </button>
-                                        <button matButton="outlined" (click)="removeSaleUnitRates(i)" *ngIf="!l">
+                                        <button mat-stroked-button (click)="removeSaleUnitRates(i)" *ngIf="!l">
                                             <i class="icon-cross text-red"></i>
                                         </button>
                                     </div>
@@ -448,16 +469,13 @@
                 <section class="mt-4 row mb-5 col-12 col-sm-12" *ngIf="addStockForm?.value.isFsStock">
                     <div class="pl-1 pr-1">
                         <p class="section-head border-bottom">
-                            <strong>{{ addStockForm.controls['name']?.value }} (Made with)</strong>
+                            <strong>{{ addStockForm.controls["name"]?.value }} (Made with)</strong>
                         </p>
                         <table class="no-hover w-100">
                             <tbody formGroupName="manufacturingDetails">
                                 <tr class="output-row">
                                     <td class="form-group">
-                                        <label>
-                                            Output Qty
-                                            <sup>*</sup>
-                                        </label>
+                                        <label>Output Qty <sup>*</sup></label>
                                         <input
                                             type="text"
                                             class="form-control"
@@ -469,10 +487,7 @@
                                         />
                                     </td>
                                     <td class="form-group">
-                                        <label>
-                                            Stock Unit
-                                            <sup>*</sup>
-                                        </label>
+                                        <label>Stock Unit <sup>*</sup></label>
                                         <reactive-dropdown-field
                                             [options]="stockUnitsDropDown$ | async"
                                             formControlName="manufacturingUnitUniqueName"
@@ -481,18 +496,30 @@
                                         ></reactive-dropdown-field>
                                     </td>
                                     <td
-                                        *ngIf="addStockForm.controls['manufacturingDetails'].controls['manufacturingQuantity']?.value"
+                                        *ngIf="
+                                            addStockForm.controls['manufacturingDetails'].controls[
+                                                'manufacturingQuantity'
+                                            ]?.value
+                                        "
                                         colspan="2"
                                     >
                                         <label class="d-block">&nbsp;</label>
-                                        <span class="w-100">
-                                            <strong>
-                                                = (
-                                                {{ addStockForm.controls['manufacturingDetails'].controls['manufacturingQuantity']?.value }}
-                                                {{ addStockForm.controls['manufacturingDetails'].controls['manufacturingUnitCode']?.value }}
-                                                {{ addStockForm.controls['name']?.value }} )
-                                            </strong>
-                                        </span>
+                                        <span class="w-100"
+                                            ><strong
+                                                >= (
+                                                {{
+                                                    addStockForm.controls["manufacturingDetails"].controls[
+                                                        "manufacturingQuantity"
+                                                    ]?.value
+                                                }}
+                                                {{
+                                                    addStockForm.controls["manufacturingDetails"].controls[
+                                                        "manufacturingUnitCode"
+                                                    ]?.value
+                                                }}
+                                                {{ addStockForm.controls["name"]?.value }} )</strong
+                                            ></span
+                                        >
                                     </td>
                                 </tr>
                                 <tr class="no-hover table-label">
@@ -505,7 +532,9 @@
                                 <ng-container formArrayName="linkedStocks">
                                     <tr
                                         *ngFor="
-                                            let list of addStockForm.get('manufacturingDetails')['controls']['linkedStocks'].controls;
+                                            let list of addStockForm.get('manufacturingDetails')['controls'][
+                                                'linkedStocks'
+                                            ].controls;
                                             let i = index;
                                             let l = last
                                         "
@@ -546,14 +575,14 @@
                                         </td>
                                         <td>
                                             <button
-                                                matButton="outlined"
+                                                mat-stroked-button
                                                 (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l"
                                                 [disabled]="disableStockButton"
                                             >
                                                 <i class="icon-plus text-green"></i>
                                             </button>
-                                            <button matButton="outlined" (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
+                                            <button mat-stroked-button (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
                                                 <i class="icon-cross text-red"></i>
                                             </button>
                                         </td>
@@ -572,7 +601,8 @@
                                 *ngIf="!isUpdatingStockForm"
                                 [ladda]="isStockAddInProcess$ | async"
                                 (click)="submit()"
-                                matButton="filled"
+                                mat-raised-button
+                                color="primary"
                                 [disabled]="addStockForm.invalid || disableStockButton"
                             >
                                 Save
@@ -581,7 +611,8 @@
                                 type="button"
                                 *ngIf="isUpdatingStockForm"
                                 [ladda]="isStockUpdateInProcess$ | async"
-                                matButton="filled"
+                                mat-raised-button
+                                color="primary"
                                 (click)="update()"
                                 [disabled]="addStockForm.invalid || disableStockButton"
                             >
@@ -590,7 +621,7 @@
                             <button
                                 *ngIf="isUpdatingStockForm"
                                 [ladda]="isStockDeleteInProcess$ | async"
-                                matButton="outlined"
+                                mat-stroked-button
                                 (click)="openDialog(deleteGroupStockTemplate)"
                             >
                                 Delete Stock
@@ -599,7 +630,7 @@
                                 type="button"
                                 *ngIf="!isUpdatingStockForm"
                                 (click)="resetStockForm()"
-                                matButton="outlined"
+                                mat-stroked-button
                             >
                                 Reset
                             </button>
@@ -619,11 +650,14 @@
     <confirm-modal
         [title]="'Confirmation'"
         [body]="'Deleting this stock will un-link & delete it forever. Are you sure you want to delete the stock?'"
-        [permanentlyDeleteMessage]="'It will be deleted permanently and will no longer be accessible from any other module.'"
+        [permanentlyDeleteMessage]="
+            'It will be deleted permanently and will no longer be accessible from any other module.'
+        "
         [ok]="'Yes'"
         [cancel]="'No'"
         (cancelCallBack)="closeDialog()"
         (successCallBack)="deleteStock(); closeDialog()"
-    ></confirm-modal>
+    >
+    </confirm-modal>
 </ng-template>
 <!-- popup end -->

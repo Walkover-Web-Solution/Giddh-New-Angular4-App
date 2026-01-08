@@ -12,7 +12,6 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 @Component({
     selector: 'invetory-sidebar',
     templateUrl: './inventory.sidebar.component.html',
-    standalone: false,
     styles: [`
         .parent-group > ul > li ul li div {
             color: #8a8a8a;

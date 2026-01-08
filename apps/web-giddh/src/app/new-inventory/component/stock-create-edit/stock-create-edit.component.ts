@@ -11,7 +11,7 @@ import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.a
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { NgForm } from "@angular/forms";
-import { Configuration, INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
+import { INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
 import { MatDialog } from "@angular/material/dialog";
@@ -31,14 +31,12 @@ import { PreviewVariantImageComponent } from "../preview-variant-image/preview-v
 import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
     styleUrls: ["./stock-create-edit.component.scss"],
-    providers: [InventoryComponentStore, VoucherComponentStore],
-    standalone:false
+    providers: [InventoryComponentStore, VoucherComponentStore]
 })
 export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Instance of stock create/edit form */
@@ -336,7 +334,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         // and the parent will handle the page leave confirmation via ViewChild
 
         /* added image path */
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         /** added parent class to body after entering new-inventory page */
         document.querySelector("body").classList.add("stock-create-edit");
 
@@ -679,14 +677,14 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public deleteVariantOption(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '585px',
-                    data: {
+            width: '585px',
+            data: {
                 title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.confirm_delete_option,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no,
-                    permanentlyDeleteMessage: ' '
-                }
+                body: this.localeData?.confirm_delete_option,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: ' '
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -1088,7 +1086,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     isMandatory: obj.isMandatory
                 }
             });
-            (Array.isArray(updatedCustomFieldArray) ? updatedCustomFieldArray : []).forEach(field => {
+            updatedCustomFieldArray.forEach(field => {
                 if (field.isMandatory && (field.value === undefined || field.value === null)) {
                     this.isFormSubmitted = true;
                 }
@@ -1177,7 +1175,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     if (!this.stockGroups?.length) {
                         this.getStockGroups();
                     }
-                    this.toaster.showSnackBar("success", this.localeData?.stock_create_successfully);
+                    this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
                     if (this.addStock) {
                         this.closeAsideEvent.emit(false);
                     } else {
@@ -1509,7 +1507,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.clearPageLeaveConfirmation();
-                this.toaster.showSnackBar("success", this.localeData?.stock_update_successfully);
+                this.toaster.showSnackBar("success", this.localeData?.stock_update_succesfully);
                 if (this.createRecipe && this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
                 }
@@ -1660,7 +1658,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body?.results;
                 if (!this.queryParams?.stockUniqueName) {
-                    (Array.isArray(this.stockForm.variants) ? this.stockForm.variants : []).forEach(variant => {
+                    this.stockForm.variants.forEach(variant => {
                         if (this.companyCustomFields?.length > 0) {
                             variant.customFields = cloneDeep(this.companyCustomFields);
                         }
@@ -1922,16 +1920,16 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public deleteStock(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '40%',
-                    role: 'alertdialog',
-                    ariaLabel: 'Confirm Delete Dialog',
-                    data: {
+            width: '40%',
+            role: 'alertdialog',
+            ariaLabel: 'Confirm Delete Dialog',
+            data: {
                 title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.delete_stock,
-                    permanentlyDeleteMessage: this.localeData?.permanently_delete,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                body: this.localeData?.delete_stock,
+                permanentlyDeleteMessage: this.localeData?.permanently_delete,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -1941,7 +1939,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     this.toggleLoader(false);
                     if (response?.status === "success") {
                         this.clearPageLeaveConfirmation();
-                        this.toaster.showSnackBar("success", this.localeData?.stock_delete_successfully);
+                        this.toaster.showSnackBar("success", this.localeData?.stock_delete_succesfully);
                         if (this.addStock) {
                             this.closeAsideEvent.emit();
                         } else {

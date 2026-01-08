@@ -1,4 +1,4 @@
-@use '../abstracts/mixins' as *;
+@use "../abstracts/mixins" as *;
 
 .border {
     border: 1px solid var(--border-color) !important;
@@ -54,9 +54,7 @@
 .only-bottom-radius {
     @include border-radius(0, 0, var(--mat-border-radius-4), var(--mat-border-radius-4));
 }
-.text-color-inherit {
-    color: inherit !important;
-}
+
 .text-primary {
     color: var(--text-primary-color) !important;
 }
@@ -256,7 +254,7 @@
     &::after {
         display: block;
         clear: both;
-        content: '';
+        content: "";
     }
 }
 

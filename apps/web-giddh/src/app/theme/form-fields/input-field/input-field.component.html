@@ -6,7 +6,12 @@
     >
         <mat-label>
             {{ label || placeholder }}
-            <i *ngIf="showLabelIcon" [class]="labelIconClass" [matTooltip]="labelIconTooltip" matTooltipPosition="above"></i>
+            <i
+                *ngIf="showLabelIcon"
+                [class]="labelIconClass"
+                [matTooltip]="labelIconTooltip"
+                matTooltipPosition="above"
+            ></i>
         </mat-label>
         <input
             matInput
@@ -31,7 +36,7 @@
             [attr.max]="max"
             *ngIf="!allowDecimalDigitsOnly && !useMask"
             #textField
-            (keydown.enter)="handleEnterKey($event)"
+            (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
             [ngClass]="{ 'error-box': showError }"
@@ -59,7 +64,7 @@
             [customDecimalPlaces]="customDecimalPlaces"
             decimalDigitsDirective
             #textField
-            (keydown.enter)="handleEnterKey($event)"
+            (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
             [ngClass]="{ 'error-box': showError }"
@@ -89,7 +94,7 @@
             *ngIf="useMask"
             [customDecimalPlaces]="customDecimalPlaces"
             #textField
-            (keydown.enter)="handleEnterKey($event)"
+            (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
             [ngClass]="{ 'error-box': showError }"
@@ -97,7 +102,9 @@
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute icon-prefix"></i>
 
-        <span matSuffix *ngIf="matSuffix" [ngClass]="matSuffixCssClass" (click)="handleSuffixClick()">{{ matSuffix }}</span>
+        <span matSuffix *ngIf="matSuffix" [ngClass]="matSuffixCssClass" (click)="handleSuffixClick()">{{
+            matSuffix
+        }}</span>
         <i
             matSuffix
             *ngIf="matSuffixIcon"
@@ -107,6 +114,7 @@
             matTooltipPosition="above"
             role="button"
             [attr.aria-label]="label || placeholder"
-        ></i>
+        >
+        </i>
     </mat-form-field>
 </div>

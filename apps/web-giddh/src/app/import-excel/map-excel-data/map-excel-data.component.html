@@ -9,7 +9,10 @@
                     </div>
                 </div>
                 <div class="checkbox d-flex mt-1">
-                    <mat-checkbox [(ngModel)]="importData.isHeaderProvided" color="primary">
+                    <mat-checkbox
+                        [(ngModel)]="importData.isHeaderProvided"
+                        color="primary"
+                    >
                         {{ localeData?.header_provided }}
                     </mat-checkbox>
                 </div>
@@ -40,8 +43,8 @@
                 </div>
             </div>
             <div class="mt-5">
-                <button matButton="outlined" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
-                <button matButton="filled" (click)="mapExcelData()">{{ commonLocaleData?.app_next }}</button>
+                <button mat-stroked-button (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
+                <button mat-raised-button color="primary" (click)="mapExcelData()">{{ commonLocaleData?.app_next }}</button>
             </div>
         </div>
     </div>

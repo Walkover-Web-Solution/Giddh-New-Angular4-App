@@ -1,87 +1,108 @@
-@use 'sass:map';
 @use '@angular/material' as mat;
-@use '../material/material-mixins' as mixins;
 
-// Use Angular Material's built-in M3 palettes directly
-$theme-primary: mat.$azure-palette;
-$theme-tertiary: mat.$blue-palette;
- 
-$giddh-light-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: $theme-primary,
-    tertiary: $theme-tertiary,
-    use-system-variables: true,
-  ),
-  typography: (
-    brand-family: var(--font-family),
-    plain-family: var(--font-family),
-    bold-weight: var(--font-weight-bold),
-    medium-weight: var(--font-weight-medium),
-    regular-weight: var(--font-weight-regular),
-    use-system-variables: true,
-  ),
-  density: (
-    scale: 0,
-  )
-));
+$custom-primary-palette: (
+    50: #e8eaf6,
+    100: #c5cae9,
+    200: #9fa8da,
+    300: #7986cb,
+    400: #5c6bc0,
+    500: #3f51b5,
+    600: #3949ab,
+    700: #303f9f,
+    800: #283593,
+    900: #1a237e,
+    A100: #8c9eff,
+    A200: #536dfe,
+    A400: #3d5afe,
+    A700: #304ffe,
+    contrast: (
+        50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: rgba(black, 0.87),
+        300: white,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: rgba(black, 0.87),
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
 
-$giddh-dark-theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-     primary: $theme-primary,
-    tertiary: $theme-tertiary,
-    use-system-variables: true,
-  ),
-  typography: (
-    brand-family: var(--font-family),
-    plain-family: var(--font-family),
-    bold-weight: var(--font-weight-bold),
-    medium-weight: var(--font-weight-medium),
-    regular-weight: var(--font-weight-regular),
-    use-system-variables: true,
-  ),
-  density: (
-    scale: 0,
-  )
-));
+$custom-accent-palette: (
+    50: #e8f5e8,
+    100: #c8e6c9,
+    200: #a5d6a7,
+    300: #81c784,
+    400: #66bb6a,
+    500: #4caf50,
+    600: #43a047,
+    700: #388e3c,
+    800: #2e7d32,
+    900: #198754,
+    A100: #b9f6ca,
+    A200: #69f0ae,
+    A400: #00e676,
+    A700: #00c853,
+    contrast: (
+        50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: rgba(black, 0.87),
+        300: rgba(black, 0.87),
+        400: rgba(black, 0.87),
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: rgba(black, 0.87),
+        A200: rgba(black, 0.87),
+        A400: rgba(black, 0.87),
+        A700: white,
+    )
+);
 
-// Apply light theme by default
-html, body {
-    @include mat.all-component-themes($giddh-light-theme);
-    @include mat.system-level-typography($giddh-light-theme);
-    @include mat.all-component-typographies($giddh-light-theme);
-}
+$custom-warn-palette: (
+    50: #ffebee,
+    100: #ffcdd2,
+    200: #ef9a9a,
+    300: #e57373,
+    400: #ef5350,
+    500: #f44336,
+    600: #e53935,
+    700: #d32f2f,
+    800: #c62828,
+    900: #dc3545,
+    A100: #ff8a80,
+    A200: #ff5252,
+    A400: #ff1744,
+    A700: #d50000,
+    contrast: (
+        50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: rgba(black, 0.87),
+        300: rgba(black, 0.87),
+        400: rgba(black, 0.87),
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: rgba(black, 0.87),
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
 
-.default-theme {
-    // Apply component colors
-    @include mat.all-component-colors($giddh-light-theme);
-    @include mat.system-level-colors($giddh-light-theme);
+$giddh-primary: mat.define-palette($custom-primary-palette, 900);  // #1a237e
+$giddh-accent: mat.define-palette($custom-accent-palette, 900);    // #198754
+$giddh-warn: mat.define-palette($custom-warn-palette, 900);        // #dc3545
 
-    // Apply your custom mixin
-    @include mixins.define-theme-colors($giddh-light-theme);
-    
-    // Density override
-    @include mat.all-component-densities($giddh-light-theme);
-}
-.dark-theme {
-    // Apply component colors
-    @include mat.all-component-colors($giddh-dark-theme);
-    @include mat.system-level-colors($giddh-dark-theme);
-    
-    // Apply your custom mixin
-    @include mixins.define-theme-colors($giddh-dark-theme);
-    
-    // Dynamic Material Design System variables for dark theme only
-    // Explicitly picks tone 40 for primary and tone 90 for on-primary from Azure palette
-    --mat-sys-primary: #{map.get($theme-primary, 40)};
-    --mat-sys-on-primary: #{map.get($theme-primary, 90)};
-    --mat-button-outlined-label-text-color: var(--color-white, #ffffff);
-    
-    // Density override
-    @include mat.all-component-densities($giddh-dark-theme);
-}
-
-// Export themes for use in other files
-$light-theme: $giddh-light-theme !default;
-$dark-theme: $giddh-dark-theme !default;
+$giddh-primary-dark: mat.define-palette($custom-primary-palette, 400);  // #9fa8da (lighter indigo)
+$giddh-accent-dark: mat.define-palette($custom-accent-palette, 400);    // #a5d6a7 (lighter green)
+$giddh-warn-dark: mat.define-palette($custom-warn-palette, 400);        // #ef9a9a (lighter red)

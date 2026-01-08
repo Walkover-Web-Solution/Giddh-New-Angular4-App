@@ -23,8 +23,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 @Component({
     selector: 'group-update',
     templateUrl: 'group-update.component.html',
-    styleUrls: ['group-update.component.scss'],
-    standalone: false
+    styleUrls: ['group-update.component.scss']
 })
 
 export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -500,8 +499,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         data.taxes = [];
         this.activeGroupTaxHierarchy$.pipe(take(1)).subscribe((t) => {
             if (t) {
-                (Array.isArray(t.inheritedTaxes) ? t.inheritedTaxes : []).forEach(tt => {
-                    (Array.isArray(tt.applicableTaxes) ? tt.applicableTaxes : []).forEach(ttt => {
+                t.inheritedTaxes.forEach(tt => {
+                    tt.applicableTaxes.forEach(ttt => {
                         data.taxes.push(ttt?.uniqueName);
                     });
                 });

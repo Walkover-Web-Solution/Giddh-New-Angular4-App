@@ -22,10 +22,9 @@ import { StateCode } from '../models/api-models/Sales';
 import { ServiceConfig } from '../services/service.config';
 
 @Component({
-selector: 'billing-details',
+    selector: 'billing-details',
     templateUrl: 'billing-details.component.html',
-    styleUrls: ['billing-details.component.scss'],
-    standalone: false
+    styleUrls: ['billing-details.component.scss']
 })
 export class BillingDetailComponent implements OnInit, OnDestroy {
     /** Form instance */

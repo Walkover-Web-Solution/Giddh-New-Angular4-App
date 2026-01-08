@@ -200,7 +200,7 @@ class AppDatabase extends Dexie {
                 return this.companies.get(key);
             }).catch((err) => (err));
         }).catch((err) => {
-
+            console.log('error while adding item', err);
         });
     }
 
@@ -234,7 +234,7 @@ class AppDatabase extends Dexie {
                 return this.companies.get(key);
             }).catch((err) => (err)); 
         }).catch((err) => {
-
+            console.log('error while deleting item', err);
         });
     }
 

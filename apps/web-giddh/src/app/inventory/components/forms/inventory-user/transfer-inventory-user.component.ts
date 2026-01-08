@@ -9,7 +9,9 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
 @Component({
     selector: 'transfer-inventory-user',
     templateUrl: './transfer-inventory-user.component.html',
-    standalone: false
+    styles: [`
+
+  `],
 })
 
 export class InventoryUserComponent implements OnChanges {
@@ -58,7 +60,7 @@ export class InventoryUserComponent implements OnChanges {
                 inventoryUser
             });
         } else {
-            (Array.isArray(items.controls) ? items.controls : []).forEach(c => c?.patchValue({ ...c?.value, inventoryUser }));
+            items.controls.forEach(c => c?.patchValue({ ...c?.value, inventoryUser }));
         }
     }
 
@@ -71,13 +73,13 @@ export class InventoryUserComponent implements OnChanges {
             const control = items.at(index);
             control?.patchValue({ ...control?.value, stock, stockUnit });
         } else {
-            (Array.isArray(items.controls) ? items.controls : []).forEach(c => c?.patchValue({ ...c?.value, stock, stockUnit }));
+            items.controls.forEach(c => c?.patchValue({ ...c?.value, stock, stockUnit }));
         }
     }
 
     public quantityChanged(event) {
         const items = this.form.get('transactions') as UntypedFormArray;
-        (Array.isArray(items.controls) ? items.controls : []).forEach(c => c?.patchValue({ ...c?.value, quantity: event.target?.value }));
+        items.controls.forEach(c => c?.patchValue({ ...c?.value, quantity: event.target?.value }));
 
     }
 

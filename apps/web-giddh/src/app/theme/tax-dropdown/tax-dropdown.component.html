@@ -12,8 +12,6 @@
         readonly
         [value]="currency + totalTaxAmount"
         (menuOpened)="handleMenuOpened()"
-        (menuClosed)="emitCloseTaxDropdown()"
-        #taxInput
     />
     <mat-menu #taxControlMenu="matMenu" (closed)="handleMenuClosed($event)">
         <ng-template matMenuContent>
@@ -27,12 +25,17 @@
                 cdkTrapFocusAutoCapture
             >
                 <div class="discount-checkbox-wrapper d-flex flex-column">
-                    <ng-container *ngFor="let tax of taxForm.get('taxes')['controls']; let i = index" formArrayName="taxes">
+                    <ng-container
+                        *ngFor="let tax of taxForm.get('taxes')['controls']; let i = index"
+                        formArrayName="taxes"
+                    >
                         <ng-container [formGroupName]="i">
                             <span
                                 [matTooltip]="
                                     tax?.get('disableForDate')?.value
-                                        ? commonLocaleData.app_applicable_date + ': ' + tax?.get('taxDetail')?.value?.date
+                                        ? commonLocaleData.app_applicable_date +
+                                          ': ' +
+                                          tax?.get('taxDetail')?.value?.date
                                         : ''
                                 "
                                 matTooltipPosition="above"
@@ -53,11 +56,13 @@
                                         taxMenuTrigger?.closeMenu()
                                     "
                                     (keydown.space)="
-                                        $event.preventDefault(); taxRef.toggle(); enableDisableTaxes(); focusNextCheckbox($event.target, i)
+                                        $event.preventDefault();
+                                        taxRef.toggle();
+                                        enableDisableTaxes();
+                                        focusNextCheckbox($event.target, i)
                                     "
+                                    ><span class="font-size-15">{{ tax?.get("name")?.value }}</span></mat-checkbox
                                 >
-                                    <span class="font-size-15">{{ tax?.get('name')?.value }}</span>
-                                </mat-checkbox>
                             </span>
                         </ng-container>
                     </ng-container>

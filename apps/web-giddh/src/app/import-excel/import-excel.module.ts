@@ -13,9 +13,8 @@ import { UploadSuccessComponent } from './upload-success/upload-success.componen
 import { ImportReportComponent } from './import-report/import-report.component';
 import { SharedModule } from '../shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-// import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -44,13 +43,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         }),
         ScrollingModule,
         SharedModule,
-        // WatchVideoModule,
+        WatchVideoModule,
         MatSlideToggleModule,
         MatButtonModule,
         MatTooltipModule,
         FormFieldsModule,
-        MatCheckboxModule,
-        HamburgerMenuModule
+        MatCheckboxModule
     ],
 })
 export class ImportExcelModule {

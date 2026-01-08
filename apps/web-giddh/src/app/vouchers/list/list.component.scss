@@ -14,6 +14,7 @@
                     color: var(--color-red);
                 }
             }
+
         }
     }
 
@@ -42,10 +43,12 @@
     .template-design {
         max-width: 258px;
     }
+
 }
 
 table {
     tr {
+
         th,
         td {
             max-width: 240px;
@@ -138,7 +141,7 @@ table {
 }
 
 @media screen and (max-width: 1024px) {
-    .invoice-list {
+    .invoice-list{
         .video-link {
             display: none;
         }

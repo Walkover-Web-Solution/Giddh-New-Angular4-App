@@ -14,8 +14,7 @@ export class UpdateLedgerDiscountData {
 @Component({
     selector: 'update-ledger-discount',
     templateUrl: 'update-ledger-discount.component.html',
-    styleUrls: ['./update-ledger-discount.component.scss'],
-    standalone: false
+    styleUrls: ['./update-ledger-discount.component.scss']
 })
 
 export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {

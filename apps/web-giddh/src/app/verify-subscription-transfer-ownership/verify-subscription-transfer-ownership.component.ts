@@ -4,17 +4,15 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../subscription/utility/subscription.store';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { COUNTRY_REGION_MAP, Configuration } from '../app.constant';
+import { COUNTRY_REGION_MAP } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
-import { environment } from '../../environments/environment.generated';
 
 @Component({
     selector: 'verify-subscription-transfer-ownership',
     templateUrl: './verify-subscription-transfer-ownership.component.html',
     styleUrls: ['./verify-subscription-transfer-ownership.component.scss'],
-    providers: [SubscriptionComponentStore],
-    standalone: false
+    providers: [SubscriptionComponentStore]
 })
 export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     /** Transfer confirmation reference */
@@ -64,8 +62,9 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
    *
    * @memberof VerifySubscriptionTransferOwnershipComponent
    */
-    public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+    public async ngOnInit(): Promise<void> {
+        this.loginUrl = await this.generalService.getGiddhRegionUrl();
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.requestId) {
@@ -99,9 +98,9 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
      */
     public dialogOpen(): void {
         this.modalDialogRef = this.dialog.open(this.dialogBox, {
-                    width: '850px',
-                    disableClose: true
-                });
+            width: '850px',
+            disableClose: true
+        });
     }
 
     /**
@@ -129,9 +128,9 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
    */
     public onReject(): void {
         this.rejectModalDialogRef = this.dialog.open(this.rejectDialog, {
-                    width: '850px',
-                    disableClose: true
-                });
+            width: '850px',
+            disableClose: true
+        });
     }
 
     /**

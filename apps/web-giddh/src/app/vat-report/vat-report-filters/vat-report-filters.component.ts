@@ -30,8 +30,7 @@ interface DateCheckResult {
     selector: 'vat-report-filters',
     templateUrl: './vat-report-filters.component.html',
     styleUrls: ['./vat-report-filters.component.scss'],
-    providers: [TaxAuthorityComponentStore],
-    standalone:false
+    providers: [TaxAuthorityComponentStore]
 })
 export class VatReportFiltersComponent implements OnInit, OnChanges {
     /** This will hold local JSON data */
@@ -245,7 +244,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             this.componentStore.taxAuthorityList$.pipe(takeUntil(this.destroyed$)).subscribe(taxAuthorities => {
                 if (taxAuthorities?.length) {
                     let arr: IOption[] = [];
-                    (Array.isArray(taxAuthorities) ? taxAuthorities : []).forEach(taxAuthority => {
+                    taxAuthorities.forEach(taxAuthority => {
                         arr.push({ label: taxAuthority.name, value: taxAuthority?.uniqueName });
                     });
                     this.taxAuthorityList = arr;
@@ -259,7 +258,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(taxes => {
                 if (taxes) {
                     let arr: IOption[] = [];
-                    (Array.isArray(taxes) ? taxes : []).forEach(tax => {
+                    taxes.forEach(tax => {
                         arr.push({ label: tax?.name, value: tax?.uniqueName });
                     });
                     this.taxList = arr;
@@ -493,7 +492,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
+        if (isOpen) {            
            this.universalDatepickerTrigger?.openMenu();
         } else {
            this.universalDatepickerTrigger?.closeMenu();

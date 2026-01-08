@@ -137,14 +137,10 @@ tr.mat-header-row {
             }
             &:hover {
                 background-color: var(--theme-primary-light);
-                .customer-name,
-                .light-gray {
-                    color: var(--color-black) !important;
-                }
             }
 
             .customer-name {
-                color: var(--theme-foreground-color);
+                color: var(--color-black);
                 white-space: normal;
                 word-break: break-all;
             }

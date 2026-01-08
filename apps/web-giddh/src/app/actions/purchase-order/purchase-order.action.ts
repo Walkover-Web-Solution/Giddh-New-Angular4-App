@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { PURCHASE_ORDER_ACTIONS } from './purchase-order.const';
 import { CustomActions } from '../../store/custom-actions';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class PurchaseOrderActions {
 
     /**

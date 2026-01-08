@@ -13,7 +13,7 @@
             border-right: 1px solid var(--border-color);
         }
 
-        .checkbox-span {
+.checkbox-span {
             height: 49px;
             min-height: 49px;
             display: flex;
@@ -133,11 +133,12 @@ input {
     border-bottom: 1px solid var(--border-color) !important;
 }
 
-table.ledger-footer-1 td[class*='col-'] {
+table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
 }
 
 .transaction-mapped-table {
+
     thead {
         th {
             border-bottom: none;
@@ -152,7 +153,7 @@ table.ledger-footer-1 td[class*='col-'] {
                 border-top: none !important;
             }
 
-            td[class*='col-'] {
+            td[class*="col-"] {
                 padding-left: 0 !important;
                 padding-right: 0 !important;
             }
@@ -298,7 +299,7 @@ table.ledger-footer-1 td[class*='col-'] {
 
 .input-wrapper:before {
     position: absolute;
-    content: '';
+    content: "";
     display: block;
     height: 36px;
     width: 1px;
@@ -309,8 +310,8 @@ table.ledger-footer-1 td[class*='col-'] {
     display: none;
 }
 
-input[type='date']::-webkit-inner-spin-button,
-input[type='date']::-webkit-outer-spin-button {
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
 
@@ -349,6 +350,7 @@ input[type='date']::-webkit-outer-spin-button {
         min-width: 80% !important;
         max-width: 80% !important;
     }
+
 }
 
 .ledger-book .ledger-footer-1 .total-col .border-top {
@@ -361,7 +363,7 @@ input[type='date']::-webkit-outer-spin-button {
 
 .advance-search-by-date:before {
     position: absolute;
-    content: '';
+    content: "";
     height: 1px;
     width: 32%;
     background-color: var(--color-silver);
@@ -371,7 +373,7 @@ input[type='date']::-webkit-outer-spin-button {
 
 .advance-search-by-date:after {
     position: absolute;
-    content: '';
+    content: "";
     height: 1px;
     width: 32%;
     background-color: var(--color-silver);
@@ -464,7 +466,7 @@ input[type='date']::-webkit-outer-spin-button {
 }
 
 .ipad-view-datepicker {
-    .date-range-picker {
+.date-range-picker {
         border: 1px solid var(--border-color);
         border-radius: var(--mat-border-radius-16);
         width: 203px !important;
@@ -494,6 +496,7 @@ input[type='date']::-webkit-outer-spin-button {
         width: 100%;
 
         tbody {
+
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
@@ -507,6 +510,7 @@ input[type='date']::-webkit-outer-spin-button {
                         border-right: 1px solid var(--border-color);
                         width: 60%;
                     }
+
                 }
             }
         }
@@ -530,6 +534,7 @@ input[type='date']::-webkit-outer-spin-button {
 
 .no-btn,
 .no-btn:active,
+
 .transaction-mapped-table {
     font-size: var(--font-size-15);
 
@@ -568,7 +573,7 @@ input[type='date']::-webkit-outer-spin-button {
 
             .d-flex {
                 span {
-                    input[type='checkbox'] {
+                    input[type="checkbox"] {
                         margin-right: 5px;
                         margin-left: 5px;
                         height: 18px;
@@ -592,7 +597,7 @@ input[type='date']::-webkit-outer-spin-button {
     white-space: normal;
 }
 
-.ledg-head .ledger-main .ledger-row:last-child mat-grid-tile[class*='col-'] {
+.ledg-head .ledger-main .ledger-row:last-child mat-grid-tile[class*="col-"] {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
@@ -605,6 +610,7 @@ input[type='date']::-webkit-outer-spin-button {
 }
 
 .icon-refresh,
+
 input#ledger-search {
     padding-left: 27px !important;
     background-color: transparent !important;
@@ -613,6 +619,7 @@ input#ledger-search {
     &:focus {
         border: 1px solid var(--border-color) !important;
     }
+
 }
 
 .no-right-border {
@@ -635,6 +642,7 @@ input#ledger-search {
 }
 
 .linked-entities {
+
     i {
         font-size: unset;
         line-height: normal;
@@ -697,7 +705,7 @@ input#ledger-search {
         padding: 0;
     }
 
-    .ledg-head input[type='search'] {
+    .ledg-head input[type="search"] {
         min-width: 170px;
     }
 
@@ -805,7 +813,7 @@ input#ledger-search {
         .single-search-box {
             position: relative;
 
-            input[type='search'] {
+            input[type="search"] {
                 min-width: 150px;
                 border-radius: var(--mat-border-radius-16) !important;
             }
@@ -834,6 +842,7 @@ input#ledger-search {
 
     .search-ledger-field {
         margin-right: 0 !important;
+
     }
 
     .ledger-ellipse {

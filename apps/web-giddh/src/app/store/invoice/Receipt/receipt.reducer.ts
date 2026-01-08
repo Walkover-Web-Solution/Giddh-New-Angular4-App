@@ -7,7 +7,6 @@ import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseCla
 import { VoucherClass, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { UNAUTHORISED } from '../../../app.constant';
-import { cloneDeep, findIndex, map, remove } from '../../../lodash-optimized';
 
 export interface ReceiptState {
     vouchers: ReciptResponse;
@@ -68,7 +67,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = action.payload;
             if (res?.status === 'success') {
                 newState[res.request && res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
@@ -94,7 +93,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<string, ReciptDeleteRequest> = action.payload;
             if (res?.status === 'success') {
                 let indx = (res.request.invoiceNumber) ? newState.vouchers?.items?.findIndex(f => f.voucherNumber === res.request.invoiceNumber) : newState.vouchers?.items?.findIndex(f => f?.uniqueName === res.request?.uniqueName);
@@ -113,7 +112,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<string, ReciptRequest> = action.payload;
             if (res?.status === 'success') {
                 newState.vouchers?.items.map(a => {
@@ -187,13 +186,13 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             newState.base64Data = null;
             return Object.assign({}, state, newState);
         }
 
         case INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<any, any> = action.payload;
             if (res) {
                 newState.base64Data = res;
@@ -219,7 +218,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 let indx = newState.vouchers?.items?.findIndex((o) => o.voucherNumber === res.request);
@@ -239,7 +238,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             };
         }
         case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
             newState.voucherDetailsInProcess = false;
             if (res?.status === 'success') {
@@ -252,7 +251,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
             if (res?.status === 'success') {
                 newState.voucher = res.body;
@@ -268,11 +267,11 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             });
         }
         case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 newState.isInvoiceGenerated = true;
-                newState.ledgers.results = remove(newState.vouchers.results, (item: ILedgersInvoiceResult) => {
+                newState.ledgers.results = _.remove(newState.vouchers.results, (item: ILedgersInvoiceResult) => {
                     return !item.isSelected;
                 });
                 return Object.assign({}, state, newState);
@@ -303,7 +302,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<string, SalesRegisteDetailedResponse> = action.payload;
             if (res?.status === 'success') {
                 newState.isGetSalesDetailsInProcess = false;
@@ -322,7 +321,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_REGISTERED_DETAILS_RESPONSE: {
-            let newState = cloneDeep(state);
+            let newState = _.cloneDeep(state);
             let res: BaseResponse<string, PurchaseRegisteDetailedResponse> = action.payload;
             if (res?.status === 'success') {
                 newState.isGetPurchaseDetailsInProcess = false;

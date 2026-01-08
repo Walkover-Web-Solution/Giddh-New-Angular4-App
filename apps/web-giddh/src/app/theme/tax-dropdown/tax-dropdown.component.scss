@@ -6,13 +6,15 @@
     z-index: 1;
 }
 
-su .dropdown-menu {
+su
+
+.dropdown-menu {
     left: unset !important;
     top: 0px;
-    li {
+    li{
         padding: 0 10px;
         height: 40px;
-        &:hover {
+        &:hover{
             background-color: var(--color-border-light) !important;
         }
     }

@@ -1,16 +1,12 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { GeneralService } from '../services/general.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { AppState } from '../store';
 import { Store } from '@ngrx/store';
 import { NavigationEnd, Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { includes } from '../lodash-optimized';
 
 @Component({
     selector: 'page',
-    standalone:false,
     template: `
     <div id="main" [ngClass]="{'subscription-page': isSubscriptionPage}">
       <giddh-loader></giddh-loader>
@@ -21,11 +17,10 @@ import { includes } from '../lodash-optimized';
     </div>`
 })
 
-export class PageComponent implements AfterViewInit, OnDestroy {
+export class PageComponent implements AfterViewInit {
     public sideMenu: { isopen: boolean } = { isopen: true };
     /**True if it is subscription page */
     public isSubscriptionPage: boolean = false;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
@@ -33,7 +28,7 @@ export class PageComponent implements AfterViewInit, OnDestroy {
         private generalActions: GeneralActions,
         private router: Router
     ) {
-        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+        this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 if (this.router.url.includes("/pages/user-details/subscription")) {
                     this.isSubscriptionPage = true;
@@ -48,12 +43,7 @@ export class PageComponent implements AfterViewInit, OnDestroy {
         this.generalService.SetIAmLoaded(true);
     }
 
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    public sidebarStatusChange(event: boolean) {
+    public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
         this.store.dispatch(this.generalActions.setSideMenuBarState(event));
     }

@@ -24,8 +24,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                     this.auth2 = gapi.auth2.init({
                         client_id: this.clientId,
                         scope: 'email',
-                        prompt: 'select_account',
-                        cookiepolicy: 'single_host_origin'
+                        prompt: 'select_account'
                     });
 
                     this.auth2.then(() => {

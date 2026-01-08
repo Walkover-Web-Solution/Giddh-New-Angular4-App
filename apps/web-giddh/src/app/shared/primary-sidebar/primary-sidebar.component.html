@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'sidebar-menu'"
     (localeData)="localeData = $event"
@@ -24,22 +24,27 @@
                             <div class="d-flex align-items-center">
                                 <span class="company-alice mr-1 text-uppercase">{{ companyInitials }}</span>
                                 <span class="d-flex justify-content-between w-100 company-full-name flex-column">
-                                    <span class="company-ellipsis" [matTooltip]="selectedCompanyDetails?.name" matTooltipPosition="above">
-                                        {{ selectedCompanyDetails?.name }}
-                                    </span>
-                                    <span class="branch-ellipsis" *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1">
-                                        <span>{{ currentBranch?.name }}</span>
+                                    <span
+                                        class="company-ellipsis"
+                                        [matTooltip]="selectedCompanyDetails?.name"
+                                        matTooltipPosition="above"
+                                        >{{ selectedCompanyDetails?.name }}</span
+                                    >
+                                    <span
+                                        class="branch-ellipsis"
+                                        *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
+                                        ><span>{{ currentBranch?.name }}</span>
                                     </span>
                                     <i
                                         class="icon-branch-connect"
                                         *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
                                     ></i>
                                 </span>
-                                <button matIconButton class="ml-1 toggle-btn text-color-inherit">
+                                <button mat-icon-button class="ml-1 toggle-btn">
                                     <i
                                         [ngClass]="{
                                             'icon-cross font-size-15': showCompanyBranchSwitch,
-                                            'icon-down-new': !showCompanyBranchSwitch,
+                                            'icon-down-new': !showCompanyBranchSwitch
                                         }"
                                     ></i>
                                 </button>
@@ -72,9 +77,8 @@
                                     class="cursor-pointer"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
                                     (click)="analyzeAccounts($event, acc); $event.stopPropagation()"
+                                    >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
-                                    {{ acc.name }} {{ commonLocaleData?.app_ac }}
-                                </a>
                             </li>
                             <li>
                                 <a
@@ -82,15 +86,20 @@
                                     aria-label="show more"
                                     (click)="showNavigationModal()"
                                     class="show-more cursor-pointer"
+                                    >{{ localeData?.show_more }}</a
                                 >
-                                    {{ localeData?.show_more }}
-                                </a>
                             </li>
                         </ul>
                     </div>
                     <div class="account-dropdown btn-group" [attr.container]="!isOpen ? 'body' : ''">
-                        <a href="javascript:void(0);" aria-label="account-icon" id="button-basic-01" type="button" class="dropdown-toggle">
-                            <span [matTooltip]="localeData?.accounts"><i class="icon-accounts-new"></i></span>
+                        <a
+                            href="javascript:void(0);"
+                            aria-label="account-icon"
+                            id="button-basic-01"
+                            type="button"
+                            class="dropdown-toggle"
+                        >
+                            <span [matTooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
                             <i class="icon-right ml-2 font-size-15"></i>
                         </a>
                         <ul
@@ -104,9 +113,8 @@
                                     aria-label="account item"
                                     routerLink="ledger/{{ acc?.uniqueName }}"
                                     (click)="analyzeAccounts($event, acc)"
+                                    >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
-                                    {{ acc.name }} {{ commonLocaleData?.app_ac }}
-                                </a>
                             </li>
                             <li role="menuitem">
                                 <a
@@ -114,9 +122,8 @@
                                     aria-label="Show more"
                                     (click)="showNavigationModal()"
                                     class="show-more cursor-pointer"
+                                    >{{ localeData?.show_more }}</a
                                 >
-                                    {{ localeData?.show_more }}
-                                </a>
                             </li>
                         </ul>
                     </div>
@@ -125,7 +132,10 @@
                     <div class="menu-item-wrapper font-size-15">
                         <div class="menu-item pl-4 pr-4">
                             <p class="d-flex align-items-center justify-content-between font-size-12">
-                                <span [routerLink]="['/pages/giddh-all-items']" class="d-inline-flex align-items-center cursor-pointer">
+                                <span
+                                    [routerLink]="['/pages/giddh-all-items']"
+                                    class="d-inline-flex align-items-center cursor-pointer"
+                                >
                                     {{ localeData?.menu }}
                                     <i class="icon-down-new ml-1"></i>
                                 </span>
@@ -147,7 +157,10 @@
                                             <i [ngClass]="node?.icon"></i>
                                             <span class="item-name">{{ node.label }}</span>
                                         </span>
-                                        <i class="ml-2 font-size-15 icon-right" [ngClass]="{ 'rotate-270': isExpanded(node) }"></i>
+                                        <i
+                                            class="ml-2 font-size-15 icon-right"
+                                            [ngClass]="{ 'rotate-270': isExpanded(node) }"
+                                        ></i>
                                     </span>
                                 </div>
                             </cdk-tree-node>
@@ -160,7 +173,9 @@
                                 role="menu"
                                 class="has-no-child"
                                 [ngClass]="{
-                                    'active': isActiveRoute === node?.link && node?.additional?.queryParams?.tabIndex == queryParams,
+                                    'active':
+                                        isActiveRoute === node?.link &&
+                                        node?.additional?.queryParams?.tabIndex == queryParams
                                 }"
                             >
                                 <!-- Parent menu without children -->
@@ -201,7 +216,8 @@
                                         </span>
                                         <ng-container
                                             *ngIf="
-                                                !isConsolidatedBranch && (currentOrganizationType === 'BRANCH' || isCompanyWithoutBranch)
+                                                !isConsolidatedBranch &&
+                                                (currentOrganizationType === 'BRANCH' || isCompanyWithoutBranch)
                                             "
                                         >
                                             <ng-container
@@ -232,8 +248,8 @@
                                                     class="ml-auto create-new"
                                                     (click)="
                                                         $event.stopPropagation();
-                                                        selectedGroupForCreateAccount = node?.additional?.createNew?.queryParams
-                                                            ?.addCustomer
+                                                        selectedGroupForCreateAccount = node?.additional?.createNew
+                                                            ?.queryParams?.addCustomer
                                                             ? 'sundrydebtors'
                                                             : 'sundrycreditors';
                                                         openAccountAsidePane()
@@ -264,18 +280,17 @@
             [setParentWidth]="true"
         ></command-k>
         <div class="shortcuts">
-            <strong>↑</strong>
-            <strong>↓</strong>
-            &nbsp; {{ localeData?.to_navigate }}
-            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>
-            &nbsp;
+            <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
+            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
             {{ localeData?.to_select }}
-            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_escape">{{ commonLocaleData?.app_esc }}</strong>
-            &nbsp;
+            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_escape">{{
+                commonLocaleData?.app_esc
+            }}</strong
+            >&nbsp;
             {{ localeData?.to_dismiss }}
         </div>
     </ng-template>
-</div>
+</ng-container>
 
 <!-- Generic aside menu account template open from cmd+k-->
 <ng-template #genericAsideMenuAccountTemplate>
@@ -285,5 +300,6 @@
         [selectedGrpUniqueName]="selectedGroupForCreateAccount"
         [createAccountFromCommandK]="true"
         (addEvent)="addNewAccount($event)"
-    ></generic-aside-menu-account>
+    >
+    </generic-aside-menu-account>
 </ng-template>

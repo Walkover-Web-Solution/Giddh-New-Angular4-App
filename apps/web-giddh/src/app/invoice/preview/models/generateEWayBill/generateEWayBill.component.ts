@@ -5,8 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
     selector: 'app-generate-ewaybill-dialog',
     templateUrl: './generateEWayBill.component.html',
-    styleUrls: [`./generateEWayBill.component.scss`],
-    standalone:false
+    styleUrls: [`./generateEWayBill.component.scss`]
 })
 
 export class GenerateEWayBillComponent {

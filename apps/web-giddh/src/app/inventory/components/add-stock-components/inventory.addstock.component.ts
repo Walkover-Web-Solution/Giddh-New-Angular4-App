@@ -8,7 +8,7 @@ import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } fr
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../shared/helpers';
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { cloneDeep, forEach, filter as lodashFilter, find, findIndex, without } from '../../../lodash-optimized';
+import * as  _ from '../../../lodash-optimized';
 import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
 import { IUnitRateItem } from '../../../models/interfaces/stocks-item.interface';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
@@ -26,8 +26,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 @Component({
     selector: 'inventory-add-stock',
     templateUrl: './inventory.addstock.component.html',
-    styleUrls: ['./inventory.addstock.component.scss'],
-    standalone:false
+    styleUrls: ['./inventory.addstock.component.scss']
 })
 
 export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -403,7 +402,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 }
 
                 this.companyTaxesList$.subscribe((tax) => {
-                    forEach(tax, (o) => {
+                    _.forEach(tax, (o) => {
                         o.isChecked = false;
                         o.isDisabled = false;
                     });
@@ -423,7 +422,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         this.companyTaxesList$.subscribe((tax) => {
-            forEach(tax, (o) => {
+            _.forEach(tax, (o) => {
                 o.isChecked = false;
                 o.isDisabled = false;
             });
@@ -440,7 +439,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 }
                 this.taxTempArray = [];
                 this.companyTaxesList$.subscribe((taxes) => {
-                    forEach(taxes, (o) => {
+                    _.forEach(taxes, (o) => {
                         o.isChecked = false;
                         o.isDisabled = false;
                     });
@@ -823,7 +822,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         }
         this.addStockForm.get('uniqueName').enable();
 
-        let formObj = cloneDeep(this.addStockForm?.value);
+        let formObj = _.cloneDeep(this.addStockForm?.value);
         stockObj.name = formObj.name;
         stockObj.uniqueName = formObj.uniqueName;
         stockObj.stockUnitCode = formObj.stockUnitCode;
@@ -1071,7 +1070,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as UntypedFormGroup;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
         let count = 0;
-        forEach(control.controls, (o) => {
+        _.forEach(control.controls, (o) => {
             if (o?.value.stockUniqueName === uniqueName) {
                 count++;
             }
@@ -1093,13 +1092,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as UntypedFormGroup;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
         let rawArr = control.getRawValue();
-        forEach(rawArr, (o, i) => {
+        _.forEach(rawArr, (o, i) => {
             if (!o.quantity || !o.stockUniqueName || !o.stockUnitUniqueName) {
-                rawArr = without(rawArr, o);
+                rawArr = _.without(rawArr, o);
                 control.removeAt(i);
             }
         });
-        linkedStocks = cloneDeep(rawArr);
+        linkedStocks = _.cloneDeep(rawArr);
         return linkedStocks;
     }
 
@@ -1143,9 +1142,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
         }
         if (s.autoFocusInChild && s.autoFocusInChild.currentValue) {
-            if (this.groupDDList && this.groupDDList.inputFilter && this.groupDDList.inputFilter.nativeElement) {
-                this.groupDDList.inputFilter.nativeElement.click();
-            }
+            this.groupDDList.inputFilter?.nativeElement.click();
         }
     }
 
@@ -1154,10 +1151,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      */
     public selectTax(e, tax) {
         if (tax.taxType !== 'gstcess') {
-            let index = findIndex(this.taxTempArray, (o) => o.taxType === tax.taxType);
+            let index = _.findIndex(this.taxTempArray, (o) => o.taxType === tax.taxType);
             if (index > -1 && e.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
-                    forEach(taxes, (o) => {
+                    _.forEach(taxes, (o) => {
                         if (o.taxType === tax.taxType) {
                             o.isChecked = false;
                             o.isDisabled = true;
@@ -1174,7 +1171,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
             if (index < 0 && e.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
-                    forEach(taxes, (o) => {
+                    _.forEach(taxes, (o) => {
                         if (o.taxType === tax.taxType) {
                             o.isChecked = false;
                             o.isDisabled = true;
@@ -1201,11 +1198,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 });
                 this.taxTempArray.push(tax);
             } else {
-                let idx = findIndex(this.taxTempArray, (o) => o?.uniqueName === tax?.uniqueName);
+                let idx = _.findIndex(this.taxTempArray, (o) => o?.uniqueName === tax?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 tax.isChecked = false;
                 this.companyTaxesList$.subscribe((taxes) => {
-                    forEach(taxes, (o) => {
+                    _.forEach(taxes, (o) => {
                         if (o.taxType === tax.taxType) {
                             o.isDisabled = false;
                         }
@@ -1222,7 +1219,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.taxTempArray.push(tax);
                 tax.isChecked = true;
             } else {
-                let idx = findIndex(this.taxTempArray, (o) => o?.uniqueName === tax?.uniqueName);
+                let idx = _.findIndex(this.taxTempArray, (o) => o?.uniqueName === tax?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 tax.isChecked = false;
             }
@@ -1237,8 +1234,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let taxToMap = [];
         let e: any = { target: { checked: true } };
         this.companyTaxesList$.subscribe(a => {
-            lodashFilter(a, (tax) => {
-                find(taxes, (unq) => {
+            _.filter(a, (tax) => {
+                _.find(taxes, (unq) => {
                     if (unq === tax?.uniqueName) {
                         return taxToMap.push(tax);
                     }
@@ -1328,7 +1325,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public getInvoiceSettings(): void {
         this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
-                let invoiceSettings = cloneDeep(response.body);
+                let invoiceSettings = _.cloneDeep(response.body);
                 this.inventorySettings = invoiceSettings.companyInventorySettings;
             }
         });

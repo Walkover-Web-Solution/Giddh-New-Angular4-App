@@ -11,8 +11,7 @@ import { GeneralService } from "../services/general.service";
     selector: "verify-email",
     templateUrl: "./verify-email.component.html",
     styleUrls: ["./verify-email.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VerifyEmailComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

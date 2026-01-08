@@ -16,14 +16,13 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
+import { cloneDeep } from '../../lodash-optimized';
 import { OrganizationType } from '../../models/user-login-state';
-import { cloneDeep, filter, forEach, includes, map, set } from '../../lodash-optimized';
 @Component({
     selector: 'project-wise-accounting',
-    templateUrl: './project-wise-accounting.component.html',
     styleUrls: ['./project-wise-accounting.component.scss'],
-    providers: [ProjectWiseAccountingComponentStore],
-    standalone: false
+    templateUrl: './project-wise-accounting.component.html',
+    providers: [ProjectWiseAccountingComponentStore]
 })
 export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** Holds table sorting reference */
@@ -146,11 +145,10 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
 
         this.componentStore.projectProfitDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                (Array.isArray(this.dataSource) ? this.dataSource : []).forEach((project) => {
+                this.dataSource.forEach((project) => {
                     if (project.uniqueName === response.uniqueName)
                         project.profitAndLoss = response.profitAndLoss;
                 })
-                this.changeDetection.detectChanges();
             }
         });
 
@@ -199,7 +197,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                     this.displayedColumns = this.displayedColumns?.filter(column => column !== "action");
                 }
                 this.branches = [];
-                (Array.isArray(branchList) ? branchList : []).forEach((branch) => {
+                branchList.forEach((branch) => {
                     this.branches.push({
                         label: branch?.name,
                         value: branch?.uniqueName
@@ -280,7 +278,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             this.totalResults += 1;
             this.dataSource = [response.body, ...this.dataSource];
         } else {
-            (Array.isArray(this.dataSource) ? this.dataSource : []).forEach((project) => {
+            this.dataSource.forEach((project) => {
                 if (project.uniqueName === response.body.uniqueName) {
                     project.name = response.body.name;
                     project.status = response.body.status;
@@ -414,10 +412,11 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 projectUniqueName: project.uniqueName
             };
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-                        width: '630px',
+                width: '630px',
                 data: {
                     configuration: this.generalService.deleteConfiguration(this.localeData?.project_delete_confirmation_message?.replace('[PROJECT_NAME]', project.name), this.commonLocaleData)
                 }
+
             });
 
             dialogRef.afterClosed().subscribe((response) => {
@@ -454,7 +453,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     * @memberof ProjectWiseAccountingListComponent
     */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
+        if (isOpen) {            
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();
@@ -484,7 +483,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            (Array.isArray(this.dataSource) ? this.dataSource : []).forEach((data) => {
+            this.dataSource.forEach((data) => {
                 data.profitAndLoss = null;
             });
         }
@@ -506,7 +505,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /**
      * Toggles the status of a project between "Closed" and "In Progress".
      * @param {*} project
-     *
+     * 
      * @memberof ProjectWiseAccountingListComponent
      */
     public convertToClosedOrInProgress(project: any): void {

@@ -23,7 +23,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { IForceClear } from '../../models/api-models/Sales';
 import { LinkedStocksResponse } from '../../models/api-models/BranchTransfer';
-import { cloneDeep, find, forEach, includes, map } from '../../lodash-optimized';
+import { cloneDeep, forEach } from '../../lodash-optimized';
 
 const filter1 = [
     { label: 'Greater', value: 'greaterThan' },
@@ -41,8 +41,7 @@ const filter2 = [
 @Component({
     selector: 'manufacturing-report',
     templateUrl: './mf.report.component.html',
-    styleUrls: ['./mf.report.component.scss'],
-    standalone: false
+    styleUrls: ['./mf.report.component.scss']
 })
 
 export class MfReportComponent implements OnInit, OnDestroy {
@@ -277,7 +276,7 @@ constructor(
             this.store.dispatch(this.manufacturingActions.GetMfReport(data));
         }
     }
-
+    
 
 
     public editMFItem(item) {
@@ -338,7 +337,7 @@ constructor(
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
+    
     /**
     * This will show the datepicker
     *
@@ -346,7 +345,7 @@ constructor(
     * @memberof VoucherListComponent
     */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
+        if (isOpen) {            
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();
@@ -390,7 +389,7 @@ constructor(
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             this.warehouses = [];
             if (warehouses && warehouses.results) {
-                (Array.isArray(warehouses.results) ? warehouses.results : []).forEach(warehouse => {
+                warehouses.results.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse.name, value: warehouse?.uniqueName, additional: warehouse });
                 });
             }
@@ -447,13 +446,13 @@ constructor(
             if (branches) {
                 if (branches.results?.length) {
                     this.allWarehouses = [];
-                    (Array.isArray(branches.results) ? branches.results : []).forEach(branch => {
+                    branches.results.forEach(branch => {
                         if (!this.allWarehouses[branch?.uniqueName]) {
                             this.allWarehouses[branch?.uniqueName] = [];
                         }
 
                         if (branch?.warehouses?.length > 0) {
-                            (Array.isArray(branch?.warehouses) ? branch?.warehouses : []).forEach(warehouse => {
+                            branch?.warehouses.forEach(warehouse => {
                                 this.allWarehouses[branch?.uniqueName].push({ label: warehouse?.name, value: warehouse?.uniqueName, additional: warehouse?.taxNumber });
                             });
                         }

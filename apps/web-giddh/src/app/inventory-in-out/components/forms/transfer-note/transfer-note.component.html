@@ -1,15 +1,12 @@
 <div class="form-header">
-    <p>Transfer Note</p>
+    <p >Transfer Note</p>
 </div>
 <div class="form-body clear-both margin-child-label">
     <div class="clear-both">
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-xs-6 form-group">
-                    <label>
-                        Date
-                        <sup>*</sup>
-                    </label>
+                    <label>Date <sup>*</sup></label>
                     <giddh-datepicker
                         name="entryDate"
                         formControlName="inventoryEntryDate"
@@ -17,18 +14,19 @@
                         [appearance]="'outline'"
                         [required]="true"
                     ></giddh-datepicker>
-                    <span *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
-                        <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']" class="text-danger">
-                            Please select Date.
-                        </span>
+                    <span
+                        *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
+                    >
+                        <span
+                            *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
+                            class="text-danger"
+                            >Please select Date.</span
+                        >
                     </span>
                 </div>
 
                 <div class="col-xs-6 form-group">
-                    <label>
-                        Product Name
-                        <sup>*</sup>
-                    </label>
+                    <label>Product Name <sup>*</sup></label>
                     <reactive-dropdown-field
                         [options]="stockListOptions"
                         [placeholder]="'Select Product'"
@@ -43,10 +41,7 @@
 
             <div class="row">
                 <div class="col-xs-6 form-group">
-                    <label>
-                        Sender's Name
-                        <sup>*</sup>
-                    </label>
+                    <label>Sender's Name <sup>*</sup></label>
                     <reactive-dropdown-field
                         [options]="userListOptions"
                         [placeholder]="'Select Sender'"
@@ -57,10 +52,7 @@
                 </div>
 
                 <div class="col-xs-6 form-group">
-                    <label>
-                        Receiver's Name
-                        <sup>*</sup>
-                    </label>
+                    <label>Receiver's Name <sup>*</sup></label>
                     <reactive-dropdown-field
                         [options]="userListOptions"
                         [placeholder]="'Select Receiver'"
@@ -68,16 +60,14 @@
                         [name]="'senderReceiver'"
                         (selectedOption)="recieverUniqueName = $event?.value"
                         [required]="true"
-                    ></reactive-dropdown-field>
+                    >
+                    </reactive-dropdown-field>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-6 form-group">
-                    <label>
-                        Quantity
-                        <sup>*</sup>
-                    </label>
+                    <label>Quantity <sup>*</sup></label>
                     <input
                         name="dateRange"
                         type="text"
@@ -89,10 +79,7 @@
                 </div>
 
                 <div class="col-xs-6 form-group">
-                    <label>
-                        Unit
-                        <sup>*</sup>
-                    </label>
+                    <label>Unit <sup>*</sup></label>
                     <reactive-dropdown-field
                         [options]="stockUnitsOptions"
                         [placeholder]="'Choose unit'"
@@ -113,8 +100,8 @@
 
             <div class="row">
                 <div class="col-xs-12 text-left mt-2">
-                    <button matButton="outlined" (click)="onCancel.emit($event)">Cancel</button>
-                    <button matButton="filled" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                    <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
+                    <button mat-raised-button color="primary" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save
                     </button>
                 </div>

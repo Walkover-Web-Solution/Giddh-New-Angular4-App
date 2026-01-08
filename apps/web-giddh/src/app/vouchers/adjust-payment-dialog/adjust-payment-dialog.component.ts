@@ -1,10 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, of, takeUntil } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
-import { VoucherTypeEnum, InteractionType } from '../utility/vouchers.const';
+import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { AdjustmentUtilityService } from '../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { IOption } from '../../app.constant';
 import { AdjustAdvancePaymentModal, Adjustment, AdvanceReceiptRequest, VoucherAdjustments } from '../../models/api-models/AdvanceReceiptsAdjust';
@@ -14,19 +13,15 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../services/toaster.service';
 import { NgForm } from '@angular/forms';
 import { VoucherService } from '../../services/voucher.service';
-import { InputFieldComponent } from '../../theme/form-fields/input-field/input-field.component';
 
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
 
 @Component({
     selector: 'voucher-adjustments',
     templateUrl: './adjust-payment-dialog.component.html',
-    styleUrls: ['./adjust-payment-dialog.component.scss'],
-    standalone:false
+    styleUrls: ['./adjust-payment-dialog.component.scss']
 })
 export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
-    /** Reference to the amount input field for focus management */
-    @ViewChild('amountInput') public amountInput: InputFieldComponent;
     public newAdjustVoucherOptions: IOption[] = [];
     public adjustVoucherOptions: IOption[];
     public allAdvanceReceiptResponse: Adjustment[] = [];
@@ -123,14 +118,6 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         inputMaskFormat: '',
         giddhBalanceDecimalPlaces: 2
     };
-    /** Tracks the last interaction type for conditional focus behavior */
-    public lastInteraction: InteractionType | null = null;
-    /** Timestamp of last interaction to prevent rapid overrides */
-    private lastInteractionTimestamp: number = 0;
-    /** Global event listeners for cleanup */
-    private globalKeydownListener?: (event: KeyboardEvent) => void;
-    private globalMousedownListener?: () => void;
-    private globalClickListener?: () => void;
 
     constructor(
         private componentStore: VoucherComponentStore,
@@ -146,9 +133,6 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public ngOnInit() {
-        // Set up global interaction tracking
-        this.setupGlobalInteractionTracking();
-
         this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
 
@@ -198,7 +182,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             } else {
                 if (this.voucherForAdjustment && this.voucherForAdjustment.length) {
                     this.adjustVoucherOptions = [];
-                    (Array.isArray(this.voucherForAdjustment) ? this.voucherForAdjustment : []).forEach(item => {
+                    this.voucherForAdjustment.forEach(item => {
                         if (item) {
                             if (!item?.adjustmentAmount) {
                                 item.adjustmentAmount = cloneDeep(item.balanceDue);
@@ -224,14 +208,14 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         this.componentStore.company$.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
                 this.availableTdsTaxes = [];
-                (Array.isArray(obj.taxes) ? obj.taxes : []).forEach(item => {
+                obj.taxes.forEach(item => {
                     if (item && (item.taxType === 'tdsrc' || item.taxType === 'tdspay')) {
                         this.availableTdsTaxes.push({ value: item.uniqueName, label: item.name, additional: item })
                     }
                 });
             }
         });
-        this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
+        this.enableVoucherAdjustmentMultiCurrency = enableVoucherAdjustmentMultiCurrency;
     }
 
     /**
@@ -350,7 +334,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         if (this.getBalanceDue() >= 0) {
             let isAnyBlankEntry: boolean;
             if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
-                (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach(item => {
+                this.adjustVoucherForm.adjustments.forEach(item => {
                     if (!item?.uniqueName || !item.voucherNumber) {
                         isAnyBlankEntry = true;
                     }
@@ -382,7 +366,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         if (selectedItem && selectedItem?.value && selectedItem.label && selectedItem.additional) {
             this.adjustVoucherOptions.push({ value: selectedItem?.value, label: selectedItem.label, additional: selectedItem.additional });
         }
-        this.adjustVoucherOptions = uniqBy(this.adjustVoucherOptions, (item) => {
+        this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             if (item.label === '-') {
                 return item?.value;
             } else {
@@ -391,11 +375,6 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         });
         if (this.adjustVoucherForm?.adjustments?.length > 1 || this.adjustVoucherForm?.adjustments.every(adjustment => adjustment?.uniqueName !== '')) {
             this.adjustVoucherForm.adjustments.splice(index, 1);
-
-            if (this.adjustVoucherForm.adjustments.length === 0) {
-                this.onClear(true);
-                this.addNewBlankAdjustVoucherRow();
-            }
         } else {
             this.onClear();
         }
@@ -509,7 +488,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 }
             });
 
-            (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach((item, key) => {
+            this.adjustVoucherForm.adjustments.forEach((item, key) => {
                 if (!item?.voucherNumber && item?.adjustmentAmount?.amountForAccount) {
                     isValid = false;
                     if (form.controls[`voucherName${key}`]) {
@@ -569,14 +548,6 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 this.adjustVoucherForm.adjustments[index] = new Adjustment();
             }
             this.checkValidations();
-
-            if (this.lastInteraction === InteractionType.KEYBOARD) {
-                setTimeout(() => {
-                    if (this.amountInput) {
-                        this.amountInput.inputFocus();
-                    }
-                }, 200);
-            }
         }
     }
 
@@ -619,7 +590,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     public getAdvanceReceiptUnselectedVoucher(): IOption[] {
         let options: IOption[] = [];
         let adjustVoucherAdjustment = [];
-        (Array.isArray(this.newAdjustVoucherOptions) ? this.newAdjustVoucherOptions : []).forEach(item => {
+        this.newAdjustVoucherOptions.forEach(item => {
             options.push(item);
         });
         adjustVoucherAdjustment = cloneDeep(this.adjustVoucherForm.adjustments);
@@ -634,13 +605,13 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        (Array.isArray(options) ? options : []).forEach(item => {
+        options.forEach(item => {
             if (item) {
                 delete item['isHilighted'];
             }
         });
 
-        options = uniqBy(options, (item) => {
+        options = _.uniqBy(options, (item) => {
             if (item.label === '-' || item.label === this.commonLocaleData?.app_not_available) {
                 return item.value;
             } else {
@@ -731,7 +702,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         let convertedTotalAmount: number = 0;
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
             this.adjustPayment.balanceDue = this.voucherTotals?.balanceDue;
-            (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach(item => {
+            this.adjustVoucherForm.adjustments.forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
                     if (
                         ((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) ||
@@ -797,7 +768,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     public checkValidations(): void {
         this.isInvalidForm = false;
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
-            (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach((item, key) => {
+            this.adjustVoucherForm.adjustments.forEach((item, key) => {
                 if ((!item?.voucherNumber && item?.adjustmentAmount?.amountForAccount) || (item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount) || (!item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount && this.adjustVoucherForm.adjustments.length > 0)) {
                     this.isInvalidForm = true;
                 }
@@ -888,22 +859,11 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Lifecycle hook for component destruction
+     * Unsubscribe from all listeners
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public ngOnDestroy(): void {
-        // Clean up global interaction tracking listeners
-        if (this.globalKeydownListener) {
-            document.removeEventListener('keydown', this.globalKeydownListener);
-        }
-        if (this.globalMousedownListener) {
-            document.removeEventListener('mousedown', this.globalMousedownListener);
-        }
-        if (this.globalClickListener) {
-            document.removeEventListener('click', this.globalClickListener);
-        }
-
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -967,7 +927,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     private pushExistingAdjustments(): void {
         if (this.adjustVoucherForm.adjustments[this.currentAdjustmentRowIndex]?.uniqueName) {
             if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
-                (Array.isArray(this.advanceReceiptAdjustmentUpdatedData.adjustments) ? this.advanceReceiptAdjustmentUpdatedData.adjustments : []).forEach(item => {
+                this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
                     if (this.adjustVoucherForm.adjustments[this.currentAdjustmentRowIndex]?.uniqueName === item?.uniqueName) {
                         item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
                         const itemPresentInVoucherOptions = this.adjustVoucherOptions.find(voucher => voucher?.value === item?.uniqueName);
@@ -1128,7 +1088,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 }
 
                 if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
-                    (Array.isArray(this.allAdvanceReceiptResponse) ? this.allAdvanceReceiptResponse : []).forEach(item => {
+                    this.allAdvanceReceiptResponse.forEach(item => {
                         this.handlePartiallyAdjustedVoucher(item);
                         if (item && item.voucherDate) {
                             item.voucherDate = item.voucherDate?.replace(/-/g, '/');
@@ -1166,53 +1126,4 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-    /**
-     * Sets up global interaction tracking for the entire page
-     *
-     * @private
-     * @memberof AdjustPaymentDialogComponent
-     */
-    private setupGlobalInteractionTracking(): void {
-        // Create event listeners with proper binding
-        this.globalKeydownListener = (event: KeyboardEvent) => {
-            if (['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Tab', 'Escape'].includes(event.key)) {
-                this.setInteractionType(InteractionType.KEYBOARD, 'Global keydown');
-            }
-        };
-
-        this.globalMousedownListener = () => {
-            this.setInteractionType(InteractionType.MOUSE, 'Global mousedown');
-        };
-
-        this.globalClickListener = () => {
-            this.setInteractionType(InteractionType.MOUSE, 'Global click');
-        };
-
-        // Add event listeners to document
-        document.addEventListener('keydown', this.globalKeydownListener);
-        document.addEventListener('mousedown', this.globalMousedownListener);
-        document.addEventListener('click', this.globalClickListener);
-    }
-
-    /**
-     * Sets interaction type with timestamp protection
-     *
-     * @private
-     * @param {InteractionType} type - Interaction type
-     * @param {string} source - Source of the interaction for debugging
-     * @memberof AdjustPaymentDialogComponent
-     */
-    private setInteractionType(type: InteractionType, source: string): void {
-        const now = Date.now();
-        const timeSinceLastInteraction = now - this.lastInteractionTimestamp;
-
-        // If this is a keyboard interaction, always accept it (keyboard has priority)
-        // If this is a mouse interaction, only accept it if enough time has passed or if the last interaction wasn't keyboard
-        if (type === InteractionType.KEYBOARD || (type === InteractionType.MOUSE && (this.lastInteraction !== InteractionType.KEYBOARD || timeSinceLastInteraction > 500))) {
-            this.lastInteraction = type;
-            this.lastInteractionTimestamp = now;
-        }
-    }
-
 }

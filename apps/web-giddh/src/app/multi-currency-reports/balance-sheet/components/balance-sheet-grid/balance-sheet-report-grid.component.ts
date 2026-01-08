@@ -21,14 +21,12 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MMMM_YYYY } from 'apps/web-gidd
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { forEach } from '../../../../lodash-optimized';
 
 @Component({
-selector: 'balance-sheet-report-grid',
+    selector: 'balance-sheet-report-grid',
     templateUrl: './balance-sheet-report-grid.component.html',
     styleUrls: [`./balance-sheet-report-grid.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Reference to the search input element */
@@ -91,10 +89,10 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
                         this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
                         // always make first level visible ....
                         if (this.bsData.liabilities) {
-                            (Array.isArray(this.bsData.liabilities) ? this.bsData.liabilities : []).forEach((childGroup: any) => {
+                            this.bsData.liabilities.forEach((childGroup: any) => {
                                 if (childGroup.isIncludedInSearch) {
                                     childGroup.isVisible = true;
-                                    (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: any) => {
+                                    childGroup.accounts.forEach((account: any) => {
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -103,10 +101,10 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
                             });
                         }
                         if (this.bsData.assets) {
-                            (Array.isArray(this.bsData.assets) ? this.bsData.assets : []).forEach((childGroup: any) => {
+                            this.bsData.assets.forEach((childGroup: any) => {
                                 if (childGroup.isIncludedInSearch) {
                                     childGroup.isVisible = true;
-                                    (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: any) => {
+                                    childGroup.accounts.forEach((account: any) => {
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -187,12 +185,12 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof BalanceSheetReportGridComponent
      */
     private toggleVisibility(data: ChildGroup[], isVisible: boolean): void {
-        (Array.isArray(data) ? data : []).forEach((childGroup: ChildGroup) => {
+        data.forEach((childGroup: ChildGroup) => {
             if (childGroup.isIncludedInSearch) {
                 childGroup.isCreated = true;
                 childGroup.isVisible = isVisible;
                 childGroup.isOpen = isVisible;
-                (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
+                childGroup.accounts.forEach((account: Account) => {
                     if (account.isIncludedInSearch) {
                         account.isCreated = true;
                         account.isVisible = isVisible;

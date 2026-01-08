@@ -28,14 +28,12 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OrganizationType } from '../../../models/user-login-state';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { Router } from "@angular/router";
-import { cloneDeep, isEmpty } from '../../../lodash-optimized';
 import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
     selector: "new-branch-transfer-list",
     templateUrl: "./new.branch.transfer.list.component.html",
-    styleUrls: ["./new.branch.transfer.component.scss"],
-    standalone: false
+    styleUrls: ["./new.branch.transfer.component.scss"]
 })
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
@@ -136,8 +134,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         private router: Router
     ) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !isEmpty(o)) {
-                let companyInfo = cloneDeep(o);
+            if (o && !_.isEmpty(o)) {
+                let companyInfo = _.cloneDeep(o);
                 this.activeCompany = companyInfo;
             }
         });
@@ -164,7 +162,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
                 this.datePicker = [dayjs(universalDate[0], GIDDH_DATE_FORMAT).toDate(), dayjs(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
                 this.branchTransferGetRequestParams.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.branchTransferGetRequestParams.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
@@ -203,7 +201,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this._generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {

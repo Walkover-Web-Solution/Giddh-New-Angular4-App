@@ -6,8 +6,8 @@
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedDateOption"
         [name]="'selectedDateOption'"
-        (onClear)="resetFilterBy()"
-    ></reactive-dropdown-field>
+        (onClear)="resetFilterBy()">
+    </reactive-dropdown-field>
 </div>
 <div class="clear-both mt-3" *ngIf="vm.selectedDateOption == '1'">
     <label>{{ localeData?.from_date }}</label>
@@ -59,8 +59,8 @@
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedOperation"
         [name]="'selectedOperation'"
-        (onClear)="resetOperation()"
-    ></reactive-dropdown-field>
+        (onClear)="resetOperation()">
+    </reactive-dropdown-field>
 </div>
 
 <div class="clear-both mt-3">
@@ -70,8 +70,8 @@
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedEntity"
         [name]="'selectedEntity'"
-        (onClear)="resetEntity()"
-    ></reactive-dropdown-field>
+        (onClear)="resetEntity()">
+    </reactive-dropdown-field>
 </div>
 
 <div class="clear-both mt-3">
@@ -85,8 +85,8 @@
         (scrollEnd)="handleScrollEnd()"
         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
         [name]="'selectedAccountUnq'"
-        (onClear)="resetAccount()"
-    ></reactive-dropdown-field>
+        (onClear)="resetAccount()">
+    </reactive-dropdown-field>
 </div>
 
 <div class="clear-both mt-3">
@@ -100,8 +100,8 @@
         (scrollEnd)="handleGroupScrollEnd()"
         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
         [name]="'selectedGroupUnq'"
-        (onClear)="resetGroup()"
-    ></reactive-dropdown-field>
+        (onClear)="resetGroup()">
+    </reactive-dropdown-field>
 </div>
 <div class="clear-both mt-3">
     <label>{{ localeData?.select_user_label }}</label>
@@ -110,13 +110,13 @@
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedUserUnq"
         [name]="'selectedUserUnq'"
-        (onClear)="resetUser()"
-    ></reactive-dropdown-field>
+        (onClear)="resetUser()">
+    </reactive-dropdown-field>
 </div>
-<button matButton="filled" class="pull-left mt-3" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
+<button mat-raised-button color="primary" class="pull-left mt-3" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
     {{ localeData?.get_logs }}
 </button>
-<button matButton="outlined" class="pull-left mt-3 ml-1" (click)="resetFilters()">
+<button mat-stroked-button class="pull-left mt-3 ml-1" (click)="resetFilters()">
     {{ commonLocaleData?.app_reset }}
 </button>
 <br />

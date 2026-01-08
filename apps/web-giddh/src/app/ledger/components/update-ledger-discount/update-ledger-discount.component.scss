@@ -1,5 +1,5 @@
 .or-line::before {
-    content: ' ';
+    content: " ";
     border-bottom: 1px solid var(--border-color);
     display: inline-block;
     width: 81px;
@@ -11,7 +11,7 @@
 }
 
 .or-line::after {
-    content: '';
+    content: "";
     border-bottom: 1px solid var(--border-color);
     display: inline-block;
     width: 81px;

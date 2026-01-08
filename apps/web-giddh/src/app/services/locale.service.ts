@@ -4,7 +4,6 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
-import { get } from '../lodash-optimized';
 
 @Injectable({
     providedIn: 'root'

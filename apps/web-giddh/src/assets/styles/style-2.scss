@@ -2574,7 +2574,7 @@ modal-container.modal {
     position: relative;
     bottom: -11px;
     left: 50%;
-    content: ' ';
+    content: " ";
     transform: translateX(-50%);
     display: none;
 }
@@ -4372,7 +4372,7 @@ body {
 
 .activity-log-page {
     /* UNUSED GLOBAL CLASS: mat-raised-button - Auto-commented by script
-    .mat-mdc-unelevated-button {
+    .mat-raised-button {
         box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%),
             0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
     }

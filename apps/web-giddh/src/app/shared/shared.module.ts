@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
-import { KeyboardNavigationModule } from './helpers/directives/enter-next/keyboard-navigation.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
@@ -24,8 +23,6 @@ import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalD
 import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
-import { Configuration } from '../app.constant';
-import { environment } from '../../environments/environment.generated';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -60,13 +57,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { GiddhNumberFormatModule } from './helpers/pipes/number-format/number-format.module';
-import { get } from '../lodash-optimized';
 
-
-const SOCIAL_CONFIG = Configuration.isElectron ? null : new AuthServiceConfig([
+const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider(environment.GOOGLE_CLIENT_ID)
+        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
     }
 ], false);
 
@@ -105,7 +100,6 @@ export function provideConfig() {
         ElementViewChildModule,
         DecimalDigitsModule,
         DigitsOnlyModule,
-        KeyboardNavigationModule,
         MatPaginatorModule,
         Daterangepicker,
         TextCaseChangeModule,
@@ -143,7 +137,6 @@ export function provideConfig() {
     exports: [
         CommonModule,
         DecimalDigitsModule,
-        KeyboardNavigationModule,
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,

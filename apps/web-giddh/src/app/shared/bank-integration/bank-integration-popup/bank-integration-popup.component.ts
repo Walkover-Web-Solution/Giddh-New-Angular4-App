@@ -7,8 +7,7 @@ import { IOption } from '../../../app.constant';
 @Component({
     selector: 'bank-integration-popup',
     styleUrls: ['./bank-integration-popup.component.scss'],
-    templateUrl: './bank-integration-popup.component.html',
-    standalone: false
+    templateUrl: './bank-integration-popup.component.html'
 })
 
 export class BankIntegrationDialogComponent implements OnInit, OnDestroy {

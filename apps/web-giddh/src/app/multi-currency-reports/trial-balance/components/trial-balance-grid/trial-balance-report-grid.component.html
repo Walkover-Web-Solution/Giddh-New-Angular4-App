@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'trial-profit-balance/trial-balance/grid'"
     (localeData)="localeData = $event"
@@ -30,11 +30,15 @@
         <div class="table-container clear-both trial-balance">
             <section class="tb-section">
                 <div class="row">
-                    <div class="col-4 d-flex align-items-center" #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
+                    <div
+                        class="col-4 d-flex align-items-center"
+                        #searchContainer
+                        (clickOutside)="clickedOutside($event, searchContainer)"
+                    >
                         <span [ngClass]="{ 'd-none': showClearSearch }" class="d-flex align-items-center">
-                            <span class="pr-2">
-                                <strong>{{ localeData?.particular }}</strong>
-                            </span>
+                            <span class="pr-2"
+                                ><strong>{{ localeData?.particular }}</strong></span
+                            >
                             <i
                                 class="position-relative font-size-14 pr-2 cursor-pointer d-flex align-items-center light-gray"
                                 id="showSearch"
@@ -88,14 +92,19 @@
                                         context: {
                                             $implicit: grp.childGroups,
                                             padding: padding + 20,
-                                            isSubGroup: true,
+                                            isSubGroup: true
                                         }
                                     "
-                                ></ng-container>
+                                >
+                                </ng-container>
                             </section>
                         </ng-container>
                     </ng-container>
-                    <cdk-virtual-scroll-viewport *ngIf="expandAll && !isSubGroup && !search" [itemSize]="35" class="trial-balance-viewport">
+                    <cdk-virtual-scroll-viewport
+                        *ngIf="expandAll && !isSubGroup && !search"
+                        [itemSize]="35"
+                        class="trial-balance-viewport"
+                    >
                         <ng-container *cdkVirtualFor="let grp of list; trackBy: trackByFn">
                             <section
                                 *ngIf="grp.isVisible"
@@ -114,10 +123,11 @@
                                         context: {
                                             $implicit: grp.childGroups,
                                             padding: padding + 20,
-                                            isSubGroup: true,
+                                            isSubGroup: true
                                         }
                                     "
-                                ></ng-container>
+                                >
+                                </ng-container>
                             </section>
                         </ng-container>
                     </cdk-virtual-scroll-viewport>
@@ -126,13 +136,14 @@
                     *ngTemplateOutlet="
                         groupDetails;
                         context: {
-                            $implicit: data$.groupDetails | financialSearch: search,
+                            $implicit: data$.groupDetails | financialSearch : search,
                             padding: 8,
                             tbfrom: from,
-                            tbto: to,
+                            tbto: to
                         }
                     "
-                ></ng-container>
+                >
+                </ng-container>
             </div>
             <div class="table-responsive">
                 <table class="table basic mb-0 table-footer">
@@ -147,7 +158,8 @@
                                         [amount]="data$?.forwardedBalance?.amount"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
-                                    ></amount-field>
+                                    >
+                                    </amount-field>
                                 </span>
                             </th>
                             <th width="16.6%;" class="text-right">
@@ -156,7 +168,8 @@
                                         [amount]="data$.debitTotal"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
-                                    ></amount-field>
+                                    >
+                                    </amount-field>
                                 </span>
                             </th>
                             <th width="16.6%;" class="text-right">
@@ -165,7 +178,8 @@
                                         [amount]="data$.creditTotal"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
-                                    ></amount-field>
+                                    >
+                                    </amount-field>
                                 </span>
                             </th>
                             <th width="16.6%;" class="text-right">
@@ -175,7 +189,8 @@
                                             [amount]="data$.closingBalance?.amount"
                                             [currencySymbol]="false"
                                             [currencyCode]="false"
-                                        ></amount-field>
+                                        >
+                                        </amount-field>
                                     </span>
                                 </span>
                             </th>
@@ -185,7 +200,7 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>
 <ng-template #createNew>
     <aside-menu-account
         [activeGroupUniqueName]="activeGroupUniqueName"
@@ -195,5 +210,6 @@
         [commonLocaleData]="commonLocaleData"
         (closeAsideEvent)="createNewAccountDialogRef?.close(); getUpdatedList(false)"
         (getUpdateList)="getUpdatedList(true)"
-    ></aside-menu-account>
+    >
+    </aside-menu-account>
 </ng-template>

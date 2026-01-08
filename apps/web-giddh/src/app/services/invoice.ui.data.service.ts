@@ -4,7 +4,7 @@ import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { CompanyResponse } from '../models/api-models/Company';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { NgForm } from '@angular/forms';
-import { cloneDeep, forEach, keys, set } from '../lodash-optimized';
+import { cloneDeep } from '../lodash-optimized';
 
 export class TemplateContentUISectionVisibility {
     public header: boolean = true;
@@ -12,9 +12,7 @@ export class TemplateContentUISectionVisibility {
     public footer: boolean = false;
 }
 declare var _: any;
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 
 export class InvoiceUiDataService {
     /** Holds the current custom template data */
@@ -188,7 +186,7 @@ export class InvoiceUiDataService {
     public bRToNewLine(template: any): any {
         const fields = ['message1', 'companyAddress', 'slogan'];
         if (template?.sections?.footer?.data) {
-            (Array.isArray(fields) ? fields : []).forEach(field => {
+            fields.forEach(field => {
                 if (template.sections.footer.data[field]) {
                     const label = template.sections.footer.data[field]?.label;
                     template.sections.footer.data[field].label = label ? label.replace(/<br\s*[\/]?>/gi, '\n') : '';

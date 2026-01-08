@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
+import { cloneDeep, each } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
@@ -11,12 +12,10 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial-balance-grid.component';
 import { TlPlService } from '../../../services/tl-pl.service';
-import { cloneDeep, each, forEach } from '../../../lodash-optimized';
 
 @Component({
-selector: 'trial-balance',
-    templateUrl: './trial-balance.component.html',
-    standalone: false
+    selector: 'trial-balance',
+    templateUrl: './trial-balance.component.html'
 })
 export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
@@ -76,7 +75,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
                     }, 100);
                 }
                 this.InitData(d.groupDetails);
-                (Array.isArray(d.groupDetails) ? d.groupDetails : []).forEach(g => {
+                d.groupDetails.forEach(g => {
                     g.isVisible = true;
                     g.isCreated = true;
                 });

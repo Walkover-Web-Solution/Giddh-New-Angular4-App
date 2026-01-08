@@ -34,7 +34,10 @@
     }
 }
 
-#mfReportTbl .table .manufacture-table {
+#mfReportTbl .table
+
+.manufacture-table {
+
     tr {
         &:hover {
             td.raw-material {
@@ -114,6 +117,7 @@
             flex: 0 0 21.666667%;
             max-width: 21.666667%;
         }
+
     }
     .linked-entities sh-select::ng-deep input {
         padding-right: 6px !important;
@@ -137,6 +141,7 @@
     }
 
     .datepicker-flex,
+
     .no-branch-head {
         .col-xl-2 {
             flex: 0 0 50%;

@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'trial-profit-balance/balance-sheet/grid'"
     (localeData)="localeData = $event"
@@ -22,7 +22,10 @@
                                 <thead>
                                     <tr>
                                         <th class="p-0 font-size-16" width="33.33%">
-                                            <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
+                                            <div
+                                                #searchContainer
+                                                (clickOutside)="clickedOutside($event, searchContainer)"
+                                            >
                                                 <div
                                                     [ngStyle]="{ 'display': showClearSearch ? 'none' : 'flex' }"
                                                     class="d-flex align-items-center"
@@ -34,11 +37,7 @@
                                                         (click)="openConfirmDialog()"
                                                         aria-label="clear selection"
                                                     >
-                                                        <img
-                                                            src="{{ imgPath }}deselect-all.svg"
-                                                            class="uncheck-all-icon image-as-icon-color"
-                                                            aria-label="clear selection icon"
-                                                        />
+                                                        <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
                                                     </span>
                                                     <span class="ml-1 mr-1">{{ localeData?.particular }}</span>
                                                     <i class="icon-search" (click)="toggleSearch()"></i>
@@ -58,20 +57,36 @@
                                         </th>
                                         <th class="text-right font-size-16" width="33.33%">
                                             {{ commonLocaleData?.app_as_of }}
-                                            <span *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to !== 'Invalid date'">
-                                                {{ dayjs(bsData?.dates?.to, giddhDateFormat)?.toString() | date: 'dd MMMM yyyy' }}
-                                            </span>
+                                            <span
+                                                *ngIf="
+                                                    bsData &&
+                                                    bsData.dates &&
+                                                    bsData.dates.to &&
+                                                    bsData.dates.to !== 'Invalid date'
+                                                "
+                                            >
+                                                {{
+                                                    dayjs(bsData?.dates?.to, giddhDateFormat)?.toString()
+                                                        | date : "dd MMMM yyyy"
+                                                }}</span
+                                            >
                                         </th>
                                         <th class="text-right font-size-16" width="33.33%">
                                             {{ commonLocaleData?.app_as_of }}
                                             <span
-                                                *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from !== 'Invalid date'"
+                                                *ngIf="
+                                                    bsData &&
+                                                    bsData.dates &&
+                                                    bsData.dates.from &&
+                                                    bsData.dates.from !== 'Invalid date'
+                                                "
                                             >
                                                 {{
-                                                    dayjs(bsData?.dates?.from, giddhDateFormat).add(-1, 'day')?.toString()
-                                                        | date: 'dd MMMM yyyy'
-                                                }}
-                                            </span>
+                                                    dayjs(bsData?.dates?.from, giddhDateFormat)
+                                                        .add(-1, "day")
+                                                        ?.toString() | date : "dd MMMM yyyy"
+                                                }}</span
+                                            >
                                         </th>
                                     </tr>
                                 </thead>
@@ -96,9 +111,13 @@
                                         [to]="to"
                                         [expandAll]="expandAll"
                                     >
-                                        <div
-                                            *ngTemplateOutlet="groupDetails; context: { $implicit: grp.childGroups, padding: padding + 20 }"
-                                        ></div>
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                groupDetails;
+                                                context: { $implicit: grp.childGroups, padding: padding + 20 }
+                                            "
+                                        >
+                                        </ng-container>
                                     </section>
                                 </ng-container>
                             </ng-template>
@@ -106,9 +125,10 @@
                             <ng-container
                                 *ngTemplateOutlet="
                                     groupDetails;
-                                    context: { $implicit: bsData?.liabilities | financialSearch: search, padding: 10 }
+                                    context: { $implicit: bsData?.liabilities | financialSearch : search, padding: 10 }
                                 "
-                            ></ng-container>
+                            >
+                            </ng-container>
                             <!--/Grid-->
                             <div class="top-bar row clear-both">
                                 <div class="col-4 group">
@@ -121,7 +141,8 @@
                                                 [amount]="bsData?.liabTotal"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </strong>
                                 </div>
@@ -132,7 +153,8 @@
                                                 [amount]="bsData?.liabTotalEnd"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </strong>
                                 </div>
@@ -162,17 +184,22 @@
                                         [to]="to"
                                     >
                                         <ng-container
-                                            *ngTemplateOutlet="groupDetails; context: { $implicit: grp.childGroups, padding: padding + 20 }"
-                                        ></ng-container>
+                                            *ngTemplateOutlet="
+                                                groupDetails;
+                                                context: { $implicit: grp.childGroups, padding: padding + 20 }
+                                            "
+                                        >
+                                        </ng-container>
                                     </section>
                                 </ng-container>
                             </ng-template>
                             <ng-container
                                 *ngTemplateOutlet="
                                     groupDetails;
-                                    context: { $implicit: bsData?.assets | financialSearch: search, padding: 10 }
+                                    context: { $implicit: bsData?.assets | financialSearch : search, padding: 10 }
                                 "
-                            ></ng-container>
+                            >
+                            </ng-container>
                             <!--/Grid-->
                         </div>
                     </div>
@@ -188,7 +215,8 @@
                                         [amount]="bsData?.assetTotal"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
-                                    ></amount-field>
+                                    >
+                                    </amount-field>
                                 </span>
                             </strong>
                         </div>
@@ -199,7 +227,8 @@
                                         [amount]="bsData?.assetTotalEnd"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
-                                    ></amount-field>
+                                    >
+                                    </amount-field>
                                 </span>
                             </strong>
                         </div>
@@ -210,4 +239,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

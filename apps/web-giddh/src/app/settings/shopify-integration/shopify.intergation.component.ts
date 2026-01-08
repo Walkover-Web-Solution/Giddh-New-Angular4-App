@@ -8,8 +8,7 @@ import { isEmpty } from '../../lodash-optimized';
 @Component({
     selector: 'shopify-integration',
     templateUrl: './shopify.intergation.component.html',
-    styleUrls: ['./shopify.intergation.component.scss'],
-    standalone:false
+    styleUrls: ['./shopify.intergation.component.scss']
 })
 export class ShopifyIntegrationComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -33,7 +32,7 @@ export class ShopifyIntegrationComponent implements OnInit, OnDestroy {
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
-                    (Array.isArray(res.ecommerceDetails) ? res.ecommerceDetails : []).forEach(item => {
+                    res.ecommerceDetails.forEach(item => {
                         if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
                             this.getShopifyVerifyStatus(item.uniqueName);
                         }

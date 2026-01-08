@@ -16,7 +16,9 @@
                     <div *ngIf="subscriptionMove" class="position-relative move-select">
                         <reactive-dropdown-field
                             [placeholder]="
-                                localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan : localeData?.select_plan
+                                localeData?.subscription?.select_plan
+                                    ? localeData?.subscription?.select_plan
+                                    : localeData?.select_plan
                             "
                             [enableDynamicSearch]="true"
                             [isPaginationEnabled]="true"
@@ -25,7 +27,8 @@
                             [options]="subscriptions$ | async"
                             [required]="true"
                             (selectedOption)="$event && (selectedPlan = $event.value)"
-                        ></reactive-dropdown-field>
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div *ngIf="!subscriptionMove" class="position-relative move-select">
                         <reactive-dropdown-field
@@ -38,13 +41,15 @@
                             (dynamicSearchedQuery)="searchCompany($event)"
                             [required]="true"
                             (selectedOption)="selectCompany($event)"
-                        ></reactive-dropdown-field>
+                        >
+                        </reactive-dropdown-field>
                     </div>
                 </div>
             </div>
             <div class="d-flex justify-content-end column-gap-1">
                 <button
-                    matButton="filled"
+                    mat-raised-button
+                    color="primary"
                     mat-dialog-close
                     (click)="moveCompanyInNewPlan()"
                     [disabled]="subscriptionMove ? !selectedPlan : companyDetails?.value"
@@ -57,7 +62,7 @@
                             : commonLocaleData?.app_add
                     }}
                 </button>
-                <button matButton="outlined" mat-dialog-close type="button">
+                <button mat-stroked-button mat-dialog-close type="button">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

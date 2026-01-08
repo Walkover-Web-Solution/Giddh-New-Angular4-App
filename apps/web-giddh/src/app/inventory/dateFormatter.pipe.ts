@@ -1,8 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'replaceHyphens',
-    standalone:false
+    name: 'replaceHyphens'
 })
 
 export class DateFormatterPipe implements PipeTransform {

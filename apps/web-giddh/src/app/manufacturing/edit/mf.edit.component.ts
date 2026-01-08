@@ -22,13 +22,12 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { GeneralService } from '../../services/general.service';
+import { cloneDeep, forEach } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
-import { cloneDeep, concat, find, findIndex, forEach, includes, map } from '../../lodash-optimized';
 
 @Component({
     templateUrl: './mf.edit.component.html',
-    styleUrls: [`./mf.edit.component.scss`],
-    standalone:false
+    styleUrls: [`./mf.edit.component.scss`]
 })
 
 export class MfEditComponent implements OnInit, OnDestroy {
@@ -166,10 +165,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
                     manufacturingObj.date = dayjs(manufacturingObj.date, GIDDH_DATE_FORMAT).toDate();
                     manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
-                    (Array.isArray(manufacturingObj.linkedStocks) ? manufacturingObj.linkedStocks : []).forEach((item) => {
+                    manufacturingObj.linkedStocks.forEach((item) => {
                         item.quantity = (item.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
                     });
-                    (Array.isArray(manufacturingObj.otherExpenses) ? manufacturingObj.otherExpenses : []).forEach(expense => {
+                    manufacturingObj.otherExpenses.forEach(expense => {
                         expense.baseAccount.defaultName = `${expense.baseAccount.name} (${expense.baseAccount?.uniqueName})`;
                         expense.transactions[0].account.defaultName = `${expense.transactions[0]?.account?.name} (${expense.transactions[0]?.account?.uniqueName})`;
                     });
@@ -385,7 +384,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
             dataToSave.date = String(dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
         delete dataToSave.warehouse;
-        (Array.isArray(dataToSave.linkedStocks) ? dataToSave.linkedStocks : []).forEach((obj) => {
+        dataToSave.linkedStocks.forEach((obj) => {
             obj.manufacturingUnit = obj.stockUnitCode;
             obj.manufacturingQuantity = obj.quantity;
         });
@@ -475,7 +474,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
         if (!this.initialQuantityObj?.length) {
             this.initialQuantityObj = [];
-            (Array.isArray(manufacturingObj.linkedStocks) ? manufacturingObj.linkedStocks : []).forEach((o) => {
+            manufacturingObj.linkedStocks.forEach((o) => {
                 this.initialQuantityObj.push(o);
             });
         }
@@ -487,7 +486,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         }
 
         if (manufacturingObj && manufacturingObj.linkedStocks) {
-            (Array.isArray(manufacturingObj.linkedStocks) ? manufacturingObj.linkedStocks : []).forEach((stock) => {
+            manufacturingObj.linkedStocks.forEach((stock) => {
                 let selectedStock = this.initialQuantityObj.find((obj) => obj.stockUniqueName === stock.stockUniqueName);
 
                 if (selectedStock) {
@@ -781,7 +780,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
             if (warehouses && warehouses.results) {
                 let warehouseResults = cloneDeep(warehouses.results);
                 warehouseResults = warehouseResults?.filter(warehouse => this.manufacturingDetails?.warehouseUniqueName === warehouse?.uniqueName || !warehouse.isArchived);
-                (Array.isArray(warehouseResults) ? warehouseResults : []).forEach(warehouse => {
+                warehouseResults.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse.name, value: warehouse?.uniqueName, additional: warehouse });
                 });
             }

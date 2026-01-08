@@ -1,9 +1,14 @@
-<div appTranslate [file]="'import-data'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'import-data'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="p-3">
+    <div class=" p-3 ">
         <div class="d-flex flex-column">
             <div class="text-right">
-                <button matButton="filled" (click)="importFiles()">{{ localeData?.import_files }}</button>
+                <button mat-raised-button color="primary" (click)="importFiles()">{{ localeData?.import_files }}</button>
             </div>
             <div class="mt-3 import-data-table" *ngIf="!isLoading">
                 <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">
@@ -54,12 +59,16 @@
                             </div>
                             <div class="row mt-1">
                                 <div class="col-3 col-sm-3">
-                                    <label class="text-light">
-                                        {{ item?.entity === 'entries' ? commonLocaleData?.app_branch : commonLocaleData?.app_company }}:
-                                    </label>
+                                    <label class="text-light"
+                                        >{{
+                                            item?.entity === "entries"
+                                                ? commonLocaleData?.app_branch
+                                                : commonLocaleData?.app_company
+                                        }}:</label
+                                    >
                                 </div>
                                 <div class="col-9 col-sm-9">
-                                    {{ item?.entity === 'entries' ? item?.branch?.name || '-' : activeCompany?.name }}
+                                    {{ item?.entity === "entries" ? item?.branch?.name || "-" : activeCompany?.name }}
                                 </div>
                             </div>
                         </div>
@@ -74,10 +83,10 @@
                 [pageSizeOptions]="pageSizeOptions"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
-                (page)="handlePageEvent($event)"
-            ></mat-paginator>
+                (page)="handlePageEvent($event)">
+            </mat-paginator>
             <section class="mb-custom-80"></section>
             <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>
     </div>
-</div>
+</ng-container>

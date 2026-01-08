@@ -27,7 +27,7 @@
                     display: block;
                     background-color: var(--color-medium-gray);
                     border-radius: 50%;
-                    content: '';
+                    content: "";
                     left: -4px;
                 }
                 &:before {
@@ -37,7 +37,7 @@
                     display: block;
                     background-color: var(--color-medium-gray);
                     border-radius: 50%;
-                    content: '';
+                    content: "";
                     bottom: -4px;
                     right: -4px;
                 }
@@ -94,6 +94,7 @@
                     margin-top: 7px;
                 }
             }
+
         }
         .company-branch-nav {
             height: calc(100vh - 120px);
@@ -172,7 +173,7 @@
             display: none !important;
         }
         .toggle-btn {
-            display: none !important;
+            display: none;
         }
         .company-branch-block {
             padding: 0 10px !important;
@@ -215,6 +216,7 @@
                 margin-top: 0;
                 margin-left: 0;
                 .branch-name {
+
                     .switch-branch-alice {
                         display: flex !important;
                         justify-content: center;
@@ -470,6 +472,7 @@ cdk-tree {
     }
 }
 @media (max-height: 950px) {
+
     .menu-block {
         padding-bottom: 20px;
     }

@@ -4,7 +4,6 @@ import {
     Component,
     ElementRef,
     EventEmitter,
-    Inject,
     Input,
     NgZone,
     OnChanges,
@@ -15,6 +14,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
+import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -26,18 +26,13 @@ import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Configuration } from '../../../../../app.constant';
-import { environment } from '../../../../../../environments/environment.generated';
-import { each, forEach } from '../../../../../lodash-optimized';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
-selector: 'balance-sheet-grid',
+    selector: 'balance-sheet-grid',
     templateUrl: './balance-sheet-grid.component.html',
     styleUrls: [`./balance-sheet-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [FinancialReportsComponentStore],
-    standalone: false
+    providers: [FinancialReportsComponentStore]
 })
 export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     public noData: boolean;
@@ -77,8 +72,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         private zone: NgZone,
         private financialReportsComponentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService,
-        @Inject(ServiceConfig) private serviceConfig
+        private generalService: GeneralService
     ) {
 
     }
@@ -125,7 +119,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.bsSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -198,7 +192,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-
+    
     /**
      * Unchecks all the accounts/groups in the balance sheet grid.
      *
@@ -212,7 +206,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {
                     request: {
-                        reportType: ReportType.BALANCE_SHEET,
+                        reportType: ReportType.BalanceSheet,
                         from: this.from,
                         to: this.to,
                         branchUniqueName: this.generalService.currentBranchUniqueName
@@ -234,7 +228,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof BalanceSheetGridComponent
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        (Array.isArray(groupAccountDetails) ? groupAccountDetails : []).forEach(groupAccount => {
+        groupAccountDetails.forEach(groupAccount => {
             if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
                     uniqueName: groupAccount.uniqueName,
@@ -268,7 +262,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
                 this.uncheckAll();
             }
         });
-    }
+    } 
 
     /**
      * This will destroy all the memory used by this component

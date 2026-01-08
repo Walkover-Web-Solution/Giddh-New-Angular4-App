@@ -6,8 +6,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 @Component({
     selector: 'app-cdk-scroll',
     templateUrl: './cdk-scroll.component.html',
-    styleUrls: ['./cdk-scroll.component.css'],
-    standalone: false
+    styleUrls: ['./cdk-scroll.component.css']
 })
 export class CdkScrollComponent implements OnInit, OnDestroy {
 

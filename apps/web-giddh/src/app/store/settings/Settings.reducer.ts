@@ -13,9 +13,9 @@ import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.
 import { IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
+import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
 import { UNAUTHORISED } from '../../app.constant';
 import { ITaxAuthority } from '../../models/interfaces/tax.interface';
-import { cloneDeep, filter, findIndex, map, orderBy } from '../../lodash-optimized';
 
 export interface LinkedAccountsState {
     bankAccounts?: BankAccountsResponse[];

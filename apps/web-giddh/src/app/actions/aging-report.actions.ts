@@ -16,9 +16,7 @@ import { ToasterService } from '../services/toaster.service';
 import { AgingreportingService } from '../services/agingreporting.service';
 import { LocaleService } from '../services/locale.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class AgingReportActions {
     public static DUE_DAY_RANGE_POPUP_OPEN = 'DUE_DAY_RANGE_POPUP_OPEN';
     public static DUE_DAY_RANGE_POPUP_CLOSE = 'DUE_DAY_RANGE_POPUP_CLOSE';

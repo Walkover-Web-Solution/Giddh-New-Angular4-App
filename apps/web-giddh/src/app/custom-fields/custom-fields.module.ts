@@ -10,6 +10,7 @@ import { CustomFieldsListComponent } from "./list/list.component";
 import { MainComponent } from "./main.component";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCommonModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
@@ -37,6 +38,7 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         MatTableModule,
         MatFormFieldModule,
         MatInputModule,
+        MatCommonModule,
         MatRadioModule,
         MatSelectModule,
         FormFieldsModule,

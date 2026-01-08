@@ -5,8 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     selector: 'new-confirm-modal',
     templateUrl: './confirm-modal.component.html',
     styleUrls: ['./confirm-modal.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmModalComponent {
     constructor(

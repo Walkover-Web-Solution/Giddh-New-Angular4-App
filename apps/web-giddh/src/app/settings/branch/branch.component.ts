@@ -22,14 +22,12 @@ import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
-    styleUrls: ['./branch.component.scss'],
-    standalone:false
+    styleUrls: ['./branch.component.scss']
 })
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
@@ -199,7 +197,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        this.imgPath = Configuration.isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
@@ -235,9 +233,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public openCreateCompanyDialog(): void {
         this.dialog.open(this.addCompanyModal, {
-                    panelClass: 'modal-dialog',
-                    width: '1000px',
-                });
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
     }
 
     /**
@@ -460,7 +458,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         entity.isDefault = !entity.isDefault;
 
         if (entityType === 'address') {
-            (Array.isArray(branch.addresses) ? branch.addresses : []).forEach(branchAddress => {
+            branch.addresses.forEach(branchAddress => {
                 if (branchAddress?.uniqueName === entity?.uniqueName) {
                     branchAddress.isDefault = entity.isDefault;
                 } else {
@@ -468,7 +466,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             });
         } else if (entityType === 'warehouse') {
-            (Array.isArray(branch.warehouseResource) ? branch.warehouseResource : []).forEach(warehouse => {
+            branch.warehouseResource.forEach(warehouse => {
                 if (warehouse?.uniqueName === entity?.uniqueName) {
                     warehouse.isDefault = entity.isDefault;
                 } else {
@@ -558,9 +556,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         if (unarchivedBranches?.length > 1 || branch?.isArchived) {
             this.branchStatusToUpdate = branch;
             this.statusDialogRef = this.dialog.open(this.statusDialog, {
-                        panelClass: 'modal-dialog',
-                        width: '1000px',
-                    });
+                panelClass: 'modal-dialog',
+                width: '1000px'
+            });
         } else {
             this.toasterService.warningToast(this.localeData?.archive_notallowed);
         }
@@ -587,7 +585,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.statusDialogRef?.close();
         });
     }
-
+    
     /**
      * Opens the address info
      *

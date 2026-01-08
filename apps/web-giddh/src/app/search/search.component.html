@@ -1,4 +1,9 @@
-<div appTranslate [file]="'search'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'search'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid">
         <div>
@@ -11,7 +16,8 @@
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
                         (currentBranchChanged)="handleCurrentBranchChange($event)"
-                    ></search-sidebar>
+                    >
+                    </search-sidebar>
                 </div>
                 <search-grid
                     *ngIf="localeData?.page_heading"
@@ -20,8 +26,9 @@
                     (pageChangeEvent)="paginationChanged($event)"
                     (FilterByAPIEvent)="FilterByAPIEvent($event)"
                     [currentBranchUniqueName]="currentBranchUniqueName"
-                ></search-grid>
+                >
+                </search-grid>
             </div>
         </div>
     </div>
-</div>
+</ng-container>

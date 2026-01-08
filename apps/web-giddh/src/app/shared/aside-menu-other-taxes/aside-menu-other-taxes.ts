@@ -10,7 +10,6 @@ import { IOption } from '../../app.constant';
     templateUrl: './aside-menu-other-taxes.html',
     styleUrls: ['./aside-menu-other-taxes.scss'],
     host: { 'class': 'app-aside-menu-other-taxes' },
-    standalone: false
 })
 export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();

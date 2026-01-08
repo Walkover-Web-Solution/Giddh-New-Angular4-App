@@ -477,7 +477,6 @@ export class CustomTemplateResponse {
     public type?: string;
     public showBankQrCode: boolean;
     public qrCodeId: string;
-    public accountCustomFieldUniqueNames: string[] = [];
 }
 
 export class Esignature {

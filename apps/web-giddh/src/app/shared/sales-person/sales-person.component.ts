@@ -22,7 +22,6 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { MatMenuModule } from '@angular/material/menu';
 import { ArchiveSalesPersonComponent } from './archive/archive.component';
 import { MobileNumberInputComponent } from '../mobile-number-input';
-import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module';
 
 @Component({
     selector: 'app-sales-person',
@@ -41,8 +40,7 @@ import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keybo
         GiddhPageLoaderModule,
         ElementViewChildModule,
         MatMenuModule,
-        MobileNumberInputComponent,
-        KeyboardNavigationModule
+        MobileNumberInputComponent
     ],
     templateUrl: './sales-person.component.html',
     styleUrls: ['./sales-person.component.scss'],

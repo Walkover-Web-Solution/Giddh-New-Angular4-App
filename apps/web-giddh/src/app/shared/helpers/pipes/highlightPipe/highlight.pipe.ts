@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 // tslint:disable-next-line:pipe-naming
-@Pipe({ name: 'highlight', standalone: false })
+@Pipe({ name: 'highlight' })
 export class HighlightPipe implements PipeTransform {
     public transform(text: string, search): string {
         if (search && text) {

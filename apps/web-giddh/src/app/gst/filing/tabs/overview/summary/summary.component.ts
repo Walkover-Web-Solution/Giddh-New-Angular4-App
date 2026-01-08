@@ -8,10 +8,8 @@ import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReport } from '../../../../constants/gst.constant';
 import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/gst-reconcile.actions';
-import { cloneDeep, sortBy } from '../../../../../lodash-optimized';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 interface SequenceConfig {
     name: string;
@@ -23,8 +21,7 @@ interface SequenceConfig {
     // tslint:disable-next-line:component-selector
     selector: 'overview-summary',
     templateUrl: './summary.component.html',
-    styleUrls: ['summary.component.scss'],
-    standalone: false
+    styleUrls: ['summary.component.scss']
 })
 export class OverviewSummaryComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -57,7 +54,6 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['description', 'total_transactions', 'taxable_amount', 'igst', 'cgst', 'sgst', 'cess'];
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.gstr1OverviewData$ = this.store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
         this.gstr2OverviewData$ = this.store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -69,6 +65,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.gstr1OverviewData$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && this.selectedGst === GstReport.Gstr1) {
                 this.gstrOverviewData = this.transformedSummaryData(data);
@@ -143,9 +140,9 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     public mapResponseData(data: GstOverViewSummary[], sequencingList: SequenceConfig[]): GstOverViewSummary[] {
-        let manipulatedData: GstOverViewSummary[] = cloneDeep(data);
+        let manipulatedData: GstOverViewSummary[] = _.cloneDeep(data);
 
-        manipulatedData = sortBy(manipulatedData, (o: GstOverViewSummary) => {
+        manipulatedData = _.sortBy(manipulatedData, (o: GstOverViewSummary) => {
             let index = sequencingList?.findIndex(f => f.gstReturnType === o.gstReturnType);
             o.name = sequencingList[index].name;
             return index;

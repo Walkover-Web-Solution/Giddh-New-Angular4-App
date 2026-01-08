@@ -15,8 +15,7 @@ import { PageEvent } from '@angular/material/paginator';
     selector: 'account-wise-report',
     templateUrl: './account-wise-report.component.html',
     styleUrls: ['./account-wise-report.component.scss'],
-    providers: [TaxAuthorityComponentStore],
-    standalone: false
+    providers: [TaxAuthorityComponentStore]
 })
 export class AccountWiseReportComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

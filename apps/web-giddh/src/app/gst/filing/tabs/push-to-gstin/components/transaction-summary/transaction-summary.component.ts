@@ -5,7 +5,6 @@ import { Component, Input, OnInit } from '@angular/core';
     selector: 'transaction-summary',
     templateUrl: './transaction-summary.component.html',
     styleUrls: ['transaction-summary.component.css'],
-    standalone: false
 })
 export class TransactionSummaryComponent implements OnInit {
 
@@ -19,7 +18,7 @@ export class TransactionSummaryComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
 
     constructor() {
-
+        
     }
 
     public ngOnInit() {

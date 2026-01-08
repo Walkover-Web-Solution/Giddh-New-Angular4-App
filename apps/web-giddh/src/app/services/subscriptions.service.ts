@@ -11,11 +11,8 @@ import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { GeneralService } from './general.service';
 import { TaxSupportedCountries, TaxType } from '../vouchers/utility/vouchers.const';
-import { get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SubscriptionsService {
     public dayjs = dayjs;
 

@@ -9,10 +9,9 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
 import { IPage, NewPermissionObj, NewRoleClass } from '../../permission.utility';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { cloneDeep, concat, filter, find, findIndex, forEach, indexOf, isEmpty, map, remove } from '../../../lodash-optimized';
+import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remove } from '../../../lodash-optimized';
 
 @Component({
-    standalone: false,
     templateUrl: './permission.details.html',
     styleUrls: [`./permission.details.scss`]
 })
@@ -110,13 +109,13 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     public handleShareSituation(roleObj: NewRoleClass) {
         let shareScopes = ['SHRALL', 'SHRLWR', 'SHRSM'];
-        (Array.isArray(roleObj?.scopes) ? roleObj?.scopes : []).forEach((role) => {
+        roleObj?.scopes.forEach((role) => {
             if (role.name === 'SHARE') {
                 role.permissions = role.permissions?.filter((p) => {
                     return shareScopes?.indexOf(p.code) > -1;
                 });
                 if (role.permissions?.length < 3) {
-                    (Array.isArray(shareScopes) ? shareScopes : []).forEach((s: string) => {
+                    shareScopes.forEach((s: string) => {
                         let indexOfAbsentScope = role.permissions.findIndex((p) => p.code === s);
                         if (indexOfAbsentScope === -1) {
                             role.permissions.push(new NewPermissionObj(s, false));
@@ -203,7 +202,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         }
 
         if (response) {
-            (Array.isArray(response) ? response : []).forEach(item => {
+            response.forEach(item => {
                 let count = 0;
                 item?.permissions?.forEach(item => {
                     if (item.code !== 'SELECT-ALL' && item.isSelected) {

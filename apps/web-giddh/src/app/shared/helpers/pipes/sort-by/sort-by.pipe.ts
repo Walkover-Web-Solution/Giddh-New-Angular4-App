@@ -1,8 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'sortBy',
-    standalone: false
+    name: 'sortBy'
 })
 export class SortByPipe implements PipeTransform {
     public transform(array: string[], args?: any): any {

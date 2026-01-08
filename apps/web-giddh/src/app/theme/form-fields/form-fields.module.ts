@@ -26,7 +26,6 @@ import { InputFieldComponent } from "./input-field/input-field.component";
 import { ReactiveDropdownFieldComponent } from "./reactive-dropdown-field/reactive-dropdown-field.component";
 import { OptionsScrollDirective } from "./reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 import { MatDividerModule } from "@angular/material/divider";
-import { A11yModule } from "@angular/cdk/a11y";
 
 @NgModule({
     declarations: [
@@ -59,8 +58,7 @@ import { A11yModule } from "@angular/cdk/a11y";
         MatIconModule,
         MatMenuModule,
         MatButtonModule,
-        MatDividerModule,
-        A11yModule
+        MatDividerModule
     ],
     exports: [
         TextFieldComponent,

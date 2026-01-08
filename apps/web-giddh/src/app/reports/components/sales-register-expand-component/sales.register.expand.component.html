@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'reports/sales-register'"
     (localeData)="localeData = $event"
@@ -11,7 +11,7 @@
             <div class="form-inline d-flex justify-content-between top-bar-content">
                 <div class="d-flex align-items-center column-gap-1">
                     <button
-                        matButton="outlined"
+                        mat-stroked-button
                         class="btn-stroked-icon"
                         (click)="emitExpand()"
                         [matTooltip]="expand ? commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all"
@@ -19,14 +19,12 @@
                     >
                         <i [ngClass]="expand ? 'icon-collapse' : 'icon-expandIcon'"></i>
                     </button>
-                    <div
-                        class="custom-datepicker"
+                    <div class="custom-datepicker"
                         [matMenuTriggerFor]="universalDatepicker"
-                        #universalDatepickerTrigger="matMenuTrigger"
-                        role="button"
-                        aria-haspopup="true"
-                        aria-controls="universalDatepicker"
-                    >
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universalDatepicker">
                         <input
                             matInput
                             type="text"
@@ -39,16 +37,16 @@
                     </div>
                 </div>
                 <div
-                    class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
+                    class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                     *ngIf="showClearFilter"
                 >
-                    <button matButton="outlined" (click)="resetAdvanceSearch()">
+                    <button mat-stroked-button (click)="resetAdvanceSearch()">
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
                 <div class="d-flex align-items-center column-gap-1">
                     <button
-                        matButton="outlined"
+                        mat-stroked-button
                         [matTooltip]="commonLocaleData?.app_back"
                         [matTooltipPosition]="'above'"
                         (click)="gotoSalesRegister()"
@@ -56,7 +54,7 @@
                         {{ commonLocaleData?.app_back }}
                     </button>
                     <button
-                        matButton="filled"
+                        mat-raised-button
                         (click)="export()"
                         color="primary"
                         [matTooltip]="commonLocaleData?.app_export"
@@ -73,7 +71,8 @@
                         [iconClass]="'icon-options select-multiple-icon-options'"
                         [cssClass]="'purchase-customise-column-button'"
                         (isLoading)="isLoading = $event"
-                    ></select-table-column>
+                    >
+                    </select-table-column>
                 </div>
             </div>
         </div>
@@ -90,7 +89,10 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-1 border-none opening-box" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal">
+                <div
+                    class="total-details-box mr-1 border-none opening-box"
+                    *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
+                >
                     <h5>
                         {{ commonLocaleData?.app_sales }}
                         <div>
@@ -99,12 +101,16 @@
                                     [amount]="(salesRegisteDetailedResponse$ | async).creditTotal"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-1 border-none sales-purchase" *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal">
+                <div
+                    class="total-details-box mr-1 border-none sales-purchase"
+                    *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal"
+                >
                     <h5>
                         {{ commonLocaleData?.app_return }}
                         <div>
@@ -113,7 +119,8 @@
                                     [amount]="(salesRegisteDetailedResponse$ | async).debitTotal"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -127,7 +134,8 @@
                                     [amount]="(salesRegisteDetailedResponse$ | async).discountTotal"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -144,7 +152,8 @@
                                     [amount]="(salesRegisteDetailedResponse$ | async).tcsTotal"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -161,7 +170,8 @@
                                     [amount]="(salesRegisteDetailedResponse$ | async).tdsTotal"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -175,7 +185,8 @@
                                     [amount]="(salesRegisteDetailedResponse$ | async).taxTotal"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -189,7 +200,8 @@
                                     [amount]="(salesRegisteDetailedResponse$ | async).netTotal.amount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                ></amount-field>
+                                >
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -212,18 +224,13 @@
                                 </div>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let item">{{ item.date }}</td>
+                        <td mat-cell *matCellDef="let item"> {{ item.date }} </td>
                     </ng-container>
 
                     <!-- Account Column -->
                     <ng-container matColumnDef="account">
-                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_account }}</th>
-                        <td
-                            mat-cell
-                            *matCellDef="let item"
-                            (dblclick)="modalUniqueName = item?.uniqueName"
-                            class="cursor-pointer no-dbl-click-select"
-                        >
+                        <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_account }} </th>
+                        <td mat-cell *matCellDef="let item" (dblclick)="modalUniqueName = item?.uniqueName" class="cursor-pointer no-dbl-click-select">
                             {{ item.account.name }}
                             <div
                                 *ngIf="modalUniqueName === item?.uniqueName"
@@ -245,60 +252,56 @@
 
                     <!-- Parent Group Column -->
                     <ng-container matColumnDef="parent_group">
-                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_parent_group }}</th>
+                        <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_parent_group }} </th>
                         <td mat-cell *matCellDef="let item">
                             <span class="d-inline-flex">
-                                {{ item?.group?.name ? item?.group?.name : '-' }}
+                                {{ item?.group?.name ? item?.group?.name : "-" }}
                             </span>
                         </td>
                     </ng-container>
 
                     <!-- gstin Column -->
                     <ng-container matColumnDef="tax_no">
-                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_tax_number_short }}</th>
+                        <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_tax_number_short }} </th>
                         <td mat-cell *matCellDef="let item">
                             <span class="d-inline-flex">
-                                {{ item?.gstin ? item?.gstin : '-' }}
+                                {{ item?.gstin ? item?.gstin : "-" }}
                             </span>
                         </td>
                     </ng-container>
 
                     <!-- Address Column -->
                     <ng-container matColumnDef="address">
-                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_address }}</th>
-                        <td mat-cell *matCellDef="let item">{{ item?.address ? item?.address : '-' }}</td>
+                        <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_address }} </th>
+                        <td mat-cell *matCellDef="let item"> {{ item?.address ? item?.address : "-" }} </td>
                     </ng-container>
 
                     <!-- Pincode Column -->
                     <ng-container matColumnDef="pincode">
-                        <th mat-header-cell *matHeaderCellDef>
-                            {{
-                                zipCodeSupportedCountryList.includes(activeCompanyCountryCode)
-                                    ? commonLocaleData?.app_zip_code
-                                    : commonLocaleData?.app_pin_code
-                            }}
-                        </th>
-                        <td mat-cell *matCellDef="let item">{{ item?.pincode ? item?.pincode : '-' }}</td>
+                        <th mat-header-cell *matHeaderCellDef> {{
+                            zipCodeSupportedCountryList.includes(activeCompanyCountryCode)
+                            ? commonLocaleData?.app_zip_code
+                            : commonLocaleData?.app_pin_code
+                        }} </th>
+                        <td mat-cell *matCellDef="let item">  {{ item?.pincode ? item?.pincode : "-" }} </td>
                     </ng-container>
 
                     <!-- Email Column -->
                     <ng-container matColumnDef="email">
-                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_email }}</th>
-                        <td mat-cell *matCellDef="let item">{{ item?.email ? item?.email : '-' }}</td>
+                        <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_email }} </th>
+                        <td mat-cell *matCellDef="let item">  {{ item?.email ? item?.email : "-" }} </td>
                     </ng-container>
 
                     <!-- Mobile No Column -->
                     <ng-container matColumnDef="mobile_no">
-                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_mobile_no }}</th>
-                        <td mat-cell *matCellDef="let item">{{ item?.mobileNo ? item?.mobileNo : '-' }}</td>
+                        <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_mobile_no }} </th>
+                        <td mat-cell *matCellDef="let item"> {{ item?.mobileNo ? item?.mobileNo : "-" }} </td>
                     </ng-container>
 
                     <!-- Sales Account Column -->
                     <ng-container matColumnDef="sales_account">
-                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.sales_account }}</th>
-                        <td mat-cell *matCellDef="let item">
-                            {{ item?.salesPurchaseAccount?.name ? item?.salesPurchaseAccount?.name : '-' }}
-                        </td>
+                        <th mat-header-cell *matHeaderCellDef> {{ localeData?.sales_account }} </th>
+                        <td mat-cell *matCellDef="let item"> {{ item?.salesPurchaseAccount?.name ? item?.salesPurchaseAccount?.name : "-" }} </td>
                     </ng-container>
 
                     <!-- Voucher Type Column -->
@@ -311,14 +314,15 @@
                                         *ngTemplateOutlet="
                                             sortingTemplate;
                                             context: {
-                                                $implicit: 'voucherType',
+                                                $implicit: 'voucherType'
                                             }
                                         "
-                                    ></ng-container>
+                                    >
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let item">{{ item.voucherType }}</td>
+                        <td mat-cell *matCellDef="let item">  {{ item.voucherType }} </td>
                     </ng-container>
 
                     <!-- Voucher No Column -->
@@ -326,21 +330,27 @@
                         <th mat-header-cell *matHeaderCellDef class="td-search-box nowrap voucher-width">
                             <div [hidden]="showSearchInvoiceNo">
                                 <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
-                                <span>
-                                    {{ voucherApiVersion === 2 ? commonLocaleData?.app_voucher_no : commonLocaleData?.app_entry_no }}
-                                </span>
+                                <span>{{
+                                    voucherApiVersion === 2
+                                        ? commonLocaleData?.app_voucher_no
+                                        : commonLocaleData?.app_entry_no
+                                }}</span>
                             </div>
                             <div class="input-container" [hidden]="!showSearchInvoiceNo">
                                 <input
                                     type="text"
-                                    [placeholder]="voucherApiVersion === 2 ? localeData?.search_voucher_no : localeData?.search_entry_no"
+                                    [placeholder]="
+                                        voucherApiVersion === 2
+                                            ? localeData?.search_voucher_no
+                                            : localeData?.search_entry_no
+                                    "
                                     class="w100"
                                     #invoiceSearch
                                     [formControl]="voucherNumberInput"
                                 />
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let item">{{ item.voucherNumber ? item.voucherNumber : '-' }}</td>
+                        <td mat-cell *matCellDef="let item"> {{ item.voucherNumber ? item.voucherNumber : "-" }} </td>
                     </ng-container>
 
                     <!-- Sales Column -->
@@ -353,16 +363,22 @@
                                         *ngTemplateOutlet="
                                             sortingTemplate;
                                             context: {
-                                                $implicit: 'creditTotal',
+                                                $implicit: 'creditTotal'
                                             }
                                         "
-                                    ></ng-container>
+                                    >
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.creditTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                                <amount-field
+                                    [amount]="item.creditTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
                             </span>
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
@@ -378,13 +394,21 @@
                             <div class="d-flex justify-content-end align-items-center">
                                 <div class="text-right">{{ commonLocaleData?.app_return }}</div>
                                 <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'debitTotal' }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'debitTotal' }"
+                                    >
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.debitTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                                <amount-field
+                                    [amount]="item.debitTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
                             </span>
                         </td>
                     </ng-container>
@@ -395,7 +419,10 @@
                             <div class="d-flex justify-content-end align-items-center">
                                 <div class="text-right">{{ commonLocaleData?.app_quantity_unit }}</div>
                                 <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'rate' }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'rate' }"
+                                    >
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
@@ -416,7 +443,10 @@
                             <div class="d-flex justify-content-end align-items-center">
                                 <div class="text-right">{{ commonLocaleData?.app_rate }}</div>
                                 <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'rate' }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'rate' }"
+                                    >
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
@@ -424,7 +454,12 @@
                             <ng-container *ngFor="let stock of item.stocks">
                                 <p>
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="stock.rate" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                                        <amount-field
+                                            [amount]="stock.rate"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
+                                        </amount-field>
                                     </span>
                                 </p>
                             </ng-container>
@@ -442,16 +477,22 @@
                                         *ngTemplateOutlet="
                                             sortingTemplate;
                                             context: {
-                                                $implicit: 'discountTotal',
+                                                $implicit: 'discountTotal'
                                             }
                                         "
-                                    ></ng-container>
+                                    >
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.discountTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                                <amount-field
+                                    [amount]="item.discountTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
                             </span>
                         </td>
                     </ng-container>
@@ -462,13 +503,21 @@
                             <div class="d-flex justify-content-end align-items-center">
                                 <div class="text-right">{{ commonLocaleData?.app_tax }}</div>
                                 <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'taxTotal' }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'taxTotal' }"
+                                    >
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.taxTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                                <amount-field
+                                    [amount]="item.taxTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
                             </span>
                         </td>
                     </ng-container>
@@ -479,19 +528,27 @@
                             <div class="d-flex justify-content-end align-items-center">
                                 <div>{{ commonLocaleData?.app_net_sales }}</div>
                                 <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'netTotal' }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'netTotal' }"
+                                    >
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.netTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                                <amount-field
+                                    [amount]="item.netTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
                             </span>
                         </td>
                     </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
                 <mat-paginator
                     *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > pageSizeOptions[0]"
@@ -506,7 +563,12 @@
                 <section class="mb-custom-80"></section>
             </div>
         </div>
-        <div class="no-data" *ngIf="(salesRegisteDetailedResponse$ | async)?.items?.length === 0 && !(isGetSalesDetailsInProcess$ | async)">
+        <div
+            class="no-data"
+            *ngIf="
+                (salesRegisteDetailedResponse$ | async)?.items?.length === 0 && !(isGetSalesDetailsInProcess$ | async)
+            "
+        >
             <no-data></no-data>
         </div>
     </ng-container>
@@ -521,7 +583,8 @@
             *ngIf="getDetailedsalesRequestFilter.sortBy !== col"
             (click)="sortbyApi('asc', col)"
             [ngClass]="{
-                'active-text-color': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc',
+                'active-text-color':
+                    getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'
             }"
         ></div>
 
@@ -530,7 +593,8 @@
             *ngIf="getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'"
             (click)="sortbyApi('desc', col)"
             [ngClass]="{
-                'active-text-color': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc',
+                'active-text-color':
+                    getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'
             }"
         ></div>
 
@@ -539,12 +603,13 @@
             *ngIf="getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'desc'"
             (click)="sortbyApi('asc', col)"
             [ngClass]="{
-                'active-text-color': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'desc',
+                'active-text-color':
+                    getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'desc'
             }"
         ></div>
     </ng-template>
     <!-- endregion -->
-</div>
+</ng-container>
 
 <!-- Universal Date Picker Menu -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

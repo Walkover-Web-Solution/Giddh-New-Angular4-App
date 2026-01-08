@@ -4,14 +4,15 @@
         <span>{{ templateData?.mode === templateModeEnum.Create ? localeData?.create_template : localeData?.update_template }}</span>
         <button
             class="ml-auto"
-            matButton="filled"
+            mat-raised-button
+            color="primary"
             (click)="templateData?.mode === templateModeEnum.Create ? createTemplate() : updateTemplate()"
         >
             {{ templateData?.mode === templateModeEnum.Create ? localeData?.create_template : localeData?.update_template }}
         </button>
-        <button matButton="outlined" (click)="closeDialog()">{{ commonLocaleData?.app_close }}</button>
+        <button mat-stroked-button (click)="closeDialog()">{{ commonLocaleData?.app_close }}</button>
     </div>
-
+    
     <!-- Scrollable content -->
     <div class="scrollable-content p-3 overflow-auto">
         <div class="d-flex column-gap-1 h-100">

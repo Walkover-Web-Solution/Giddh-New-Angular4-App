@@ -8,8 +8,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 @Component({
     selector: 'aside-inventory-stock-group',
     styleUrls: [`./aside-inventory.components.scss`],
-    templateUrl: './aside-inventory.components.html',
-    standalone: false
+    templateUrl: './aside-inventory.components.html'
 })
 export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
 

@@ -25,8 +25,7 @@ import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
     selector: 'bulk-stock',
     templateUrl: './bulk-stock-edit.component.html',
     styleUrls: ['./bulk-stock-edit.component.scss'],
-    providers: [InventoryComponentStore],
-    standalone:false
+    providers: [InventoryComponentStore]
 })
 
 export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -271,16 +270,15 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.setPaginationData(res);
                 this.noDataFound = res.totalItems === 0;
                 this.totalInventoryCount = res?.totalItems;
-                (Array.isArray(res.results) ? res.results : []).forEach((row: any, index: number) => {
+                res.results.forEach((row: any, index: number) => {
                     this.dropdownValues[index] = row;
                     this.dropdownValues[index].hsnNo = row?.hsnNo || "";
                     this.dropdownValues[index].sacNo = row?.sacNo || "";
-                    this.dropdownValues[index].purchaseUnits = [{ code: row?.purchaseUnits?.[0]?.code ?? null, uniqueName: row?.purchaseUnits?.[0]?.uniqueName ?? null }];
-                    this.dropdownValues[index].salesUnits = [{ code: row?.salesUnits?.[0]?.code ?? null, uniqueName: row?.salesUnits?.[0]?.uniqueName ?? null }];
-                    this.dropdownValues[index].fixedAssetUnits = [{ code: row?.fixedAssetUnits?.[0]?.code ?? null, uniqueName: row?.fixedAssetUnits?.[0]?.uniqueName ?? null }];
+                    this.dropdownValues[index].purchaseUnits = [{code: row?.purchaseUnits?.[0]?.code ?? null, uniqueName: row?.purchaseUnits?.[0]?.uniqueName ?? null}];
+                    this.dropdownValues[index].salesUnits = [{code: row?.salesUnits?.[0]?.code ?? null, uniqueName: row?.salesUnits?.[0]?.uniqueName ?? null}];
+                    this.dropdownValues[index].fixedAssetUnits = [{code: row?.fixedAssetUnits?.[0]?.code ?? null, uniqueName: row?.fixedAssetUnits?.[0]?.uniqueName ?? null}];
                     this.addRow(row);
                 });
-                this.cdr.detectChanges();
             }
         });
 
@@ -543,7 +541,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             let index = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp.taxType === taxSelected.taxType);
 
             if (index > -1 && !isSelected?.length) {
-                (Array.isArray(rowTaxes) ? rowTaxes : []).forEach((tax) => {
+                rowTaxes.forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
@@ -557,7 +555,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             if (index < 0 && !isSelected?.length) {
-                (Array.isArray(rowTaxes) ? rowTaxes : []).forEach((tax) => {
+                rowTaxes.forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
@@ -593,7 +591,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (rowTax) {
                     rowTax.isChecked = false;
                 }
-                (Array.isArray(rowTaxes) ? rowTaxes : []).forEach((tax) => {
+                rowTaxes.forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isDisabled = false;
                     }
@@ -751,7 +749,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         const formArray = this.formBuilder.array([]);
 
         if (customFields && customFields.length > 0) {
-            (Array.isArray(customFields) ? customFields : []).forEach(field => {
+            customFields.forEach(field => {
                 formArray.push(this.formBuilder.group({
                     key: [field.key || ''],
                     value: [field.value || ''],

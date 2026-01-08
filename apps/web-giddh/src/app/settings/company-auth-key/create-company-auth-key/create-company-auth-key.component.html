@@ -15,7 +15,9 @@
                                 <span class="custom-mat-form-field">
                                     <input-field
                                         [type]="'text'"
-                                        [showError]="isFormSubmitted && !createCompanyAuthKeyForm.get('roleName')?.value"
+                                        [showError]="
+                                            isFormSubmitted && !createCompanyAuthKeyForm.get('roleName')?.value
+                                        "
                                         [name]="'role-name'"
                                         formControlName="roleName"
                                         [placeholder]="localeData?.user_role_name_placeholder"
@@ -31,7 +33,9 @@
                                     [options]="allRoles"
                                     formControlName="roleUniqueName"
                                     [required]="true"
-                                    [showError]="isFormSubmitted && !createCompanyAuthKeyForm?.get('roleUniqueName')?.value"
+                                    [showError]="
+                                        isFormSubmitted && !createCompanyAuthKeyForm?.get('roleUniqueName')?.value
+                                    "
                                 ></reactive-dropdown-field>
                             </div>
                         </div>
@@ -44,7 +48,7 @@
                             (clickOutside)="methodForToggleSection('timeSpanSection')"
                         >
                             <button
-                                matButton="outlined"
+                                mat-button
                                 [matMenuTriggerFor]="menu"
                                 (click)="showTimeSpan = !showTimeSpan"
                                 type="button"
@@ -145,7 +149,7 @@
                             (clickOutside)="methodForToggleSection('rangeSpanSection')"
                         >
                             <button
-                                matButton="outlined"
+                                mat-button
                                 [matMenuTriggerFor]="menurange"
                                 (click)="showIPWrap = !showIPWrap"
                                 type="button"
@@ -266,16 +270,17 @@
                 <div class="col-12 d-flex column-gap-1">
                     <button
                         *ngIf="!isUpdateMode"
-                        matButton="filled"
+                        mat-raised-button
+                        color="primary"
                         (click)="saveCompanyAuthKey()"
                         [ladda]="createCompanyAuthKeyInProgress$ | async"
                     >
                         {{ commonLocaleData?.app_save }}
                     </button>
-                    <button *ngIf="isUpdateMode" matButton="filled" (click)="saveCompanyAuthKey()">
+                    <button *ngIf="isUpdateMode" mat-raised-button color="primary" (click)="saveCompanyAuthKey()">
                         {{ commonLocaleData?.app_update }}
                     </button>
-                    <button matButton="outlined" (click)="cancel()">
+                    <button mat-stroked-button (click)="cancel()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

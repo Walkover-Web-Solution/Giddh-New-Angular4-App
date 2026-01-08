@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges, AfterViewInit, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as dayjs from 'dayjs';
-type Dayjs = any;
 import * as localeData from 'dayjs/plugin/localeData' // load on demand
 import * as isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
@@ -12,6 +11,7 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isoWeek);
 dayjs.extend(isBetween);
+import { Dayjs } from 'dayjs';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { takeUntil, debounceTime, take } from 'rxjs/operators';
@@ -21,13 +21,12 @@ import { SettingsFinancialYearService } from '../../services/settings.financial-
 import { Router, NavigationStart } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
-import { Configuration, DatePickerDefaultRangeEnum } from '../../app.constant';
+import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { ServiceConfig } from '../../services/service.config';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 export enum DateType {
     start = 'start',
@@ -108,8 +107,7 @@ export interface DateRangeClicked {
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => NgxDaterangepickerComponent),
         multi: true
-    }],
-    standalone: false
+    }]
 })
 
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -120,12 +118,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     renderedCalendarMonths: any[] = [];
     timepickerVariables: { start: any, end: any } = { start: {}, end: {} };
     applyBtn: { disabled: boolean } = { disabled: false };
-    startDate: Dayjs = dayjs().startOf('day');
-    endDate: Dayjs = dayjs().endOf('day');
+    startDate = dayjs().startOf('day');
+    endDate = dayjs().endOf('day');
     @Input()
-    inputStartDate: Dayjs;
+    inputStartDate: dayjs.Dayjs;
     @Input()
-    inputEndDate: Dayjs;
+    inputEndDate: dayjs.Dayjs;
     ActiveDate: ActiveDateEnum = ActiveDateEnum.Start;
     @Input()
     ActiveSelectedDateClass = 'activeSelectedDate';
@@ -136,9 +134,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @ViewChild('startDateElement', { static: true }) startDateElement: ElementRef;
     @ViewChild('endDateElement', { static: true }) endDateElement: ElementRef;
     @Input()
-    minDate: Dayjs = dayjs().subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
+    minDate: dayjs.Dayjs = dayjs().subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
     @Input()
-    maxDate: Dayjs = dayjs().add(1, 'year').endOf('month').month(11); // default max date of next year last month
+    maxDate: dayjs.Dayjs = dayjs().add(1, 'year').endOf('month').month(11); // default max date of next year last month
     @Input()
     autoApply: boolean = false;
     @Input()
@@ -266,11 +264,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         @Inject(ServiceConfig) private serviceConfig,
         private _ref: ChangeDetectorRef,
         private _localeService: NgxDaterangepickerLocaleService,
-        public settingsFinancialYearService: SettingsFinancialYearService,
-        private router: Router,
-        private store: Store<AppState>,
-        private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private dialog: MatDialog,
+        public settingsFinancialYearService: SettingsFinancialYearService, 
+        private router: Router, 
+        private store: Store<AppState>, 
+        private settingsFinancialYearActions: SettingsFinancialYearActions, 
+        private dialog: MatDialog, 
         private generalService: GeneralService
     ) {
         this.choosedDate = new EventEmitter();
@@ -327,7 +325,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnInit(): void {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.activeFinancialYear) {
@@ -884,7 +882,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             const flattenRanges = [];
             this.flattenRanges(this.ranges, flattenRanges);
 
-            (Array.isArray(flattenRanges) ? flattenRanges : []).forEach(range => {
+            flattenRanges.forEach(range => {
                 if (this.timePicker) {
                     const format = this.timePickerSeconds ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD HH:mm';
 
@@ -931,7 +929,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (this.chosenLabel) {
             this.choosedDate.emit({ name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
-
+        
         this.emitSelectedDates(false, true);
         this.hide();
     }
@@ -1466,7 +1464,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @param date the date to add time
      * @param side start or end
      */
-    private _getDateWithTime(date, side: DateType): any {
+    private _getDateWithTime(date, side: DateType): dayjs.Dayjs {
         let hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
         if (!this.timePicker24Hour) {
             const ampm = this.timepickerVariables[side].ampmModel;
@@ -1622,7 +1620,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     private selectRange(ranges: DateRangesInterface[], rangeName: string): boolean {
         let isSelected = false;
         if (ranges && ranges.length) {
-            (Array.isArray(ranges) ? ranges : []).forEach(range => {
+            ranges.forEach(range => {
                 if (range.name === rangeName) {
                     range.isSelected = true;
                     isSelected = true;
@@ -1674,7 +1672,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     private flattenRanges(ranges, flattenRanges = []): void {
         if (ranges && ranges.length) {
-            (Array.isArray(ranges) ? ranges : []).forEach(range => {
+            ranges.forEach(range => {
                 if (range.ranges && range.ranges.length) {
                     this.flattenRanges(range.ranges, flattenRanges);
                     flattenRanges.push(range);
@@ -1723,7 +1721,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
                 const currentDate = dayjs().format(GIDDH_DATE_FORMAT);
                 this.financialYears = [];
-                (Array.isArray(res.body.financialYears) ? res.body.financialYears : []).forEach(key => {
+                res.body.financialYears.forEach(key => {
                     let financialYearStarts = dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.financialYears.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
@@ -1745,11 +1743,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     }
 
                 });
-                this.financialYears.reverse();
                 if (this.ranges && this.ranges.length > 0) {
                     let loop = 0;
                     let ranges = [];
-                    (Array.isArray(this.ranges) ? this.ranges : []).forEach(key => {
+                    this.ranges.forEach(key => {
                         if (key.name === DatePickerDefaultRangeEnum.AllTime) {
                             ranges[loop] = key;
                             ranges[loop].value = [
@@ -1780,7 +1777,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                         }
                     });
 
-                    (Array.isArray(this.ranges) ? this.ranges : []).forEach(key => {
+                    this.ranges.forEach(key => {
                         key.name = this.commonLocaleData?.app_datepicker?.ranges[key.key];
                     });
 
@@ -2081,7 +2078,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public checkIfSubRangeSelected(range: any): boolean {
         let isSelected = false;
         if (this.selectedRangeLabel && range.ranges && range.ranges.length > 0) {
-            (Array.isArray(range.ranges) ? range.ranges : []).forEach(subRange => {
+            range.ranges.forEach(subRange => {
                 if (!isSelected && subRange.name === this.selectedRangeLabel) {
                     isSelected = true;
                 }
@@ -2101,7 +2098,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public checkIfFinancialYearSelected(financialYears: any): boolean {
         let isSelected = false;
         if (this.selectedRangeLabel && financialYears && financialYears.length > 0) {
-            (Array.isArray(financialYears) ? financialYears : []).forEach(year => {
+            financialYears.forEach(year => {
                 if (!isSelected && year.label === this.selectedRangeLabel) {
                     isSelected = true;
                 }

@@ -1,10 +1,3 @@
-/**
- * @fileoverview General service for business logic and data management
- * @author Giddh Development Team
- * @since 2026
- */
-
-import { environment } from './../../environments/environment.generated';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -13,6 +6,7 @@ import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../them
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
+import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
@@ -28,18 +22,8 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
-import { Configuration } from '../app.constant';
-import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
-/**
- * GeneralService class - Handles generalservice functionality
- * @export
- * @class GeneralService
- */
-
+@Injectable()
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
     public isCurrencyPipeLoaded: boolean = false;
@@ -95,7 +79,7 @@ export class GeneralService {
         this._createNewCompany = newCompanyRequest;
     }
 
-    public eventHandler: Subject<{ name: string, payload: any }> = new Subject();
+    public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
     public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private _user: UserDetails;
@@ -558,7 +542,7 @@ export class GeneralService {
     public addValueInArray(array: Array<string>, value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            (Array.isArray(array) ? array : []).forEach(item => {
+            array.forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -584,7 +568,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            (Array.isArray(array) ? array : []).forEach(item => {
+            array.forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -606,7 +590,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            (Array.isArray(array) ? array : []).forEach(item => {
+            array.forEach(item => {
                 if (item === value) {
                     index = loop;
                 }
@@ -951,7 +935,7 @@ export class GeneralService {
                 // Check if "" is not present at 0th and 1st index
                 let count = 0;
                 let initials = '';
-                (Array.isArray(nameArray) ? nameArray : []).forEach(word => {
+                nameArray.forEach(word => {
                     if (word && count < 2) {
                         initials += ` ${word[0]}`;
                         count++;
@@ -1050,7 +1034,7 @@ export class GeneralService {
         } else {
             this.router.navigate([route], parameter);
         }
-        if (Configuration.isElectron && isSocialLogin) {
+        if (isElectron && isSocialLogin) {
             setTimeout(() => {
                 window.location.reload();
             }, 200);
@@ -1235,6 +1219,7 @@ export class GeneralService {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
+
 
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
             if (this.voucherApiVersion === 2) {
@@ -1428,7 +1413,7 @@ export class GeneralService {
     public addObjectInArray(array: any[], value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            (Array.isArray(array) ? array : []).forEach(item => {
+            array.forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1454,7 +1439,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            (Array.isArray(array) ? array : []).forEach(item => {
+            array.forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1476,7 +1461,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            (Array.isArray(array) ? array : []).forEach(item => {
+            array.forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     index = loop;
                 }
@@ -1639,7 +1624,7 @@ export class GeneralService {
             discountsList,
             discountAccountsDetails
         } = requestObj;
-        (Array.isArray(discountsList) ? discountsList : []).forEach(acc => {
+        discountsList.forEach(acc => {
             if (discountAccountsDetails) {
                 let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName || s.uniqueName === acc?.uniqueName);
                 if (!hasItem) {
@@ -2335,7 +2320,7 @@ export class GeneralService {
             const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
             return whiteLabelData?.body || null;
         } catch (error) {
-
+            console.error('Error parsing whiteLabel data from localStorage:', error);
             return null;
         }
     }
@@ -2694,7 +2679,7 @@ export class GeneralService {
             try {
                 return callback();
             } catch (error) {
-
+                console.warn('Error checking unsaved changes:', error);
                 return false;
             }
         });
@@ -2706,11 +2691,11 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public markAllFormsAsPristine(): void {
-        (Array.isArray(this.markFormsAsPristineCallbacks) ? this.markFormsAsPristineCallbacks : []).forEach(callback => {
+        this.markFormsAsPristineCallbacks.forEach(callback => {
             try {
                 callback();
             } catch (error) {
-
+                console.warn('Error marking forms as pristine:', error);
             }
         });
     }
@@ -2739,326 +2724,5 @@ export class GeneralService {
             return '0.' + '0'.repeat(decimalPlaces);
         }
         return amount.toFixed(decimalPlaces);
-    }
-
-    /**
-     * Logs all global variables if debug mode is enabled
-     * Call this method after Angular app is fully loaded
-     *
-     * @memberof GeneralService
-     */
-    public logAllGlobalVariables(): void {
-        // Early exit if debug mode is disabled
-        if (!this.debugMode) {
-            return;
-        }
-
-        console.group('🌍 GLOBAL VARIABLES AFTER ANGULAR LOAD');
-
-        try {
-            // Get all global variables from window object
-            const globalVars: { [key: string]: any } = {};
-            const excludedKeys = ['parent', 'top', 'self', 'frames', 'frameElement']; // Avoid circular references
-
-            // Collect all enumerable properties from window
-            for (const key in window) {
-                if (window.hasOwnProperty(key) && !excludedKeys.includes(key)) {
-                    try {
-                        const value = (window as any)[key];
-                        globalVars[key] = {
-                            type: typeof value,
-                            value: this.getSafeValue(value),
-                            constructor: value?.constructor?.name || 'Unknown'
-                        };
-                    } catch (error) {
-                        globalVars[key] = {
-                            type: 'Error',
-                            value: `[Error accessing property: ${error}]`,
-                            constructor: 'Error'
-                        };
-                    }
-                }
-            }
-
-            // Log categorized global variables
-            this.logCategorizedGlobals(globalVars);
-
-            // Log Angular-specific globals
-            this.logAngularGlobals();
-
-            // Log Giddh-specific globals
-            this.logGiddhGlobals();
-
-            // Log Environment variables
-            this.logEnvironmentVariables();
-
-            // Log Browser APIs
-            this.logBrowserAPIs();
-
-            // Log Third-party libraries
-            this.logThirdPartyLibraries();
-
-        } catch (error) {
-            console.error('❌ Error logging global variables:', error);
-        }
-
-        console.groupEnd();
-    }
-
-    /**
-     * Gets a safe representation of a value for logging
-     *
-     * @private
-     * @param {any} value - The value to make safe
-     * @returns {any} Safe representation of the value
-     * @memberof GeneralService
-     */
-    private getSafeValue(value: any): any {
-        if (value === null) return null;
-        if (value === undefined) return undefined;
-
-        const type = typeof value;
-
-        switch (type) {
-            case 'string':
-            case 'number':
-            case 'boolean':
-                return value;
-            case 'function':
-                return `[Function: ${value.name || 'anonymous'}]`;
-            case 'object':
-                if (Array.isArray(value)) {
-                    return `[Array(${value.length})]`;
-                }
-                if (value instanceof Date) {
-                    return value.toISOString();
-                }
-                if (value instanceof Error) {
-                    return `[Error: ${value.message}]`;
-                }
-                if (value.constructor && value.constructor.name) {
-                    return `[Object: ${value.constructor.name}]`;
-                }
-                return '[Object]';
-            default:
-                return `[${type}]`;
-        }
-    }
-
-    /**
-     * Logs categorized global variables
-     *
-     * @private
-     * @param {any} globalVars - Object containing all global variables
-     * @memberof GeneralService
-     */
-    private logCategorizedGlobals(globalVars: any): void {
-        const categories = {
-            functions: [] as string[],
-            objects: [] as string[],
-            primitives: [] as string[],
-            arrays: [] as string[],
-            classes: [] as string[]
-        };
-
-        Object.keys(globalVars).forEach(key => {
-            const item = globalVars[key];
-            switch (item.type) {
-                case 'function':
-                    categories.functions.push(key);
-                    break;
-                case 'object':
-                    if (item.value && typeof item.value === 'string' && item.value.includes('Array')) {
-                        categories.arrays.push(key);
-                    } else if (item.constructor !== 'Object') {
-                        categories.classes.push(key);
-                    } else {
-                        categories.objects.push(key);
-                    }
-                    break;
-                default:
-                    categories.primitives.push(key);
-            }
-        });
-
-        console.group('📊 CATEGORIZED GLOBALS');
-        console.log('🔧 Functions:', categories.functions.sort());
-        console.log('📦 Objects:', categories.objects.sort());
-        console.log('🏗️ Classes/Constructors:', categories.classes.sort());
-        console.log('📋 Arrays:', categories.arrays.sort());
-        console.log('🔤 Primitives:', categories.primitives.sort());
-        console.groupEnd();
-
-        // Log detailed view of important globals
-        console.group('🔍 DETAILED GLOBAL VARIABLES');
-        Object.keys(globalVars).sort().forEach(key => {
-            const item = globalVars[key];
-            console.log(`${key}:`, {
-                type: item.type,
-                constructor: item.constructor,
-                value: item.value
-            });
-        });
-        console.groupEnd();
-    }
-
-    /**
-     * Logs Angular-specific global variables
-     *
-     * @private
-     * @memberof GeneralService
-     */
-    private logAngularGlobals(): void {
-        console.group('🅰️ ANGULAR GLOBALS');
-
-        const angularGlobals = [
-            'ng', 'ngDevMode', 'Zone', '__zone_symbol__', 'getAllAngularRootElements',
-            'getAngularTestability', 'getAllAngularTestabilities'
-        ];
-
-        angularGlobals.forEach(key => {
-            if ((window as any)[key] !== undefined) {
-                console.log(`${key}:`, this.getSafeValue((window as any)[key]));
-            }
-        });
-
-        // Log Angular version if available
-        if ((window as any).ng && (window as any).ng.version) {
-            console.log('Angular Version:', (window as any).ng.version);
-        }
-
-        console.groupEnd();
-    }
-
-    /**
-     * Logs Giddh-specific global variables
-     *
-     * @private
-     * @memberof GeneralService
-     */
-    private logGiddhGlobals(): void {
-        console.group('🏢 GIDDH GLOBALS');
-
-        const giddhGlobals = [
-            'PRODUCTION_ENV', 'AppUrl', 'isElectron', 'electronAPI', 'require',
-            'giddhRegion', 'Country-Region', 'whiteLabel'
-        ];
-
-        giddhGlobals.forEach(key => {
-            if ((window as any)[key] !== undefined) {
-                console.log(`${key}:`, this.getSafeValue((window as any)[key]));
-            }
-        });
-
-        // Log localStorage Giddh-specific items
-        console.group('💾 GIDDH LOCALSTORAGE');
-        const giddhStorageKeys = ['session', 'permission', 'branchConsolidated', 'whiteLabel', 'Country-Region'];
-        giddhStorageKeys.forEach(key => {
-            const value = localStorage.getItem(key);
-            if (value) {
-                try {
-                    const parsed = JSON.parse(value);
-                    console.log(`localStorage.${key}:`, parsed);
-                } catch {
-                    console.log(`localStorage.${key}:`, value);
-                }
-            }
-        });
-        console.groupEnd();
-
-        // Log sessionStorage Giddh-specific items
-        console.group('🗂️ GIDDH SESSIONSTORAGE');
-        giddhStorageKeys.forEach(key => {
-            const value = sessionStorage.getItem(key);
-            if (value) {
-                try {
-                    const parsed = JSON.parse(value);
-                    console.log(`sessionStorage.${key}:`, parsed);
-                } catch {
-                    console.log(`sessionStorage.${key}:`, value);
-                }
-            }
-        });
-        console.groupEnd();
-
-        console.groupEnd();
-    }
-
-    /**
-     * Logs environment variables
-     *
-     * @private
-     * @memberof GeneralService
-     */
-    private logEnvironmentVariables(): void {
-        console.group('🌐 ENVIRONMENT VARIABLES');
-
-        console.log('Environment Config:', {
-            production: environment.production,
-            PRODUCTION_ENV: environment.PRODUCTION_ENV,
-            APP_FOLDER: environment.APP_FOLDER,
-            isElectron: Configuration.isElectron,
-            AppUrl: Configuration.AppUrl,
-            ApiUrl: Configuration.ApiUrl
-        });
-
-        console.log('Service Config:', {
-            AppUrl: this.config?.AppUrl,
-            ApiUrl: this.config?.ApiUrl
-        });
-
-        console.groupEnd();
-    }
-
-    /**
-     * Logs browser APIs
-     *
-     * @private
-     * @memberof GeneralService
-     */
-    private logBrowserAPIs(): void {
-        console.group('🌐 BROWSER APIS');
-
-        const browserAPIs = [
-            'navigator', 'location', 'history', 'document', 'console',
-            'localStorage', 'sessionStorage', 'indexedDB', 'fetch',
-            'XMLHttpRequest', 'WebSocket', 'Worker', 'ServiceWorker'
-        ];
-
-        browserAPIs.forEach(api => {
-            if ((window as any)[api] !== undefined) {
-                console.log(`${api}:`, this.getSafeValue((window as any)[api]));
-            }
-        });
-
-        console.groupEnd();
-    }
-
-    /**
-     * Logs third-party libraries
-     *
-     * @private
-     * @memberof GeneralService
-     */
-    private logThirdPartyLibraries(): void {
-        console.group('📚 THIRD-PARTY LIBRARIES');
-
-        const thirdPartyLibs = [
-            'jQuery', '$', 'Razorpay', 'CodeMirror', 'moment', 'dayjs',
-            'Chart', 'D3', 'Froala', 'LogRocket', 'gtag', 'ga'
-        ];
-
-        thirdPartyLibs.forEach(lib => {
-            if ((window as any)[lib] !== undefined) {
-                const value = (window as any)[lib];
-                console.log(`${lib}:`, {
-                    type: typeof value,
-                    version: value.version || value.VERSION || 'Unknown',
-                    constructor: value.constructor?.name || 'Unknown'
-                });
-            }
-        });
-
-        console.groupEnd();
     }
 }

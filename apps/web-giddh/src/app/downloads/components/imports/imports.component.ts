@@ -11,6 +11,7 @@ import { download } from '@giddh-workspaces/utils';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
+import { cloneDeep } from '../../../lodash-optimized';
 import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../../models/api-models/imports';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
@@ -19,15 +20,11 @@ import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/hel
 import { AppState } from '../../../store';
 import { ImportsService } from '../../../services/imports.service';
 import { ServiceConfig } from '../../../services/service.config';
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
-import { cloneDeep, find, forEach, keys, map, remove } from '../../../lodash-optimized';
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
 @Component({
     selector: 'imports',
-    
-    standalone: false,templateUrl: './imports.component.html',
+    templateUrl: './imports.component.html',
     styleUrls: ['./imports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -97,7 +94,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Instance of is electron variable */
-    public isElectron: any = Configuration.isElectron;
+    public isElectron: any = isElectron;
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -115,7 +112,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('import-page');
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -149,7 +146,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {

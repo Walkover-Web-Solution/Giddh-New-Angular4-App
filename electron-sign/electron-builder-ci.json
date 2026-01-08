@@ -50,10 +50,12 @@
             "nsis-web",
             "zip"
         ],
-        "icon": "./resources/icon.ico",
-        "publisherName": "",
-        "legalTrademarks": "",
-        "signAndEditExecutable": false
+        "icon": "icon.ico",
+        "signingHashAlgorithms": [
+            "sha256"
+        ],
+        "publisherName": "Walkover Technologies Pvt Ltd",
+        "legalTrademarks": "Walkover Technologies Pvt Ltd"
     },
     "nsis": {
         "oneClick": true,

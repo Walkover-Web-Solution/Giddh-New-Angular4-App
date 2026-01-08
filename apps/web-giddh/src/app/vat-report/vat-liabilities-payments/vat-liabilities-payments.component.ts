@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { merge, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules } from '../../app.constant';
@@ -13,14 +13,12 @@ import { VatReportComponentStore } from '../utility/vat.report.store';
 import { cloneDeep } from '../../lodash-optimized';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { Angular21ChangeDetectionService } from '../../services/angular21-change-detection.service';
 
 @Component({
     selector: 'vat-liabilities-payments',
     templateUrl: './vat-liabilities-payments.component.html',
     styleUrls: ['./vat-liabilities-payments.component.scss'],
-    providers: [VatReportComponentStore],
-    standalone:false
+    providers: [VatReportComponentStore]
 })
 
 export class VatLiabilitiesPayments implements OnInit, OnDestroy {
@@ -81,7 +79,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** Hold HMRC portal url */
     public connectToHMRCUrl: string = null;
     /** True if API Call is in progress */
-    public isLoading = signal<boolean>(false);
+    public isLoading: boolean;
     /** Observable to store the HMRC portal url */
     public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
     /** Enum for restricted modules */
@@ -193,7 +191,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
 
         merge(this.componentStore.liabilityPaymentListInProgress$, this.componentStore.getTaxNumberInProgress$, this.componentStore.getHMRCInProgress$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                this.isLoading.set(response);
+                this.isLoading = response;
             });
     }
 

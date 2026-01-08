@@ -1,8 +1,13 @@
-<div appTranslate [file]="'accounts'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'accounts'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <section class="aside-dialog-wrapper">
         <div class="dialog-header">
             <span>{{ localeData?.bulk_add }}</span>
-            <button matIconButton aria-label="close" mat-dialog-close>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -67,9 +72,11 @@
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 item.get('openingBalanceType')?.value === 'DEBIT' &&
-                                                (item.get('openingBalance')?.value > 0 || item.get('foreignOpeningBalance')?.value > 0),
+                                                (item.get('openingBalance')?.value > 0 ||
+                                                    item.get('foreignOpeningBalance')?.value > 0),
                                             'cursor-pointer':
-                                                item.get('openingBalance')?.value > 0 || item.get('foreignOpeningBalance')?.value > 0,
+                                                item.get('openingBalance')?.value > 0 ||
+                                                item.get('foreignOpeningBalance')?.value > 0
                                         }"
                                     >
                                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
@@ -80,9 +87,11 @@
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 item.get('openingBalanceType')?.value === 'CREDIT' &&
-                                                (item.get('openingBalance')?.value > 0 || item.get('foreignOpeningBalance')?.value > 0),
+                                                (item.get('openingBalance')?.value > 0 ||
+                                                    item.get('foreignOpeningBalance')?.value > 0),
                                             'cursor-pointer':
-                                                item.get('openingBalance')?.value > 0 || item.get('foreignOpeningBalance')?.value > 0,
+                                                item.get('openingBalance')?.value > 0 ||
+                                                item.get('foreignOpeningBalance')?.value > 0
                                         }"
                                     >
                                         {{ commonLocaleData?.app_cr?.toUpperCase() }}
@@ -93,7 +102,8 @@
                     </ng-container>
                     <button
                         class="float-right align-self-end mt-2"
-                        matButton="filled"
+                        mat-raised-button
+                        color="primary"
                         aria-label="save"
                         type="submit"
                         (click)="saveOpeningBalance()"
@@ -104,4 +114,4 @@
             </div>
         </mat-dialog-content>
     </section>
-</div>
+</ng-container>

@@ -1,11 +1,14 @@
-<div
+<ng-container
     appTranslate
     [file]="'gst'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState"
+    >
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
             [selectedGstModule]="selectedGstr"
@@ -18,11 +21,23 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="column content-column gst-filing-container navs-list">
         <div class="tax-engine">
-            <div class="d-flex justify-content-between align-items-center flex-wrap column-gap-1 row-gap-15 mt-3">
+            <div
+                class="d-flex justify-content-between align-items-center flex-wrap column-gap-1 row-gap-15 mt-3"
+            >
                 <div class="d-flex column-gap-1 align-items-center">
                     <span class="font-size-16">
-                        <a [routerLink]="['/gstfiling']" id="ember2007" class="ember-view cursor-pointer" aria-label="back svg">
-                            <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-lg text-middle">
+                        <a
+                            [routerLink]="['/gstfiling']"
+                            id="ember2007"
+                            class="ember-view cursor-pointer"
+                            aria-label="back svg"
+                        >
+                            <svg
+                                id="Layer_1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 512 512"
+                                class="icon icon-lg text-middle"
+                            >
                                 <path
                                     d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"
                                 ></path>
@@ -34,12 +49,13 @@
                         <giddh-datepicker
                             [monthYearMode]="true"
                             [startView]="'multi-year'"
-                            (monthYearSelected)="setMonthAndYear($event)"
                             [cssClass]="'text-center width-150'"
                             [startAt]="startAt"
                             [placeholder]="date?.value ?? '--'"
                             [appearance]="'outline'"
-                        ></giddh-datepicker>
+                            (monthYearSelected)="setMonthAndYear($event)"
+                        >
+                        </giddh-datepicker>
                     </div>
                 </div>
 
@@ -51,7 +67,7 @@
                         <ul class="d-flex column-gap-1 align-items-center">
                             <li>
                                 <div>
-                                    <button matButton="filled" [matMenuTriggerFor]="menu">
+                                    <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">
                                         <i class="icon-download"></i>
                                         {{ commonLocaleData?.app_download }}
                                     </button>
@@ -74,11 +90,13 @@
                                                 [type]="'text'"
                                                 [required]="true"
                                                 [autocomplete]="'off'"
-                                            ></input-field>
+                                            >
+                                            </input-field>
                                             <div>
                                                 <button
                                                     class="flex-grow-0"
-                                                    matButton="filled"
+                                                    mat-raised-button
+                                                    color="primary"
                                                     (click)="emailGSTR3bSheet(false)"
                                                     [disabled]="!userEmail"
                                                     aria-label="emailGST"
@@ -94,13 +112,10 @@
                                 <div *ngIf="showTaxPro">
                                     <button
                                         *ngIf="isCompany && showGstFiling"
-                                        matButton="filled"
+                                        mat-raised-button
+                                        color="primary"
                                         (click)="checkAuthenticationAndFileGstr3B()"
-                                        [disabled]="
-                                            (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
-                                                restrictedModules.TaxFilling
-                                            )
-                                        "
+                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        
                                     >
                                         {{ localeData?.filing?.push_to_portal }}
                                     </button>
@@ -110,15 +125,16 @@
                                 <div *ngIf="showTaxPro">
                                     <button
                                         *ngIf="isCompany && showGstFiling"
-                                        matButton="filled"
+                                        mat-raised-button
+                                        color="primary"
                                         (click)="openSettingAsidePane()"
-                                        [disabled]="
-                                            (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
-                                                restrictedModules.TaxFilling
-                                            )
-                                        "
+                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        
                                     >
-                                        {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
+                                        {{
+                                            gstAuthenticated
+                                                ? localeData?.filing?.authenticated
+                                                : localeData?.filing?.authenticate
+                                        }}
                                     </button>
                                 </div>
                             </li>
@@ -131,17 +147,20 @@
             </div>
             <div *ngIf="isCompany && showGstFiling" class="px-1">
                 <span class="pull-right px-3">
-                    <restricted-module-message
-                        [restrictedModule]="restrictedModules.TaxFilling"
-                        (onUpgradePlan)="buyPlan($event)"
-                    ></restricted-module-message>
+                    <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                        (onUpgradePlan)="buyPlan($event)">
+                    </restricted-module-message>
                 </span>
             </div>
             <div class="scroll-y noscroll-x fill body scrollbox mt-3">
                 <div id="ember1220" class="ember-view" *ngIf="selectedGstr3BTab === 'pushGSTN'">
                     <div class="summary-content">
                         <div class="table-responsive">
-                            <table mat-table [dataSource]="gstrUserTableData" class="table gstr-3b-user font-medium w-100">
+                            <table
+                                mat-table
+                                [dataSource]="gstrUserTableData"
+                                class="table gstr-3b-user font-medium w-100"
+                            >
                                 <!-- Number Column -->
                                 <ng-container matColumnDef="number">
                                     <td mat-cell *matCellDef="let row" width="2%">
@@ -170,7 +189,11 @@
                     <div class="summary-content">
                         <p>{{ localeData?.gstr3b?.outward_inward_supplies }}</p>
                         <div class="table-responsive" tabindex="0">
-                            <table mat-table [dataSource]="gstr3bTableData" class="table gstr-3b-report border w-100">
+                            <table
+                                mat-table
+                                [dataSource]="gstr3bTableData"
+                                class="table gstr-3b-report border w-100"
+                            >
                                 <!-- Supply Nature Column -->
                                 <ng-container matColumnDef="supplyNature">
                                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.gstr3b?.supply_nature }}</th>
@@ -191,7 +214,8 @@
                                                 [amount]="row.taxableValue"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </td>
                                     <td mat-footer-cell *matFooterCellDef class="text-right">
@@ -201,7 +225,8 @@
                                                 [amount]="gstr3BData?.sumTaxVal || 0"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </td>
                                 </ng-container>
@@ -223,7 +248,8 @@
                                                     [amount]="row.integratedTax"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -234,7 +260,8 @@
                                                 [amount]="gstr3BData?.sumIamtVal || 0"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </td>
                                 </ng-container>
@@ -243,7 +270,12 @@
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
                                         {{ localeData?.gstr3b?.central_tax }}
                                     </th>
-                                    <td mat-cell *matCellDef="let row" class="text-right" [ngClass]="{ 'gstr3b-null': row.hideCentralTax }">
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [ngClass]="{ 'gstr3b-null': row.hideCentralTax }"
+                                    >
                                         <ng-container *ngIf="!row.hideCentralTax">
                                             <i class="icon-rupees icon-font-11"></i>
                                             <span class="d-inline-flex">
@@ -251,7 +283,8 @@
                                                     [amount]="row.centralTax"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -262,7 +295,8 @@
                                                 [amount]="gstr3BData?.sumCamtval || 0"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </td>
                                 </ng-container>
@@ -271,7 +305,12 @@
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
                                         {{ localeData?.gstr3b?.state_ut_tax }}
                                     </th>
-                                    <td mat-cell *matCellDef="let row" class="text-right" [ngClass]="{ 'gstr3b-null': row.hideStateUtTax }">
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [ngClass]="{ 'gstr3b-null': row.hideStateUtTax }"
+                                    >
                                         <ng-container *ngIf="!row.hideStateUtTax">
                                             <i class="icon-rupees icon-font-11"></i>
                                             <span class="d-inline-flex">
@@ -279,7 +318,8 @@
                                                     [amount]="row.stateUtTax"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -290,7 +330,8 @@
                                                 [amount]="gstr3BData?.sumSamtval || 0"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </td>
                                 </ng-container>
@@ -299,7 +340,12 @@
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
                                         {{ localeData?.gstr3b?.cess_tax }}
                                     </th>
-                                    <td mat-cell *matCellDef="let row" class="text-right" [ngClass]="{ 'gstr3b-null': row.hideCessTax }">
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [ngClass]="{ 'gstr3b-null': row.hideCessTax }"
+                                    >
                                         <ng-container *ngIf="!row.hideCessTax">
                                             <i class="icon-rupees icon-font-11"></i>
                                             <span class="d-inline-flex">
@@ -307,7 +353,8 @@
                                                     [amount]="row.cessTax"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -318,7 +365,8 @@
                                                 [amount]="gstr3BData?.sumCsamtval || 0"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </td>
                                 </ng-container>
@@ -359,10 +407,20 @@
                                     </th>
                                 </ng-container>
 
-                                <tr mat-header-row *matHeaderRowDef="gstr3bTableDataDisplayedColumns"></tr>
-                                <tr mat-header-row *matHeaderRowDef="['1', '2', '3', '4', '5', '6']"></tr>
+                                <tr
+                                    mat-header-row
+                                    *matHeaderRowDef="gstr3bTableDataDisplayedColumns"
+                                ></tr>
+                                <tr
+                                    mat-header-row
+                                    *matHeaderRowDef="['1', '2', '3', '4', '5', '6']"
+                                ></tr>
 
-                                <tr mat-row *matRowDef="let row; columns: gstr3bTableDataDisplayedColumns" class="cursor-pointer"></tr>
+                                <tr
+                                    mat-row
+                                    *matRowDef="let row; columns: gstr3bTableDataDisplayedColumns"
+                                    class="cursor-pointer"
+                                ></tr>
 
                                 <tr mat-footer-row *matFooterRowDef="gstr3bTableDataDisplayedColumns"></tr>
                             </table>
@@ -396,7 +454,8 @@
                                                     [amount]="row.pos"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -413,7 +472,8 @@
                                                     [amount]="row.txval"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -430,7 +490,8 @@
                                                     [amount]="row.iamt"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -460,7 +521,10 @@
                                     </th>
                                 </ng-container>
                                 <!-- Header Row -->
-                                <tr mat-header-row *matHeaderRowDef="suppliesTableDataDisplayedColumns"></tr>
+                                <tr
+                                    mat-header-row
+                                    *matHeaderRowDef="suppliesTableDataDisplayedColumns"
+                                ></tr>
                                 <tr mat-header-row *matHeaderRowDef="['1', '2', '3', '4']" class="bg-thead"></tr>
                                 <!-- Data Rows -->
                                 <tr
@@ -468,7 +532,7 @@
                                     *matRowDef="let row; columns: suppliesTableDataDisplayedColumns"
                                     [ngClass]="{
                                         'text-muted gstr3-subheading': row.isSubheading,
-                                        'pointer-none': !row.isSubheading,
+                                        'pointer-none': !row.isSubheading
                                     }"
                                 ></tr>
                             </table>
@@ -481,7 +545,11 @@
                                 <!-- Details Column -->
                                 <ng-container matColumnDef="details">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_details }}</th>
-                                    <td mat-cell *matCellDef="let row" [attr.colspan]="row.type === 'header' ? '100%' : null">
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        [attr.colspan]="row.type === 'header' ? '100%' : null"
+                                    >
                                         <ng-container [ngSwitch]="row.type">
                                             <!-- Header rows -->
                                             <ng-container *ngSwitchCase="'header'">
@@ -513,7 +581,8 @@
                                                     [amount]="row.iamt"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -537,7 +606,8 @@
                                                     [amount]="row.camt"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -561,7 +631,8 @@
                                                     [amount]="row.samt"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -585,7 +656,8 @@
                                                     [amount]="row.csamt"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </ng-container>
                                     </td>
@@ -627,7 +699,7 @@
                                     *matRowDef="let row; columns: itcDisplayedColumns"
                                     [ngClass]="{
                                         'cursor-pointer': row.type === 'data',
-                                        'font-weight-semibold': row.type === 'header',
+                                        'font-weight-semibold': row.type === 'header'
                                     }"
                                 ></tr>
                             </table>
@@ -654,7 +726,8 @@
                                                 [amount]="row.inter"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </td>
                                 </ng-container>
@@ -670,7 +743,8 @@
                                                 [amount]="row.intra"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </td>
                                 </ng-container>
@@ -691,7 +765,10 @@
                                     </th>
                                 </ng-container>
                                 <!-- Header Rows -->
-                                <tr mat-header-row *matHeaderRowDef="exemptValuesDisplayedColumns"></tr>
+                                <tr
+                                    mat-header-row
+                                    *matHeaderRowDef="exemptValuesDisplayedColumns"
+                                ></tr>
                                 <tr mat-header-row *matHeaderRowDef="['1', '2', '3']" class="bg-thead"></tr>
                                 <!-- Data Rows -->
                                 <tr mat-row *matRowDef="let row; columns: exemptValuesDisplayedColumns"></tr>
@@ -702,9 +779,9 @@
                 <div class="transactions-overview" *ngIf="selectedGstr3BTab === 'filing'">
                     <div class="gstr-transactions-summary mt-5 mb-5 text-center">
                         <div class="gst-return-date">
-                            <img src="{{ imgPath }}return-date.svg" />
+                            <img src="assets/images/return-date.svg" />
                             <p>{{ localeData?.gstr3b?.click_proceed }}</p>
-                            <button matButton="filled" (click)="returnGstr3B = { via: 'TAXPRO' }">
+                            <button mat-raised-button color="primary" (click)="returnGstr3B = { via: 'TAXPRO' }">
                                 {{ localeData?.gstr3b?.push_to_portal }}
                             </button>
                         </div>
@@ -724,7 +801,7 @@
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
     ></filing-header>
-</div>
+</ng-container>
 <ng-template #watchVideoTemplateGSTR3>
     <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pr-3"></watch-video>
 </ng-template>

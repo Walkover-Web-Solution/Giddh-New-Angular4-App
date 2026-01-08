@@ -19,14 +19,12 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
 import { WarehouseActions } from '../action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { ServiceConfig } from '../../../services/service.config';
-import { ASIDE_PANE_CONFIG, Configuration } from '../../../app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 @Component({
     selector: 'create-warehouse',
     templateUrl: './create-warehouse.component.html',
-    styleUrls: ['./create-warehouse.component.scss'],
-    standalone:false
+    styleUrls: ['./create-warehouse.component.scss']
 })
 
 export class CreateWarehouseComponent implements OnInit, OnDestroy {
@@ -158,7 +156,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.imgPath = Configuration.isElectron ? 'assets/images/warehouse-image.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/warehouse-image.svg';
+
+        this.imgPath = isElectron ? 'assets/images/warehouse-image.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-image.svg';
 
         this.warehouseForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.showPageLeaveConfirmation) {

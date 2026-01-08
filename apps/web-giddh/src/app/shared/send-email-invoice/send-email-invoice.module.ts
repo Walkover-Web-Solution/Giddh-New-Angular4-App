@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { SendEmailInvoiceComponent } from './send-email-invoice.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 
 @NgModule({
     imports: [
@@ -17,8 +16,7 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
         MatInputModule,
         MatCheckboxModule,
         MatButtonModule,
-        MatDialogModule,
-        FormFieldsModule
+        MatDialogModule
     ],
     exports: [
         SendEmailInvoiceComponent
@@ -27,7 +25,6 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
         SendEmailInvoiceComponent
     ],
     providers: [],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SendEmailInvoiceModule {
 }

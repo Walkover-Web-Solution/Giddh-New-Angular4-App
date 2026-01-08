@@ -682,7 +682,7 @@ export class UpdateLedgerVm {
     public getUnderstandingText(selectedLedgerAccountType, accountName, localeData?: any) {
         let underStandingTextData = localeData?.text_data;
         if (underStandingTextData) {
-            let data = cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
+            let data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             if (data) {
                 if (data.balanceText && data.balanceText.cr) {
                     data.balanceText.cr = data.balanceText.cr?.replace('<accountName>', accountName);
@@ -697,7 +697,7 @@ export class UpdateLedgerVm {
                 if (data.text && data.text.cr) {
                     data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
-                this.ledgerUnderStandingObj = cloneDeep(data);
+                this.ledgerUnderStandingObj = _.cloneDeep(data);
             }
         }
     }

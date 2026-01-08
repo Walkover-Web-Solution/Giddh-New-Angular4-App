@@ -14,7 +14,6 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
 import { TitleCasePipe } from '@angular/common';
 import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
-import { forEach, keys } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
 @Component({
@@ -22,8 +21,7 @@ Chart.register(...registerables);
     templateUrl: 'revenue-chart.component.html',
     styleUrls: ['revenue-chart.component.scss', '../../home.component.scss'],
     providers: [TitleCasePipe],
-    encapsulation: ViewEncapsulation.None,
-    standalone:false
+    encapsulation: ViewEncapsulation.None
 })
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
@@ -96,10 +94,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        if (this.chart) {
-            this.chart.destroy();
-            this.chart = null;
-        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

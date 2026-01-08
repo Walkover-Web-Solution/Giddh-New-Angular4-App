@@ -3,8 +3,7 @@ import { VouchersUtilityService } from "../../vouchers.utility.service";
 
 @Pipe({
     name: 'voucherName',
-    pure: true,
-    standalone:false
+    pure: true
 })
 export class VoucherNamePipe implements PipeTransform {
 

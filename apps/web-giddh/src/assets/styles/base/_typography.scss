@@ -1,74 +1,49 @@
 @use '../abstracts/mixins' as *;
-@import '../fonts/Inter/_inter_fonts.css';
-
-// ==========================================================================
-// ANGULAR 21 MATERIAL 3 TYPOGRAPHY SYSTEM
-// ==========================================================================
-// Modern typography utilities compatible with Angular 21 Material 3 design tokens
-// Note: This file should align with M3 variables defined in themes/_m3-variables.scss
+@import "../fonts/Inter/_inter_fonts.css";
 
 /* Typography CSS Variables and Utility Classes */
 
 // Font Family Variables and Classes
-// Updated to match M3 variables with fallback fonts
 :root {
-    --font-family: 'Inter';
+    --font-family: "Inter";
 }
 
 // Font Weight Variables and Classes
-// Matches M3 font weight scale
-@include typography-utilities(
-    'font-weight',
-    (
-        'regular': 400,
-        'medium': 500,
-        'semibold': 600,
-        'bold': 700,
-    )
-);
+@include typography-utilities('font-weight', (
+  'regular': 400,
+  'medium': 500,
+  'semibold': 600,
+  'bold': 700
+));
 
 // Font Size Variables and Classes
-// Complete M3 font size scale
-@include typography-utilities(
-    'font-size',
-    (
-        '9': 9px,
-        '12': 12px,
-        '14': 14px,
-        '15': 15px,
-        '16': 16px,
-        '20': 20px,
-        '24': 24px,
-        '32': 32px,
-        '48': 48px,
-    )
-);
+@include typography-utilities('font-size', (
+  '9': 9px,
+  '12': 12px,
+  '14': 14px,
+  '15': 15px,
+  '16': 16px,
+  '20': 20px,
+  '24': 24px,
+  '32': 32px,
+  '48': 48px
+));
 
 // Line Height Variables and Classes
-// Complete M3 line height scale
-@include typography-utilities(
-    'line-height',
-    (
-        '16': 16px,
-        '20': 20px,
-        '22': 22px,
-        '24': 24px,
-        '28': 28px,
-        '32': 32px,
-        '36': 36px,
-        '40': 40px,
-        '56': 56px,
-    )
-);
+@include typography-utilities('line-height', (
+  '16': 16px,
+  '20': 20px,
+  '22': 22px,
+  '24': 24px,
+  '32': 32px,
+  '36': 36px
+));
 
 // Letter Spacing Variables and Classes
-// M3 letter spacing values (converted to pixel equivalents for consistency)
-@include typography-utilities(
-    'letter-spacing',
-    (
-        'normal': 0px,
-        'wide': 0.25px,
-        'wider': 0.4px,
-        'widest': 1.5px,
-    )
-);
+@include typography-utilities('letter-spacing', (
+  'normal': normal,
+  'tight': -0.025em,
+  'wide': 0.025em,
+  'wider': 0.05em,
+  'widest': 0.1em
+));

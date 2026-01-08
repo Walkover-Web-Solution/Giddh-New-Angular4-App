@@ -10,9 +10,7 @@ import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { CustomActions } from '../store/custom-actions';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 
 export class VerifyMobileActions {
     public static VERIFY_MOBILE_REQUEST = 'VERIFY_MOBILE_REQUEST';

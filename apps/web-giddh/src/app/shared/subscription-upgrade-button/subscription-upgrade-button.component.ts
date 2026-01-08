@@ -7,8 +7,7 @@ import { select, Store } from '@ngrx/store';
 @Component({
     selector: 'restricted-module-message',
     styleUrls: [`./subscription-upgrade-button.component.scss`],
-    templateUrl: './subscription-upgrade-button.component.html',
-    standalone: false
+    templateUrl: './subscription-upgrade-button.component.html'
 })
 export class SubscriptionUpgradeButtonComponent implements OnDestroy {
     /** Type of restricted module to check */

@@ -3,7 +3,6 @@ import { Account, ChildGroup } from "apps/web-giddh/src/app/models/api-models/Se
 import { giddhRoundOff } from "apps/web-giddh/src/app/shared/helpers/helperFunctions";
 import { RecTypePipe } from "apps/web-giddh/src/app/shared/helpers/pipes/recType/recType.pipe";
 import { Total } from "../trial-balance/export-csv/export-csv.component";
-import { forEach, keys, slice } from '../../../../lodash-optimized';
 
 
 export interface IFormatable {
@@ -35,7 +34,7 @@ export class DataFormatter {
         header = `${this.selectedCompany?.name ?? ''}\r\n"${this.selectedCompany?.address ?? ''}"\r\n${this.selectedCompany?.city ?? ''}${this.selectedCompany?.pincode ? '-' : ''}${this.selectedCompany?.pincode ?? ''}\r\n${localeData?.csv.trial_balance.trial_balance} ${fromDate ?? ''} ${localeData?.csv.trial_balance.to} ${toDate ?? ''}\r\n`;
         csv += `${header}\r\n${title}`;
 
-        (Array.isArray(this.exportData) ? this.exportData : []).forEach(obj => {
+        this.exportData.forEach(obj => {
             const balanceObj = obj.closingBalance[Object.keys(obj.closingBalance)[0]];
             row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance?.amount} ${this.recType.transform(obj.forwardedBalance)}, ${obj.debitTotal},${obj.creditTotal}, ${balanceObj?.amount} ${this.recType.transform(balanceObj)}\r\n`;
             total = this.calculateTotal(obj, total);
@@ -57,7 +56,7 @@ export class DataFormatter {
         createCsv = (groups: ChildGroup[]) => {
             const addRow = (group: ChildGroup) => {
                 if (group.accounts?.length > 0) {
-                    (Array.isArray(group.accounts) ? group.accounts : []).forEach(account => {
+                    group.accounts.forEach(account => {
                         if (account) {
                             let data1 = [];
                             let name = `${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`;
@@ -71,11 +70,11 @@ export class DataFormatter {
                     });
                 }
             };
-            (Array.isArray(groups) ? groups : []).forEach(group => {
+            groups.forEach(group => {
                 if (group.accounts?.length > 0) {
                     addRow(group);
                 }
-                (Array.isArray(group.childGroups) ? group.childGroups : []).forEach(childGroup => {
+                group.childGroups.forEach(childGroup => {
                     if (childGroup.accounts?.length > 0) {
                         addRow(childGroup);
                     }
@@ -106,7 +105,7 @@ export class DataFormatter {
         };
         formatable.setHeader(this.selectedCompany);
         const createCsv = (groupDetails: ChildGroup[], index) => {
-            (Array.isArray(groupDetails) ? groupDetails : []).forEach(group => {
+            groupDetails.forEach(group => {
                 let i;
                 let j;
                 let ref;
@@ -126,7 +125,7 @@ export class DataFormatter {
                     formatable.setRowData(data1, strIndex);
                     data1 = [];
                     if (group.accounts?.length > 0) {
-                        (Array.isArray(group.accounts) ? group.accounts : []).forEach(acc => {
+                        group.accounts.forEach(acc => {
                             if (acc) {
                                 data1.push(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`);
                                 data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
@@ -190,7 +189,7 @@ export class DataFormatter {
      * @memberof DataFormatter
      */
     public calculateGrandTotal(total): Total {
-        (Array.isArray(this.exportData) ? this.exportData : []).forEach(group => {
+        this.exportData.forEach(group => {
             total = this.calculateTotal(group, total);
         });
 

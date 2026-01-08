@@ -12,8 +12,7 @@ import { SettingsFinancialYearActions } from '../../actions/settings/financial-y
     selector: 'giddh-daterangepicker',
     styleUrls: ['./giddh-daterangepicker.component.scss'],
     templateUrl: './giddh-daterangepicker.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestroy {

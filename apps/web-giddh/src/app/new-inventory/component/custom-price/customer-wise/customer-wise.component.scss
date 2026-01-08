@@ -11,10 +11,14 @@
             width: 100%;
             height: 100%;
             display: flex;
+            .list-viewport {
+                min-height: calc(100vh - 204px);
+            }
             .item-list {
                 width: $sidebar-width;
                 height: 100%;
                 position: relative;
+                min-height: calc(100vh - 120px);
                 min-width: 218px;
                 .mat-mdc-list-item {
                     cursor: pointer;
@@ -40,7 +44,7 @@
                 }
                 .custom-tab {
                     border: 1px solid var(--color-border-medium);
-                    border-radius: var(--mat-button-text-container-shape, var(--mat-sys-corner-full));
+                    border-radius: var(--mat-border-radius-4);
                     button {
                         flex-grow: 1;
                         height: 33px;
@@ -62,14 +66,12 @@
                         }
                     }
                 }
-                .list-viewport {
-                    height: calc(100vh - 209px);
-                }
             }
             .customer-right-side {
                 width: calc(100% - $sidebar-width);
                 padding: 12px 16px;
                 border-left: 1px solid var(--border-color);
+                height: calc(100vh - 92px);
                 overflow-y: auto;
                 .right-heading {
                     display: flex;
@@ -81,7 +83,8 @@
                     }
                 }
                 .stocks-wrapper {
-                    
+                    min-height: calc(100vh - 152px);
+                    padding-bottom: 40px;
 
                     $header-giddh-logo-width: 200px;
                     .save-discount-header {
@@ -109,7 +112,7 @@
                         strong {
                             font-size: var(--font-size-16);
                             margin-left: 12px;
-                            font-weight: var(--font-weight-semibold);
+                            color: var(--text-primary-color) !important;
                         }
                     }
 
@@ -169,7 +172,7 @@
                                             @include setWidth(150px);
                                         }
                                         &::before {
-                                            content: '';
+                                            content: "";
                                             height: 50px;
                                             width: 1px;
                                             display: inline-block;
@@ -231,7 +234,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    height: 37px;
+                    height: 32px;
                     min-width: 42px;
                     border-radius: var(--mat-border-radius-4);
                     color: var(--color-dark-gray) !important;

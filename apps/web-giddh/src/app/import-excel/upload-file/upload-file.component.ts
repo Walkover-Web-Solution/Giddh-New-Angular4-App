@@ -10,16 +10,15 @@ import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
-import { cloneDeep, find, forEach, map, some } from '../../lodash-optimized';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
+import { cloneDeep } from '../../lodash-optimized';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
     selector: 'upload-file',
-    templateUrl: './upload-file.component.html',
     styleUrls: ['./upload-file.component.scss'],
-    providers: [LedgerComponentStore], // Commented out due to missing import
-    standalone: false
+    templateUrl: './upload-file.component.html',
+    providers: [LedgerComponentStore]
 })
 
 export class UploadFileComponent implements OnInit, OnDestroy {
@@ -74,7 +73,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     /** Stores the voucher response */
     public voucherListResponse: IOption[] = [];
     /** Holds a reference to the `VoucherType` enum */
-    public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import/
+    public voucherType: typeof VoucherType = VoucherType;
 
     constructor(
         private toasterService: ToasterService,
@@ -83,7 +82,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private router: Router,
-        private ledgerComponentStore: LedgerComponentStore // Commented out due to missing import
+        private ledgerComponentStore: LedgerComponentStore
     ) {
 
     }
@@ -172,7 +171,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -187,7 +186,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                 this.accountSearchRequest.count = accountSearchResponse.count;
                 const currentOptions = this.accountSearchResponseSubject.value;
                 const newOptions = [...currentOptions];
-
+                
                 accountSearchResponse.results?.forEach(result => {
                     if (result?.uniqueName) {
                         newOptions.push({
@@ -196,7 +195,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                         });
                     }
                 });
-
+                
                 this.accountSearchResponseSubject.next(newOptions);
                 this.accountSearchRequest.isLoading = false;
             }
@@ -286,7 +285,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     */
     public getProjectAccount(requestObject: any): void {
         requestObject.count = this.defaultCount;
-        this.ledgerComponentStore.getProjectAccount(requestObject); // Commented out due to missing import
+        this.ledgerComponentStore.getProjectAccount(requestObject);
     }
 
     /**

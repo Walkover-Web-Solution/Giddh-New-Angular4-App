@@ -11,13 +11,11 @@ import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 import { Router } from '@angular/router';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
-import { Configuration } from '../../app.constant';
 
 @Component({
     selector: '[account-detail-modal-component]',
     templateUrl: './account-detail-modal.component.html',
-    styleUrls: ['./account-detail-modal.component.scss'],
-    standalone: false
+    styleUrls: ['./account-detail-modal.component.scss']
 })
 
 export class AccountDetailModalComponent implements OnChanges, OnDestroy {
@@ -106,12 +104,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 break;
 
             case 1: // go to ledger
-                if (this.generalService.voucherApiVersion === 2) {
-                    const additionalParams = this.from && this.to ? `/${this.accountUniqueName}/${this.from}/${this.to}` : `/${this.accountUniqueName}`;
-                    this.goToRoute("ledger", additionalParams, this.accountUniqueName);
-                } else {
-                    this.goToRoute("ledger", `/${this.from}/${this.to}`, this.accountUniqueName);
-                }
+                let additionalParams = this.generalService.voucherApiVersion === 2 ? `ledger/${this.accountUniqueName}` : 'ledger';
+                this.goToRoute(additionalParams, `/${this.from}/${this.to}`);
                 break;
 
             case 2: // go to sales/ purchase/ debit note or credit note generate page
@@ -120,19 +114,19 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                     let isCashInvoice = this.accountUniqueName === 'cash';
                     if (this.generalService.voucherApiVersion === 2) {
                         if (isCashInvoice) {
-                            this.goToRoute("vouchers/cash/create", "", "");
+                            this.goToRoute(`/pages/vouchers/cash/create`);
                         } else {
-                            this.goToRoute("vouchers/sales/" + this.accountUniqueName + "/create", "", "");
+                            this.goToRoute(`/pages/vouchers/sales/${this.accountUniqueName}/create`);
                         }
                     } else {
-                        this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, "", this.accountUniqueName);
+                        this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`);
                     }
                 } else {
                     // for purchase/ debit and credit note
                     if (this.generalService.voucherApiVersion === 2) {
-                        this.goToRoute("vouchers/" + this.voucherType.toString().replace(/-/g, " ") + "/" + this.accountUniqueName + "/create", "", "");
+                        this.goToRoute('/pages/vouchers/' + this.voucherType.toString().replace(/-/g, " ") + '/' + this.accountUniqueName + '/create');
                     } else {
-                        this.goToRoute('proforma-invoice/invoice/' + this.voucherType, "", this.accountUniqueName);
+                        this.goToRoute('proforma-invoice/invoice/' + this.voucherType);
                     }
                 }
                 break;
@@ -146,65 +140,26 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      *
      * @param {string} part routing url
      * @param {string} [additionalParams=''] addition params like date range
-     * @param {string} [accUniqueName=''] account unique name for URL construction
      * @memberof AccountDetailModalComponent
      */
-    public goToRoute(part: string, additionalParams: string = '', accUniqueName: string = ''): void {
-        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}` : location.href + `?returnUrl=${part}/${accUniqueName || this.accountUniqueName}`;
+    public goToRoute(part: string, additionalParams: string = ''): void {
+        let url = (this.generalService.voucherApiVersion === 2) ? part : location.href + `?returnUrl=${part}/${this.accountUniqueName}`;
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
 
-        if (Configuration.isElectron) {
-            try {
-                let electronIpcAvailable = false;
-
-                // Try electronAPI first (secure context)
-                if ((window as any).electronAPI && (window as any).electronAPI.send) {
-                    try {
-                        url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName || this.accountUniqueName}` : ""}`;
-                        (window as any).electronAPI.send('open-url', url);
-                        electronIpcAvailable = true;
-                    } catch (ipcError) {
-
-                    }
-                }
-
-                // Try legacy electron require (fallback)
-                if (!electronIpcAvailable && (window as any).require) {
-                    try {
-                        const electron = (window as any).require('electron');
-                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
-                            url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName || this.accountUniqueName}` : ""}`;
-                            electron.ipcRenderer.send('open-url', url);
-                            electronIpcAvailable = true;
-                        }
-                    } catch (requireError) {
-
-                    }
-                }
-
-                // Fallback to regular window.open if IPC not available
-                if (!electronIpcAvailable) {
-
-                    if (part === 'ledger') {
-                        const separator = url.includes('?') ? '&' : '?';
-                        url = url + `${separator}redirectUrl=${encodeURIComponent(location.href)}`;
-                    }
-                    (window as any).open(url);
-                }
-            } catch (error) {
-
-                if (part === 'ledger') {
-                    const separator = url.includes('?') ? '&' : '?';
-                    url = url + `${separator}redirectUrl=${encodeURIComponent(location.href)}`;
-                }
-                (window as any).open(url);
+        if (isElectron) {
+            let ipcRenderer = (window as any).require('electron').ipcRenderer;
+            if (this.generalService.voucherApiVersion === 2) {
+                url = location.origin + location.pathname + `#./pages/${part}`;
+            } else {
+                url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
             }
+            ipcRenderer.send('open-url', url);
         } else {
-            if (part === 'ledger') {
+            if (part?.includes('ledger')) {
                 const separator = url.includes('?') ? '&' : '?';
-                url = url + `${separator}redirectUrl=${encodeURIComponent(location.href)}`;
+                url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
             }
             (window as any).open(url);
         }

@@ -11,9 +11,7 @@ export interface OnboardingComponentState  {
 export const DEFAULT_ONBOARDING_STATE: OnboardingComponentState = {
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class OnboardingComponentStore extends ComponentStore<OnboardingComponentState> implements OnDestroy  {
 
     constructor(

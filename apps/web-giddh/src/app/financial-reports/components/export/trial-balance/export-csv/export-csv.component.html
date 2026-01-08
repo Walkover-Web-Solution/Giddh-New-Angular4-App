@@ -1,5 +1,11 @@
-<div appTranslate [file]="'trial-profit-balance/export'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <a href="javascript:void(0);" aria-label="csv download" [matMenuTriggerFor]="csvDownloadMenu" class="cursor-pointer new-icon-img">
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance/export'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <a href="javascript:void(0);" aria-label="csv download" [matMenuTriggerFor]="csvDownloadMenu"
+        class="cursor-pointer new-icon-img">
         <img [src]="imgPath" alt="csv img" />
     </a>
     <!-- Menu -->
@@ -17,4 +23,4 @@
             {{ localeData?.csv?.flat_report }}
         </button>
     </mat-menu>
-</div>
+</ng-container>

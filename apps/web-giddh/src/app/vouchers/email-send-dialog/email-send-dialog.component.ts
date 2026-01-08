@@ -9,8 +9,7 @@ import { ToasterService } from '../../services/toaster.service';
     selector: 'app-email-send-dialog',
     templateUrl: './email-send-dialog.component.html',
     styleUrls: ['./email-send-dialog.component.scss'],
-    providers: [VoucherComponentStore],
-    standalone: false
+    providers: [VoucherComponentStore]
 })
 export class EmailSendDialogComponent implements OnInit, OnDestroy {
     /** Holds invoice type */

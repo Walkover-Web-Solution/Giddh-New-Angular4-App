@@ -3,9 +3,7 @@ import { Router } from '@angular/router';
 
 @Component({
     selector: 'aside-create-new-inventory',
-    
     templateUrl: './create-new-inventory-aside.component.html',
-    standalone: false,
     styleUrls: ['./create-new-inventory-aside.component.scss']
 })
 export class CreateNewInventoryAsideComponent implements OnInit {

@@ -1,23 +1,21 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { InventoryService } from "../../../services/inventory.service";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { UntypedFormControl } from "@angular/forms";
+import { cloneDeep } from "../../../lodash-optimized";
 import { MatDialog } from "@angular/material/dialog";
 import { ExportInventoryMasterComponent } from "../export-inventory-master/export-inventory-master.component";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 import { CreateUpdateGroupComponent } from "../create-update-group/create-update-group.component";
 import { GeneralService } from "../../../services/general.service";
 import { StockCreateEditComponent } from "../stock-create-edit/stock-create-edit.component";
-import { cloneDeep, concat, filter, forEach, map, slice } from '../../../lodash-optimized';
 
 @Component({
     selector: "inventory-master",
-
     templateUrl: "./inventory-master.component.html",
-    standalone: false,
     styleUrls: ["./inventory-master.component.scss"]
 })
 export class InventoryMasterComponent implements OnInit, OnDestroy {
@@ -76,8 +74,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private router: Router,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private generalService: GeneralService,
-        private changeDetectorRef: ChangeDetectorRef
+        private generalService: GeneralService
     ) {
     }
 
@@ -93,12 +90,12 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         if (this.createUpdateGroupComponent && this.createUpdateGroupComponent.showPageLeaveConfirmation) {
             return true;
         }
-
+        
         // Add checks for other child components if needed (like stock-create-edit)
         if (this.createUpdateStockComponent && this.createUpdateStockComponent.showPageLeaveConfirmation) {
             return true;
         }
-
+        
         return false;
     }
 
@@ -114,14 +111,14 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             // Update initial form values to current values to prevent false positive unsaved changes
             this.createUpdateGroupComponent.captureInitialFormValues();
         }
-
+        
         // Add similar logic for other child components if needed
         if (this.createUpdateStockComponent && this.createUpdateStockComponent.stockCreateEditForm) {
             this.createUpdateStockComponent.stockCreateEditForm.form.markAsPristine();
             // Update initial form values to current values to prevent false positive unsaved changes
             this.createUpdateStockComponent.captureInitialFormValues();
         }
-
+        
     }
 
     /**
@@ -149,8 +146,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            const dataLength = event?.getDataLength ? event.getDataLength() : event?.dataLength || 0;
-            if (!this.isSearching && event && typeof event.getRenderedRange === 'function' && dataLength - event.getRenderedRange().end < 50) {
+            if (!this.isSearching && event && event?.getDataLength() - event?.getRenderedRange().end < 50) {
                 if (!this.loadMoreInProgress) {
                     let elementId = event?.elementRef?.nativeElement?.id;
                     if (elementId > 0) {
@@ -171,6 +167,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const wasSearching = cloneDeep(this.isSearching);
             this.isSearching = (String(search)?.trim()) ? true : false;
+
             if (this.isSearching) {
                 this.searchInventory(search);
             } else {
@@ -180,7 +177,6 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     this.showCreateButtons = false;
                 }
             }
-            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -197,7 +193,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         if (this.unregisterMarkFormsAsPristineCallback) {
             this.unregisterMarkFormsAsPristineCallback();
         }
-
+        
         this.destroyed$.next(true);
         this.destroyed$.complete();
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
@@ -236,7 +232,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         // Check for unsaved changes before proceeding
         if (!isLoadMore && this.hasUnsavedChanges()) {
             let dialogRef = this.pageLeaveUtilityService.openDialog();
-
+            
             dialogRef.afterClosed().subscribe((action) => {
                 if (action) {
                     // User confirmed to proceed - clean up and continue
@@ -248,7 +244,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             });
             return;
         }
-
+        
         this.proceedWithGetMasters(stockGroup, currentIndex, isRefresh, isLoadMore);
     }
 
@@ -296,7 +292,6 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     this.masterColumnsData[currentIndex].page = response?.body?.page;
                     this.masterColumnsData[currentIndex].results = this.masterColumnsData[currentIndex].results.concat(response?.body?.results);
                 }
-                this.changeDetectorRef.detectChanges();
             }
             this.loadMoreInProgress = false;
             if (!this.isSearching) {
@@ -346,7 +341,6 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 setTimeout(() => {
                     this.scrollToRight();
                 });
-                this.changeDetectorRef.detectChanges();
             }
         });
     }
@@ -469,7 +463,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         // Check for unsaved changes before proceeding
         if (this.hasUnsavedChanges()) {
             let dialogRef = this.pageLeaveUtilityService.openDialog();
-
+            
             dialogRef.afterClosed().subscribe((action) => {
                 if (action) {
                     // User confirmed to proceed - clean up and continue
@@ -481,7 +475,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             });
             return;
         }
-
+        
         this.proceedWithEditStock(masterData, index);
     }
 
@@ -523,7 +517,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         // Check for unsaved changes before proceeding
         if (this.hasUnsavedChanges()) {
             let dialogRef = this.pageLeaveUtilityService.openDialog();
-
+            
             dialogRef.afterClosed().subscribe((action) => {
                 if (action) {
                     // User confirmed to proceed - clean up and continue
@@ -535,7 +529,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             });
             return;
         }
-
+        
         this.proceedWithEditGroup(masterData, index);
     }
 
@@ -725,8 +719,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         }
 
         this.dialog.open(ExportInventoryMasterComponent, {
-                    width: "750px",
-                    data: exportData
-                })
+            width: "750px",
+            data: exportData
+        })
     }
 }

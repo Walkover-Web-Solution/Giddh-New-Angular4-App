@@ -1,14 +1,19 @@
-<div appTranslate [file]="'purchase-order'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'purchase-order'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="dialog-header">
         <span>{{ localeData?.po_preview_heading }}</span>
-        <button matIconButton aria-label="close" (click)="hideModal()">
+        <button mat-icon-button aria-label="close" (click)="hideModal()">
             <i class="icon-cross"></i>
-        </button>
+       </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <div class="row mb-2">
             <div class="col-sm-12 pdf-viewer">
-                <div class="position-relative" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
+                <div class="position-relative " *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
                     <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                 </div>
                 <div class="error" [hidden]="!pdfPreviewHasError">
@@ -28,4 +33,4 @@
             </div>
         </div>
     </mat-dialog-content>
-</div>
+</ng-container>

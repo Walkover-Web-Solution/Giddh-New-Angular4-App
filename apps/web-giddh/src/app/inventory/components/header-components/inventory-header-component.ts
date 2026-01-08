@@ -10,7 +10,8 @@ import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 @Component({
     selector: 'inventory-header',
-    standalone: false,
+    styles: [`
+  `],
     template: `
     <ng-template #asideCustomStockTemplate>
         <aside-custom-stock [menuState]="true" (closeAsideEvent)="asideCustomStockDialogRef.close()"

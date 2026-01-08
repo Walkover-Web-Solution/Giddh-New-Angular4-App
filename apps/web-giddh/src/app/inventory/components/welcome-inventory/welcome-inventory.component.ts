@@ -6,8 +6,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
     selector: 'welcome-inventory',
     templateUrl: './welcome-inventory.component.html',
-    styleUrls: ['./welcome-inventory.scss'],
-    standalone: false
+    styleUrls: ['./welcome-inventory.scss']
 })
 export class InventoryWelcomeComponent implements OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

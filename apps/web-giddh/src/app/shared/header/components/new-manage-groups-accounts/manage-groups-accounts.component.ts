@@ -1,6 +1,5 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild, NgZone, ChangeDetectionStrategy } from '@angular/core';
-import { Angular21ChangeDetectionService } from '../../../../services/angular21-change-detection.service';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
@@ -16,9 +15,7 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
 @Component({
     selector: 'app-manage-groups-accounts',
     templateUrl: './manage-groups-accounts.component.html',
-    styleUrls: ['./manage-groups-accounts.component.scss'],
-    standalone: false,
-    changeDetection: ChangeDetectionStrategy.Default
+    styleUrls: ['./manage-groups-accounts.component.scss']
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -74,9 +71,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         private generalAction: GeneralActions,
         private groupService: GroupService,
         private accountsAction: AccountsAction,
-        private pageLeaveUtilityService: PageLeaveUtilityService,
-        private ngZone: NgZone,
-        private changeDetectionService: Angular21ChangeDetectionService
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
         this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
@@ -169,7 +164,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public ngAfterViewChecked() {
-        this.changeDetectionService.safeChangeDetection(this.cdRef, this.ngZone);
+        this.cdRef.detectChanges();
     }
 
     public searchGroups(term: string): void {
@@ -271,9 +266,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.groupService.getGroupsWithAccounts(term, null, this.selectedArchivedOption).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.searchedMasterData = response?.body;
-                this.changeDetectionService.triggerChangeDetection(this.cdRef, this.ngZone);
-            } else {
-                this.changeDetectionService.safeChangeDetection(this.cdRef, this.ngZone);
             }
         });
     }
@@ -289,9 +281,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.groupService.getTopSharedGroups().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.topSharedGroups = response?.body?.results;
-                this.changeDetectionService.triggerChangeDetection(this.cdRef, this.ngZone);
-            } else {
-                this.changeDetectionService.safeChangeDetection(this.cdRef, this.ngZone);
             }
         });
     }
@@ -319,14 +308,14 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      *
      * @memberof ManageGroupsAccountsComponent
      */
-    @HostListener("document:keyup.esc")
+    @HostListener("document:keyup.esc", ['$event'])
     public onPressEscape(): void {
         this.closePopupEvent();
     }
 
      /**
      * Handles selection of archived filter option
-     *
+     * 
      * @param {any} event Event containing selected filter value
      * @param {boolean} search Whether to perform search or not
      * @memberof ManageGroupsAccountsComponent
@@ -349,7 +338,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         if (event) {
             this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
             this.onArchivedFilterSelected(this.archivedOptions[0], false);
-            this.changeDetectionService.triggerChangeDetection(this.cdRef, this.ngZone);
         }
     }
 

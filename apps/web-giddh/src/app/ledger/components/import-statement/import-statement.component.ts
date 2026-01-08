@@ -22,8 +22,7 @@ import { FileTypeEnum } from '../../../shared/Enums/common.enum';
     templateUrl: './import-statement.component.html',
     styleUrls: ['./import-statement.component.scss'],
     providers: [LedgerComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ImportStatementComponent implements OnDestroy {

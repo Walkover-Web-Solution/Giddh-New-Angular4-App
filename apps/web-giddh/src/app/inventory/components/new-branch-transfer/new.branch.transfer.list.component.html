@@ -5,7 +5,7 @@
                 <div class="clear-both d-flex">
                     <!-- <button
                         *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
-                        matButton="filled"
+                        mat-raised-button color="primary"
                         class="mr-2 pull-right mobile-none"
                         matTooltip="Alt+N"
                         (click)="openTransferAsidePaneDialog()"
@@ -25,7 +25,8 @@
                                 [enableDynamicSearch]="true"
                                 [placeholder]="'Select Entity'"
                                 [labelValue]="currentBranch?.name"
-                            ></reactive-dropdown-field>
+                            >
+                            </reactive-dropdown-field>
                         </div>
                         <div
                             class="custom-datepicker"
@@ -48,19 +49,23 @@
                 </div>
                 <div class="text-center d-lg-flex d-none">
                     <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                        <button matButton="outlined" class="mr-0" (click)="clearFilters()">
+                        <button mat-stroked-button class="mr-0" (click)="clearFilters()">
                             <span class="icon-cross"></span> Clear Filter
                         </button>
                     </div>
                 </div>
-                <div class="advance-icon pointer mobile-none mr-0" matTooltip="Advance Search" (click)="openSearchModal(searchDialog)">
+                <div
+                    class="advance-icon pointer mobile-none mr-0"
+                    matTooltip="Advance Search"
+                    (click)="openSearchModal(searchDialog)"
+                >
                     <span class="pr-1 d-sm-flex d-none">Filter</span>
                     <span class="icon-advance-filter"></span>
                 </div>
             </div>
             <div class="d-lg-none mb-2">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                    <button matButton="outlined" class="mr-0" (click)="clearFilters()">
+                    <button mat-stroked-button class="mr-0" (click)="clearFilters()">
                         <span class="icon-cross"></span> Clear Filter
                     </button>
                 </div>
@@ -92,7 +97,7 @@
                                             branchTransferGetRequestParams.sort === 'asc'),
                                     'icon-arrow-down':
                                         branchTransferGetRequestParams.sortBy === 'dateOfSupply' &&
-                                        branchTransferGetRequestParams.sort === 'desc',
+                                        branchTransferGetRequestParams.sort === 'desc'
                                 }"
                             ></span>
                         </th>
@@ -204,7 +209,7 @@
                                             branchTransferGetRequestParams.sort === 'asc'),
                                     'icon-arrow-down':
                                         branchTransferGetRequestParams.sortBy === 'totalAmount' &&
-                                        branchTransferGetRequestParams.sort === 'desc',
+                                        branchTransferGetRequestParams.sort === 'desc'
                                 }"
                             ></span>
                         </th>
@@ -214,12 +219,15 @@
                 <tbody *ngIf="!isLoading && branchTransferResponse.items && branchTransferResponse.items.length > 0">
                     <tr *ngFor="let item of branchTransferResponse.items; let i = index">
                         <td data-title="#">
-                            {{ branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1) + (i + 1) }}
+                            {{
+                                branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1) +
+                                    (i + 1)
+                            }}
                         </td>
                         <td data-title="Date">{{ item.dateOfSupply }}</td>
                         <td data-title="Voucher Type">
-                            <span *ngIf="item.voucherType === 'deliverynote'">Delivery Challan</span>
-                            <span *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span>
+                            <span *ngIf="item.voucherType === 'deliverynote'">Delivery Challan</span
+                            ><span *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span>
                         </td>
                         <td data-title="Voucher Number">
                             <a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a>
@@ -238,7 +246,7 @@
                             <div class="btn-group">
                                 <button
                                     type="button"
-                                    matButton="outlined"
+                                    mat-stroked-button
                                     class="select-action-button"
                                     [matMenuTriggerFor]="actionMenu"
                                 >
@@ -246,7 +254,9 @@
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
                                 <mat-menu #actionMenu="matMenu" class="action-dropdown-menu" xPosition="before" yPosition="below">
-                                    <button mat-menu-item (click)="downloadBranchTransfer(item)">Download</button>
+                                    <button mat-menu-item (click)="downloadBranchTransfer(item)">
+                                        Download
+                                    </button>
                                     <!-- <button mat-menu-item (click)="showEditBranchTransferPopup(item)">
                                         Edit
                                     </button> -->
@@ -258,7 +268,10 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody class="on-mobile-view no-records" *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
+                <tbody
+                    class="on-mobile-view no-records"
+                    *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0"
+                >
                     <tr>
                         <td *ngIf="isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11">
                             <giddh-page-loader></giddh-page-loader>
@@ -278,7 +291,10 @@
             (page)="handlePageEvent($event)"
         ></mat-paginator>
         <section class="mb-custom-80"></section>
-        <div class="no-data" *ngIf="!isLoading && (!branchTransferResponse.items || branchTransferResponse.items.length === 0)">
+        <div
+            class="no-data"
+            *ngIf="!isLoading && (!branchTransferResponse.items || branchTransferResponse.items.length === 0)"
+        >
             <h2>No entries found within given criteria.</h2>
             <h2 class="p-0">Do search with some other dates.</h2>
         </div>
@@ -288,7 +304,7 @@
 <ng-template #searchDialog>
     <div class="dialog-header">
         <span>Advance Search</span>
-        <button matIconButton aria-label="close" (click)="closeSearchDialog()">
+        <button mat-icon-button aria-label="close" (click)="closeSearchDialog()">
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -329,9 +345,9 @@
                 </div>
             </div>
             <div class="pull-right mt-2">
-                <button matButton="filled" class="mr-2" type="button" (click)="search()">Search</button>
+                <button mat-raised-button color="primary" class="mr-2" type="button" (click)="search()">Search</button>
                 <button
-                    matButton="outlined"
+                    mat-stroked-button
                     class="mr-0"
                     type="button"
                     (click)="refreshTempPostParams(); hideModal(false)"
@@ -360,7 +376,8 @@
             (hideModal)="hideModal(true)"
             [editBranchTransferUniqueName]="editBranchTransferUniqueName"
             [branchTransferMode]="branchTransferMode"
-        ></new-branch-transfer>
+        >
+        </new-branch-transfer>
     </div>
 </ng-template>
 
@@ -372,7 +389,8 @@
             [body]="'Are you sure you want to delete this ' + selectedBranchTransferType + '?'"
             (cancelCallBack)="hideBranchTransferModal()"
             (successCallBack)="deleteNewBranchTransfer()"
-        ></confirm-modal>
+        >
+        </confirm-modal>
     </div>
 </ng-template>
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

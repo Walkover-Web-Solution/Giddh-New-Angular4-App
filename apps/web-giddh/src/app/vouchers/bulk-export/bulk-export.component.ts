@@ -29,8 +29,7 @@ enum ExportTypeEnum {
     selector: 'app-bulk-export',
     templateUrl: './bulk-export.component.html',
     styleUrls: ['./bulk-export.component.scss'],
-    providers: [VoucherComponentStore],
-    standalone: false
+    providers: [VoucherComponentStore]
 })
 export class BulkExportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -213,7 +212,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         };
 
         if (postRequest.fileNameFormat.length) {
-            (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach(format => {
+            this.fileFormatList.forEach(format => {
                 const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
                 postRequest.fileNameFormat = postRequest.fileNameFormat.replace(pattern, `\${${format.key}}`);
             });
@@ -237,7 +236,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             let recipients = this.exportForm.value?.recipients.split(",");
             let validEmails = [];
             if (recipients && recipients.length > 0) {
-                (Array.isArray(recipients) ? recipients : []).forEach(email => {
+                recipients.forEach(email => {
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         let invalidEmail = this.localeData?.invalid_email;
                         invalidEmail = invalidEmail?.replace("[EMAIL]", email);
@@ -280,7 +279,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      */
     public getFileFormat() {
         let fileNameFormat = this.exportForm.get("selectedFormatList").value;
-        (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach((format) => {
+        this.fileFormatList.forEach((format) => {
             if(this.exportForm.get("selectedFormatList").value.includes(`{${format.value}}`)) {
                 fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }

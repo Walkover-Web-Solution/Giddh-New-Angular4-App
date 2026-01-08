@@ -4,13 +4,12 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
-import { cloneDeep, keys, map } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'columnar-report-table-component',
     templateUrl: './columnar.report.table.component.html',
-    styleUrls: ['./columnar.report.table.component.scss'],
-    standalone: false
+    styleUrls: ['./columnar.report.table.component.scss']
 })
 
 export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChanges {

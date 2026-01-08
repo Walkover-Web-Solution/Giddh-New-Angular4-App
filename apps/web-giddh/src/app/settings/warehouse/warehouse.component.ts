@@ -1,6 +1,5 @@
 import {
     AfterViewInit,
-    ChangeDetectorRef,
     Component,
     ComponentFactoryResolver,
     Inject,
@@ -17,7 +16,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
-import { OnBoardingType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG, Configuration } from '../../app.constant';
+import { OnBoardingType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -33,7 +32,6 @@ import { WarehouseState } from './reducer/warehouse.reducer';
 import { OrganizationType } from '../../models/user-login-state';
 import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 import { ServiceConfig } from '../../services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 /**
  * Warehouse component
@@ -47,8 +45,7 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     selector: 'setting-warehouse',
     templateUrl: './warehouse.component.html',
     styleUrls: ['./warehouse.component.scss'],
-    providers: [VoucherComponentStore],
-    standalone:false
+    providers: [VoucherComponentStore]
 })
 export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -135,8 +132,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         private settingsWarehouseService: SettingsWarehouseService,
         public dialog: MatDialog,
         @Inject(ServiceConfig) private serviceConfig,
-        private componentStore: VoucherComponentStore,
-        private changeDetection: ChangeDetectorRef
+        private componentStore: VoucherComponentStore
     ) { }
 
     /**
@@ -146,7 +142,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
 
@@ -356,7 +352,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.resetDefaultWarehouse();
                 this.setDefaulWarehouse(warehouseState.defaultWarehouseData);
             }
-            this.changeDetection.detectChanges();
         });
         this.allWarehouses$.pipe(takeUntil(this.destroyed$)).subscribe((warehouseData: any) => {
             if (warehouseData) {
@@ -367,7 +362,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     totalPages: warehouseData.totalPages,
                 }
                 this.showLoader = false;
-                this.changeDetection.detectChanges();
             }
         });
     }
@@ -458,9 +452,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!warehouse?.isDefault || warehouse?.isArchived) {
             this.warehouseStatusToUpdate = warehouse;
             this.statusModalRef = this.dialog.open(this.statusModal, {
-                        panelClass: 'modal-dialog',
-                        width: '1000px',
-                    });
+                panelClass: 'modal-dialog',
+                width: '1000px'
+            });
         } else {
             this.toasterService.warningToast(this.localeData?.archive_notallowed);
         }

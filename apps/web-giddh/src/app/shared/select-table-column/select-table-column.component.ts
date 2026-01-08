@@ -10,8 +10,7 @@ import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.c
     selector: "select-table-column",
     styleUrls: ["./select-table-column.component.scss"],
     templateUrl: "./select-table-column.component.html",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectTableColumnComponent implements OnInit, OnChanges {
     /* This will hold local JSON data */
@@ -179,7 +178,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
                     this.dynamicCustomColumns = body.reportFilterColumns || [];
                 } else if (!isDynamic && body?.columns) {
                     const displayColumnsSet = new Set(body.columns);
-                    (Array.isArray(this.customiseColumns) ? this.customiseColumns : []).forEach(column => {
+                    this.customiseColumns.forEach(column => {
                         column.checked = displayColumnsSet.has(column.value);
                     });
                 }

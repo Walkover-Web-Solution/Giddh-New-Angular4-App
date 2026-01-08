@@ -11,8 +11,7 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
     selector: 'ledger-aside-pane-account',
     styleUrls: ['./ledger-aside.pane.account.component.scss'],
     templateUrl: './ledger-aside.pane.account.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */

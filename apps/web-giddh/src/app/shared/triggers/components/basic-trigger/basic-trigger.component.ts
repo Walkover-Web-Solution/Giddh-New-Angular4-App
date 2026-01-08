@@ -13,8 +13,7 @@ import { PageEvent } from "@angular/material/paginator";
     selector: 'app-basic-trigger',
     templateUrl: './basic-trigger.component.html',
     styleUrls: ['./basic-trigger.component.scss'],
-    providers: [TriggerComponentStore],
-    standalone: false
+    providers: [TriggerComponentStore]
 })
 
 export class BasicTriggerComponent implements OnInit {

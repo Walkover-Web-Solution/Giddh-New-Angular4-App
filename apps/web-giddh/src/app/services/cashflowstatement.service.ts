@@ -6,11 +6,8 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class CashFlowStatementService {
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 

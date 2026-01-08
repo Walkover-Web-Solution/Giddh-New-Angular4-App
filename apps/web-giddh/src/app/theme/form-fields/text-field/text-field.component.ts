@@ -18,7 +18,6 @@ const noop = () => {
         }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', { static: false }) public textField: ElementRef;
@@ -89,19 +88,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.autoFocus) {
-           this.inputFocus();
+            setTimeout(() => {
+                this.textField?.nativeElement?.focus();
+            }, 20);
         }
-    }
-
-    /**
-     * Focus on the text field
-     *
-     * @memberof TextFieldComponent
-     */
-    public inputFocus(): void {
-        setTimeout(() => {
-            this.textField?.nativeElement?.focus();
-        }, 50);
     }
 
     /**

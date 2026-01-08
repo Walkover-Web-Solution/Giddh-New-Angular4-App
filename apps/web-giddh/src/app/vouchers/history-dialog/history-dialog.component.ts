@@ -12,8 +12,7 @@ import { PageEvent } from '@angular/material/paginator';
     selector: 'app-history-dialog',
     templateUrl: './history-dialog.component.html',
     styleUrls: ['./history-dialog.component.scss'],
-    providers: [VoucherComponentStore],
-    standalone: false
+    providers: [VoucherComponentStore]
 })
 export class HistoryDialogComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -56,11 +55,11 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
                         delete versions.results;
                     }
                     if (versions.items && versions.items.length > 0) {
-                        (Array.isArray(versions.items) ? versions.items : []).forEach(result => {
+                        versions.items.forEach(result => {
                             result.versionTime = new Date(result.versionTime);
                             result['userName'] =  this.getByUserText(result.user?.name);
                             if (result.changes && result.changes.length > 0) {
-                                (Array.isArray(result.changes) ? result.changes : []).forEach(change => {
+                                result.changes.forEach(change => {
                                     change.message = this.getVersionMessage(this.inputData.model?.voucherType === VoucherTypeEnum.purchaseOrder, change);
                                 });
                             }

@@ -1,6 +1,6 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -52,7 +52,6 @@ import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
-import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 
 @NgModule({
     declarations: [
@@ -118,10 +117,8 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         MatTooltipModule,
         MatMenuModule,
         MatDatepickerModule,
-        MatNativeDateModule,
-        NewConfirmationModalModule
+        MatNativeDateModule
     ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class FinancialReportsModule {
 }

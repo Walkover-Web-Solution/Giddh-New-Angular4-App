@@ -11,13 +11,11 @@ import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { OrganizationType } from '../../../models/user-login-state';
-import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'cr-dr-list',
     templateUrl: 'cr-dr-list.component.html',
     styleUrls: ['./cr-dr-list.component.scss', '../../home.component.scss'],
-    standalone: false
 })
 export class CrDrComponent implements OnInit, OnDestroy {
     /** Angular Material menu trigger for datepicker */
@@ -80,7 +78,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
 
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);

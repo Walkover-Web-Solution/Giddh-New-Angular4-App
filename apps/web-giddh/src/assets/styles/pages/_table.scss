@@ -37,7 +37,7 @@ invoice-preview-details-component {
     }
 }
 
-$listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors here, separated by commas (,)
+$listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors here, separated by commas (,)
 
 .table-header-sticky {
     &:not(:has(#{$listOfNotApplyBelowCodeSelectors})) {
@@ -56,7 +56,6 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
                 overflow: visible !important;
 
                 .mat-mdc-tab-body-content {
-                    height: unset !important;
                     overflow: visible !important;
                 }
             }

@@ -10,21 +10,28 @@
                     class="item-group"
                     [ngClass]="{
                         'active':
-                            grp.isOpen && activeGroup && activeGroup?.uniqueName === grp?.uniqueName && !(activeStockUniqueName$ | async),
+                            grp.isOpen &&
+                            activeGroup &&
+                            activeGroup?.uniqueName === grp?.uniqueName &&
+                            !(activeStockUniqueName$ | async)
                     }"
                 >
                     <a (click)="OpenGroup(grp, $event)" class="d-flex">
                         <a class="theme-foreground-color inventory-group-name">{{ grp.name }}</a>
                         <i
                             (click)="OpenGroup(grp, $event)"
-                            class="icon-arrow-down position-relative"
+                            class="icon-arrow-down position-relative "
                             [ngClass]="{ 'open': grp.isOpen }"
                         ></i>
                     </a>
                 </div>
                 <div>
-                    <stock-list [Groups]="grp"></stock-list>
-                    <stockgrp-list [Groups]="grp.childStockGroups" *ngIf="grp.childStockGroups?.length > 0 && grp.isOpen"></stockgrp-list>
+                    <stock-list [Groups]="grp"> </stock-list>
+                    <stockgrp-list
+                        [Groups]="grp.childStockGroups"
+                        *ngIf="grp.childStockGroups?.length > 0 && grp.isOpen"
+                    >
+                    </stockgrp-list>
                 </div>
             </li>
         </ul>
@@ -36,8 +43,7 @@
             <giddh-page-loader></giddh-page-loader>
         </ng-container>
         <ng-container *ngIf="!getStocksInProgress">
-            <img src="assets/images/search-data-not-found.svg" />
-            <br />
+            <img src="assets/images/search-data-not-found.svg" /><br />
             No Data Found
         </ng-container>
     </li>

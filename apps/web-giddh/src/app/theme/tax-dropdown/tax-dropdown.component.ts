@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import * as dayjs from 'dayjs';
@@ -12,8 +12,7 @@ import { isEqual } from "../../lodash-optimized";
 @Component({
     selector: "tax-dropdown",
     templateUrl: "./tax-dropdown.component.html",
-    styleUrls: ["./tax-dropdown.component.scss"],
-    standalone: false
+    styleUrls: ["./tax-dropdown.component.scss"]
 })
 export class TaxDropdownComponent implements OnChanges {
     @Input() public taxesList: any[] = [];
@@ -39,8 +38,6 @@ export class TaxDropdownComponent implements OnChanges {
     @Output() public selectedTaxes: EventEmitter<any> = new EventEmitter<any>();
     /** Emitter for taxes total */
     @Output() public totalTax: EventEmitter<any> = new EventEmitter<any>();
-    /** Emitter for close tax dropdown */
-    @Output() public closeTaxDropdown: EventEmitter<any> = new EventEmitter<any>();
     /** Form Group for tax form */
     public taxForm: FormGroup;
     /** Total tax amount */
@@ -51,8 +48,6 @@ export class TaxDropdownComponent implements OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Element ref for mat menu */
     @ViewChild('taxMenuTrigger') public taxMenuTrigger: MatMenuTrigger;
-    /** Element ref for tax input */
-    @ViewChild('taxInput') public taxInput: ElementRef<HTMLInputElement>;
     /** Stores last saved form values when menu opens */
     private lastSavedFormValues: any = null;
 
@@ -270,22 +265,6 @@ export class TaxDropdownComponent implements OnChanges {
      */
     public closeTaxMenu(): void {
         this.taxMenuTrigger?.closeMenu();
-    }
-
-    /**
-     * Emits close tax dropdown event with the trigger element
-     *
-     * @memberof TaxDropdownComponent
-     */
-    protected emitCloseTaxDropdown(): void {
-        // Always emit close event for focus management
-        setTimeout(() => {
-            const triggerElement = this.taxInput?.nativeElement || null;
-            const syntheticEvent = {
-                target: triggerElement
-            };
-            this.closeTaxDropdown.emit(syntheticEvent);
-        }, 50);
     }
 
     /**

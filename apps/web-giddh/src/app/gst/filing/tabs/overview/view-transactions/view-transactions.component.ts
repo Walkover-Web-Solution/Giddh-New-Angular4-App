@@ -15,13 +15,11 @@ import { GstReport } from '../../../../constants/gst.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
-import { Configuration, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.const';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { PageEvent } from '@angular/material/paginator';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
-import { cloneDeep, find } from '../../../../../lodash-optimized';
 
 export const filterTransaction = {
     entityType: '',
@@ -36,7 +34,6 @@ export const filterTransaction = {
     selector: 'view-transactions',
     templateUrl: './view-transactions.component.html',
     styleUrls: ['./view-transactions.component.scss'],
-    standalone: false
 })
 export class ViewTransactionsComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -153,7 +150,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             { label: this.localeData?.unregistered, value: 'unregistered' }
         ];
 
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.filterParam.count = PAGINATION_LIMIT;
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
@@ -228,15 +225,15 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public mapFilters() {
-        let filters = cloneDeep(this.filterParam);
+        let filters = _.cloneDeep(this.filterParam);
         if (this.selectedGst === GstReport.Gstr1) {
             this.displayedColumns.splice(4, 0, 'voucherType');
-            let selected = find(this.gstr1entityType, o => o?.value === filters.entityType);
+            let selected = _.find(this.gstr1entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
         } else {
-            let selected = find(this.gstr2entityType, o => o?.value === filters.entityType);
+            let selected = _.find(this.gstr2entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
@@ -246,18 +243,18 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             let selected;
             if (this.selectedGst === GstReport.Gstr1) {
                 if (this.filterParam.entityType === 'advance-receipt') {
-                    selected = find(this.otherEntityType, o => o?.value === filters.type)
+                    selected = _.find(this.otherEntityType, o => o?.value === filters.type)
                 } else {
-                    selected = find(this.invoiceType, o => o?.value === filters.type);
+                    selected = _.find(this.invoiceType, o => o?.value === filters.type);
                 }
             } else {
-                selected = find(this.gstr2InvoiceType, o => o?.value === filters.type);
+                selected = _.find(this.gstr2InvoiceType, o => o?.value === filters.type);
             }
             if (selected) {
                 this.selectedFilter.type = selected.label;
             }
         }
-        return this.filterParam = cloneDeep(filters);
+        return this.filterParam = _.cloneDeep(filters);
 
     }
 
@@ -373,12 +370,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      */
     public openDownloadOrSendMailDialog(): void {
         this.downloadOrSendMailDialogRef = this.dialog.open(this.downloadOrSendMailDialog, {
-                    height: '80vh',
-                    width: '80vw',
-                    disableClose: true,
-            autoFocus: false,
-            panelClass: 'download-send-mail-dialog'
-                });
+            height: '80vh',
+            width: '80vw',
+            maxWidth: '800px',
+            disableClose: true,
+            autoFocus: false
+        });
     }
 
     /**

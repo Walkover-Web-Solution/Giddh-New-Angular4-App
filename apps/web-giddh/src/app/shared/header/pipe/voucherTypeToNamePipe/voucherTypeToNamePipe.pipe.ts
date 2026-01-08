@@ -3,8 +3,7 @@ import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
 
 @Pipe({
     name: 'voucherTypeToNamePipe',
-    pure: true,
-    standalone: false
+    pure: true
 })
 
 export class VoucherTypeToNamePipe implements PipeTransform {

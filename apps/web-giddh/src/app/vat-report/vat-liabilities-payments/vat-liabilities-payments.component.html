@@ -1,7 +1,15 @@
-<div appTranslate [file]="'vat-report'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'vat-report'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu></hamburger-menu>
     <div class="position-relative w-100">
-        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+        <div
+            class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState"
+        >
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
@@ -9,14 +17,12 @@
         <div class="container-fluid section-center ml-0">
             <div class="row align-items-center row-gap-15">
                 <div class="col flex-grow-0">
-                    <div
-                        class="custom-datepicker"
-                        [matMenuTriggerFor]="universalDatepicker"
-                        #universalDatepickerTrigger="matMenuTrigger"
-                        role="button"
-                        aria-haspopup="true"
-                        aria-controls="universalDatepicker"
-                    >
+                    <div class="custom-datepicker" 
+                         [matMenuTriggerFor]="universalDatepicker"
+                         #universalDatepickerTrigger="matMenuTrigger"
+                         role="button"
+                         aria-haspopup="true"
+                         aria-controls="universalDatepicker">
                         <input
                             matInput
                             type="text"
@@ -34,7 +40,8 @@
                         [options]="taxesList"
                         (selectedOption)="taxNumberSelected($event)"
                         [placeholder]="commonLocaleData?.app_enter_vat"
-                    ></reactive-dropdown-field>
+                    >
+                    </reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0" *ngIf="(isCompanyMode || isConsolidatedBranch) && isMultipleBranch">
                     <reactive-dropdown-field
@@ -45,15 +52,15 @@
                     ></reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
-                    <button matButton="filled" (click)="getLiabilitiesPayment()">
+                    <button mat-raised-button color="primary" (click)="getLiabilitiesPayment()">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </div>
             </div>
-            <div class="position-center position-absolute" *ngIf="isLoading()">
+            <div class="position-center position-absolute" *ngIf="isLoading">
                 <giddh-page-loader class="unset-loader-margin"></giddh-page-loader>
             </div>
-            <div class="row mt-5" *ngIf="!isLoading()">
+            <div class="row mt-5" *ngIf="!isLoading">
                 <div class="table-responsive">
                     <table mat-table [dataSource]="dataSource" class="w-100" *ngIf="dataSource.length">
                         <ng-container matColumnDef="index">
@@ -80,7 +87,7 @@
                                 {{ localeData?.received_date }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element?.received ?? '-' }}
+                                {{ element?.received ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="from" *ngIf="!isPaymentMode">
@@ -88,7 +95,7 @@
                                 {{ commonLocaleData?.app_from }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element?.taxPeriod?.from ?? '-' }}
+                                {{ element?.taxPeriod?.from ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="to" *ngIf="!isPaymentMode">
@@ -96,7 +103,7 @@
                                 {{ commonLocaleData?.app_to | titlecase }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element?.taxPeriod?.to ?? '-' }}
+                                {{ element?.taxPeriod?.to ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="originalAmount" *ngIf="!isPaymentMode">
@@ -134,7 +141,7 @@
                                 {{ commonLocaleData?.app_type }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element?.type ?? '-' }}
+                                {{ element?.type ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="due" *ngIf="!isPaymentMode">
@@ -142,7 +149,7 @@
                                 {{ commonLocaleData?.app_due }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element?.due ?? '-' }}
+                                {{ element?.due ?? "-" }}
                             </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
@@ -151,16 +158,15 @@
                     <div *ngIf="!dataSource.length && hasTaxNumber">
                         <div *ngIf="connectToHMRCUrl || isTaxRestrictedModule" class="position-center position-absolute">
                             <div class="text-center">
-                                <a [disabled]="isTaxRestrictedModule" matButton="filled" [href]="connectToHMRCUrl">
+                                <a [disabled]="isTaxRestrictedModule" mat-raised-button color="primary" [href]="connectToHMRCUrl">
                                     {{ localeData?.connect_to_hmrc }}
                                 </a>
                             </div>
-                            <restricted-module-message
-                                [restrictedModule]="restrictedModules.TaxFilling"
-                                (onUpgradePlan)="buyPlan($event)"
-                            ></restricted-module-message>
+                            <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                                (onUpgradePlan)="buyPlan($event)">
+                            </restricted-module-message>
                         </div>
-                        <div class="no-data" *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
+                        <div class="no-data" *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule" >
                             <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
                         </div>
                     </div>
@@ -171,7 +177,7 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>
 
 <!-- Universal Date Picker  -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
@@ -192,6 +198,7 @@
             (closeCalender)="toggleGiddhDatepicker(false)"
             [keepCalendarOpeningWithRange]="false"
             [showRangeLabelOnInput]="false"
-        ></app-datepicker-wrapper>
+            >
+        </app-datepicker-wrapper>
     </ng-template>
 </mat-menu>

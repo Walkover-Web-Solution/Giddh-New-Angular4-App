@@ -7,8 +7,10 @@ import { InventoryStockReportComponent } from "./components/stock-report-compone
 import { InventoryUpdateGroupComponent } from "./components/update-group-component/inventory.updategroup.component";
 import { InventoryGroupStockReportComponent } from "./components/group-stock-report-component/group.stockreport.component";
 import { InventoryWelcomeComponent } from "./components/welcome-inventory/welcome-inventory.component";
+import { JobworkComponent } from "./jobwork/jobwork.component";
 
 import { InvViewService } from "./inv.view.service";
+import { ManufacturingComponent } from "./manufacturing/manufacturing.component";
 import { NewBranchTransferListComponent } from "./components/new-branch-transfer/new.branch.transfer.list.component";
 
 @NgModule({
@@ -44,6 +46,18 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
                         path: "",
                         pathMatch: "full",
                         component: InventoryWelcomeComponent
+                    },
+                    {
+                        path: "jobwork",
+                        component: JobworkComponent
+                    },
+                    {
+                        path: "jobwork/:type/:uniqueName",
+                        component: JobworkComponent
+                    },
+                    {
+                        path: "manufacturing",
+                        component: ManufacturingComponent
                     },
                     {
                         path: "report",

@@ -15,8 +15,7 @@ import { InvoicePaymentRequest } from '../../models/api-models/Invoice';
     selector: 'app-payment-dialog',
     templateUrl: './payment-dialog.component.html',
     styleUrls: ['./payment-dialog.component.scss'],
-    providers: [VoucherComponentStore],
-    standalone: false
+    providers: [VoucherComponentStore]
 })
 export class PaymentDialogComponent implements OnInit, OnDestroy {
     /** Holds current voucher details */
@@ -123,7 +122,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 let arr: any[] = [];
-                (Array.isArray(response?.body) ? response?.body : []).forEach(tag => {
+                response?.body.forEach(tag => {
                     arr.push({ value: tag.name, label: tag.name });
                 });
                 this.tags = orderBy(arr, 'name');

@@ -1,13 +1,18 @@
 <div class="dialog-header">
-    <span class="font-size-16">Redeem Activation Key</span>
-    <button matIconButton aria-label="close" mat-dialog-close>
-        <i class="icon-cross"></i>
-    </button>
+  <span class="font-size-16">Redeem Activation Key</span>
+  <button mat-icon-button aria-label="close" mat-dialog-close>
+    <i class="icon-cross"></i>
+  </button>
 </div>
 <mat-dialog-content class="dialog-body">
-    <p class="mb-2">You will get the activation key from resellers.</p>
-    <div class="d-flex column-gap-15 align-items-center w-100">
-        <input-field [type]="'text'" [label]="'Activate'" [placeholder]="'Enter activation key'" class="w-100"></input-field>
-        <button matButton="filled">Activate</button>
-    </div>
+  <p class="mb-2">You will get the activation key from resellers.</p>
+  <div class="d-flex column-gap-15 align-items-center w-100">
+    <input-field
+      [type]="'text'"
+      [label]="'Activate'"
+      [placeholder]="'Enter activation key'"
+      class="w-100"
+    ></input-field>
+    <button mat-raised-button color="primary">Activate</button>
+  </div>
 </mat-dialog-content>

@@ -11,6 +11,7 @@ import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
+import { cloneDeep, each } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { BalanceSheetData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
@@ -18,13 +19,11 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store/roots';
 import { BalanceSheetGridComponent } from './components/balance-sheet-grid/balance-sheet-grid.component';
 import { TlPlService } from '../../../services/tl-pl.service';
-import { cloneDeep, each, findIndex, forEach } from '../../../lodash-optimized';
 
 @Component({
-selector: 'balance-sheet',
+    selector: 'balance-sheet',
     templateUrl: './balance-sheet.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
@@ -89,7 +88,7 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
                 }
                 if (data && data.liabilities) {
                     this.InitData(data.liabilities);
-                    (Array.isArray(data.liabilities) ? data.liabilities : []).forEach(g => {
+                    data.liabilities.forEach(g => {
                         g.isVisible = true;
                         g.isCreated = true;
                         g.isIncludedInSearch = true;
@@ -97,7 +96,7 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
                 }
                 if (data && data.assets) {
                     this.InitData(data.assets);
-                    (Array.isArray(data.assets) ? data.assets : []).forEach(g => {
+                    data.assets.forEach(g => {
                         g.isVisible = true;
                         g.isCreated = true;
                         g.isIncludedInSearch = true;

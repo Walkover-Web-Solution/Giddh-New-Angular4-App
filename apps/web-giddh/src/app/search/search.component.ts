@@ -3,12 +3,10 @@ import { AppState } from '../store/roots';
 import { Component, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { SearchRequest } from '../models/api-models/Search';
 import { SearchActions } from '../actions/search.actions';
-import { remove } from '../lodash-optimized';
 
 @Component({
     selector: 'search',
-    templateUrl: './search.component.html',
-    standalone: false
+    templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnDestroy {
     public searchRequestEmitter = new EventEmitter<SearchRequest>();

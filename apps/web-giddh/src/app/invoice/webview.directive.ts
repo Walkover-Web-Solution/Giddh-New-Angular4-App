@@ -1,8 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-    selector: 'webview',
-    standalone: false
+    selector: 'webview'
 })
 
 /** Dummy directive to allow html-tag 'webview' */

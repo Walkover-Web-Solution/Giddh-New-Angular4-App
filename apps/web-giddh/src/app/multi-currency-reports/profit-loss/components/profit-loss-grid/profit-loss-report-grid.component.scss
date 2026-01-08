@@ -22,7 +22,7 @@
 
 :host ::ng-deep {
     .table-container {
-        &.profit-loss section div > div {
+        &.profit-loss section div>div {
             padding-left: 8px;
         }
 
@@ -36,9 +36,9 @@
     .basic {
         margin-bottom: 0;
 
-        > thead {
-            > tr {
-                > th {
+        >thead {
+            >tr {
+                >th {
                     padding: 8px 8px;
                 }
             }

@@ -13,11 +13,8 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import { APPLY_DISCOUNT_API } from './apiurls/apply-discount.api';
-import { get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class AccountService {
     private companyUniqueName: string;
 

@@ -5,12 +5,11 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
-import { forIn } from '../../../../lodash-optimized';
+import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'e-sign-modal-component',
-    templateUrl: './e-Sign.component.html',
-    standalone:false
+    templateUrl: './e-Sign.component.html'
 })
 
 export class EsignModalComponent implements OnInit, OnDestroy {

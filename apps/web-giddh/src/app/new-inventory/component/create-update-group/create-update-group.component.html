@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'inventory/group'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -9,19 +9,28 @@
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
         <hamburger-menu *ngIf="!addGroup"></hamburger-menu>
 
-        <div *ngIf="!showLoader">
+        <ng-container *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
                     <div class="row mt-3">
                         <div class="col-12 text-right">
                             <span *ngIf="!showLoader && !addGroup" class="mt-3 mr-2">
-                                <button *ngIf="groupUniqueName" (click)="backClicked()" class="mr-0"  matButton="outlined">
+                                <button
+                                    *ngIf="groupUniqueName"
+                                    (click)="backClicked()"
+                                    class="mr-0"
+                                    mat-raised-button
+                                    color="primary"
+                                >
                                     <i class="icon-left back-left"></i>
                                     {{ commonLocaleData?.app_back }}
                                 </button>
                             </span>
                             <span class="mt-3">
-                                <watch-video [cssClass]="'text-primary pt-1'" [moduleName]="'INVENTORY_MASTER_GROUP'"></watch-video>
+                                <watch-video
+                                    [cssClass]="'text-primary pt-1'"
+                                    [moduleName]="'INVENTORY_MASTER_GROUP'"
+                                ></watch-video>
                             </span>
                         </div>
                         <div class="col-12">
@@ -37,7 +46,8 @@
                                             (change)="!groupUniqueName ? generateUniqueName() : ''"
                                             [showError]="isFormSubmitted && !groupForm.get('name')?.value"
                                             [autoFocus]="addGroup && !groupUniqueName"
-                                        ></input-field>
+                                        >
+                                        </input-field>
                                     </div>
                                     <div class="col-sm-12 col-lg-6 ml-lg-2">
                                         <input-field
@@ -47,10 +57,13 @@
                                             formControlName="uniqueName"
                                             [type]="'text'"
                                             [showError]="isFormSubmitted && !groupForm.get('uniqueName')?.value"
-                                        ></input-field>
+                                        >
+                                        </input-field>
                                     </div>
                                     <div class="col-sm-12 col-lg-6 ml-lg-2">
-                                        <div class="inline-multiple-input-width d-flex align-items-center justify-content-between">
+                                        <div
+                                            class="inline-multiple-input-width d-flex align-items-center justify-content-between"
+                                        >
                                             <div>
                                                 <mat-radio-group
                                                     color="primary"
@@ -59,16 +72,19 @@
                                                     (change)="onChangeHsnSacType()"
                                                     class="d-flex column-gap-15"
                                                 >
-                                                    <mat-radio-button id="hsn" [value]="'hsn'">
-                                                        {{ commonLocaleData?.app_hsn_code }}
-                                                    </mat-radio-button>
-                                                    <mat-radio-button id="sac" [value]="'sac'">
-                                                        {{ commonLocaleData?.app_sac_code }}
-                                                    </mat-radio-button>
+                                                    <mat-radio-button id="hsn" [value]="'hsn'">{{
+                                                        commonLocaleData?.app_hsn_code
+                                                    }}</mat-radio-button>
+                                                    <mat-radio-button id="sac" [value]="'sac'">{{
+                                                        commonLocaleData?.app_sac_code
+                                                    }}</mat-radio-button>
                                                 </mat-radio-group>
                                             </div>
                                             <div class="input-min-width">
-                                                <div class="hsnsac-field" *ngIf="groupForm.get('showCodeType')?.value === 'hsn'">
+                                                <div
+                                                    class="hsnsac-field"
+                                                    *ngIf="groupForm.get('showCodeType')?.value === 'hsn'"
+                                                >
                                                     <input-field
                                                         [name]="'hsnCode'"
                                                         [placeholder]="localeData?.enter_hsn"
@@ -76,9 +92,13 @@
                                                         formControlName="hsnNumber"
                                                         [maxlength]="10"
                                                         [allowDecimalDigitsOnly]="true"
-                                                    ></input-field>
+                                                    >
+                                                    </input-field>
                                                 </div>
-                                                <div class="hsnsac-field" *ngIf="groupForm.get('showCodeType')?.value === 'sac'">
+                                                <div
+                                                    class="hsnsac-field"
+                                                    *ngIf="groupForm.get('showCodeType')?.value === 'sac'"
+                                                >
                                                     <input-field
                                                         [name]="'sacCode'"
                                                         [placeholder]="localeData?.enter_sac"
@@ -86,7 +106,8 @@
                                                         formControlName="sacNumber"
                                                         [maxlength]="10"
                                                         [allowDecimalDigitsOnly]="true"
-                                                    ></input-field>
+                                                    >
+                                                    </input-field>
                                                 </div>
                                             </div>
                                         </div>
@@ -107,12 +128,14 @@
                                                     [disabled]="tax.isDisabled"
                                                     [selected]="tax.isChecked"
                                                     (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
+                                                    >{{ tax.name }}</mat-option
                                                 >
-                                                    {{ tax.name }}
-                                                </mat-option>
-                                                <mat-option class="create-update-no-data" [disabled]="true" *ngIf="!taxes?.length">
-                                                    {{ commonLocaleData?.app_no_result_found }}
-                                                </mat-option>
+                                                <mat-option
+                                                    class="create-update-no-data"
+                                                    [disabled]="true"
+                                                    *ngIf="!taxes?.length"
+                                                    >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                                >
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
@@ -127,21 +150,23 @@
                                             [options]="discountsList$ | async"
                                             (selectedOption)="groupForm.get('discountLabel')?.patchValue($event?.label)"
                                             formControlName="discounts"
-                                        ></reactive-dropdown-field>
+                                        >
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-sm-12 col-lg-6 ml-lg-2">
                                         <div class="inline-multiple-input-width d-flex align-items-start flex-column">
                                             <div class="d-flex justify-content-between w-100">
-                                                <div class="d-flex column-gap-1 align-items-center">
+                                                <div class="d-flex toggle-childgroup">
                                                     <mat-slide-toggle
                                                         class="mt-1"
                                                         color="primary"
                                                         name="isSubGroup"
                                                         formControlName="isSubGroup"
                                                         aria-label="child group"
-                                                    ></mat-slide-toggle>
+                                                    >
+                                                    </mat-slide-toggle>
                                                     <label>{{ localeData?.is_it_childgroup }}</label>
                                                 </div>
                                                 <div class="input-min-width" *ngIf="groupForm.get('isSubGroup')?.value">
@@ -150,20 +175,24 @@
                                                         [placeholder]="commonLocaleData?.app_select_parent_group"
                                                         [options]="stockGroups"
                                                         (selectedOption)="
-                                                            stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
+                                                            stockGroupUniqueName = $event?.value;
+                                                            stockGroupName = $event?.label
                                                         "
                                                         [labelValue]="stockGroupName"
                                                     ></reactive-dropdown-field>
                                                 </div>
                                             </div>
-                                            <div class="d-flex column-gap-1 align-items-center pt-1 mt-1">
+                                            <div class="d-flex toggle-childgroup pt-1 mt-1">
                                                 <mat-slide-toggle
                                                     color="primary"
                                                     name="runtimeManufacturing"
                                                     formControlName="runtimeManufacturing"
                                                     aria-label="runtime manufacturing"
-                                                ></mat-slide-toggle>
-                                                <span>{{ commonLocaleData?.app_allow_manufacturing_sales_transactions }}</span>
+                                                >
+                                                </mat-slide-toggle>
+                                                <span>{{
+                                                    commonLocaleData?.app_allow_manufacturing_sales_transactions
+                                                }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -173,14 +202,18 @@
                                 <div class="col-sm-12 col-lg-12 ml-lg-2">
                                     <div class="d-flex align-items-center w-100">
                                         <div>
-                                            <button matButton="filled" (click)="saveGroup()">
-                                                {{ groupUniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_create }}
+                                            <button mat-raised-button color="primary" (click)="saveGroup()">
+                                                {{
+                                                    groupUniqueName
+                                                        ? commonLocaleData?.app_update
+                                                        : commonLocaleData?.app_create
+                                                }}
                                             </button>
                                         </div>
-                                        <div class="ml-auto d-flex column-gap-15">
+                                        <div class="ml-auto right-aligned-buttons d-flex column-gap-15">
                                             <button
                                                 *ngIf="!groupUniqueName"
-                                                matButton="outlined"
+                                                mat-stroked-button
                                                 (click)="resetGroupForm()"
                                                 type="button"
                                             >
@@ -189,7 +222,7 @@
 
                                             <button
                                                 *ngIf="groupUniqueName && !addGroup"
-                                                matButton="outlined"
+                                                mat-stroked-button
                                                 class="min-width-100"
                                                 (click)="cancelEdit()"
                                             >
@@ -197,7 +230,7 @@
                                             </button>
                                             <button
                                                 *ngIf="groupUniqueName"
-                                                matButton="outlined"
+                                                mat-stroked-button
                                                 class="min-width-100"
                                                 (click)="deleteGroup()"
                                             >
@@ -211,6 +244,6 @@
                     </div>
                 </div>
             </form>
-        </div>
+        </ng-container>
     </div>
-</div>
+</ng-container>

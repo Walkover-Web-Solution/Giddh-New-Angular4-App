@@ -13,8 +13,7 @@ import { ServiceConfig } from '../../services/service.config';
 @Component({
     selector: 'personal-information',
     templateUrl: './personal-information.component.html',
-    styleUrls: ['./personal-information.component.scss'],
-    standalone: false
+    styleUrls: ['./personal-information.component.scss']
 })
 export class PersonalInformationComponent implements OnInit, OnChanges, OnDestroy {
 

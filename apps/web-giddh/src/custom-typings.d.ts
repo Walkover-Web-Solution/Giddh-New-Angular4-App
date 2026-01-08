@@ -1,5 +1,5 @@
 /*
- * Custom Type Definitions for Angular 21
+ * Custom Type Definitions
  * When including 3rd party modules you also need to include the type definition for the module
  * if they don't provide one within the module. You can try to install it with @types
 
@@ -13,23 +13,38 @@ declare module 'my-module' {
  export function doesSomething(value: string): string;
 }
 
- * For Angular 21 compatibility, ensure all module declarations are properly typed
- */
+ * If you are using a CommonJS module that is using module.exports then you will have to write your
+ * types using export = yourObjectOrFunction with a namespace above it
+ * notice how we have to create a namespace that is equal to the function we're
+ * assigning the export to
+
+declare module 'jwt-decode' {
+  function jwtDecode(token: string): any;
+  namespace jwtDecode {}
+  export = jwtDecode;
+}
+
+ *
+ * If you're prototying and you will fix the types later you can also declare it as type any
+ *
 
 declare var assert: any;
 declare var _: any;
 declare var $: any;
 
-/*
+ *
  * If you're importing a module that uses Node.js modules which are CommonJS you need to import as
  * in the files such as main.browser.ts or any file within app/
  *
+
+import * as _ from 'lodash'
+
  * You can include your type definitions in this file until you create one for the @types
  *
  */
 // support NodeJS modules without type definitions
 
-// declare module '*';
+declare module '*';
 
 /*
 // for legacy tslint etc to understand rename 'modern-lru' with your package
@@ -41,8 +56,7 @@ declare module 'modern-lru' {
 }
 */
 
-// Global variables for Angular 21 - injected by webpack DefinePlugin
-declare var VERSION: string;
+// Extra variables that live on Global that will be replaced by webpack DefinePlugin
 declare var ENV: string;
 declare var HMR: boolean;
 declare var System: SystemJS;
@@ -65,26 +79,15 @@ declare var enableVoucherAdjustmentMultiCurrency: boolean;
 declare var GOOGLE_CLIENT_ID: string;
 declare var GOOGLE_CLIENT_SECRET: string;
 declare var RAZORPAY_KEY: string;
+declare var FROALA_EDITOR_KEY: string;
 declare var OTP_WIDGET_ID: string;
 declare var OTP_TOKEN_AUTH: string;
-
-// Angular 21 specific module declarations
-declare module 'dayjs' {
-  const dayjs: any;
-  export = dayjs;
-}
-
-declare module 'dayjs/plugin/quarterOfYear' {
-  const quarterOfYear: any;
-  export = quarterOfYear;
-}
 
 interface SystemJS {
     import: (path?: string) => Promise<any>;
 }
 
 interface GlobalEnvironment {
-    VERSION: string;
     ENV: string;
     HMR: boolean;
     SystemJS: SystemJS;
@@ -102,11 +105,6 @@ interface GlobalEnvironment {
     errlyticsKey: string;
     APP_FOLDER: string;
     RAZORPAY_KEY: string;
-    enableVoucherAdjustmentMultiCurrency: boolean;
-    PRODUCTION_ENV: boolean;
-    STAGING_ENV: boolean;
-    TEST_ENV: boolean;
-    LOCAL_ENV: boolean;
 }
 
 interface Es6PromiseLoader {

@@ -39,10 +39,10 @@
     padding: 30px 40px;
     width: 100%;
 }
-.text-link-2 {
-    color: var(--theme-primary-color) !important;
-    &:hover {
+    .text-link-2 {
         color: var(--theme-primary-color) !important;
+        &:hover {
+            color: var(--theme-primary-color) !important;
     }
 }
 @media (max-width: 991px) {

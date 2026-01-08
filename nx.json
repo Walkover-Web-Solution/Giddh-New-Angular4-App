@@ -8,24 +8,15 @@
     "nx.json": "*"
   },
   "cli": {
-    "defaultCollection": "@nx/angular",
+    "defaultCollection": "@nrwl/angular",
     "analytics": "69d6b0ae-2848-419a-9569-8ea7bbf4545f"
   },
   "generators": {
-    "@nx/angular:application": {
-      "unitTestRunner": "jest",
-      "bundler": "esbuild"
-    },
-    "@nx/angular:library": {
+    "@nrwl/angular:application": {
       "unitTestRunner": "jest"
-    }
-  },
-  "targetDefaults": {
-    "build": {
-      "cache": true
     },
-    "lint": {
-      "cache": true
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
     }
   }
 }

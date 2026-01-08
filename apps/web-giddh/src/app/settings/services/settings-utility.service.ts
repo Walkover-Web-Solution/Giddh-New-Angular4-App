@@ -64,7 +64,7 @@ export class SettingsUtilityService {
      */
     public getFormattedCompanyAddresses(response: Array<any>): Array<any> {
         const formattedCompanyAddresses = [];
-        (Array.isArray(response) ? response : []).forEach(address => {
+        response.forEach(address => {
             formattedCompanyAddresses.push({
                 taxType: address.taxType,
                 stateCode: address.stateCode,
@@ -91,7 +91,7 @@ export class SettingsUtilityService {
     public getFormattedBranchAddresses(response: Array<any>): Array<any> {
         const formattedCompanyAddresses = [];
         if (response) {
-            (Array.isArray(response) ? response : []).forEach(address => {
+            response.forEach(address => {
                 formattedCompanyAddresses.push({
                     stateCode: address.stateCode,
                     stateName: address.stateName,
@@ -135,7 +135,7 @@ export class SettingsUtilityService {
     private getLinkedEntities(address: any): Array<any> {
         const linkedEntities = [];
         if (address.branches && address.branches.length) {
-            (Array.isArray(address.branches) ? address.branches : []).forEach(branch => {
+            address.branches.forEach(branch => {
                 linkedEntities.push({
                     ...branch,
                     isBranch: true
@@ -143,7 +143,7 @@ export class SettingsUtilityService {
             });
         }
         if (address.warehouses && address.warehouses.length) {
-            (Array.isArray(address.warehouses) ? address.warehouses : []).forEach(warehouse => {
+            address.warehouses.forEach(warehouse => {
                 linkedEntities.push({
                     ...warehouse,
                     isWarehouse: true

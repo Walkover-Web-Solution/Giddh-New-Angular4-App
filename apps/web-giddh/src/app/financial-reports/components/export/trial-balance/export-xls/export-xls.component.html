@@ -1,5 +1,6 @@
-<div appTranslate [file]="'trial-profit-balance/export'" (localeData)="localeData = $event">
-    <a href="javascript:void(0);" aria-label="download" [matMenuTriggerFor]="xlsDownloadMenu" class="cursor-pointer new-icon-img">
+<ng-container appTranslate [file]="'trial-profit-balance/export'" (localeData)="localeData = $event">
+    <a href="javascript:void(0);" aria-label="download" [matMenuTriggerFor]="xlsDownloadMenu"
+        class="cursor-pointer new-icon-img">
         <img [src]="imgPath" alt="download img" />
     </a>
     <!-- Menu -->
@@ -17,4 +18,4 @@
             {{ localeData?.xls?.complete_report }}
         </button>
     </mat-menu>
-</div>
+</ng-container>

@@ -1,4 +1,9 @@
-<span appTranslate [file]="'watch-video'" (localeData)="localeData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'watch-video'"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <span *ngIf="translatedText">
         <div *ngIf="showIcon">
             <i
@@ -25,7 +30,7 @@
             {{ translatedText }}
         </span>
     </span>
-</span>
+</ng-container>
 
 <ng-template #videoTutorial>
     <div class="video-wrapper">

@@ -1,18 +1,16 @@
-import { Component, Inject, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption, Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integration.service';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from '../../../../lodash-optimized';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 export interface ActiveTriggers {
     title: string;
@@ -25,8 +23,7 @@ export interface ActiveTriggers {
 @Component({
     selector: 'app-advance-trigger',
     templateUrl: './advance-trigger.component.html',
-    styleUrls: ['./advance-trigger.component.scss'],
-    standalone: false
+    styleUrls: ['./advance-trigger.component.scss']
 })
 export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     /* Selector for variableComponent type field */
@@ -123,8 +120,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
-        private dialog: MatDialog,
-        @Inject(ServiceConfig) private serviceConfig,
+        private dialog: MatDialog
     ) {
         this.resetCommunicationForm();
     }
@@ -135,7 +131,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
      * @memberof AdvanceTriggerComponent
      */
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.getCommunicationPlatforms();
     }
 

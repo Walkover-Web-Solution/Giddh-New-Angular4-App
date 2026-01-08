@@ -1,5 +1,5 @@
 <cdk-virtual-scroll-viewport [itemSize]="100" class="h-100">
-    <div
+    <ng-container
         appTranslate
         [file]="'aside-setting'"
         (localeData)="localeData = $event"
@@ -38,27 +38,25 @@
                                     iciciAllowedCompanies?.includes(selectedCompany?.uniqueName)
                                 "
                             >
-                                <ng-container
-                                    *ngIf="
-                                        (tab?.link === '/pages/vouchers/preview/sales/settings' && !isCompany && !isConsolidatedBranch) ||
-                                        tab?.link !== '/pages/vouchers/preview/sales/settings'
-                                    "
-                                >
+                                <ng-container *ngIf="(tab?.link === '/pages/vouchers/preview/sales/settings' && !isCompany && !isConsolidatedBranch) || tab?.link !== '/pages/vouchers/preview/sales/settings'">
                                     <ng-container *ngIf="tab?.link !== '/pages/settings/tag'; else tagsListItem">
                                         <mat-list-item
                                             role="listitem"
                                             [ngClass]="{
                                                 'active-link':
-                                                    (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) && !isTagMenuOpened,
+                                                    (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) &&
+                                                    !isTagMenuOpened
                                             }"
-                                            [attr.data-link]="tab?.link"
-                                            class="navigation-item"
-                                            style="cursor: pointer;"
                                         >
-                                            <div class="d-block clear-both">
+                                            <a
+                                                href="javascript:;"
+                                                aria-label="icon"
+                                                class="d-block clear-both"
+                                                [routerLink]="tab?.link"
+                                            >
                                                 <span [innerHTML]="tab?.icon"></span>
                                                 <span>{{ tab?.label }}</span>
-                                            </div>
+                                            </a>
                                         </mat-list-item>
                                     </ng-container>
                                 </ng-container>
@@ -84,7 +82,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 </cdk-virtual-scroll-viewport>
 
 <!-- Show All Tags Menu  -->

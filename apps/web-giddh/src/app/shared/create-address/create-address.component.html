@@ -1,7 +1,12 @@
 <form [formGroup]="addressForm" novalidate (ngSubmit)="handleFormSubmit()" autocomplete="off">
     <section class="aside-dialog-wrapper w-100">
         <div class="dialog-header">
-            <span *ngIf="addressConfiguration?.type === 'createAddress' || addressConfiguration?.type === 'createBranchAddress'">
+            <span
+                *ngIf="
+                    addressConfiguration?.type === 'createAddress' ||
+                    addressConfiguration?.type === 'createBranchAddress'
+                "
+            >
                 {{ localeData?.create_address }}
             </span>
             <span *ngIf="addressConfiguration?.type === 'editAddress'">{{ localeData?.update_address }}</span>
@@ -11,10 +16,16 @@
         <mat-dialog-content class="dialog-body">
             <div [ngClass]="{ 'edit-branch-mode': addressConfiguration?.type === 'editBranch' }">
                 <section
-                    *ngIf="addressConfiguration?.type !== 'editBranch' && addressConfiguration?.type !== 'editWarehouse'"
+                    *ngIf="
+                        addressConfiguration?.type !== 'editBranch' && addressConfiguration?.type !== 'editWarehouse'
+                    "
                     class="clearfix margin-child-label"
                 >
-                    <div *ngIf="companyName" class="font-size-15 mb-3" [innerHTML]="getInformationSaveText(companyName)"></div>
+                    <div
+                        *ngIf="companyName"
+                        class="font-size-15 mb-3"
+                        [innerHTML]="getInformationSaveText(companyName)"
+                    ></div>
                     <div class="form-bg-aside clearfix">
                         <div class="row">
                             <div class="form-group col-12">
@@ -25,16 +36,21 @@
                                     formControlName="name"
                                     [placeholder]="localeData?.enter_name"
                                     [required]="true"
-                                ></input-field>
+                                >
+                                </input-field>
                                 <span
                                     class="danger"
-                                    *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength"
+                                    *ngIf="
+                                        addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength
+                                    "
                                 >
                                     {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
                                 </span>
                                 <span
                                     class="danger"
-                                    *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.required"
+                                    *ngIf="
+                                        addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.required
+                                    "
                                 >
                                     {{ localeData?.field_required_error }}
                                 </span>
@@ -46,7 +62,9 @@
                                 <input-field
                                     [label]="addressConfiguration?.tax?.name"
                                     [maxlength]="15"
-                                    [class.error-box]="addressForm?.get('taxNumber')?.touched && addressForm?.get('taxNumber')?.invalid"
+                                    [class.error-box]="
+                                        addressForm?.get('taxNumber')?.touched && addressForm?.get('taxNumber')?.invalid
+                                    "
                                     [type]="'text'"
                                     formControlName="taxNumber"
                                     [placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)"
@@ -56,7 +74,9 @@
                             </div>
                             <div
                                 class="col-sm-4 form-group"
-                                *ngIf="addressConfiguration.stateList?.length || addressConfiguration.countyList?.length"
+                                *ngIf="
+                                    addressConfiguration.stateList?.length || addressConfiguration.countyList?.length
+                                "
                             >
                                 <ng-container *ngIf="addressConfiguration.stateList?.length">
                                     <reactive-dropdown-field
@@ -64,21 +84,29 @@
                                         [readonly]="isStateReadonly()"
                                         [options]="addressConfiguration?.stateList"
                                         formControlName="state"
-                                        [labelValue]="addressForm?.get('stateLabel')?.value ? addressForm?.get('stateLabel')?.value : ''"
+                                        [labelValue]="
+                                            addressForm?.get('stateLabel')?.value
+                                                ? addressForm?.get('stateLabel')?.value
+                                                : ''
+                                        "
                                         [cssClass]="w - 100"
                                         [required]="true"
                                         [ngClass]="{ 'readonly-field': isStateReadonly() }"
-                                    ></reactive-dropdown-field>
+                                    >
+                                    </reactive-dropdown-field>
                                 </ng-container>
                                 <ng-container *ngIf="addressConfiguration.countyList?.length">
                                     <reactive-dropdown-field
                                         [label]="commonLocaleData?.app_region"
                                         [options]="addressConfiguration?.countyList"
                                         formControlName="county"
-                                        [labelValue]="addressToUpdate?.county?.name ? addressToUpdate?.county?.name : ''"
+                                        [labelValue]="
+                                            addressToUpdate?.county?.name ? addressToUpdate?.county?.name : ''
+                                        "
                                         [cssClass]="w - 100"
                                         [required]="true"
-                                    ></reactive-dropdown-field>
+                                    >
+                                    </reactive-dropdown-field>
                                 </ng-container>
                             </div>
                             <!-- static code added for the pincode -->
@@ -133,7 +161,11 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div *ngIf="addressConfiguration?.type !== 'createBranchAddress'" [hidden]="hideLinkEntity" class="row">
+                        <div
+                            *ngIf="addressConfiguration?.type !== 'createBranchAddress'"
+                            [hidden]="hideLinkEntity"
+                            class="row"
+                        >
                             <div class="col-sm-12 form-group linked-entities">
                                 <mat-form-field appearance="outline" class="w-100 initial-height">
                                     <mat-label>{{ localeData?.link_entity }}</mat-label>
@@ -153,18 +185,21 @@
                                         panelClass="linked-entities-options"
                                         multiple
                                     >
-                                        <mat-select-trigger></mat-select-trigger>
+                                        <mat-select-trigger> </mat-select-trigger>
                                         <mat-option
                                             *ngFor="let item of addressConfiguration?.linkedEntities; let i = index"
                                             [value]="item"
                                             (click)="selectEntity(item)"
                                         >
-                                            <a href="javascript:;" class="list-item d-flex column-gap-1 align-items-center">
+                                            <a
+                                                href="javascript:;"
+                                                class="list-item d-flex column-gap-1 align-items-center"
+                                            >
                                                 <span class="entity-icon">
                                                     <i
                                                         [ngClass]="{
                                                             'icon-company-profile': option?.consolidatedBranch,
-                                                            'icon-branch-icon': !option?.consolidatedBranch,
+                                                            'icon-branch-icon': !option?.consolidatedBranch
                                                         }"
                                                         class="pull-right"
                                                         *ngIf="item?.entity === 'BRANCH'"
@@ -178,10 +213,10 @@
                                                 </span>
                                                 <span class="entity-details">
                                                     <div class="item giddh-limit single-line-clamp">
-                                                        {{ item?.label || '-' }}
+                                                        {{ item?.label || "-" }}
                                                     </div>
                                                     <div class="item-unique giddh-limit single-line-clamp">
-                                                        {{ item?.name || '-' }}
+                                                        {{ item?.name || "-" }}
                                                     </div>
                                                 </span>
                                                 <span class="default-entity ml-auto align-self-center">
@@ -213,14 +248,19 @@
                                 <input-field
                                     [label]="localeData?.branch_name"
                                     [maxlength]="100"
-                                    [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
+                                    [class.error-box]="
+                                        addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid
+                                    "
                                     [type]="'text'"
                                     formControlName="name"
                                     [placeholder]="localeData?.enter"
-                                ></input-field>
+                                >
+                                </input-field>
                                 <span
                                     class="danger"
-                                    *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength"
+                                    *ngIf="
+                                        addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength
+                                    "
                                 >
                                     {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
                                 </span>
@@ -242,14 +282,19 @@
                                 <input-field
                                     [label]="localeData?.branch_name"
                                     [maxlength]="50"
-                                    [class.error-box]="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.invalid"
+                                    [class.error-box]="
+                                        addressForm?.get('alias')?.touched && addressForm?.get('alias')?.invalid
+                                    "
                                     [type]="'text'"
                                     formControlName="alias"
                                     [placeholder]="localeData?.enter_alias"
                                 ></input-field>
                                 <span
                                     class="danger"
-                                    *ngIf="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.errors?.maxlength"
+                                    *ngIf="
+                                        addressForm?.get('alias')?.touched &&
+                                        addressForm?.get('alias')?.errors?.maxlength
+                                    "
                                 >
                                     {{ localeData?.max_50_characters_allowed_limit }}
                                 </span>
@@ -276,18 +321,21 @@
                                         class="d-none"
                                         multiple
                                     >
-                                        <mat-select-trigger></mat-select-trigger>
+                                        <mat-select-trigger> </mat-select-trigger>
                                         <mat-option
                                             *ngFor="let item of addressConfiguration?.linkedEntities; let i = index"
                                             [value]="item"
                                             (click)="selectEntity(item)"
                                         >
-                                            <a href="javascript:void(0)" class="list-item d-flex column-gap-1 align-items-center">
+                                            <a
+                                                href="javascript:void(0)"
+                                                class="list-item d-flex column-gap-1 align-items-center"
+                                            >
                                                 <span class="entity-icon">
                                                     <i
                                                         [ngClass]="{
                                                             'icon-company-profile': option?.consolidatedBranch,
-                                                            'icon-branch-icon': !option?.consolidatedBranch,
+                                                            'icon-branch-icon': !option?.consolidatedBranch
                                                         }"
                                                         class="pull-right"
                                                         *ngIf="item?.entity === 'BRANCH'"
@@ -301,10 +349,10 @@
                                                 </span>
                                                 <span class="entity-details">
                                                     <div class="item giddh-limit single-line-clamp">
-                                                        {{ item?.label || '-' }}
+                                                        {{ item?.label || "-" }}
                                                     </div>
                                                     <div class="item-unique giddh-limit single-line-clamp">
-                                                        {{ item?.name || '-' }}
+                                                        {{ item?.name || "-" }}
                                                     </div>
                                                 </span>
                                                 <span class="default-entity ml-auto align-self-center">
@@ -326,7 +374,11 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="companyName" class="font-size-15 mt-2 mb-4" [innerHTML]="getBranchOfText(companyName)"></div>
+                    <div
+                        *ngIf="companyName"
+                        class="font-size-15 mt-2 mb-4"
+                        [innerHTML]="getBranchOfText(companyName)"
+                    ></div>
                 </section>
 
                 <section *ngIf="addressConfiguration?.type === 'editWarehouse'" class="clearfix margin-child-label">
@@ -336,12 +388,15 @@
                                 <input-field
                                     [label]="commonLocaleData?.app_name"
                                     [maxlength]="100"
-                                    [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
+                                    [class.error-box]="
+                                        addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid
+                                    "
                                     [type]="'text'"
                                     formControlName="name"
                                     [placeholder]="localeData?.enter_name"
                                     [required]="true"
-                                ></input-field>
+                                >
+                                </input-field>
                             </div>
                         </div>
 
@@ -350,7 +405,10 @@
                                 <mat-form-field appearance="outline" class="w-100 initial-height">
                                     <mat-label>{{ localeData?.linked_addresses }}</mat-label>
                                     <mat-chip-list #chipList class="d-flex flex-wrap column-gap-05 row-gap-1">
-                                        <mat-chip *ngFor="let item of addressForm?.get('linkedEntity')?.value" (removed)="removeItem(item)">
+                                        <mat-chip
+                                            *ngFor="let item of addressForm?.get('linkedEntity')?.value"
+                                            (removed)="removeItem(item)"
+                                        >
                                             {{ item?.label }}
                                             <span matChipRemove><i class="icon-cross font-size-15"></i></span>
                                         </mat-chip>
@@ -362,18 +420,21 @@
                                         panelClass="linked-entities-options"
                                         multiple
                                     >
-                                        <mat-select-trigger></mat-select-trigger>
+                                        <mat-select-trigger> </mat-select-trigger>
                                         <mat-option
                                             *ngFor="let item of addressConfiguration?.linkedEntities; let i = index"
                                             [value]="item"
                                             (click)="selectEntity(item)"
                                         >
-                                            <a href="javascript:void(0)" class="list-item d-flex column-gap-1 align-items-center">
+                                            <a
+                                                href="javascript:void(0)"
+                                                class="list-item d-flex column-gap-1 align-items-center"
+                                            >
                                                 <span class="entity-icon">
                                                     <i
                                                         [ngClass]="{
                                                             'icon-company-profile': option?.consolidatedBranch,
-                                                            'icon-branch-icon': !option?.consolidatedBranch,
+                                                            'icon-branch-icon': !option?.consolidatedBranch
                                                         }"
                                                         class="pull-right"
                                                         *ngIf="item?.entity === 'BRANCH'"
@@ -387,10 +448,10 @@
                                                 </span>
                                                 <span class="entity-details">
                                                     <div class="item giddh-limit single-line-clamp">
-                                                        {{ item?.label || '-' }}
+                                                        {{ item?.label || "-" }}
                                                     </div>
                                                     <div class="item-unique giddh-limit single-line-clamp">
-                                                        {{ item?.name || '-' }}
+                                                        {{ item?.name || "-" }}
                                                     </div>
                                                 </span>
                                                 <span class="default-entity ml-auto align-self-center">
@@ -428,8 +489,8 @@
                 >
                     <label>
                         <mat-checkbox color="primary" formControlName="isDefault">
-                            {{ localeData?.set_as_default_address }}
-                        </mat-checkbox>
+                            {{ localeData?.set_as_default_address }}</mat-checkbox
+                        >
                     </label>
                 </div>
 
@@ -437,7 +498,8 @@
                     <div class="col-xs-12 col-sm-12 text-left">
                         <div class="d-flex column-gap-1">
                             <button
-                                matButton="filled"
+                                mat-raised-button
+                                color="primary"
                                 [ladda]="showLoader"
                                 [disabled]="addressForm?.invalid"
                                 type="submit"
@@ -449,8 +511,8 @@
                                         addressConfiguration?.type === 'createBranchAddress'
                                     "
                                 >
-                                    {{ commonLocaleData?.app_save }}
-                                </ng-container>
+                                    {{ commonLocaleData?.app_save }}</ng-container
+                                >
                                 <ng-container
                                     *ngIf="
                                         addressConfiguration?.type === 'editAddress' ||
@@ -458,14 +520,14 @@
                                         addressConfiguration?.type === 'editWarehouse'
                                     "
                                 >
-                                    {{ commonLocaleData?.app_update }}
-                                </ng-container>
+                                    {{ commonLocaleData?.app_update }}</ng-container
+                                >
                             </button>
-                            <button matButton="outlined" type="reset" (click)="clearForm()" aria-label="clear">
+                            <button mat-stroked-button type="reset" (click)="clearForm()" aria-label="clear">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
                             <button
-                                matButton="outlined"
+                                mat-stroked-button
                                 aria-label="close"
                                 type="button"
                                 (click)="closeAsidePane($event)"

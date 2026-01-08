@@ -5,8 +5,7 @@ import { AppState } from '../store';
 
 @Component({
     styleUrls: [`./purchase.component.scss`],
-    templateUrl: './purchase.component.html',
-    standalone: false
+    templateUrl: './purchase.component.html'
 })
 export class PurchaseComponent implements OnDestroy {
     constructor(private store: Store<AppState>, public purchaseOrderActions: PurchaseOrderActions) {

@@ -12,8 +12,7 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 @Component({
     selector: 'with-held-setting-component',
     templateUrl: './with-held-setting.component.html',
-    styleUrls: ['./with-held-setting.component.scss'],
-    standalone:false
+    styleUrls: ['./with-held-setting.component.scss']
 })
 
 export class WithHeldSettingComponent implements OnInit, OnDestroy {
@@ -68,7 +67,7 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle form submit and update
+     * Handle form submit and update 
      * With Held Tax Percentage value
      *
      * @memberof WithHeldSettingComponent

@@ -1,25 +1,53 @@
 <div class="d-inline-block pull-right">
-    <div>
+    <div >
         <div class="pull-right">
             <div class="btn-group">
                 <button
                     type="button"
-                    matButton="outlined"
+                    mat-stroked-button
                     [matMenuTriggerFor]="newMenu"
                 >
                     New <i class="caret"></i>
                 </button>
                 <mat-menu #newMenu="matMenu" class="dropdown-option dropdown-menu-right">
-                    <button mat-menu-item (click)="openGroupStockAsidePaneDialog('inward')">Inward Note</button>
-                    <button mat-menu-item (click)="openGroupStockAsidePaneDialog('outward')">Outward Note</button>
-                    <button mat-menu-item (click)="openGroupStockAsidePaneDialog('transfer')">Transfer Note</button>
-                    <button mat-menu-item (click)="openGroupStockAsidePaneDialog('createStock')">Create Stock</button>
-                    <button mat-menu-item (click)="openGroupStockAsidePaneDialog('createAccount')">Create Account</button>
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('inward')"
+                    >
+                        Inward Note
+                    </button>
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('outward')"
+                    >
+                        Outward Note
+                    </button>
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('transfer')"
+                    >
+                        Transfer Note
+                    </button>
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('createStock')"
+                    >
+                        Create Stock
+                    </button>
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('createAccount')"
+                    >
+                        Create Account
+                    </button>
                 </mat-menu>
             </div>
         </div>
     </div>
 </div>
 <ng-template #asideMenuTemplate>
-    <aside-menu (closeAsideEvent)="asideMenuDialogRef?.close()" [selectedAsideView]="selectedAsideView"></aside-menu>
+    <aside-menu
+        (closeAsideEvent)="asideMenuDialogRef?.close()"
+        [selectedAsideView]="selectedAsideView"
+    ></aside-menu>
 </ng-template>

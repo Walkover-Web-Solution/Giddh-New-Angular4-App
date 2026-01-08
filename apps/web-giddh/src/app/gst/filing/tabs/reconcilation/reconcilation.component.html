@@ -12,23 +12,26 @@
                         <mat-tab [label]="localeData?.filing?.missing_in_gstn">
                             <ng-template mat-tab-label>
                                 {{ localeData?.filing?.missing_in_gstn }}
-                                <span class="count">{{ '(' + (gstNotFoundOnPortalData$ | async)?.count + ')' }}</span>
+                                <span class="count">{{ "(" + (gstNotFoundOnPortalData$ | async)?.count + ")" }}</span>
                             </ng-template>
                             <ng-container
                                 *ngTemplateOutlet="
                                     commonTableTemplate;
                                     context: { $implicit: (gstNotFoundOnPortalData$ | async), type: 'missingInGstin' }
                                 "
-                            ></ng-container>
+                            >
+                            </ng-container>
                             <ng-container
                                 *ngTemplateOutlet="
                                     notFoundTmpl;
                                     context: {
                                         $implicit:
-                                            !(gstNotFoundOnPortalData$ | async)?.count && !(gstReconcileInvoiceRequestInProcess$ | async),
+                                            !(gstNotFoundOnPortalData$ | async)?.count &&
+                                            !(gstReconcileInvoiceRequestInProcess$ | async)
                                     }
                                 "
-                            ></ng-container>
+                            >
+                            </ng-container>
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
                             <div
                                 *ngIf="
@@ -53,23 +56,26 @@
                         <mat-tab [label]="localeData?.filing?.missing_in_giddh">
                             <ng-template mat-tab-label>
                                 {{ localeData?.filing?.missing_in_giddh }}
-                                <span class="count">{{ '(' + (gstNotFoundOnGiddhData$ | async)?.count + ')' }}</span>
+                                <span class="count">{{ "(" + (gstNotFoundOnGiddhData$ | async)?.count + ")" }}</span>
                             </ng-template>
                             <ng-container
                                 *ngTemplateOutlet="
                                     commonTableTemplate;
                                     context: { $implicit: (gstNotFoundOnGiddhData$ | async), type: 'missingInGiddh' }
                                 "
-                            ></ng-container>
+                            >
+                            </ng-container>
                             <ng-container
                                 *ngTemplateOutlet="
                                     notFoundTmpl;
                                     context: {
                                         $implicit:
-                                            !(gstNotFoundOnGiddhData$ | async)?.count && !(gstReconcileInvoiceRequestInProcess$ | async),
+                                            !(gstNotFoundOnGiddhData$ | async)?.count &&
+                                            !(gstReconcileInvoiceRequestInProcess$ | async)
                                     }
                                 "
-                            ></ng-container>
+                            >
+                            </ng-container>
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
                             <div
                                 *ngIf="
@@ -94,7 +100,7 @@
                         <mat-tab [label]="localeData?.filing?.partially_matched">
                             <ng-template mat-tab-label>
                                 {{ localeData?.filing?.partially_matched }}
-                                <span class="count">{{ '(' + (gstPartiallyMatchedData$ | async)?.count + ')' }}</span>
+                                <span class="count">{{ "(" + (gstPartiallyMatchedData$ | async)?.count + ")" }}</span>
                             </ng-template>
 
                             <ng-container
@@ -102,16 +108,19 @@
                                     commonTableTemplate;
                                     context: { $implicit: (gstPartiallyMatchedData$ | async), type: 'partiallyMatched' }
                                 "
-                            ></ng-container>
+                            >
+                            </ng-container>
                             <ng-container
                                 *ngTemplateOutlet="
                                     notFoundTmpl;
                                     context: {
                                         $implicit:
-                                            !(gstPartiallyMatchedData$ | async)?.count && !(gstReconcileInvoiceRequestInProcess$ | async),
+                                            !(gstPartiallyMatchedData$ | async)?.count &&
+                                            !(gstReconcileInvoiceRequestInProcess$ | async)
                                     }
                                 "
-                            ></ng-container>
+                            >
+                            </ng-container>
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
                             <div
                                 *ngIf="
@@ -136,21 +145,28 @@
                         <mat-tab [label]="localeData?.filing?.matched">
                             <ng-template mat-tab-label>
                                 {{ localeData?.filing?.matched }}
-                                <span class="count matched">{{ '(' + (gstMatchedData$ | async)?.count + ')' }}</span>
+                                <span class="count matched">{{ "(" + (gstMatchedData$ | async)?.count + ")" }}</span>
                             </ng-template>
 
                             <ng-container
-                                *ngTemplateOutlet="commonTableTemplate; context: { $implicit: (gstMatchedData$ | async), type: 'matched' }"
-                            ></ng-container>
+                                *ngTemplateOutlet="
+                                    commonTableTemplate;
+                                    context: { $implicit: (gstMatchedData$ | async), type: 'matched' }
+                                "
+                            >
+                            </ng-container>
 
                             <ng-container
                                 *ngTemplateOutlet="
                                     notFoundTmpl;
                                     context: {
-                                        $implicit: !(gstMatchedData$ | async)?.count && !(gstReconcileInvoiceRequestInProcess$ | async),
+                                        $implicit:
+                                            !(gstMatchedData$ | async)?.count &&
+                                            !(gstReconcileInvoiceRequestInProcess$ | async)
                                     }
                                 "
-                            ></ng-container>
+                            >
+                            </ng-container>
 
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
@@ -160,7 +176,7 @@
                                     (gstMatchedData$ | async)?.data?.totalItems > pageSizeOptions[0]
                                 "
                             >
-                                <mat-paginator
+                            <mat-paginator
                                     [showFirstLastButtons]="true"
                                     [pageSizeOptions]="pageSizeOptions"
                                     [pageIndex]="pageIndex"
@@ -183,23 +199,29 @@
 <!-- region common table template -->
 <ng-template #commonTableTemplate let-list let-type="type">
     <ng-container *ngIf="list?.count">
-        <table class="table table-fixed reconciliations-table table-hover table-responsive mb-0" *ngIf="list?.count">
+        <table
+            class="table table-fixed reconciliations-table table-hover table-responsive mb-0"
+            *ngIf="list?.count"
+        >
             <thead>
-                <ng-container *ngTemplateOutlet="commonHeaderTemplateForReconciliationTable"></ng-container>
+                <ng-container *ngTemplateOutlet="commonHeaderTemplateForReconciliationTable"> </ng-container>
             </thead>
 
             <tbody>
                 <ng-container *ngFor="let item of list?.data?.results">
                     <ng-container *ngIf="type === 'missingInGstin'">
-                        <ng-container *ngTemplateOutlet="missingInGstinTemplate; context: { $implicit: item }"></ng-container>
+                        <ng-container *ngTemplateOutlet="missingInGstinTemplate; context: { $implicit: item }">
+                        </ng-container>
                     </ng-container>
 
                     <ng-container *ngIf="type === 'missingInGiddh'">
-                        <ng-container *ngTemplateOutlet="missingInGiddhTemplate; context: { $implicit: item }"></ng-container>
+                        <ng-container *ngTemplateOutlet="missingInGiddhTemplate; context: { $implicit: item }">
+                        </ng-container>
                     </ng-container>
 
                     <ng-container *ngIf="type === 'partiallyMatched'">
-                        <ng-container *ngTemplateOutlet="partiallyMatchedTemplate; context: { $implicit: item }"></ng-container>
+                        <ng-container *ngTemplateOutlet="partiallyMatchedTemplate; context: { $implicit: item }">
+                        </ng-container>
                     </ng-container>
 
                     <ng-container *ngIf="type === 'matched'">
@@ -216,14 +238,18 @@
 <ng-template #commonHeaderTemplateForReconciliationTable>
     <tr>
         <th class="text-left width-vendor" *ngIf="selectedGst === 'gstr1'">
-            <div class="position-relative">
-                <div [attr.data-test-title]="localeData?.section" [attr.title]="localeData?.section" class="pull-left over-flow">
+            <div class="position-relative ">
+                <div
+                    [attr.data-test-title]="localeData?.section"
+                    [attr.title]="localeData?.section"
+                    class="pull-left over-flow"
+                >
                     {{ localeData?.section }}
                 </div>
             </div>
         </th>
         <th id="4" class="text-left width-vendor">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="commonLocaleData?.app_gstin"
                     [attr.title]="commonLocaleData?.app_gstin"
@@ -235,7 +261,7 @@
         </th>
 
         <th class="text-left width-vendor">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="commonLocaleData?.app_voucher_no"
                     [attr.title]="commonLocaleData?.app_voucher_no"
@@ -247,7 +273,7 @@
         </th>
 
         <th class="text-left width-date">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.transaction_date"
                     [attr.title]="localeData?.filing?.transaction_date"
@@ -259,7 +285,7 @@
         </th>
 
         <th class="text-left width-supply">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.place_supply"
                     [attr.title]="localeData?.filing?.place_supply"
@@ -271,15 +297,19 @@
         </th>
 
         <th class="text-left width-date" *ngIf="selectedGst === GstReport.Gstr1">
-            <div class="position-relative">
-                <div [attr.data-test-title]="localeData?.filing?.rate" [attr.title]="localeData?.filing?.rate" class="pull-left over-flow">
+            <div class="position-relative ">
+                <div
+                    [attr.data-test-title]="localeData?.filing?.rate"
+                    [attr.title]="localeData?.filing?.rate"
+                    class="pull-left over-flow"
+                >
                     {{ localeData?.filing?.rate }} (%)
                 </div>
             </div>
         </th>
 
         <th class="text-right width-amount">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.taxable_amount"
                     [attr.title]="localeData?.filing?.taxable_amount"
@@ -291,39 +321,55 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
-                <div [attr.data-test-title]="localeData?.filing?.igst" [attr.title]="localeData?.filing?.igst" class="over-flow">
+            <div class="position-relative ">
+                <div
+                    [attr.data-test-title]="localeData?.filing?.igst"
+                    [attr.title]="localeData?.filing?.igst"
+                    class="over-flow"
+                >
                     {{ localeData?.filing?.igst }}
                 </div>
             </div>
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
-                <div [attr.data-test-title]="localeData?.filing?.cgst" [attr.title]="localeData?.filing?.cgst" class="over-flow">
+            <div class="position-relative ">
+                <div
+                    [attr.data-test-title]="localeData?.filing?.cgst"
+                    [attr.title]="localeData?.filing?.cgst"
+                    class="over-flow"
+                >
                     {{ localeData?.filing?.cgst }}
                 </div>
             </div>
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
-                <div [attr.data-test-title]="localeData?.filing?.sgst" [attr.title]="localeData?.filing?.sgst" class="over-flow">
+            <div class="position-relative ">
+                <div
+                    [attr.data-test-title]="localeData?.filing?.sgst"
+                    [attr.title]="localeData?.filing?.sgst"
+                    class="over-flow"
+                >
                     {{ localeData?.filing?.sgst }}
                 </div>
             </div>
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
-                <div [attr.data-test-title]="localeData?.filing?.cess" [attr.title]="localeData?.filing?.cess" class="over-flow">
+            <div class="position-relative ">
+                <div
+                    [attr.data-test-title]="localeData?.filing?.cess"
+                    [attr.title]="localeData?.filing?.cess"
+                    class="over-flow"
+                >
                     {{ localeData?.filing?.cess }}
                 </div>
             </div>
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="commonLocaleData?.app_total_amount"
                     [attr.title]="commonLocaleData?.app_total_amount"
@@ -342,39 +388,40 @@
     <tr class="cursor-pointer">
         <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
             <div>
-                {{ item.section ? item.section : '-' }}
+                {{ item.section ? item.section : "-" }}
             </div>
         </td>
         <td class="primary-details">
             <div>
-                {{ item.ctin ? item.ctin : '-' }}
+                {{ item.ctin ? item.ctin : "-" }}
             </div>
         </td>
 
         <td class="primary-details">
             <div>
-                {{ item.invoice_number ? item.invoice_number : '-' }}
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
         <td>
-            <div>{{ item.invoice_date ? item.invoice_date : '-' }}</div>
+            <div>{{ item.invoice_date ? item.invoice_date : "-" }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
 
         <td>
-            <div>{{ item.pos ? item.pos : '-' }}</div>
+            <div>{{ item.pos ? item.pos : "-" }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
         <td *ngIf="selectedGst === GstReport.Gstr1">
-            <div>{{ item.rate >= 0 ? item?.rate : '-' }}</div>
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
 
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.taxable_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="unrecognized-value pt-1">-</div>
@@ -383,7 +430,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.igst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="unrecognized-value pt-1">-</div>
@@ -392,7 +440,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.cgst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="unrecognized-value pt-1">-</div>
@@ -401,7 +450,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.sgst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="unrecognized-value pt-1">-</div>
@@ -410,7 +460,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.cess_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="unrecognized-value pt-1">-</div>
@@ -419,7 +470,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.grand_total" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="unrecognized-value pt-1">-</div>
@@ -433,34 +485,34 @@
     <tr class="cursor-pointer">
         <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
             <div>
-                {{ item.section ? item.section : '-' }}
+                {{ item.section ? item.section : "-" }}
             </div>
         </td>
 
         <td class="primary-details">
             <div>
-                {{ item.ctin ? item.ctin : '-' }}
+                {{ item.ctin ? item.ctin : "-" }}
             </div>
         </td>
 
         <td class="primary-details">
             <div>
-                {{ item.invoice_number ? item.invoice_number : '-' }}
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
         <td>
             <div>-</div>
-            <div class="unrecognized-value pt-1">{{ item.invoice_date ? item.invoice_date : '-' }}</div>
+            <div class="unrecognized-value pt-1">{{ item.invoice_date ? item.invoice_date : "-" }}</div>
         </td>
 
         <td>
             <div>-</div>
-            <div class="unrecognized-value pt-1">{{ item.pos ? item.pos : '-' }}</div>
+            <div class="unrecognized-value pt-1">{{ item.pos ? item.pos : "-" }}</div>
         </td>
 
         <td *ngIf="selectedGst === GstReport.Gstr1">
-            <div>{{ item.rate >= 0 ? item?.rate : '-' }}</div>
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
 
@@ -468,7 +520,8 @@
             <div>-</div>
             <div class="unrecognized-value pt-1">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.taxable_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -477,7 +530,8 @@
             <div>-</div>
             <div class="unrecognized-value pt-1">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.igst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -486,7 +540,8 @@
             <div>-</div>
             <div class="unrecognized-value pt-1">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.cgst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -495,7 +550,8 @@
             <div>-</div>
             <div class="unrecognized-value pt-1">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.sgst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -504,7 +560,8 @@
             <div>-</div>
             <div class="unrecognized-value pt-1">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.cess_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -513,7 +570,8 @@
             <div>-</div>
             <div class="unrecognized-value pt-1">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.grand_total" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -526,53 +584,61 @@
     <tr class="cursor-pointer">
         <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
             <div>
-                {{ item.section ? item.section : '-' }}
+                {{ item.section ? item.section : "-" }}
             </div>
         </td>
         <td class="primary-details">
             <div>
-                {{ item.ctin ? item.ctin : '-' }}
+                {{ item.ctin ? item.ctin : "-" }}
             </div>
         </td>
 
         <td class="primary-details">
             <div>
-                {{ item.invoice_number ? item.invoice_number : '-' }}
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
         <td>
-            <div>{{ item.invoice_date ? item.invoice_date : '-' }}</div>
-            <div [ngClass]="{ 'unrecognized-value': item.invoice_date !== item?.data_in_giddh?.invoice_date }" class="pt-1">
-                {{ item?.data_in_giddh?.invoice_date ? item?.data_in_giddh?.invoice_date : '-' }}
+            <div>{{ item.invoice_date ? item.invoice_date : "-" }}</div>
+            <div
+                [ngClass]="{ 'unrecognized-value': item.invoice_date !== item?.data_in_giddh?.invoice_date }"
+                class="pt-1"
+            >
+                {{ item?.data_in_giddh?.invoice_date ? item?.data_in_giddh?.invoice_date : "-" }}
             </div>
         </td>
 
         <td>
-            <div>{{ item.pos ? item.pos : '-' }}</div>
+            <div>{{ item.pos ? item.pos : "-" }}</div>
             <div [ngClass]="{ 'unrecognized-value': item.pos !== item?.data_in_giddh?.pos }" class="pt-1">
-                {{ item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : '-' }}
+                {{ item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : "-" }}
             </div>
         </td>
 
         <td *ngIf="selectedGst === GstReport.Gstr1">
-            <div>{{ item.rate >= 0 ? item?.rate : '-' }}</div>
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
 
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.taxable_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
-            <div [ngClass]="{ 'unrecognized-value': item.taxable_amount !== item?.data_in_giddh?.taxable_amount }" class="pt-1">
+            <div
+                [ngClass]="{ 'unrecognized-value': item.taxable_amount !== item?.data_in_giddh?.taxable_amount }"
+                class="pt-1"
+            >
                 <span class="d-inline-flex">
                     <amount-field
                         [amount]="item?.data_in_giddh?.taxable_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -580,16 +646,21 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.igst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
-            <div [ngClass]="{ 'unrecognized-value': item.igst_amount !== item?.data_in_giddh?.igst_amount }" class="pt-1">
+            <div
+                [ngClass]="{ 'unrecognized-value': item.igst_amount !== item?.data_in_giddh?.igst_amount }"
+                class="pt-1"
+            >
                 <span class="d-inline-flex">
                     <amount-field
                         [amount]="item?.data_in_giddh?.igst_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -597,16 +668,21 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.cgst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
-            <div [ngClass]="{ 'unrecognized-value': item.cgst_amount !== item?.data_in_giddh?.cgst_amount }" class="pt-1">
+            <div
+                [ngClass]="{ 'unrecognized-value': item.cgst_amount !== item?.data_in_giddh?.cgst_amount }"
+                class="pt-1"
+            >
                 <span class="d-inline-flex">
                     <amount-field
                         [amount]="item?.data_in_giddh?.cgst_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -614,16 +690,21 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.sgst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
-            <div [ngClass]="{ 'unrecognized-value': item.sgst_amount !== item?.data_in_giddh?.sgst_amount }" class="pt-1">
+            <div
+                [ngClass]="{ 'unrecognized-value': item.sgst_amount !== item?.data_in_giddh?.sgst_amount }"
+                class="pt-1"
+            >
                 <span class="d-inline-flex">
                     <amount-field
                         [amount]="item?.data_in_giddh?.sgst_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -631,16 +712,21 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.cess_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
-            <div [ngClass]="{ 'unrecognized-value': item.cess_amount !== item?.data_in_giddh?.cess_amount }" class="pt-1">
+            <div
+                [ngClass]="{ 'unrecognized-value': item.cess_amount !== item?.data_in_giddh?.cess_amount }"
+                class="pt-1"
+            >
                 <span class="d-inline-flex">
                     <amount-field
                         [amount]="item?.data_in_giddh?.cess_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -648,16 +734,21 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.grand_total" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
-            <div [ngClass]="{ 'unrecognized-value': item.grand_total !== item?.data_in_giddh?.grand_total }" class="pt-1">
+            <div
+                [ngClass]="{ 'unrecognized-value': item.grand_total !== item?.data_in_giddh?.grand_total }"
+                class="pt-1"
+            >
                 <span class="d-inline-flex">
                     <amount-field
                         [amount]="item?.data_in_giddh?.grand_total"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -670,40 +761,41 @@
     <tr class="cursor-pointer">
         <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
             <div>
-                {{ item.section ? item.section : '-' }}
+                {{ item.section ? item.section : "-" }}
             </div>
         </td>
         <td class="primary-details">
             <div>
-                {{ item.ctin ? item.ctin : '-' }}
+                {{ item.ctin ? item.ctin : "-" }}
             </div>
         </td>
 
         <td class="primary-details">
             <div>
-                {{ item.invoice_number ? item.invoice_number : '-' }}
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
         <td>
-            <div>{{ item.invoice_date ? item.invoice_date : '-' }}</div>
-            <div class="pt-1">{{ item?.data_in_giddh?.invoice_date ? item?.data_in_giddh?.invoice_date : '-' }}</div>
+            <div>{{ item.invoice_date ? item.invoice_date : "-" }}</div>
+            <div class="pt-1">{{ item?.data_in_giddh?.invoice_date ? item?.data_in_giddh?.invoice_date : "-" }}</div>
         </td>
 
         <td>
-            <div>{{ item.pos ? item.pos : '-' }}</div>
-            <div class="pt-1">{{ item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : '-' }}</div>
+            <div>{{ item.pos ? item.pos : "-" }}</div>
+            <div class="pt-1">{{ item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : "-" }}</div>
         </td>
 
         <td *ngIf="selectedGst === GstReport.Gstr1">
-            <div>{{ item.rate >= 0 ? item?.rate : '-' }}</div>
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
             <div class="pt-1">-</div>
         </td>
 
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.taxable_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="pt-1">
@@ -712,7 +804,8 @@
                         [amount]="item?.data_in_giddh?.taxable_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -720,7 +813,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item.igst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="pt-1">
@@ -729,7 +823,8 @@
                         [amount]="item?.data_in_giddh?.igst_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -737,7 +832,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.cgst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="pt-1">
@@ -746,7 +842,8 @@
                         [amount]="item?.data_in_giddh?.cgst_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -754,7 +851,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.sgst_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="pt-1">
@@ -763,7 +861,8 @@
                         [amount]="item?.data_in_giddh?.sgst_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -771,7 +870,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.cess_amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="pt-1">
@@ -780,7 +880,8 @@
                         [amount]="item?.data_in_giddh?.cess_amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -788,7 +889,8 @@
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
-                    <amount-field [amount]="item?.grand_total" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="item?.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="pt-1">
@@ -797,7 +899,8 @@
                         [amount]="item?.data_in_giddh?.grand_total"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    ></amount-field>
+                    >
+                    </amount-field>
                 </span>
             </div>
         </td>
@@ -814,7 +917,7 @@
         </div>
 
         <div class="empty-msg">
-            <span>{{ localeData?.filing?.loading_data }}</span>
+            <span> {{ localeData?.filing?.loading_data }} </span>
         </div>
     </div>
 </ng-template>
@@ -823,7 +926,7 @@
 <!--region common not found msg-->
 <ng-template #notFoundTmpl let-show>
     <div class="filings-empty-state" *ngIf="show">
-        <img src="{{ imgPath }}gst/nofound.svg" [style.max-width.px]="110" alt="Image not found" />
+        <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" alt="Image not found" />
         <div class="empty-msg">
             <span>{{ localeData?.filing?.reconcilation_note }}</span>
         </div>

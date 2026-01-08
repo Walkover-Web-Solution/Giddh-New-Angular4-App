@@ -10,7 +10,6 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
 @Component({
     selector: 'transfer-outward-note',
     templateUrl: './outward-note.component.html',
-    standalone: false
 })
 
 export class OutwardNoteComponent implements OnChanges {
@@ -139,7 +138,7 @@ export class OutwardNoteComponent implements OnChanges {
                 inventoryUser
             });
         } else {
-            (Array.isArray(items.controls) ? items.controls : []).forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
+            items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
         }
     }
 
@@ -152,7 +151,7 @@ export class OutwardNoteComponent implements OnChanges {
             const control = items.at(index);
             control?.patchValue({ ...control.value, stock, stockUnit });
         } else {
-            (Array.isArray(items.controls) ? items.controls : []).forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
+            items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
         }
     }
 

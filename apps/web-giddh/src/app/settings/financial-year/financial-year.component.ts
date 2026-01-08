@@ -23,8 +23,7 @@ export interface IGstObj {
 @Component({
     selector: 'financial-year',
     templateUrl: './financial-year.component.html',
-    styleUrls: ['./financial-year.component.scss'],
-    standalone: false
+    styleUrls: ['./financial-year.component.scss']
 })
 
 export class FinancialYearComponent implements OnInit, OnDestroy {
@@ -101,7 +100,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 this.fyAddNewDropdownIsOpen = false;
                 this.fyPeriodDropdownIsOpen = false;
                 let yearOptions = cloneDeep(this.yearOptions);
-                (Array.isArray(o.financialYears) ? o.financialYears : []).forEach((fyear) => {
+                o.financialYears.forEach((fyear) => {
                     let year = dayjs(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
                     let yearIndx = yearOptions?.findIndex((y: any) => y?.value === year);
                     if (yearIndx !== -1) {

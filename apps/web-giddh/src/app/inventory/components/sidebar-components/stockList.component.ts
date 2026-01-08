@@ -11,7 +11,6 @@ import { InvViewService } from '../../inv.view.service';
 import { takeUntil } from 'rxjs/operators';
 @Component({
     selector: 'stock-list',
-    standalone: false,
     styleUrls: ['stockList.component.scss'],
     template: `
     <ul class="list-unstyled stock-items clear-both" [hidden]="!Groups.isOpen">

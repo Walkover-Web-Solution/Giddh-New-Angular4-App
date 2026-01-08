@@ -5,8 +5,7 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
     selector: 'send-email',
     templateUrl: './send-email.component.html',
     styleUrls: ['./send-email.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SendEmailComponent implements OnInit {
     /** Holds voucher type */

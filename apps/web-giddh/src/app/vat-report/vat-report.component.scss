@@ -46,6 +46,7 @@
                     a {
                         color: var(--text-primary-color) !important;
                     }
+
                 }
             }
         }
@@ -57,6 +58,7 @@
 }
 
 @media only screen and (max-width: 767px) {
+
     .on-mobile-view.table-hide-title tr td {
         padding-left: 15px !important;
     }

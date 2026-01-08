@@ -6,10 +6,10 @@
         <form name="newRole" novalidate autocomplete="off">
             <p [innerHTML]="confirmationMessage"></p>
             <div class="text-right mt-5 clear-both">
-                <button matButton="filled" class="mr-2" (click)="onConfirmation()">
+                <button mat-raised-button color="primary" class="mr-2" (click)="onConfirmation()">
                     {{ commonLocaleData?.app_yes }}
                 </button>
-                <button matButton="outlined" (click)="onCancel()">
+                <button mat-stroked-button (click)="onCancel()">
                     {{ commonLocaleData?.app_no }}
                 </button>
             </div>

@@ -1,4 +1,9 @@
-<div appTranslate [file]="'audit-logs'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'audit-logs'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="!isNewVersion"></hamburger-menu>
     <hamburger-menu [pageHeading]="localeData?.page_heading_new" *ngIf="isNewVersion"></hamburger-menu>
     <div class="container-fluid">
@@ -22,15 +27,13 @@
             </div>
             <div class="col-12 d-flex align-items-center">
                 <div class="mt-3 mb-3 custom-datepicker-wrapper" *ngIf="isNewVersion">
-                    <div
-                        class="custom-datepicker"
-                        [matMenuTriggerFor]="universalDatepicker"
-                        #universalDatepickerTrigger="matMenuTrigger"
-                        role="button"
-                        tabindex="0"
-                        aria-haspopup="true"
-                        aria-controls="universal-datepicker-menu"
-                    >
+                    <div class="custom-datepicker" 
+                         [matMenuTriggerFor]="universalDatepicker"
+                         #universalDatepickerTrigger="matMenuTrigger"
+                         role="button"
+                         tabindex="0"
+                         aria-haspopup="true"
+                         aria-controls="universal-datepicker-menu">
                         <input
                             matInput
                             type="text"
@@ -42,13 +45,14 @@
                     </div>
                 </div>
                 <a *ngIf="isNewVersion && showClearFilter" class="font-size-12 pl-2 clear-filter" (click)="resetFilter()">
-                    <span class="icon-refresh"></span>
-                    {{ commonLocaleData?.app_clear_filter }}
+                    <span class="icon-refresh"></span> {{ commonLocaleData?.app_clear_filter }}
                 </a>
             </div>
             <div class="col-12 col-md-12" [ngClass]="!isNewVersion ? 'col-lg-9' : 'col-lg-12'">
-                <audit-logs-grid *ngIf="!isNewVersion" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></audit-logs-grid>
-                <audit-logs-table *ngIf="isNewVersion" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></audit-logs-table>
+                <audit-logs-grid *ngIf="!isNewVersion" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+                </audit-logs-grid>
+                <audit-logs-table *ngIf="isNewVersion" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+                </audit-logs-table>
             </div>
         </div>
     </div>
@@ -74,4 +78,4 @@
             ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</div>
+</ng-container>

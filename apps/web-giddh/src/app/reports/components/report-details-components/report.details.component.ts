@@ -22,19 +22,18 @@ import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DAT
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';
+import { cloneDeep } from '../../../lodash-optimized';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
-import { cloneDeep, find, forEach, get, includes, indexOf, keys, map, slice } from '../../../lodash-optimized';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
     styleUrls: ['./report.details.component.scss'],
-    providers: [ReportsComponentStore, SalesPersonComponentStore],
-    standalone: false
+    providers: [ReportsComponentStore, SalesPersonComponentStore]
 })
 export class ReportsDetailsComponent implements OnInit, OnDestroy {
     /** Directive to get reference of datepicker menu trigger */
@@ -72,9 +71,9 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public isTcsTdsApplicable: boolean;
     /**
      * Configuration for table columns.
-     *
+     * 
      * Each key represents a column, and its value is an array with the following structure:
-     *
+     * 
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
@@ -175,7 +174,6 @@ constructor(
                 this.salesRegisterTotal = new ReportsModel();
                 this.salesRegisterTotal.particular = this.getCustomParticular();
                 this.reportRespone = this.filterReportResp(response);
-                this.changeDetectorRef.detectChanges();
             }
         });
 
@@ -199,7 +197,7 @@ constructor(
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
@@ -209,7 +207,7 @@ constructor(
                         };
                     }
                 } else {
-                    const selectedBranch = cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
+                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
@@ -263,8 +261,8 @@ constructor(
 
     /**
      * Handle group by change
-     *
-     * @param response
+     * 
+     * @param response 
      */
     public handleGroupByChange(response: IOption): void {
         if (response?.value === GroupBy.SalesPerson) {
@@ -287,7 +285,7 @@ constructor(
         let indexMonths = 0;
         let weekCount = 1;
         let reportsModelCombined: ReportsModel = new ReportsModel();
-        forEach(response, (item) => {
+        _.forEach(response, (item) => {
             let reportsModel: ReportsModel = new ReportsModel();
             reportsModel.sales = item.creditTotal;
             reportsModel.returns = item.debitTotal;
@@ -553,7 +551,7 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     private setSalesRegisterTotal(transaction: any): void {
-        const item = cloneDeep(transaction);
+        const item = _.cloneDeep(transaction);
         this.salesRegisterTotal.sales += item.creditTotal;
         this.salesRegisterTotal.returns += item.debitTotal;
         this.salesRegisterTotal.taxTotal += item.taxTotal;
@@ -644,7 +642,7 @@ constructor(
 
     /**
      * Updates the visibility of table columns based on specific conditions.
-     *
+     * 
      * @param {any} item - The transaction item.
      * @memberof ReportsDetailsComponent
      */

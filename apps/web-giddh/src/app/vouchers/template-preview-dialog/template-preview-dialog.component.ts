@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { ReplaySubject, takeUntil } from 'rxjs';
@@ -10,8 +10,7 @@ import { VoucherTypeEnum } from '../utility/vouchers.const';
 @Component({
   selector: 'app-template-preview-dialog',
   templateUrl: './template-preview-dialog.component.html',
-  styleUrls: ['./template-preview-dialog.component.scss'],
-  standalone:false
+  styleUrls: ['./template-preview-dialog.component.scss']
 })
 export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
   /* Hold invoice  type*/
@@ -37,8 +36,7 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
     private generalService: GeneralService,
     private invoiceTemplatesService: InvoiceTemplatesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private toasterService: ToasterService,
-    private cdRef: ChangeDetectorRef
+    private toasterService: ToasterService
   ) { }
 
   /**
@@ -104,7 +102,6 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
         this.sanitizedPdfFileUrl = null;
         this.toasterService.showSnackBar('error', this.localeData?.failed_to_get_template_preview || 'Failed to get template preview');
       }
-      this.cdRef.detectChanges();
     });
   }
 

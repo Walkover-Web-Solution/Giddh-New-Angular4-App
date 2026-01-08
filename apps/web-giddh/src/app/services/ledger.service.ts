@@ -12,13 +12,11 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
+import { cloneDeep } from '../lodash-optimized';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpBackend, HttpClient } from '@angular/common/http';
-import { cloneDeep, concat, forEach, get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class LedgerService {
     private companyUniqueName: string;
     private httpClient: HttpClient
@@ -163,7 +161,7 @@ export class LedgerService {
         const clonedRequest = cloneDeep(model);
         // Delete keys not required by API
         const keysToDelete = ['discountResources', 'warning', 'otherTaxModal', 'otherTaxesSum', 'refreshLedger', 'actualAmount', 'actualRate', 'unitRates', 'entryVoucherTotals', 'isOtherTaxesApplicable', 'tdsTcsTaxesSum'];
-        (Array.isArray(keysToDelete) ? keysToDelete : []).forEach(key => delete model[key]);
+        keysToDelete.forEach(key => delete model[key]);
         let url = this.config.apiUrl + LEDGER_API.UNIVERSAL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))?.replace(':entryUniqueName', entryUniqueName);
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);

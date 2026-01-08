@@ -31,7 +31,8 @@
                     [for]="picker"
                     (focusout)="!isDatepickerOpen ? focusOut.emit(true) : ''"
                     (click)="emitDatepickerState(true); picker?.open()"
-                ></mat-datepicker-toggle>
+                >
+                </mat-datepicker-toggle>
             </ng-container>
             <mat-datepicker
                 [opened]="isOpened"

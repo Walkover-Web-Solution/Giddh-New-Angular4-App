@@ -9,15 +9,13 @@ import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ReportsDetailedRequestFilter, ColumnarResponseResult } from '../../../models/api-models/Reports';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
-import { cloneDeep } from '../../../lodash-optimized';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'ledger-columnar-report-table',
     templateUrl: './ledger-columnar-report-table.component.html',
     styleUrls: ['./ledger-columnar-report-table.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, OnChanges {
@@ -62,7 +60,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
         this.tableHeadingColumns = this.getDefaultColumns();
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state && state.session && state.session.companyUniqueName) {
-                this.companyUniqueName = cloneDeep(state.session.companyUniqueName);
+                this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
             }
         });
     }
@@ -150,11 +148,11 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
         this.columnarTableColumn = [];
         this.tableHeadingColumns = this.getDefaultColumns();
         if (this.reportResponseResult && this.reportResponseResult.length > 0) {
-            (Array.isArray(this.reportResponseResult) ? this.reportResponseResult : []).forEach((item, index) => {
+            this.reportResponseResult.forEach((item, index) => {
                 if (item && item.accountNameAndBalanceMap) {
                     let columns = Object.keys(item.accountNameAndBalanceMap);
                     if (columns && columns.length > 0) {
-                        (Array.isArray(columns) ? columns : []).forEach((element) => {
+                        columns.forEach((element) => {
                             if (element && this.columnarTableColumn?.indexOf(element) === -1) {
                                 this.columnarTableColumn.push(element);
                                 this.tableHeadingColumns.push(element);

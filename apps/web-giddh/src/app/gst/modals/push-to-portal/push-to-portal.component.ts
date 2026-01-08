@@ -4,8 +4,7 @@ import { GST_UTILITY_DOWNLOAD_LINK } from '../../../app.constant';
     selector: 'push-to-portal',
     templateUrl: './push-to-portal.component.html',
     styleUrls: ['./push-to-portal.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PushToPortalComponent {
     /** This will hold local JSON data */

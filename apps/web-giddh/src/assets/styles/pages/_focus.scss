@@ -1,6 +1,5 @@
 .text-primary-onfocus {
-    &:focus,
-    &:focus-visible {
+    &:focus, &:focus-visible {
         color: var(--theme-primary-color) !important;
         text-decoration: underline !important;
     }

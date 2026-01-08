@@ -8,6 +8,7 @@
     max-height: 90vh;
 
     .mdc-list-item {
+
         &.active-option {
             border-left-color: 3px solid var(--theme-primary-color);
         }

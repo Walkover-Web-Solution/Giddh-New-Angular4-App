@@ -30,7 +30,6 @@ import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
 import { A11yModule } from "@angular/cdk/a11y";
-import { KeyboardNavigationModule } from "../../../shared/helpers/directives/enter-next/keyboard-navigation.module";
 
 @NgModule({
     declarations: [
@@ -66,8 +65,7 @@ import { KeyboardNavigationModule } from "../../../shared/helpers/directives/ent
         SortByModule,
         WatchVideoModule,
         MatProgressSpinnerModule,
-        A11yModule,
-        KeyboardNavigationModule
+        A11yModule
     ],
     exports: [
         StockCreateEditComponent

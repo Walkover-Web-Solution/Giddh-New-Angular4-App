@@ -8,8 +8,7 @@ import { takeUntil, take } from 'rxjs/operators';
 @Component({
     selector: 'hamburger-menu',
     templateUrl: './hamburger-menu.component.html',
-    styleUrls: ['hamburger-menu.component.scss'],
-    standalone: false
+    styleUrls: ['hamburger-menu.component.scss']
 })
 
 export class HamburgerMenuComponent implements OnInit, OnDestroy {

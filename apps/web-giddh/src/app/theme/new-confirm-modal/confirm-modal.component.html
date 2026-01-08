@@ -8,8 +8,8 @@
             {{ inputData?.permanentlyDeleteMessage }}
         </p>
         <div class="d-flex column-gap-1 mt-3 justify-content-end">
-            <button matButton="filled" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
-            <button matButton="outlined" (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
+            <button mat-raised-button color="primary" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
+            <button mat-stroked-button (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
         </div>
     </mat-dialog-content>
 </div>

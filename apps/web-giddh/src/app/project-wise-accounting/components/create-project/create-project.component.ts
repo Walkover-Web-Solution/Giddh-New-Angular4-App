@@ -4,14 +4,12 @@ import { ProjectWiseAccountingComponentStore } from '../../project-wise-accounti
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProjectDialogData } from '../../project-wise-accounting';
-import { get } from '../../../lodash-optimized';
 
 @Component({
     selector: 'create-project',
     templateUrl: './create-project.component.html',
     styleUrls: ['./create-project.component.scss'],
-    providers: [ProjectWiseAccountingComponentStore],
-    standalone: false
+    providers: [ProjectWiseAccountingComponentStore]
 })
 export class CreateProjectComponent implements OnInit, OnDestroy {
     /** Indicates if the form is loading */
@@ -50,7 +48,7 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
                 this.sendResponse(project);
             }
         });
-
+        
         this.componentStore.isSavingProject$.pipe(takeUntil(this.destroyed$)).subscribe((loading) => {
             this.isLoading = loading;
         });

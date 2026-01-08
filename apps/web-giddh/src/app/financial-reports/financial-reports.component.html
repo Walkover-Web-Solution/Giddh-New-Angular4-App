@@ -6,14 +6,13 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu></hamburger-menu>
-    <mat-tab-group
+    <mat-tab-group 
         class="setting-page tb-pl-bs-tabs"
         mat-stretch-tabs="false"
         mat-align-tabs="start"
         [selectedIndex]="selectedTabIndex"
         (selectedTabChange)="onTabChanged($event)"
-        #staticTabsTBPL
-    >
+        #staticTabsTBPL>
         <mat-tab [label]="localeData?.tabs?.trial_balance">
             <div class="pt-3 pb-3">
                 <div class="container-fluid tb-pl-bs-header-tab">

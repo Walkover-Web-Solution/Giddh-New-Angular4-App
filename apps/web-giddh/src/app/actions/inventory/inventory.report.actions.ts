@@ -10,9 +10,7 @@ import { INVENTORY_REPORT_ACTIONS } from './inventory.const';
 import { InventoryFilter, InventoryReport } from '../../models/api-models/Inventory-in-out';
 import { Observable } from 'rxjs';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class InventoryReportActions {
 
     public genReport$: Observable<Action> = createEffect(() => this.action$

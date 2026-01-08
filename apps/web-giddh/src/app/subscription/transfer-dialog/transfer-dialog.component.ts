@@ -9,8 +9,7 @@ import { SubscriptionComponentStore } from '../utility/subscription.store';
     templateUrl: './transfer-dialog.component.html',
     styleUrls: ['./transfer-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [SubscriptionComponentStore],
-    standalone: false
+    providers: [SubscriptionComponentStore]
 })
 export class TransferDialogComponent implements OnInit {
     /** Holds Store Transfer Subscription Success state observable*/
@@ -46,7 +45,7 @@ export class TransferDialogComponent implements OnInit {
             if (response) {
                 this.dialogRef.close(true);
             }
-        });
+        }); 
     }
 
     /**

@@ -1,6 +1,11 @@
-<div appTranslate [file]="'subscription'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div id="main" class="welcome-outer p-3">
-        <button aria-label="return" matButton="outlined" class="mb-3" (click)="back()">
+        <button aria-label="return" mat-stroked-button class="mb-3" (click)="back()">
             <i class="icon-left back-left"></i>
             {{ commonLocaleData?.app_back }}
         </button>
@@ -8,7 +13,9 @@
             <form name="changeBillingForm" [formGroup]="changeBillingForm" autocomplete="off" novalidate>
                 <mat-card-content>
                     <div class="welcome-msg">
-                        <p class="strong font-size-16 my-3">{{ localeData?.billing_heading_hello }} {{ billingDetails?.billingName }} !</p>
+                        <p class="strong font-size-16 my-3">
+                            {{ localeData?.billing_heading_hello }} {{ billingDetails?.billingName }} !
+                        </p>
                     </div>
                     <div class="billing-details">
                         <div class="form-group">
@@ -20,7 +27,8 @@
                                 [placeholder]="localeData?.billing_name"
                                 formControlName="billingName"
                                 [showError]="isFormSubmitted && !changeBillingForm.get('billingName')?.value"
-                            ></input-field>
+                            >
+                            </input-field>
                         </div>
                         <div class="form-group">
                             <input-field
@@ -31,7 +39,8 @@
                                 formControlName="companyName"
                                 [placeholder]="commonLocaleData?.app_company_name"
                                 [showError]="isFormSubmitted && !changeBillingForm.get('companyName')?.value"
-                            ></input-field>
+                            >
+                            </input-field>
                         </div>
                         <div class="form-group">
                             <input-field
@@ -43,9 +52,11 @@
                                 [placeholder]="commonLocaleData?.app_email"
                                 [showError]="
                                     isFormSubmitted &&
-                                    (!changeBillingForm.get('email')?.value || changeBillingForm.get('email')?.errors?.pattern)
+                                    (!changeBillingForm.get('email')?.value ||
+                                        changeBillingForm.get('email')?.errors?.pattern)
                                 "
-                            ></input-field>
+                            >
+                            </input-field>
                         </div>
                         <div class="form-group">
                             <input-field
@@ -55,7 +66,8 @@
                                 [label]="localeData?.pincode"
                                 formControlName="pincode"
                                 [placeholder]="localeData?.pincode"
-                            ></input-field>
+                            >
+                            </input-field>
                         </div>
                         <div class="form-group">
                             <!-- Mobile Number -->
@@ -64,7 +76,8 @@
                                 [label]="commonLocaleData?.app_mobile_number"
                                 [required]="true"
                                 [useImageFlags]="true"
-                            ></mobile-number-input>
+                            >
+                            </mobile-number-input>
                         </div>
                         <div class="form-group">
                             <div class="w-100">
@@ -78,7 +91,8 @@
                                     (selectedOption)="selectCountry($event)"
                                     [labelValue]="selectedCountry"
                                     [showError]="isFormSubmitted && !changeBillingForm.get('country')?.value"
-                                ></reactive-dropdown-field>
+                                >
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="form-group">
@@ -89,10 +103,13 @@
                                 [placeholder]="getEnterTaxText()"
                                 [type]="'text'"
                                 formControlName="taxNumber"
-                                [showError]="isFormSubmitted && changeBillingForm.get('taxNumber')?.value && !isGstinValid"
+                                [showError]="
+                                    isFormSubmitted && changeBillingForm.get('taxNumber')?.value && !isGstinValid
+                                "
                                 [maxlength]="15"
                                 (change)="validateGstNumber()"
-                            ></input-field>
+                            >
+                            </input-field>
                         </div>
                         <div class="form-group">
                             <div *ngIf="!countyList?.length">
@@ -108,7 +125,8 @@
                                     (selectedOption)="selectState($event)"
                                     [ngClass]="{ 'readonly-field': disabledState }"
                                     [required]="true"
-                                ></reactive-dropdown-field>
+                                >
+                                </reactive-dropdown-field>
                             </div>
                             <div *ngIf="countyList?.length">
                                 <reactive-dropdown-field
@@ -119,7 +137,8 @@
                                     [options]="countyList"
                                     [labelValue]="selectedState"
                                     (selectedOption)="changeBillingForm.get('state')?.patchValue($event)"
-                                ></reactive-dropdown-field>
+                                >
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="form-group">
@@ -137,10 +156,10 @@
                     </div>
                     <div class="form-group">
                         <div class="pt-2 d-flex column-gap-15">
-                            <button aria-label="submit" matButton="filled" (click)="onSubmit()">
+                            <button aria-label="submit" mat-raised-button color="primary" (click)="onSubmit()">
                                 {{ commonLocaleData?.app_submit }}
                             </button>
-                            <button aria-label="back" matButton="outlined" (click)="back()">
+                            <button aria-label="back" mat-stroked-button (click)="back()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -149,4 +168,4 @@
             </form>
         </mat-card>
     </div>
-</div>
+</ng-container>

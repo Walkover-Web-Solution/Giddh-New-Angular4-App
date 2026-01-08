@@ -1,8 +1,18 @@
-<div appTranslate [file]="'trial-profit-balance'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="clear-both">
         <div class="row">
             <div class="col-xl-9 col-12">
-                <form [formGroup]="filterForm" class="form-inline financial-select-year" name="fromToDateForm" novalidate>
+                <form
+                    [formGroup]="filterForm"
+                    class="form-inline financial-select-year"
+                    name="fromToDateForm"
+                    novalidate
+                >
                     <div class="d-flex">
                         <div class="form-group relative mr-3 datepicker-field">
                             <div
@@ -28,7 +38,8 @@
                                 appearance="outline"
                                 class="w-100"
                                 [ngClass]="{
-                                    'mat-form-field-invalid': getForm('shareCompanyList').value?.length === 0 && !isValidForm,
+                                    'mat-form-field-invalid':
+                                        getForm('shareCompanyList').value?.length === 0 && !isValidForm
                                 }"
                             >
                                 <mat-label>{{ localeData?.company_list }}</mat-label>
@@ -54,8 +65,11 @@
                                 formControlName="selectCurrency"
                                 (onClear)="getForm('selectCurrency')?.patchValue(null)"
                                 [required]="true"
-                                [showError]="!getForm('selectCurrency')?.value && !getForm('shareCompanyList').value?.length"
-                            ></reactive-dropdown-field>
+                                [showError]="
+                                    !getForm('selectCurrency')?.value && !getForm('shareCompanyList').value?.length
+                                "
+                            >
+                            </reactive-dropdown-field>
                         </div>
                         <div class="mr-3 m-1 text-primary">
                             <a
@@ -65,7 +79,7 @@
                                 matTooltipPosition="above"
                                 *ngIf="!expandAll"
                             >
-                                <span class="icon-expandIcon d-flex justify-content-center align-items-center"></span>
+                                <span class="icon-expandIcon d-flex justify-content-center align-items-center"> </span>
                             </a>
                             <a
                                 class="expand-icon cursor-pointer d-flex font-size-16 bgWhiteMo border"
@@ -74,11 +88,11 @@
                                 matTooltipPosition="above"
                                 *ngIf="expandAll"
                             >
-                                <span class="icon-collapse d-flex justify-content-center align-items-center"></span>
+                                <span class="icon-collapse d-flex justify-content-center align-items-center"> </span>
                             </a>
                         </div>
                         <div class="form-group mr-3">
-                            <button matButton="filled" (click)="onSubmit()">
+                            <button mat-raised-button color="primary" (click)="onSubmit()">
                                 {{ commonLocaleData?.app_view }}
                             </button>
                         </div>
@@ -108,4 +122,4 @@
             ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</div>
+</ng-container>

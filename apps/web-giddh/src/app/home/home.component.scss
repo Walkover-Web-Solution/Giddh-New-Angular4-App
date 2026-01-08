@@ -4,6 +4,7 @@
     justify-content: center;
     margin: 0 -15px;
     flex-direction: row;
+
 }
 
 .warning-msg-row {
@@ -19,13 +20,15 @@
     width: 100%;
 }
 
-span .icon-traingle-info {
+span
+.icon-traingle-info {
     color: var(--color-red);
     font-size: 15px;
     margin-right: 10px;
 }
 
-span .icon-info-icon {
+span
+.icon-info-icon {
     color: var(--color-medium-gray);
     font-size: var(--font-size-16);
     margin-right: 10px;
@@ -41,7 +44,7 @@ span .icon-info-icon {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    strong {
+    strong{
         letter-spacing: -1px;
     }
 }
@@ -66,7 +69,7 @@ span .icon-info-icon {
     align-items: flex-start;
     height: 40px;
 
-    .icon-arrow-down {
+.icon-arrow-down {
         line-height: 22px !important;
     }
 }

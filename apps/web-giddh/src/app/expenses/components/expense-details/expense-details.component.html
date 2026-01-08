@@ -7,7 +7,8 @@
             <div class="col-sm-6 text-right xs-left">
                 <div class="d-flex justify-content-end align-items-center column-gap-1">
                     <button
-                        matButton="filled"
+                        mat-raised-button
+                        color="primary"
                         class="mb-1 d-flex align-items-center"
                         type="button"
                         (click)="showApproveConfirmPopup(approveConfirm)"
@@ -15,7 +16,7 @@
                         {{ localeData?.approve }}
                     </button>
                     <button
-                        matButton="outlined"
+                        mat-stroked-button
                         class="mb-1"
                         type="button"
                         (click)="openModal(rejectionReason)"
@@ -30,17 +31,22 @@
             <div class="col-sm-12">
                 <div class="upload-file" *ngIf="!isImageZoomView">
                     <ul>
-                        <div *ngFor="let item of imageURL; let i = index">
+                        <ng-container *ngFor="let item of imageURL; let i = index">
                             <li>
                                 <div class="upload-img">
-                                    <img [src]="item.src" (click)="openZoomImageView(i)" [id]="'signatureImage_' + i" />
+                                    <img [src]="item.src" (click)="openZoomImageView(i)" [id]="'signatureImage_'+i" />
                                 </div>
                             </li>
-                        </div>
+                        </ng-container>
                         <li>
                             <div class="upload-img add-img">
                                 <label for="signatureImg-edit"><i class="icon-add"></i></label>
-                                <input type="file" accept="image/png, image/jpeg" id="signatureImg-edit" (change)="uploadFile()" />
+                                <input
+                                    type="file"
+                                    accept="image/png, image/jpeg"
+                                    id="signatureImg-edit"
+                                    (change)="uploadFile()"
+                                />
                             </div>
                         </li>
                     </ul>
@@ -82,11 +88,16 @@
                                         (scrollEnd)="handleAccountScrollEnd()"
                                         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                         [labelValue]="entryAgainstObject?.name"
-                                    ></reactive-dropdown-field>
+                                    >
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
 
-                            <div class="col-4 text-right" (click)="toggleEntryAgainst()" *ngIf="entryAgainstObject.against">
+                            <div
+                                class="col-4 text-right"
+                                (click)="toggleEntryAgainst()"
+                                *ngIf="entryAgainstObject.against"
+                            >
                                 <a href="javascript:void(0)" class="d-inline-block pt-3 font-size-15">
                                     {{ entryAgainstObject.against }}
                                 </a>
@@ -133,12 +144,13 @@
         [pettyCashEntry]="accountEntryPettyCash"
         [entryAgainstObject]="entryAgainstObject"
         (approveEntry)="hideApproveConfirmPopup($event)"
-    ></petty-cash-approve-confirm-dialog>
+    >
+    </petty-cash-approve-confirm-dialog>
 </ng-template>
 <!-- endregion -->
 
 <!-- region other taxes aside menu -->
-<ng-template #asideMenuStateForOtherTaxes>
+<ng-template #asideMenuStateForOtherTaxes>    
     <app-aside-menu-sales-other-taxes
         [class]="asideMenuStateForOtherTaxes"
         [taxes]="companyTaxesList"
@@ -146,7 +158,8 @@
         [commonLocaleData]="commonLocaleData"
         (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
         (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()"
-    ></app-aside-menu-sales-other-taxes>
+    >
+    </app-aside-menu-sales-other-taxes>
 </ng-template>
 <!-- endregion -->
 
@@ -158,5 +171,6 @@
         [commonLocaleData]="commonLocaleData"
         (onShortcutPress)="ledgerAsidePaneDialogRef?.close()"
         (closeAsideEvent)="ledgerAsidePaneDialogRef?.close()"
-    ></ledger-aside-pane>
+    >
+    </ledger-aside-pane>
 </ng-template>

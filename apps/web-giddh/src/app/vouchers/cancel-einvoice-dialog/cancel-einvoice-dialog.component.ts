@@ -10,8 +10,7 @@ import { IOption } from '../../app.constant';
     selector: 'cancel-einvoice-dialog',
     templateUrl: './cancel-einvoice-dialog.component.html',
     styleUrls: ['./cancel-einvoice-dialog.component.scss'],
-    providers: [VoucherComponentStore],
-    standalone: false
+    providers: [VoucherComponentStore]
 })
 export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */

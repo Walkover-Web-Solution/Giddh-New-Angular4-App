@@ -53,36 +53,36 @@
         &:focus {
             outline: none;
         }
-
+        
         // CDK Virtual Scroll Viewport styling
         cdk-virtual-scroll-viewport {
             &.command-k-viewport {
                 width: 100%;
                 overflow-y: auto;
-
+                
                 .cdk-virtual-scroll-content-wrapper {
                     width: 100%;
                 }
             }
         }
-
+        
         // Command K Item styling
         .command-k-item {
             min-height: 52px;
             padding: 0 24px;
             cursor: pointer;
-
+            
             &.selected {
                 background-color: var(--bg-primary-color);
-
+                
                 .item-link {
                     color: var(--color-white);
                 }
-
+                
                 .item-icon .icon {
                     color: var(--color-white);
                 }
-
+                
                 .item-unique-name span {
                     color: var(--color-white) !important;
                 }
@@ -98,7 +98,7 @@
                     filter: var(--filter-image-color-white) !important;
                 }
             }
-
+            
             .item-link {
                 display: flex;
                 align-items: center;
@@ -106,18 +106,18 @@
                 color: var(--theme-foreground-color);
                 width: 100%;
                 min-height: 52px;
-
+                
                 .item-icon {
                     margin-right: 25px;
-
+                    
                     .icon {
                         color: var(--color-medium-gray);
                         font-size: 14px;
-
+                        
                         &.icon-account {
                             font-size: 11px;
                         }
-
+                        
                         &.icon-group-folder {
                             font-size: 16px;
                         }
@@ -126,19 +126,19 @@
                         filter: var(--color-image-filter-quaternary);
                     }
                 }
-
+                
                 .item-content {
                     flex: 1;
-
+                    
                     .item-main {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         width: 100%;
-
+                        
                         .item-info {
                             flex: 1;
-
+                            
                             .item-name {
                                 margin: 0;
                                 font-size: var(--font-size-15);
@@ -146,31 +146,31 @@
                                 display: inline;
                                 white-space: initial;
                             }
-
+                            
                             .item-type {
                                 font-size: var(--font-size-12);
                                 color: var(--color-dark-gray);
                                 display: block;
                             }
-
+                            
                             .item-breadcrumb {
                                 margin: 0;
                                 width: 320px;
                                 white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
-
+                                
                                 small {
                                     font-size: var(--font-size-12);
                                     color: var(--color-dark-gray);
                                 }
                             }
                         }
-
+                        
                         .item-unique-name {
                             width: 25%;
                             text-align: right;
-
+                            
                             span {
                                 font-size: var(--font-size-12);
                                 color: var(--color-dark-gray);
@@ -182,21 +182,21 @@
             }
         }
     }
-
+    
     // No Results styling
     .no-results {
         padding: 20px 24px;
-
+        
         .no-results-content {
             &.text-center {
                 text-align: center;
             }
-
+            
             .no-results-message {
                 margin-bottom: 16px;
                 color: var(--theme-foreground-color);
             }
-
+            
             .no-results-actions {
                 display: flex;
                 gap: 15px;

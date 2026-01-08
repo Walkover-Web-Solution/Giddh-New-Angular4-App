@@ -12,8 +12,7 @@
         "import-blacklist": [
             true,
             "rxjs/Rx",
-            "rxjs/internal/operators",
-            "@ngrx/operators"
+            "rxjs/internal/operators"
         ],
         "interface-over-type-literal": true,
         "member-access": false,
@@ -69,13 +68,13 @@
         "directive-selector": [
             true,
             "attribute",
-            ["app", "giddh"],
+            "foo",
             "camelCase"
         ],
         "component-selector": [
             true,
             "element",
-            ["app", "giddh"],
+            "foo",
             "kebab-case"
         ],
         "no-output-on-prefix": true,

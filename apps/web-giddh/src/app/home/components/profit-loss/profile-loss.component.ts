@@ -18,20 +18,17 @@ import { TBPlBsActions } from "../../../actions/tl-pl.actions";
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { TlPlService } from '../../../services/tl-pl.service';
+import { cloneDeep } from '../../../lodash-optimized';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
 import { ServiceConfig } from '../../../services/service.config';
 import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
-import { cloneDeep } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
 @Component({
     selector: 'profit-loss',
     templateUrl: 'profit-loss.component.html',
     styleUrls: ['../../home.component.scss', './profit-loss.component.scss'],
-    standalone:false
 })
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
@@ -86,7 +83,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         // img path
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -122,10 +119,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        if (this.chart) {
-            this.chart.destroy();
-            this.chart = null;
-        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

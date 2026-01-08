@@ -4,17 +4,13 @@ import { AllGiddhItemComponent } from './all-item.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([ { path: '',
-        component: AllGiddhItemComponent },
-        { path: 'giddh-all-items',
-        component: AllGiddhItemComponent }
-    
+        RouterModule.forChild([
+            { path: '', component: AllGiddhItemComponent },
+            { path: 'giddh-all-items', component: AllGiddhItemComponent }
         ])
     ],
 
-    exports: [
-        RouterModule
-    ]
+    exports: [RouterModule]
 
 
 })

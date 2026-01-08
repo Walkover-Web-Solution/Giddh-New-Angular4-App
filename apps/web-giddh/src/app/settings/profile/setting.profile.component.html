@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'settings/profile'"
     (localeData)="localeData = $event"
@@ -26,11 +26,16 @@
                                 [organizationType]="currentOrganizationType"
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
-                            ></personal-information>
+                            >
+                            </personal-information>
                         </mat-tab>
                         <mat-tab
                             *ngIf="!isConsolidatedBranch"
-                            [label]="companyProfileObj?.taxType ? localeData?.address + companyProfileObj?.taxType : localeData?.addresses"
+                            [label]="
+                                companyProfileObj?.taxType
+                                    ? localeData?.address + companyProfileObj?.taxType
+                                    : localeData?.addresses
+                            "
                         >
                             <address-settings
                                 [addresses]="addresses"
@@ -104,4 +109,4 @@
             <img src="{{ imgPath }}" alt="branch-image" />
         </div>
     </ng-container>
-</div>
+</ng-container>

@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'compare-with-date-range-picker'"
     (localeData)="localeData = $event"
@@ -23,7 +23,9 @@
                 [formGroup]="compareOptionsForm"
             >
                 <div class="w-100">
-                    <label class="d-block pl-3 pr-3 text-primary" matListItemTitle>{{ localeData?.compare_with }}</label>
+                    <label class="d-block pl-3 pr-3 text-primary" matListItemTitle>{{
+                        localeData?.compare_with
+                    }}</label>
                     <mat-selection-list
                         [multiple]="false"
                         [hideSingleSelectionIndicator]="true"
@@ -36,19 +38,22 @@
                             [selected]="compareOptionsForm.get('compareValue')?.value == 0"
                             (click)="toggleMenu(false)"
                             [ngClass]="{ 'active-option': compareOptionsForm.get('compareValue')?.value == 0 }"
+                            >{{ localeData?.none }}</mat-list-option
                         >
-                            {{ localeData?.none }}
-                        </mat-list-option>
                         <mat-list-option
                             (click)="toggleMenu(false)"
                             value="1"
                             [ngClass]="{ 'active-option': compareOptionsForm.get('compareValue')?.value == 1 }"
                         >
                             <span
-                                [ngClass]="compareOptionsForm.get('compareValue')?.value == 1 ? 'text-primary' : 'theme-foreground-color'"
+                                [ngClass]="
+                                    compareOptionsForm.get('compareValue')?.value == 1
+                                        ? 'text-primary'
+                                        : 'theme-foreground-color'
+                                "
                             >
                                 {{ commonLocaleData?.app_numbers?.one }}
-                                {{ getTranslatedType(compareOptionsForm.get('compareType')?.value?.[0]) }}
+                                {{ getTranslatedType(compareOptionsForm.get("compareType")?.value?.[0]) }}
                             </span>
                         </mat-list-option>
                         <mat-list-option
@@ -57,10 +62,14 @@
                             [ngClass]="{ 'active-option': compareOptionsForm.get('compareValue')?.value == 2 }"
                         >
                             <span
-                                [ngClass]="compareOptionsForm.get('compareValue')?.value == 2 ? 'text-primary' : 'theme-foreground-color'"
+                                [ngClass]="
+                                    compareOptionsForm.get('compareValue')?.value == 2
+                                        ? 'text-primary'
+                                        : 'theme-foreground-color'
+                                "
                             >
                                 {{ commonLocaleData?.app_numbers?.two }}
-                                {{ getTranslatedType(compareOptionsForm.get('compareType')?.value?.[0]) }}
+                                {{ getTranslatedType(compareOptionsForm.get("compareType")?.value?.[0]) }}
                             </span>
                         </mat-list-option>
                         <mat-list-option
@@ -69,10 +78,14 @@
                             [ngClass]="{ 'active-option': compareOptionsForm.get('compareValue')?.value == 3 }"
                         >
                             <span
-                                [ngClass]="compareOptionsForm.get('compareValue')?.value == 3 ? 'text-primary' : 'theme-foreground-color'"
+                                [ngClass]="
+                                    compareOptionsForm.get('compareValue')?.value == 3
+                                        ? 'text-primary'
+                                        : 'theme-foreground-color'
+                                "
                             >
                                 {{ commonLocaleData?.app_numbers?.three }}
-                                {{ getTranslatedType(compareOptionsForm.get('compareType')?.value?.[0]) }}
+                                {{ getTranslatedType(compareOptionsForm.get("compareType")?.value?.[0]) }}
                             </span>
                         </mat-list-option>
                         <mat-list-option
@@ -81,10 +94,14 @@
                             [ngClass]="{ 'active-option': compareOptionsForm.get('compareValue')?.value == 4 }"
                         >
                             <span
-                                [ngClass]="compareOptionsForm.get('compareValue')?.value == 4 ? 'text-primary' : 'theme-foreground-color'"
+                                [ngClass]="
+                                    compareOptionsForm.get('compareValue')?.value == 4
+                                        ? 'text-primary'
+                                        : 'theme-foreground-color'
+                                "
                             >
                                 {{ commonLocaleData?.app_numbers?.four }}
-                                {{ getTranslatedType(compareOptionsForm.get('compareType')?.value?.[0]) }}
+                                {{ getTranslatedType(compareOptionsForm.get("compareType")?.value?.[0]) }}
                             </span>
                         </mat-list-option>
                         <mat-list-option
@@ -112,7 +129,9 @@
                 </div>
                 <mat-divider class="w-100"></mat-divider>
                 <div class="w-100">
-                    <label class="d-block pl-3 pr-3 mt-4 text-primary" matListItemTitle>{{ localeData?.previous }}</label>
+                    <label class="d-block pl-3 pr-3 mt-4 text-primary" matListItemTitle>{{
+                        localeData?.previous
+                    }}</label>
                     <mat-selection-list [multiple]="false" color="primary" formControlName="compareType">
                         <mat-list-option
                             [disabled]="hasDisable('month')"
@@ -160,7 +179,11 @@
                     </mat-selection-list>
                     <p
                         class="m-0 pl-3 pr-3 text-light"
-                        *ngIf="dateRangeInfo.isMonthSelected && dateRangeInfo.isQuarterSelected && dateRangeInfo.isYearSelected"
+                        *ngIf="
+                            dateRangeInfo.isMonthSelected &&
+                            dateRangeInfo.isQuarterSelected &&
+                            dateRangeInfo.isYearSelected
+                        "
                     >
                         {{ localeData?.options_are_disabled_message }}
                     </p>
@@ -168,4 +191,4 @@
             </form>
         </mat-menu>
     </div>
-</div>
+</ng-container>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
@@ -24,8 +24,7 @@ import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
 @Component({
     selector: 'app-expense-details',
     templateUrl: './expense-details.component.html',
-    styleUrls: ['./expense-details.component.scss'],
-    standalone:false
+    styleUrls: ['./expense-details.component.scss']
 })
 
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
@@ -154,8 +153,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private companyActions: CompanyActions,
         private lightbox: Lightbox,
         private generalService: GeneralService,
-        private commonService: CommonService,
-        private cdRef: ChangeDetectorRef
+        private commonService: CommonService
     ) {
         this.files = [];
         this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
@@ -204,7 +202,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.imageURL = [];
 
         if (imgs) {
-            (Array.isArray(imgs) ? imgs : []).forEach(imgUniqueName => {
+            imgs.forEach(imgUniqueName => {
                 const image = {
                     src: imgPrefix + imgUniqueName
                 };
@@ -897,7 +895,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.preFillData(response?.body);
             }
             this.isPettyCashEntryLoading = false;
-            this.cdRef.detectChanges();
         });
     }
 

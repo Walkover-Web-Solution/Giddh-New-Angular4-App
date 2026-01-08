@@ -17,12 +17,10 @@ import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
 import { ServiceConfig } from '../../../services/service.config';
-import { cloneDeep, forEach, isArray, map, some } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-pending-list',
-
-      standalone: false,templateUrl: './pending-list.component.html',
+    templateUrl: './pending-list.component.html',
     styleUrls: ['./pending-list.component.scss'],
 })
 export class PendingListComponent implements OnInit, OnChanges {
@@ -105,7 +103,7 @@ export class PendingListComponent implements OnInit, OnChanges {
             let dateObj = resp[0];
             this.todaySelected = resp[1];
             if (dateObj && !this.todaySelected) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
                 let from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 let to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 if (from && to) {
@@ -142,9 +140,9 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.accountEntryPettyCash = { particular: { name: item?.baseAccount?.name } };
         this.prepareEntryAgainstObject(item);
         this.approveEntryModalRef = this.dialog.open(ref, {
-                    width: '500px',
-                    disableClose: true
-                });
+            width: '500px',
+            disableClose: true
+        });
         this.selectedEntryForApprove = item;
     }
 
@@ -396,9 +394,9 @@ export class PendingListComponent implements OnInit, OnChanges {
     public showRejectConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults): void {
         this.selectedEntryForApprove = item;
         this.approveEntryModalRef = this.dialog.open(ref, {
-                    width: '500px',
-                    disableClose: true
-                });
+            width: '500px',
+            disableClose: true
+        });
     }
 
     /**

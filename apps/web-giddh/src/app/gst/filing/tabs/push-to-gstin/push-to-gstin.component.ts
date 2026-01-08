@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/gst-reconcile.actions';
 import { select, Store } from '@ngrx/store';
 import { GstDatePeriod, Gstr1SummaryRequest, Gstr1SummaryResponse } from '../../../../models/api-models/GstReconcile';
@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
     selector: 'push-to-gstin',
     templateUrl: './push-to-gstin.component.html',
     styleUrls: ['./push-to-gstin.component.scss'],
-    standalone: false
 })
 export class PushToGstInComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: GstDatePeriod = null;
@@ -25,13 +24,13 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     public gstr1SummaryDetails: Gstr1SummaryResponse;
-    public gstr1SummaryDetailsInProcess = signal<boolean>(false);
+    public gstr1SummaryDetailsInProcess: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
         private gstrAction: GstReconcileActions,
-        private changeDetectorRef: ChangeDetectorRef,
+        private changeDetectorRef: ChangeDetectorRef, 
         private route: Router) {
 
         this.store.pipe(select(s => s.gstR.gstr1SummaryResponse), takeUntil(this.destroyed$)).subscribe(result => {
@@ -42,7 +41,7 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(s => s.gstR.gstr1SummaryDetailsInProcess), takeUntil(this.destroyed$)).subscribe(result => {
-            this.gstr1SummaryDetailsInProcess.set(result);
+            this.gstr1SummaryDetailsInProcess = result;
         });
     }
 

@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { tap } from "rxjs/operators";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { BaseResponse } from "apps/web-giddh/src/app/models/api-models/BaseResponse";
@@ -44,20 +43,26 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((triggerModule) => {
                 this.patchState({ emailConditionSuggestions: null });
                 return this.invoiceService.getEmailConditions(triggerModule).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({
+                                return this.patchState({
                                     emailConditionSuggestions: res.body?.conditions ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                this.patchState({
+                                return this.patchState({
                                     emailConditionSuggestions: []
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                emailConditionSuggestions: []
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -76,21 +81,25 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((req) => {
                 this.patchState({ updateCustomEmailIsSuccess: null });
                 return this.invoiceService.updateCustomEmailTemplate(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toaster.showSnackBar("success", res?.body);
-                                this.patchState({
-                                    updateCustomEmailIsSuccess: true
+                                return this.patchState({
+                                    updateCustomEmailIsSuccess: res?.body ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                this.patchState({
-                                    updateCustomEmailIsSuccess: false
+                                return this.patchState({
+                                    updateCustomEmailIsSuccess: []
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ updateCustomEmailIsSuccess: null });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -109,20 +118,26 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((searchTerm) => {
                 this.patchState({ emailContentSuggestions: null });
                 return this.invoiceService.getEmailContentSuggestions(searchTerm).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({
+                                return this.patchState({
                                     emailContentSuggestions: res.body ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                this.patchState({
+                                return this.patchState({
                                     emailContentSuggestions: []
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                emailContentSuggestions: []
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -141,20 +156,26 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((req) => {
                 this.patchState({ emailTemplates: null });
                 return this.invoiceService.getEmailTemplate(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({
+                                return this.patchState({
                                     emailTemplates: res.body ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                this.patchState({
+                                return this.patchState({
                                     emailTemplates: []
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                emailTemplates: []
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -173,20 +194,26 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((req) => {
                 this.patchState({ accountGroupList: [] });
                 return this.inventoryService.getFlattenGroupWithAccountsList(req.request, req.model).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({
-                                    accountGroupList: res.body?.results ?? []
+                                return this.patchState({
+                                    accountGroupList: res?.body?.results ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                this.patchState({
+                                return this.patchState({
                                     accountGroupList: []
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                accountGroupList: []
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)

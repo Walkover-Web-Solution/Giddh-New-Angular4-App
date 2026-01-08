@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'setting-l-acc-confirmation-modal',
-    templateUrl: './confirmation.modal.component.html',
-    standalone: false
+    templateUrl: './confirmation.modal.component.html'
 })
 
 export class SettingLinkedAccountsConfirmationModalComponent {

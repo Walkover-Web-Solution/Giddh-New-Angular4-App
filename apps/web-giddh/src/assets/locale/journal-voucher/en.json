@@ -32,6 +32,5 @@
     "upto": "Upto",
     "entry_created": "Entry created successfully",
     "discount_list": "Discount List",
-    "tax_list": "Tax List",
-    "select_account_or_remove_amount": "Please select account or remove amount"
+    "tax_list": "Tax List"
 }

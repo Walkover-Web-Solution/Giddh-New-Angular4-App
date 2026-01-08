@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { delay, Observable, ReplaySubject, takeUntil, Subject, take } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import * as dayjs from "dayjs";
 import * as duration from "dayjs/plugin/duration";
 import { AiOcrStore } from "./utility/ai-ocr.store";
@@ -10,10 +10,7 @@ import { AiOcrService } from "../services/ai-ocr.service";
 import { GeneralService } from "../services/general.service";
 import { OrganizationType } from "../models/user-login-state";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
-import { cloneDeep } from "../lodash-optimized";
 import { ActivatedRoute, Router } from "@angular/router";
-import { environment } from '../../environments/environment.generated';
-import { ServiceConfig } from "../services/service.config";
 dayjs.extend(duration);
 
 export enum OcrAction {
@@ -29,7 +26,6 @@ export enum OcrAction {
     styleUrls: ["./ai-ocr.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [AiOcrStore, LedgerComponentStore],
-    standalone:false
 })
 export class AiOcrComponent implements OnInit, OnDestroy {
     /** True, if custom date filter is selected or custom searching or sorting is performed */
@@ -152,8 +148,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private route: ActivatedRoute,
-        private router: Router,
-        @Inject(ServiceConfig) private serviceConfig
+        private router: Router
     ) {
         this.selectedToggle = OcrAction.List;
     }
@@ -203,7 +198,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
                     }
                 });
-                this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+                this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
 
                 this.ocrMainList$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
                     if (!res) {
@@ -285,7 +280,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                                 this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
                             }
                             this.branches = [];
-                            (Array.isArray(branchList) ? branchList : []).forEach((branch) => {
+                            branchList.forEach((branch) => {
                                 this.branches.push({
                                     label: branch?.name,
                                     value: branch?.uniqueName
@@ -311,7 +306,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     /** Universal date observer */
                     this.aiOcrStore.universalDate$.pipe(takeUntil(this.routeScope$)).subscribe((dateObj) => {
                         if (dateObj) {
-                            this.universalDate = cloneDeep(dateObj);
+                            this.universalDate = _.cloneDeep(dateObj);
                             this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                             this.selectedDateRangeUi =
                                 dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +
@@ -635,7 +630,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             take(1)
         ).subscribe((dateObj) => {
             if (dateObj) {
-                this.universalDate = cloneDeep(dateObj);
+                this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi =
                     dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +

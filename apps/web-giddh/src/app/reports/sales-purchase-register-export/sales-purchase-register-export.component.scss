@@ -27,7 +27,7 @@
         .export-border {
             position: relative;
             &::after {
-                content: '';
+                content: "";
                 display: block;
                 position: absolute;
                 width: 1px;

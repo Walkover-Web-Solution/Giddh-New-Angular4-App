@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'trial-profit-balance/trial-balance/grid'"
     (localeData)="localeData = $event"
@@ -39,8 +39,15 @@
             <div class="table-container clear-both trial-balance">
                 <section class="tb-section">
                     <div class="row">
-                        <div class="col-4 search-container" #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
-                            <span [ngStyle]="{ 'display': showClearSearch ? 'none' : 'flex' }" class="align-items-center">
+                        <div
+                            class="col-4 search-container"
+                            #searchContainer
+                            (clickOutside)="clickedOutside($event, searchContainer)"
+                        >
+                            <span
+                                [ngStyle]="{ 'display': showClearSearch ? 'none' : 'flex' }"
+                                class="align-items-center"
+                            >
                                 <span
                                     class="tailed-checkbox p-2"
                                     [matTooltip]="commonLocaleData?.app_clear_selected"
@@ -48,11 +55,11 @@
                                     (click)="openConfirmDialog()"
                                     aria-label="clear selection"
                                 >
-                                    <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon image-as-icon-color" aria-label="clear selection icon" />
-                                </span>
-                                <span class="ml-1 mr-1">
-                                    <strong>{{ localeData?.particular }}</strong>
-                                </span>
+                                    <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
+                                </span> 
+                                <span class="ml-1 mr-1"
+                                    ><strong>{{ localeData?.particular }}</strong></span
+                                >
                                 <i class="icon-search" id="showSearch" (click)="toggleSearch()"></i>
                             </span>
                             <span [hidden]="!showClearSearch" class="show-clear-search">
@@ -105,10 +112,11 @@
                                             context: {
                                                 $implicit: grp.childGroups,
                                                 padding: padding + 20,
-                                                isSubGroup: true,
+                                                isSubGroup: true
                                             }
                                         "
-                                    ></ng-container>
+                                    >
+                                    </ng-container>
                                 </section>
                             </ng-container>
                         </ng-container>
@@ -138,10 +146,11 @@
                                             context: {
                                                 $implicit: grp.childGroups,
                                                 padding: padding + 20,
-                                                isSubGroup: true,
+                                                isSubGroup: true
                                             }
                                         "
-                                    ></ng-container>
+                                    >
+                                    </ng-container>
                                 </section>
                             </ng-container>
                         </cdk-virtual-scroll-viewport>
@@ -150,13 +159,14 @@
                         *ngTemplateOutlet="
                             groupDetails;
                             context: {
-                                $implicit: data$.groupDetails | financialSearch: search,
+                                $implicit: data$.groupDetails | financialSearch : search,
                                 padding: 8,
                                 tbfrom: from,
-                                tbto: to,
+                                tbto: to
                             }
                         "
-                    ></ng-container>
+                    >
+                    </ng-container>
                 </div>
                 <div>
                     <div class="table-responsive">
@@ -172,7 +182,8 @@
                                                 [amount]="data$.forwardedBalance?.amount"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
@@ -181,7 +192,8 @@
                                                 [amount]="data$.debitTotal"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
@@ -190,7 +202,8 @@
                                                 [amount]="data$.creditTotal"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
-                                            ></amount-field>
+                                            >
+                                            </amount-field>
                                         </span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
@@ -200,7 +213,8 @@
                                                     [amount]="data$.closingBalance?.amount"
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                ></amount-field>
+                                                >
+                                                </amount-field>
                                             </span>
                                         </span>
                                     </th>
@@ -213,7 +227,7 @@
             <!-- end main content -->
         </div>
     </div>
-</div>
+</ng-container>
 
 <ng-template #accountAsideMenuTemplate>
     <aside-menu-account
@@ -223,5 +237,6 @@
         [commonLocaleData]="commonLocaleData"
         (closeAsideEvent)="getUpdatedList(false)"
         (getUpdateList)="getUpdatedList(true)"
-    ></aside-menu-account>
+    >
+    </aside-menu-account>
 </ng-template>

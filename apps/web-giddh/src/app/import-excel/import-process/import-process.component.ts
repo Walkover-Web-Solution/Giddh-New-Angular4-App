@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { cloneDeep } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
-import { cloneDeep, filter, forEach, includes, map } from '../../lodash-optimized';
 
 @Component({
     selector: 'import-process',
-    
-    standalone: false,styleUrls: ['./import-process.component.scss'],
+    styleUrls: ['./import-process.component.scss'],
     templateUrl: './import-process.component.html'
 })
 export class ImportProcessComponent {

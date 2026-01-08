@@ -12,8 +12,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
     styleUrls: ['./institutions-list.component.scss'],
     templateUrl: './institutions-list.component.html',
     providers: [SettingIntegrationComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class InstitutionsListComponent implements OnInit, OnDestroy {

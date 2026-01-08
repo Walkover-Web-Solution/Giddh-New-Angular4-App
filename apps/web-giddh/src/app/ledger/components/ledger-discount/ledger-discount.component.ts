@@ -8,8 +8,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 @Component({
     selector: 'ledger-discount',
     templateUrl: 'ledger-discount.component.html',
-    styleUrls: [`./ledger-discount.component.scss`],
-    standalone: false
+    styleUrls: [`./ledger-discount.component.scss`]
 })
 
 export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
@@ -92,7 +91,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
     /**
      * Prepare discount obj
-     *
+     * 
      * @memberof LedgerDiscountComponent
      */
     public prepareDiscountList(): void {

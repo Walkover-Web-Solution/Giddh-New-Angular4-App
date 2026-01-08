@@ -9,8 +9,7 @@ import {
     OnChanges,
     OnDestroy,
     OnInit,
-    Output,
-    Renderer2
+    Output
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
@@ -28,7 +27,7 @@ import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwit
 import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { clone, cloneDeep, isEqual, uniqBy } from '../../../../lodash-optimized';
+import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
@@ -50,8 +49,7 @@ import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.const
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore],
-    standalone:false
+    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore]
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -254,8 +252,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private commonService: CommonService,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
         private settingsBranchAction: SettingsBranchActions,
-        private salesPersonStore: SalesPersonComponentStore,
-        private renderer: Renderer2
+        private salesPersonStore: SalesPersonComponentStore
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
@@ -333,6 +330,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
+
         this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -379,7 +377,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 let currentEmail = change.get('email')?.value;
                 let emailDuplicateFound = false;
                 if (currentEmail !== "") {
-                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
+                    mappings.controls.forEach((control, i) => {
                         if (lastEmailOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
                             lastEmailOccurrenceIndex = index;
                             change.get('email').setErrors({ duplicate: true });
@@ -394,12 +392,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     change.get('email').setErrors(Object.keys(errors).length ? errors : null);
                 }
 
+
                 // Contact number validation
                 let lastContactOccurrenceIndex = -1;
                 let currentContactNo = change.get('contactNo')?.value;
                 let contactDuplicateFound = false;
                 if (currentContactNo !== "" && currentContactNo) {
-                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
+                    mappings.controls.forEach((control, i) => {
                         if (lastContactOccurrenceIndex === -1 && index !== i && control.get('contactNo')?.value === currentContactNo) {
                             lastContactOccurrenceIndex = index;
                             change.get('contactNo').setErrors({ duplicate: true });
@@ -418,7 +417,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 this.lastDuplicateEmailIndex = lastEmailOccurrenceIndex;
                 this.lastDuplicateContactIndex = lastContactOccurrenceIndex;
-
+                
                 // Update duplicate contact errors flag
                 this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
             }
@@ -664,7 +663,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Initializes the GST details form with default values and validators.
-     *
+     * 
      * @returns FormGroup
      * @memberof AccountAddNewDetailsComponent
      */
@@ -711,7 +710,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
         mappings.push(mappingForm);
         if (user) {
-            (Array.isArray(mappings.controls) ? mappings.controls : []).forEach(control => {
+            mappings.controls.forEach(control => {
                 if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
                     control?.get('name').setValue(user.name);
                     control?.get('email').setValue(user.email);
@@ -762,6 +761,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
+
     public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm());
@@ -771,27 +771,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return;
     }
 
-    /**
-     * Removes GST details form at specified index and focuses on submit button
-     * @param i - Index of the form to remove
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public removeGstDetailsForm(i: number): void {
+    public removeGstDetailsForm(i: number) {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
-
-        // Focus on submit button after removing address
-        setTimeout(() => {
-            try {
-                const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[aria-label="save"]', true);
-                if (submitBtn) {
-                    submitBtn.focus();
-                }
-            } catch (error) {
-                // Silently handle case where submit button doesn't exist
-
-            }
-        }, 100);
     }
 
     public addBlankGstForm() {
@@ -820,7 +802,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Validates and extracts the state code from the GST number entered in the given form.
-     *
+     * 
      * @param gstForm The `FormGroup` containing the GST-related form controls.
      * @memberof AccountAddNewDetailsComponent
      */
@@ -874,9 +856,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public openingBalanceTypeChanged(type: string): void {
-        if (this.company?.isActive) {
-            return;
-        }
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0 || Number(this.addAccountForm.get('foreignOpeningBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
@@ -898,10 +877,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public submit() {
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
-
+        
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
-
+            
             // If duplicate contact errors exist, navigate to portal tab
             if (this.hasDuplicateContactErrors) {
                 this.goToPortalTab();
@@ -963,7 +942,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (accountRequest.addresses && accountRequest.addresses.length > 0) {
                 let addressExists = false;
 
-                (Array.isArray(accountRequest.addresses) ? accountRequest.addresses : []).forEach(address => {
+                accountRequest.addresses.forEach(address => {
                     if (address?.address?.trim() || address?.gstNumber?.trim() || address?.stateCode?.trim() || address?.countyCode?.trim() || address?.pincode?.trim()) {
                         addressExists = true;
                     }
@@ -1001,7 +980,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
         if (accountRequest.addresses && accountRequest.addresses.length > 0) {
-            (Array.isArray(accountRequest.addresses) ? accountRequest.addresses : []).forEach(address => {
+            accountRequest.addresses.forEach(address => {
                 if (this.countyList?.length) {
                     delete address['state'];
                     delete address['stateCode'];
@@ -1084,7 +1063,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Checks whether a given unique group name exists within the list of parent groups.
-     *
+     * 
      * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
@@ -1096,7 +1075,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Handles the selection of a state from a dropdown or similar UI component.
-     *
+     * 
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected state's label and value.
      * @memberof AccountAddNewDetailsComponent
@@ -1112,7 +1091,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Updates the county information in the GST form based on the selected county event.
-     *
+     * 
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected county's label and value.
      * @memberof AccountAddNewDetailsComponent
@@ -1428,7 +1407,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /**
      * Handles tab change
      *
-     * @param {MatTabChangeEvent} event
+     * @param {MatTabChangeEvent} event 
      * @memberof AccountAddNewDetailsComponent
      */
     public tabChanged(event: MatTabChangeEvent): void {
@@ -1436,7 +1415,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.selectedTabLabel = event.tab.textLabel;
             this.selectedTabIndex = event.index;
             this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
-
+            
             // Mark this tab as activated
             this.activatedTabs.add(event.tab.textLabel);
         }
@@ -1825,14 +1804,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                                width: '40%',
-                                data: {
+                        width: '40%',
+                        data: {
                             title: this.commonLocaleData?.app_confirmation,
-                                body: this.commonLocaleData?.app_gst_confirm_message1,
-                                ok: this.commonLocaleData?.app_yes,
-                                cancel: this.commonLocaleData?.app_no,
-                                permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
-                            }
+                            body: this.commonLocaleData?.app_gst_confirm_message1,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no,
+                            permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                        }
                     });
                     dialogRef.afterClosed().subscribe(response => {
                         if (response) {
@@ -1986,7 +1965,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * Get Sales Person List
+     * Get sales person list as label value
      *
      * @memberof AccountAddNewDetailsComponent
      */
@@ -2008,4 +1987,5 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }
+
 

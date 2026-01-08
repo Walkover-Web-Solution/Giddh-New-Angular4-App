@@ -9,8 +9,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'aside-pane',
     styleUrls: ['aside-pane.components.scss'],
-    templateUrl: './aside-pane.components.html',
-    standalone: false
+    templateUrl: './aside-pane.components.html'
 })
 export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
 

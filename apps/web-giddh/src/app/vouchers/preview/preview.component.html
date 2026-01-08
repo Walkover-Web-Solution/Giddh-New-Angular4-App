@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'vouchers/preview'"
     (localeData)="localeData = $event"
@@ -6,17 +6,11 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <giddh-page-loader *ngIf="!isSearching && !isLoadMore && (getVouchersInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
-    <div
-        class="invoice-preview-wrapper"
-        *ngIf="isSearching || isLoadMore || !(getVouchersInProgress$ | async)"
-        appResizable
-        resizableTarget=".preview-list"
-        [minWidth]="300"
-        [maxWidthRatio]="0.5"
-        [defaultWidthRatio]="0.3"
-        [moduleName]="voucherType"
-    >
+    <giddh-page-loader
+        *ngIf="!isSearching && !isLoadMore && (getVouchersInProgress$ | async)"
+        [cssClass]="'no-data'"
+    ></giddh-page-loader>
+    <div class="invoice-preview-wrapper" *ngIf="isSearching || isLoadMore || !(getVouchersInProgress$ | async)">
         <div class="preview-list h-100 pb-3">
             <div class="d-flex align-items-center column-gap-05 p-3 w-100 list-responsive row-gap-1">
                 <div class="position-relative search-field flex-grow-1">
@@ -26,12 +20,18 @@
                         [cssClass]="'form-control pl-3'"
                         [placeholder]="commonLocaleData?.app_search"
                         [formControl]="search"
-                    ></text-field>
+                    >
+                    </text-field>
                     <i class="icon-search position-absolute"></i>
                 </div>
                 <ng-container *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2">
                     <ng-container *ngIf="voucherType === voucherTypeEnum.sales; else other">
-                        <button matButton="filled" [matMenuTriggerFor]="newInvoice" class="invoice-btn width-150">
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            [matMenuTriggerFor]="newInvoice"
+                            class="invoice-btn width-150"
+                        >
                             <div class="d-inline-flex align-items-center flex-nowrap">
                                 <span class="nowrap">{{ localeData?.new_invoice }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -47,14 +47,19 @@
                         </mat-menu>
                     </ng-container>
                     <ng-template #other>
-                        <button matButton="filled" class="invoice-btn width-150" [routerLink]="[createNewVoucher.link]">
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            class="invoice-btn width-150"
+                            [routerLink]="[createNewVoucher.link]"
+                        >
                             {{ createNewVoucher.text }}
                         </button>
                     </ng-template>
                 </ng-container>
             </div>
             <div class="mat-grid-wrapper">
-                <div class="mat-list-wrap">
+                <div class="mat-list-wrap" *ngIf="(getVouchersInProgress$ | async) === false">
                     <mat-list>
                         <app-cdk-scroll
                             [scrollTriggerDistance]="30"
@@ -63,29 +68,33 @@
                             [scrollableElementId]="'invoiceList'"
                         >
                             <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport" [id]="'invoiceList'">
-                                <ng-container *cdkVirtualFor="let item of invoiceList; let i = index; let lastItem = last">
+                                <ng-container
+                                    *cdkVirtualFor="let item of invoiceList; let i = index; let lastItem = last"
+                                >
                                     <mat-list-item
                                         class="single-invoice-detail cursor-pointer"
                                         [ngClass]="{
                                             'active': item?.uniqueName === selectedInvoice?.uniqueName,
-                                            'border-bottom': !lastItem,
+                                            'border-bottom': !lastItem
                                         }"
                                         (click)="setSelectedInvoice(item?.uniqueName, true)"
                                     >
                                         <div class="d-flex justify-content-between align-items-center column-gap-05">
-                                            <div class="flex-grow-1 min-width-0">
-                                                <div class="text-ellipsis w-100">
-                                                    <span class="font-size-12 text-primary">
-                                                        {{ item.voucherNumber ? item.voucherNumber : commonLocaleData?.app_not_available }}
-                                                    </span>
-                                                    <span class="font-size-12 light-gray">| {{ item?.voucherDate }}</span>
-                                                </div>
-                                                <p
-                                                    class="text-ellipsis w-100"
-                                                    [matTooltip]="item?.account?.customerName || item?.account?.name || item?.vendor?.name"
-                                                    [matTooltipPosition]="'left'"
-                                                >
-                                                    {{ item?.account?.customerName || item?.account?.name || item?.vendor?.name }}
+                                            <div>
+                                                <span class="font-size-12 text-primary">
+                                                    {{
+                                                        item.voucherNumber
+                                                            ? item.voucherNumber
+                                                            : commonLocaleData?.app_not_available
+                                                    }}
+                                                </span>
+                                                <span class="font-size-12 light-gray"> | {{ item?.voucherDate }} </span>
+                                                <p class="pr-5 text-wrap">
+                                                    {{
+                                                        item?.account?.customerName ||
+                                                            item?.account?.name ||
+                                                            item?.vendor?.name
+                                                    }}
                                                 </p>
                                             </div>
                                             <div>
@@ -94,7 +103,8 @@
                                                         [amount]="item?.grandTotal?.amountForAccount"
                                                         [currencySymbol]="item?.account?.currency?.symbol"
                                                         [currencyCode]="item?.account?.currency?.code"
-                                                    ></amount-field>
+                                                    >
+                                                    </amount-field>
                                                 </span>
                                             </div>
                                         </div>
@@ -113,7 +123,7 @@
                 ></giddh-page-loader>
             </div>
         </div>
-        <div class="preview-content flex-grow-1">
+        <div class="preview-content">
             <section class="preview-header p-3">
                 <div class="d-flex justify-content-between pt-3 mb-5 flex-wrap row-gap-2 flex-row-reverse">
                     <div class="order-1 mr-auto">
@@ -122,7 +132,8 @@
                     </div>
                     <div class="d-flex column-gap-1 flex-wrap row-gap-1">
                         <button
-                            matButton="filled"
+                            mat-raised-button
+                            color="primary"
                             (click)="toggleActivityHistoryAsidePane()"
                             *ngIf="!(invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice)"
                         >
@@ -131,7 +142,7 @@
                         </button>
                         <div class="d-flex action-btn">
                             <button
-                                matButton="outlined"
+                                mat-stroked-button
                                 *ngIf="voucherApiVersion === 2"
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_edit"
@@ -141,7 +152,7 @@
                                 <i class="icon-edit-pencil"></i>
                             </button>
                             <button
-                                matButton="outlined"
+                                mat-stroked-button
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_send_email"
                                 [matTooltipPosition]="'above'"
@@ -150,7 +161,7 @@
                                 <i class="icon-envelope"></i>
                             </button>
                             <button
-                                matButton="outlined"
+                                mat-stroked-button
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_print"
                                 [matTooltipPosition]="'above'"
@@ -163,7 +174,7 @@
                                     defaultThermalTemplate?.templateType === 'thermal_template' &&
                                     !invoiceType.isPurchaseOrder
                                 "
-                                matButton="outlined"
+                                mat-stroked-button
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_print_thermal"
                                 [matTooltipPosition]="'above'"
@@ -172,7 +183,7 @@
                                 <i class="fa fa-print"></i>
                             </button>
                             <button
-                                matButton="outlined"
+                                mat-stroked-button
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_download_pdf"
                                 [matTooltipPosition]="'above'"
@@ -182,7 +193,7 @@
                             </button>
                             <button
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                                matButton="outlined"
+                                mat-stroked-button
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_delete"
                                 [matTooltipPosition]="'above'"
@@ -192,14 +203,15 @@
                             </button>
                         </div>
                         <button
-                            matButton="filled"
+                            mat-raised-button
+                            color="primary"
                             [matMenuTriggerFor]="changeStatus"
                             *ngIf="
                                 selectedInvoice?.balanceStatus !== 'CANCEL' &&
                                 !isCompany &&
-                                !isConsolidatedBranch &&
-                                !invoiceType.isReceiptInvoice &&
-                                !invoiceType.isPaymentInvoice
+                                    !isConsolidatedBranch &&
+                                    !invoiceType.isReceiptInvoice &&
+                                    !invoiceType.isPaymentInvoice
                             "
                         >
                             <span>Change Status</span>
@@ -214,7 +226,7 @@
                                         voucherTypeEnum.sales,
                                         voucherTypeEnum.purchase,
                                         voucherTypeEnum.creditNote,
-                                        voucherTypeEnum.debitNote,
+                                        voucherTypeEnum.debitNote
                                     ].includes(voucherType)
                                 "
                             >
@@ -239,13 +251,15 @@
                                         voucherTypeEnum.sales,
                                         voucherTypeEnum.purchaseOrder,
                                         voucherTypeEnum.creditNote,
-                                        voucherTypeEnum.debitNote,
+                                        voucherTypeEnum.debitNote
                                     ].includes(voucherType)
                                 "
                             >
                                 {{ commonLocaleData?.app_payment_status?.cancel }}
                             </button>
-                            <ng-container *ngIf="[voucherTypeEnum.purchase, voucherTypeEnum.purchaseOrder].includes(voucherType)">
+                            <ng-container
+                                *ngIf="[voucherTypeEnum.purchase, voucherTypeEnum.purchaseOrder].includes(voucherType)"
+                            >
                                 <button mat-menu-item (click)="editCopyVoucher('copy')">
                                     {{ commonLocaleData?.app_copy }}
                                 </button>
@@ -253,12 +267,20 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </ng-container>
-                            <button mat-menu-item *ngIf="voucherType === voucherTypeEnum.purchaseOrder" (click)="actionVoucher('open')">
+                            <button
+                                mat-menu-item
+                                *ngIf="voucherType === voucherTypeEnum.purchaseOrder"
+                                (click)="actionVoucher('open')"
+                            >
                                 {{ commonLocaleData?.app_payment_status?.open }}
                             </button>
 
                             <ng-container
-                                *ngIf="[voucherTypeEnum.generateEstimate, voucherTypeEnum.generateProforma].includes(voucherType)"
+                                *ngIf="
+                                    [voucherTypeEnum.generateEstimate, voucherTypeEnum.generateProforma].includes(
+                                        voucherType
+                                    )
+                                "
                             >
                                 <button mat-menu-item (click)="actionEstimateProforma('accepted')">
                                     {{ localeData?.accepted }}
@@ -284,7 +306,7 @@
                         <span *ngIf="isShowInvoiceStatus()" class="invoice-status border-radius-4 text-capitalize">
                             {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action ?? selectedInvoice?.status }}
                         </span>
-                        <button matButton="outlined" (click)="redirectToGetAllPage()">
+                        <button mat-stroked-button (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}
                         </button>
                     </div>
@@ -306,8 +328,8 @@
                             {{ localeData?.record_payment }}
                         </p>
                         <a href="javascript:;" class="text-underline" (click)="showPaymentDialog()">
-                            {{ localeData?.receipt_payment }}
-                        </a>
+                            {{ localeData?.receipt_payment }}</a
+                        >
                     </div>
                     <div>
                         <span class="d-flex justify-content-center align-items-center">
@@ -316,24 +338,34 @@
                         <p class="my-1">
                             {{ localeData?.email_invoice }}
                         </p>
-                        <a href="javascript:;" class="text-underline" (click)="openEmailSendDialog()">{{ localeData?.send_invoice }}</a>
+                        <a href="javascript:;" class="text-underline" (click)="openEmailSendDialog()">{{
+                            localeData?.send_invoice
+                        }}</a>
                     </div>
                 </div>
                 <div class="d-flex" *ngIf="invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice">
                     <div>
                         <div class="pt-2 pb-2" *ngIf="moreLogsDisplayed">
-                            <a href="javascript:;" (click)="filterVoucherVersions(false)">{{ localeData?.less_details }}</a>
+                            <a href="javascript:;" (click)="filterVoucherVersions(false)">{{
+                                localeData?.less_details
+                            }}</a>
                         </div>
                         <div class="pt-2 pb-2" *ngIf="filteredVoucherVersions?.length && !moreLogsDisplayed">
-                            <a href="javascript:;" (click)="filterVoucherVersions(true)">{{ localeData?.more_details }}</a>
+                            <a href="javascript:;" (click)="filterVoucherVersions(true)">{{
+                                localeData?.more_details
+                            }}</a>
                         </div>
 
                         <ul class="invoice-history-list ml-3">
                             <li *ngFor="let log of filteredVoucherVersions" class="position-relative my-3">
                                 <p>
                                     {{ log.estimateDate }},
-                                    <span *ngIf="voucherType === voucherTypeEnum.generateEstimate">{{ localeData?.estimate }}</span>
-                                    <span *ngIf="voucherType !== voucherTypeEnum.generateEstimate">{{ voucherType }}</span>
+                                    <span *ngIf="voucherType === voucherTypeEnum.generateEstimate">{{
+                                        localeData?.estimate
+                                    }}</span>
+                                    <span *ngIf="voucherType !== voucherTypeEnum.generateEstimate">{{
+                                        voucherType
+                                    }}</span>
                                     {{ getVoucherLogText(log) }}
                                 </p>
                             </li>
@@ -354,7 +386,9 @@
                     [secondaryMessage]="' '"
                 ></no-data>
             </section>
-            <giddh-page-loader *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"></giddh-page-loader>
+            <giddh-page-loader
+                *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"
+            ></giddh-page-loader>
 
             <ng-container *ngIf="(isVoucherDownloading$ | async) === false">
                 <div class="pdf-preview" *ngIf="voucherType === voucherTypeEnum.purchase">
@@ -391,8 +425,7 @@
                         <div
                             *ngIf="
                                 shouldShowUploadAttachment &&
-                                !isCompany &&
-                                !isConsolidatedBranch &&
+                                !isCompany && !isConsolidatedBranch &&
                                 !(attachedPdfFileUrl || imagePreviewSource)
                             "
                             class="upload-excel position-relative d-flex align-items-center justify-content-center max-width-500 dashed-border"
@@ -417,8 +450,8 @@
                                                 class="file-upload-panel w-100 text-left p-2 border-radius-4 text-light"
                                                 for="csv-upload-input"
                                             >
-                                                <span>{{ localeData?.browse_file }}</span>
-                                            </label>
+                                                <span>{{ localeData?.browse_file }}</span></label
+                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -448,7 +481,7 @@
             </ng-container>
         </div>
     </div>
-</div>
+</ng-container>
 
 <!-- adjust-payment-dialog -->
 <ng-template #adjustPaymentDialog>
@@ -463,7 +496,8 @@
         (submitClicked)="getAdvanceReceiptAdjustData($event)"
         [voucherForAdjustment]="null"
         [adjustedVoucherType]="voucherType"
-    ></voucher-adjustments>
+    >
+    </voucher-adjustments>
 </ng-template>
 
 <!-- history dialog -->
@@ -478,7 +512,8 @@
         [invoiceType]="invoiceType"
         (cancelEvent)="sendEmailModalDialogRef.close()"
         (successEvent)="sendEmail($event)"
-    ></app-email-send-dialog>
+    >
+    </app-email-send-dialog>
 </ng-template>
 
 <!-- payment-dialog -->

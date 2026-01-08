@@ -1,4 +1,9 @@
-<div appTranslate [file]="'import-data'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'import-data'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="row w-100">
         <div class="col-12">
@@ -10,25 +15,36 @@
                         href="javascript:void(0);"
                         class="text-link-2 mt-1 d-block text-center"
                         [routerLink]="['/pages', 'downloads', 'imports']"
+                        >{{ localeData?.previous_imports }}</a
                     >
-                        {{ localeData?.previous_imports }}
-                    </a>
                 </div>
                 <ul class="import-type mb-4 mt-5 pt-5">
                     <li *ngIf="!isBranch">
-                        <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'master']" href="javascript:void(0);">
+                        <a
+                            class="theme-foreground-color h-100"
+                            [routerLink]="['/pages', 'import', 'master']"
+                            href="javascript:void(0);"
+                        >
                             <img src="{{ imgPath }}new/group-import.svg" alt="group import" />
                             <p>{{ commonLocaleData?.app_import_type?.master }}</p>
                         </a>
                     </li>
                     <li *ngIf="isBranch || branches?.length === 1">
-                        <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'entries']" href="javascript:void(0);">
+                        <a
+                            class="theme-foreground-color h-100"
+                            [routerLink]="['/pages', 'import', 'entries']"
+                            href="javascript:void(0);"
+                        >
                             <img src="{{ imgPath }}new/entries-import.svg" alt="entries import" />
                             <p>{{ commonLocaleData?.app_import_type?.entries }}</p>
                         </a>
                     </li>
                     <li *ngIf="!isBranch">
-                        <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'stock']" href="javascript:void(0);">
+                        <a
+                            class="theme-foreground-color h-100"
+                            [routerLink]="['/pages', 'import', 'stock']"
+                            href="javascript:void(0);"
+                        >
                             <img src="{{ imgPath }}new/Inventory-13.svg" alt="inventory" />
                             <p>{{ commonLocaleData?.app_import_type?.inventory }}</p>
                         </a>
@@ -65,4 +81,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

@@ -14,8 +14,7 @@ import { RestrictedModules } from '../app.constant';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
-    templateUrl: './vat-report.component.html',
-    standalone:false
+    templateUrl: './vat-report.component.html'
 })
 export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];

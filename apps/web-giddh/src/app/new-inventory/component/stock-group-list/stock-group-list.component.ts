@@ -8,7 +8,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
     selector: 'stock-group-list',
     templateUrl: './stock-group-list.component.html',
     styleUrls: ['./stock-group-list.component.scss'],
-    standalone: false
 })
 
 export class StockGroupListComponent implements OnInit {

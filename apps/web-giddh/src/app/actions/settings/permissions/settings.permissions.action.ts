@@ -9,9 +9,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { CustomActions } from '../../../store/custom-actions';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SettingsPermissionActions {
 
     public GetUsersWithPermissions$: Observable<Action> = createEffect(() => this.action$

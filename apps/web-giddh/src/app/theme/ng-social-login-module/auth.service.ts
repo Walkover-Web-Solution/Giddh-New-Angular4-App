@@ -42,10 +42,10 @@ export class AuthService {
     ) {
         this.providers = config.providers;
         if (config.autoLogin) {
-            (Array.isArray(this.providers) ? this.providers : []).forEach((provider: LoginProvider, key: number) => {
+            this.providers.forEach((provider: LoginProvider, key: string) => {
                 if (provider) {
                     provider.initialize().then((user: SocialUser) => {
-                        user.provider = key.toString();
+                        user.provider = key;
                         this._user = user;
                         this._authState.next(user);
                     }).catch((err) => {
@@ -67,11 +67,6 @@ export class AuthService {
                         resolve(user);
                         this._user = user;
                         this._authState.next(user);
-                        this.loadingService.hide();
-                    }).catch((error) => {
-
-                        reject(error);
-                        this.loadingService.hide();
                     });
                 } else {
                     providerObject.initialize().then(() => {
@@ -82,20 +77,10 @@ export class AuthService {
                                 resolve(u);
                                 this._user = u;
                                 this._authState.next(u);
-                                this.loadingService.hide();
-                            }).catch((error) => {
-
-                                reject(error);
-                                this.loadingService.hide();
                             });
                         } else {
-                            reject('Google Auth initialization failed');
-                            this.loadingService.hide();
+                            reject('something went wrong');
                         }
-                    }).catch((initError) => {
-
-                        reject(initError);
-                        this.loadingService.hide();
                     });
                 }
             } else {

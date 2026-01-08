@@ -1,7 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY , tap } from "rxjs";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
@@ -45,7 +45,7 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
             switchMap((req) => {
                 this.patchState({ companyListInProgress: true });
                 return this.subscriptionService.getCompaniesListBySubscriptionID(req.model, req.subscriptionId, req?.params).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -86,7 +86,7 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
                 switchMap((req) => {
                     this.patchState({ archiveCompanySuccess: null });
                     return this.subscriptionService.setArchiveUnarchiveCompany(req).pipe(
-                        tap(
+                        tapResponse(
                             (res: BaseResponse<any, any>) => {
                                 if (res?.status === 'success') {
                                     return this.patchState({

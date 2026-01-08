@@ -1,15 +1,22 @@
-<div appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <section class="aside-dialog-wrapper" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeAsidePane()">
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <section
+        class="aside-dialog-wrapper"
+        [keyboardShortcut]="'esc'"
+        [config]="{ dialogMode: true }"
+        (onShortcutPress)="closeAsidePane()"
+    >
         <div class="dialog-header">
             <span>
                 {{ commonLocaleData?.app_add }}
-                <span *ngIf="voucherApiVersion === 2">{{ stockType !== 'fixed_assets' ? (stockType | titlecase) : 'Fixed Assets' }}</span>
+                <span *ngIf="voucherApiVersion === 2">{{
+                    stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"
+                }}</span>
             </span>
             <div class="d-flex align-items-center column-gap-15">
-                <button matButton="filled" *ngIf="hideFirstStep && !isAddServiceOpen" (click)="backButtonPressed()">
+                <button mat-raised-button *ngIf="hideFirstStep && !isAddServiceOpen" (click)="backButtonPressed()">
                     {{ commonLocaleData?.app_back }}
                 </button>
-                <button matIconButton aria-label="close" (click)="closeAsidePane()">
+                <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
                     <i class="icon-cross"></i>
                 </button>
             </div>
@@ -18,17 +25,35 @@
             <div class="aside-panel-ledger" *ngIf="!hideFirstStep">
                 <div class="d-inline-grid">
                     <ng-container *ngIf="inputData !== 'receipt-note' && inputData !== 'delivery-challan'">
-                        <button matButton="filled" class="mb-2" (click)="toggleAccountPane()">
+                        <button mat-raised-button color="primary" class="mb-2" (click)="toggleAccountPane()">
                             {{ commonLocaleData?.app_add_account }}
                         </button>
                     </ng-container>
-                    <button *ngIf="voucherApiVersion === 2" matButton="filled" class="mb-2" (click)="toggleStockPane('product')">
+                    <button
+                        *ngIf="voucherApiVersion === 2"
+                        mat-raised-button
+                        color="primary"
+                        class="mb-2"
+                        (click)="toggleStockPane('product')"
+                    >
                         {{ commonLocaleData?.app_add_product }}
                     </button>
-                    <button *ngIf="voucherApiVersion === 2" matButton="filled" class="mb-2" (click)="toggleStockPane('service')">
+                    <button
+                        *ngIf="voucherApiVersion === 2"
+                        mat-raised-button
+                        color="primary"
+                        class="mb-2"
+                        (click)="toggleStockPane('service')"
+                    >
                         {{ commonLocaleData?.app_add_service }}
                     </button>
-                    <button *ngIf="voucherApiVersion === 2" matButton="filled" class="mb-2" (click)="toggleStockPane('fixed_assets')">
+                    <button
+                        *ngIf="voucherApiVersion === 2"
+                        mat-raised-button
+                        color="primary"
+                        class="mb-2"
+                        (click)="toggleStockPane('fixed_assets')"
+                    >
                         {{ commonLocaleData?.app_add_fixedassets }}
                     </button>
                 </div>
@@ -42,7 +67,7 @@
             ></stock-create-edit>
         </mat-dialog-content>
     </section>
-</div>
+</ng-container>
 
 <ng-template #accountTemplate>
     <generic-aside-menu-account

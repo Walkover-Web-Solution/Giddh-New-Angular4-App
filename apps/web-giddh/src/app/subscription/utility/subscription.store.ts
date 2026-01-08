@@ -1,7 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { SubscriptionsService } from "../../services/subscriptions.service";
@@ -67,7 +67,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
             switchMap((req) => {
                 this.patchState({ subscriptionListInProgress: true });
                 return this.subscriptionService.getAllSubscriptions(req?.pagination, req?.model).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -108,7 +108,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
             switchMap((req) => {
                 this.patchState({ cancelSubscriptionInProgress: true });
                 return this.subscriptionService.cancelSubscriptionById(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', res?.body);
@@ -151,7 +151,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
             switchMap((req) => {
                 this.patchState({ transferSubscriptionInProgress: false });
                 return this.subscriptionService.transferSubscription(req.model, req.params).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', res?.body);
@@ -192,7 +192,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
             switchMap((req) => {
                 this.patchState({ verifyOwnershipInProgress: true, rejectReason: null });
                 return this.subscriptionService.verifyOwnership(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Subscription ownership verified successfully.');
@@ -236,7 +236,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
             switchMap(() => {
                 this.patchState({ subscribedCompaniesInProgress: true });
                 return this.subscriptionService.getSubScribedCompanies().pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -276,7 +276,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
         return data.pipe(
             switchMap((req) => {
                 return this.subscriptionService.buyPlan(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -315,7 +315,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
             switchMap((req) => {
                 this.patchState({ companiesListInProgress: true });
                 return this.subscriptionService.getCompaniesBySubscriptionId(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({

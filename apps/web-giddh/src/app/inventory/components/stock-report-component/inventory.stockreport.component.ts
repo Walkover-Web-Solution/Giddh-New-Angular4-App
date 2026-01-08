@@ -41,8 +41,7 @@ import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 @Component({
     selector: 'invetory-stock-report',
     templateUrl: './inventory.stockreport.component.html',
-    styleUrls: ['./inventory.stockreport.component.scss'],
-    standalone: false
+    styleUrls: ['./inventory.stockreport.component.scss']
 })
 export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
@@ -470,7 +469,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         branches.push(this.selectedCmp);
                     }
-                    (Array.isArray(branches) ? branches : []).forEach(element => {
+                    branches.forEach(element => {
                         element['label'] = element.name;
                     });
                     this.entities$ = observableOf(orderBy(branches, 'name'));
@@ -485,7 +484,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public initVoucherType() {
         // initialization for voucher type array inially all selected
         this.stockReportRequest.voucherTypes = [];
-        (Array.isArray(this.VOUCHER_TYPES) ? this.VOUCHER_TYPES : []).forEach(element => {
+        this.VOUCHER_TYPES.forEach(element => {
             element.checked = true;
             this.stockReportRequest.voucherTypes.push(element.value);
         });
@@ -632,10 +631,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public showAccountSearchBox() {
         this.showAccountSearch = !this.showAccountSearch;
         setTimeout(() => {
-            if (this.accountName && this.accountName.nativeElement) {
-                this.accountName.nativeElement.focus();
-                this.accountName.nativeElement.value = null;
-            }
+            this.accountName?.nativeElement.focus();
+            this.accountName.nativeElement.value = null;
         }, 200);
     }
 
@@ -649,7 +646,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.stockReportRequest.val = null;
         this.stockReportRequest.param = null;
         this.stockReportRequest.expression = null;
-        if (this.accountName && this.accountName.nativeElement) {
+        if (this.accountName) {
             this.accountName.nativeElement.value = null;
         }
 
@@ -830,7 +827,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         } else {
             this.stockReportRequest.val = null;
         }
-        if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || (this.accountName && this.accountName.nativeElement && this.accountName.nativeElement.value) || this.stockReportRequest.param || this.stockReportRequest.expression || this.stockReportRequest.val) {
+        if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName?.nativeElement.value || this.stockReportRequest.param || this.stockReportRequest.expression || this.stockReportRequest.val) {
             this.isFilterCorrect = true;
         } else {
             this.isFilterCorrect = false;

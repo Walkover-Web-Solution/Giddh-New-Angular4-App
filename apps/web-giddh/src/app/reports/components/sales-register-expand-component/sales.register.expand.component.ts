@@ -19,14 +19,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
-import { forEach, includes, map, set } from '../../../lodash-optimized';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
-    styleUrls: ['./sales.register.expand.component.scss'],
-    standalone: false
+    styleUrls: ['./sales.register.expand.component.scss']
 })
 export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public SalesRegisteDetailedItems: SalesRegisteDetailedResponse;
@@ -117,7 +113,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedsalesRequestFilter.q = '';
@@ -352,7 +348,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             let idx = this.from.split('-');
             this.monthYear = [];
             if (currentYearFrom === currentYearTo) {
-                (Array.isArray(this.monthNames) ? this.monthNames : []).forEach(element => {
+                this.monthNames.forEach(element => {
                     this.monthYear.push(element + ' ' + currentYearFrom);
                 });
             }
@@ -479,10 +475,10 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             localeData: this.localeData
         }
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
-                    width: '630px',
-                    panelClass: 'export-container',
-                    data: exportData
-                });
+            width: '630px',
+            panelClass: 'export-container',
+            data: exportData
+        });
     }
 
     /**

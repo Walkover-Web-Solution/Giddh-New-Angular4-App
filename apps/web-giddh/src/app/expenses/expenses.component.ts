@@ -16,7 +16,6 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../app.constan
 import { ExpenseService } from '../services/expences.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { cloneDeep, forEach } from '../lodash-optimized';
 
 /** Enum for expense tab names */
 export enum EExpenseTabName {
@@ -26,9 +25,8 @@ export enum EExpenseTabName {
 
 @Component({
     selector: 'app-expenses',
-    standalone: false,
     templateUrl: './expenses.component.html',
-    styleUrls: ['./expenses.component.scss']
+    styleUrls: ['./expenses.component.scss'],
 })
 export class ExpensesComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
@@ -70,7 +68,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /* This will store available date ranges */
+/* This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
@@ -126,7 +124,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
 
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
@@ -153,7 +151,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                             this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
                             this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
                         }
-
+                       
 
                         if (this.rejectedListComponent) {
                             this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
@@ -251,14 +249,13 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         request.to = this.pettycashRequest.to;
         this.isPettyCashPendingReportLoading = true;
         this.expenseService.getPettycashReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
+            if(response?.status === "success") {
                 this.pettyCashPendingReportResponse = response?.body;
             } else {
                 this.toasterService.clearAllToaster();
                 this.toasterService.errorToast(response?.message);
             }
             this.isPettyCashPendingReportLoading = false;
-            this.detectChanges();
         });
     }
 
@@ -268,14 +265,13 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         request.to = this.pettycashRequest.to;
         this.isPettyCashRejectedReportLoading = true;
         this.expenseService.getPettycashRejectedReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
+            if(response?.status === "success") {
                 this.pettyCashRejectedReportResponse = response?.body;
             } else {
                 this.toasterService.clearAllToaster();
                 this.toasterService.errorToast(response?.message);
             }
             this.isPettyCashRejectedReportLoading = false;
-            this.detectChanges();
         });
     }
 
@@ -284,7 +280,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             if (res) {
                 this.universalFrom = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
                 this.universalTo = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
-                let universalDate = cloneDeep(res);
+                let universalDate = _.cloneDeep(res);
 
                 if (universalDate && !this.todaySelected) {
                     this.selectedDateRange = { startDate: dayjs(res[0]), endDate: dayjs(res[1]) };
@@ -319,7 +315,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         let tab = (event?.index === 0) ? EExpenseTabName.PENDING : EExpenseTabName.REJECTED;
         let tabIndex = (event?.index === 0) ? 0 : 1;
 
-        this.router.navigate(['pages', 'expenses-manager'], { queryParams: { tab: tab, tabIndex: tabIndex } });
+        this.router.navigate(['pages', 'expenses-manager'], { queryParams: { tab: tab, tabIndex: tabIndex } } );
 
         if (tab === EExpenseTabName.PENDING && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
             this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
@@ -426,7 +422,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      * @memberof ExpensesComponent
      */
     public reportDates(event: any): void {
-        if (this.todaySelected && event) {
+        if(this.todaySelected && event) {
             this.selectedDateRange = { startDate: dayjs(event[0], GIDDH_DATE_FORMAT), endDate: dayjs(event[1], GIDDH_DATE_FORMAT) };
             this.selectedDateRangeUi = dayjs(event[0], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event[1], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
@@ -440,16 +436,16 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      * @memberof ExpensesComponent
      */
     public previewNextItem(event: any): void {
-        if (event) {
+        if(event) {
             let nextItemIndex;
             this.pettyCashPendingReportResponse?.results?.forEach((item, index) => {
-                if (item?.uniqueName === this.selectedRowItem?.uniqueName) {
+                if(item?.uniqueName === this.selectedRowItem?.uniqueName) {
                     nextItemIndex = index + 1;
                 }
             });
 
-            if (this.pettyCashPendingReportResponse?.results?.length > 1) {
-                if (nextItemIndex && this.pettyCashPendingReportResponse?.results[nextItemIndex]) {
+            if(this.pettyCashPendingReportResponse?.results?.length > 1) {
+                if(nextItemIndex && this.pettyCashPendingReportResponse?.results[nextItemIndex]) {
                     this.selectedRowItem = this.pettyCashPendingReportResponse?.results[nextItemIndex];
                 } else {
                     this.selectedRowItem = this.pettyCashPendingReportResponse?.results[0];

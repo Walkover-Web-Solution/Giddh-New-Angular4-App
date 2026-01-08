@@ -16,8 +16,7 @@ import {
 import { DaterangepickerConfig } from './config.service';
 
 @Directive({
-    selector: "[daterangepicker]",
-    standalone: false
+    selector: "[daterangepicker]"
 })
 export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnChanges {
 

@@ -8,6 +8,7 @@ import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../app.const
 import { PageEvent } from '@angular/material/paginator';
 import { AppState } from '../../../store';
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
+import { cloneDeep } from "../../../lodash-optimized";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
 import { GroupStockReportRequest } from "../../../models/api-models/Inventory";
 import { SettingsFinancialYearActions } from "../../../actions/settings/financial-year/financial-year.action";
@@ -15,14 +16,10 @@ import { GeneralService } from "../../../services/general.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { SelectFieldComponent } from "../../../theme/form-fields/select-field/select-field.component";
 import { ServiceConfig } from "../../../services/service.config";
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
-import { cloneDeep, filter, forEach, includes, indexOf, map, remove } from '../../../lodash-optimized';
 @Component({
     selector: 'stock-balance',
     templateUrl: './stock-balance.component.html',
-    styleUrls: ['./stock-balance.component.scss'],
-    standalone:false
+    styleUrls: ['./stock-balance.component.scss']
 })
 
 
@@ -120,9 +117,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             }
             this.warehouses = warehousesClone;
         });
+
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.isLoading = true;
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.getStockUnits();
         this.getWarehouses();
         this.GroupStockReportRequest = new GroupStockReportRequest();
@@ -131,19 +129,19 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         combineLatest([this.inventoryService.GetGroupsWithStocksFlatten(), this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.financialYearLimits))]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (resp[0] && resp[1] && resp[2]) {
                 this.isLoading = false;
-
+                
                 // Handle stock groups data
                 if (resp[0]?.status === "success") {
                     let stockGroups: IOption[] = [];
                     this.arrangeStockGroups(resp[0].body?.results, stockGroups);
                     this.stockGroups = stockGroups;
                 }
-
+                
                 // Handle warehouses data
                 this.warehouses = resp[1]?.results;
                 this.allWarehouses = resp[1]?.results;
-                let stockGroupUniqueName = resp[0]?.body?.results && resp[0]?.body?.results[0] ? resp[0]?.body?.results[0]?.uniqueName : null;
-                let warehouseUniqueName = resp[1]?.results && resp[1]?.results[0] ? resp[1]?.results[0]?.uniqueName : null;
+                let stockGroupUniqueName = resp[0]?.body?.results[0]?.uniqueName;
+                let warehouseUniqueName = resp[1]?.results[0]?.uniqueName;
                 let financialYearLimits = resp[2]?.startDate;
                 if (stockGroupUniqueName && warehouseUniqueName && financialYearLimits && !this.GroupStockReportRequest.from) {
                     this.GroupStockReportRequest.warehouseUniqueName = warehouseUniqueName;
@@ -196,8 +194,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                 if (response && response?.status === "success") {
                     stock.stock = response?.body;
                     stock.stockOriginal = cloneDeep(response?.body);
-                    (Array.isArray(stock?.stock?.variants) ? stock?.stock?.variants : []).forEach(variant => {
-                        (Array.isArray(this.warehouses) ? this.warehouses : []).forEach(warehouse => {
+                    stock?.stock?.variants.forEach(variant => {
+                        this.warehouses.forEach(warehouse => {
                             const warehouseFound = variant?.warehouseBalance?.filter(balance => balance?.warehouse?.uniqueName === warehouse?.uniqueName);
                             if (!warehouseFound?.length) {
                                 variant.warehouseBalance.push({
@@ -256,7 +254,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                         });
                     });
 
-                    (Array.isArray(this.allSelectedWarehouse) ? this.allSelectedWarehouse : []).forEach(warehouse => {
+                    this.allSelectedWarehouse.forEach(warehouse => {
                         this.calculationWarehouse(warehouse);
                     });
                     this.GroupStockReportRequest.page = response.body?.page;
@@ -298,12 +296,12 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     if (response && response?.status === "success") {
                         let warehouseStocksList = response?.body?.stockReport;
                         if (warehouseStocksList?.length > 0) {
-                            (Array.isArray(warehouseStocksList) ? warehouseStocksList : []).forEach(warehouseStock => {
+                            warehouseStocksList.forEach(warehouseStock => {
                                 const stockFound = this.stocksList?.filter(stock => stock?.stockUniqueName === warehouseStock?.stockUniqueName);
-                                if (stockFound?.length > 0 && stockFound[0]) {
+                                if (stockFound?.length > 0) {
                                     if (stockFound[0]?.warehouses?.length > 0) {
                                         const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse?.uniqueName === uniqueName);
-                                        if (warehouseFound?.length > 0 && warehouseFound[0]) {
+                                        if (warehouseFound?.length > 0) {
                                             warehouseFound[0].openingBalance = warehouseStock?.openingBalance;
                                         }
                                     }

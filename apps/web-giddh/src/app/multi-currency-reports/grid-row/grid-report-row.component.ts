@@ -18,14 +18,12 @@ import { Account, ChildGroup } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../financial-reports/constants/trial-balance-profit.constant';
 import { SearchService } from '../../services/search.service';
-import { indexOf } from '../../lodash-optimized';
 
 @Component({
-selector: '[grid-report-row]',
+    selector: '[grid-report-row]',
     styleUrls: ['./grid-report-row.component.scss'],
     templateUrl: './grid-report-row.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridReportRowComponent implements OnChanges, OnDestroy {
     /** Child group details */

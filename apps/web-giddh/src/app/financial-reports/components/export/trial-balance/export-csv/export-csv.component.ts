@@ -15,9 +15,6 @@ import { takeUntil } from 'rxjs/operators';
 
 import { DataFormatter, IFormatable } from '../../model/data-formatter';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { Configuration } from '../../../../../app.constant';
-import { environment } from '../../../../../../environments/environment.generated';
-import { forEach, indexOf } from '../../../../../lodash-optimized';
 
 export interface Total {
     ob: number;
@@ -45,22 +42,21 @@ class FormatCsv implements IFormatable {
 
     public setRowData(data: any[], padding: number) {
         this.body += ' '.repeat(padding);
-        (Array.isArray(data) ? data : []).forEach(value => this.body += `${value},`);
+        data.forEach(value => this.body += `${value},`);
         this.body += `\r\n`;
     }
 
     public setFooter(data: any[]) {
         this.footer += this.localeData?.csv.trial_balance.total;
-        (Array.isArray(data) ? data : []).forEach(value => this.footer += `${value},`);
+        data.forEach(value => this.footer += `${value},`);
         this.footer += `\r\n`;
     }
 }
 
 @Component({
-selector: 'trial-balance-export-csv',
+    selector: 'trial-balance-export-csv',
     templateUrl: './export-csv.component.html',
-    providers: [RecTypePipe],
-    standalone: false
+    providers: [RecTypePipe]
 })
 export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
     @Input() public trialBalanceRequest: TrialBalanceRequest;
@@ -93,7 +89,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/csv.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/csv.svg';
+        this.imgPath = isElectron ? 'assets/images/csv.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/csv.svg';
     }
 
     public ngOnDestroy() {

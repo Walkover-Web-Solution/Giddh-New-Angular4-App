@@ -1,4 +1,4 @@
-<div
+<ng-container
     appTranslate
     [file]="'custom-fields'"
     (localeData)="localeData = $event"
@@ -7,13 +7,13 @@
 >
     <hamburger-menu></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-    <div *ngIf="!showLoader">
+    <ng-container *ngIf="!showLoader">
         <div class="position-relative create-custom-field-page mt-4">
-            <button matButton="outlined" [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
+            <button mat-stroked-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
                 <i class="back-left icon-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>
-            <div class="custom-field-wrapper">
+            <div class="custom-field-wrapper relative">
                 <div>
                     <form #customFieldCreateEditForm="ngForm" novalidate autocomplete="off">
                         <p class="mx-3 mb-3 mb-4 font-size-15" *ngIf="!customFieldUniqueName">
@@ -29,7 +29,8 @@
                                         [(ngModel)]="customFieldRequest.fieldName"
                                         [required]="true"
                                         [label]="localeData?.field_name"
-                                    ></input-field>
+                                    >
+                                    </input-field>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -42,7 +43,8 @@
                                         [labelValue]="customFieldRequest?.fieldType?.name"
                                         [required]="true"
                                         [label]="localeData?.field_type"
-                                    ></reactive-dropdown-field>
+                                    >
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                             <div class="row mb-3" *ngIf="visibleFields.fieldInfo">
@@ -85,10 +87,7 @@
                             </div>
                             <div class="row mb-3" *ngIf="visibleFields.fieldOptions">
                                 <div class="col-sm-4 col-lg-4">
-                                    <label>
-                                        {{ localeData?.options }}
-                                        <span class="text-red">*</span>
-                                    </label>
+                                    <label>{{ localeData?.options }} <span class="text-red">*</span></label>
                                 </div>
                                 <div class="col-sm-8 col-lg-6">
                                     <div class="add-icon-delete mb-3">
@@ -115,8 +114,8 @@
                                             [required]="true"
                                             [multiple]="true"
                                         >
-                                            <mat-option *ngFor="let module of fieldModules" [value]="module?.uniqueName">
-                                                {{ module.name }}
+                                            <mat-option *ngFor="let module of fieldModules" [value]="module?.uniqueName"
+                                                >{{ module.name }}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -124,18 +123,26 @@
                             </div>
                             <div class="row">
                                 <div class="col-8">
-                                    <mat-slide-toggle color="primary" [(ngModel)]="customFieldRequest.isMandatory" name="isMandatory">
+                                    <mat-slide-toggle
+                                        color="primary"
+                                        [(ngModel)]="customFieldRequest.isMandatory"
+                                        name="isMandatory"
+                                    >
                                         {{ localeData?.field_mandatory }}
                                     </mat-slide-toggle>
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-8">
-                                    <div class="d-flex align-items-center justify-content-between" *ngIf="voucherApiVersion === 2">
-                                        <div *ngIf="customFieldUniqueName">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between"
+                                        *ngIf="voucherApiVersion === 2"
+                                    >
+                                        <ng-container *ngIf="customFieldUniqueName">
                                             <div class="d-flex column-gap-15">
                                                 <button
-                                                    matButton="filled"
+                                                    mat-raised-button
+                                                    color="primary"
                                                     class="min-width-100"
                                                     [disabled]="
                                                         customFieldCreateEditForm.invalid ||
@@ -147,18 +154,19 @@
                                                     {{ commonLocaleData?.app_update }}
                                                 </button>
                                                 <button
-                                                    matButton="outlined"
+                                                    mat-stroked-button
                                                     class="min-width-100 mr-0"
                                                     (click)="redirectToGetAllPage()"
                                                 >
                                                     {{ commonLocaleData?.app_cancel }}
                                                 </button>
                                             </div>
-                                        </div>
-                                        <div *ngIf="!customFieldUniqueName">
+                                        </ng-container>
+                                        <ng-container *ngIf="!customFieldUniqueName">
                                             <div class="d-flex column-gap-15">
                                                 <button
-                                                    matButton="filled"
+                                                    mat-raised-button
+                                                    color="primary"
                                                     class="min-width-100"
                                                     [disabled]="
                                                         customFieldCreateEditForm.invalid ||
@@ -170,14 +178,14 @@
                                                     {{ commonLocaleData?.app_save }}
                                                 </button>
                                                 <button
-                                                    matButton="outlined"
+                                                    mat-stroked-button
                                                     class="min-width-100 mr-0"
                                                     (click)="resetForm(customFieldCreateEditForm)"
                                                 >
                                                     {{ commonLocaleData?.app_clear }}
                                                 </button>
                                             </div>
-                                        </div>
+                                        </ng-container>
                                     </div>
                                 </div>
                             </div>
@@ -186,5 +194,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </ng-container>
+</ng-container>

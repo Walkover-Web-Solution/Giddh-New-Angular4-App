@@ -1,13 +1,11 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as jsonTreeViewer from 'json-tree-viewer';
-import { remove } from '../../../lodash-optimized';
 @Component({
     selector: 'activity-logs-json',
     templateUrl: './activity-logs-json.component.html',
     styleUrls: ['activity-logs-json.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActivityLogsJsonComponent implements OnInit, OnDestroy {
     /** Instance of activity logs json */

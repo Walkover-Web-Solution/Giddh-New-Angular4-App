@@ -4,20 +4,16 @@ import { saveAs } from 'file-saver';
  * NativeScript helpers
  */
 
-declare var window: any;
+declare var window;
 
 /**
  * Electron helpers
  */
-export const isElectron = () => {
-    return window && window.process && window.process.type;
-};
+export function isElectron() {
+    return typeof window !== 'undefined' && window.process && window.process.type;
+}
 
-export const isCordova = () => {
-    return window && window.cordova;
-};
-
-export function download(filename: string, data: any, mimeType: string): any {
+export function download(filename, data, mimeType): any {
     const blob = data;
     saveAs(blob, filename);
 }

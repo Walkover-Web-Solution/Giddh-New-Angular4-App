@@ -11,23 +11,30 @@
     ></div>
     <div class="col-2 group text-right">
         <span class="d-inline-flex">
-            <amount-field [amount]="groupDetail.forwardedBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
-        </span>
-        {{ groupDetail.forwardedBalance | recType }}
+            <amount-field
+                [amount]="groupDetail.forwardedBalance?.amount"
+                [currencySymbol]="false"
+                [currencyCode]="false"
+            >
+            </amount-field> </span
+        >{{ groupDetail.forwardedBalance | recType }}
     </div>
     <div class="col-2 group text-right">
         <span class="d-inline-flex">
-            <amount-field [amount]="groupDetail.debitTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+            <amount-field [amount]="groupDetail.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
         </span>
     </div>
     <div class="col-2 group text-right">
         <span class="d-inline-flex">
-            <amount-field [amount]="groupDetail.creditTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+            <amount-field [amount]="groupDetail.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
         </span>
     </div>
     <div class="col-2 group text-right">
         <span class="d-inline-flex">
-            <amount-field [amount]="groupDetail.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+            <amount-field [amount]="groupDetail.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
         </span>
         {{ groupDetail.closingBalance | recType }}
     </div>
@@ -66,7 +73,10 @@
     >
         <div class="row row-item">
             <div class="col-4 account user-select-none" [style.padding-left]="padding + 20 + 'px !important'">
-                <div class="p-0 border-right-none text-danger" [innerHTML]="account.name | lowercase | highlight: search"></div>
+                <div
+                    class="p-0 border-right-none text-danger"
+                    [innerHTML]="account.name | lowercase | highlight: search"
+                ></div>
                 <span class="position-absolute" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="accountDetailModalTemplate">&nbsp;</span>
                 <mat-menu #accountDetailModalTemplate>
                     <span
@@ -80,27 +90,40 @@
                         (modalOpened)="handleModalOpened($event)"
                         (modalClosed)="hideModal()"
                         (modalClosedTemporary)="openAccountModal.emit($event); hideModal()"
-                    ></span>
+                    >
+                    </span>
                 </mat-menu>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field
+                        [amount]="account.openingBalance?.amount"
+                        [currencySymbol]="false"
+                        [currencyCode]="false"
+                    >
+                    </amount-field>
                 </span>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="account.debitTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="account.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="account.creditTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field [amount]="account.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
                 </span>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">
-                    <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    <amount-field
+                        [amount]="account.closingBalance?.amount"
+                        [currencySymbol]="false"
+                        [currencyCode]="false"
+                    >
+                    </amount-field>
                 </span>
                 {{ account.closingBalance | recType }}
             </div>
