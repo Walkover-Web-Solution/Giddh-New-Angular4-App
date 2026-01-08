@@ -1,5 +1,5 @@
 <div appTranslate [file]="'inventory/adjustment'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.create_reason }}</span>
     </div>
     <mat-dialog-content class="dialog-body">

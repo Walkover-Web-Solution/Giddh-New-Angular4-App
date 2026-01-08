@@ -22,7 +22,7 @@
     <ng-template #transferConfirmation>
         <div (click)="$event.stopPropagation()">
             <div>
-                <div class="dialog-header">
+                <div cdkFocusInitial class="dialog-header">
                     <span>{{ localeData?.subscription_transfer }}</span>
                     <button matIconButton aria-label="close" (click)="closeAllDialogs($event)">
                         <i class="icon-cross"></i>
@@ -48,7 +48,7 @@
     <ng-template #rejectConfirmation>
         <div (click)="$event.stopPropagation()">
             <div>
-                <div class="dialog-header">
+                <div cdkFocusInitial class="dialog-header">
                     <span>{{ localeData?.reject }}</span>
                 </div>
                 <mat-dialog-content class="dialog-body">

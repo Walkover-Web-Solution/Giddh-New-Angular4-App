@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete()"
 >
     <!-- Adjust Payment modal start -->
-    <div class="dialog-header" *ngIf="isModal">
+    <div cdkFocusInitial class="dialog-header" *ngIf="isModal">
         <span>{{ localeData?.page_heading }}</span>
     </div>
     <mat-dialog-content class="dialog-body font-size-15 adjustments-list">

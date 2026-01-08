@@ -1,6 +1,6 @@
 <div appTranslate [file]="'ledger/export-ledger'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div>
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.export_group_ledger }}</span>
         </div>
         <mat-dialog-content class="dialog-body">

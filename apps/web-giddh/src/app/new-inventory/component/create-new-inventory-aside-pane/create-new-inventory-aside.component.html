@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="aside-dialog-wrapper">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ commonLocaleData?.app_create_new }}</span>
             <button matIconButton aria-label="close" (click)="closeAsidePane($event)">
                 <i class="icon-cross"></i>

@@ -631,7 +631,7 @@
         </div>
     </div>
     <ng-template #expiredPlanModel>
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.ready_to_upgrade }}</span>
             <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
@@ -670,7 +670,7 @@
     </ng-template>
     <!-- modal second -->
     <ng-template #crossedTxLimitModel>
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.ready_to_upgrade }}</span>
             <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>

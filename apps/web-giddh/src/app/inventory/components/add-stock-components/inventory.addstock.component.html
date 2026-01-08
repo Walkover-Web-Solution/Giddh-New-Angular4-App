@@ -1,6 +1,6 @@
 <form #formDiv name="addEditStockForm" class="row" [formGroup]="addStockForm" novalidate="" autocomplete="off">
     <section class="w-100">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ isUpdatingStockForm ? 'Update Stock' : 'Create Stock' }}</span>
             <button matIconButton aria-label="close" (click)="closeAsidePane()">
                 <i class="icon-cross"></i>
