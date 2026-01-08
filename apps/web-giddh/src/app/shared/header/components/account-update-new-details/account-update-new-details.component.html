@@ -283,7 +283,7 @@
                 <div class="pt-3 px-1 overflow-hidden" formArrayName="addresses" *ngIf="addAccountForm.get('addresses')?.length">
                     <ng-container
                         *ngFor="
-                            let gst of addAccountForm.get('addresses')['controls'] | slice: 0 : gstDetailsLength;
+                            let gst of addressesControls | slice: 0 : gstDetailsLength;
                             let i = index;
                             let firstItem = first;
                             let lastItem = last
@@ -431,11 +431,11 @@
                         </div>
                         <div
                             class="d-flex justify-content-between column-gap-15 pb-4"
-                            *ngIf="lastItem && addAccountForm.get('addresses')['controls']?.length > 3 && !moreGstDetailsVisible"
+                            *ngIf="lastItem && addressesControls?.length > 3 && !moreGstDetailsVisible"
                         >
                             <button matButton="outlined" class="text-left w-50 pr-4" (click)="showMoreGst()">
                                 {{ commonLocaleData?.app_show_all }} ({{
-                                    addAccountForm.get("addresses")["controls"]?.length
+                                    addressesControls?.length
                                 }})
                             </button>
                             <button matButton="outlined" class="text-left w-50" (click)="showLessGst()">
@@ -510,7 +510,7 @@
                 <div formArrayName="portalDomain" class="pt-3 px-1 overflow-hidden pb-5">
                     <div
                         class="row pb-4 align-items-center"
-                        *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
+                        *ngFor="let domain of portalDomainControls; let i = index"
                         [formGroupName]="i"
                     >
                         <div class="w-25 pl-3">
@@ -520,17 +520,16 @@
                                 [id]="'name' + i"
                                 [label]="localeData?.portal_attention_to"
                                 [placeholder]="localeData?.portal_attention_to"
-                                [type]="'email'"
+                                [type]="'text'"
                                 (input)="portalIndex = i"
                                 [autoFocus]="activePortalIndex === i"
                                 formControlName="name"
-                                ]
                             ></input-field>
                         </div>
                         <div class="pl-2">
                             <input-field
                                 appEnterNext
-                                [name]="'name_' + i"
+                                [name]="'email_' + i"
                                 [id]="'emailid' + i"
                                 [label]="commonLocaleData?.app_email_id"
                                 [placeholder]="commonLocaleData?.app_email_id"
@@ -589,7 +588,7 @@
                         </div>
                         <div class="pl-2 mt-1">
                             <button
-                                matButton="outlined"
+                                mat-stroked-button
                                 (click)="removePortalUser(domain, i)"
                                 class="btn-stroked-icon"
                                 aria-label="delete icon"
@@ -627,7 +626,7 @@
                         <div
                             class="row"
                             *ngFor="
-                                let bank of addAccountForm.get('accountBankDetails')['controls'];
+                                let bank of bankDetailsControls;
                                 let i = index;
                                 let firstItem = first;
                                 let lastItem = last
@@ -868,7 +867,7 @@
                             [formGroupName]="companyCustomFieldIndex"
                         >
                             <ng-container
-                                *ngFor="let customFieldsItem of addAccountForm.get('customFields')['controls']; let index = index"
+                                *ngFor="let customFieldsItem of customFieldsControls; let index = index"
                             >
                                 <div class="row mb-3" *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value">
                                     <div class="col-lg-8">
