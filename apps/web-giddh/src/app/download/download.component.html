@@ -1,21 +1,20 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate (commonLocaleData)="commonLocaleData = $event">
     <header class="header">
         <div class="brand-logo">
             <a [href]="giddhDomainUrl" target="_blank"><img [src]="giddhLogoSrc" alt="brand-logo" /></a>
         </div>
     </header>
     <div class="download-button flex-column d-flex justify-content-center align-items-center">
-        <span class="mb-3"> <img src="{{ imgPath }}download-illustrator.svg" /></span>
+        <span class="mb-3"><img src="{{ imgPath }}download-illustrator.svg" /></span>
         <p class="mb-3">{{ commonLocaleData?.app_download_here }}</p>
         <a
-            mat-raised-button
-            color="primary"
+            matButton="filled"
             class="mr-0 min-width-160 d-flex align-items-center justify-content-center"
             [href]="downloadUrl"
             download
             target="_blank"
         >
-            {{ commonLocaleData?.app_download }}</a
-        >
+            {{ commonLocaleData?.app_download }}
+        </a>
     </div>
-</ng-container>
+</div>

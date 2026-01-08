@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -8,47 +8,47 @@
     <div class="aside-dialog-wrapper">
         <div class="dialog-header">
             <span>{{ commonLocaleData?.app_create_new }}</span>
-            <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
+            <button matIconButton aria-label="close" (click)="closeAsidePane($event)">
                 <i class="icon-cross"></i>
             </button>
         </div>
         <mat-dialog-content class="dialog-body d-flex flex-column justify-content-center align-items-center">
-            <ng-container *ngIf="moduleType === 'branch-transfer'">
+            <div *ngIf="moduleType === 'branch-transfer'">
                 <div class="pb-3">
-                    <button mat-raised-button color="primary" (click)="openCreateBranchTransfer('receipt-note')">
-                        {{commonLocaleData?.app_receipt_note}}
+                    <button matButton="filled" (click)="openCreateBranchTransfer('receipt-note')" class="w150">
+                        {{ commonLocaleData?.app_receipt_note }}
                     </button>
                 </div>
                 <div>
-                    <button mat-raised-button color="primary" (click)="openCreateBranchTransfer('delivery-challan')">
-                        {{commonLocaleData?.app_delivery_challan}}
+                    <button matButton="filled" (click)="openCreateBranchTransfer('delivery-challan')" class="w150">
+                        {{ commonLocaleData?.app_delivery_challan }}
                     </button>
                 </div>
-            </ng-container>
-            <ng-container *ngIf="moduleType !== 'branch-transfer' && moduleType !== 'inventory-adjustment'">
+            </div>
+            <div *ngIf="moduleType !== 'branch-transfer' && moduleType !== 'inventory-adjustment'">
                 <div class="pb-3">
-                    <button mat-raised-button color="primary" (click)="createNewByAsidePanel('stock')">
+                    <button matButton="filled" (click)="createNewByAsidePanel('stock')" class="w150">
                         {{ commonLocaleData?.app_create_stock }}
                     </button>
                 </div>
                 <div>
-                    <button mat-raised-button color="primary" (click)="createNewByAsidePanel('group')">
+                    <button matButton="filled" (click)="createNewByAsidePanel('group')" class="w150">
                         {{ commonLocaleData?.app_create_group }}
                     </button>
                 </div>
-            </ng-container>
-            <ng-container *ngIf="moduleType === 'inventory-adjustment'">
+            </div>
+            <div *ngIf="moduleType === 'inventory-adjustment'">
                 <div class="pb-3">
-                    <button mat-raised-button color="primary" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']" >
+                    <button matButton="filled" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']" class="w150">
                         Adjust Group
                     </button>
                 </div>
                 <div>
-                    <button mat-raised-button color="primary" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']">
+                    <button matButton="filled" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']" class="w150">
                         Adjust Stock
                     </button>
                 </div>
-            </ng-container>
+            </div>
         </mat-dialog-content>
     </div>
-</ng-container>
+</div>

@@ -4,7 +4,7 @@ import { select, Store } from "@ngrx/store";
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
-import { BranchHierarchyType, FILE_ATTACHMENT_TYPE } from "../../app.constant";
+import { BranchHierarchyType, Configuration, FILE_ATTACHMENT_TYPE } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { CommonService } from "../../services/common.service";
 import { GeneralService } from "../../services/general.service";
@@ -21,12 +21,14 @@ import * as printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ServiceConfig } from "../../services/service.config";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: "attachments",
     templateUrl: "./attachments.component.html",
     styleUrls: ["./attachments.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AttachmentsComponent implements OnInit, OnDestroy {
     /** Taking selected entry as input */
@@ -93,7 +95,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -317,13 +319,13 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public showDeleteAttachedFileModal(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            data: {
+                    width: '40%',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
-                body: this.localeData?.confirm_delete_file,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.confirm_delete_file,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -361,14 +363,14 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         }
 
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            data: {
+                    width: '40%',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
-                body: messageBody,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: this.localeData?.delete_entries_content
-            }
+                    body: messageBody,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: this.localeData?.delete_entries_content
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -436,7 +438,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         }
 
         if (isAttachmentSelected?.length > 0) {
-            isAttachmentSelected.forEach(attachment => {
+            (Array.isArray(isAttachmentSelected) ? isAttachmentSelected : []).forEach(attachment => {
                 if (attachment?.type !== "unsupported") {
                     if (attachment?.type === "image") {
                         filesToPrint.push({ file: `data:image/${attachment?.type};base64,` + attachment?.encodedData, type: attachment?.type });

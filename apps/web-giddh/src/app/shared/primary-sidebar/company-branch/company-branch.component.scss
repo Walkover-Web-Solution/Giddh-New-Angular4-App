@@ -28,7 +28,6 @@
                 border-color: var(--border-color) !important;
             }
         }
-
     }
 
     tab {
@@ -111,14 +110,14 @@
                     span {
                         background-color: var(--theme-primary-light);
                     }
-
                 }
                 &.btn-group {
                     display: flex;
                     flex-direction: column;
                     margin-bottom: 0 !important;
                     padding: 0 20px;
-                    &.active, &:hover  {
+                    &.active,
+                    &:hover {
                         background-color: var(--theme-primary-light) !important;
                         color: var(--color-black) !important;
                     }
@@ -224,18 +223,17 @@
                     a {
                         background-color: transparent;
                         padding: 8px 20px;
-                        color: var(--color-dark-gray);
+                        color: var(--theme-foreground-color);
                         white-space: normal;
                         word-break: break-all;
                         &.active {
-                            color: var(--color-dark-gray) !important;
+                            color: var(--color-black) !important;
                             background-color: var(--theme-primary-light) !important;
                         }
                         &:hover {
                             background-color: initial !important;
-                            color: var(--color-dark-gray) !important;
+                            color: var(--color-black) !important;
                         }
-
                     }
                     &:hover {
                         a {
@@ -255,91 +253,88 @@
         }
     }
 
-.company-branch-opt-2 {
-    .wrap-company-refresh {
-        padding: 0 20px;
-        p {
-            span {
-                small {
-                    background: var(--color-border-light);
-                    color: var(--color-dark-gray);
-                    font-size: var(--font-size-9);
-                    line-height: 12.4px;
-                    font-weight: 700;
-                    padding: 2px 5px;
-                    border-radius: var(--mat-border-radius-4);
-                }
-            }
-        }
-        .btn-sky-text-primary {
-            padding: 0px 10px;
-            height: 30px;
-        }
-    }
-    .company-list {
-        height: calc(100vh - 292px) !important;
-        overflow-x: hidden;
-        padding: 0 !important;
-        ul {
-            position: relative;
-            li {
-                padding: 0;
-                margin: 0;
-                &:last-child {
-                    margin-bottom: 10px !important;
-                }
+    .company-branch-opt-2 {
+        .wrap-company-refresh {
+            padding: 0 20px;
+            p {
                 span {
-                    padding: 8px 20px;
+                    small {
+                        background: var(--color-border-light);
+                        color: var(--color-dark-gray);
+                        font-size: var(--font-size-9);
+                        line-height: 12.4px;
+                        font-weight: 700;
+                        padding: 2px 5px;
+                        border-radius: var(--mat-border-radius-4);
+                    }
+                }
+            }
+            .btn-sky-text-primary {
+                padding: 0px 10px;
+                height: 30px;
+            }
+        }
+        .company-list {
+            height: calc(100vh - 292px) !important;
+            overflow-x: hidden;
+            padding: 0 !important;
+            ul {
+                position: relative;
+                li {
+                    padding: 0;
                     margin: 0;
-                    &.company-name {
-                        display: flex !important;
-                        align-items: center !important;
-                        justify-content: space-between !important;
-                        span {
-                            i {
-                                float: left;
-                                width: 14px;
-                            }
-
-                        }
+                    &:last-child {
+                        margin-bottom: 10px !important;
                     }
-                }
-                &.btn-group {
-                    &.open {
-                        span {
-                            &.dropdown-toggle {
-                                padding: 8px 20px;
-                                span {
-                                    color: var(--color-dark-gray);
-                                }
-                            }
-                            &.active {
-                                background-color: var(--theme-primary-light);
-                                position: sticky;
-                                top: 0;
-                                z-index: 991;
-                            }
-
-                        }
-                        background-color: transparent !important;
-                        ul {
-                            padding: 0;
-                            li {
-                                span {
-                                    padding: 0;
+                    span {
+                        padding: 8px 20px;
+                        margin: 0;
+                        &.company-name {
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            span {
+                                i {
+                                    float: left;
+                                    width: 14px;
                                 }
                             }
                         }
-
                     }
-                }
-                a {
-                    padding: 10px 20px !important;
+                    &.btn-group {
+                        &.open {
+                            span {
+                                &.dropdown-toggle {
+                                    padding: 8px 20px;
+                                    span {
+                                        color: var(--color-dark-gray);
+                                    }
+                                }
+                                &.active {
+                                    background-color: var(--theme-primary-light);
+                                    position: sticky;
+                                    top: 0;
+                                    z-index: 991;
+                                }
+                            }
+                            background-color: transparent !important;
+                            ul {
+                                padding: 0;
+                                li {
+                                    span {
+                                        padding: 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    a {
+                        padding: 10px 20px !important;
+                    }
                 }
             }
         }
     }
-}
 }
 
 .icon-reload {

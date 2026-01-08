@@ -6,7 +6,8 @@ import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
 @Directive({
-    selector: '[appTranslate]'
+    selector: '[appTranslate]',
+    standalone: false
 })
 
 export class TranslateDirective implements OnInit, OnDestroy {

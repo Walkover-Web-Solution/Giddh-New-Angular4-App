@@ -2,7 +2,7 @@
     <div class="row">
         <div [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-back': showLoader }"></div>
         <div class="col-md-2 col-sm-2" *ngIf="!showLoader">
-            <button (click)="backClicked()" class="mb-2 mr-0" color="primary" mat-raised-button>
+            <button (click)="backClicked()" class="mb-2 mr-0" matButton="filled">
                 <i class="icon-left back-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>
@@ -10,12 +10,12 @@
     </div>
     <ng-container *ngIf="!isSwitchPlanInProcess">
         <div class="scroll-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'left-icon': showLoader }">
-            <button mat-raised-button color="primary" (click)="scrollLeft()" *ngIf="!showLoader">
+            <button matButton="filled" (click)="scrollLeft()" *ngIf="!showLoader">
                 <i class="icon-left"></i>
             </button>
         </div>
         <div class="scroll-right" [ngClass]="{ 'skeleton-common-class': showLoader, 'right-icon': showLoader }">
-            <button mat-raised-button color="primary" (click)="scrollRight()" *ngIf="!showLoader">
+            <button matButton="filled" (click)="scrollRight()" *ngIf="!showLoader">
                 <i class="icon-right"></i>
             </button>
         </div>
@@ -27,12 +27,12 @@
                     </span>
                 </div>
                 <div class="grid-title-list font-size-15" *ngFor="let plan of inputData">
-                    <span class="sub-plan-name">{{ plan["name"] }}</span> <br />
-                    <span class="sub-plan-amount"
-                        >{{ plan["currency"]?.symbol }}{{ plan["amount"] }}/<span class="sub-plan-duration">{{
-                            plan["durationUnit"]
-                        }}</span></span
-                    >
+                    <span class="sub-plan-name">{{ plan['name'] }}</span>
+                    <br />
+                    <span class="sub-plan-amount">
+                        {{ plan['currency']?.symbol }}{{ plan['amount'] }}/
+                        <span class="sub-plan-duration">{{ plan['durationUnit'] }}</span>
+                    </span>
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
                     <span class="inner-name mat-table-sticky">{{ commonLocaleData?.app_transactions }}</span>
                 </div>
                 <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
-                    <span>{{ plan["transactionLimit"] }}</span>
+                    <span>{{ plan['transactionLimit'] }}</span>
                 </div>
             </div>
             <div class="grid-list-div list-grid">
@@ -49,7 +49,7 @@
                     <span class="inner-name mat-table-sticky">{{ localeData?.subscription?.companies }}</span>
                 </div>
                 <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
-                    <span>{{ plan["companiesLimit"] }}</span>
+                    <span>{{ plan['companiesLimit'] }}</span>
                 </div>
             </div>
             <div class="grid-list-div list-grid">
@@ -78,16 +78,15 @@
             </div>
             <div class="grid-list-div list-grid bottom-grid-list-div">
                 <div class="grid-title-left">
-                    <a class="sub-plan-feature mat-table-sticky" (click)="openDialog()" href="javascript:void(0)">{{
-                        localeData?.subscription?.check_all_features
-                    }}</a>
+                    <a class="sub-plan-feature mat-table-sticky" (click)="openDialog()" href="javascript:void(0)">
+                        {{ localeData?.subscription?.check_all_features }}
+                    </a>
                 </div>
                 <div class="grid-title-list bottom-buy-button" *ngFor="let plan of inputData">
                     <button
                         (click)="buyPlanClicked(plan)"
                         class="all-feature-button"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         *ngIf="plan?.uniqueName === activeCompany?.subscription?.planDetails?.uniqueName"
                     >
                         {{ localeData?.subscription?.renew }}
@@ -95,8 +94,7 @@
                     <button
                         (click)="buyPlanClicked(plan)"
                         class="all-feature-button"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         *ngIf="plan?.uniqueName !== activeCompany?.subscription?.planDetails?.uniqueName"
                     >
                         {{ localeData?.subscription?.buy_plan }}
@@ -107,10 +105,7 @@
 
         <div #tableContent class="plan-table-content" *ngIf="showLoader">
             <div class="grid-list-div-changes">
-                <div
-                    class="grid-title-left"
-                    [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-                >
+                <div class="grid-title-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }">
                     <span class="inner-name inner-name-bold mat-table-sticky">&nbsp;</span>
                 </div>
                 <div
@@ -118,16 +113,17 @@
                     *ngFor="let plan of inputData"
                     [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
                 >
-                    <span class="sub-plan-name">&nbsp;</span> <br />
-                    <span class="sub-plan-amount">&nbsp;<span class="sub-plan-duration">&nbsp;</span></span>
+                    <span class="sub-plan-name">&nbsp;</span>
+                    <br />
+                    <span class="sub-plan-amount">
+                        &nbsp;
+                        <span class="sub-plan-duration">&nbsp;</span>
+                    </span>
                 </div>
             </div>
 
             <div class="grid-list-div-changes list-grid">
-                <div
-                    class="grid-title-left"
-                    [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-                >
+                <div class="grid-title-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }">
                     <span class="inner-name mat-table-sticky">&nbsp;</span>
                 </div>
                 <div
@@ -139,10 +135,7 @@
                 </div>
             </div>
             <div class="grid-list-div-changes list-grid">
-                <div
-                    class="grid-title-left"
-                    [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-                >
+                <div class="grid-title-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }">
                     <span class="inner-name mat-table-sticky">&nbsp;</span>
                 </div>
                 <div
@@ -154,10 +147,7 @@
                 </div>
             </div>
             <div class="grid-list-div-changes list-grid">
-                <div
-                    class="grid-title-left"
-                    [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-                >
+                <div class="grid-title-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }">
                     <span class="inner-name mat-table-sticky">&nbsp;</span>
                 </div>
                 <div
@@ -167,10 +157,7 @@
                 ></div>
             </div>
             <div class="grid-list-div-changes list-grid">
-                <div
-                    class="grid-title-left"
-                    [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-                >
+                <div class="grid-title-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }">
                     <span class="inner-name mat-table-sticky">&nbsp;</span>
                 </div>
                 <div
@@ -180,10 +167,7 @@
                 ></div>
             </div>
             <div class="grid-list-div-changes list-grid">
-                <div
-                    class="grid-title-left"
-                    [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-                >
+                <div class="grid-title-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }">
                     <span class="inner-name mat-table-sticky">&nbsp;</span>
                 </div>
                 <div
@@ -193,13 +177,8 @@
                 ></div>
             </div>
             <div class="grid-list-div-changes list-grid">
-                <div
-                    class="grid-title-left"
-                    [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-                >
-                    <a class="sub-plan-feature mat-table-sticky" (click)="openDialog()" href="javascript:void(0)"
-                        >&nbsp;</a
-                    >
+                <div class="grid-title-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }">
+                    <a class="sub-plan-feature mat-table-sticky" (click)="openDialog()" href="javascript:void(0)">&nbsp;</a>
                 </div>
                 <div
                     class="grid-title-list list-grid-title"
@@ -209,19 +188,17 @@
             </div>
         </div>
         <p [ngClass]="{ 'skeleton-common-class': showLoader }" class="extra-addons-content font-size-15">
-            {{ localeData?.subscription?.extra_addons }}:<span *ngIf="!showLoader" class="extra-addons-value">
-                {{ localeData?.subscription?.per_transaction }}</span
-            >
+            {{ localeData?.subscription?.extra_addons }}:
+            <span *ngIf="!showLoader" class="extra-addons-value">
+                {{ localeData?.subscription?.per_transaction }}
+            </span>
         </p>
         <!-- Default Active Company End  -->
 
         <div class="activation-key-wrapper">
-            <div class=" p-3 ">
+            <div class="p-3">
                 <div class="row">
-                    <div
-                        class="col-md-6 col-sm-12 col-xs-12 footer-plan"
-                        [ngClass]="{ 'footer-plan-loading': showLoader }"
-                    >
+                    <div class="col-md-6 col-sm-12 col-xs-12 footer-plan" [ngClass]="{ 'footer-plan-loading': showLoader }">
                         <div class="activation-key mb-2">
                             <p
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-plan': showLoader }"
@@ -230,16 +207,11 @@
                                 {{ localeData?.subscription?.redeem }}
                                 {{ localeData?.subscription?.activation_key }}
                             </p>
-                            <p
-                                [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-details': showLoader }"
-                                class="font-size-15"
-                            >
+                            <p [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-details': showLoader }" class="font-size-15">
                                 {{ localeData?.subscription?.activation_key_note }}
                             </p>
                             <div class="d-flex redeem-content align-items-center mt-2">
-                                <div
-                                    [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-input': showLoader }"
-                                ></div>
+                                <div [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-input': showLoader }"></div>
                                 <input-field
                                     *ngIf="!showLoader"
                                     [type]="'text'"
@@ -250,14 +222,11 @@
                                     [placeholder]="localeData?.subscription?.enter_activation_key"
                                 ></input-field>
                                 <div class="activation-btn ml-3">
-                                    <div
-                                        [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-button': showLoader }"
-                                    ></div>
+                                    <div [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-button': showLoader }"></div>
                                     <button
                                         *ngIf="!showLoader"
                                         class="mt-2 pl-3 pr-3"
-                                        color="primary"
-                                        mat-raised-button
+                                        matButton="filled"
                                         [disabled]="!licenceKey?.value"
                                         (click)="createCompanyViaActivationKey()"
                                     >

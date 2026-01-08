@@ -1,16 +1,16 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="aside-pane mat-app-background inventory-aside-pane mat-app-background" asideInventorySidebarMenuState>
+    <div class="aside-pane mat-app-background inventory-aside-pane" asideInventorySidebarMenuState>
         <div class="help-aside-body">
             <div class="back-to-main-slider">
                 <a [routerLink]="['/pages/giddh-all-items']" href="javascript:void(0);" aria-label="home icon">
                     <span>
-                        <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top image-as-icon-color">
+                        <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top image-as-icon-color" />
                     </span>
                 </a>
                 <p class="heading">{{ localeData?.sidebar?.inventory }}</p>
@@ -38,19 +38,11 @@
                             <p>{{ node.name }}</p>
                         </span>
                     </mat-tree-node>
-                    <mat-tree-node
-                        *matTreeNodeDef="let node; when: hasChild"
-                        matTreeNodePadding
-                        matTreeNodeToggle
-                        class="list"
-                    >
-                        <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn" aria-label="sidebar icon">
+                    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodeToggle class="list">
+                        <button matIconButton disableRipple matTreeNodeToggle class="arrow-btn" aria-label="sidebar icon">
                             <span class="sidebar-list-icon">
                                 <i *ngIf="treeControl.isExpanded(node)" class="icon-up ml-2 font-size-15 sidebar-icon"></i>
-                                <i
-                                    *ngIf="!treeControl.isExpanded(node)"
-                                    class="icon-down-new ml-2 font-size-15 sidebar-icon"
-                                ></i>
+                                <i *ngIf="!treeControl.isExpanded(node)" class="icon-down-new ml-2 font-size-15 sidebar-icon"></i>
                             </span>
                         </button>
                         <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="menu icon" />
@@ -60,7 +52,7 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>
 <ng-template #asideMenuStateForCreateNewInventoryTemplate>
     <aside-create-new-inventory
         (closeAsideEvent)="asideMenuStateForCreateNewInventoryDialogRef.close()"

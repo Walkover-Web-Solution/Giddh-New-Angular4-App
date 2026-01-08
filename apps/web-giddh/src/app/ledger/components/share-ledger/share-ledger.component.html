@@ -1,13 +1,8 @@
-<ng-container
-    appTranslate
-    [file]="'ledger/share-ledger'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'ledger/share-ledger'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div id="share-modal">
         <div class="dialog-header">
             <span>{{ localeData?.page_heading }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
+            <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -29,12 +24,10 @@
                                             [required]="true"
                                             [label]="localeData?.share_with"
                                             [placeholder]="commonLocaleData?.app_email_id"
-                                        >
-                                        </input-field>
+                                        ></input-field>
                                         <span class="input-group-btn ml-5">
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 class="share-ledger-button d-flex align-items-center"
                                                 type="submit"
                                                 [disabled]="shareAccountForm.invalid"
@@ -71,11 +64,7 @@
                         <div class="modal-wrap clear-both">
                             <div class="clear-both">
                                 <span>{{ commonLocaleData?.app_or | titlecase }}</span>
-                                <a
-                                    class="btn-link share-link mb-1 font-size-15"
-                                    href="javascript:;"
-                                    (click)="getMagicLink()"
-                                >
+                                <a class="btn-link share-link mb-1 font-size-15" href="javascript:;" (click)="getMagicLink()">
                                     {{ localeData?.get_shareable_link }}
                                 </a>
                                 <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
@@ -89,11 +78,10 @@
                                     [readonly]="true"
                                     [disabled]="true"
                                     [label]="localeData?.url"
-                                >
-                                </input-field>
+                                ></input-field>
                                 <span class="input-group-btn ml-5">
                                     <button
-                                        mat-raised-button
+                                        matButton="filled"
                                         type="button"
                                         color="primary"
                                         [disabled]="!magicLink ? 'disabled' : null"
@@ -113,4 +101,4 @@
             </div>
         </mat-dialog-content>
     </div>
-</ng-container>
+</div>

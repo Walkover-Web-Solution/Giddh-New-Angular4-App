@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'activity-logs'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -8,17 +8,16 @@
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="activity-container p-3">
         <div class="activity-filter-wrap mb-2">
-            <div *ngFor="let selectedField of selectedFields; let i = index" class="filter-wrapper">
+            <div *ngFor="let selectedField of selectedFields; let i = index; trackBy: trackBySelectedField" class="filter-wrapper">
                 <div class="ml-1">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'fields'"
                         [placeholder]="localeData?.select_field"
                         [options]="fields"
                         (selectedOption)="selectField(i, $event)"
                         [defaultValue]="selectedField?.label"
-                    >
-                    </select-field>
+                    ></select-field>
                 </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'LOG_DATE'">
                     <div
@@ -34,7 +33,7 @@
                             type="text"
                             name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker h-100 bg-white"
+                            class="giddh-datepicker date-range-picker h-100 bg-white text-black"
                             readonly
                         />
                     </div>
@@ -62,7 +61,7 @@
                 </div>
                 <div class="entity-wrapper ml-2" *ngIf="selectedField?.value === 'ENTITY'">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'entity'"
                         [placeholder]="commonLocaleData?.app_entity"
                         [options]="entities"
@@ -70,8 +69,7 @@
                         [defaultValue]="activityObjLabels?.entity"
                         (onClear)="resetEntity($event)"
                         [allowValueReset]="true"
-                    >
-                    </select-field>
+                    ></select-field>
                 </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'ENTRY_DATE'">
                     <div
@@ -87,7 +85,7 @@
                             type="text"
                             name="selectedEntryDateRange"
                             [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker h-100 bg-white"
+                            class="giddh-datepicker date-range-picker h-100 bg-white text-black"
                             readonly
                         />
                     </div>
@@ -127,7 +125,7 @@
                             type="text"
                             name="selectedVoucherDateRange"
                             [value]="selectedVoucherDateRangeUi ? selectedVoucherDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker h-100 bg-white"
+                            class="giddh-datepicker date-range-picker h-100 bg-white text-black"
                             readonly
                         />
                     </div>
@@ -155,22 +153,19 @@
                 </div>
                 <div class="operation-wrapper ml-2" *ngIf="selectedField?.value === 'OPERATION'">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'operation'"
                         [placeholder]="localeData?.operation"
                         [options]="activityOperations"
-                        (selectedOption)="
-                            activityObj.operation = $event?.value; activityObjLabels.operation = $event.label
-                        "
+                        (selectedOption)="activityObj.operation = $event?.value; activityObjLabels.operation = $event.label"
                         [defaultValue]="activityObjLabels?.operation"
                         (onClear)="resetOperation($event)"
                         [allowValueReset]="true"
-                    >
-                    </select-field>
+                    ></select-field>
                 </div>
                 <div class="user-wrapper ml-2" *ngIf="selectedField?.value === 'USERS'">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'user'"
                         [placeholder]="localeData?.user"
                         [options]="users"
@@ -178,12 +173,11 @@
                         [defaultValue]="activityObjLabels?.user"
                         (onClear)="resetUser($event)"
                         [allowValueReset]="true"
-                    >
-                    </select-field>
+                    ></select-field>
                 </div>
                 <div class="user-wrapper ml-2" *ngIf="selectedField?.value === 'ACCOUNTS'">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'accounts'"
                         [placeholder]="commonLocaleData?.app_import_type?.base_accounts"
                         [options]="accounts"
@@ -195,30 +189,19 @@
                         [enableDynamicSearch]="true"
                         [isPaginationEnabled]="true"
                         (scrollEnd)="handleScrollEnd()"
-                    >
-                    </select-field>
+                    ></select-field>
                 </div>
                 <span class="delete-row" *ngIf="selectedFields?.length > 1">
-                    <a
-                        href="javascript:;"
-                        (click)="removeFilter(selectedField, i)"
-                        class="remove-filter"
-                        aria-label="delete icon"
-                        ><i class="icon-trash"></i
-                    ></a>
+                    <a href="javascript:;" (click)="removeFilter(selectedField, i)" class="remove-filter" aria-label="delete icon">
+                        <i class="icon-trash"></i>
+                    </a>
                 </span>
                 <span class="and-text" *ngIf="i < selectedFields?.length - 1">&</span>
             </div>
-            <button mat-button (click)="addDefaultFilter()" class="add-button" aria-label="add">+</button>
+            <button matButton="outlined" (click)="addDefaultFilter()" class="add-button" aria-label="add">+</button>
         </div>
         <div class="button-wrapper mb-2">
-            <button
-                mat-raised-button
-                color="primary"
-                class="min-width-160"
-                (click)="getActivityLogs(true)"
-                aria-label="get logs"
-            >
+            <button matButton="filled" class="min-width-160" (click)="getActivityLogs(true)" aria-label="get logs">
                 {{ localeData?.get_logs }}
             </button>
         </div>
@@ -236,62 +219,35 @@
                 <!-- UserName Column -->
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
-                    <td
-                        class="activity-td"
-                        mat-cell
-                        *matCellDef="let element"
-                        (click)="getLogsDetails($event, element)"
-                    >
-                        <span [matTooltip]="element.user.email" matTooltipPosition="above">{{
-                            element.user.name
-                        }}</span>
+                    <td class="activity-td" mat-cell *matCellDef="let element" (click)="getLogsDetails($event, element)">
+                        <span [matTooltip]="element.user.email" matTooltipPosition="above">{{ element.user.name }}</span>
                     </td>
                 </ng-container>
                 <!-- Date Column -->
                 <ng-container matColumnDef="time">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.date }}</th>
-                    <td
-                        class="activity-td"
-                        mat-cell
-                        *matCellDef="let element"
-                        (click)="getLogsDetails($event, element)"
-                    >
-                        <span [matTooltip]="element.timeonly" matTooltipPosition="above"> {{ element.time }}</span>
+                    <td class="activity-td" mat-cell *matCellDef="let element" (click)="getLogsDetails($event, element)">
+                        <span [matTooltip]="element.timeonly" matTooltipPosition="above">{{ element.time }}</span>
                     </td>
                 </ng-container>
                 <!-- IP Column -->
                 <ng-container matColumnDef="ip">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.ip }}</th>
-                    <td
-                        class="activity-td"
-                        mat-cell
-                        *matCellDef="let element"
-                        (click)="getLogsDetails($event, element)"
-                    >
+                    <td class="activity-td" mat-cell *matCellDef="let element" (click)="getLogsDetails($event, element)">
                         {{ element.ip }}
                     </td>
                 </ng-container>
                 <!-- Entity Column -->
                 <ng-container matColumnDef="entity">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_entity }}</th>
-                    <td
-                        class="activity-td"
-                        mat-cell
-                        *matCellDef="let element"
-                        (click)="getLogsDetails($event, element)"
-                    >
+                    <td class="activity-td" mat-cell *matCellDef="let element" (click)="getLogsDetails($event, element)">
                         {{ element.entity }}
                     </td>
                 </ng-container>
                 <!-- Operation Column -->
                 <ng-container matColumnDef="operation">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.operation }}</th>
-                    <td
-                        mat-cell
-                        *matCellDef="let element"
-                        class="position-relative"
-                        (click)="getLogsDetails($event, element)"
-                    >
+                    <td mat-cell *matCellDef="let element" class="position-relative" (click)="getLogsDetails($event, element)">
                         {{ element.operation }}
                     </td>
                 </ng-container>
@@ -301,9 +257,7 @@
                     <td mat-cell *matCellDef="let element" class="position-relative">
                         <a
                             [matTooltip]="
-                                element.hasHistory && !element.history?.length
-                                    ? localeData?.no_history_found
-                                    : localeData?.history
+                                element.hasHistory && !element.history?.length ? localeData?.no_history_found : localeData?.history
                             "
                             matTooltipPosition="above"
                             (click)="getHistory($event, element)"
@@ -325,11 +279,7 @@
                     >
                         <div class="d-flex overflow-hidden">
                             <div class="w-100" *ngIf="rowHistory.isExpanded && rowHistory.history?.length">
-                                <table
-                                    class="giddh-table table activity-child-table"
-                                    mat-table
-                                    [dataSource]="rowHistory.history"
-                                >
+                                <table class="giddh-table table activity-child-table" mat-table [dataSource]="rowHistory.history">
                                     <!-- UserName Column -->
                                     <ng-container matColumnDef="name">
                                         <th mat-header-cell *matHeaderCellDef></th>
@@ -339,9 +289,9 @@
                                             *matCellDef="let details"
                                             (click)="getLogsDetails($event, rowHistory)"
                                         >
-                                            <span [matTooltip]="details.user.email" matTooltipPosition="above">{{
-                                                details.user.name
-                                            }}</span>
+                                            <span [matTooltip]="details.user.email" matTooltipPosition="above">
+                                                {{ details.user.name }}
+                                            </span>
                                         </td>
                                     </ng-container>
                                     <!-- Date Column -->
@@ -354,8 +304,8 @@
                                             (click)="getLogsDetails($event, rowHistory)"
                                         >
                                             <span [matTooltip]="details.timeonly" matTooltipPosition="above">
-                                                {{ details.time }}</span
-                                            >
+                                                {{ details.time }}
+                                            </span>
                                         </td>
                                     </ng-container>
                                     <!-- IP Column -->
@@ -404,23 +354,19 @@
                                                     class="history-checkbox"
                                                     color="primary"
                                                     (change)="selectedItems($event, rowHistory, details)"
-                                                >
-                                                </mat-checkbox>
+                                                ></mat-checkbox>
                                                 <a
                                                     class="compare-json cursor-pointer"
                                                     *ngIf="details.isChecked && rowHistory.selectedItems?.length === 2"
                                                     (click)="compareHistoryJson(rowHistory, details, $event)"
                                                     aria-label="compare"
-                                                    >{{ localeData?.compare }}
+                                                >
+                                                    {{ localeData?.compare }}
                                                 </a>
                                             </span>
                                         </td>
                                     </ng-container>
-                                    <tr
-                                        class="history-child-row"
-                                        mat-row
-                                        *matRowDef="let rowHistory; columns: displayedColumns"
-                                    ></tr>
+                                    <tr class="history-child-row" mat-row *matRowDef="let rowHistory; columns: displayedColumns"></tr>
                                 </table>
                             </div>
                         </div>
@@ -450,8 +396,7 @@
             [showFirstLastButtons]="true"
             [hidePageSize]="false"
             (page)="handlePageEvent($event)"
-        >
-        </mat-paginator>
+        ></mat-paginator>
         <section class="mb-custom-80"></section>
     </div>
-</ng-container>
+</div>

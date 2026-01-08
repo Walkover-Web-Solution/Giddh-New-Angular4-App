@@ -30,8 +30,7 @@
                                     [(ngModel)]="generateEwayBillform.subSupplyType"
                                     [disabled]="true"
                                     [labelValue]="selectedSubType"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-6">
                                 <reactive-dropdown-field
@@ -44,8 +43,7 @@
                                     [(ngModel)]="generateEwayBillform.docType"
                                     [disabled]="true"
                                     [labelValue]="selectedDocType"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-6">
                                 <input-field
@@ -59,8 +57,7 @@
                                     [maxlength]="15"
                                     [minlength]="15"
                                     [(ngModel)]="generateEwayBillform.toGstIn"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                             <div class="col-6">
                                 <input-field
@@ -74,8 +71,7 @@
                                     [maxlength]="6"
                                     [minlength]="6"
                                     [(ngModel)]="generateEwayBillform.toPinCode"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                             <div class="col-6">
                                 <reactive-dropdown-field
@@ -86,8 +82,7 @@
                                     [name]="'transactionType'"
                                     [(ngModel)]="generateEwayBillform.transactionType"
                                     [labelValue]="transactionSubType?.[0]?.label"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
 
@@ -107,8 +102,7 @@
                                     [(ngModel)]="generateEwayBillform.transporterId"
                                     [showCreateNew]="true"
                                     (createOption)="openTransporterDialog()"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-6">
                                 <input-field
@@ -122,8 +116,7 @@
                                     [maxlength]="4"
                                     [minlength]="4"
                                     [(ngModel)]="generateEwayBillform.transDistance"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                         </div>
 
@@ -139,17 +132,8 @@
                             </div>
 
                             <div class="col-md-8 col-lg-8 col-sm-12 mt-3">
-                                <mat-radio-group
-                                    name="transMode"
-                                    [(ngModel)]="generateEwayBillform.transMode"
-                                    class="d-flex flex-wrap"
-                                >
-                                    <mat-radio-button
-                                        color="primary"
-                                        value="1"
-                                        (change)="selectedModeOfTrans('road')"
-                                        class="mr-3 mb-2"
-                                    >
+                                <mat-radio-group name="transMode" [(ngModel)]="generateEwayBillform.transMode" class="d-flex flex-wrap">
+                                    <mat-radio-button color="primary" value="1" (change)="selectedModeOfTrans('road')" class="mr-3 mb-2">
                                         <div class="d-inline-flex column-gap-05">
                                             <img class="image-as-icon-color" src="assets/icon/4.svg" />
                                             {{ commonLocaleData?.app_road }}
@@ -227,14 +211,11 @@
                                     [minlength]="7"
                                     #name="ngModel"
                                     [(ngModel)]="generateEwayBillform.vehicleNo"
-                                >
-                                </input-field>
+                                ></input-field>
 
-                                <small
-                                    class="text-danger"
-                                    *ngIf="name.value && name.invalid && name.touched && name.dirty"
-                                    >{{ localeData?.vehicle_no_format }}</small
-                                >
+                                <small class="text-danger" *ngIf="name.value && name.invalid && name.touched && name.dirty">
+                                    {{ localeData?.vehicle_no_format }}
+                                </small>
                             </div>
                             <div class="col-6">
                                 <input-field
@@ -244,8 +225,7 @@
                                     [name]="'transDocNo'"
                                     [maxlength]="15"
                                     [(ngModel)]="generateEwayBillform.transDocNo"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                             <div class="col-6">
                                 <giddh-datepicker
@@ -263,15 +243,14 @@
                             <div class="col-12 mt-4">
                                 <div class="d-flex column-gap-1">
                                     <button
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         [disabled]="generateInvForm.invalid"
                                         [ladda]="isEwaybillGenerateInProcess$ | async"
                                         (click)="onSubmitEwaybill(generateInvForm)"
                                     >
                                         {{ localeData?.save_generate }}
                                     </button>
-                                    <button mat-stroked-button (click)="onCancelGenerateBill()">
+                                    <button matButton="outlined" (click)="onCancelGenerateBill()">
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
                                 </div>
@@ -291,16 +270,18 @@
                     </mat-card-title>
                     <mat-card-content>
                         <div class="mb-2">
-                            <label>{{ commonLocaleData?.app_date }}: </label><span>{{ invoice?.voucherDate }}</span>
+                            <label>{{ commonLocaleData?.app_date }}:</label>
+                            <span>{{ invoice?.voucherDate }}</span>
                         </div>
                         <div class="mb-2">
-                            <label>{{ commonLocaleData?.app_to }}: </label><span>{{ invoice?.account.name }}</span>
+                            <label>{{ commonLocaleData?.app_to }}:</label>
+                            <span>{{ invoice?.account.name }}</span>
                         </div>
                         <div class="mb-4">
-                            <label>{{ localeData?.amount }}: </label
-                            ><span>{{ invoice?.grandTotal?.amountForAccount }}</span>
+                            <label>{{ localeData?.amount }}:</label>
+                            <span>{{ invoice?.grandTotal?.amountForAccount }}</span>
                         </div>
-                        <button (click)="removeInvoice(invoice)" mat-raised-button color="primary">
+                        <button (click)="removeInvoice(invoice)" matButton="filled">
                             {{ commonLocaleData?.app_remove }}
                         </button>
                     </mat-card-content>
@@ -310,8 +291,7 @@
     </div>
 </ng-container>
 <ng-template #eWayBillCredentialsTemplate>
-    <app-eWayBill-credentials-modal (closeModelEvent)="toggleEwayBillCredentialsPopup()">
-    </app-eWayBill-credentials-modal>
+    <app-eWayBill-credentials-modal (closeModelEvent)="toggleEwayBillCredentialsPopup()"></app-eWayBill-credentials-modal>
 </ng-template>
 
 <ng-template #transporterTemplate>
@@ -333,18 +313,15 @@
                             [autocomplete]="'off'"
                             [pattern]="'[a-zA-Z0-9^ .&]{5,100}'"
                             [(ngModel)]="generateNewTransporter.transporterName"
-                        >
-                        </input-field>
+                        ></input-field>
 
                         <small
                             class="text-danger"
                             *ngIf="
-                                Transportersname.invalid &&
-                                Transportersname.touched &&
-                                Transportersname.dirty &&
-                                Transportersname?.value
+                                Transportersname.invalid && Transportersname.touched && Transportersname.dirty && Transportersname?.value
                             "
-                            >{{ commonLocaleData?.app_invalid_transporter_name_message }}
+                        >
+                            {{ commonLocaleData?.app_invalid_transporter_name_message }}
                         </small>
                     </div>
                 </div>
@@ -361,17 +338,12 @@
                             [minlength]="4"
                             [maxlength]="15"
                             [(ngModel)]="generateNewTransporter.transporterId"
-                        >
-                        </input-field>
+                        ></input-field>
                         <small
                             class="text-danger"
-                            *ngIf="
-                                TransportersID.invalid &&
-                                TransportersID.touched &&
-                                TransportersID.dirty &&
-                                TransportersID?.value
-                            "
-                            >{{ commonLocaleData?.app_invalid_transporter_id_message }}
+                            *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty && TransportersID?.value"
+                        >
+                            {{ commonLocaleData?.app_invalid_transporter_id_message }}
                         </small>
                     </div>
                 </div>
@@ -380,8 +352,7 @@
             <div class="d-flex justify-content-end column-gap-1 mt-3">
                 <ng-container *ngIf="!transportEditMode">
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         [disabled]="generateTransporterForm.invalid"
                         [ladda]="isGenarateTransporterInProcess$ | async"
                         (click)="generateTransporter(generateTransporterForm)"
@@ -389,17 +360,16 @@
                     >
                         {{ commonLocaleData?.app_save }}
                     </button>
-                    <button mat-stroked-button (click)="clearTransportForm()" type="submit">
+                    <button matButton="outlined" (click)="clearTransportForm()" type="submit">
                         {{ commonLocaleData?.app_clear }}
                     </button>
-                    <button mat-stroked-button mat-dialog-close>
+                    <button matButton="outlined" mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </ng-container>
                 <ng-container *ngIf="transportEditMode">
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         [disabled]="generateTransporterForm.invalid"
                         [ladda]="updateTransporterInProcess$ | async"
                         (click)="updateTransporter(generateTransporterForm)"
@@ -407,10 +377,10 @@
                     >
                         {{ commonLocaleData?.app_update }}
                     </button>
-                    <button mat-stroked-button (click)="clearTransportForm()">
+                    <button matButton="outlined" (click)="clearTransportForm()">
                         {{ commonLocaleData?.app_clear }}
                     </button>
-                    <button mat-stroked-button mat-dialog-close role="button">
+                    <button matButton="outlined" mat-dialog-close role="button">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </ng-container>
@@ -442,10 +412,10 @@
                     <th mat-header-cell *matHeaderCellDef class="nowrap">{{ commonLocaleData?.app_actions }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="d-flex column-gap-1">
-                            <button mat-stroked-button (click)="editTransporter(element)">
+                            <button matButton="outlined" (click)="editTransporter(element)">
                                 <i class="icon-edit"></i>
                             </button>
-                            <button mat-stroked-button (click)="deleteTransporter(element)">
+                            <button matButton="outlined" (click)="deleteTransporter(element)">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </div>
@@ -465,8 +435,7 @@
             [showFirstLastButtons]="true"
             [hidePageSize]="false"
             (page)="handlePageEvent($event)"
-        >
-        </mat-paginator>
+        ></mat-paginator>
         <section class="mb-custom-80"></section>
     </mat-dialog-content>
 </ng-template>

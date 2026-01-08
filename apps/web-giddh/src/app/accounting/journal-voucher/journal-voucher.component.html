@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'journal-voucher'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'journal-voucher'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="row mr-0 ml-0 full-viewport-height">
         <account-as-voucher
@@ -22,8 +17,7 @@
             (hideDiscountSidebar)="showDiscountEvent = false"
             (hideTaxSidebar)="showTaxEvent = false"
             (showDiscountAndTax)="getSalesEntryEvent($event)"
-        >
-        </account-as-voucher>
+        ></account-as-voucher>
 
         <input type="hidden" [attr.data-gridType]="gridType" id="get-grid-type" />
 
@@ -37,4 +31,4 @@
             ></accounting-sidebar>
         </div>
     </div>
-</ng-container>
+</div>

@@ -27,7 +27,8 @@ const CIDR_RANGE = 'cidr_range';
 @Component({
     selector: "create-company-auth-key",
     templateUrl: "./create-company-auth-key.component.html",
-    styleUrls: ["./create-company-auth-key.component.scss"]
+    styleUrls: ["./create-company-auth-key.component.scss"],
+    standalone: false
 })
 export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data for company auth key module */
@@ -99,7 +100,7 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             if (response && response.roles && response.roles.length > 0) {
                 let roles = cloneDeep(response.roles);
                 let allRoleArray = [];
-                roles.forEach((role: any) => {
+                (Array.isArray(roles) ? roles : []).forEach((role: any) => {
                     allRoleArray.push({
                         label: role?.name,
                         value: role?.uniqueName
@@ -175,7 +176,7 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             let allowedCidrs = this.createCompanyAuthKeyForm.get('allowedCidrs') as FormArray;
 
             if (authKey?.allowedIps?.length > 0) {
-                authKey.allowedIps.forEach((val: any) => {
+                (Array.isArray(authKey.allowedIps) ? authKey.allowedIps : []).forEach((val: any) => {
                     allowedIps.push(this.initRangeForm(val));
                 });
             } else {
@@ -183,7 +184,7 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             }
 
             if (authKey?.allowedCidrs?.length > 0) {
-                authKey.allowedCidrs.forEach((val: any) => {
+                (Array.isArray(authKey.allowedCidrs) ? authKey.allowedCidrs : []).forEach((val: any) => {
                     allowedCidrs.push(this.initRangeForm(val));
                 });
             } else {
@@ -363,13 +364,13 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             form.from = dayjs(this.createCompanyAuthKeyForm.get('from').value).format(GIDDH_DATE_FORMAT);
             form.to = dayjs(this.createCompanyAuthKeyForm.get('to').value).format(GIDDH_DATE_FORMAT);
         }
-        form.allowedCidrs.forEach((n: any) => {
+        (Array.isArray(form.allowedCidrs) ? form.allowedCidrs : []).forEach((n: any) => {
             if (n.range) {
                 CidrArr.push(n.range);
             }
         });
 
-        form.allowedIps.forEach((res: any) => {
+        (Array.isArray(form.allowedIps) ? form.allowedIps : []).forEach((res: any) => {
             if (res.range) {
                 IpArr.push(res.range);
             }

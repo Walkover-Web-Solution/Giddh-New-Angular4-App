@@ -1,14 +1,7 @@
-<ng-container
-    appTranslate
-    (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
->
+<div appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <ng-container *ngIf="showLabel">
         <div [ngClass]="{ 'readonly-field': readonly || disabled, 'dropdown-without-label': !showMatLabel }">
-            <mat-form-field
-                [appearance]="appearance"
-                [ngClass]="{ 'mat-form-field-invalid': showError }"
-            >
+            <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }">
                 <mat-label *ngIf="showMatLabel">{{ label ? label : placeholder }}</mat-label>
                 <input
                     type="text"
@@ -24,6 +17,7 @@
                     [required]="required"
                     (input)="searchFormControl.next($event.target.value)"
                     (blur)="onBlur()"
+                    (keydown)="onInputKeyDown($event)"
                     #trigger="matAutocompleteTrigger"
                     [style.padding-right]="showCaretIcon ? '18px' : '0'"
                     #selectField
@@ -62,10 +56,7 @@
                             (click)="$event.stopPropagation()"
                             [disabled]="option?.additional?.disabled"
                         >
-                            <ng-template
-                                [ngTemplateOutletContext]="{ option: option }"
-                                [ngTemplateOutlet]="optionTemplate"
-                            ></ng-template>
+                            <ng-template [ngTemplateOutletContext]="{ option: option }" [ngTemplateOutlet]="optionTemplate"></ng-template>
                             <ng-container *ngIf="!optionTemplate">
                                 {{ option?.label }}
                             </ng-container>
@@ -92,8 +83,7 @@
                     matTooltipPosition="above"
                     role="button"
                     [attr.aria-label]="'clear'"
-                >
-                </i>
+                ></i>
             </mat-form-field>
         </div>
     </ng-container>
@@ -112,19 +102,21 @@
             [required]="required"
             [attr.aria-expanded]="readonly ? false : true"
             (input)="searchFormControl.next($event.target.value)"
+            (blur)="onBlur()"
+            (keydown)="onInputKeyDown($event)"
             #trigger="matAutocompleteTrigger"
             #selectField
             matAutocompletePosition="auto"
             [value]="controlLabelValue ?? ''"
         />
         <mat-autocomplete
+            (opened)="panelOpened()"
             (optionSelected)="optionSelected($event)"
             optionsScroll
-            class="py-0"
-            [ngClass]="{ 'sidebar-list-view': sidebarListView }"
+            [class]="'py-0' + (sidebarListView ? ' sidebar-list-view' : '')"
             [enableDynamicSearch]="enableDynamicSearch"
             (optionsScroll)="onScroll()"
-            [autoActiveFirstOption]="false"
+            [autoActiveFirstOption]="!showCreateNew"
             [displayWith]="displayLabel"
             #auto="matAutocomplete"
         >
@@ -133,7 +125,7 @@
                 class="create-new-option"
                 (onSelectionChange)="handleCreateNewSelection($event)"
                 [attr.aria-label]="createNewText"
-                >
+            >
                 <div class="theme-primary-color d-flex justify-content-between">
                     <div class="item create-new">{{ createNewText }}</div>
                     <div class="item create-new-command" *ngIf="showKeyboardCommand">
@@ -155,4 +147,4 @@
             </mat-option>
         </mat-autocomplete>
     </ng-container>
-</ng-container>
+</div>

@@ -38,7 +38,8 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     selector: 'tax-control',
     templateUrl: 'tax-control.component.html',
     styleUrls: ['./tax-control.component.scss'],
-    providers: [TAX_CONTROL_VALUE_ACCESSOR]
+    providers: [TAX_CONTROL_VALUE_ACCESSOR],
+    standalone: false
 })
 
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
@@ -265,7 +266,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type?.length) {
-            this.allowedSelectionOfAType.type.forEach(taxType => {
+            (Array.isArray(this.allowedSelectionOfAType.type) ? this.allowedSelectionOfAType.type : []).forEach(taxType => {
                 const selectedTaxes = this.taxRenderData?.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
                 if (selectedTaxes?.length >= this.allowedSelectionOfAType.count) {
@@ -354,7 +355,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      */
     public enableAllTheTaxes(): void {
         if (this.taxRenderData?.length) {
-            this.taxRenderData.forEach(tax => tax.isDisabled = false);
+            (Array.isArray(this.taxRenderData) ? this.taxRenderData : []).forEach(tax => tax.isDisabled = false);
         }
     }
 

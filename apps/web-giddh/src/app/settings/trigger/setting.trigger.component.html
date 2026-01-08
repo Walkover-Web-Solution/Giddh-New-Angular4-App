@@ -1,22 +1,18 @@
-<ng-container
+<div
     appTranslate
     [file]="'settings/trigger'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class=" p-3 clear-both">
+    <div class="p-3 clear-both">
         <p class="section-head pt-0">{{ localeData?.tab_heading }}</p>
         <div class="row">
-            <form
-                #createTriggerForm="ngForm"
-                (ngSubmit)="onSubmit(newTriggerObj)"
-                class="col-lg-10 col-md-12 col-xs-12"
-            >
+            <form #createTriggerForm="ngForm" (ngSubmit)="onSubmit(newTriggerObj)" class="col-lg-10 col-md-12 col-xs-12">
                 <div class="row">
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                        <label>{{ commonLocaleData?.app_name }}</label
-                        ><br />
+                        <label>{{ commonLocaleData?.app_name }}</label>
+                        <br />
                         <input
                             type="text"
                             [placeholder]="commonLocaleData?.app_name"
@@ -35,8 +31,7 @@
                             [(ngModel)]="newTriggerObj.entity"
                             [placeholder]="localeData?.select_entity_type"
                             [label]="localeData?.select_entity_type"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
                         <reactive-dropdown-field
@@ -48,16 +43,11 @@
                             [label]="commonLocaleData?.app_select_entity"
                             [enableDynamicSearch]="true"
                             [isPaginationEnabled]="true"
-                            (scrollEnd)="
-                                newTriggerObj.entity === 'account' ? handleScrollEnd() : handleGroupScrollEnd()
-                            "
+                            (scrollEnd)="newTriggerObj.entity === 'account' ? handleScrollEnd() : handleGroupScrollEnd()"
                             (dynamicSearchedQuery)="
-                                newTriggerObj.entity === 'account'
-                                    ? onAccountSearchQueryChanged($event)
-                                    : onGroupSearchQueryChanged($event)
+                                newTriggerObj.entity === 'account' ? onAccountSearchQueryChanged($event) : onGroupSearchQueryChanged($event)
                             "
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
                         <reactive-dropdown-field
@@ -66,8 +56,7 @@
                             [(ngModel)]="newTriggerObj.filter"
                             [placeholder]="localeData?.filter_placeholder"
                             [label]="commonLocaleData?.app_filter"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
                         <reactive-dropdown-field
@@ -77,12 +66,11 @@
                             [options]="scopeList"
                             [label]="localeData?.scope_label"
                             (selectedOption)="onSelectScope($event)"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                        <label>{{ localeData?.url }}</label
-                        ><br />
+                        <label>{{ localeData?.url }}</label>
+                        <br />
                         <input
                             type="text"
                             [(ngModel)]="newTriggerObj.url"
@@ -92,19 +80,15 @@
                         />
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                        <label>{{ commonLocaleData?.app_description }}</label
-                        ><br />
-                        <textarea
-                            class="form-control"
-                            [(ngModel)]="newTriggerObj.description"
-                            name="description"
-                        ></textarea>
+                        <label>{{ commonLocaleData?.app_description }}</label>
+                        <br />
+                        <textarea class="form-control" [(ngModel)]="newTriggerObj.description" name="description"></textarea>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <button mat-raised-button color="primary" type="submit">{{ commonLocaleData?.app_add }}</button>
-                        <button mat-stroked-button type="button" (click)="onCancel()">
+                        <button matButton="filled" type="submit">{{ commonLocaleData?.app_add }}</button>
+                        <button matButton="outlined" type="button" (click)="onCancel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -218,19 +202,15 @@
                                     <button
                                         *ngIf="!triggerToEdit[i]"
                                         type="button"
-                                        mat-stroked-button
+                                        matButton="outlined"
                                         (click)="triggerToEdit = []; triggerToEdit[i] = true"
                                     >
-                                        <i
-                                            class="icon-edit-pencil"
-                                            aria-hidden="true"
-                                            [matTooltip]="commonLocaleData?.app_edit"
-                                        ></i>
+                                        <i class="icon-edit-pencil" aria-hidden="true" [matTooltip]="commonLocaleData?.app_edit"></i>
                                     </button>
                                     <button
                                         *ngIf="!triggerToEdit[i]"
                                         type="button"
-                                        mat-stroked-button
+                                        matButton="outlined"
                                         (click)="deleteTax(trigger)"
                                     >
                                         <i
@@ -242,19 +222,15 @@
                                     <button
                                         *ngIf="triggerToEdit[i]"
                                         type="button"
-                                        mat-stroked-button
+                                        matButton="outlined"
                                         (click)="updateTrigger(i); triggerToEdit[i] = false"
                                     >
-                                        <i
-                                            class="fa fa-check"
-                                            aria-hidden="true"
-                                            [matTooltip]="commonLocaleData?.app_save"
-                                        ></i>
+                                        <i class="fa fa-check" aria-hidden="true" [matTooltip]="commonLocaleData?.app_save"></i>
                                     </button>
                                     <button
                                         *ngIf="triggerToEdit[i]"
                                         type="button"
-                                        mat-stroked-button
+                                        matButton="outlined"
                                         (click)="triggerToEdit[i] = false"
                                     >
                                         <i
@@ -287,7 +263,6 @@
             [message]="confirmationMessage"
             [commonLocaleData]="commonLocaleData"
             (userConfirmationEvent)="userConfirmation($event)"
-        >
-        </delete-tax-confirmation-model>
+        ></delete-tax-confirmation-model>
     </ng-template>
-</ng-container>
+</div>

@@ -3,6 +3,7 @@ import { IStocksItem } from '../../../models/interfaces/stocks-item.interface';
 
 @Component({
     selector: 'inout-stock-list',
+    standalone: false,
     styles: [`
     .active > a {
       color: #d35f29 !important;

@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'settings/taxes'"
     (localeData)="localeData = $event"
@@ -19,6 +19,7 @@
                 <div class="row mt-2">
                     <div class="col-6">
                         <reactive-dropdown-field
+                            appEnterNext
                             [label]="localeData?.select_tax"
                             [placeholder]="localeData?.select_tax"
                             [labelValue]="otherTaxForm.get('name')?.value"
@@ -27,31 +28,31 @@
                             [name]="'tax'"
                             [options]="taxesList$ | async"
                             (onClear)="otherTaxForm.get('tax')?.patchValue(null)"
-                            [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value"
+                            [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value?.uniqueName"
                             (createOption)="createTaxDialog()"
                             [showCreateNew]="true"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="col-6">
                         <span class="custom-mat-form-field">
                             <reactive-dropdown-field
+                                appEnterNext
                                 [options]="calculationMethodOptions"
                                 [label]="commonLocaleData?.app_calculation_method"
                                 [appearance]="'outline'"
                                 [required]="true"
+                                [showError]="isFormSubmitted && !otherTaxForm.get('calculationMethod')?.value"
                                 formControlName="calculationMethod"
-                            >
-                            </reactive-dropdown-field>
+                            ></reactive-dropdown-field>
                         </span>
                     </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col-12">
-                        <button mat-raised-button color="primary" (click)="saveTax()">
+                        <button matButton="filled" (click)="saveTax()">
                             {{ commonLocaleData?.app_apply }}
                         </button>
-                        <button mat-stroked-button mat-dialog-close class="ml-2">
+                        <button matButton="outlined" mat-dialog-close class="ml-2">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -71,4 +72,4 @@
             (closeEvent)="closeCreateTaxDialog()"
         ></aside-menu-create-tax-component>
     </ng-template>
-</ng-container>
+</div>

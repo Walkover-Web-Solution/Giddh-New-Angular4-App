@@ -1,4 +1,4 @@
-@use "../../assets/styles/abstracts/_mixins" as *;
+@use '../../assets/styles/abstracts/_mixins' as *;
 .dropdown-menu {
     > li {
         > a {
@@ -27,7 +27,7 @@
     }
 }
 
-.aging-table > tbody > tr:hover input[type="checkbox"] {
+.aging-table > tbody > tr:hover input[type='checkbox'] {
     position: relative !important;
     opacity: 1;
 }
@@ -288,7 +288,7 @@ button.btn.btn-filter {
     }
 }
 
-.mat-raised-button {
+.mat-mdc-unelevated-button {
     margin-right: 0px !important;
 }
 
@@ -300,7 +300,7 @@ button.btn.btn-filter {
     font-size: 16px !important;
 }
 
-.mat-icon-button {
+.mdc-icon-button {
     width: 25px;
     i {
         line-height: 20px;

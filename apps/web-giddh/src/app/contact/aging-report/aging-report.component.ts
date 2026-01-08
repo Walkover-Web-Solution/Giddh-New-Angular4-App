@@ -33,7 +33,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { PageEvent } from "@angular/material/paginator";
-import { BranchHierarchyType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from "../../app.constant";
+import { BranchHierarchyType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG, Configuration } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
@@ -45,11 +45,13 @@ import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { SettingsFinancialYearActions } from "../../actions/settings/financial-year/financial-year.action";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ServiceConfig } from "../../services/service.config";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
-    styleUrls: ["aging-report.component.scss"]
+    styleUrls: ["aging-report.component.scss"],
+    standalone:false
 })
 export class AgingReportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -200,7 +202,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         this.getDueReport();
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.dispatch(this.agingReportActions.GetDueRange());
@@ -249,7 +251,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
@@ -286,7 +288,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20 && !this.unpaidInvoiceIsLoading && this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
+            const dataLength = event?.getDataLength ? event.getDataLength() : event?.dataLength || 0;
+            if (event && typeof event.getRenderedRange === 'function' && dataLength - event.getRenderedRange().end < 20 && !this.unpaidInvoiceIsLoading && this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
                 this.unpaidInvoicePaginationData.page++;
                 this.getAllInvoices(this.unpaidInvoiceListInput.accountUniqueName, this.unpaidInvoiceListInput.range);
             }
@@ -409,7 +412,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      */
     public showAdvanceSearchPopup(): void {
         this.dialog.open(this.advanceSearchTemplate, {
-            width: '630px',
+            panelClass: 'mat-dialog-md'
         });
     }
 

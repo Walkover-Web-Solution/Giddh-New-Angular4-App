@@ -1,10 +1,11 @@
 import { Routes } from "@angular/router";
+
 export const ROUTES: Routes = [
     { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: '404' },
-    { path: 'app-login-success' },
+    { path: '404', component: null }, // Add proper 404 component later
+    { path: 'app-login-success', component: null }, // Add proper component later
     { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule) },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule) },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
@@ -22,12 +23,12 @@ export const ROUTES: Routes = [
     { path: 'activity-logs', redirectTo: 'pages/activity-logs', pathMatch: 'full' },
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
-    { path: 'proforma-invoice' },
+    { path: 'proforma-invoice', component: null }, // Add proper component later
     { path: 'user-details', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
     { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule) },
-    { path: 'social-login-callback' },
+    { path: 'social-login-callback', component: null }, // Add proper component later
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
     { path: 'sales', redirectTo: 'pages/sales' },
     { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
@@ -58,7 +59,7 @@ export const ROUTES: Routes = [
             { path: 'inventory/v2', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule) },
             {
                 path: 'inventory-in-out',
-                loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule),
+                loadChildren: () =>  import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule),
                 data: { preload: true }
             },
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
@@ -105,11 +106,11 @@ export const ROUTES: Routes = [
             { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule) },
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },
             { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
-            { path: 'user-details', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
-            { path: 'ai-ocr', loadChildren: () => import('./ai-ocr/ai-ocr.module').then(module => module.AiOcrModule) },
+            { path: 'user-details', loadChildren: () =>  import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
+            { path: 'ai-ocr', loadChildren: () =>  import('./ai-ocr/ai-ocr.module').then(module => module.AiOcrModule)},
             { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
             { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule) },
-            { path: 'group-name', loadChildren: () => import('./group-name/group-name.module').then(module => module.GroupNameModule) },
+            { path: 'group-name', loadChildren: () =>  import('./group-name/group-name.module').then(module => module.GroupNameModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

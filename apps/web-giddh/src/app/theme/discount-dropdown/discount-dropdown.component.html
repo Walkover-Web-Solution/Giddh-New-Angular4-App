@@ -4,14 +4,15 @@
         class="form-control text-right total-discount-amount"
         tabindex="0"
         cdkMonitorElementFocus
-        (keydown.enter)="$event.preventDefault(); menuTrigger.openMenu()"
-        (keydown.space)="$event.preventDefault(); menuTrigger.openMenu()"
+        (keydown.enter)="$event.preventDefault(); isMenuOpened ? menuTrigger.closeMenu() : menuTrigger.openMenu()"
+        (keydown.space)="$event.preventDefault(); isMenuOpened ? menuTrigger.closeMenu() : menuTrigger.openMenu()"
         [matMenuTriggerFor]="discountControlMenu"
         #menuTrigger="matMenuTrigger"
         [placeholder]="currency + '0'"
-        readonly
         [value]="currency + totalDiscountAmount"
         (menuOpened)="handleMenuOpened()"
+        (menuClosed)="emitCloseDiscountDropdown(); isMenuOpened = false"
+        #discountInput
     />
     <mat-menu #discountControlMenu="matMenu" [hasBackdrop]="hasBackdrop" (closed)="handleMenuClosed($event)">
         <ng-template matMenuContent>
@@ -73,22 +74,16 @@
                                     focusNextCheckbox($event.target, i);
                                     menuTrigger?.closeMenu()
                                 "
-                                (keydown.space)="
-                                    $event.preventDefault(); discountRef.toggle(); focusNextCheckbox($event.target, i)
-                                "
+                                (keydown.space)="$event.preventDefault(); discountRef.toggle(); focusNextCheckbox($event.target, i)"
                             >
                                 <span class="font-size-15">
-                                    {{ discount?.get("name")?.value }}
+                                    {{ discount?.get('name')?.value }}
                                 </span>
                             </mat-checkbox>
                         </ng-container>
                     </ng-container>
                 </div>
-                <div
-                    *ngIf="showCreateNew"
-                    class="create-new pt-2 my-2 text-center cursor-pointer"
-                    (click)="createNew()"
-                >
+                <div *ngIf="showCreateNew" class="create-new pt-2 my-2 text-center cursor-pointer" (click)="createNew()">
                     <span
                         class="text-primary"
                         tabindex="0"

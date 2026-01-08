@@ -17,7 +17,8 @@ import { PageEvent } from '@angular/material/paginator';
     selector: 'app-e-way-bill-create',
     templateUrl: './e-way-bill-create-component.html',
     styleUrls: [`./e-way-bill-create-component.scss`],
-    providers: [EWayBillComponentStore]
+    providers: [EWayBillComponentStore],
+    standalone: false
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Template reference for invoice removal confirmation dialog */

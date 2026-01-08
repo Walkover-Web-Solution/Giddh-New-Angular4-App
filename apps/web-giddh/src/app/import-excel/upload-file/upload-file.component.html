@@ -5,7 +5,7 @@
         {{
             entity === voucherType.AccountWise || entity === voucherType.VoucherWise
                 ? commonLocaleData?.app_import_type?.voucher +
-                  " - " +
+                  ' - ' +
                   (entity === voucherType.AccountWise
                       ? commonLocaleData?.app_import_type?.account_wise
                       : commonLocaleData?.app_import_type?.voucher_wise)
@@ -14,16 +14,17 @@
     </p>
     <div
         *ngIf="
-            currentCompanyBranches?.length > 1 &&
-            entity === 'entries' &&
-            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+            currentCompanyBranches?.length > 1 && entity === 'entries' && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
         "
         class="form-group max-width-500 center-block"
     >
         <!-- Currently only import entries is only visible for branch as API doesn't support permission.
         Import is only allowed for 'entries' and not for other options ('inventory', 'account', 'trial-balance', 'groups')
         on branch level and for company level other options are supported but not entries -->
-        <label class="mt-4 mb-8">{{ localeData?.select_branch_headquarter }} <sup>*</sup></label>
+        <label class="mt-4 mb-8">
+            {{ localeData?.select_branch_headquarter }}
+            <sup>*</sup>
+        </label>
         <div class="form-group linked-entities">
             <div class="form-group">
                 <reactive-dropdown-field
@@ -33,8 +34,7 @@
                     [placeholder]="localeData?.select_branch"
                     [labelValue]="currentBranch?.name"
                     [name]="'currentBranch'"
-                >
-                </reactive-dropdown-field>
+                ></reactive-dropdown-field>
             </div>
         </div>
     </div>
@@ -59,9 +59,8 @@
                         <label class="file-upload-panel" for="csvUploadInput">
                             <span *ngIf="!selectedFileName">{{ localeData?.browse_file_label }}</span>
                             <span *ngIf="selectedFileName" class="select-file">{{ selectedFileName }}</span>
-                            <span class="pull-right select-file"
-                                ><i class="fa fa-check" *ngIf="selectedFileName"></i></span
-                        ></label>
+                            <span class="pull-right select-file"><i class="fa fa-check" *ngIf="selectedFileName"></i></span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -97,8 +96,7 @@
                     [(ngModel)]="selectVoucher"
                     (selectedOption)="selectVoucher = $event?.value"
                     [required]="true"
-                >
-                </reactive-dropdown-field>
+                ></reactive-dropdown-field>
             </div>
         </div>
         <div class="d-flex justify-content-between mt-2">
@@ -112,7 +110,7 @@
 
         <div class="pull-right mt-4">
             <button
-                mat-stroked-button
+                matButton="outlined"
                 [matTooltip]="commonLocaleData?.app_back"
                 matTooltipPosition="above"
                 class="mr-2"
@@ -121,7 +119,7 @@
                 {{ commonLocaleData?.app_back }}
             </button>
             <button
-                mat-raised-button
+                matButton="filled"
                 [matTooltip]="commonLocaleData?.app_next"
                 matTooltipPosition="above"
                 color="primary"

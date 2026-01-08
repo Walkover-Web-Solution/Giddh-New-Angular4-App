@@ -20,7 +20,8 @@ import { SettingsTriggersService } from '../../services/settings.triggers.servic
 @Component({
     selector: 'setting-trigger',
     templateUrl: './setting.trigger.component.html',
-    styleUrls: [`./setting.trigger.component.scss`]
+    styleUrls: [`./setting.trigger.component.scss`],
+    standalone: false
 })
 
 export class SettingTriggerComponent implements OnInit, OnDestroy {

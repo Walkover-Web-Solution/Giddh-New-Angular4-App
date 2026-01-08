@@ -28,13 +28,16 @@ import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
+import { environment } from "../../environments/environment.generated";
+import { EnvironmentService } from "../services/environment.service";
 
 declare var initSendOTP: any;
 
 @Component({
     selector: "signup",
     templateUrl: "./signup.component.html",
-    styleUrls: ["./signup.component.scss"]
+    styleUrls: ["./signup.component.scss"],
+    standalone:false
 })
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
@@ -87,7 +90,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
 
     // tslint:disable-next-line:no-empty
-    constructor(private fb: UntypedFormBuilder,
+    constructor(private _fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
@@ -96,11 +99,12 @@ export class SignupComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
         private ngZone: NgZone,
+        private generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig,
-        private generalService : GeneralService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private environmentService: EnvironmentService
     ) {
-        this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER;
+        this.urlPath = this.environmentService.isElectron ? "" : (this.serviceConfig.AppUrl || this.environmentService.appUrl) + this.environmentService.appFolder;
         this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
@@ -147,28 +151,31 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        // Use EnvironmentService for consistent asset path handling
+        this.imgPath = this.environmentService.getImagePath('');
+        this.urlPath = this.environmentService.isElectron ? "" : "";
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || this.environmentService.appUrl || 'https://giddh.com';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.environmentService.getImagePath('giddh-white-logo.svg');
         this.generateRandomBanner();
-        this.mobileVerifyForm = this.fb.group({
+        this.mobileVerifyForm = this._fb.group({
             country: ["India", [Validators.required]],
             mobileNumber: ["", [Validators.required]],
             otp: ["", [Validators.required]]
         });
 
-        this.emailVerifyForm = this.fb.group({
+        this.emailVerifyForm = this._fb.group({
             email: ["", [Validators.required, Validators.email]],
             token: ["", Validators.required]
         });
-        this.twoWayOthForm = this.fb.group({
+        this.twoWayOthForm = this._fb.group({
             otp: ["", [Validators.required]]
         });
-        this.signUpWithPasswdForm = this.fb.group({
+        this.signUpWithPasswdForm = this._fb.group({
             email: ["", [Validators.required, Validators.email]],
             password: ["", [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$")]]
         });
-        this.signupVerifyForm = this.fb.group({
+        this.signupVerifyForm = this._fb.group({
             email: ["", [Validators.required, Validators.email]],
             verificationCode: ["", Validators.required]
         });
@@ -329,7 +336,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
     }
 
-
     /**
      * This will use for sign with providers
      *
@@ -338,25 +344,82 @@ export class SignupComponent implements OnInit, OnDestroy {
      */
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
-            // electronOauth2
-            const { ipcRenderer } = (window as any).require("electron");
-            if (provider === "google") {
-                // google
-                const t = ipcRenderer.send("authenticate", provider);
-                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
-                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
-                });
+            // Enhanced Electron OAuth with robust error handling
+            try {
+                let ipcRenderer = null;
+                let authMethod = 'none';
 
-            } else {
-                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
-                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
-                });
+                // Method 1: Try legacy require first (most reliable)
+                if ((window as any).require) {
+                    try {
+                        const electron = (window as any).require("electron");
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            ipcRenderer = electron.ipcRenderer;
+                            authMethod = 'legacy-require';
+
+                        }
+                    } catch (requireError) {
+
+                    }
+                }
+
+                // Method 2: Try secure electronAPI as fallback
+                if (!ipcRenderer && (window as any).electronAPI) {
+                    const electronAPI = (window as any).electronAPI;
+                    if (electronAPI.send && electronAPI.once) {
+                        ipcRenderer = {
+                            send: electronAPI.send.bind(electronAPI),
+                            once: electronAPI.once.bind(electronAPI)
+                        };
+                        authMethod = 'secure-api';
+
+                    }
+                }
+
+                if (ipcRenderer && provider === "google") {
+                    try {
+                        // Send authentication request
+                        ipcRenderer.send("authenticate", provider);
+
+                        // Listen for response
+                        ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+
+                            // Handle error response from main process
+                            if (arg && arg.error) {
+
+                                this.toaster.errorToast('Google authentication failed: ' + arg.error);
+                                return;
+                            }
+
+                            // Handle successful response
+                            if (arg && arg.access_token) {
+
+                                this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                            } else {
+
+                                this.toaster.errorToast('Google authentication failed - invalid token format');
+                            }
+                        });
+                    } catch (ipcError) {
+
+                        this.toaster.errorToast('Google login communication error');
+                    }
+                } else {
+
+                    this.toaster.errorToast('Google login is not available in this Electron version');
+                }
+            } catch (error) {
+
+                this.toaster.errorToast('Google login is not available in this Electron version');
             }
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
-                this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+                // Only call authService.signIn for web (non-Electron) environments
+                if (!Configuration.isElectron) {
+                    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+                }
             }
         }
     }
@@ -421,7 +484,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         /* OTP SIGNUP */
         if (window['initSendOTP'] === undefined) {
             let scriptTag = document.createElement('script');
-            scriptTag.src = isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
+            scriptTag.src = Configuration.isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             scriptTag.onload = () => {

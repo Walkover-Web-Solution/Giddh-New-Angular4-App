@@ -1,13 +1,8 @@
-<ng-container
-    appTranslate
-    [file]="'contact/preview'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'contact/preview'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="no-data" *ngIf="getAccountStatementInProgress$ | async">
         <giddh-page-loader></giddh-page-loader>
     </div>
-    <div class="common-wrapper">
+    <div class="common-wrapper" *ngIf="!(getAccountStatementInProgress$ | async)">
         <div class="account-statement p-20 mt-4">
             <table class="w-100">
                 <tr>
@@ -87,7 +82,9 @@
                                 <p class="font-30 text-right">{{ localeData?.statement_of_accounts }}</p>
                                 <hr class="bordered m-0" />
                                 <p class="text-right text-light font-size-18 line-height-22">
-                                    {{ responseAccountList.fromDate }} <span> - </span> {{ responseAccountList.toDate }}
+                                    {{ responseAccountList.fromDate }}
+                                    <span>-</span>
+                                    {{ responseAccountList.toDate }}
                                 </p>
                                 <hr class="bordered m-0" />
                             </div>
@@ -97,10 +94,7 @@
                 <tr>
                     <td width="65%"></td>
                     <td width="35%">
-                        <table
-                            class="w-100"
-                            *ngIf="responseAccountList.accountSummary && responseAccountList.accountAddress"
-                        >
+                        <table class="w-100" *ngIf="responseAccountList.accountSummary && responseAccountList.accountAddress">
                             <thead>
                                 <tr>
                                     <th colspan="2" class="bg-grey font-size-16 text-light account-Summary">
@@ -187,7 +181,7 @@
                         </div>
                     </div>
                     <button
-                        mat-stroked-button
+                        matButton="outlined"
                         (click)="setInitialAdvanceFilter()"
                         class="mx-auto"
                         *ngIf="(advanceFiltersApplied || clearFilter) && !isLoading"
@@ -199,7 +193,7 @@
                     </button>
                     <div class="d-flex justify-content-between">
                         <button
-                            mat-stroked-button
+                            matButton="outlined"
                             class="mr-2"
                             [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'"
@@ -209,7 +203,7 @@
                         </button>
                         <button
                             aria-label="filter"
-                            mat-stroked-button
+                            matButton="outlined"
                             (click)="onOpenAdvanceSearch()"
                             class="d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
                             [matTooltip]="commonLocaleData?.app_advance_search"
@@ -239,12 +233,8 @@
                                 >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td
-                                    mat-cell
-                                    *matCellDef="let element; let i = index"
-                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
-                                >
-                                    {{ element.date ?? "-" }}
+                                <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{ 'bg-light-grey': i % 2 }">
+                                    {{ element.date ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="transactions">
@@ -263,18 +253,14 @@
                                                     $implicit: showTransactionInput,
                                                     fieldName: 'transactionsField',
                                                     formControl: transactionInput,
-                                                    title: localeData?.transactions
+                                                    title: localeData?.transactions,
                                                 }
                                             "
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td
-                                    mat-cell
-                                    *matCellDef="let element; let i = index"
-                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
-                                >
-                                    {{ element?.voucherType ?? "-" }}
+                                <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{ 'bg-light-grey': i % 2 }">
+                                    {{ element?.voucherType ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="details">
@@ -287,15 +273,11 @@
                                     [ngClass]="{ 'bg-light-grey': i % 2 }"
                                     class="details-column word-break"
                                 >
-                                    {{ element?.voucherNumber ?? "-" }}
+                                    {{ element?.voucherNumber ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="amount">
-                                <th
-                                    mat-header-cell
-                                    *matHeaderCellDef
-                                    class="sort-header-right text-right font-size-16 font-weight-bold"
-                                >
+                                <th mat-header-cell *matHeaderCellDef class="sort-header-right text-right font-size-16 font-weight-bold">
                                     {{ commonLocaleData?.app_amount }}
                                 </th>
                                 <td
@@ -304,21 +286,17 @@
                                     [ngClass]="{ 'bg-light-grey': i % 2 }"
                                     class="sort-header-right text-right"
                                 >
-                                    <span
-                                        >{{
+                                    <span>
+                                        {{
                                             element?.voucherAmount.type === transactionType.Debit
                                                 ? (element?.voucherAmount?.amount | giddhNumberFormat)
-                                                : "-"
+                                                : '-'
                                         }}
                                     </span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="payments">
-                                <th
-                                    mat-header-cell
-                                    *matHeaderCellDef
-                                    class="sort-header-right text-right font-size-16 font-weight-bold"
-                                >
+                                <th mat-header-cell *matHeaderCellDef class="sort-header-right text-right font-size-16 font-weight-bold">
                                     {{ commonLocaleData?.app_payment }}
                                 </th>
                                 <td
@@ -330,16 +308,12 @@
                                     {{
                                         element?.voucherAmount.type !== transactionType.Debit
                                             ? (element?.voucherAmount?.amount | giddhNumberFormat)
-                                            : "-"
+                                            : '-'
                                     }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="balance">
-                                <th
-                                    mat-header-cell
-                                    *matHeaderCellDef
-                                    class="sort-header-right text-right font-size-16 font-weight-bold"
-                                >
+                                <th mat-header-cell *matHeaderCellDef class="sort-header-right text-right font-size-16 font-weight-bold">
                                     {{ commonLocaleData?.app_balance }}
                                 </th>
                                 <td
@@ -350,9 +324,9 @@
                                 >
                                     {{
                                         element.closingBalance?.amount >= 0
-                                            ? (element.closingBalance?.type === transactionType.Credit ? "-" : "") +
+                                            ? (element.closingBalance?.type === transactionType.Credit ? '-' : '') +
                                               (element.closingBalance.amount | giddhNumberFormat)
-                                            : ""
+                                            : ''
                                     }}
                                 </td>
                             </ng-container>
@@ -366,10 +340,7 @@
                                 {{ balanceDue }}
                             </span>
                         </div>
-                        <div
-                            class="text-center pt-2 pb-2"
-                            *ngIf="isLoading || (!isLoading && !accountListData?.length)"
-                        >
+                        <div class="text-center pt-2 pb-2" *ngIf="isLoading || (!isLoading && !accountListData?.length)">
                             <div class="no-data" *ngIf="isLoading">
                                 <giddh-page-loader class="spinner-container position-absolute"></giddh-page-loader>
                             </div>
@@ -388,15 +359,14 @@
                             [pageSizeOptions]="pageSizeOptions"
                             [hidePageSize]="false"
                             [pageIndex]="accountListRequest.page - 1"
-                        >
-                        </mat-paginator>
+                        ></mat-paginator>
                         <section class="mb-custom-80"></section>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</ng-container>
+</div>
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
     <ng-template matMenuContent>
         <app-datepicker-wrapper

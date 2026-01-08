@@ -1,3 +1,9 @@
+// ==========================================================================
+// ANGULAR 21 MATERIAL 3 RESET STYLES
+// ==========================================================================
+// Modern CSS reset compatible with Angular 21 Material 3 components
+@use '../abstracts/mixins' as *;
+
 *,
 *::before,
 *::after {
@@ -15,35 +21,29 @@
 
 html,
 body {
-    overflow: hidden;
-
-    ::-webkit-scrollbar-track {
-        background-color: var(--theme-background-color);
-    }
-
     ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
-        background-color: var(--theme-background-color);
     }
 
     ::-webkit-scrollbar-thumb {
         border-radius: var(--mat-border-radius-8, 8px);
-        background-color: var(--theme-primary-light, lightgray);
+        background-color: lightgray;
     }
 
     .cdk-keyboard-focused,
     .cdk-program-focused {
         &:not(
-                .mat-calendar-content,
-                .mat-mdc-radio-button,
-                .mat-mdc-list-item,
-                .mat-expansion-panel-header,
-                .mat-mdc-icon-button,
-                .mat-mdc-slide-toggle,
-                .mat-mdc-menu-item
-            ) {
-            border-radius: 2px;
+            .border-none,
+            .mat-calendar-content,
+            .mat-mdc-radio-button,
+            .mat-mdc-list-item,
+            .mat-expansion-panel-header,
+            .mat-mdc-icon-button,
+            .mat-mdc-slide-toggle,
+            .mat-mdc-menu-item,
+            .cash-invoice-input
+        ) {
             outline-offset: 1px;
             outline: 2px solid var(--theme-primary-color) !important;
         }
@@ -55,6 +55,7 @@ a {
     @include cursor(pointer);
     color: var(--text-primary-color);
 }
+
 h1,
 h2,
 h3,
@@ -64,19 +65,23 @@ h6 {
     font-size: inherit;
     font-weight: inherit;
 }
+
 button,
 input,
 textarea {
     outline: none !important;
     font-family: inherit;
 }
+
 textarea,
 input {
     color: inherit;
     background-color: var(--color-transparent);
 }
+
 table {
     border-collapse: collapse;
+
     tr {
         th,
         td {
@@ -85,10 +90,12 @@ table {
         }
     }
 }
+
 ul,
 ol {
     list-style: none;
 }
+
 textarea {
     resize: none !important;
 }

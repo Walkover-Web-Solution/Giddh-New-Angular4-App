@@ -17,7 +17,8 @@ import { GeneralService } from '../../services/general.service';
 @Component({
     selector: 'address-settings',
     templateUrl: './address-settings.component.html',
-    styleUrls: ['./address-settings.component.scss']
+    styleUrls: ['./address-settings.component.scss'],
+    standalone:false
 })
 export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds Aside Account AsidePane Dialog Template Reference */
@@ -303,6 +304,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public saveAddress(form: any): void {
         this.saveNewAddress.emit(form);
+        this.closeAccountAsidePane();
     }
 
     /**
@@ -314,6 +316,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public updateAddress(form: any): void {
         form.formValue['uniqueName'] = this.addressToUpdate?.uniqueName;
         this.updatedAddress.emit(form);
+        this.closeAccountAsidePane();
     }
 
     /**

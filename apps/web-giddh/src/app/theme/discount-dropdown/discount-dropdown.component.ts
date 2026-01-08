@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { isEqual } from "../../lodash-optimized";
@@ -8,11 +8,14 @@ import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 @Component({
     selector: "discount-dropdown",
     templateUrl: "./discount-dropdown.component.html",
-    styleUrls: ["./discount-dropdown.component.scss"]
+    styleUrls: ["./discount-dropdown.component.scss"],
+    standalone: false
 })
 export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     /** Element ref for mat menu */
     @ViewChild('menuTrigger') public menuTrigger: MatMenuTrigger;
+    /** Element ref for discount input */
+    @ViewChild('discountInput') public discountInput: ElementRef<HTMLInputElement>;
     /** List of discounsts */
     @Input() public discountsList: any[] = [];
     /** List of selected discounts */
@@ -35,6 +38,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public selectedDiscounts: EventEmitter<any> = new EventEmitter<any>();
     /** Emitter for discount total */
     @Output() public totalDiscount: EventEmitter<any> = new EventEmitter<any>();
+    /** Emitter for close discount dropdown */
+    @Output() public closeDiscountDropdown: EventEmitter<any> = new EventEmitter<any>();
     /** Form Group for discount form */
     public discountForm: FormGroup;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -47,6 +52,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public readonly: boolean = false;
     /** Stores last saved form values when menu opens */
     private lastSavedFormValues: any = null;
+
+    public isMenuOpened: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -247,6 +254,10 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             fixedValue: this.discountForm.get('fixedValue')?.value,
             discounts: this.discountForm.get('discounts')?.value
         };
+
+        setTimeout(() => {
+            this.isMenuOpened = true;
+        }, 100);
     }
 
     /**
@@ -257,8 +268,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleMenuClosed(reason: MenuCloseReason): void {
         if (!reason) return;
-
-        const isClosedByEscape = reason === 'keydown';
+        this.isMenuOpened = false;
+        const isClosedByEscape = reason === 'keydown';   
         if (isClosedByEscape && this.lastSavedFormValues) {
             this.allowDiscountValueChanges = false;
             this.discountForm.patchValue({
@@ -277,6 +288,22 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             this.calculateDiscountAmount();
         }
         this.lastSavedFormValues = null;
+    }
+
+    /**
+     * Emits close discount dropdown event with the trigger element
+     *
+     * @memberof DiscountDropdownComponent
+     */
+    protected emitCloseDiscountDropdown(): void {
+        // Always emit close event for focus management
+        setTimeout(() => {
+            const triggerElement = this.discountInput?.nativeElement || null;
+            const syntheticEvent = {
+                target: triggerElement
+            };
+            this.closeDiscountDropdown.emit(syntheticEvent);
+        }, 50);
     }
 
     /**

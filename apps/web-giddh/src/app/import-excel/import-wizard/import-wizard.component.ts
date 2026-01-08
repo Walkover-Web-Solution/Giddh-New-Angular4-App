@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImportExcelRequestStates, ImportExcelResponseData, ImportExcelState, ImportExcelStatusPaginatedResponse, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -8,14 +8,16 @@ import { ImportExcelService } from '../../services/import-excel.service';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { CommonActions } from '../../actions/common.actions';
+import { map } from '../../lodash-optimized';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { ImportStatementType, VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
     selector: 'import-wizard',
-    styleUrls: ['./import-wizard.component.scss'],
     templateUrl: './import-wizard.component.html',
-    providers: [LedgerComponentStore]
+    styleUrls: ['./import-wizard.component.scss'],
+    providers: [LedgerComponentStore],
+    standalone: false
 })
 
 export class ImportWizardComponent implements OnInit, OnDestroy {
@@ -50,7 +52,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         private cdRef: ChangeDetectorRef,
         private toaster: ToasterService,
         private store: Store<AppState>,
-        private ledgerComponentStore: LedgerComponentStore,
+        private ledgerComponentStore: LedgerComponentStore, // Commented out due to missing import
         private commonAction: CommonActions
     ) {
     }
@@ -85,6 +87,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         }
 
         this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
+        this.cdRef.detectChanges();
     }
 
     public ngOnInit() {
@@ -260,7 +263,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
             case "voucher-wise":
                 importType = "VOUCHER_WISE_VOUCHER_IMPORT";
-                break;   
+                break;
         }
 
         return importType;

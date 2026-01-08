@@ -6,7 +6,7 @@ import {
 } from '../../theme/confirmation-modal/confirmation-modal.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { VoucherForm } from '../../models/api-models/Voucher';
-import * as cleaner from 'fast-clean';
+// Removed fast-clean dependency - using native JavaScript methods
 
 @Injectable({
     providedIn: 'any'
@@ -156,9 +156,8 @@ export class VoucherUtilityService {
         delete updatedData?.account?.currencyCode;
         delete updatedData?.account?.currencySymbol;
 
-        updatedData = cleaner?.clean(updatedData, {
-            nullCleaner: true
-        });
+        // Replace fast-clean with native JavaScript null/undefined cleanup
+        updatedData = this.removeNullUndefined(updatedData);
 
         if (!updatedData.account?.shippingDetails) {
             updatedData.account.shippingDetails = {
@@ -177,5 +176,35 @@ export class VoucherUtilityService {
         }
 
         return updatedData;
+    }
+
+    /**
+     * Remove null and undefined values from object (replaces fast-clean functionality)
+     * @param obj Object to clean
+     * @returns Cleaned object
+     */
+    private removeNullUndefined(obj: any): any {
+        if (obj === null || obj === undefined) {
+            return obj;
+        }
+        
+        if (Array.isArray(obj)) {
+            return obj.map(item => this.removeNullUndefined(item)).filter(item => item !== null && item !== undefined);
+        }
+        
+        if (typeof obj === 'object') {
+            const cleaned: any = {};
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    const value = this.removeNullUndefined(obj[key]);
+                    if (value !== null && value !== undefined) {
+                        cleaned[key] = value;
+                    }
+                }
+            }
+            return cleaned;
+        }
+        
+        return obj;
     }
 }

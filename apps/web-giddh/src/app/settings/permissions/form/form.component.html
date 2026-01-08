@@ -38,13 +38,9 @@
                 ></reactive-dropdown-field>
             </div>
             <!-- time span -->
-            <div
-                [exclude]="'.time-span-dropdown'"
-                [attachOutsideOnClick]="true"
-                (clickOutside)="methodForToggleSection('timeSpanSection')"
-            >
+            <div [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
                 <button
-                    mat-button
+                    matButton="outlined"
                     [matMenuTriggerFor]="menu"
                     (click)="showTimeSpan = !showTimeSpan"
                     type="button"
@@ -101,11 +97,7 @@
                                                     [placeholder]="commonLocaleData?.app_start_date"
                                                     formControlName="from"
                                                 />
-                                                <input
-                                                    matEndDate
-                                                    [placeholder]="commonLocaleData?.app_end_date"
-                                                    formControlName="to"
-                                                />
+                                                <input matEndDate [placeholder]="commonLocaleData?.app_end_date" formControlName="to" />
                                             </mat-date-range-input>
                                             <mat-date-range-picker #picker></mat-date-range-picker>
                                         </mat-form-field>
@@ -144,7 +136,7 @@
                     (clickOutside)="methodForToggleSection('rangeSpanSection')"
                 >
                     <button
-                        mat-button
+                        matButton="outlined"
                         [matMenuTriggerFor]="menurange"
                         (click)="showIPWrap = !showIPWrap"
                         type="button"
@@ -186,11 +178,7 @@
                             >
                                 <div
                                     class="d-flex column-gap-1 align-items-center mb-2"
-                                    *ngFor="
-                                        let item of permissionForm.get('allowedCidrs')['controls'];
-                                        let i = index;
-                                        let l = last
-                                    "
+                                    *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
                                     [formGroupName]="i"
                                 >
                                     <div class="w-100">
@@ -203,16 +191,8 @@
                                         />
                                     </div>
                                     <div class="pull-left lh-34">
-                                        <i
-                                            *ngIf="!l"
-                                            (click)="delRow('allowedCidrs', i, $event)"
-                                            class="icon-trash cursor-pointer"
-                                        ></i>
-                                        <i
-                                            *ngIf="l"
-                                            (click)="addNewRow('allowedCidrs', item, $event)"
-                                            class="icon-plus cursor-pointer"
-                                        ></i>
+                                        <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)" class="icon-trash cursor-pointer"></i>
+                                        <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)" class="icon-plus cursor-pointer"></i>
                                     </div>
                                 </div>
                             </section>
@@ -224,11 +204,7 @@
                             >
                                 <div
                                     class="d-flex column-gap-1 align-items-center mb-2"
-                                    *ngFor="
-                                        let item of permissionForm.get('allowedIps')['controls'];
-                                        let i = index;
-                                        let l = last
-                                    "
+                                    *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
                                     [formGroupName]="i"
                                 >
                                     <div class="w-100">
@@ -242,16 +218,8 @@
                                         />
                                     </div>
                                     <div class="pull-left lh-34">
-                                        <i
-                                            *ngIf="!l"
-                                            (click)="delRow('allowedIps', i, $event)"
-                                            class="icon-trash cursor-pointer"
-                                        ></i>
-                                        <i
-                                            *ngIf="l"
-                                            (click)="addNewRow('allowedIps', item, $event)"
-                                            class="icon-plus cursor-pointer"
-                                        ></i>
+                                        <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)" class="icon-trash cursor-pointer"></i>
+                                        <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)" class="icon-plus cursor-pointer"></i>
                                     </div>
                                 </div>
                             </section>
@@ -260,30 +228,27 @@
                 </div>
             </div>
             <div class="action-button" [ngClass]="{ 'text-xl-right': isUpdtCase }">
-                <div class="add-btn">
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        [ladda]="createPermissionInProcess$ | async"
-                        [disabled]="isUserRestricted"
-                        class="btn custom-btn"
-                    >
-                        <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
-                        <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
-                    </button>
-                    <button *ngIf="isUpdtCase" (click)="closeDialog.emit(false)" mat-stroked-button type="button">
-                        {{ commonLocaleData?.app_cancel }}
-                    </button>
-                </div>
+                <button
+                    matButton="filled"
+                    [ladda]="createPermissionInProcess$ | async"
+                    [disabled]="isUserRestricted"
+                    class="mr-2"
+                >
+                    <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
+                    <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
+                </button>
+                <button *ngIf="isUpdtCase" (click)="closeDialog.emit(false)" matButton="outlined" type="button">
+                    {{ commonLocaleData?.app_cancel }}
+                </button>
             </div>
         </div>
         <div class="ml-auto" *ngIf="isSuperAdminCompany">
             <button
-                mat-raised-button
+                matButton="filled"
                 type="button"
                 color="primary"
                 *ngIf="!isUpdtCase"
-                class="btn pull-right create-btn mr-0"
+                class="pull-right create-btn mr-0 w125"
                 [routerLink]="['/pages/permissions/list']"
                 [queryParams]="{ tab: 'settings' }"
             >
@@ -295,6 +260,5 @@
         [restrictedModule]="restrictedModules.Users"
         [isUserRestricted]="isUserRestricted"
         [useRouterLink]="true"
-    >
-    </restricted-module-message>
+    ></restricted-module-message>
 </form>

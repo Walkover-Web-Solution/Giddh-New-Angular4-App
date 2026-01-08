@@ -96,7 +96,7 @@
                                 filter: var(--filter-image-color-white);
                             }
                         }
-                        &.sub-option[aria-level="1"] {
+                        &.sub-option[aria-level='1'] {
                             position: relative;
                             padding-left: 20px !important;
                             height: 27px;
@@ -211,5 +211,31 @@
     &:hover {
         background-color: var(--bg-primary-color) !important;
         color: var(--color-white) !important;
+    }
+}
+
+// Angular 21 compatibility: Ensure mat-app-background works
+:host {
+    .mat-app-background {
+        background-color: var(--mat-sys-surface, #fefbff);
+        color: var(--mat-sys-on-surface, #1d1b20);
+    }
+
+    .inventory-aside-pane.mat-app-background {
+        background-color: var(--mat-sys-surface-container-low, #f7f2fa);
+        border-right: 1px solid var(--mat-sys-outline-variant, #c4c7c5);
+    }
+}
+
+// Dark theme support
+:host-context(.dark-theme) {
+    .mat-app-background {
+        background-color: var(--mat-sys-surface, #141218);
+        color: var(--mat-sys-on-surface, #e6e0e9);
+    }
+
+    .inventory-aside-pane.mat-app-background {
+        background-color: var(--mat-sys-surface-container-low, #1d1a22);
+        border-right: 1px solid var(--mat-sys-outline-variant, #49454f);
     }
 }

@@ -1,5 +1,5 @@
 <div class="snack-container cursor-pointer text-white" (mouseenter)="resetTimeout()" (mouseleave)="createTimeout()">
-    <button mat-stroked-button class="snack-close-button pull-right btn-no-ripple" (click)="dismiss()"><i class="icon-cross"></i></button>
+    <button matButton="outlined" class="snack-close-button pull-right btn-no-ripple" (click)="dismiss()"><i class="icon-cross"></i></button>
     <div class="snack-message-title">{{ data?.title }}</div>
     <div class="snack-message-content" [innerHTML]="data?.message"></div>
     <div class="snack-progress-bar" *ngIf="showProgressBar" [style.width]="snackProgressBarWidthPercentage + '%'"></div>

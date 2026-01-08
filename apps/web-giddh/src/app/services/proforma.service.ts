@@ -9,8 +9,11 @@ import { catchError, map } from 'rxjs/operators';
 import { ProformaDownloadRequest, ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../models/api-models/proforma';
 import { ESTIMATES_API, PROFORMA_API } from './apiurls/proforma.api';
 import { VoucherClass } from '../models/api-models/Sales';
+import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ProformaService {
     private companyUniqueName: string;
 

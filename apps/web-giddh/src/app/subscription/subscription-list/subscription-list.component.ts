@@ -25,7 +25,8 @@ import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/
     templateUrl: './subscription-list.component.html',
     styleUrls: ['./subscription-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [SubscriptionComponentStore, BuyPlanComponentStore, CompanyListDialogComponentStore]
+    providers: [SubscriptionComponentStore, BuyPlanComponentStore, CompanyListDialogComponentStore],
+    standalone: false
 })
 export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** Mat menu instance reference */

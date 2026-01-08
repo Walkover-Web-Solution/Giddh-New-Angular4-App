@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'subscription'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'subscription'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="verifyOwnershipInProgress$ | async"></giddh-page-loader>
     <div class="flex-col" *ngIf="!(verifyOwnershipInProgress$ | async)">
         <div class="inner">
@@ -11,8 +6,7 @@
             <div class="flex-column d-flex justify-content-center align-items-center" *ngIf="acceptedSubscription">
                 <p>{{ localeData?.request_accepted_successfully }}</p>
                 <a
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     class="mr-0 min-width-160 d-flex align-items-center justify-content-center"
                     [href]="loginUrl"
                     target="_blank"
@@ -30,7 +24,7 @@
             <div>
                 <div class="dialog-header">
                     <span>{{ localeData?.subscription_transfer }}</span>
-                    <button mat-icon-button aria-label="close" (click)="closeAllDialogs($event)">
+                    <button matIconButton aria-label="close" (click)="closeAllDialogs($event)">
                         <i class="icon-cross"></i>
                     </button>
                 </div>
@@ -38,10 +32,10 @@
                     <p class="font-size-15 mt-1 mb-1">{{ localeData?.invited_to_become_subscriber }}</p>
                     <p class="font-size-15 mt-1">{{ localeData?.accepting_will_make_you_subscriber }}</p>
                     <div class="d-flex justify-content-end column-gap-1 mt-3">
-                        <button aria-label="yes" mat-raised-button color="primary" (click)="onSubmit($event)">
+                        <button aria-label="yes" matButton="filled" (click)="onSubmit($event)">
                             {{ localeData?.accept_subscription }}
                         </button>
-                        <button aria-label="no" mat-stroked-button (click)="onReject($event)">
+                        <button aria-label="no" matButton="outlined" (click)="onReject($event)">
                             {{ localeData?.decline_subscription }}
                         </button>
                     </div>
@@ -66,15 +60,14 @@
                                 [placeholder]="localeData?.enter_reason"
                                 [type]="'text'"
                                 formControlName="reason"
-                            >
-                            </input-field>
+                            ></input-field>
                         </div>
                     </form>
                     <div class="d-flex justify-content-end column-gap-1 mt-3">
-                        <button aria-label="yes" mat-raised-button color="primary" (click)="onSubmit($event, true)">
+                        <button aria-label="yes" matButton="filled" (click)="onSubmit($event, true)">
                             {{ localeData?.submit }}
                         </button>
-                        <button aria-label="no" type="button" mat-stroked-button (click)="closeReject($event)">
+                        <button aria-label="no" type="button" matButton="outlined" (click)="closeReject($event)">
                             {{ localeData?.cancel }}
                         </button>
                     </div>
@@ -82,4 +75,4 @@
             </div>
         </div>
     </ng-template>
-</ng-container>
+</div>

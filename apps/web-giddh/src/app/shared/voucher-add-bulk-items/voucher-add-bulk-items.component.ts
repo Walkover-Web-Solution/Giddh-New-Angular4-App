@@ -15,7 +15,8 @@ import { FormControl } from '@angular/forms';
     selector: 'voucher-add-bulk-items-component',
     templateUrl: './voucher-add-bulk-items.component.html',
     styleUrls: [`./voucher-add-bulk-items.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {

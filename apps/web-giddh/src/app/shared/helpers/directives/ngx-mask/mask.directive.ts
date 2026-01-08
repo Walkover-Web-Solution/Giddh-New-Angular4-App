@@ -104,6 +104,7 @@ const unSupportedPrefixAndSuffix = [
         },
         MaskService,
     ],
+    standalone: false
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, OnDestroy {
     @Input('mask') public maskExpression: string = '';

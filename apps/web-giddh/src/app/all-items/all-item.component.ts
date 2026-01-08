@@ -29,7 +29,8 @@ import { AppState } from '../store';
     selector: 'all-giddh-item',
     templateUrl: './all-item.component.html',
     styleUrls: ['./all-item.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 
 export class AllGiddhItemComponent implements OnInit, OnDestroy {

@@ -26,7 +26,8 @@ dayjs.extend(duration)
     selector: 'app-subscription',
     templateUrl: './subscription.component.html',
     styleUrls: ['./subscription.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
     /** True If Auth key copied and used toggle Copy text */
@@ -198,7 +199,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
             if (user) {
                 this.user = cloneDeep(user.user);
-                this.userSessionId = _.cloneDeep(user.session?.id);
+                this.userSessionId = cloneDeep(user.session?.id);
             }
         });
 

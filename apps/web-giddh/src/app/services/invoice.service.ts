@@ -13,10 +13,13 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ValidateInvoice } from '../models/api-models/Company';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
+import { cloneDeep, concat, forEach, get, keys } from '../lodash-optimized';
 
 declare var _: any;
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InvoiceService {
     public selectedInvoicesLists: any[] = [];
     private companyUniqueName: string;
@@ -334,9 +337,9 @@ export class InvoiceService {
      */
     public UpdateRazorPayDetail(form): Observable<BaseResponse<RazorPayDetailsResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let newForm = _.cloneDeep(form);
+        let newForm = cloneDeep(form);
         newForm.companyName = this.companyUniqueName;
-        form = _.cloneDeep(newForm);
+        form = cloneDeep(newForm);
         return this.http.put(this.config.apiUrl + INVOICE_API.GET_RAZORPAY_DETAIL?.replace(':companyUniqueName', this.companyUniqueName), form).pipe(
             map((res) => {
                 let data: BaseResponse<RazorPayDetailsResponse, string> = res;
@@ -380,9 +383,9 @@ export class InvoiceService {
      */
     public SaveRazorPayDetail(form): Observable<BaseResponse<RazorPayDetailsResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let newForm = _.cloneDeep(form);
+        let newForm = cloneDeep(form);
         newForm.companyName = this.companyUniqueName;
-        form = _.cloneDeep(newForm);
+        form = cloneDeep(newForm);
         return this.http.post(this.config.apiUrl + INVOICE_API.GET_RAZORPAY_DETAIL?.replace(':companyUniqueName', this.companyUniqueName), form).pipe(
             map((res) => {
                 let data: BaseResponse<RazorPayDetailsResponse, string> = res;

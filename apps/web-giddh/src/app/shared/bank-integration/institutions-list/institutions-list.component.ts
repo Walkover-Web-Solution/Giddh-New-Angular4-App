@@ -12,7 +12,8 @@ import { BankIntegrationComponentStore } from '../utility/bank-integration.store
     styleUrls: ['./institutions-list.component.scss'],
     templateUrl: './institutions-list.component.html',
     providers: [BankIntegrationComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class InstitutionsListComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */

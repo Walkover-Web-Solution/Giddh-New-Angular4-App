@@ -1,7 +1,6 @@
 .nav-left-bar.open {
     left: 0;
     width: 240px;
-
 }
 
 .menu-wrapper {
@@ -96,9 +95,9 @@
     padding: 0 25px !important;
 }
 
-ul{
-    &.universal-date{
-        li{
+ul {
+    &.universal-date {
+        li {
             .icon-circle {
                 color: var(--color-white);
                 background-color: var(--color-transparent);
@@ -109,12 +108,12 @@ ul{
                 display: flex !important;
             }
             &.header-utility-icons {
-                a{
+                a {
                     &:hover {
-                        .icon-circle{
+                        .icon-circle {
                             background-color: var(--color-white);
                         }
-                      }
+                    }
                 }
             }
             &.select-today {
@@ -122,7 +121,7 @@ ul{
                     color: var(--color-light-gray);
                     height: 32px;
                 }
-                &:hover{
+                &:hover {
                     button {
                         background-color: var(--color-white) !important;
                         color: var(--color-black) !important;
@@ -309,7 +308,6 @@ ul{
         .icon-calender,
         .icon-plus,
         i,
-
         .not-today {
             .calendar-addon {
                 color: var(--color-black);
@@ -343,7 +341,7 @@ ul{
             border-radius: var(--mat-border-radius-4);
 
             i {
-                padding: 0px 5px 1px 0px!important;
+                padding: 0px 5px 1px 0px !important;
                 color: var(--color-black) !important;
                 font-size: var(--font-size-16);
             }
@@ -359,7 +357,6 @@ ul{
                     color: var(--color-white);
                 }
             }
-
         }
     }
     .logo-wrapper {
@@ -392,7 +389,6 @@ aside-setting {
         -ms-transform: translate(0, 0px);
         transform: translate3d(0, 0px, 0px);
         right: 0;
-
     }
 }
 
@@ -403,24 +399,24 @@ aside-setting {
         position: relative;
     }
 }
-.profile-wrapper{
+.profile-wrapper {
     padding: 9px 0;
-    .profile-picture{
+    .profile-picture {
         color: var(--color-black);
         width: 40px;
         height: 40px;
         border: 1px solid var(--color-deep-orange);
         border-radius: 50%;
         background-color: var(--color-deep-orange);
-        span{
+        span {
             line-height: 38px;
         }
     }
 }
 .user-profile-menu {
     width: 270px;
-    .user-info{
-        span{
+    .user-info {
+        span {
             font-weight: 600;
         }
         p {
@@ -435,13 +431,14 @@ aside-setting {
         min-height: 30px;
         max-height: 190px;
     }
-
 }
 @media screen and (max-width: 1024px) {
-    ul{
-        &.universal-date{
-            li{
-                &.select-today, &.notification, .help-text{
+    ul {
+        &.universal-date {
+            li {
+                &.select-today,
+                &.notification,
+                .help-text {
                     display: none !important;
                 }
             }

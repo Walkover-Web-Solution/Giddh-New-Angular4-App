@@ -1,4 +1,7 @@
-import { DROPDOWN_ITEMS_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
+// Removed circular import: import { DROPDOWN_ITEMS_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
+// Using inline constants to break circular dependency
+const DROPDOWN_ITEMS_COUNT_LIMIT = 20;
+const PAGINATION_LIMIT = 20;
 import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
 import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocks-item.interface';
 

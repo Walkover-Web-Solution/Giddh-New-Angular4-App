@@ -4,6 +4,7 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    Inject,
     Input,
     NgZone,
     OnChanges,
@@ -14,7 +15,6 @@ import {
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { ProfitLossData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
@@ -26,13 +26,18 @@ import { FinancialReportsComponentStore } from '../../../../financial-reports.st
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { Configuration } from '../../../../../app.constant';
+import { environment } from '../../../../../../environments/environment.generated';
+import { each, forEach, indexOf, keys } from '../../../../../lodash-optimized';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
-    selector: 'profit-loss-grid',
+selector: 'profit-loss-grid',
     templateUrl: './profit-loss-grid.component.html',
     styleUrls: [`./profit-loss-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [FinancialReportsComponentStore]
+    providers: [FinancialReportsComponentStore],
+    standalone: false
 })
 export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     public noData: boolean;
@@ -73,13 +78,14 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
         private zone: NgZone,
         private financialReportsComponentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
     ) {
 
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.plSearchControl.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -248,7 +254,7 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {
                     request: {
-                        reportType: ReportType.ProfitLoss,
+                        reportType: ReportType.PROFIT_LOSS,
                         from: this.from,
                         to: this.to,
                         branchUniqueName: this.generalService.currentBranchUniqueName
@@ -270,7 +276,7 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ProfitLossGridComponent
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        groupAccountDetails.forEach(groupAccount => {
+        (Array.isArray(groupAccountDetails) ? groupAccountDetails : []).forEach(groupAccount => {
             if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
                     uniqueName: groupAccount.uniqueName,

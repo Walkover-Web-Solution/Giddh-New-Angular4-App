@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { merge, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules } from '../../app.constant';
@@ -23,7 +23,8 @@ export interface ObligationsStatus {
     selector: 'obligations-component',
     templateUrl: './obligations.component.html',
     styleUrls: ['./obligations.component.scss'],
-    providers: [VatReportComponentStore]
+    providers: [VatReportComponentStore],
+    standalone:false
 })
 
 export class ObligationsComponent implements OnInit, OnDestroy {
@@ -66,7 +67,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     /** Holds Obligations table columns */
     public displayedColumns = ['start', 'end', 'due', 'status', 'action'];
     /** True if API Call is in progress */
-    public isLoading: boolean;
+    public isLoading = signal<boolean>(false);
     /** This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
     /** Hold HMRC portal url */
@@ -188,7 +189,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
 
         merge(this.componentStore.getObligationListInProgress$, this.componentStore.getTaxNumberInProgress$, this.componentStore.getHMRCInProgress$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                this.isLoading = response;
+                this.isLoading.set(response);
             });
     }
 
@@ -320,11 +321,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         }
 
         const dialogRef = this.dialog.open(FileReturnComponent, {
-            data: dataToSend,
-            width: '60vw',
-            height: '80vh',
-            disableClose: true
-        });
+                    data: dataToSend,
+                    width: '60vw',
+                    height: '80vh',
+                    disableClose: true
+                });
 
         dialogRef.afterClosed().subscribe(response => {
             if (response.status === 'success') {
@@ -350,11 +351,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         }
         this.dialog.open(ViewReturnComponent, {
-            data: dataToSend,
-            width: '60vw',
-            height: '80vh',
-            disableClose: true
-        });
+                    data: dataToSend,
+                    width: '60vw',
+                    height: '80vh',
+                    disableClose: true
+                });
     }
 
     /**

@@ -10,16 +10,14 @@
                             [type]="'text'"
                             [name]="'companyName'"
                             [label]="localeData?.company_name"
-                        >
-                        </input-field>
+                        ></input-field>
                         <input-field
-                            *ngIf="organizationType === 'BRANCH'  || isConsolidatedBranch"
+                            *ngIf="organizationType === 'BRANCH' || isConsolidatedBranch"
                             [name]="'alias'"
                             formControlName="alias"
                             [type]="'text'"
                             [label]="localeData?.branch_name"
-                        >
-                        </input-field>
+                        ></input-field>
                     </div>
                 </div>
             </div>
@@ -31,7 +29,7 @@
                     <div class="font-size-15">{{ profileData?.uniqueName }}</div>
                 </div>
             </div>
-            <div *ngIf="(organizationType === 'BRANCH'  || isConsolidatedBranch)" class="row pb-1 mt-3 parent-name">
+            <div *ngIf="organizationType === 'BRANCH' || isConsolidatedBranch" class="row pb-1 mt-3 parent-name">
                 <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
                     <label class="font-size-15">{{ localeData?.parent }}:</label>
                 </div>
@@ -51,9 +49,7 @@
                         <img
                             class="country-flag"
                             *ngIf="profileData?.country?.countryCode"
-                            src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
-                                profileData?.country?.countryCode
-                            }}.svg"
+                            src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{ profileData?.country?.countryCode }}.svg"
                             alt="flag img"
                         />
                         <div class="font-size-15">

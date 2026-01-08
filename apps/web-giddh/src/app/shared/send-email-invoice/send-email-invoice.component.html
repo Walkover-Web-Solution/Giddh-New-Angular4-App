@@ -1,12 +1,7 @@
-<ng-container
-    appTranslate
-    [file]="'invoice/send-email'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'invoice/send-email'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="dialog-header">
         <span>{{ localeData?.page_heading }}</span>
-        <button mat-icon-button aria-label="close" (click)="cancel()">
+        <button matIconButton aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -14,82 +9,67 @@
     <mat-dialog-content class="dialog-body">
         <div class="row mb-2">
             <div class="col-sm-12">
-                <input
-                    matInput
-                    type="text"
-                    class="form-control border"
+                <text-field
+                    [cssClass]="'form-control border'"
                     [placeholder]="localeData?.enter_email_address"
                     [(ngModel)]="emailAddresses"
-                />
+                ></text-field>
             </div>
         </div>
-        <div
-            class="clear-both"
-            *ngIf="
-                voucherType !== 'proforma' &&
-                voucherType !== 'proformas' &&
-                voucherType !== 'estimates' &&
-                voucherType !== 'estimate' &&
-                voucherType !== 'debit note' &&
-                voucherType !== 'credit note'
-            "
-        >
+
+        <div class="clear-both" *ngIf="![receiptVoucherType, paymentVoucherType].includes(voucherType)">
             <p class="font-size-15 mb-1">{{ localeData?.invoice_copy }}</p>
             <hr />
-
-            <div class="checkbox" *ngIf="voucherApiVersion === 2">
-                <label>
-                    <mat-checkbox
-                        name="originalCopy"
-                        value="Original"
-                        color="primary"
-                        checked
-                        [(ngModel)]="isOriginal"
-                        (change)="invoiceTypeChanged($event)"
-                    ></mat-checkbox>
+            <div class="checkbox">
+                <mat-checkbox
+                    name="original-copy"
+                    color="primary"
+                    value="Original"
+                    [checked]="downloadCopy.includes('Original')"
+                    (change)="selectDownloadOptions($event)"
+                >
                     {{ localeData?.original }}
-                </label>
+                </mat-checkbox>
             </div>
-
             <div class="checkbox">
-                <label>
-                    <mat-checkbox
-                        [(ngModel)]="isTransport"
-                        color="primary"
-                        (change)="invoiceTypeChanged($event)"
-                        value="Transport"
-                    >
-                    </mat-checkbox>
+                <mat-checkbox
+                    name="transport-copy"
+                    color="primary"
+                    value="Transport"
+                    [checked]="downloadCopy.includes('Transport')"
+                    (change)="selectDownloadOptions($event)"
+                >
                     {{ localeData?.transport }}
-                </label>
+                </mat-checkbox>
             </div>
             <div class="checkbox">
-                <label>
-                    <mat-checkbox
-                        color="primary"
-                        value="Customer"
-                        (change)="invoiceTypeChanged($event)"
-                        [(ngModel)]="isCustomer"
-                    ></mat-checkbox>
+                <mat-checkbox
+                    name="customer-copy"
+                    color="primary"
+                    value="Customer"
+                    [checked]="downloadCopy.includes('Customer')"
+                    (change)="selectDownloadOptions($event)"
+                >
                     {{ commonLocaleData?.app_customer }}
-                </label>
+                </mat-checkbox>
             </div>
         </div>
 
         <!-- region buttons -->
         <div class="row mt-4 mb-2">
             <div class="col-sm-12">
-                <div class="btn-group column-gap-15" role="group">
+                <div class="btn-group" role="group">
                     <button
-                        mat-raised-button
-                        color="primary"
-                        [disabled]="!emailAddresses || (!isTransport && !isOriginal && !isCustomer)"
+                        type="button"
+                        matButton="filled"
+                        [disabled]="!emailAddresses || !downloadCopy?.length"
                         (click)="sendEmail()"
+                        mat-dialog-close
                     >
                         {{ commonLocaleData?.app_send }}
                     </button>
 
-                    <button mat-stroked-button (click)="cancel()">
+                    <button type="button" matButton="outlined" mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
@@ -97,4 +77,4 @@
         </div>
         <!-- endregion -->
     </mat-dialog-content>
-</ng-container>
+</div>

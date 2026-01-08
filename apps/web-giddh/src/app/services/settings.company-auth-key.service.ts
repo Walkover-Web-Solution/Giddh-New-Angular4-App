@@ -8,8 +8,11 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CreateCompanyAuthKeyRequest, UpdateCompanyAuthKeyRequest, ICompanyAuthKey } from '../models/api-models/SettingsCompanyAuthKey';
 import { SETTINGS_COMPANY_AUTH_KEY_API } from './apiurls/settings.company-auth-key';
+import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CompanyAuthKeyService {
     private companyUniqueName: string;
 

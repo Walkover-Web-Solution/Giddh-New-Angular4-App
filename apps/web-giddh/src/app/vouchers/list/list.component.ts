@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
@@ -15,7 +15,7 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
@@ -43,6 +43,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../services/invoice.ui.data.service';
 import { TemplateModeEnum } from "../../models/api-models/Sales";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -62,7 +63,8 @@ interface IReportFilterTableColumn {
     selector: "list",
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore],
+    standalone:false
 })
 export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold all voucher list data source for table */
@@ -383,7 +385,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceActions: InvoiceActions,
         private salesAction: SalesActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
@@ -468,7 +471,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
@@ -510,10 +513,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         ];
                         this.selectedTemplate = this.purchaseTemplatesList[0];
                         this.templateFor = this.purchaseTemplatesList[0]?.value || null;
-                    }  else {
+                    } else {
                         this.selectedTemplate = null;
                         this.templateFor = null;
                     }
+                    this.changeDetectorRef.detectChanges();
                 }, 100);
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                     this.setModuleType();
@@ -737,7 +741,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                 let tcsSum: number = 0;
                 let tdsSum: number = 0;
-                response.body?.entries.forEach(entry => {
+                (Array.isArray(response.body?.entries) ? response.body?.entries : []).forEach(entry => {
                     entry.taxes?.forEach(tax => {
                         if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
                             tcsSum += tax.amount?.amountForAccount;
@@ -1375,7 +1379,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getAllVouchers(): void {
-        if (this.voucherType?.length) {
+        if (this.voucherTypes?.length) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                 this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
@@ -1989,7 +1993,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.page = advanceFilters.page;
         this.advanceFilters.count = advanceFilters.count;
         this.advanceFilters.q = advanceFilters.q;
-
         tempKeysInAdvanceFiltersForm.forEach(keys => {
             this.advanceSearchTempKeyObj = { ...this.advanceSearchTempKeyObj, [keys]: this.advanceFilters[keys] };
             delete this.advanceFilters[keys];
@@ -2221,9 +2224,43 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private openUrl(url: string): void {
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#.${url}`;
-            ipcRenderer.send('open-url', url);
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        const electronUrl = location.origin + location.pathname + `#.${url}`;
+                        (window as any).electronAPI.send('open-url', electronUrl);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            const electronUrl = location.origin + location.pathname + `#.${url}`;
+                            electron.ipcRenderer.send('open-url', electronUrl);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+
+                    }
+                }
+
+                // Fallback to regular window.open if IPC not available
+                if (!electronIpcAvailable) {
+
+                    (window as any).open(url);
+                }
+            } catch (error) {
+
+                (window as any).open(url);
+            }
         } else {
             (window as any).open(url);
         }
@@ -2653,7 +2690,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private flattenGroupedVouchers(groupedVoucher: Record<string, GenBulkInvoiceGroupByObj[]>): string[] {
         const model: string[] = [];
         forEach(groupedVoucher, items => {
-            items.forEach(obj => model.push(obj?.uniqueName));
+            (Array.isArray(items) ? items : []).forEach(obj => model.push(obj?.uniqueName));
         });
         return model;
     }
@@ -3367,6 +3404,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else {
                 this.createdTemplatesList = [];
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -3473,13 +3511,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         };
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
-            width: '100%',
-            height: '95vh',
-            maxHeight: '95vh',
-            maxWidth: '90vw',
-            data: dataToSend,
-            disableClose: true
-        });
+                    width: '100%',
+                    height: '95vh',
+                    maxHeight: '95vh',
+                    data: dataToSend,
+                    disableClose: true
+                });
 
         dialogRef.afterClosed().subscribe(response => {
             if (response) {

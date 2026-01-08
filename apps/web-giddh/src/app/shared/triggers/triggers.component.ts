@@ -10,7 +10,8 @@ import { ASIDE_PANE_CONFIG } from "../../app.constant";
     selector: 'app-triggers',
     templateUrl: './triggers.component.html',
     styleUrls: ['./triggers.component.scss'],
-    providers: [TriggerComponentStore]
+    providers: [TriggerComponentStore],
+    standalone: false
 })
 
 export class TriggersComponent implements OnInit {

@@ -12,7 +12,9 @@ import { AppState } from '../../../store/roots';
 import { GeneralActions } from '../../general/general.actions';
 import { SETTINGS_TAXES_ACTIONS } from './settings.taxes.const';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsTaxesActions {
 
     public CreateTax$: Observable<Action> = createEffect(() => this.action$

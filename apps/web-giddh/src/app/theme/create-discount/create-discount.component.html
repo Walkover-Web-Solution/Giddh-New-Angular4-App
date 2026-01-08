@@ -1,16 +1,11 @@
-<ng-container
+<div
     appTranslate
     [file]="'settings/discount'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div
-        class="aside-dialog-wrapper"
-        [keyboardShortcut]="'esc'"
-        [config]="{ dialogMode: true }"
-        (onShortcutPress)="cancelDiscount()"
-    >
+    <div class="aside-dialog-wrapper" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="cancelDiscount()">
         <div class="dialog-header">
             <span class="font-size-16">{{ localeData?.tab_heading }}</span>
         </div>
@@ -29,8 +24,7 @@
                                     [appearance]="'outline'"
                                     formControlName="type"
                                     [openDropdown]="true"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </span>
                         </div>
                         <div class="col-6">
@@ -64,8 +58,7 @@
                                 [labelValue]="createDiscountForm.get('accountName')?.value"
                                 (selectedOption)="selectDiscount($event)"
                                 (onClear)="clearAccount()"
-                            >
-                            </reactive-dropdown-field>
+                            ></reactive-dropdown-field>
                         </div>
                     </div>
                 </form>
@@ -73,8 +66,7 @@
                     <div class="col-12 d-flex column-gap-1">
                         <button
                             *ngIf="!isUpdateMode"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             (click)="saveDiscount()"
                             [ladda]="createDiscountInProgress$ | async"
                         >
@@ -82,17 +74,16 @@
                         </button>
                         <button
                             *ngIf="isUpdateMode"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             (click)="updateDiscount()"
                             [ladda]="createDiscountInProgress$ | async"
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                        <button mat-stroked-button (click)="cancelDiscount()">
+                        <button matButton="outlined" (click)="cancelDiscount()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
-                        <button *ngIf="!isUpdateMode" mat-stroked-button (click)="clearDiscount()">
+                        <button *ngIf="!isUpdateMode" matButton="outlined" (click)="clearDiscount()">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>
@@ -100,4 +91,4 @@
             </ng-container>
         </div>
     </div>
-</ng-container>
+</div>

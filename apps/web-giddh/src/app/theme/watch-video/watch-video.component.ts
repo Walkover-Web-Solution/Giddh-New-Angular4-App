@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef, ViewChild, OnDestroy, ElementRef, HostListener } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { VIDEOLINK } from './video-link.const';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -7,7 +7,8 @@ import { DomSanitizer } from '@angular/platform-browser';
     selector: 'watch-video',
     templateUrl: './watch-video.component.html',
     styleUrls: ['./watch-video.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class WatchVideoComponent implements OnInit, OnDestroy {
     /** Static counter for component instances */
@@ -74,11 +75,11 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
     */
     private detectDialogContext(): boolean {
         let element = this.elementRef.nativeElement;
-        
+
         while (element && element.parentElement) {
             element = element.parentElement;
-            
-            if (element.classList.contains('mat-dialog-container') || 
+
+            if (element.classList.contains('mat-dialog-container') ||
                 element.classList.contains('cdk-overlay-pane') ||
                 element.classList.contains('mat-dialog-content') ||
                 element.hasAttribute('role') && element.getAttribute('role') === 'dialog' ||
@@ -86,7 +87,7 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -99,12 +100,12 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
     @HostListener('window:keydown', ['$event'])
     public handleGlobalKeydown(event: KeyboardEvent): void {
         // Check for Alt+H shortcut using multiple detection methods
-        const isHKey = event.key === 'h' || 
-                      event.key === 'H' || 
-                      event.code === 'KeyH' || 
-                      event.keyCode === 72 || 
+        const isHKey = event.key === 'h' ||
+                      event.key === 'H' ||
+                      event.code === 'KeyH' ||
+                      event.keyCode === 72 ||
                       event.which === 72;
-        
+
         if (event.altKey && isHKey) {
             // Only proceed if this is the highest priority instance
             if (this.shouldHandleShortcut()) {
@@ -134,7 +135,8 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
             width: '800px',
             height: 'auto',
             role: 'alertdialog',
-            ariaLabel: 'Video'
+            ariaLabel: 'Video',
+            autoFocus: false
         });
 
         // Reset flag when dialog is closed
@@ -152,7 +154,7 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
     */
     private shouldHandleShortcut(): boolean {
         const instances = Array.from(WatchVideoComponent.activeInstances.values());
-        
+
         // Filter instances that are visible and in the DOM
         const visibleInstances = instances.filter(instance => {
             const element = instance.elementRef.nativeElement;
@@ -167,7 +169,7 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
         // Check dialog context in real-time for all instances
         const dialogInstances = visibleInstances.filter(instance => instance.detectDialogContext());
         const isThisInDialog = this.detectDialogContext();
-        
+
         if (dialogInstances.length > 0) {
             // If this is a dialog instance, check if it's the most recent one
             if (isThisInDialog) {

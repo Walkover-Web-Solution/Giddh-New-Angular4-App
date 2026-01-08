@@ -7,7 +7,9 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { catchError, map } from 'rxjs/operators';
 import { ECOMMERCE_API } from './apiurls/ecommerce.api';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class EcommerceService {
     private companyUniqueName: string;
 

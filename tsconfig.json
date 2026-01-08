@@ -4,12 +4,17 @@
       "inlineSources": true,
       "sourceMap": true,
       "declaration": false,
-      "moduleResolution": "node",
+      "moduleResolution": "bundler",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "importHelpers": true,
       "target": "ES2022",
       "module": "ES2022",
+      "strict": false,
+    //   "noImplicitOverride": true,
+    //   "noPropertyAccessFromIndexSignature": true,
+    //   "noImplicitReturns": true,
+    //   "noFallthroughCasesInSwitch": true,
       "typeRoots": [
         "node_modules/@types"
       ],

@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { ComponentStore  } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { ToasterService } from "../../../services/toaster.service";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { InvoiceService } from "../../../services/invoice.service";
@@ -33,7 +33,7 @@ export class EwayBillComponentStore extends ComponentStore<EwayBillListState> im
         return data.pipe(
             switchMap((request) => {
                 return this.invoiceService.getEwayBillFromPlace(request).pipe(
-                    tapResponse(
+                    tap(
                         (response: BaseResponse<any, any>) => {
                             if (response?.status === 'success') {
                                 return this.patchState({

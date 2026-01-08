@@ -7,7 +7,8 @@ import { ClipboardService } from 'ngx-clipboard';
 @Component({
     selector: 'tally-integration',
     templateUrl: './tally.intergation.component.html',
-    styleUrls: ['./tally.intergation.component.scss']
+    styleUrls: ['./tally.intergation.component.scss'],
+    standalone: false,
 })
 export class TallyIntegrationComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */

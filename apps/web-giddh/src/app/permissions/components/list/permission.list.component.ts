@@ -11,9 +11,11 @@ import { NewRoleClass } from '../../permission.utility';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { findIndex } from '../../../lodash-optimized';
 
 @Component({
     templateUrl: './permission-list.html',
+    standalone: false,
     styleUrls: ['./permission.component.scss']
 })
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -38,7 +40,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /* Holds Permission Dialog Reference */
-    private permissionDialogRef: MatDialogRef<any>; 
+    private permissionDialogRef: MatDialogRef<any>;
     /* Holds Permission Confirmation Dialog Reference */
     public permissionConfirmationDialogRef: MatDialogRef<any>;
 
@@ -132,13 +134,13 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
 
     public deleteRole(role: IRoleCommonResponseAndRequest): void {
         this.selectedRoleForDelete = role;
-       this.permissionConfirmationDialogRef =  this.dialog.open(this.permissionConfirmationDialog, {
-            panelClass: 'modal-dialog',
-            width: '600px'
-        });
+        this.permissionConfirmationDialogRef = this.dialog.open(this.permissionConfirmationDialog, {
+                    panelClass: 'modal-dialog',
+                    width: '600px',
+                });
     }
 
-    
+
     public deleteConfirmedRole() {
         this.permissionConfirmationDialogRef.close();
         this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));
@@ -160,8 +162,8 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
      */
     public openPermissionDialog(): void {
         this.permissionDialogRef = this.dialog.open(this.permissiomDialog, {
-            panelClass: 'modal-dialog',
-            width: '650px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '650px',
+                });
     }
 }

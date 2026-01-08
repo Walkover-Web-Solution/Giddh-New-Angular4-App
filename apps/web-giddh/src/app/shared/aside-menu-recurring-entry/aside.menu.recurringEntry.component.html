@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'invoice/recurring'"
     (localeData)="localeData = $event"
@@ -9,15 +9,16 @@
         <div class="form-header">
             <p class="aside-title">{{ localeData?.recurring_account }}</p>
         </div>
-        <button mat-button (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+        <button matButton="outlined" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="aside-body">
             <div class="aside-pane-form">
                 <form [formGroup]="form">
                     <div class="row">
                         <div class="col-xs-4 col-sm-4 form-group">
-                            <label class="mb-2"
-                                >{{ commonLocaleData?.app_start_date }}<span class="text-danger">*</span></label
-                            >
+                            <label class="mb-2">
+                                {{ commonLocaleData?.app_start_date }}
+                                <span class="text-danger">*</span>
+                            </label>
                             <giddh-datepicker
                                 type="text"
                                 [minDate]="today"
@@ -25,14 +26,14 @@
                                 [placeholder]="giddhDateFormat"
                                 name="dateRange"
                                 formControlName="nextCronDate"
-                            >
-                            </giddh-datepicker>
+                            ></giddh-datepicker>
                         </div>
 
                         <div class="col-xs-4 col-sm-4 form-group" *ngIf="!IsNotExpirable">
-                            <label class="mb-2"
-                                >{{ commonLocaleData?.app_end_date }}<span class="text-danger">*</span></label
-                            >
+                            <label class="mb-2">
+                                {{ commonLocaleData?.app_end_date }}
+                                <span class="text-danger">*</span>
+                            </label>
                             <giddh-datepicker
                                 type="text"
                                 [minDate]="maxEndDate"
@@ -40,18 +41,19 @@
                                 [placeholder]="giddhDateFormat"
                                 name="dateRange"
                                 formControlName="cronEndDate"
-                            >
-                            </giddh-datepicker>
+                            ></giddh-datepicker>
                         </div>
                     </div>
                     <div class="form-group">
-                        <mat-checkbox [checked]="IsNotExpirable" color="primary" (change)="isExpirableChanged($event)">
-                        </mat-checkbox>
+                        <mat-checkbox [checked]="IsNotExpirable" color="primary" (change)="isExpirableChanged($event)"></mat-checkbox>
                         {{ localeData?.never_expire }}
                     </div>
 
                     <div class="form-group ng-select-wrap select-list select-group">
-                        <label class="mb-2">{{ localeData?.interval }}<span class="text-danger">*</span></label>
+                        <label class="mb-2">
+                            {{ localeData?.interval }}
+                            <span class="text-danger">*</span>
+                        </label>
                         <select-field
                             [cssClass]="'form-control border'"
                             [name]="'duration'"
@@ -70,20 +72,16 @@
                         </select-field>
                     </div>
                     <div class="clear-both text-right" *ngIf="mode === 'create'">
-                        <button mat-stroked-button class="border" (click)="closeAsidePane($event)">
+                        <button matButton="outlined" class="border" (click)="closeAsidePane($event)">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
-                        <button
-                            mat-raised-button color="primary"
-                            [ladda]="isLoading"
-                            (click)="saveRecurringInvoice()"
-                        >
+                        <button matButton="filled" [ladda]="isLoading" (click)="saveRecurringInvoice()">
                             {{ commonLocaleData?.app_save }}
                         </button>
                     </div>
                     <div class="clear-both text-right" *ngIf="mode === 'update'">
                         <button
-                            mat-stroked-button
+                            matButton="outlined"
                             *ngIf="(!isCompany && !isConsolidatedBranch)"
                             class="btn-sm"
                             [ladda]="isDeleteLoading"
@@ -92,9 +90,8 @@
                             {{ commonLocaleData?.app_delete }}
                         </button>
                         <button
-                            mat-raised-button
-                            color="primary"
-                            *ngIf="(!isCompany && !isConsolidatedBranch)"
+                            matButton="filled"
+                            *ngIf="!isCompany && !isConsolidatedBranch"
                             class="btn-sm"
                             [ladda]="isLoading"
                             (click)="saveRecurringInvoice()"
@@ -106,4 +103,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

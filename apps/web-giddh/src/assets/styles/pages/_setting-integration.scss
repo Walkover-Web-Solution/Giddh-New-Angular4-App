@@ -4,26 +4,21 @@
         min-height: calc(100vh - 118px);
     }
 }
-
 .input-background {
     border-radius: 0.5rem;
 }
-
 select-multiple-fields {
     .mat-mdc-standard-chip.mdc-evolution-chip--with-trailing-action .mdc-evolution-chip__action--trailing i {
         font-size: 12px;
     }
 }
-
 .list-item-underline-hover {
     &:hover {
         color: var(--text-primary-color) !important;
         text-decoration: underline;
     }
 }
-
 @media screen and (max-width: 1440px) {
-
     .menu-two-list {
         .menu-two-list-items {
             .mat-body-1 {
@@ -37,7 +32,6 @@ select-multiple-fields {
             padding: 0 5px 0 5px;
         }
     }
-
     .main-content {
         .expand-button {
             left: 75% !important;

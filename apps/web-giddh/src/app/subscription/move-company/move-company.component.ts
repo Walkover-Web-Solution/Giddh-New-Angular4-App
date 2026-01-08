@@ -16,7 +16,8 @@ import { IOption } from '../../app.constant';
     styleUrls: ['./move-company.component.scss'],
     templateUrl: './move-company.component.html',
     providers: [SubscriptionComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class MoveCompanyComponent implements OnInit, OnDestroy {
@@ -260,11 +261,11 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public getMovePlanText(): string {
         let text = '';
         if (this.subscriptionMove) {
-            text = this.localeData?.move_plan_note;    
-            const companyName = this.moveSelectedCompany?.name || 
-                               this.moveSelectedCompany?.companies?.[0]?.name || 
+            text = this.localeData?.move_plan_note;
+            const companyName = this.moveSelectedCompany?.name ||
+                               this.moveSelectedCompany?.companies?.[0]?.name ||
                                this.moveSelectedCompany?.companiesList?.[0]?.name || '';
-            const planName = this.moveSelectedCompany?.subscription?.planDetails?.name || 
+            const planName = this.moveSelectedCompany?.subscription?.planDetails?.name ||
                             this.moveSelectedCompany?.plan?.name || this.moveSelectedCompany?.planName || '';
             text = text?.replace("[COMPANY_NAME]", companyName)?.replace("[PLAN_NAME]", planName);
         } else {

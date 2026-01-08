@@ -37,9 +37,7 @@
                                 <input-field
                                     [cssClass]="'form-control border'"
                                     [type]="'text'"
-                                    [placeholder]="
-                                        commonLocaleData?.app_numbers?.zero + '' + commonLocaleData?.app_numbers?.zero
-                                    "
+                                    [placeholder]="commonLocaleData?.app_numbers?.zero + '' + commonLocaleData?.app_numbers?.zero"
                                     [allowDecimalDigitsOnly]="true"
                                     [label]="commonLocaleData?.app_amount"
                                     [name]="'total'"
@@ -52,10 +50,10 @@
             </div>
             <!--endregion-->
             <div class="pull-right">
-                <button mat-raised-button color="primary" type="submit" class="mr-3" (click)="save()">
+                <button matButton="filled" type="submit" class="mr-3" (click)="save()">
                     {{ commonLocaleData?.app_search }}
                 </button>
-                <button mat-stroked-button type="button" (click)="onCancel()">
+                <button matButton="outlined" type="button" (click)="onCancel()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

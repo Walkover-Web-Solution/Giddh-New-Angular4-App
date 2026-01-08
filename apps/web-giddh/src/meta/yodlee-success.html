@@ -35,69 +35,64 @@
 
     <div class="copy-right">
         <p>
-            All right are reserved &copy; 2020 Walkover <a [href]="giddhDomainUrl" target="_Blank">{{ domainName }}</a>
+            All right are reserved &copy; 2020 Walkover
+            <a [href]="giddhDomainUrl" target="_Blank">{{ domainName }}</a>
         </p>
     </div>
 </div>
 
 <script src="../assets/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-    var companyUniqueName = getQueryStringValue("companyUniqueName");
+    var companyUniqueName = getQueryStringValue('companyUniqueName');
     const whiteLabel = this.generalService.getDecodedWhiteLabel();
-    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
-    var domainName = whiteLabel?.giddhWhiteLabel?.domainName || "Giddh.com";
-    var search = "";
-    var status = getQueryStringValue("status");
-    var JSONcallBackStatus = getQueryStringValue("JSONcallBackStatus");
+    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || 'https://books.giddh.com/';
+    var domainName = whiteLabel?.giddhWhiteLabel?.domainName || 'Giddh.com';
+    var search = '';
+    var status = getQueryStringValue('status');
+    var JSONcallBackStatus = getQueryStringValue('JSONcallBackStatus');
     if (JSONcallBackStatus) {
         var response = JSON.parse(JSONcallBackStatus);
     }
 
     function getApi() {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
+        this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || 'https://books.giddh.com/';
         if (whiteLabel) {
             apiBaseUrl = `${whiteLabel?.giddhWhiteLabel?.apiDomain}/`;
         } else {
             switch (window.location.hostname) {
-                case "localhost":
-                case "dev.giddh.com":
-                    apiBaseUrl = "https://apidev.giddh.com/";
+                case 'localhost':
+                case 'dev.giddh.com':
+                    apiBaseUrl = 'https://apidev.giddh.com/';
                     break;
-                case "test.giddh.com":
-                    apiBaseUrl = "https://apitest.giddh.com/";
+                case 'test.giddh.com':
+                    apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
-                case "stage.giddh.com":
-                    apiBaseUrl = "https://apitest.giddh.com/";
+                case 'stage.giddh.com':
+                    apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
-                case "books.giddh.com":
-                    apiBaseUrl = "https://api.giddh.com/";
+                case 'books.giddh.com':
+                    apiBaseUrl = 'https://api.giddh.com/';
                     break;
                 default:
-                    apiBaseUrl = "https://api.giddh.com/";
+                    apiBaseUrl = 'https://api.giddh.com/';
             }
         }
         return apiBaseUrl;
     }
 
     function postCallBackData() {
-        var paramToSend = "JSONcallBackStatus" + window.location.search.split("JSONcallBackStatus")[1];
-        $.get(
-            apiBaseUrl + "company/" + companyUniqueName + "/yodlee/call-back?" + paramToSend,
-            function (data, status) {
-                console.log("Account Added Successfully");
-            }
-        );
+        var paramToSend = 'JSONcallBackStatus' + window.location.search.split('JSONcallBackStatus')[1];
+        $.get(apiBaseUrl + 'company/' + companyUniqueName + '/yodlee/call-back?' + paramToSend, function (data, status) {
+            console.log('Account Added Successfully');
+        });
     }
 
     function getQueryStringValue(key) {
         return decodeURIComponent(
             window.location.search.replace(
-                new RegExp(
-                    "^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$",
-                    "i"
-                ),
-                "$1"
+                new RegExp('^(?:.*[&\\?]' + encodeURIComponent(key).replace(/[\.\+\*]/g, '\\$&') + '(?:\\=([^&]*))?)?.*$', 'i'),
+                '$1'
             )
         );
     }
@@ -105,18 +100,18 @@
     getApi();
 
     $(document).ready(function () {
-        var apiBaseUrl = "";
-        $("#failed").hide();
-        $("#success").hide();
+        var apiBaseUrl = '';
+        $('#failed').hide();
+        $('#success').hide();
         // Would write the value of the QueryString-variable called name to the console
 
         if (!JSONcallBackStatus) {
-            $("#failed").show();
-            $("#success").hide();
+            $('#failed').show();
+            $('#success').hide();
         } else {
             postCallBackData();
-            $("#success").show();
-            $("#failed").hide();
+            $('#success').show();
+            $('#failed').hide();
         }
         // status.find()
     });

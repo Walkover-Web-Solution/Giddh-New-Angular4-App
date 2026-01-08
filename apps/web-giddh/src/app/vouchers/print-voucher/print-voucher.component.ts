@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { ProformaDownloadRequest } from '../../models/api-models/proforma';
@@ -14,7 +14,9 @@ import { VoucherComponentStore } from '../utility/vouchers.store';
 @Component({
     selector: 'print-voucher',
     templateUrl: './print-voucher.component.html',
-    styleUrls: ['./print-voucher.component.scss']
+    styleUrls: ['./print-voucher.component.scss'],
+    providers: [VoucherComponentStore],
+    standalone: false
 })
 export class PrintVoucherComponent implements OnInit {
     /** Emit the cancel dialog event */
@@ -49,7 +51,8 @@ export class PrintVoucherComponent implements OnInit {
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService,
         private commonService: CommonService,
-        private componentStore: VoucherComponentStore
+        private componentStore: VoucherComponentStore,
+        private changeDetection: ChangeDetectorRef
     ) { }
 
     /**
@@ -71,6 +74,7 @@ export class PrintVoucherComponent implements OnInit {
     public printVoucher(): void {
         if (this.pdfContainer) {
             this.componentStore.printVoucher(this.pdfContainer);
+            this.changeDetection.detectChanges();
         }
     }
 
@@ -232,6 +236,7 @@ export class PrintVoucherComponent implements OnInit {
      */
     private setLoadingState(isLoading: boolean): void {
         this.isVoucherDownloading = isLoading;
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -243,6 +248,7 @@ export class PrintVoucherComponent implements OnInit {
      */
     private setVoucherDownloadErrorState(isError: boolean): void {
         this.isVoucherDownloadError = isError;
+        this.changeDetection.detectChanges();
     }
 
 

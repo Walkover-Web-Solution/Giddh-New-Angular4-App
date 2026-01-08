@@ -3,11 +3,13 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, of, ReplaySubject, Subject, merge } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
+import { cloneDeep } from '../../../lodash-optimized';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
 import { IForceClear } from '../../../models/api-models/Sales';
+import { Configuration } from '../../../app.constant';
 
 @Component({
     selector: 'connect-bank-modal',
@@ -33,7 +35,8 @@ import { IForceClear } from '../../../models/api-models/Sales';
         width: 100%;
         height: auto;
     }
-    `]
+    `],
+    standalone: false
 })
 
 export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
@@ -65,7 +68,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public apiInInterval: any;
     public cancelRequest: boolean = false;
     public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
-    public isElectron = isElectron;
+    public isElectron = Configuration.isElectron;
     public base64StringForModel: SafeResourceUrl = '';
     /** Force clear for drop down */
     public forceClearReactive$: Observable<IForceClear> = of({ status: false });
@@ -177,7 +180,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public ngOnChanges(changes) {
         if (changes.providerId && changes.providerId.currentValue) {
             this.step = 2;
-            this.providerId = _.cloneDeep(changes.providerId.currentValue);
+            this.providerId = cloneDeep(changes.providerId.currentValue);
             this.getProviderLoginForm(this.providerId);
         }
     }
@@ -276,7 +279,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         this.loginForm.reset();
         this._settingsLinkedAccountsService.GetLoginForm(providerId).pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.status === 'success') {
-                let response = _.cloneDeep(a.body?.loginForm[0]);
+                let response = cloneDeep(a.body?.loginForm[0]);
                 this.createLoginForm(response);
                 this.step = 2;
             }
@@ -291,7 +294,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             loginForm: []
         };
         objToSend.loginForm.push(this.loginForm?.value);
-        this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+        this._settingsLinkedAccountsService.AddProvider(cloneDeep(objToSend), this.selectedProvider.id).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this._toaster.successToast(res?.body);
                 let providerId = res?.body?.replace(/[^0-9]+/ig, '');
@@ -340,7 +343,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             this.onCancel();
             return true;
         } else if (status === 'user_input_required' || status === 'addl_authentication_required') {
-            let response = _.cloneDeep(provider.loginForm[0]);
+            let response = cloneDeep(provider.loginForm[0]);
             this.providerId = provider.id;
             if (response.formType === 'image') {
                 this.bypassSecurityTrustResourceUrl(response.row[0].field[0]?.value);

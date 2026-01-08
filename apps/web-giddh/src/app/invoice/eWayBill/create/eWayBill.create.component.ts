@@ -22,7 +22,8 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 @Component({
     selector: 'app-e-way-bill-create',
     templateUrl: './eWayBill.create.component.html',
-    styleUrls: [`./eWayBill.create.component.scss`]
+    styleUrls: [`./eWayBill.create.component.scss`],
+    standalone:false
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
@@ -172,7 +173,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
         });
-        
+
         this.transporterList$.subscribe(transporters => {
             if (transporters) {
                 this.transporterDataSource.data = transporters;
@@ -236,8 +237,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
             this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
-            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;     
-            
+            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
+
             if (generateBillform.valid) {
                 this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
             }
@@ -276,7 +277,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     /**
      * Opens the transporter dialog
-     * 
+     *
      * @memberof EWayBillCreateComponent
      */
     public openTransporterDialog(): void {
@@ -357,7 +358,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     /**
      * Handles pagination events and updates API parameters
-     * 
+     *
      * @param {PageEvent} event - Contains pagination details
      * @memberof EWayBillCreateComponent
      */
@@ -375,7 +376,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     /**
      * Handles sorting events and updates API parameters
-     * 
+     *
      * @param {any} event - Contains sorting details
      * @memberof EWayBillCreateComponent
      */

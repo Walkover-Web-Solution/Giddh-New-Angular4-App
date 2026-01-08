@@ -1,8 +1,8 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate (commonLocaleData)="commonLocaleData = $event">
     <div class="download-list-container">
         <div class="dialog-header">
             <span>{{ commonLocaleData?.app_filter }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
+            <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -10,4 +10,4 @@
             <div class="json-preview" #jsonData></div>
         </mat-dialog-content>
     </div>
-</ng-container>
+</div>

@@ -8,44 +8,44 @@
                 <thead>
                     <tr>
                         <th class="text-left">
-                            <div class="position-relative ">
+                            <div class="position-relative">
                                 <div class="pull-left over-flow">{{ localeData?.filing?.type }}</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div class="position-relative ">
+                            <div class="position-relative">
                                 <div class="over-flow">{{ localeData?.filing?.rate }}</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div class="position-relative ">
+                            <div class="position-relative">
                                 <div class="over-flow">{{ localeData?.filing?.place_supply }}</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div class="position-relative ">
+                            <div class="position-relative">
                                 <div class="over-flow">{{ localeData?.filing?.taxable_amount }}</div>
                             </div>
                         </th>
 
                         <th class="text-right">
-                            <div class="position-relative ">
+                            <div class="position-relative">
                                 <div class="over-flow">{{ localeData?.filing?.igst_amount }}</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div class="position-relative ">
+                            <div class="position-relative">
                                 <div class="over-flow">{{ localeData?.filing?.cgst_amount }}</div>
                             </div>
                         </th>
 
                         <th class="text-right">
-                            <div class="position-relative ">
+                            <div class="position-relative">
                                 <div class="over-flow">{{ localeData?.filing?.sgst_amount }}</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div class="position-relative ">
+                            <div class="position-relative">
                                 <div class="over-flow">{{ commonLocaleData?.app_cess }}</div>
                             </div>
                         </th>
@@ -53,44 +53,38 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of brcsSummary">
-                        <td [attr.data-title]="localeData?.filing?.type">{{ item.typ ? item.typ : "-" }}</td>
+                        <td [attr.data-title]="localeData?.filing?.type">{{ item.typ ? item.typ : '-' }}</td>
                         <td [attr.data-title]="localeData?.filing?.rate" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.rt" [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
+                                <amount-field [amount]="item.rt" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.place_supply" class="text-right">
-                            {{ item.pos ? item.pos : "-" }}
+                            {{ item.pos ? item.pos : '-' }}
                         </td>
                         <td [attr.data-title]="localeData?.filing?.taxable_amount" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
+                                <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.igst_amount" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.iamt" [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
+                                <amount-field [amount]="item.iamt" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.cgst_amount" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.camt" [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
+                                <amount-field [amount]="item.camt" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.sgst_amount" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.samt" [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
+                                <amount-field [amount]="item.samt" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="commonLocaleData?.app_cess" class="text-right">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="item.csamt" [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
+                                <amount-field [amount]="item.csamt" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                             </span>
                         </td>
                     </tr>
@@ -100,9 +94,9 @@
 
         <div *ngIf="!brcsSummary?.length">
             <div class="filings-empty-state">
-                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
+                <img src="{{ imgPath }}gst/nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg">
-                    <span> {{ localeData?.filing?.b2c_small_details_no_invoices }} </span>
+                    <span>{{ localeData?.filing?.b2c_small_details_no_invoices }}</span>
                 </div>
             </div>
         </div>

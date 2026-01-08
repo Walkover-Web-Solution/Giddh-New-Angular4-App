@@ -5,7 +5,8 @@ import { LocaleService } from "../../services/locale.service";
     selector: 'no-data',
     templateUrl: './no-data.component.html',
     styleUrls: ['./no-data.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NoDataComponent implements OnInit {
     /** Primary message for no data */

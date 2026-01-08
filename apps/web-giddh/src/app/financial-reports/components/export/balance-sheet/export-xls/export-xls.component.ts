@@ -3,10 +3,13 @@ import { Store } from '@ngrx/store';
 import { TBPlBsActions } from 'apps/web-giddh/src/app/actions/tl-pl.actions';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
+import { Configuration } from '../../../../../app.constant';
+import { environment } from '../../../../../../environments/environment.generated';
 
 @Component({
-    selector: 'balance-sheet-export-xls',
-    templateUrl: './export-xls.component.html'
+selector: 'balance-sheet-export-xls',
+    templateUrl: './export-xls.component.html',
+    standalone: false
 })
 export class BalanceSheetExportXlsComponent implements OnInit {
     @Input() public fy: number;
@@ -24,7 +27,7 @@ export class BalanceSheetExportXlsComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/xls-icon.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/xls-icon.svg';
+        this.imgPath = Configuration.isElectron ? 'assets/images/xls-icon.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/xls-icon.svg';
     }
 
     public downloadBsXls(value: boolean): void {

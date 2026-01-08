@@ -8,7 +8,7 @@ import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { ASIDE_PANE_CONFIG, FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, Configuration, FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
@@ -26,12 +26,14 @@ import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 import { DownloadVoucherComponent } from "../download-voucher/download-voucher.component";
 import { ServiceConfig } from "../../services/service.config";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: "preview",
     templateUrl: "./preview.component.html",
     styleUrls: ["./preview.component.scss"],
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore],
+    standalone: false
 })
 export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Instance of PDF container iframe */
@@ -258,7 +260,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
                 // Reset Filter
@@ -479,7 +481,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
                 let tcsSum: number = 0;
                 let tdsSum: number = 0;
-                response.body?.entries.forEach(entry => {
+                (Array.isArray(response.body?.entries) ? response.body?.entries : []).forEach(entry => {
                     entry.taxes?.forEach(tax => {
                         if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
                             tcsSum += tax.amount?.amountForAccount;

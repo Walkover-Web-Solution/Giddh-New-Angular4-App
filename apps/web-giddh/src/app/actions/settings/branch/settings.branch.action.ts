@@ -10,7 +10,9 @@ import { CustomActions } from '../../../store/custom-actions';
 import { SettingsBranchService } from '../../../services/settings.branch.service';
 import { BranchFilterRequest } from '../../../models/api-models/Company';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsBranchActions {
 
     public GetAllBranches$: Observable<Action> = createEffect(() => this.action$

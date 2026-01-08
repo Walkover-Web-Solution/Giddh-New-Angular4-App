@@ -1,5 +1,5 @@
 <div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()" class="position-relative">
-    <label *ngIf="showHeaderText" for="discountSum">{{commonLocaleData?.app_discount}}</label>
+    <label *ngIf="showHeaderText" for="discountSum">{{ commonLocaleData?.app_discount }}</label>
     <a id="discount">
         <div class="multi-select adjust position-relative">
             <input
@@ -9,7 +9,7 @@
                 type="text"
                 decimalDigitsDirective
                 name="discountSum"
-                [ngClass]="{'field-disabled': readonly}"
+                [ngClass]="{ 'field-disabled': readonly }"
                 class="form-control text-right cursor-pointer pr-4"
                 (focus)="!readonly ? showDiscountMenu() : ''"
                 [(ngModel)]="discountSum"
@@ -23,7 +23,7 @@
     </a>
     <div
         class="my-dropdown-menu custom-discount-menu"
-        [ngClass]="{'display-block': discountMenu, 'display-none' : !discountMenu}"
+        [ngClass]="{ 'display-block': discountMenu, 'display-none': !discountMenu }"
         (click)="$event.stopPropagation()"
         #disInptEle
     >
@@ -35,7 +35,7 @@
                         (keydown.enter)="$event.preventDefault()"
                         matInput
                         type="text"
-                        [ngClass]="{'read-only': !discountFromPer}"
+                        [ngClass]="{ 'read-only': !discountFromPer }"
                         [disabled]="!discountFromPer"
                         decimalDigitsDirective
                         [(ngModel)]="discountPercentageModal"
@@ -55,7 +55,7 @@
                         (keydown.enter)="$event.preventDefault()"
                         matInput
                         type="text"
-                        [ngClass]="{'read-only': !discountFromVal}"
+                        [ngClass]="{ 'read-only': !discountFromVal }"
                         [disabled]="!discountFromVal"
                         decimalDigitsDirective
                         [(ngModel)]="discountFixedValueModal"
@@ -68,27 +68,24 @@
         </div>
 
         <div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails?.length > 1">
-            <span class="or-line">{{commonLocaleData?.app_and}}</span>
+            <span class="or-line">{{ commonLocaleData?.app_and }}</span>
         </div>
 
         <div *ngIf="discountAccountsDetails?.length > 1">
             <ul class="discount-list">
-                <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-                    <li
-                        *ngIf="discount && discount.discountUniqueName && discount.name"
-                        class="discount-item cursor-pointer"
-                    >
+                <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
+                    <li *ngIf="discount && discount.discountUniqueName && discount.name" class="discount-item cursor-pointer">
                         <label class="checkbox overflow-hidden w-100 p-0 m-0" (click)="$event.stopPropagation()">
                             <mat-checkbox
                                 color="primary"
                                 class="pull-left"
-                                id="{{'discount-control-' + idx}}"
-                                name="tax_{{idx}}"
+                                id="{{ 'discount-control-' + idx }}"
+                                name="tax_{{ idx }}"
                                 [(ngModel)]="discount.isActive"
                                 (change)="change(discount, $event)"
                                 (click)="$event.stopPropagation()"
                             >
-                                <div class="checkbox-label">{{discount.name}}</div>
+                                <div class="checkbox-label">{{ discount.name }}</div>
                             </mat-checkbox>
                         </label>
                     </li>

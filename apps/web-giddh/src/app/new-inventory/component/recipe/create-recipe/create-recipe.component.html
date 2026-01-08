@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'inventory/manufacturing'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'inventory/manufacturing'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <div *ngIf="newVariants?.length" class="pl-3 pt-3">
         <div class="save-recipe">{{ localeData?.save_variants }}</div>
     </div>
@@ -23,7 +18,7 @@
                     </div>
                 </div>
             </div> -->
-            <ng-container *ngFor="let recipe of recipeObject.manufacturingDetails; let i = index">
+            <div *ngFor="let recipe of recipeObject.manufacturingDetails; let i = index">
                 <div class="row py-4 manufacturing-border" *ngIf="recipe.isEdit">
                     <div class="col-3">
                         <div class="row">
@@ -43,8 +38,7 @@
                                                 recipe.variant.uniqueName = $event.value;
                                                 checkIfVariantIsAlreadyUsed(recipe, $event, i)
                                             "
-                                        >
-                                        </reactive-dropdown-field>
+                                        ></reactive-dropdown-field>
                                     </div>
                                     <div class="w-100">
                                         <input-field
@@ -66,15 +60,14 @@
                                                 recipe.manufacturingUnitCode = $event.label;
                                                 recipe.manufacturingUnitUniqueName = $event.value
                                             "
-                                        >
-                                        </reactive-dropdown-field>
+                                        ></reactive-dropdown-field>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-1 d-flex justify-content-center">
-                        <span class="less-than-text"> <i class="icon-left"></i></span>
+                        <span class="less-than-text"><i class="icon-left"></i></span>
                     </div>
                     <div class="col-8 pr-0">
                         <div class="row">
@@ -120,9 +113,7 @@
                                                                     [defaultValue]="linkedStock.stockName"
                                                                     [enableDynamicSearch]="true"
                                                                     [isPaginationEnabled]="true"
-                                                                    (dynamicSearchedQuery)="
-                                                                        getStocks(linkedStock, 1, $event)
-                                                                    "
+                                                                    (dynamicSearchedQuery)="getStocks(linkedStock, 1, $event)"
                                                                     (scrollEnd)="stockScrollEnd(linkedStock)"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="
@@ -131,8 +122,7 @@
                                                                         linkedStock.stocksQ = '';
                                                                         getStocks(linkedStock, 1, '')
                                                                     "
-                                                                >
-                                                                </select-field>
+                                                                ></select-field>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -148,8 +138,7 @@
                                                                         linkedStock.variant.name = $event.label;
                                                                         linkedStock.variant.uniqueName = $event.value
                                                                     "
-                                                                >
-                                                                </select-field>
+                                                                ></select-field>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -177,8 +166,7 @@
                                                                         linkedStock.stockUnitCode = $event.label;
                                                                         linkedStock.stockUnitUniqueName = $event.value
                                                                     "
-                                                                >
-                                                                </select-field>
+                                                                ></select-field>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -209,9 +197,7 @@
                                 </mat-expansion-panel>
                                 <mat-expansion-panel [expanded]="isByProductExpanded">
                                     <mat-expansion-panel-header>
-                                        <mat-panel-title class="p-0"
-                                            >{{ commonLocaleData?.app_by_product_output }}
-                                        </mat-panel-title>
+                                        <mat-panel-title class="p-0">{{ commonLocaleData?.app_by_product_output }}</mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div class="consumption-details-wrapper w-100 pr-2 pl-2">
                                         <div class="mt-2">
@@ -226,26 +212,18 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr
-                                                        *ngFor="
-                                                            let byProductLinkedStock of recipe.byProducts;
-                                                            let k = index
-                                                        "
-                                                    >
+                                                    <tr *ngFor="let byProductLinkedStock of recipe.byProducts; let k = index">
                                                         <td>
                                                             <div>
                                                                 <select-field
                                                                     [cssClass]="'form-control border'"
                                                                     [name]="'byProductStock_' + i + '_' + k"
-                                                                    [scrollableElementId]="
-                                                                        'byProductStock_' + i + '_' + k
-                                                                    "
+                                                                    [scrollableElementId]="'byProductStock_' + i + '_' + k"
                                                                     [placeholder]="commonLocaleData?.app_select_stock"
                                                                     [options]="byProductLinkedStock.stocks"
                                                                     (selectedOption)="
                                                                         byProductLinkedStock.stockName = $event.label;
-                                                                        byProductLinkedStock.stockUniqueName =
-                                                                            $event.value;
+                                                                        byProductLinkedStock.stockUniqueName = $event.value;
                                                                         getStockVariants(byProductLinkedStock, $event);
                                                                         onUnitChange(
                                                                             byProductLinkedStock,
@@ -256,12 +234,8 @@
                                                                     [defaultValue]="byProductLinkedStock.stockName"
                                                                     [enableDynamicSearch]="true"
                                                                     [isPaginationEnabled]="true"
-                                                                    (dynamicSearchedQuery)="
-                                                                        getAllStocks(byProductLinkedStock, 1, $event)
-                                                                    "
-                                                                    (scrollEnd)="
-                                                                        byProductStockScrollEnd(byProductLinkedStock)
-                                                                    "
+                                                                    (dynamicSearchedQuery)="getAllStocks(byProductLinkedStock, 1, $event)"
+                                                                    (scrollEnd)="byProductStockScrollEnd(byProductLinkedStock)"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="
                                                                         byProductLinkedStock.stockName = '';
@@ -269,8 +243,7 @@
                                                                         byProductLinkedStock.stocksQ = '';
                                                                         getAllStocks(byProductLinkedStock, 1, '')
                                                                     "
-                                                                >
-                                                                </select-field>
+                                                                ></select-field>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -278,20 +251,15 @@
                                                                 <select-field
                                                                     [cssClass]="'form-control border'"
                                                                     [name]="'byProductVariant_' + i + '_' + k"
-                                                                    [scrollableElementId]="
-                                                                        'byProductVariant' + i + '_' + k
-                                                                    "
+                                                                    [scrollableElementId]="'byProductVariant' + i + '_' + k"
                                                                     [placeholder]="commonLocaleData?.app_select_variant"
                                                                     [options]="byProductLinkedStock.variants"
                                                                     [defaultValue]="byProductLinkedStock.variant?.name"
                                                                     (selectedOption)="
-                                                                        byProductLinkedStock.variant.name =
-                                                                            $event.label;
-                                                                        byProductLinkedStock.variant.uniqueName =
-                                                                            $event.value
+                                                                        byProductLinkedStock.variant.name = $event.label;
+                                                                        byProductLinkedStock.variant.uniqueName = $event.value
                                                                     "
-                                                                >
-                                                                </select-field>
+                                                                ></select-field>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -311,20 +279,15 @@
                                                                 <select-field
                                                                     [cssClass]="'form-control border'"
                                                                     [name]="'byProductUnit_' + i + '_' + k"
-                                                                    [scrollableElementId]="
-                                                                        'byProductIUnit_' + i + '_' + k
-                                                                    "
+                                                                    [scrollableElementId]="'byProductIUnit_' + i + '_' + k"
                                                                     [placeholder]="localeData?.select_stock_unit"
                                                                     [options]="byProductLinkedStock.units"
                                                                     [defaultValue]="byProductLinkedStock.stockUnitCode"
                                                                     (selectedOption)="
-                                                                        byProductLinkedStock.stockUnitCode =
-                                                                            $event.label;
-                                                                        byProductLinkedStock.stockUnitUniqueName =
-                                                                            $event.value
+                                                                        byProductLinkedStock.stockUnitCode = $event.label;
+                                                                        byProductLinkedStock.stockUnitUniqueName = $event.value
                                                                     "
-                                                                >
-                                                                </select-field>
+                                                                ></select-field>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -356,13 +319,13 @@
                         </div>
                     </div>
                     <div class="col-12 mt-3" *ngIf="recipe.isEdit">
-                        <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false" aria-label="done">
+                        <button matButton="outlined" class="mb-2" (click)="recipe.isEdit = false" aria-label="done">
                             {{ commonLocaleData?.app_done }}
                         </button>
                     </div>
                 </div>
                 <div class="manufacturing-border view-mode" *ngIf="!recipe.isEdit">
-                    <div class="row pb-4 align-items-baseline position-relative ">
+                    <div class="row pb-4 align-items-baseline position-relative">
                         <div class="col-2">
                             <div class="row">
                                 <div class="form-fields w-100">
@@ -374,11 +337,7 @@
                                             <p>{{ recipe?.variant?.name }}</p>
                                         </div>
                                         <div class="d-flex">
-                                            <p class="mr-3">
-                                                {{ recipe?.manufacturingQuantity }} ({{
-                                                    recipe?.manufacturingUnitCode
-                                                }})
-                                            </p>
+                                            <p class="mr-3">{{ recipe?.manufacturingQuantity }} ({{ recipe?.manufacturingUnitCode }})</p>
                                         </div>
                                     </div>
                                 </div>
@@ -405,11 +364,7 @@
                                                     </td>
                                                     <td>
                                                         <div>
-                                                            <p>
-                                                                {{ linkedStock.quantity }} ({{
-                                                                    linkedStock.stockUnitCode
-                                                                }})
-                                                            </p>
+                                                            <p>{{ linkedStock.quantity }} ({{ linkedStock.stockUnitCode }})</p>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -441,11 +396,7 @@
                                                     </td>
                                                     <td>
                                                         <div>
-                                                            <p>
-                                                                {{ linkedStock.quantity }} ({{
-                                                                    linkedStock.stockUnitCode
-                                                                }})
-                                                            </p>
+                                                            <p>{{ linkedStock.quantity }} ({{ linkedStock.stockUnitCode }})</p>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -479,13 +430,13 @@
                         </div>
                     </div>
                 </div>
-            </ng-container>
+            </div>
             <div class="row mt-2 add-recipe" *ngIf="recipeObject.manufacturingDetails?.length < variantsList?.length">
-                <button mat-button class="mb-2 ml-2" color="primary" (click)="addNewRecipe()" aria-label="add recipe">
-                    <span>+</span> {{ localeData?.add_recipe }}
+                <button matButton="outlined" class="mb-2 ml-2" color="primary" (click)="addNewRecipe()" aria-label="add recipe">
+                    <span>+</span>
+                    {{ localeData?.add_recipe }}
                 </button>
             </div>
         </div>
     </section>
-
-</ng-container>
+</div>

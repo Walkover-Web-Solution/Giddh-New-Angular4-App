@@ -1,15 +1,10 @@
-<ng-container
-    appTranslate
-    [file]="'inventory/adjustment'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'inventory/adjustment'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <div class="dialog-header">
         <span>{{ localeData?.create_reason }}</span>
     </div>
     <mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="createReasonInProgress$ | async"></giddh-page-loader>
-        <ng-container *ngIf="!(createReasonInProgress$ | async)">
+        <div *ngIf="!(createReasonInProgress$ | async)">
             <form autocomplete="off" novalidate name="reasonForm" [formGroup]="reasonForm">
                 <div class="row mb-3">
                     <div class="col-xl-5 col-lg-5 col-sm-5">
@@ -20,23 +15,16 @@
                             [placeholder]="localeData?.enter_reason"
                             formControlName="reason"
                             [showError]="!isValidForm && !reasonForm?.get('reason')?.value"
-                        >
-                        </input-field>
+                        ></input-field>
                     </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col-sm-4 pr-0">
                         <div class="d-flex column-gap-1">
-                            <button
-                                aria-label="save"
-                                mat-raised-button
-                                color="primary"
-                                type="button"
-                                (click)="saveReason()"
-                            >
+                            <button aria-label="save" matButton="filled" type="button" (click)="saveReason()">
                                 {{ commonLocaleData?.app_save }}
                             </button>
-                            <button aria-label="cancel" mat-stroked-button type="button" mat-dialog-close>
+                            <button aria-label="cancel" matButton="outlined" type="button" mat-dialog-close>
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -45,7 +33,7 @@
                         <div class="pull-right d-flex column-gap-15">
                             <button
                                 aria-label="clear"
-                                mat-stroked-button
+                                matButton="outlined"
                                 type="button"
                                 class="btn-sm mr-0"
                                 (click)="resetForm()"
@@ -56,6 +44,6 @@
                     </div>
                 </div>
             </form>
-        </ng-container>
+        </div>
     </mat-dialog-content>
-</ng-container>
+</div>

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-
 import { SettingsComponent } from '../settings.component';
+
+// import { SettingsComponent } from '../settings.component';
 
 /**
  * Deactivate guard to prevent browser navigation when modal is displayed
@@ -10,7 +11,9 @@ import { SettingsComponent } from '../settings.component';
  * @class SettingsDeactivateGuard
  * @implements {CanDeactivate<SettingsComponent>}
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsDeactivateGuard  {
 
     /**

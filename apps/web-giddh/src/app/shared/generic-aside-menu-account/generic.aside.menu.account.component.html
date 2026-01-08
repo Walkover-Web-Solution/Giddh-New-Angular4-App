@@ -1,8 +1,4 @@
-<ng-container
-    appTranslate
-    (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
->
+<div appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <section
         class="aside-dialog-wrapper"
         [keyboardShortcut]="'esc'"
@@ -13,18 +9,16 @@
             <span>{{ actionAccount }}</span>
 
             <div class="d-flex align-items-center column-gap-15">
-                <button mat-raised-button *ngIf="backButtonVisible" (click)="backButtonPressed()">
+                <button matButton="filled" *ngIf="backButtonVisible" (click)="backButtonPressed()">
                     {{ commonLocaleData?.app_back }}
                 </button>
-                <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
+                <button matIconButton aria-label="close" (click)="closeAsidePane($event)">
                     <i class="icon-cross"></i>
                 </button>
             </div>
         </div>
         <mat-dialog-content class="dialog-body">
-            <ng-container
-                *ngIf="!selectedAccountUniqueName && (activeGroupUniqueName || allGroups) && !createAccountFromCommandK"
-            >
+            <ng-container *ngIf="!selectedAccountUniqueName && (activeGroupUniqueName || allGroups) && !createAccountFromCommandK">
                 <account-add-new-details
                     [activeGroupUniqueName]="activeGroupUniqueName"
                     (isGroupSelected)="isGroupSelected($event)"
@@ -40,8 +34,7 @@
                     [isCustomerCreation]="isCustomerCreation"
                     [includeSearchedGroup]="includeSearchedGroup"
                     (closeAccountModal)="closeAccountModal?.emit($event)"
-                >
-                </account-add-new-details>
+                ></account-add-new-details>
             </ng-container>
             <ng-container *ngIf="selectedAccountUniqueName && activeGroupUniqueName && !createAccountFromCommandK">
                 <account-update-new-details
@@ -58,8 +51,7 @@
                     (submitClicked)="updateAccount($event)"
                     (updateViaPatchApi)="updateAccount($event, true)"
                     (closeAccountModal)="closeAccountModal?.emit($event)"
-                >
-                </account-update-new-details>
+                ></account-update-new-details>
             </ng-container>
             <ng-container *ngIf="createAccountFromCommandK">
                 <account-add-new-details
@@ -78,9 +70,8 @@
                     [fromCommandK]="true"
                     [includeSearchedGroup]="includeSearchedGroup"
                     (closeAccountModal)="closeAccountModal?.emit($event)"
-                >
-                </account-add-new-details>
+                ></account-add-new-details>
             </ng-container>
         </mat-dialog-content>
     </section>
-</ng-container>
+</div>

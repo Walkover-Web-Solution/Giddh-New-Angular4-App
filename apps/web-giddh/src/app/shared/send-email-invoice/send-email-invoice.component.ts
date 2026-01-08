@@ -5,7 +5,8 @@ import { GeneralService } from '../../services/general.service';
 @Component({
     selector: 'app-send-email-invoice-component',
     templateUrl: './send-email-invoice.component.html',
-    styleUrls: ['./send-email-invoice.component.scss']
+    styleUrls: ['./send-email-invoice.component.scss'],
+    standalone: false
 })
 
 export class SendEmailInvoiceComponent implements OnInit {
@@ -26,6 +27,12 @@ export class SendEmailInvoiceComponent implements OnInit {
     public isOriginal: boolean = true;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: number;
+    /** Receipt voucher type constant */
+    public receiptVoucherType = VoucherTypeEnum.receipt;
+    /** Payment voucher type constant */
+    public paymentVoucherType = VoucherTypeEnum.payment;
+    /** Download copy options array */
+    public downloadCopy: string[] = ['Original'];
 
     constructor(
         private generalService: GeneralService
