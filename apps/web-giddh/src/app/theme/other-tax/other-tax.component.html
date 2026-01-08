@@ -11,7 +11,7 @@
         [config]="{ dialogMode: true }"
         (onShortcutPress)="dialogRef?.close()"
     >
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span class="font-size-16">{{ commonLocaleData?.app_tax_applicable }}</span>
         </div>
         <div mat-dialog-content class="dialog-body">

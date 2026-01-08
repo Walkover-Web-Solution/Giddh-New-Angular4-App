@@ -337,7 +337,7 @@
     <!-- region Modal for Mail/SMS for vendor -->
     <ng-template #mailModal *ngIf="activeTab === 'vendor'" tabindex="1">
         <div>
-            <div class="dialog-header">
+            <div cdkFocusInitial class="dialog-header">
                 <span>{{ messageBody.header.set }}</span>
             </div>
             <mat-dialog-content class="dialog-body">
@@ -382,7 +382,7 @@
     <!--region Modal for Mail/SMS for customer-->
     <ng-template #mailModal *ngIf="activeTab === 'customer'" tabindex="-1" class="email-dialog-box">
         <div>
-            <div class="dialog-header">
+            <div cdkFocusInitial class="dialog-header">
                 <span>{{ messageBody.header.set }}</span>
             </div>
 
@@ -993,7 +993,7 @@
 
                                     <ng-template #mailModal>
                                         <div (click)="$event.stopPropagation()">
-                                            <div class="dialog-header">
+                                            <div cdkFocusInitial class="dialog-header">
                                                 <span>{{ messageBody.header.set }}</span>
                                             </div>
 
@@ -1528,7 +1528,7 @@
 </div>
 
 <ng-template #successTemplate>
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.payment_status }}</span>
     </div>
     <mat-dialog-content class="dialog-body">

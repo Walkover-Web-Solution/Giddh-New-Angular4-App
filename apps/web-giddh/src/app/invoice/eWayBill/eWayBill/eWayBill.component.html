@@ -73,7 +73,7 @@
 
     <!-- Not In Use -->
     <ng-template #consolidateModal>
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.consolidated_details_heading }}</span>
             <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
@@ -181,7 +181,7 @@
 
     <!-- Add Vehicle Dialog -->
     <ng-template #addVehicle>
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.add_vehicle }}</span>
         </div>
         <mat-dialog-content class="dialog-body">
@@ -325,7 +325,7 @@
     <!-- Cancel Dialog -->
     <ng-template #cancellation>
         <!-- Reasons for cancellation -->
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.reasons_for_cancellation }}</span>
         </div>
         <mat-dialog-content class="dialog-body">

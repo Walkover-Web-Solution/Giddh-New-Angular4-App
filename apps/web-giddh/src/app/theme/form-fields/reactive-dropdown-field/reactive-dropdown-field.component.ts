@@ -177,7 +177,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             if (this.openDropdown) {
                 this.openDropdownPanel();
             }
-        }, 500);
+        }, 200);
     }
 
     /**
@@ -678,7 +678,26 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.focusInputField();
         setTimeout(() => {
             this.handleDropdownPanelOperation('open');
-        }, 10);
+        }, 200);
+    }
+
+    /**
+     * Focuses the input field without opening the dropdown
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public focusInputField(): void {
+        if (this.trigger) {
+            // Temporarily disable autocomplete to prevent dropdown from opening
+            this.trigger.autocompleteDisabled = true;
+            this.selectField?.nativeElement?.focus();
+            // Re-enable autocomplete after a short delay
+            setTimeout(() => {
+                this.trigger.autocompleteDisabled = false;
+            }, 100);
+        } else {
+            this.selectField?.nativeElement?.focus();
+        }
     }
 
     /**
