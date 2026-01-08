@@ -13,22 +13,12 @@
             .account {
                 background-color: var(--color-success-light);
                 color: var(--color-black);
-
-                .mat-mdc-checkbox {
-                    .mdc-form-field {
-                        .mdc-checkbox {
-                            .mdc-checkbox__background {
-                                border-color: inherit !important;
-                            }
-                        }
-                    }
-                }
+                --mat-checkbox-unselected-icon-color: var(--color-black);
             }
         }
     }
 
     .uncheck-all-icon {
-        filter: invert(0);
         width: 20px;
         height: 20px;
     }

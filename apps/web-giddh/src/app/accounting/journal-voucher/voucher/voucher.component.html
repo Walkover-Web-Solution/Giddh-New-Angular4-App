@@ -270,10 +270,10 @@
 <div class="sidebar-list form-control" *ngIf="showLedgerAccountList || showDiscountSidebar || showTaxSidebar">
     <!-- Dynamic Header -->
     <div
-        class="border-bottom d-flex justify-content-between align-items-center p-1 mat-app-background"
+        class="border-bottom d-flex justify-content-between align-items-center p-2 bg-white text-black"
         *ngIf="showDiscountSidebar || showTaxSidebar"
     >
-        <h3 class="text-primary">
+        <h3>
             {{ showDiscountSidebar ? localeData?.discount_list : showTaxSidebar ? localeData?.tax_list : '' }}
         </h3>
         <i class="icon-cross cursor-pointer" (click)="showDiscountSidebar ? closeDiscountSidebar() : closeTaxSidebar()"></i>

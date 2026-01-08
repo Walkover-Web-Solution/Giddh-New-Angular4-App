@@ -76,6 +76,7 @@ html, body {
     // Explicitly picks tone 40 for primary and tone 90 for on-primary from Azure palette
     --mat-sys-primary: #{map.get($theme-primary, 40)};
     --mat-sys-on-primary: #{map.get($theme-primary, 90)};
+    --mat-button-outlined-label-text-color: var(--color-white, #ffffff);
     
     // Density override
     @include mat.all-component-densities($giddh-dark-theme);

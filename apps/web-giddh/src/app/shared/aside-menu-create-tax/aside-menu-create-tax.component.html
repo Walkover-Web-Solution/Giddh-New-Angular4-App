@@ -143,7 +143,7 @@
                 <div class="col-sm-12">
                     {{ localeData?.linked_account }}
                     <div class="custom-tags" *ngIf="taxForm?.get('accounts')?.value?.length">
-                        <span *ngFor="let account of taxForm.get('accounts').value">
+                        <span class="border border-radius-4 text-black theme-primary-light" *ngFor="let account of taxForm.get('accounts').value">
                             {{ account.name }}
                         </span>
                     </div>
