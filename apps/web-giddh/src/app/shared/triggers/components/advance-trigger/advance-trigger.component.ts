@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, QueryList, signal, ViewChildren } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -52,7 +52,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
         }]
     };
     /** True if communication platform get api in progress */
-    public isCommunicationPlatformsLoading: boolean = true;
+    public isCommunicationPlatformsLoading = signal<boolean>(true);
     /** True if show integrated wrapper */
     public isShowIntegrated: boolean = false;
     /** True if communication platform verification api in progress */
@@ -124,6 +124,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
         private dialog: MatDialog,
+        private changeDetectorRef: ChangeDetectorRef,
         @Inject(ServiceConfig) private serviceConfig,
     ) {
         this.resetCommunicationForm();
@@ -146,7 +147,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     * @memberof AdvanceTriggerComponent
     */
     private getCommunicationPlatforms(): void {
-        this.isCommunicationPlatformsLoading = true;
+        this.isCommunicationPlatformsLoading.set(true);
         this.editCommunicationPlatform = "";
         this.campaignIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
@@ -171,10 +172,10 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                     this.platform = response?.body?.platforms[0]?.name;
                     this.createTrigger.communicationPlatform = this.platform;
                 }
-                this.isCommunicationPlatformsLoading = false;
+                this.isCommunicationPlatformsLoading.set(false);
             } else {
                 this.toasty.showSnackBar("error", response?.message);
-                this.isCommunicationPlatformsLoading = false;
+                this.isCommunicationPlatformsLoading.set(false);
             }
         });
     }
@@ -276,6 +277,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                 this.isActiveTriggersLoading = false;
                 this.triggerObj.totalItems = 0;
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
