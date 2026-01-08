@@ -32,7 +32,7 @@
                     <button
                         *ngIf="inputData?.rowData?.isOwner && inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies"
                         (click)="createCompanyInSubscription()"
-                        mat-raised-button
+                        matButton="filled"
                         [matTooltip]="localeData?.add_company_subscription"
                         [matTooltipPosition]="'above'"
                         color="primary"

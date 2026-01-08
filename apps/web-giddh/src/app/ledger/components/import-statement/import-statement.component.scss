@@ -22,7 +22,6 @@
         width: 120px !important;
         border-radius: var(--mat-border-radius-0);
         text-align: center;
-        background-color: var(--theme-primary-light);
         margin-left: -34px;
     }
     input[type='file'] {
@@ -56,14 +55,12 @@
 .statement-card {
     > div {
         height: 230px;
-        p {
-            color: var(--theme-foreground-color);
-        }
     }
 
     &:hover {
         > div {
             background-color: var(--theme-primary-light);
+            color: var(--color-black);
         }
     }
 }

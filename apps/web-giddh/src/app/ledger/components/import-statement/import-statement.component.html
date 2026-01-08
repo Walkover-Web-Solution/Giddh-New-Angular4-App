@@ -11,11 +11,11 @@
     <div class="d-inline-block">
         <button
             *ngIf="importStep === importStepEnum.Second"
-            mat-raised-button
+            matButton="filled"
             [matTooltip]="inputData?.commonLocaleData?.app_back"
             matTooltipPosition="above"
             (click)="importStep = importStepEnum.First"
-            class="header-btn"
+            class="header-btn bg-white text-black"
         >
             {{ inputData?.commonLocaleData?.app_back }}
         </button>

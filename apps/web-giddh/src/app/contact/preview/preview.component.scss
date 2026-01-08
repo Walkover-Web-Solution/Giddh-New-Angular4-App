@@ -16,6 +16,10 @@
     &:hover,
     &.active {
         background-color: var(--theme-primary-light) !important;
+
+        .light-gray, p, .theme-foreground-color {
+            color: var(--color-black) !important;
+        }
     }
 }
 
@@ -34,7 +38,7 @@
         .single-invoice-detail {
             &:hover,
             &.active {
-                background-color: var(--color-light-gray);
+                background-color: var(--theme-primary-light);
 
                 .title-text {
                     color: var(--theme-primary-color) !important;

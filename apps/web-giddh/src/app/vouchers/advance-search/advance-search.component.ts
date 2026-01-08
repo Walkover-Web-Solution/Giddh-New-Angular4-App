@@ -14,7 +14,7 @@ import { SalesPersonComponent } from '../../shared/sales-person/sales-person.com
     templateUrl: './advance-search.component.html',
     styleUrls: ['./advance-search.component.scss'],
     providers: [SalesPersonComponentStore],
-    standalone: false
+    standalone:false
 })
 export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -189,7 +189,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
             this.filteredSalesPersonList = res as IOption[];
         });
-        
+
         /** Search for action dropdown */
         this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
         takeUntil(this.destroyed$)).subscribe((search: string) => {
@@ -386,13 +386,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
         // Helper function to clear specific date fields
         const clearDateFields = (controlNames: string[]): void => {
-            (Array.isArray(controlNames) ? controlNames : []).forEach(controlName => {
+            controlNames.forEach(controlName => {
                 this.searchForm.get(controlName)?.patchValue(null);
             });
         };
 
         // Process each date control based on the type
-        (Array.isArray(allDateControlNames) ? allDateControlNames : []).forEach(controlName => {
+        allDateControlNames.forEach(controlName => {
             switch (this.type) {
                 case 'drcr':
                 case 'invoice':

@@ -6,8 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { SignupRoutingModule } from './signup.routing.module';
 import { SharedModule } from '../shared/shared.module';
-// // import {} from '../theme/form-fields/form-fields.module';
-// Temporarily disabled
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     imports: [
@@ -17,7 +16,8 @@ import { SharedModule } from '../shared/shared.module';
         ReactiveFormsModule,
         SignupRoutingModule,
         LaddaModule.forRoot({ style: 'slide-left', spinnerSize: 30 }),
-        SharedModule
+        SharedModule,
+        FormFieldsModule
     ],
     declarations: [
         SignupComponent

@@ -105,12 +105,10 @@ if (window['CodeMirror'] === undefined) {
 | `FileSaver.min.js` | - | File download functionality | 6th - Utility |
 | `v-toaster.js` | - | Toast notifications | 7th - UI feedback |
 | `axios.min.js` | - | HTTP client | 8th - API communication |
-| `magic-link-script.js` | - | Main magic link functionality | 9th - Core logic |
+**Total Files:** 8  
+**Critical Level:** Low - General utility files only
 
-**Total Files:** 9  
-**Critical Level:** Medium - Required for magic link functionality
-
-### Loading Sequence (from magic.html)
+### Loading Sequence (legacy reference - file removed)
 
 ```javascript
 // Sequential loading with dependencies
@@ -121,7 +119,7 @@ moment.onload = function () {
     
     vue.onload = function () {
         // Load remaining scripts after Vue
-        // ... bootstrap, FileSaver, v-toaster, axios, magic-link-script
+        // ... bootstrap, FileSaver, v-toaster, axios
     }
 }
 ```
