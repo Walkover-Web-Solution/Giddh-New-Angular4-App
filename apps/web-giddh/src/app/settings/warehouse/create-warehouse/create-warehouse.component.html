@@ -78,7 +78,7 @@
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button matButton="outlined" type="button" aria-label="clear" (click)="handleFormClear()" class="btn custom-btn">
+                        <button matButton="outlined" type="button" aria-label="clear" (click)="handleFormClear()" class="mr-3">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                         <button
@@ -86,7 +86,6 @@
                             matButton="filled"
                             type="submit"
                             [disabled]="warehouseForm?.invalid"
-                            class="btn"
                         >
                             {{ localeData?.create_warehouse }}
                         </button>

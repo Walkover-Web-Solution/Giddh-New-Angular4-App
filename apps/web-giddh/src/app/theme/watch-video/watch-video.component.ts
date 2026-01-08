@@ -87,6 +87,7 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -153,6 +154,7 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
     */
     private shouldHandleShortcut(): boolean {
         const instances = Array.from(WatchVideoComponent.activeInstances.values());
+
         // Filter instances that are visible and in the DOM
         const visibleInstances = instances.filter(instance => {
             const element = instance.elementRef.nativeElement;
@@ -167,6 +169,7 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
         // Check dialog context in real-time for all instances
         const dialogInstances = visibleInstances.filter(instance => instance.detectDialogContext());
         const isThisInDialog = this.detectDialogContext();
+
         if (dialogInstances.length > 0) {
             // If this is a dialog instance, check if it's the most recent one
             if (isThisInDialog) {

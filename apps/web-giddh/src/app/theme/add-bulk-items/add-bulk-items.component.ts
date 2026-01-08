@@ -244,6 +244,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             if (listContainer) {
                 const focusableElements = listContainer.querySelectorAll('[tabindex="0"]');
                 const currentIndex = Array.from(focusableElements).indexOf(currentElement);
+
                 if (currentIndex >= 0 && currentIndex < focusableElements.length - 1) {
                     // Focus next element
                     (focusableElements[currentIndex + 1] as HTMLElement)?.focus();
@@ -254,6 +255,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             }
         }, 100);
     }
+
 
     /**
      * Initializes add bulk form

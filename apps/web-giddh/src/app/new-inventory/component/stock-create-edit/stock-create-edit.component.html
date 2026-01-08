@@ -172,9 +172,7 @@
                                                 [label]="commonLocaleData?.app_discount"
                                                 [options]="discountsList"
                                                 [(ngModel)]="discountValue"
-                                                (selectedOption)="
-                                                    stockForm.discounts = [$event?.value]; discountValue = $event?.value
-                                                "
+                                                (selectedOption)="stockForm.discounts = [$event?.value]; discountValue = $event?.value"
                                                 (onClear)="stockForm.discounts = []; discountValue = ''"
                                                 [labelValue]="stockForm.discountLabel ?? ''"
                                             ></reactive-dropdown-field>
@@ -2086,7 +2084,7 @@
                                 </table>
                             </div>
                             <p class="add-new-line font-size-15 my-3">
-                                <button aria-label="add line" mat-button class="text-primary">+ Add New Line</button>
+                                <button aria-label="add line" matButton="outlined" class="text-primary">+ Add New Line</button>
                             </p>
 
                             <div class="sales-purchase-details bg-light">
@@ -3249,7 +3247,7 @@
                                     <button
                                         aria-label="option icon"
                                         matIconButton
-                                        class="btn bulk-creation-filter-btn"
+                                        class="bulk-creation-filter-btn"
                                         [matMenuTriggerFor]="menu"
                                     >
                                         <i class="icon-options"></i>

@@ -2248,7 +2248,7 @@
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
                                                             (ngModelChange)="onChangeFieldVisibility()"
-                                                            [pattern]="'^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'"
+                                                            [pattern]="'^[a-zA-Z0-9._%-]{2,256}@[a-zA-Z0-9.-]{2,64}$'"
                                                             (patternValidation)="onPatternValidation($event)"
                                                         ></input-field>
                                                     </div>
@@ -2781,7 +2781,7 @@
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             (ngModelChange)="onChangeFieldVisibility()"
                                                             [(ngModel)]="customTemplate.qrCodeId"
-                                                            [pattern]="'^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'"
+                                                            [pattern]="'^[a-zA-Z0-9._%-]{2,256}@[a-zA-Z0-9.-]{2,64}$'"
                                                             (patternValidation)="onPatternValidation($event)"
                                                         ></input-field>
                                                     </div>

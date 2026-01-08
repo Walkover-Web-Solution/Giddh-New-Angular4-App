@@ -334,14 +334,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public onScroll(): void {
         // Store current active option index before pagination
         this.storeActiveOptionIndex();
-        
+
         // Set pagination flag but mark as NOT keyboard triggered (mouse/scroll triggered)
         this.isPaginationInProgress = true;
         this.isKeyboardTriggeredPagination = false;
-        
+
         // Emit scroll event for pagination
         this.scrollEnd.emit();
-        
+
     }
 
     /**
@@ -355,7 +355,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             // Angular 21: Use public API approach instead of private _keyManager
             if (this.matAutocomplete && this.matAutocomplete.options) {
                 const options = this.matAutocomplete.options.toArray();
-                
+
                 // Find the currently active/focused option using public APIs
                 const activeOption = options.find((option, index) => {
                     // Use public getHostElement() method instead of private _element
@@ -370,7 +370,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     }
                     return false;
                 });
-                
+
                 if (activeOption) {
                     this.activeOptionIndex = options.indexOf(activeOption);
                 } else {
@@ -402,16 +402,16 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             if (this.matAutocomplete && this.matAutocomplete.options && this.activeOptionIndex >= 0) {
                 const options = this.matAutocomplete.options.toArray();
                 const targetOption = options[this.activeOptionIndex];
-                
+
                 if (targetOption) {
                     // Angular 21 compatible approach: Use public APIs
-                    
+
                     // Method 1: Try to use keyManager if available
                     const keyManager = (this.matAutocomplete as any)._keyManager;
                     if (keyManager && typeof keyManager.setActiveItem === 'function') {
                         keyManager.setActiveItem(this.activeOptionIndex);
                     }
-                    
+
                     // Method 2: Manually set active state and focus using public APIs
                     const targetElement = (targetOption as any).getHostElement?.() || (targetOption as any)._getHostElement?.();
                     if (targetElement) {
@@ -423,20 +423,20 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                                 element.setAttribute('aria-selected', 'false');
                             }
                         });
-                        
+
                         // Set active state on target option
                         targetElement.classList.add('mat-option-active');
                         targetElement.setAttribute('aria-selected', 'true');
-                        
+
                         // Scroll into view
                         targetElement.scrollIntoView({
                             behavior: 'auto',
                             block: 'nearest',
                             inline: 'nearest'
                         });
-                        
+
                     }
-                    
+
                     // Method 3: Use ChangeDetectorRef to trigger view update
                     this.changeDetection.detectChanges();
                 }
@@ -616,7 +616,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (event.key === 'Enter' && this.trigger?.panelOpen) {
             this.closeDropdownPanel();
         }
-        
+
         // Handle down arrow key for keyboard-triggered pagination
         if (event.key === 'ArrowDown' && this.trigger?.panelOpen) {
             this.handleKeyboardNavigation();
@@ -634,25 +634,25 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             if (this.matAutocomplete && this.matAutocomplete.options) {
                 const options = this.matAutocomplete.options.toArray();
                 const totalOptions = options.length;
-                
+
                 // Check if we're near the last few options (trigger pagination early)
                 setTimeout(() => {
                     if (this.matAutocomplete && this.matAutocomplete.options) {
                         const currentOptions = this.matAutocomplete.options.toArray();
                         const activeOption = currentOptions.find(option => option.active);
-                        
+
                         if (activeOption) {
                             const activeIndex = currentOptions.indexOf(activeOption);
                             const isNearEnd = activeIndex >= (totalOptions - 2); // Trigger when 2 items from end
-                            
+
                             if (isNearEnd && this.scrollEnd.observers.length > 0) {
                                 // Store current active option index before pagination
                                 this.storeActiveOptionIndex();
-                                
+
                                 // Mark as keyboard-triggered pagination
                                 this.isPaginationInProgress = true;
                                 this.isKeyboardTriggeredPagination = true;
-                                
+
                                 // Emit scroll event for pagination
                                 this.scrollEnd.emit();
                             }
@@ -772,8 +772,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public onBlur(): void {
         setTimeout(() => {
-            // Handle closeOnFocusOut functionality - only for sidebarListView or when closeOnFocusOut is enabled
-            if (this.sidebarListView || this.closeOnFocusOut) {
+            // Handle closeOnFocusOut functionality - for sidebarListView, closeOnFocusOut, or normal mat-autocomplete
+            if (this.sidebarListView || this.closeOnFocusOut || !this.sidebarListView) {
                 this.closeDropdownPanel();
             }
 

@@ -50,10 +50,10 @@
                     </button>
                 </div>
             </div>
-            <div class="position-center position-absolute" *ngIf="isLoading">
+            <div class="position-center position-absolute" *ngIf="isLoading()">
                 <giddh-page-loader class="unset-loader-margin"></giddh-page-loader>
             </div>
-            <div class="row mt-5" *ngIf="!isLoading">
+            <div class="row mt-5" *ngIf="!isLoading()">
                 <div class="table-responsive">
                     <table mat-table [dataSource]="dataSource" class="w-100" *ngIf="dataSource.length">
                         <ng-container matColumnDef="index">

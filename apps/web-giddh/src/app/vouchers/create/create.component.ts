@@ -2,6 +2,7 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
+    computed,
     ElementRef,
     HostListener,
     Inject,
@@ -573,7 +574,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @type {boolean}
      * @memberof VoucherCreateComponent
      */
-    public get showTaxColumn(): boolean {
+    public showTaxColumn = computed(() => {
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             return false;
         }
@@ -609,7 +610,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             return true;
         }
-    }
+    });
 
     /**
      * True if it's UK company
@@ -761,10 +762,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getCreatedTemplates();
                         this.getAccountOnboardingFormData();
                         this.searchStock();
-                        
-                        if (!this.invoiceType.isPaymentInvoice && !this.invoiceType.isReceiptInvoice) {
-                            this.getWarehouses();
-                        }
 
                         if (!this.invoiceType.isPaymentInvoice && !this.invoiceType.isReceiptInvoice) {
                             this.getWarehouses();
@@ -1398,10 +1395,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.customerVendorDropdown.focusInputField();
                         }, 100);
                     } else {
-                        this.openAccountDropdown = false;
-                        setTimeout(() => {
-                            this.openAccountDropdown = true;
-                        }, 100);
+                        this.customerVendorDropdownOpen();
                     }
                     this.startLoader(false);
                 }
@@ -1570,6 +1564,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
                 this.lastVouchersList$ = observableOf([...lastVouchers]);
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -2998,7 +2993,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             hsnNumber: [entryData ? entryData?.hsnNumber : ""],
             sacNumber: [entryData ? entryData?.sacNumber : ""],
             totalDiscount: [""], // temp
-            totalTax: [""], // temp
+            totalTax: [0], // temp
             totalTaxWithoutCess: [""], //temp
             totalCess: [""], //temp
             calculateTotal: [true], //temp
@@ -3505,27 +3500,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.accountParentGroup = "bankaccounts";
         }
-        
-        // Store focus - if customFocusElement is provided, use its native element
-        if (customFocusElement) {
-            // Handle MatMenuTrigger reference - use _element property (confirmed working)
-            if (customFocusElement._element && customFocusElement._element.nativeElement) {
-                this.storeFocus(customFocusElement._element.nativeElement);
-            }
-            // Handle direct ElementRef
-            else if (customFocusElement.nativeElement) {
-                this.storeFocus(customFocusElement.nativeElement);
-            }
-            // Handle if it's already an HTMLElement
-            else if (customFocusElement instanceof HTMLElement) {
-                this.storeFocus(customFocusElement);
-            }
-            else {
-                this.storeFocus();
-            }
-        } else {
-            this.storeFocus();
-        }
 
         // Store focus - if customFocusElement is provided, use its native element
         if (customFocusElement) {
@@ -3565,12 +3539,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     });
                 }
                 this.accountAsideMenuRef = null;
-                if (this.lastInteraction === InteractionType.KEYBOARD) {
-                    this.openAccountDropdown = false;
-                    setTimeout(() => {
-                        this.openAccountDropdown = true;
-                    }, 50);
-                }
+                this.restoreFocus();
             });
     }
 
@@ -3987,7 +3956,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 width: "650px",
             });
             this.emailDialogRef.afterClosed().subscribe(() => {
-                this.openAccountDropdown = true;
+                this.customerVendorDropdownOpen();
             });
         });
     }
@@ -4006,7 +3975,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 height: "80vh",
             });
             dialogRef.afterClosed().subscribe(() => {
-                this.openAccountDropdown = true;
+                this.customerVendorDropdownOpen();
             });
         });
     }
@@ -5824,9 +5793,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.advanceReceiptAdjustmentData = cloneDeep(this.originalVoucherAdjustments);
                 this.calculateAdjustedVoucherTotal(this.originalVoucherAdjustments?.adjustments);
             }
-            this.dialog.open(this.adjustmentModal, {
-                width: "800px",
-            });
+            this.openDialogWithFocusManagement(() =>
+                this.dialog.open(this.adjustmentModal, {
+                    width: "800px",
+                })
+            );
         } else {
             this.isAdjustAmount = false;
             this.adjustPaymentBalanceDueData = 0;
@@ -6774,6 +6745,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private handleEnterPress(event: KeyboardEvent): void {
         const activeElement = document.activeElement;
         const isInputFocused = activeElement && (activeElement.tagName === HtmlElementEnum.Button || activeElement.tagName === HtmlElementEnum.Textarea);
+
         if (!isInputFocused && event.key === KeyCodesEnum.ENTER) {
             if (event.shiftKey) {
                 // Shift+Enter: Generate voucher without preventing default
@@ -7495,39 +7467,43 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        const currentElement = event.target as HTMLElement;
-        if (!currentElement) {
+        if (this.lastInteraction !== InteractionType.KEYBOARD) {
             return;
         }
 
-        // Check if this is a dropdown close event (from tax-dropdown or discount-dropdown)
-        const isDropdownCloseEvent = currentElement.classList.contains('total-tax-amount') ||
-            currentElement.classList.contains('total-discount-amount');
+            const currentElement = event.target as HTMLElement;
+            if (!currentElement) {
+                return;
+            }
 
-        // For dropdown close events, always proceed and set keyboard interaction
-        if (isDropdownCloseEvent) {
-            this.setInteractionType(InteractionType.KEYBOARD, 'Dropdown close event');
+            // Check if this is a dropdown close event (from tax-dropdown or discount-dropdown)
+            const isDropdownCloseEvent = currentElement.classList.contains('total-tax-amount') ||
+                currentElement.classList.contains('total-discount-amount');
+
+            // For dropdown close events, always proceed and set keyboard interaction
+            if (isDropdownCloseEvent) {
+                this.setInteractionType(InteractionType.KEYBOARD, 'Dropdown close event');
         } else if (this.lastInteraction !== InteractionType.KEYBOARD) {
             // For non-dropdown events, check interaction type
             return;
-        }
+            }
 
-        // Use Angular CDK to find focusable elements within the component's view
-        const focusableElements = this.getFocusableElements();
-        const currentIndex = focusableElements.indexOf(currentElement);
+            // Use Angular CDK to find focusable elements within the component's view
+            const focusableElements = this.getFocusableElements();
+            const currentIndex = focusableElements.indexOf(currentElement);
 
-        if (currentIndex !== -1 && currentIndex < focusableElements.length - 1) {
-            const nextElement = focusableElements[currentIndex + 1];
+            if (currentIndex !== -1 && currentIndex < focusableElements.length - 1) {
+                const nextElement = focusableElements[currentIndex + 1];
 
-            // Add a small delay to ensure the dropdown has fully closed
-            setTimeout(() => {
-                // Use NgZone for Angular-optimized async operations
-                this.ngZone.run(() => {
-                    // Use FocusMonitor for better focus management
-                    this.focusMonitor.focusVia(nextElement, 'keyboard');
-                });
+                // Add a small delay to ensure the dropdown has fully closed
+                setTimeout(() => {
+                    // Use NgZone for Angular-optimized async operations
+                    this.ngZone.run(() => {
+                        // Use FocusMonitor for better focus management
+                        this.focusMonitor.focusVia(nextElement, 'keyboard');
+                    });
             }, 150);
-        }
+            }
     }
 
     /**
@@ -7616,5 +7592,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         document.addEventListener('keydown', this.globalKeydownListener);
         document.addEventListener('mousedown', this.globalMousedownListener);
         document.addEventListener('click', this.globalClickListener);
+    }
+
+    /**
+     * Opens customer/vendor dropdown
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private customerVendorDropdownOpen(): void {
+        this.openAccountDropdown = false;
+        setTimeout(() => {
+            this.openAccountDropdown = true;
+            this.changeDetection.detectChanges();
+        }, 50);
     }
 }

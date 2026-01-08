@@ -12,13 +12,17 @@
             margin-top: 20px;
         }
     }
-}
-
-.e-way-card:hover div {
-    background-color: var(--theme-primary-light);
-}
-.e-way-card:hover .icon-link {
-    .a {
-        stroke-width: 0.75px;
+    &:hover {
+        div {
+            background-color: var(--theme-primary-light);
+            color: var(--color-black);
+        }
+        .icon-link {
+            .a {
+                fill: var(--color-black) !important;
+                stroke: var(--color-black) !important;
+                stroke-width: 0.75px;
+            }
+        }
     }
 }

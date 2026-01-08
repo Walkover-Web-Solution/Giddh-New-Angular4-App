@@ -957,6 +957,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
+
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             if (show) {
@@ -976,6 +977,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, ((this.asideSettingMenuState) ? 100 : 0));
+    }
+
+    /**
+     * Force close the sidebar pane immediately without delays
+     *
+     * @memberof HeaderComponent
+     */
+    public forceCloseSidebarPane(): void {
+        this.isMobileSidebar = false;
+        this.asideSettingMenuState = false;
+
+        document.querySelector('body')?.classList?.remove('aside-setting');
+        document.querySelector('body')?.classList?.remove('mobile-setting-sidebar');
     }
 
     /**

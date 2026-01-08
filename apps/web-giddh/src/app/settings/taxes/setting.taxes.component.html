@@ -11,7 +11,7 @@
             <div>
                 <watch-video [cssClass]="'text-primary mr-3'" [moduleName]="'TAX_CREATION'"></watch-video>
                 <button
-                    mat-raised-button
+                    matButton="filled"
                     *ngIf="voucherApiVersion === 2"
                     color="primary"
                     [matTooltip]="localeData?.create_new_tax"

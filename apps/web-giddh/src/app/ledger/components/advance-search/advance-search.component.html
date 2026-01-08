@@ -11,7 +11,7 @@
             <span>{{ commonLocaleData?.app_advance_search }}</span>
             <div class="d-flex align-items-center column-gap-1">
                 <button
-                    mat-raised-button
+                    matButton="filled"
                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
                     [matTooltipPosition]="'above'"
                     (click)="resetAdvanceSearchModal()"
@@ -53,11 +53,7 @@
                                         />
                                     </div>
                                 </div>
-                                <mat-menu
-                                    #universalDatepicker="matMenu"
-                                    class="universal-datepicker-menu-panel"
-                                    xPosition="after"
-                                >
+                                <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
                                     <ng-template matMenuContent>
                                         <app-datepicker-wrapper
                                             [inputStartDate]="selectedDateRange?.startDate"
@@ -268,12 +264,8 @@
                                                 >
                                                     <mat-option class="mt-0">
                                                         <ngx-mat-select-search
-                                                            [placeholderLabel]="
-                                                                commonLocaleData?.app_sales_person_placeholder
-                                                            "
-                                                            [noEntriesFoundLabel]="
-                                                                commonLocaleData?.app_no_result_found
-                                                            "
+                                                            [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
+                                                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                                             [formControl]="salesPersonDropdown"
                                                         >
                                                             <i class="icon-cross" ngxMatSelectSearchClear></i>
@@ -374,9 +366,7 @@
                                                         <mat-slide-toggle
                                                             color="primary"
                                                             id="includeInventory"
-                                                            [formControl]="
-                                                                advanceSearchForm.get('inventory.includeInventory')
-                                                            "
+                                                            [formControl]="advanceSearchForm.get('inventory.includeInventory')"
                                                         >
                                                             <span
                                                                 class="pull-left"
@@ -399,12 +389,8 @@
                                                             [appearance]="'outline'"
                                                             [showMatLabel]="true"
                                                             [commonLocaleData]="commonLocaleData"
-                                                            [formControl]="
-                                                                advanceSearchForm.get('inventory.inventories')
-                                                            "
-                                                            [selectedValues]="
-                                                                advanceSearchForm.get('inventory.inventories')?.value
-                                                            "
+                                                            [formControl]="advanceSearchForm.get('inventory.inventories')"
+                                                            [selectedValues]="advanceSearchForm.get('inventory.inventories')?.value"
                                                             [name]="'inventories'"
                                                             [label]="commonLocaleData?.app_inventory"
                                                             [placeholder]="commonLocaleData?.app_select_accounts"
@@ -423,9 +409,7 @@
                                                             class="w-100"
                                                             [name]="'particulars'"
                                                             [placeholder]="commonLocaleData?.app_select_range"
-                                                            [formControl]="
-                                                                advanceSearchForm.get('inventory.inventoryQty')
-                                                            "
+                                                            [formControl]="advanceSearchForm.get('inventory.inventoryQty')"
                                                             [options]="comparisonFilterDropDown$ | async"
                                                             (selectedOption)="onRangeSelect('inventoryQty', $event)"
                                                         ></reactive-dropdown-field>
@@ -451,9 +435,7 @@
                                                             class="w-100"
                                                             [name]="'particulars'"
                                                             [placeholder]="commonLocaleData?.app_select_range"
-                                                            [formControl]="
-                                                                advanceSearchForm.get('inventory.inventoryVal')
-                                                            "
+                                                            [formControl]="advanceSearchForm.get('inventory.inventoryVal')"
                                                             [options]="comparisonFilterDropDown$ | async"
                                                             (selectedOption)="onRangeSelect('inventoryVal', $event)"
                                                         ></reactive-dropdown-field>

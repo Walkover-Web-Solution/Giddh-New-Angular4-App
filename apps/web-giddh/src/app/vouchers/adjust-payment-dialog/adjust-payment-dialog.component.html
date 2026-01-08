@@ -112,7 +112,7 @@
                     <ng-container
                         *ngFor="let entry of adjustVoucherForm?.adjustments; let entryIdx = index; let first = first; let last = last"
                     >
-                        <div class="row voucher-form pb-1 align-items-center mb-1">
+                        <div class="row voucher-form pb-1 align-items-start mb-1">
                             <div class="col-5">
                                 <div class="form-group mb-0">
                                     <reactive-dropdown-field
@@ -200,7 +200,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col pt-2">
                                 <a
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
@@ -210,7 +210,7 @@
                                     tabindex="0"
                                     role="button"
                                     cdkMonitorElementFocus
-                                    class="icon-font-22 theme-foreground-color"
+                                    class="icon-font-22 theme-foreground-color d-inline-block mt-1"
                                 >
                                     <i class="icon-trash"></i>
                                 </a>

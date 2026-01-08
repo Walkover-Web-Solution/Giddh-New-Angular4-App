@@ -276,10 +276,7 @@
                                                                         ?.value,
                                                             }"
                                                         >
-                                                            <mat-form-field
-                                                                appearance="outline"
-                                                                class="initial-height w-100"
-                                                            >
+                                                            <mat-form-field appearance="outline" class="initial-height w-100">
                                                                 <mat-label>{{ localeData?.sender_address }}</mat-label>
                                                                 <textarea
                                                                     matInput
@@ -417,10 +414,7 @@
                                                             )?.value,
                                                         }"
                                                     >
-                                                        <mat-form-field
-                                                            appearance="outline"
-                                                            class="initial-height w-100"
-                                                        >
+                                                        <mat-form-field appearance="outline" class="initial-height w-100">
                                                             <mat-label>{{ localeData?.receiver_address }}</mat-label>
                                                             <textarea
                                                                 matInput
@@ -445,9 +439,7 @@
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
                                     <p>{{ commonLocaleData?.app_total_amount }}</p>
-                                    <p>
-                                        {{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhNumberFormat }}
-                                    </p>
+                                    <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhNumberFormat }}</p>
                                 </div>
                             </div>
                         </div>
@@ -508,8 +500,7 @@
                                                     selectProduct($event, branchTransferCreateEditForm.get('products.0'), false, 0)
                                                 "
                                                 [labelValue]="
-                                                    isUpdateMode &&
-                                                    branchTransferCreateEditForm.get('products.0.name').value
+                                                    isUpdateMode && branchTransferCreateEditForm.get('products.0.name').value
                                                         ? branchTransferCreateEditForm.get('products.0.name').value
                                                         : ''
                                                 "
@@ -720,10 +711,7 @@
                                                                 branchTransferCreateEditForm.get('sources.0.warehouse.uniqueName')?.value,
                                                         }"
                                                     >
-                                                        <mat-form-field
-                                                            appearance="outline"
-                                                            class="initial-height w-100"
-                                                        >
+                                                        <mat-form-field appearance="outline" class="initial-height w-100">
                                                             <mat-label>{{ localeData?.sender_address }}</mat-label>
                                                             <textarea
                                                                 matInput
@@ -838,10 +826,7 @@
                                                             )?.value,
                                                         }"
                                                     >
-                                                        <mat-form-field
-                                                            appearance="outline"
-                                                            class="initial-height w-100"
-                                                        >
+                                                        <mat-form-field appearance="outline" class="initial-height w-100">
                                                             <mat-label>{{ localeData?.receiver_address }}</mat-label>
                                                             <textarea
                                                                 matInput
@@ -964,10 +949,7 @@
                                                                         ?.value,
                                                             }"
                                                         >
-                                                            <mat-form-field
-                                                                appearance="outline"
-                                                                class="initial-height w-100"
-                                                            >
+                                                            <mat-form-field appearance="outline" class="initial-height w-100">
                                                                 <mat-label>{{ localeData?.sender_address }}</mat-label>
                                                                 <textarea
                                                                     matInput
@@ -993,9 +975,7 @@
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
                                     <p>{{ commonLocaleData?.app_total_amount }}</p>
-                                    <p>
-                                        {{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhNumberFormat }}
-                                    </p>
+                                    <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhNumberFormat }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1281,7 +1261,7 @@
                                                             <div
                                                                 class="show-sku-code-position"
                                                                 *ngIf="activeIndx == i && product.get('uniqueName').value"
-                                                                mat-button
+                                                                matButton="outlined"
                                                                 [matMenuTriggerFor]="sku_Menu"
                                                                 #skuMenuTrigger="matMenuTrigger"
                                                             >
@@ -1345,7 +1325,7 @@
                                                             <div
                                                                 class="show-code-position"
                                                                 *ngIf="activeIndx == i"
-                                                                mat-button
+                                                                matButton="outlined"
                                                                 [matMenuTriggerFor]="hsn_sac_Menu"
                                                                 #hsnSacMenuTrigger="matMenuTrigger"
                                                             >
@@ -1364,10 +1344,7 @@
                                                                             : product.get('sacNumber')?.value
                                                                     }}
                                                                     <span class="edit-icon cursor-pointer">
-                                                                        <img
-                                                                            src="assets/images/edit-pencilicon.svg"
-                                                                            alt="edit img"
-                                                                        />
+                                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit img" />
                                                                     </span>
                                                                 </span>
                                                             </div>
@@ -1934,9 +1911,9 @@
                                     aria-label="uniqueName"
                                     matButton="filled"
                                     *ngIf="isBranch || isCompanyWithSingleBranch"
-                                    class="d-inline-block vertical-align-middle {{
-                                        branchTransferCreateEditForm.invalid
-                                    }}-{{ isValidSourceTaxNumber }}-{{ isValidDestinationTaxNumber }}"
+                                    class="d-inline-block vertical-align-middle {{ branchTransferCreateEditForm.invalid }}-{{
+                                        isValidSourceTaxNumber
+                                    }}-{{ isValidDestinationTaxNumber }}"
                                     (click)="submit()"
                                 >
                                     {{ editBranchTransferUniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_create }}

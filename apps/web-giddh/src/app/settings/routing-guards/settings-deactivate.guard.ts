@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { SettingsComponent } from '../settings.component';
 
 // import { SettingsComponent } from '../settings.component';
 
@@ -27,7 +28,7 @@ export class SettingsDeactivateGuard  {
      * @memberof SettingsDeactivateGuard
      */
     canDeactivate(
-        // component: SettingsComponent,
+        component: SettingsComponent,
         currentRoute: ActivatedRouteSnapshot,
         currentState: RouterStateSnapshot,
         nextState?: RouterStateSnapshot): boolean {
