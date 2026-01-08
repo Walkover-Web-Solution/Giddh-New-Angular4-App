@@ -56,6 +56,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService
     ) {
+        this.loginUrl = this.generalService.getGiddhRegionUrl();
     }
 
 
