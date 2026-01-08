@@ -57,7 +57,7 @@ interface SubscriptionErrorFlags {
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    standalone: false
+    standalone:false
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
@@ -935,10 +935,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportDialogRef?.close();
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
-                    width: '1000px',
-                    panelClass: 'aside-help-panel',
-                    hasBackdrop: false,
-                    position: {
+                            width: '1000px',
+                            panelClass: 'aside-help-panel',
+                            hasBackdrop: false,
+                            position: {
                         right: '0',
                         top: '0'
                     }

@@ -44,6 +44,14 @@ export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
     public isCurrencyPipeLoaded: boolean = false;
 
+    /**
+     * Debug flag - set to true to enable global variable logging
+     * To enable debugging: Change this value from false to true
+     * By default: false (no logging)
+     * For debugging: true (enables comprehensive global variable logging)
+     */
+    public debugMode: boolean = false;
+
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Stores the branch unique name */
@@ -658,90 +666,15 @@ export class GeneralService {
      * @return {*}  {string}
      * @memberof GeneralService
      */
-    /**
-     * Attempts to get whiteLabel data from localStorage with retry mechanism
-     * @param maxRetries Maximum number of retry attempts (default: 10)
-     * @param delay Delay between retries in milliseconds (default: 50)
-     * @returns Promise<any> whiteLabel data or null if not found after retries
-     */
-    private async getWhiteLabelWithRetry(maxRetries: number = 10, delay: number = 50): Promise<any> {
-        for (let attempt = 1; attempt <= maxRetries; attempt++) {
-            try {
-                const whiteLabelString = localStorage.getItem('whiteLabel');
-                if (whiteLabelString) {
-                    const whiteLabelData = JSON.parse(whiteLabelString);
-                    if (whiteLabelData && whiteLabelData.giddhWhiteLabel && whiteLabelData.giddhWhiteLabel.domainName) {
-                        return whiteLabelData;
-                    }
-                }
-            } catch (error) {
-                console.warn(`WhiteLabel parse error on attempt ${attempt}:`, error);
-            }
-
-            // Wait before next retry (except on last attempt)
-            if (attempt < maxRetries) {
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-        }
-        return null;
-    }
-
-    public async getGiddhRegionUrl(): Promise<string> {
+    public getGiddhRegionUrl(): string {
         const countryRegion = localStorage.getItem('Country-Region');
         const region = COUNTRY_REGION_MAP[countryRegion] || null;
 
-        // Try to get whiteLabel data with retry mechanism
-        const whiteLabelData = await this.getWhiteLabelWithRetry();
+        // Use environment-specific AppUrl instead of hardcoded giddh.com
+        const baseUrl = environment.AppUrl || 'https://giddh.com';
+        const loginPath = '/login';
 
-        // Check if white label data exists and has domainName
-        if (whiteLabelData && whiteLabelData.giddhWhiteLabel && whiteLabelData.giddhWhiteLabel.domainName) {
-            // If domainName is books.giddh.com, use original region logic
-            if (whiteLabelData.giddhWhiteLabel.domainName === 'https://books.giddh.com') {
-                return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
-            }
-            return whiteLabelData.giddhWhiteLabel.domainName + '/login';
-        }
-
-        // Priority 2: Handle current URL logic
-        const currentHostname = window.location.hostname;
-
-        // If current URL is books.giddh.com, redirect using region logic
-        if (currentHostname === 'books.giddh.com') {
-            return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
-        }
-
-        // For non-books.giddh.com URLs, allow page to open and fetch white label data
-        if (currentHostname !== 'books.giddh.com') {
-            try {
-                const response = await fetch(`${this.config.apiUrl}white-label`);
-
-                // Check if response is successful
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                // Validate response structure
-                if (data && data.giddhWhiteLabel) {
-                    // Store white label data in localStorage if API succeeds
-                    localStorage.setItem('whiteLabel', JSON.stringify(data));
-
-                    // Return current URL to allow page to open properly
-                    return window.location.origin + this.router.url;
-                } else {
-                    // Invalid response structure, treat as error
-                    throw new Error('Invalid white label response structure');
-                }
-            } catch (error) {
-                console.error('Failed to fetch white label data:', error);
-                // If we got error, return to fallback URL
-                return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
-            }
-        }
-
-        // Fallback when no whiteLabel data exists after retries
-        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+        return region === 'gl' ? `${baseUrl}${loginPath}` : `${baseUrl}/${region}${loginPath}`;
     }
 
     /**
@@ -2583,7 +2516,7 @@ export class GeneralService {
                         document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
 
                         if (action === true) {
-                            // User confirmed to leave - clean up and navigate
+                        // User confirmed to leave - clean up and navigate
 
                             pageLeaveUtilityService.removeBrowserConfirmationDialog();
                             cleanupCallback();

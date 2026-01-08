@@ -1055,16 +1055,16 @@ export class LoginActions {
                 raw = params.get('returnUrl') || params.get('returnurl') || '';
             }
             if (!raw) {
-                try { raw = sessionStorage.getItem('returnUrl') || ''; } catch (_) { }
+                try { raw = sessionStorage.getItem('returnUrl') || ''; } catch (_) {}
             }
             if (raw && raw.trim()) {
                 const decoded = decodeURIComponent(raw);
                 const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded.startsWith('/') ? decoded.substring(1) : decoded}`;
-                try { sessionStorage.removeItem('returnUrl'); } catch (_) { }
+                try { sessionStorage.removeItem('returnUrl'); } catch (_) {}
                 this.zone.run(() => this._router.navigateByUrl(`/${target}`));
                 return { type: 'EmptyAction' };
             }
-        } catch (_) { }
+        } catch (_) {}
 
         // Fallback to normal lastState navigation
         let route = (stateDetail?.body?.lastUpdated > 7 || !stateDetail?.body?.lastUpdated) ? '/pages/home' : stateDetail.body?.lastState;
