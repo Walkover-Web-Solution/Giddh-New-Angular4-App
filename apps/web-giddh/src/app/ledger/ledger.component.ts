@@ -917,13 +917,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (this.ledgerView === LedgerViewEnum.TView) {
                     const debitTransactions = lt.debitTransactions ?? [];
                     const creditTransactions = lt.creditTransactions ?? [];
+                    const debitEntries = Array.isArray(debitTransactions) ? debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })) : [];
+                    const creditEntries = Array.isArray(creditTransactions) ? creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })) : [];
                     checkedEntriesName = uniq([
-                        ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
-                        ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
+                        ...debitEntries,
+                        ...creditEntries,
                     ]);
                 } else {
+                    const debitCreditEntries = (Array.isArray(lt?.debitCreditTransactions) ? lt.debitCreditTransactions : []).filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: dt.type }));
                     checkedEntriesName = uniq([
-                        ...lt?.debitCreditTransactions?.filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: dt.type }))
+                        ...debitCreditEntries
                     ]);
                 }
 

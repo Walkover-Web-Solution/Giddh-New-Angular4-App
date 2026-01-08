@@ -290,13 +290,13 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 if (res?.status === 'success') {
                     this.reverseChargeReportResults = res.body;
                     // Update MatTableDataSource for proper Angular Material integration
-                    this.dataSource.data = res.body?.results || [];
+                    this.dataSource.data = res.body?.items || [];
                     if (this.todaySelected) {
                         this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT) };
                         this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
                     this.changeDetectionService.updateDataSourceWithChangeDetection(
-                        this.dataSource, this.reverseChargeReportResults?.results || [],
+                        this.dataSource, this.reverseChargeReportResults?.items || [],
                         this.cdRef, this.ngZone, this.table
                     );
                 } else {

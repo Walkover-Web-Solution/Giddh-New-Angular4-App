@@ -28,7 +28,7 @@ import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
 import { CompanyService } from './services/company.service';
 import { environment } from '../environments/environment.generated';
-import { clone, get, includes, pick, remove, startsWith  } from './lodash-optimized';
+import { clone, get, includes, pick, remove, startsWith } from './lodash-optimized';
 
 /**
  * App Component
@@ -128,7 +128,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     }
                     const regionLogin = this._generalService.getGiddhRegionUrl() + 'login';
                     const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
-                    window.location.href = target;
+
+                    // Prevent infinite loop: check if target URL is the same as current URL
+                    const currentFullUrl = window.location.href;
+                    if (target !== currentFullUrl && !currentFullUrl.includes(target)) {
+                        window.location.href = target;
+                    } else {
+                        // Fallback to router navigation to avoid infinite loop
+                        this.router.navigate(['/login']);
+                    }
                 } else {
                     const currentUrl = path + search;
                     let returnUrl = '';
