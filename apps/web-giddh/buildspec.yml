@@ -43,6 +43,6 @@ phases:
       - du -sh dist/apps/web-giddh/ || echo "Could not get directory size"
 
 artifacts:
-  base-directory: ./dist/apps/web-giddh/
+  base-directory: dist/apps/web-giddh
   files:
     - '**/*'
