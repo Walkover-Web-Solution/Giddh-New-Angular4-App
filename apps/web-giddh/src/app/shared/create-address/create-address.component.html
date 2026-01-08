@@ -1,6 +1,6 @@
 <form [formGroup]="addressForm" novalidate (ngSubmit)="handleFormSubmit()" autocomplete="off">
     <section class="aside-dialog-wrapper w-100">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span *ngIf="addressConfiguration?.type === 'createAddress' || addressConfiguration?.type === 'createBranchAddress'">
                 {{ localeData?.create_address }}
             </span>

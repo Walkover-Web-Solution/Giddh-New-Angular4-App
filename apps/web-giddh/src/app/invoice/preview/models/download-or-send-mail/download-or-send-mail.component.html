@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>
             <ng-container *ngIf="showPdfWrap">
                 <button type="button" matButton="filled" class="mr-2 bg-white text-black" *ngIf="showEditButton" (click)="editVoucher()">

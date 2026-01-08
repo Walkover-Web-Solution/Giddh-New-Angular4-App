@@ -1,6 +1,6 @@
 <div appTranslate [file]="'vouchers/add-bulk-items'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="bulk-entry" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="handleGlobalEscape()">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span class="font-size-16">{{ localeData?.add_bulk_items }}</span>
         </div>
         <div mat-dialog-content class="bulk-entry-body dialog-body d-flex">

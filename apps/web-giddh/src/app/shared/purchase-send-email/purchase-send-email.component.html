@@ -1,4 +1,4 @@
-<div class="dialog-header" appTranslate (commonLocaleData)="commonLocaleData = $event">
+<div cdkFocusInitial class="dialog-header" appTranslate (commonLocaleData)="commonLocaleData = $event">
     <span>{{ commonLocaleData?.app_send_email }}</span>
     <button matIconButton aria-label="close" (click)="hideModal()">
         <i class="icon-cross"></i>

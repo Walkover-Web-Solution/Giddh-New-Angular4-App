@@ -177,7 +177,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             if (this.openDropdown) {
                 this.openDropdownPanel();
             }
-        }, 500);
+        }, 200);
     }
 
     /**
@@ -678,7 +678,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.focusInputField();
         setTimeout(() => {
             this.handleDropdownPanelOperation('open');
-        }, 10);
+        }, 200);
     }
 
     /**

@@ -1,5 +1,5 @@
 <div appTranslate [file]="'subscription'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <div class="dialog-header d-flex align-items-center justify-content-between border-bottom p-3">
+    <div cdkFocusInitial class="dialog-header d-flex align-items-center justify-content-between border-bottom p-3">
         <span>{{ localeData?.request_transfer }}</span>
     </div>
     <mat-dialog-content class="dialog-body w-100">

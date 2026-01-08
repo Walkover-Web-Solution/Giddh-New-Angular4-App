@@ -1,5 +1,5 @@
 <div appTranslate [file]="'settings/integration'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <div class="dialog-header d-flex align-items-center">
+    <div cdkFocusInitial class="dialog-header d-flex align-items-center">
         <span>{{ localeData?.payment?.connect_bank }}</span>
         <button matIconButton aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>

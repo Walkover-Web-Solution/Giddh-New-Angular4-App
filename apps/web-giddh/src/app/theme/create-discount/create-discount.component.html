@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="aside-dialog-wrapper" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="cancelDiscount()">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span class="font-size-16">{{ localeData?.tab_heading }}</span>
         </div>
         <div mat-dialog-content class="create-discount-aside dialog-body">

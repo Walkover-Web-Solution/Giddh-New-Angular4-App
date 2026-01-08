@@ -106,7 +106,7 @@
 
 <ng-template #shareDomain>
     <div class="dialog">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.share_dns_record_to_developer }}</span>
             <button matIconButton aria-label="close" mat-dialog-close (click)="shareEmailForm.reset()">
                 <i class="icon-cross"></i>
@@ -142,7 +142,7 @@
 
 <ng-template #addDomain>
     <div class="dialog">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.add_domain }}</span>
             <button matIconButton aria-label="close" mat-dialog-close (click)="portalWhilteLabelForm.reset()">
                 <i class="icon-cross"></i>

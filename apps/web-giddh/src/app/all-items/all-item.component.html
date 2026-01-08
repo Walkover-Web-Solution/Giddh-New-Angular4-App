@@ -89,7 +89,7 @@
 <!--Modal for All Items -->
 <ng-template #allItemModal>
     <div (click)="$event.stopPropagation()">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ createNewModalTitle }}</span>
             <button matIconButton aria-label="close" (click)="closeAllDialogs()">
                 <i class="icon-cross"></i>

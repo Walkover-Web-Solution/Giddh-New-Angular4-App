@@ -1,5 +1,5 @@
 <div appTranslate [file]="'invoice/ewaybill'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span class="font-size-16">{{ localeData?.create_e_way_bill }}</span>
     </div>
     <div mat-dialog-content class="dialog-body">
@@ -185,7 +185,7 @@
 
     <!-- Account Aside Menu -->
     <ng-template #accountAsideMenu>
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ commonLocaleData?.app_manage_transporter }}</span>
         </div>
         <div mat-dialog-content class="dialog-body">
