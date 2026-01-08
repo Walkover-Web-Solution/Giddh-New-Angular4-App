@@ -670,6 +670,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.vm.selectedLedger.attachedFileName = '';
                         this.toaster.showSnackBar("error", response.message);
                     }
+                    this.changeDetectorRef.detectChanges();
                 });
             });
         }
