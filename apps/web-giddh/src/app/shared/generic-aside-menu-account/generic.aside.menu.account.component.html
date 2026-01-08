@@ -5,7 +5,7 @@
         [config]="{ dialogMode: true }"
         (onShortcutPress)="closeAsidePane($event)"
     >
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ actionAccount }}</span>
 
             <div class="d-flex align-items-center column-gap-15">

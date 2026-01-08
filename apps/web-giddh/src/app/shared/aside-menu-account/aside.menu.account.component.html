@@ -1,5 +1,5 @@
 <section class="aside-dialog-wrapper">
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ isUpdateAccount ? commonLocaleData?.app_account_details : commonLocaleData?.app_create_account }}</span>
         <button matIconButton aria-label="close" (click)="closeAsidePane($event)">
             <i class="icon-cross"></i>

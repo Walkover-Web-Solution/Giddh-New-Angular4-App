@@ -1,5 +1,5 @@
 <div appTranslate [file]="'invoice/send-email'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.page_heading }}</span>
         <button matIconButton aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>

@@ -1,5 +1,5 @@
 <div appTranslate [file]="'purchase-order'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.po_preview_heading }}</span>
         <button matIconButton aria-label="close" (click)="hideModal()">
             <i class="icon-cross"></i>

@@ -8,7 +8,7 @@
     (onShortcutPress)="closeDialog()"
 >
     <div class="aside-dialog-wrapper">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <p class="modal-title">{{ commonLocaleData?.app_sales_person }}</p>
             <button matIconButton aria-label="close" (click)="closeDialog()">
                 <i aria-label="close icon" class="icon-cross"></i>

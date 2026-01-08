@@ -1,6 +1,6 @@
 <div appTranslate [file]="'inventory'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <div class="inventory-advance-search">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.advance_search_filter?.advance_search }}</span>
         </div>
         <mat-dialog-content class="dialog-body">

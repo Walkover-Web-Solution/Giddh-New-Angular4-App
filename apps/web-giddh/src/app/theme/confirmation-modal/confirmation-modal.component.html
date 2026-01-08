@@ -1,5 +1,5 @@
 <div class="custom-confirmation-modal">
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span [ngClass]="configuration?.headerCssClass">{{ configuration?.headerText }}</span>
         <button matIconButton aria-label="close" (click)="handleButtonClick('Close')">
             <i class="icon-cross"></i>

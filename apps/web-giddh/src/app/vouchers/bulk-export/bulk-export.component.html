@@ -12,7 +12,7 @@
                 : 'mat-dialog-md'
         "
     >
-        <div class="dialog-header d-flex justify-content-between align-items-center">
+        <div cdkFocusInitial class="dialog-header d-flex justify-content-between align-items-center">
             <span class="font-size-16 px-0">
                 {{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ inputData?.totalItems }}
             </span>
@@ -63,10 +63,7 @@
                 </ng-container>
 
                 <!-- Export voucher -->
-                <div
-                    class="pb-4 pt-2 clear-both export-type"
-                    *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)"
-                >
+                <div class="pb-4 pt-2 clear-both export-type" *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
                     <label class="width-150">{{ commonLocaleData?.app_voucher }}:</label>
                     <mat-slide-toggle
                         color="primary"
@@ -80,20 +77,12 @@
                 <ng-container *ngIf="exportForm.get('voucherExport').value">
                     <div class="d-flex align-items-center mb-3">
                         <label class="width-150">{{ commonLocaleData?.app_type }}:</label>
-                        <mat-radio-group
-                            name="mergePdf"
-                            formControlName="exportType"
-                            (change)="onExportTypeChange($event)"
-                        >
+                        <mat-radio-group name="mergePdf" formControlName="exportType" (change)="onExportTypeChange($event)">
                             <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
                                 <mat-radio-button
                                     color="primary"
                                     [value]="exportTypeEnum.multiplePdf"
-                                    (change)="
-                                        exportForm
-                                            ?.get('mergePdf')
-                                            ?.setValue($event.value === exportTypeEnum.multiplePdf)
-                                    "
+                                    (change)="exportForm?.get('mergePdf')?.setValue($event.value === exportTypeEnum.multiplePdf)"
                                     aria-label="Export as multiple PDFs in single zip file"
                                 >
                                     {{ localeData?.multiple_pdf }}
@@ -101,19 +90,13 @@
                                 <mat-radio-button
                                     color="primary"
                                     [value]="exportTypeEnum.singlePdf"
-                                    (change)="
-                                        exportForm?.get('mergePdf')?.setValue($event.value === exportTypeEnum.singlePdf)
-                                    "
+                                    (change)="exportForm?.get('mergePdf')?.setValue($event.value === exportTypeEnum.singlePdf)"
                                     aria-label="Export as single PDF"
                                 >
                                     {{ localeData?.single_pdf }}
                                 </mat-radio-button>
                             </ng-container>
-                            <mat-radio-button
-                                color="primary"
-                                [value]="exportTypeEnum.excel"
-                                aria-label="Export as Excel"
-                            >
+                            <mat-radio-button color="primary" [value]="exportTypeEnum.excel" aria-label="Export as Excel">
                                 {{ commonLocaleData?.app_excel }}
                             </mat-radio-button>
                             <mat-radio-button color="primary" [value]="exportTypeEnum.csv" aria-label="Export as CSV">
