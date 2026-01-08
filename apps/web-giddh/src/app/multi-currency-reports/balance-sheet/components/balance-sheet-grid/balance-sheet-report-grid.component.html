@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'trial-profit-balance/balance-sheet/grid'"
     (localeData)="localeData = $event"
@@ -13,10 +13,7 @@
                             <tr>
                                 <th class="p-0 font-size-16" width="33.33%">
                                     <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
-                                        <div
-                                            [ngClass]="{ 'd-none': showClearSearch }"
-                                            class="d-flex align-items-center"
-                                        >
+                                        <div [ngClass]="{ 'd-none': showClearSearch }" class="d-flex align-items-center">
                                             <span class="ml-3 mr-1">{{ localeData?.particular }}</span>
                                             <i class="icon-search" (click)="toggleSearch()"></i>
                                         </div>
@@ -36,8 +33,8 @@
                                 <th class="text-right font-size-16" width="33.33%">
                                     {{ commonLocaleData?.app_as_of }}
                                     <span *ngIf="lastSyncDate && dayjs(lastSyncDate)?.isValid()">
-                                        {{ lastSyncDate }}</span
-                                    >
+                                        {{ lastSyncDate }}
+                                    </span>
                                 </th>
                             </tr>
                         </thead>
@@ -57,23 +54,15 @@
                                 [expandAll]="expandAll"
                             >
                                 <ng-container
-                                    *ngTemplateOutlet="
-                                        groupDetails;
-                                        context: { $implicit: grp.childGroups, padding: padding + 20 }
-                                    "
-                                >
-                                </ng-container>
+                                    *ngTemplateOutlet="groupDetails; context: { $implicit: grp.childGroups, padding: padding + 20 }"
+                                ></ng-container>
                             </section>
                         </ng-container>
                     </ng-template>
 
                     <ng-container
-                        *ngTemplateOutlet="
-                            groupDetails;
-                            context: { $implicit: bsData?.liabilities | financialSearch : search, padding: 10 }
-                        "
-                    >
-                    </ng-container>
+                        *ngTemplateOutlet="groupDetails; context: { $implicit: bsData?.liabilities | financialSearch: search, padding: 10 }"
+                    ></ng-container>
                     <div class="top-bar row clear-both">
                         <div class="col-4 group">
                             <strong class="font-size-15">{{ localeData?.total_liabilities }}</strong>
@@ -85,8 +74,7 @@
                                         [amount]="bsData?.liabTotal"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
-                                    >
-                                    </amount-field>
+                                    ></amount-field>
                                 </span>
                             </strong>
                         </div>
@@ -97,8 +85,7 @@
                                         [amount]="bsData?.liabTotalEnd"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
-                                    >
-                                    </amount-field>
+                                    ></amount-field>
                                 </span>
                             </strong>
                         </div>
@@ -122,22 +109,14 @@
                                 [search]="search"
                             >
                                 <ng-container
-                                    *ngTemplateOutlet="
-                                        groupDetails;
-                                        context: { $implicit: grp.childGroups, padding: padding + 20 }
-                                    "
-                                >
-                                </ng-container>
+                                    *ngTemplateOutlet="groupDetails; context: { $implicit: grp.childGroups, padding: padding + 20 }"
+                                ></ng-container>
                             </section>
                         </ng-container>
                     </ng-template>
                     <ng-container
-                        *ngTemplateOutlet="
-                            groupDetails;
-                            context: { $implicit: bsData?.assets | financialSearch : search, padding: 10 }
-                        "
-                    >
-                    </ng-container>
+                        *ngTemplateOutlet="groupDetails; context: { $implicit: bsData?.assets | financialSearch: search, padding: 10 }"
+                    ></ng-container>
                 </div>
             </div>
 
@@ -148,24 +127,18 @@
                 <div class="col-4 group text-right">
                     <strong class="font-size-15">
                         <span class="d-inline-flex">
-                            <amount-field [amount]="bsData?.assetTotal" [currencySymbol]="false" [currencyCode]="false">
-                            </amount-field>
+                            <amount-field [amount]="bsData?.assetTotal" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                         </span>
                     </strong>
                 </div>
                 <div class="col-4 group text-right">
                     <strong class="font-size-15">
                         <span class="d-inline-flex">
-                            <amount-field
-                                [amount]="bsData?.assetTotalEnd"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field>
+                            <amount-field [amount]="bsData?.assetTotalEnd" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                         </span>
                     </strong>
                 </div>
             </div>
         </div>
     </div>
-</ng-container>
+</div>

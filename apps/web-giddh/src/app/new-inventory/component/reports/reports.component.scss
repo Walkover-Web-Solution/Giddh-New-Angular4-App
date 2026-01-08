@@ -35,7 +35,6 @@ td {
 
     .stock-value {
         padding-right: 80px;
-
     }
 }
 
@@ -82,7 +81,6 @@ td {
     .stock-mat-salect {
         min-width: 199px;
     }
-
 }
 
 @mixin column-header($label) {
@@ -98,17 +96,17 @@ td {
 }
 
 .opening-column {
-    @include column-header("Opening Stock");
+    @include column-header('Opening Stock');
 }
 
 .inward-column {
-    @include column-header("Inwards");
+    @include column-header('Inwards');
 }
 
 .outward-column {
-    @include column-header("Outward");
+    @include column-header('Outward');
 }
 
 .closing-column {
-    @include column-header("Closing Stock");
+    @include column-header('Closing Stock');
 }

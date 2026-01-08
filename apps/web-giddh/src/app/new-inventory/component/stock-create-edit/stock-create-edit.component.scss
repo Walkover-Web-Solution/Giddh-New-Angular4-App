@@ -28,9 +28,7 @@
                 align-items: center;
                 overflow: hidden;
                 font-family: var(--font-family) !important;
-
             }
-
         }
 
         .sales-information {
@@ -41,13 +39,11 @@
                 width: 1px;
                 background-color: var(--color-silver);
                 height: 100%;
-                content: "";
+                content: '';
                 left: -20px;
                 top: 0;
             }
-
         }
-
     }
 
     .stock-made-with {
@@ -57,7 +53,7 @@
 
         &:after {
             position: absolute;
-            content: "";
+            content: '';
             background-color: var(--color-medium-gray);
             right: 0;
             height: 1px;
@@ -207,7 +203,6 @@
                         min-width: 95px;
                     }
                 }
-
             }
 
             .other-group {
@@ -538,10 +533,8 @@ table.stock-table {
 }
 
 @media (max-width: 1199px) {
-
     .create-new-inventory-page {
         .sales-purchase-details {
-
             .pl-5 {
                 padding-left: 15px !important;
             }
@@ -592,7 +585,6 @@ table.stock-table {
 }
 
 @media (max-width: 991px) {
-
     .addon-form,
     .variant-form {
         input {

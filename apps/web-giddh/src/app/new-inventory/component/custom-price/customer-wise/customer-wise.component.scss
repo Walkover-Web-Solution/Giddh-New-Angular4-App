@@ -44,7 +44,7 @@
                 }
                 .custom-tab {
                     border: 1px solid var(--color-border-medium);
-                    border-radius: var(--mat-border-radius-4);
+                    border-radius: var(--mat-button-text-container-shape, var(--mat-sys-corner-full));
                     button {
                         flex-grow: 1;
                         height: 33px;
@@ -172,7 +172,7 @@
                                             @include setWidth(150px);
                                         }
                                         &::before {
-                                            content: "";
+                                            content: '';
                                             height: 50px;
                                             width: 1px;
                                             display: inline-block;
@@ -234,7 +234,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    height: 32px;
+                    height: 37px;
                     min-width: 42px;
                     border-radius: var(--mat-border-radius-4);
                     color: var(--color-dark-gray) !important;

@@ -21,7 +21,6 @@
     height: calc(100vh - (var(--header-height) + 30px));
 
     .preview-list {
-        width: 35%;
         .list-viewport {
             height: calc(100vh - 185px);
         }
@@ -30,13 +29,11 @@
             &:hover,
             &.active {
                 background-color: var(--color-light-gray);
-
             }
         }
     }
 
     .preview-content {
-        width: 65%;
         overflow-y: auto;
 
         .preview-header {
@@ -83,7 +80,7 @@
                 li {
                     &:not(:last-child) {
                         &::after {
-                            content: "";
+                            content: '';
                             position: absolute;
                             top: 20px;
                             left: -10px;
@@ -127,6 +124,10 @@
             }
         }
     }
+}
+
+.max-width-list {
+    max-width: 80%;
 }
 
 ::ng-deep .default-theme {

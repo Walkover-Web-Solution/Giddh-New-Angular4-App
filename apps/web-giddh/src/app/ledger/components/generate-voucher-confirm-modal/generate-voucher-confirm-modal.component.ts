@@ -5,7 +5,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     selector: 'generate-voucher-confirmation-modal',
     templateUrl: './generate-voucher-confirm-modal.component.html',
     styleUrls: ['./generate-voucher-confirm-modal.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class GenerateVoucherConfirmationModalComponent {
     constructor(

@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'trial-profit-balance/trial-balance'"
     (localeData)="localeData = $event"
@@ -33,12 +33,9 @@
             [data$]="data$ | async"
         ></trial-balance-grid>
     </div>
-    <div
-        *ngIf="!(showLoader | async) && !(data$ | async)"
-        class="d-flex align-items-center justify-content-center tb-pl-bs-data"
-    >
+    <div *ngIf="!(showLoader | async) && !(data$ | async)" class="d-flex align-items-center justify-content-center tb-pl-bs-data">
         <div class="d-flex">
             <p>{{ localeData?.no_data_found }}</p>
         </div>
     </div>
-</ng-container>
+</div>

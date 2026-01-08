@@ -1,9 +1,10 @@
-<ng-container
+<div
     appTranslate
     (commonLocaleData)="commonLocaleData = $event"
     [keyboardShortcut]="'esc'"
     [config]="{ dialogMode: true }"
     (onShortcutPress)="closeDialog()"
+    class="aside-dialog-wrapper"
 >
     <div class="dialog-header">
         <p class="modal-title">
@@ -14,7 +15,7 @@
             }}
             details
         </p>
-        <button mat-icon-button aria-label="Close dialog" (click)="closeDialog()">
+        <button matIconButton aria-label="Close dialog" (click)="closeDialog()">
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -39,7 +40,7 @@
                     "
                 />
                 <button
-                    mat-icon-button
+                    matIconButton
                     matSuffix
                     tabindex="-1"
                     aria-label="Search or Clear"
@@ -67,11 +68,7 @@
                 (salesBifurcationDetailsList$ | async)?.clientDetails?.length > 0
             "
         >
-            <table
-                class="giddh-table table border"
-                mat-table
-                [dataSource]="(salesBifurcationDetailsList$ | async)?.clientDetails"
-            >
+            <table class="giddh-table table border" mat-table [dataSource]="(salesBifurcationDetailsList$ | async)?.clientDetails">
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef width="30%">
@@ -104,8 +101,7 @@
                             (editAccount)="updateAccount()"
                             [fromDate]="goToLedgerDateRangeFrom"
                             [toDate]="goToLedgerDateRangeTo"
-                        >
-                        </app-action-menu>
+                        ></app-action-menu>
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="clientDisplayedColumns; sticky: true"></tr>
@@ -155,7 +151,7 @@
                         <span class="pl-3">{{ commonLocaleData?.app_date }}</span>
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <span class="pl-3"> {{ element.date }}</span>
+                        <span class="pl-3">{{ element.date }}</span>
                     </td>
                 </ng-container>
                 <!-- Invoice Number Column -->
@@ -164,9 +160,7 @@
                         {{ commonLocaleData?.app_invoice_number }}
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <a href="javascript:void(0);" (click)="openInvoice(attachments, element)">{{
-                            element.invoiceNumber
-                        }}</a>
+                        <a href="javascript:void(0);" (click)="openInvoice(attachments, element)">{{ element.invoiceNumber }}</a>
                     </td>
                 </ng-container>
                 <!-- Customer Name Column -->
@@ -180,8 +174,7 @@
                         {{ commonLocaleData?.app_amount }}
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <amount-field [amount]="element.amount" [currencySymbol]="false" [currencyCode]="false">
-                        </amount-field>
+                        <amount-field [amount]="element.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="invoiceDisplayedColumns; sticky: true"></tr>
@@ -209,16 +202,14 @@
         </section>
         <div
             class="mt-4 no-data-found text-center"
-            *ngIf="
-                !(salesBifurcationDetailsListInProgress$ | async) &&
-                (salesBifurcationDetailsList$ | async)?.totalItems <= 0
-            "
+            *ngIf="!(salesBifurcationDetailsListInProgress$ | async) && (salesBifurcationDetailsList$ | async)?.totalItems <= 0"
         >
-            <img src="{{ imgPath }}search-data-not-found.svg" alt="result not found" /><br />
+            <img src="{{ imgPath }}search-data-not-found.svg" alt="result not found" />
+            <br />
             {{ commonLocaleData?.app_no_result_found }}
         </div>
     </mat-dialog-content>
-</ng-container>
+</div>
 <ng-template #attachments>
     <attachments [selectedItem]="selectedItem" (isDeletedAccount)="isDeletedAccount($event)"></attachments>
 </ng-template>

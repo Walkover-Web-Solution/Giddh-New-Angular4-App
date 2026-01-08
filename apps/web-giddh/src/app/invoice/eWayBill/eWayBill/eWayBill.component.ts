@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, Renderer2 } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
@@ -35,7 +35,8 @@ import { EwayBillComponentStore } from '../utility/eWayBill.store';
     selector: 'app-ewaybill-component',
     templateUrl: './eWayBill.component.html',
     styleUrls: [`./eWayBill.component.scss`],
-    providers: [VoucherComponentStore, EwayBillComponentStore]
+    providers: [VoucherComponentStore, EwayBillComponentStore],
+    standalone:false
 })
 
 export class EWayBillComponent implements OnInit, OnDestroy {
@@ -171,7 +172,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private voucherComponentStore: VoucherComponentStore,
-        private componentStore: EwayBillComponentStore
+        private componentStore: EwayBillComponentStore,
+        private renderer: Renderer2
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.EwayBillfilterRequest.count = PAGINATION_LIMIT;
@@ -219,7 +221,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        document.querySelector('body').classList.add('gst-sidebar-open');
+        this.renderer.addClass(document.body, 'gst-sidebar-open');
         this.loadTaxDetails();
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
@@ -334,7 +336,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
@@ -378,7 +380,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.showAdvanceSearchIcon = false;
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
@@ -439,7 +441,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public onSelectEwayDownload(eway: Result) {
-        this.selectedEway = _.cloneDeep(eway);
+        this.selectedEway = cloneDeep(eway);
         this.invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(response.body.data, 'application/pdf', 512);
@@ -451,7 +453,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public onSelectEwayDetailedDownload(ewayItem: Result) {
-        this.selectedEway = _.cloneDeep(ewayItem);
+        this.selectedEway = cloneDeep(ewayItem);
         this.invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(response.body.data, 'application/pdf', 512);
@@ -463,7 +465,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open add vehicle/cancel dialog 
+     * Open add vehicle/cancel dialog
      *
      * @memberof EWayBillComponent
      */
@@ -526,13 +528,17 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.showSearchCustomer = false;
 
             setTimeout(() => {
-                this.invoiceSearch?.nativeElement.focus();
+                if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                    this.invoiceSearch.nativeElement.focus();
+                }
             }, 200);
         } else if (fieldName === 'customerUniqueName') {
             this.showSearchCustomer = true;
             this.showSearchInvoiceNo = false;
             setTimeout(() => {
-                this.customerSearch?.nativeElement.focus();
+                if (this.customerSearch && this.customerSearch.nativeElement) {
+                    this.customerSearch.nativeElement.focus();
+                }
             }, 200);
         } else {
             this.showSearchInvoiceNo = false;
@@ -653,7 +659,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.renderer.removeClass(document.body, 'gst-sidebar-open');
         this.asideGstSidebarMenuState = false;
     }
 
@@ -707,7 +713,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         } else {
             this.isDropUp = true;
         }
-        
+
         this._cd.detectChanges();
     }
 

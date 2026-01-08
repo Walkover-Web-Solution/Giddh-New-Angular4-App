@@ -9,7 +9,8 @@ import { GeneralService } from '../services/general.service';
 import { AppState } from '../store';
 
 @Component({
-    selector: "token-verify",
+    selector: 'token-verify',
+standalone: false,
     templateUrl: "./token-verify.component.html"
 })
 export class TokenVerifyComponent implements OnInit, OnDestroy {

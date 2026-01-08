@@ -9,8 +9,6 @@ import { AsideCustomStockComponent } from '../inventory/components/aside-custom-
 import { AsideInventoryComponent } from '../inventory/components/aside-inventory.components/aside-inventory.components';
 import { AsidePaneComponent } from '../inventory/components/aside-pane/aside-pane.components';
 import { AsideTransferPaneComponent } from '../inventory/components/aside-transfer-pane/aside-transfer-pane.component';
-import { JobworkComponent } from '../inventory/jobwork/jobwork.component';
-import { JobworkWelcomeComponent } from '../inventory/jobwork/welcome-jobwork/welcome-jobwork.component';
 import { ExceptionLogService } from '../services/exception-log.service';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
@@ -39,8 +37,6 @@ import { InventoryWelcomeComponent } from './components/welcome-inventory/welcom
 import { DateFormatterPipe } from './dateFormatter.pipe';
 import { InventoryComponent } from './inventory.component';
 import { InventoryRoutingModule } from './inventory.routing.module';
-import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
-import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -72,8 +68,6 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         InventoryUpdateGroupComponent,
         InventoryGroupStockReportComponent,
         InventoryWelcomeComponent,
-        JobworkComponent,
-        JobworkWelcomeComponent,
         AsidePaneComponent,
         AsideTransferPaneComponent,
         AsideBranchTransferPaneComponent,
@@ -81,8 +75,6 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         TransferNoteComponent,
         InwardNoteComponent,
         OutwardNoteComponent,
-        JobworkSidebarComponent,
-        ManufacturingComponent,
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent,
         DateFormatterPipe
@@ -101,8 +93,6 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         InventoryUpdateGroupComponent,
         InventoryGroupStockReportComponent,
         InventoryWelcomeComponent,
-        JobworkComponent,
-        JobworkWelcomeComponent,
         AsidePaneComponent,
         AsideTransferPaneComponent,
         AsideBranchTransferPaneComponent,
@@ -110,8 +100,6 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         TransferNoteComponent,
         InwardNoteComponent,
         OutwardNoteComponent,
-        JobworkSidebarComponent,
-        ManufacturingComponent,
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent,
         InventoryAddStockModule

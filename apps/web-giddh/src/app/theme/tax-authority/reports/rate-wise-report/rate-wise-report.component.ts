@@ -14,7 +14,8 @@ import { PageEvent } from '@angular/material/paginator';
     selector: 'rate-wise-report',
     templateUrl: './rate-wise-report.component.html',
     styleUrls: ['./rate-wise-report.component.scss'],
-    providers: [TaxAuthorityComponentStore]
+    providers: [TaxAuthorityComponentStore],
+    standalone: false
 })
 export class RateWiseReportComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

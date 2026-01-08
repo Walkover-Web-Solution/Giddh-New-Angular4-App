@@ -34,16 +34,6 @@
                         max-width: 86%;
                     }
                 }
-
-                .mat-expansion-panel {
-                    box-shadow: unset !important;
-                }
-
-                .mat-expansion-panel-header {
-                    &.mat-expanded {
-                        height: unset;
-                    }
-                }
             }
         }
 
@@ -91,6 +81,20 @@
                     padding-top: 4px;
                 }
             }
+        }
+    }
+}
+:host ::ng-deep .accordion-header {
+    > .icon-arrow-down {
+        top: 18px;
+        right: 10px;
+        transition: transform 300ms ease-in-out;
+        transform: rotate(0deg);
+    }
+
+    &.opened {
+        > .icon-arrow-down {
+            transform: rotate(180deg);
         }
     }
 }

@@ -46,7 +46,7 @@
                             #grpSrch
                             id="grpSrch"
                             [(ngModel)]="searchString"
-                            (ngModelChange)="searchString === '' ? resetGroupSearchString(): null"
+                            (ngModelChange)="searchString === '' ? resetGroupSearchString() : null"
                             (keyup)="searchGroups(grpSrch?.value)"
                             class="form-control bg-white text-black"
                             [placeholder]="localeData?.search_accounts"
@@ -59,8 +59,9 @@
                             class="position-absolute btn-link"
                             (click)="resetGroupSearchString()"
                             *ngIf="grpSrch?.value"
-                            >{{ commonLocaleData?.app_clear }}</a
                         >
+                            {{ commonLocaleData?.app_clear }}
+                        </a>
                     </div>
                 </div>
                 <!-- form-inline -->
@@ -78,12 +79,13 @@
             <div
                 class="grp-col p-0"
                 [ngStyle]="{
-                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px'
+                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px',
                 }"
             >
                 <div class="search-loading" *ngIf="searchLoad | async">
                     <div class="vertical-center">
-                        <span class="spinner small"></span> {{ commonLocaleData?.app_loading }}
+                        <span class="spinner small"></span>
+                        {{ commonLocaleData?.app_loading }}
                     </div>
                 </div>
                 <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !topSharedGroups?.length">
@@ -92,10 +94,7 @@
                     </div>
                 </div>
                 <div>
-                    <div
-                        id="horizontal-master-scroll"
-                        class="scroll-container"
-                    >
+                    <div id="horizontal-master-scroll" class="scroll-container">
                         <div
                             *ngIf="!(searchLoad | async)"
                             [ngStyle]="{ 'width': master?.masterColumnsData?.length * 255 + 'px' }"
@@ -106,10 +105,7 @@
                                 [topSharedGroups]="topSharedGroups"
                                 [searchedMasterData]="searchedMasterData"
                                 [ngStyle]="{
-                                    'height':
-                                        (myModelRect ? myModelRect.height : 0) -
-                                        (headerRect ? headerRect.height : 0) +
-                                        'px'
+                                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px',
                                 }"
                                 [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
                                 [isSearchingGroups]="!(grpSrch?.value === '')"
@@ -119,8 +115,7 @@
                                 (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
                                 (activeGroupUniqueName)="activeGroupUniqueName = $event"
                                 (scrollToRight)="scrollToRight()"
-                            >
-                            </master>
+                            ></master>
                         </div>
                     </div>
                 </div>
@@ -139,8 +134,7 @@
                     (accountUpdated)="handleUpdateAccount()"
                     #form
                     *ngIf="localeData?.page_heading"
-                >
-                </account-operations>
+                ></account-operations>
             </div>
         </div>
     </div>

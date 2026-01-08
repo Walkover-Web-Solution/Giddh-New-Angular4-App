@@ -8,7 +8,9 @@ import { CustomActions } from '../store/custom-actions';
 import { AuthenticationService } from '../services/authentication.service';
 import { ToasterService } from '../services/toaster.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SessionActions {
 
     public static GET_ALL_SESSION_REQUEST = 'GET_ALL_SESSION_REQUEST';

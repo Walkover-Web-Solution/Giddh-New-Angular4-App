@@ -8,26 +8,24 @@
                 <!-- HSN/SAC Column -->
                 <ng-container matColumnDef="hsn_sc">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_hsn_sac }}</th>
-                    <td mat-cell *matCellDef="let item">{{ item.hsn_sc || "-" }}</td>
+                    <td mat-cell *matCellDef="let item">{{ item.hsn_sc || '-' }}</td>
                 </ng-container>
                 <!-- Description Column -->
                 <ng-container matColumnDef="desc">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.filing?.description }}</th>
-                    <td mat-cell *matCellDef="let item" 
-                        [matTooltip]="item.desc || '-'" 
-                        matTooltipPosition="above">
-                        {{ item.desc || "-" }}
+                    <td mat-cell *matCellDef="let item" [matTooltip]="item.desc || '-'" matTooltipPosition="above">
+                        {{ item.desc || '-' }}
                     </td>
                 </ng-container>
                 <!-- Quantity Column -->
                 <ng-container matColumnDef="qty">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_quantity }}</th>
-                    <td mat-cell *matCellDef="let item">{{ item.qty || "-" }}</td>
+                    <td mat-cell *matCellDef="let item">{{ item.qty || '-' }}</td>
                 </ng-container>
                 <!-- Unit Column -->
                 <ng-container matColumnDef="uqc">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_unit }}</th>
-                    <td mat-cell *matCellDef="let item">{{ item.uqc || "-" }}</td>
+                    <td mat-cell *matCellDef="let item">{{ item.uqc || '-' }}</td>
                 </ng-container>
                 <!-- Taxable Amount Column -->
                 <ng-container matColumnDef="txval">
@@ -76,17 +74,17 @@
                         <amount-field [amount]="item.val" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                     </td>
                 </ng-container>
-    
+
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </div>
 
         <div *ngIf="!hsnSummary">
             <div class="filings-empty-state">
-                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
+                <img src="{{ imgPath }}gst/nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg">
-                    <span> {{ localeData?.filing?.no_hsn_summary }} </span>
+                    <span>{{ localeData?.filing?.no_hsn_summary }}</span>
                 </div>
             </div>
         </div>

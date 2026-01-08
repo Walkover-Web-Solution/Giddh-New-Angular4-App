@@ -8,13 +8,14 @@ import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permis
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { PermissionState } from 'apps/web-giddh/src/app/store/permission/permission.reducer';
 import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api-models/Permission';
-import { forEach, omit } from '../../../lodash-optimized';
 import { IOption } from '../../../app.constant';
+import { filter, find, forEach, omit } from '../../../lodash-optimized';
 
 @Component({
     selector: 'permission-model',
     templateUrl: './permission.model.component.html',
-    styleUrls: ['./permission.model.component.scss']
+    styleUrls: ['./permission.model.component.scss'],
+    standalone: false
 })
 
 export class PermissionModelComponent implements OnInit, OnDestroy {
@@ -68,16 +69,16 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 this.roleOptions = [];
                 forEach(p.roles, (role: IRoleCommonResponseAndRequest) => {
                     this.allRoles.push({ name: role?.name, uniqueName: role?.uniqueName });
-                    this.roleOptions.push({ 
-                        value: role?.uniqueName, 
-                        label: role?.name 
+                    this.roleOptions.push({
+                        value: role?.uniqueName,
+                        label: role?.name
                     });
                 });
             }
             this.newRoleObj.isSelectedAllPages = false;
             this.newRoleObj.pageList = [];
             if (p.pages && p.pages.length) {
-                p.pages.forEach((page: IPageStr) => {
+                (Array.isArray(p.pages) ? p.pages : []).forEach((page: IPageStr) => {
                     this.newRoleObj.pageList.push({ name: page, isSelected: false });
                 });
             }
@@ -129,14 +130,14 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public selectAllPages(event): void {
         if (event.checked) {
             this.selectedValues = [];
-            this.newRoleObj.pageList.forEach((item: IPage) => {
+            (Array.isArray(this.newRoleObj.pageList) ? this.newRoleObj.pageList : []).forEach((item: IPage) => {
                 item.isSelected = true;
                 this.selectedValues.push(item);
             });
             this.newRoleObj.isSelectedAllPages = true;
         } else {
             this.selectedValues = [];
-            this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = false);
+            (Array.isArray(this.newRoleObj.pageList) ? this.newRoleObj.pageList : []).forEach((item: IPage) => item.isSelected = false);
             this.newRoleObj.isSelectedAllPages = false;
         }
     }
@@ -174,7 +175,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             const role = this.allRoles.find(r => r.uniqueName === selectedRole.value);
             if (role) {
                 // Reset all roles selection state
-                this.allRoles.forEach(r => (r as any).isSelected = false);
+                (Array.isArray(this.allRoles) ? this.allRoles : []).forEach(r => (r as any).isSelected = false);
                 // Set selected role
                 (role as any).isSelected = true;
                 this.enableDisableSelectAll();

@@ -15,7 +15,8 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
 @Component({
     selector: '[account-detail-modal-component]',
     templateUrl: './account-detail-modal.component.html',
-    styleUrls: ['./account-detail-modal.component.scss']
+    styleUrls: ['./account-detail-modal.component.scss'],
+    standalone: false
 })
 
 export class AccountDetailModalComponent implements OnChanges, OnDestroy {
@@ -149,13 +150,57 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         }
 
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            if (this.generalService.voucherApiVersion === 2) {
-                url = location.origin + location.pathname + `#./pages/${part}`;
-            } else {
-                url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        if (this.generalService.voucherApiVersion === 2) {
+                            url = location.origin + location.pathname + `#./pages/${part}`;
+                        } else {
+                            url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
+                        }
+                        (window as any).electronAPI.send('open-url', url);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            if (this.generalService.voucherApiVersion === 2) {
+                                url = location.origin + location.pathname + `#./pages/${part}`;
+                            } else {
+                                url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
+                            }
+                            electron.ipcRenderer.send('open-url', url);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+
+                    }
+                }
+
+                // Fallback to regular navigation if IPC not available
+                if (!electronIpcAvailable) {
+
+                    if (part?.includes('ledger')) {
+                        const separator = url.includes('?') ? '&' : '?';
+                        url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
+                    }
+                    // Use Angular router instead of window.open for better integration
+                    this.router.navigateByUrl(part);
+                }
+            } catch (error) {
+
+                // Fallback to Angular router
+                this.router.navigateByUrl(part);
             }
-            ipcRenderer.send('open-url', url);
         } else {
             if (part?.includes('ledger')) {
                 const separator = url.includes('?') ? '&' : '?';

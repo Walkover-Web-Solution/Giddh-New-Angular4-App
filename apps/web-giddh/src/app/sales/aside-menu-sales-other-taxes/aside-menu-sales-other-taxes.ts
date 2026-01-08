@@ -8,7 +8,8 @@ import { IOption } from '../../app.constant';
     selector: 'app-aside-menu-sales-other-taxes',
     templateUrl: './aside-menu-sales-other-taxes.html',
     styleUrls: [`./aside-menu-sales-other-taxes.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {

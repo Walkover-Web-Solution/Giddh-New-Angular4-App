@@ -17,9 +17,7 @@
                     formControlName="name"
                     [disabled]="groupDetailForm.get('name')?.disabled"
                     [autoFocus]="true"
-                >
-                </input-field>
-
+                ></input-field>
             </div>
             <div class="col-xs-12 col-sm-6">
                 <input-field
@@ -29,16 +27,13 @@
                     [name]="'uniqueName'"
                     formControlName="uniqueName"
                     [disabled]="groupDetailForm.get('uniqueName')?.disabled"
-                >
-                </input-field>
+                ></input-field>
             </div>
         </div>
 
         <div class="row pb-4">
             <div class="col-sm-6 closing-balance-width" *ngIf="!(activeGroup$ | async)?.fixed">
-                <div
-                    [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
-                >
+                <div [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }">
                     <input-field
                         [type]="'number'"
                         [label]="localeData?.balance_for_trigger"
@@ -50,16 +45,14 @@
                         [ngClass]="{ 'w100 remove-right-border-radius': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                         [placeholder]="'0.00'"
                         [allowDecimalDigitsOnly]="true"
-                    >
-                    </input-field>
+                    ></input-field>
                     <div class="d-flex">
                         <div
                             class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                             (click)="closingBalanceTypeChanged('DEBIT')"
                             [ngClass]="{
-                                'active-toggle-btn':
-                                    groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
-                                'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
+                                'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
+                                'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0,
                             }"
                             *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
                         >
@@ -69,9 +62,8 @@
                             class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                             (click)="closingBalanceTypeChanged('CREDIT')"
                             [ngClass]="{
-                                'active-toggle-btn':
-                                    groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                                'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
+                                'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
+                                'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0,
                             }"
                             *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
                         >
@@ -96,7 +88,7 @@
 
         <div class="text-right" *ngIf="voucherApiVersion === 2">
             <button
-                mat-stroked-button
+                matButton="outlined"
                 *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
                 (click)="openDeleteGroupDialog()"
                 aria-label="delete"
@@ -107,8 +99,7 @@
 
             <button
                 *ngIf="showEditGroup$ | async"
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 class="ml-2"
                 type="submit"
                 aria-label="update"
@@ -125,13 +116,7 @@
     class="horizontal-form manage-group-account-form form-group mb-2 clear-both"
     *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed"
 >
-    <form
-        name="moveGroupForm"
-        class="col-xs-12 col-sm-12"
-        novalidate
-        (submit)="moveGroup()"
-        [formGroup]="moveGroupForm"
-    >
+    <form name="moveGroupForm" class="col-xs-12 col-sm-12" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
@@ -147,15 +132,8 @@
                             [isPaginationEnabled]="true"
                             (scrollEnd)="handleGroupScrollEnd()"
                             (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-                        >
-                        </reactive-dropdown-field>
-                        <button
-                            mat-raised-button
-                            color="primary"
-                            type="submit"
-                            [disabled]="moveGroupForm.invalid"
-                            aria-label="move"
-                        >
+                        ></reactive-dropdown-field>
+                        <button matButton="filled" type="submit" [disabled]="moveGroupForm.invalid" aria-label="move">
                             {{ localeData?.move }}
                         </button>
                     </div>
@@ -194,8 +172,7 @@
                         <button
                             [disabled]="isTaxesSaveDisable$ | async"
                             type="submit"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             aria-label="save"
                             [matTooltip]="commonLocaleData?.app_save"
                             matTooltipPosition="above"
@@ -231,9 +208,10 @@
                                             originY: 'center',
                                             overlayX: 'start',
                                             overlayY: 'center',
-                                            offsetX: 8
-                                        }
-                                    ]">
+                                            offsetX: 8,
+                                        },
+                                    ]"
+                                >
                                     <div class="tax-tooltip font-size-14 custom-cdk-overlay-wrapper">
                                         <div>
                                             <p>{{ localeData?.tax_inherited }}:</p>
@@ -256,7 +234,10 @@
 <div class="horizontal-form" *ngIf="isDebtorCreditorGroups">
     <div class="mb-2 select-box container-fluid mt-4">
         <div class="form-group">
-            <label>{{ localeData?.default_discounts }} <span class="text-primary"></span></label>
+            <label>
+                {{ localeData?.default_discounts }}
+                <span class="text-primary"></span>
+            </label>
             <div class="d-flex justify-content-between align-items-center pt-2">
                 <select-multiple-fields
                     [label]="localeData?.select_discounts"
@@ -270,8 +251,7 @@
                     class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom mat-form-field-clean"
                 ></select-multiple-fields>
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     [disabled]="isDiscountSaveDisable$ | async"
                     (click)="applyDiscounts()"
                     aria-label="apply"
@@ -309,9 +289,10 @@
                                 originY: 'center',
                                 overlayX: 'start',
                                 overlayY: 'center',
-                                offsetX: 8
-                            }
-                        ]">
+                                offsetX: 8,
+                            },
+                        ]"
+                    >
                         <div class="tax-tooltip bg-gray font-size-14 custom-cdk-overlay-wrapper">
                             <div>
                                 <p>{{ localeData?.discounts_inherited_from }}:</p>
@@ -332,6 +313,5 @@
         [body]="localeData?.delete_group_content"
         (cancelCallBack)="closeDeleteGroupDialog()"
         (successCallBack)="deleteGroup()"
-    >
-    </confirm-modal>
+    ></confirm-modal>
 </ng-template>

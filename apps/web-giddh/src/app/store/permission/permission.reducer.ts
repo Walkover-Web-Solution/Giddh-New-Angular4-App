@@ -5,7 +5,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { cloneDeep, sortBy } from '../../lodash-optimized';
+import { cloneDeep, filter, findIndex, forEach, sortBy } from '../../lodash-optimized';
 
 export interface PermissionState {
     roles: IRoleCommonResponseAndRequest[];
@@ -44,7 +44,7 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
                 newState.roles = sortBy(newState.roles, [(o) => o.name]);
                 newState.roles = sortBy(newState.roles, [(o) => !o.isFixed]);
                 let sortedRoles = cloneDeep(newState);
-                sortedRoles.roles.forEach((role) => {
+                (Array.isArray(sortedRoles.roles) ? sortedRoles.roles : []).forEach((role) => {
                     role.scopes = sortBy(role.scopes, [(o) => o.name]);
                 });
 

@@ -1,19 +1,16 @@
-<ng-container
-    appTranslate
-    [file]="'downloads/exports'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'downloads/exports'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <div class="download-table-container overflow-visible p-3">
         <div class="d-flex align-items-center justify-content-between mb-3">
             <div class="d-flex align-items-center">
                 <div class="custom-datepicker-wrapper">
-                    <div class="custom-datepicker" 
-                         [matMenuTriggerFor]="universalDatepicker" 
-                         #universalDatepickerTrigger="matMenuTrigger"
-                         role="button"
-                         aria-haspopup="true"
-                         aria-controls="universalDatepicker">
+                    <div
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                    >
                         <input
                             matInput
                             type="text"
@@ -25,13 +22,13 @@
                     </div>
                 </div>
                 <div class="clear-filter" *ngIf="showClearFilter">
-                    <button mat-stroked-button class="min-width-100 ml-2" (click)="resetFilter()">
+                    <button matButton="outlined" class="min-width-100 ml-2" (click)="resetFilter()">
                         <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
-            <button 
-                mat-stroked-button
+            <button
+                matButton="outlined"
                 class="btn-stroked-icon"
                 (click)="getDownloads()"
                 [matTooltip]="commonLocaleData?.app_refresh"
@@ -46,35 +43,35 @@
         <div *ngIf="!isLoading && dataSource?.length" class="overflow-visible">
             <table mat-table [dataSource]="dataSource" class="download-table">
                 <!-- Requested Date Column -->
-                <ng-container matColumnDef="requestedDate">
+                <div matColumnDef="requestedDate">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.requested_date }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-                </ng-container>
+                </div>
 
                 <!-- User Column -->
-                <ng-container matColumnDef="user">
+                <div matColumnDef="user">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.user }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.user.name }}</td>
-                </ng-container>
+                </div>
 
                 <!-- Services Column -->
-                <ng-container matColumnDef="services">
+                <div matColumnDef="services">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_services }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.type }}</td>
-                </ng-container>
+                </div>
 
                 <!-- Filter Column -->
-                <ng-container matColumnDef="filter">
+                <div matColumnDef="filter">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_filter }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-mini-fab class="download-table-btn" aria-label="info icon" (click)="openDialog(element)">
+                        <button matMiniFab class="download-table-btn" aria-label="info icon" (click)="openDialog(element)">
                             <i class="icon-info theme-foreground-color"></i>
                         </button>
                     </td>
-                </ng-container>
+                </div>
 
                 <!-- Download Column -->
-                <ng-container matColumnDef="download">
+                <div matColumnDef="download">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_status }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="download-text" *ngIf="element?.status !== 'COMPLETED'">
@@ -84,8 +81,7 @@
                             target="_blank"
                             [href]="element.s3Path"
                             *ngIf="!isElectron && element.status === 'COMPLETED'"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="download-button-status desktop"
                         >
                             {{ commonLocaleData?.app_download }}
@@ -93,20 +89,19 @@
                         <a
                             *ngIf="isElectron && element.status === 'COMPLETED'"
                             (click)="downloadFile(element.s3Path)"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="download-button-status electron"
                         >
-                            {{ commonLocaleData?.app_download }}</a
-                        >
+                            {{ commonLocaleData?.app_download }}
+                        </a>
                     </td>
-                </ng-container>
+                </div>
 
                 <!-- Expiry Column -->
-                <ng-container matColumnDef="expiry">
+                <div matColumnDef="expiry">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.expiry }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.expireAt }}</td>
-                </ng-container>
+                </div>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
@@ -119,8 +114,8 @@
                 [pageSizeOptions]="pageSizeOptions"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
-                (page)="handlePageEvent($event)">
-            </mat-paginator>
+                (page)="handlePageEvent($event)"
+            ></mat-paginator>
             <section class="mb-custom-80"></section>
         </div>
         <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
@@ -129,7 +124,7 @@
             </div>
         </section>
     </div>
-</ng-container>
+</div>
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
     <ng-template matMenuContent>
         <app-datepicker-wrapper

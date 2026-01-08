@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tapResponse } from "@ngrx/operators";
 import { ToasterService } from "../../services/toaster.service";
 import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { EmailForwardingService } from "../services/email-forwarding.service";
@@ -34,7 +35,9 @@ const DEFAULT_STATE: BankStatementState = {
     accountSearch: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class EmailForwardingComponentStore extends ComponentStore<BankStatementState> {
 
     constructor(

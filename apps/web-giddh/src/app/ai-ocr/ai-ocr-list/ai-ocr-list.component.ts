@@ -27,6 +27,7 @@ import { VoucherTypeEnum } from "../../models/api-models/Sales";
     styleUrls: ["./ai-ocr-list.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [AiOcrStore],
+    standalone:false
 })
 export class AiOcrListComponent implements OnInit, OnDestroy {
     /** Holds table sorting reference */

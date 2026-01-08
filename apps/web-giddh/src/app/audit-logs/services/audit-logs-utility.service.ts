@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuditLogsServiceModule } from './audit-logs.service.module';
 import { IOption } from '../../app.constant';
+import { forEach, map } from '../../lodash-optimized';
 
 @Injectable({
     providedIn: AuditLogsServiceModule
@@ -17,7 +18,7 @@ export class LogsUtilityService {
     public prepareAuditLogFilters(filterData: any): any {
         const formattedFilterData = {};
         if (filterData) {
-            filterData.forEach(data => {
+            (Array.isArray(filterData) ? filterData : []).forEach(data => {
                 formattedFilterData[data.entity] = data.operations;
             });
         }

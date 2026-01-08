@@ -14,8 +14,7 @@
                 (selectedOption)="dateChanged($event, 'invoice')"
                 formControlName="invoiceDateRange"
                 [labelValue]="fieldLabelValues.invoiceDateRange"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <giddh-datepicker
                 (keydown.enter)="$event.preventDefault()"
                 [label]="commonLocaleData?.app_select_date"
@@ -25,8 +24,7 @@
                 [appearance]="'outline'"
                 class="w-50"
                 formControlName="voucherDate"
-            >
-            </giddh-datepicker>
+            ></giddh-datepicker>
         </div>
         <div class="d-flex column-gap-1 mb-3 w-100">
             <reactive-dropdown-field
@@ -38,8 +36,7 @@
                 (selectedOption)="invoiceTotalRangeChanged($event)"
                 formControlName="invoiceTotalAmount"
                 [labelValue]="fieldLabelValues.invoiceTotalAmount"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <input-field
                 [type]="'number'"
                 [allowDecimalDigitsOnly]="true"
@@ -60,8 +57,7 @@
                 (selectedOption)="dateChanged($event, 'due')"
                 formControlName="dueDateRange"
                 [labelValue]="fieldLabelValues.dueDateRange"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <giddh-datepicker
                 (keydown.enter)="$event.preventDefault()"
                 [label]="commonLocaleData?.app_select_date"
@@ -71,8 +67,7 @@
                 [appearance]="'outline'"
                 class="w-50"
                 formControlName="dueDate"
-            >
-            </giddh-datepicker>
+            ></giddh-datepicker>
         </div>
         <div class="d-flex column-gap-1 mb-3 w-100">
             <reactive-dropdown-field
@@ -84,8 +79,7 @@
                 (selectedOption)="dueTotalRangeChanged($event)"
                 formControlName="dueAmount"
                 [labelValue]="fieldLabelValues.dueAmount"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <input-field
                 [type]="'number'"
                 [allowDecimalDigitsOnly]="true"
@@ -94,8 +88,7 @@
                 class="w-50"
                 name="balanceDue"
                 formControlName="balanceDue"
-            >
-            </input-field>
+            ></input-field>
         </div>
         <div>
             <mat-form-field appearance="outline" class="initial-height w-100 mb-3">
@@ -118,32 +111,28 @@
         <div>
             <mat-form-field appearance="outline" class="initial-height w-100 mb-3" *ngIf="isEInvoiceEnabled">
                 <mat-label>{{ localeData?.e_invoice_status }}</mat-label>
-                <mat-select
-                    multiple
-                    [placeholder]="commonLocaleData?.app_select_action"
-                    formControlName="eInvoiceStatus"
-                >
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">{{
-                        localeData?.e_invoice_statuses_label?.yet_to_be_pushed
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">{{
-                        localeData?.e_invoice_statuses_label?.pushed
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">{{
-                        localeData?.e_invoice_statuses_label?.push_initiated
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">{{
-                        localeData?.e_invoice_statuses_label?.cancelled
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">{{
-                        localeData?.e_invoice_statuses_label?.mark_as_cancelled
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">{{
-                        localeData?.e_invoice_statuses_label?.failed
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.na">{{
-                        localeData?.e_invoice_statuses_label?.na
-                    }}</mat-option>
+                <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="eInvoiceStatus">
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">
+                        {{ localeData?.e_invoice_statuses_label?.yet_to_be_pushed }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">
+                        {{ localeData?.e_invoice_statuses_label?.pushed }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">
+                        {{ localeData?.e_invoice_statuses_label?.push_initiated }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">
+                        {{ localeData?.e_invoice_statuses_label?.cancelled }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">
+                        {{ localeData?.e_invoice_statuses_label?.mark_as_cancelled }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">
+                        {{ localeData?.e_invoice_statuses_label?.failed }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.na">
+                        {{ localeData?.e_invoice_statuses_label?.na }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -170,8 +159,7 @@
                 (selectedOption)="dateChanged($event, 'invoice')"
                 formControlName="dateRange"
                 [labelValue]="fieldLabelValues.dateRange"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <giddh-datepicker
                 (keydown.enter)="$event.preventDefault()"
                 [label]="commonLocaleData?.app_select_date"
@@ -181,8 +169,7 @@
                 [appearance]="'outline'"
                 class="w-50"
                 formControlName="voucherDate"
-            >
-            </giddh-datepicker>
+            ></giddh-datepicker>
         </div>
         <div class="d-flex column-gap-1 mb-3 w-100">
             <reactive-dropdown-field
@@ -194,8 +181,7 @@
                 (selectedOption)="invoiceTotalRangeChanged($event)"
                 formControlName="invoiceTotalAmount"
                 [labelValue]="fieldLabelValues.invoiceTotalAmount"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <input-field
                 [type]="'number'"
                 [allowDecimalDigitsOnly]="true"
@@ -209,32 +195,28 @@
         <div>
             <mat-form-field appearance="outline" class="initial-height w-100 mb-3" *ngIf="isEInvoiceEnabled">
                 <mat-label>{{ localeData?.e_invoice_status }}</mat-label>
-                <mat-select
-                    multiple
-                    [placeholder]="commonLocaleData?.app_select_action"
-                    formControlName="eInvoiceStatus"
-                >
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">{{
-                        localeData?.e_invoice_statuses_label?.yet_to_be_pushed
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">{{
-                        localeData?.e_invoice_statuses_label?.pushed
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">{{
-                        localeData?.e_invoice_statuses_label?.push_initiated
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">{{
-                        localeData?.e_invoice_statuses_label?.cancelled
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">{{
-                        localeData?.e_invoice_statuses_label?.mark_as_cancelled
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">{{
-                        localeData?.e_invoice_statuses_label?.failed
-                    }}</mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.na">{{
-                        localeData?.e_invoice_statuses_label?.na
-                    }}</mat-option>
+                <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="eInvoiceStatus">
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">
+                        {{ localeData?.e_invoice_statuses_label?.yet_to_be_pushed }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">
+                        {{ localeData?.e_invoice_statuses_label?.pushed }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">
+                        {{ localeData?.e_invoice_statuses_label?.push_initiated }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">
+                        {{ localeData?.e_invoice_statuses_label?.cancelled }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">
+                        {{ localeData?.e_invoice_statuses_label?.mark_as_cancelled }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">
+                        {{ localeData?.e_invoice_statuses_label?.failed }}
+                    </mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.na">
+                        {{ localeData?.e_invoice_statuses_label?.na }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -250,8 +232,7 @@
                 class="w-50"
                 [labelValue]="fieldLabelValues.adjustmentVoucherOptions"
                 formControlName="receiptType"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
         </div>
         <div class="d-flex column-gap-1 mb-3 w-100">
             <reactive-dropdown-field
@@ -263,8 +244,7 @@
                 (selectedOption)="invoiceTotalRangeChanged($event)"
                 formControlName="invoiceTotalAmount"
                 [labelValue]="fieldLabelValues.invoiceTotalAmount"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <input-field
                 [type]="'number'"
                 [allowDecimalDigitsOnly]="true"
@@ -285,8 +265,7 @@
                 (selectedOption)="dueTotalRangeChanged($event)"
                 formControlName="grandTotalOperation"
                 [labelValue]="fieldLabelValues.dueAmount"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <input-field
                 [type]="'number'"
                 [allowDecimalDigitsOnly]="true"
@@ -295,8 +274,7 @@
                 class="w-50"
                 name="balanceDue"
                 formControlName="balanceDue"
-            >
-            </input-field>
+            ></input-field>
         </div>
     </ng-container>
 
@@ -339,8 +317,7 @@
                     (selectedOption)="estimateProformaAmountRangeChanged($event)"
                     formControlName="amountFieldSelector"
                     [labelValue]="fieldLabelValues.amountFieldSelector"
-                >
-                </reactive-dropdown-field>
+                ></reactive-dropdown-field>
                 <input-field
                     [type]="'number'"
                     [allowDecimalDigitsOnly]="true"
@@ -365,8 +342,7 @@
                 (selectedOption)="dateChanged($event, 'invoice')"
                 formControlName="dateRange"
                 [labelValue]="fieldLabelValues.dateRange"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <giddh-datepicker
                 (keydown.enter)="$event.preventDefault()"
                 [label]="commonLocaleData?.app_select_date"
@@ -376,8 +352,7 @@
                 [appearance]="'outline'"
                 class="w-50"
                 formControlName="voucherDate"
-            >
-            </giddh-datepicker>
+            ></giddh-datepicker>
         </div>
         <div class="d-flex column-gap-1 mb-3 w-100">
             <reactive-dropdown-field
@@ -389,8 +364,7 @@
                 (selectedOption)="invoiceTotalRangeChanged($event)"
                 formControlName="invoiceTotalAmount"
                 [labelValue]="fieldLabelValues.invoiceTotalAmount"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <input-field
                 [type]="'number'"
                 [allowDecimalDigitsOnly]="true"
@@ -411,8 +385,7 @@
                 (selectedOption)="dateChanged($event, 'due')"
                 formControlName="dueDateRange"
                 [labelValue]="fieldLabelValues.dueDateRange"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <giddh-datepicker
                 (keydown.enter)="$event.preventDefault()"
                 [label]="commonLocaleData?.app_select_date"
@@ -422,8 +395,7 @@
                 [appearance]="'outline'"
                 class="w-50"
                 formControlName="dueDate"
-            >
-            </giddh-datepicker>
+            ></giddh-datepicker>
         </div>
     </ng-container>
 
@@ -480,8 +452,7 @@
                 (selectedOption)="dueTotalRangeChanged($event)"
                 formControlName="grandTotalOperation"
                 [labelValue]="fieldLabelValues.dueAmount"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <input-field
                 [type]="'number'"
                 [allowDecimalDigitsOnly]="true"
@@ -490,8 +461,7 @@
                 class="w-50"
                 name="grandTotal"
                 formControlName="grandTotal"
-            >
-            </input-field>
+            ></input-field>
         </div>
     </ng-container>
 
@@ -499,12 +469,7 @@
     <div class="mt-3" *ngIf="(salesPersonList$ | async)?.length">
         <mat-form-field appearance="outline" class="initial-height w-100">
             <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
-            <mat-select
-                panelClass="py-0"
-                name="salesPerson"
-                [multiple]="true"
-                [formControl]="searchForm?.controls?.salesPersonUniqueNames"
-            >
+            <mat-select panelClass="py-0" name="salesPerson" [multiple]="true" [formControl]="searchForm?.controls?.salesPersonUniqueNames">
                 <mat-option class="mt-0">
                     <ngx-mat-select-search
                         [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
@@ -522,7 +487,7 @@
     </div>
 
     <div class="d-flex justify-content-end column-gap-1 mt-3">
-        <button mat-raised-button color="primary" (click)="search()">{{ commonLocaleData?.app_search }}</button>
-        <button cdkFocusInitial mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+        <button matButton="filled" (click)="search()">{{ commonLocaleData?.app_search }}</button>
+        <button cdkFocusInitial matButton="outlined" (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
     </div>
 </div>

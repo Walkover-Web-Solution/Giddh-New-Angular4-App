@@ -24,7 +24,8 @@ export interface CompanyRequest {
     templateUrl: './company-list-dialog.component.html',
     styleUrls: ['./company-list-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [CompanyListDialogComponentStore, SubscriptionComponentStore]
+    providers: [CompanyListDialogComponentStore, SubscriptionComponentStore],
+    standalone: false
 })
 export class CompanyListDialogComponent implements OnInit {
     /** Instance of company list */
@@ -248,13 +249,13 @@ export class CompanyListDialogComponent implements OnInit {
         let text = this.localeData?.confirm_archive_message;
         text = text?.replace("[TYPE]", request.status.archiveStatus === 'UNARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '540px',
-            data: {
+                    width: '540px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: text,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: text,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

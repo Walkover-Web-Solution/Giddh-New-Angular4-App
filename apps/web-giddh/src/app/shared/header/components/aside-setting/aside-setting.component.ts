@@ -9,12 +9,14 @@ import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state
 import { Observable, ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'aside-setting',
     templateUrl: './aside-setting.component.html',
     styleUrls: [`./aside-setting.component.scss`],
+    standalone: false
 })
 
 export class AsideSettingComponent implements OnInit, OnDestroy {
@@ -70,8 +72,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {

@@ -11,7 +11,7 @@
         line-height: 24px;
 
         &::before {
-            content: " ";
+            content: ' ';
             position: absolute;
             height: 63px;
             width: 2px;
@@ -23,7 +23,7 @@
     &:nth-last-child(3) {
         .condition_tag {
             &::after {
-                content: " ";
+                content: ' ';
                 position: absolute;
                 height: 2px;
                 width: 30px;

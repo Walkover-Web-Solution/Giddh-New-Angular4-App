@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'settings/warehouse'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'settings/warehouse'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <!-- create warehouse start -->
     <!-- hide branch element by *ngIf="isBranchElemnt" -->
     <hamburger-menu></hamburger-menu>
@@ -21,8 +16,8 @@
                                 </div>
                                 <div class="label-wrapper mb-3">
                                     <label>{{ localeData?.country_currency }}:</label>
-                                    <span
-                                        ><img
+                                    <span>
+                                        <img
                                             *ngIf="companyDetails?.country?.countryCode"
                                             src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
                                                 companyDetails?.country?.countryCode
@@ -31,15 +26,20 @@
                                         />
                                         {{ companyDetails?.country?.countryName }} -
                                         {{ companyDetails?.country?.currencyCode }}
-                                        {{ companyDetails?.country?.currencyName }}</span
-                                    >
+                                        {{ companyDetails?.country?.currencyName }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-2 col-sm-2">
                         <div class="warehouse-image">
-                            <img class="warehouse-image m-15" src="{{ imgPath }}" [alt]="localeData?.warehouse_image" alt="warehouse image" />
+                            <img
+                                class="warehouse-image m-15"
+                                src="{{ imgPath }}"
+                                [alt]="localeData?.warehouse_image"
+                                alt="warehouse image"
+                            />
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="warehouse-form-field">
-                        <div class="form-group mb-0"> 
+                        <div class="form-group mb-0">
                             <reactive-dropdown-field
                                 #address
                                 [options]="addresses.addressToShow"
@@ -72,20 +72,18 @@
                                 (createOption)="handleShortcutPress()"
                                 (onClear)="onSearchClear()"
                                 [labelValue]="warehouseForm?.get('address')?.value === null ? '' : null"
-                            >
-                            </reactive-dropdown-field>
+                            ></reactive-dropdown-field>
                         </div>
                     </div>
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button mat-stroked-button type="button" aria-label="clear" (click)="handleFormClear()" class="btn custom-btn">
+                        <button matButton="outlined" type="button" aria-label="clear" (click)="handleFormClear()" class="btn custom-btn">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                         <button
                             aria-label="create warehouse"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="submit"
                             [disabled]="warehouseForm?.invalid"
                             class="btn"
@@ -99,12 +97,7 @@
     </div>
     <!-- aside pane for create address -->
     <ng-template #asideAccountAsidePane>
-        <ng-container
-            appTranslate
-            [file]="'settings/profile'"
-            (localeData)="profileLocaleData = $event"
-            [requireCommonData]="false"
-        >
+        <ng-container appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event" [requireCommonData]="false">
             <create-address
                 [keyboardShortcut]="'esc'"
                 (onShortcutPress)="closeAddressAsidePane()"
@@ -121,4 +114,4 @@
             <!-- aside pane for create address end -->
         </ng-container>
     </ng-template>
-</ng-container>
+</div>

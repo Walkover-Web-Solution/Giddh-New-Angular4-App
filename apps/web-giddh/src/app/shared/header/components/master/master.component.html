@@ -25,35 +25,36 @@
                         nav-vr-item
                         *ngIf="showCreateNewButton && voucherApiVersion === 2"
                         (click)="showAddNewForm(items, i)"
-                        >{{ localeData?.create_new }}</a
                     >
+                        {{ localeData?.create_new }}
+                    </a>
 
                     <!-- Account Archive Status Filter Button -->
-                     <ng-container *ngIf="i !== 1">
-                         <button 
-                             class="h-auto p-0 btn-no-ripple"
-                             mat-icon-button
-                             [matTooltip]="commonLocaleData?.app_filter"
-                             [matTooltipPosition]="'above'"
-                             [matMenuTriggerFor]="archiveStatusMenu"
-                             [disableRipple]="true"
-                         >
+                    <ng-container *ngIf="i !== 1">
+                        <button
+                            class="h-auto p-0 btn-no-ripple"
+                            matIconButton
+                            [matTooltip]="commonLocaleData?.app_filter"
+                            [matTooltipPosition]="'above'"
+                            [matMenuTriggerFor]="archiveStatusMenu"
+                            [disableRipple]="true"
+                        >
                             <i class="icon-advance-filter font-size-15"></i>
-                         </button>
-                         <mat-menu #archiveStatusMenu="matMenu">
-                             <ng-container *ngFor="let option of archivedOptions">
-                                 <button 
-                                    aria-label="{{ option.label }}" 
-                                    mat-menu-item 
-                                    class="width-150" 
-                                    [ngClass]="{ 'active': selectedArchivedOption?.[items?.groupUniqueName] === option?.value }" 
+                        </button>
+                        <mat-menu #archiveStatusMenu="matMenu">
+                            <ng-container *ngFor="let option of archivedOptions">
+                                <button
+                                    aria-label="{{ option.label }}"
+                                    mat-menu-item
+                                    class="width-150"
+                                    [ngClass]="{ 'active': selectedArchivedOption?.[items?.groupUniqueName] === option?.value }"
                                     (click)="onArchiveStatusFilter(items?.groupUniqueName, i, option?.value)"
                                 >
                                     {{ option.label }}
-                                 </button>
-                             </ng-container>
-                         </mat-menu>
-                     </ng-container>
+                                </button>
+                            </ng-container>
+                        </mat-menu>
+                    </ng-container>
                 </div>
             </div>
             <ng-container *ngIf="items?.results?.length">
@@ -67,16 +68,17 @@
                     >
                         <div
                             *cdkVirtualFor="let item of items?.results; let j = index; trackBy: trackByFn"
-                            class="list-item master-list sidebarTooltip text-overflow-ellipsis" role="listitem"
+                            class="list-item master-list sidebarTooltip text-overflow-ellipsis"
+                            role="listitem"
                         >
                             <ng-container *ngIf="item.type === 'GROUP'">
                                 <a
                                     href="javascript:void(0);"
                                     id="subGrp_{{ item.name }}"
                                     nav-vr-item
-                                    class="list-item d-block "
+                                    class="list-item d-block"
                                     (click)="onGroupClick(item, i)"
-                                    [matTooltip]="(item.synonyms || item.name)"
+                                    [matTooltip]="item.synonyms || item.name"
                                     [matTooltipPosition]="'below'"
                                     [ngClass]="{
                                         'isActive':
@@ -85,10 +87,8 @@
                                                     (i === masterColumnsData?.length - 1 ||
                                                         (i === masterColumnsData?.length - 2 &&
                                                             masterColumnsData[masterColumnsData?.length - 1] &&
-                                                            (!masterColumnsData[masterColumnsData?.length - 1]
-                                                                .results ||
-                                                                masterColumnsData[masterColumnsData?.length - 1].results
-                                                                    ?.length === 0))) &&
+                                                            (!masterColumnsData[masterColumnsData?.length - 1].results ||
+                                                                masterColumnsData[masterColumnsData?.length - 1].results?.length === 0))) &&
                                                     j === 0)) &&
                                             !(activeAccount$ | async) &&
                                             !(
@@ -98,7 +98,7 @@
                                                     j === 0 &&
                                                     !(activeAccount$ | async)?.uniqueName)
                                             ),
-                                        'isParent': item?.isOpen
+                                        'isParent': item?.isOpen,
                                     }"
                                 >
                                     {{ item?.name }}
@@ -119,7 +119,7 @@
                                             (searchString &&
                                                 i === masterColumnsData?.length - 1 &&
                                                 j === 0 &&
-                                                !(activeAccount$ | async)?.uniqueName)
+                                                !(activeAccount$ | async)?.uniqueName),
                                     }"
                                 >
                                     {{ item?.name }} {{ commonLocaleData?.app_ac }}

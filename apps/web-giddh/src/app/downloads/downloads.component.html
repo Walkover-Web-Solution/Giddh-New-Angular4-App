@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'downloads'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'downloads'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="position-relative overflow-visible">
         <div class="clear-both petty-cash overflow-visible">
@@ -24,4 +19,4 @@
             </mat-tab-group>
         </div>
     </div>
-</ng-container>
+</div>

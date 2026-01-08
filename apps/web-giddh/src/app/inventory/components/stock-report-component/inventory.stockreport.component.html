@@ -4,7 +4,7 @@
             <!-- enable branch selection after implimentation from api-->
             <div class="d-flex">
                 <div class="mr-3 sh-select-dropdown">
-                    <div class="select-style vertical-align-middle ">
+                    <div class="select-style vertical-align-middle">
                         <reactive-dropdown-field
                             [placeholder]="'Select Branch'"
                             formControlName="selectedEntity"
@@ -20,7 +20,8 @@
         <div class="d-flex w-100 justify-content-between">
             <div class="d-flex wrap-head-report">
                 <p class="head-report" *ngIf="stockReport && stockReport.stockUnit">
-                    <span> {{ stockReport.stockName }}</span> (Stock)
+                    <span>{{ stockReport.stockName }}</span>
+                    (Stock)
                 </p>
 
                 <div class="advance-icon cursor-pointer" (click)="onOpenAdvanceSearch()" matTooltip="Advance Search">
@@ -28,7 +29,7 @@
                 </div>
             </div>
             <div class="clear-filter">
-                <button mat-stroked-button *ngIf="isFilterCorrect" (click)="resetFilter()">
+                <button matButton="outlined" *ngIf="isFilterCorrect" (click)="resetFilter()">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
             </div>
@@ -44,12 +45,8 @@
                         <i class="icon-download-circle strong"></i>
                     </button>
                     <mat-menu #downloadMenu="matMenu" class="dropdown-menu-right dropdown-menu-download">
-                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'csv')">
-                            CSV
-                        </button>
-                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'xlsx')">
-                            XLS
-                        </button>
+                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'csv')">CSV</button>
+                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'xlsx')">XLS</button>
                     </mat-menu>
                 </div>
             </div>
@@ -61,19 +58,21 @@
             <table
                 class="table basic on-mobile-view table-responsive"
                 [ngClass]="{
-                    'mb-custom-100': stockReport && stockReport.transactions && stockReport.transactions.length > 6
+                    'mb-custom-100': stockReport && stockReport.transactions && stockReport.transactions.length > 6,
                 }"
             >
                 <thead>
                     <tr>
                         <th colspan="3" width="40%">
                             <div class="d-flex">
-                                <div class="custom-datepicker"
-                                     [matMenuTriggerFor]="universalDatepicker"
-                                     #universalDatepickerTrigger="matMenuTrigger"
-                                     role="button"
-                                     aria-haspopup="true"
-                                     aria-controls="universalDatepicker">
+                                <div
+                                    class="custom-datepicker"
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
                                         matInput
                                         type="text"
@@ -141,7 +140,7 @@
                     >
                         <th width="100">
                             <div class="d-flex">
-                                <div >Date</div>
+                                <div>Date</div>
                                 <div class="icon-pointer">
                                     <!-- default -->
                                     <div
@@ -150,35 +149,26 @@
                                         (click)="sortButtonClicked('asc', 'entry_date')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'entry_date' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
                                     <div
                                         class="icon-sort-asc text-right"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'entry_date' &&
-                                            stockReportRequest.sort === 'desc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'desc'"
                                         (click)="sortButtonClicked('asc', 'entry_date')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'entry_date' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
                                         class="icon-sort-asc text-right"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'entry_date' &&
-                                            stockReportRequest.sort === 'asc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'"
                                         (click)="sortButtonClicked('desc', 'entry_date')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'entry_date' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -186,14 +176,8 @@
                         </th>
 
                         <th class="border-right border-bottom" width="14%">
-                            <div
-                                class="btn-group btn-group-voucher-type"
-                            >
-                                <button
-                                    type="button"
-                                    [matMenuTriggerFor]="voucherTypeMenu"
-                                    mat-raised-button color="primary" class="cursor-pointer c-3"
-                                >
+                            <div class="btn-group btn-group-voucher-type">
+                                <button type="button" [matMenuTriggerFor]="voucherTypeMenu" matButton="filled" class="cursor-pointer c-3">
                                     Voucher Type
                                     <i class="fa fa-ellipsis-v pull-right text-light" aria-hidden="true"></i>
                                 </button>
@@ -237,35 +221,26 @@
                                         (click)="sortButtonClicked('asc', 'inward_quantity')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'inward_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'inward_quantity' &&
-                                            stockReportRequest.sort === 'desc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'"
                                         (click)="sortButtonClicked('asc', 'inward_quantity')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'inward_quantity' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'inward_quantity' &&
-                                            stockReportRequest.sort === 'asc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'"
                                         (click)="sortButtonClicked('desc', 'inward_quantity')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'inward_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -283,35 +258,26 @@
                                         (click)="sortButtonClicked('asc', 'outward_quantity')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'outward_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'outward_quantity' &&
-                                            stockReportRequest.sort === 'desc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'"
                                         (click)="sortButtonClicked('asc', 'outward_quantity')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'outward_quantity' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'outward_quantity' &&
-                                            stockReportRequest.sort === 'asc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'"
                                         (click)="sortButtonClicked('desc', 'outward_quantity')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'outward_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -328,34 +294,24 @@
                                         *ngIf="stockReportRequest.sortBy !== 'rate'"
                                         (click)="sortButtonClicked('asc', 'rate')"
                                         [ngClass]="{
-                                            'active-text-color':
-                                                stockReportRequest.sortBy === 'rate' &&
-                                                stockReportRequest.sort === 'asc'
+                                            'active-text-color': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'"
                                         (click)="sortButtonClicked('asc', 'rate')"
                                         [ngClass]="{
-                                            'active-text-color':
-                                                stockReportRequest.sortBy === 'rate' &&
-                                                stockReportRequest.sort === 'desc'
+                                            'active-text-color': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'"
                                         (click)="sortButtonClicked('desc', 'rate')"
                                         [ngClass]="{
-                                            'active-text-color':
-                                                stockReportRequest.sortBy === 'rate' &&
-                                                stockReportRequest.sort === 'asc'
+                                            'active-text-color': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -373,35 +329,26 @@
                                         (click)="sortButtonClicked('asc', 'transaction_val')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'transaction_val' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'transaction_val' &&
-                                            stockReportRequest.sort === 'desc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'desc'"
                                         (click)="sortButtonClicked('asc', 'transaction_val')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'transaction_val' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'transaction_val' &&
-                                            stockReportRequest.sort === 'asc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'"
                                         (click)="sortButtonClicked('desc', 'transaction_val')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'transaction_val' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -419,35 +366,26 @@
                                         (click)="sortButtonClicked('asc', 'closing_quantity')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'closing_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'closing_quantity' &&
-                                            stockReportRequest.sort === 'desc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'desc'"
                                         (click)="sortButtonClicked('asc', 'closing_quantity')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'closing_quantity' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
                                         class="icon-sort-asc"
-                                        *ngIf="
-                                            stockReportRequest.sortBy === 'closing_quantity' &&
-                                            stockReportRequest.sort === 'asc'
-                                        "
+                                        *ngIf="stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'asc'"
                                         (click)="sortButtonClicked('desc', 'closing_quantity')"
                                         [ngClass]="{
                                             'active-text-color':
-                                                stockReportRequest.sortBy === 'closing_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -491,8 +429,8 @@
                             {{ txn.amount | giddhNumberFormat }}
                         </td>
                         <td class="text-right border-right" data-title="Quantity">
-                            {{ txn.closingQuantity | giddhNumberFormat
-                            }}<span class="unit-badge">{{ stockReport.stockUnit }}</span>
+                            {{ txn.closingQuantity | giddhNumberFormat }}
+                            <span class="unit-badge">{{ stockReport.stockUnit }}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -521,15 +459,12 @@
                     </tr>
                 </tfoot>
             </table>
-            <div
-                class="no-data"
-                *ngIf="(stockReport && stockReport.count < 1 && !stockReportInProcess) || stockNotFoundMessage"
-            >
+            <div class="no-data" *ngIf="(stockReport && stockReport.count < 1 && !stockReportInProcess) || stockNotFoundMessage">
                 <h2 [class.stock-not-found]="stockNotFoundMessage">
-                    {{ stockNotFoundMessage ? stockNotFoundMessage : "No entries found within given criteria." }}
+                    {{ stockNotFoundMessage ? stockNotFoundMessage : 'No entries found within given criteria.' }}
                 </h2>
                 <h2 class="p-0" [class.stock-not-found]="stockNotFoundMessage">
-                    {{ stockNotFoundMessage ? stockNotFoundMessage : "Do search with some other dates" }}
+                    {{ stockNotFoundMessage ? stockNotFoundMessage : 'Do search with some other dates' }}
                 </h2>
             </div>
         </div>
@@ -547,9 +482,7 @@
                             </div>
                             <div class="col-12">
                                 <p class="text-primary text-left">
-                                    &nbsp;{{ stockReport.profit | giddhNumberFormat }} ({{
-                                        selectedDateRangeUi | replaceHyphens
-                                    }})
+                                    &nbsp;{{ stockReport.profit | giddhNumberFormat }} ({{ selectedDateRangeUi | replaceHyphens }})
                                 </p>
                             </div>
                         </div>
@@ -562,8 +495,8 @@
                             <div class="col-2 p-0">
                                 <p class="text-primary text-left">
                                     {{
-                                        stockReport.inwardBalance.transactionCount +
-                                            stockReport.outwardBalance.transactionCount | giddhNumberFormat
+                                        stockReport.inwardBalance.transactionCount + stockReport.outwardBalance.transactionCount
+                                            | giddhNumberFormat
                                     }}
                                 </p>
                             </div>
@@ -574,10 +507,11 @@
                             </div>
                             <div class="col-2 p-0">
                                 <p class="text-left">
-                                    &nbsp;<span *ngIf="stockReport.inwardBalance.transactionCount">{{
-                                        stockReport.inwardBalance.transactionCount | giddhNumberFormat
-                                    }}</span
-                                    ><span *ngIf="!stockReport.inwardBalance.transactionCount">0</span>
+                                    &nbsp;
+                                    <span *ngIf="stockReport.inwardBalance.transactionCount">
+                                        {{ stockReport.inwardBalance.transactionCount | giddhNumberFormat }}
+                                    </span>
+                                    <span *ngIf="!stockReport.inwardBalance.transactionCount">0</span>
                                 </p>
                             </div>
                         </div>
@@ -587,10 +521,11 @@
                             </div>
                             <div class="col-2 p-0">
                                 <p class="text-left">
-                                    &nbsp;<span *ngIf="stockReport.outwardBalance.transactionCount">{{
-                                        stockReport.outwardBalance.transactionCount | giddhNumberFormat
-                                    }}</span
-                                    ><span *ngIf="!stockReport.outwardBalance.transactionCount">0</span>
+                                    &nbsp;
+                                    <span *ngIf="stockReport.outwardBalance.transactionCount">
+                                        {{ stockReport.outwardBalance.transactionCount | giddhNumberFormat }}
+                                    </span>
+                                    <span *ngIf="!stockReport.outwardBalance.transactionCount">0</span>
                                 </p>
                             </div>
                         </div>
@@ -612,8 +547,7 @@
                                 <p class="text-light">Inward</p>
                                 <p>{{ stockReport.inwardBalance.amount | giddhNumberFormat }}</p>
                                 <p>
-                                    ({{ stockReport.inwardBalance.quantity | giddhNumberFormat }}
-                                    {{ stockReport.inwardBalance.stockUnit }})
+                                    ({{ stockReport.inwardBalance.quantity | giddhNumberFormat }} {{ stockReport.inwardBalance.stockUnit }})
                                 </p>
                             </div>
                         </div>
@@ -653,7 +587,7 @@
 <ng-template #advanceSearchTemplate>
     <div class="dialog-header">
         <span>Advance Search</span>
-        <button mat-icon-button aria-label="close" (click)="advanceSearchAction('cancel')">
+        <button matIconButton aria-label="close" (click)="advanceSearchAction('cancel')">
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -705,7 +639,7 @@
             <div class="row mt-4">
                 <div class="col-sm-4">Select Category</div>
                 <div class="col-sm-4">
-                    <div class="select-style vertical-align-middle ">
+                    <div class="select-style vertical-align-middle">
                         <reactive-dropdown-field
                             [options]="CategoryOptions"
                             (onClear)="clearShSelect('filterCategory')"
@@ -716,7 +650,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="select-style vertical-align-middle " *ngIf="stockReportRequest.param !== 'qty_closing'">
+                    <div class="select-style vertical-align-middle" *ngIf="stockReportRequest.param !== 'qty_closing'">
                         <reactive-dropdown-field
                             [options]="CategoryTypeOptions"
                             (onClear)="clearShSelect('filterCategoryType')"
@@ -725,22 +659,21 @@
                             (selectedOption)="onDDElementSelect($event, 'filterCategoryType')"
                         ></reactive-dropdown-field>
                     </div>
-                    <input
-                        *ngIf="stockReportRequest.param === 'qty_closing'"
-                        readonly
-                        type="text"
-                        class="form-control"
-                        value="Quantity"
-                    />
+                    <input *ngIf="stockReportRequest.param === 'qty_closing'" readonly type="text" class="form-control" value="Quantity" />
                 </div>
             </div>
 
-<!-- branch transfer modal -->
-<ng-template #template>
-    <div class="recept-modal">
-        <div class="dialog-body">
-            <new-branch-transfer (hideModal)="hideModal($event)" [branchTransferMode]="branchTransferMode">
-            </new-branch-transfer>
-        </div>
-    </div>
+            <!-- branch transfer modal -->
+            <ng-template #template>
+                <div class="recept-modal">
+                    <div class="dialog-body">
+                        <new-branch-transfer
+                            (hideModal)="hideModal($event)"
+                            [branchTransferMode]="branchTransferMode"
+                        ></new-branch-transfer>
+                    </div>
+                </div>
+            </ng-template>
+        </form>
+    </mat-dialog-content>
 </ng-template>

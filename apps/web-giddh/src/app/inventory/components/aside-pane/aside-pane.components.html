@@ -1,6 +1,6 @@
 <div class="dialog-header" *ngIf="!hideFirstScreen">
     <span>Create</span>
-    <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
+    <button matIconButton aria-label="close" (click)="closeAsidePane()">
         <i class="icon-cross"></i>
     </button>
 </div>
@@ -8,13 +8,13 @@
 
 <div class="dialog-body d-flex flex-column justify-content-center align-items-center" *ngIf="!hideFirstScreen">
     <div class="pb-3 text-center">
-        <button mat-raised-button color="primary" (click)="toggleStockPane()">Create Stock</button>
+        <button matButton="filled" (click)="toggleStockPane()">Create Stock</button>
     </div>
     <div class="pb-3 text-center">
-        <button mat-raised-button color="primary" (click)="toggleGroupPane()">Create Group</button>
+        <button matButton="filled" (click)="toggleGroupPane()">Create Group</button>
     </div>
     <div class="pb-3 text-center">
-        <button mat-raised-button color="primary" (click)="toggleUnitPane()">Create Unit</button>
+        <button matButton="filled" (click)="toggleUnitPane()">Create Unit</button>
     </div>
 </div>
 
@@ -24,15 +24,10 @@
     [addStock]="true"
     (closeAsideEvent)="closeAsidePane($event)"
 ></inventory-add-stock>
-<inventory-add-group
-    *ngIf="isAddGroupOpen"
-    [addGroup]="true"
-    (closeAsideEvent)="closeAsidePane($event)"
-></inventory-add-group>
+<inventory-add-group *ngIf="isAddGroupOpen" [addGroup]="true" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>
 <inventory-custom-stock
     *ngIf="isAddUnitOpen"
     [isAsideClose]="asideClose"
     [isAsideOpen]="isAddUnitOpen"
     (closeAsideEvent)="closeAsidePane($event)"
->
-</inventory-custom-stock>
+></inventory-custom-stock>

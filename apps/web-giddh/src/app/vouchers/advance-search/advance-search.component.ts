@@ -13,7 +13,8 @@ import { SalesPersonComponent } from '../../shared/sales-person/sales-person.com
     selector: 'app-advance-search',
     templateUrl: './advance-search.component.html',
     styleUrls: ['./advance-search.component.scss'],
-    providers: [SalesPersonComponentStore]
+    providers: [SalesPersonComponentStore],
+    standalone: false
 })
 export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -385,13 +386,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
         // Helper function to clear specific date fields
         const clearDateFields = (controlNames: string[]): void => {
-            controlNames.forEach(controlName => {
+            (Array.isArray(controlNames) ? controlNames : []).forEach(controlName => {
                 this.searchForm.get(controlName)?.patchValue(null);
             });
         };
 
         // Process each date control based on the type
-        allDateControlNames.forEach(controlName => {
+        (Array.isArray(allDateControlNames) ? allDateControlNames : []).forEach(controlName => {
             switch (this.type) {
                 case 'drcr':
                 case 'invoice':

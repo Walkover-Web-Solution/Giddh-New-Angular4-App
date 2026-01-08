@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -12,12 +12,14 @@ import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'new-inventory-advance-search',
+
     templateUrl: './new-inventory-advance-search.component.html',
+    standalone: false,
     styleUrls: ['./new-inventory-advance-search.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class NewInventoryAdvanceSearch implements OnInit {
+export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
     /** Reference of datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /** This will store universalDate */
@@ -97,7 +99,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
         } else {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
-                    let universalDate = _.cloneDeep(dateObj);
+                    let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.advanceSearchFormObj.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -198,7 +200,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
             this.advanceSearchFormObj.searching = false;
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
-                    let universalDate = _.cloneDeep(dateObj);
+                    let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.advanceSearchFormObj.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);

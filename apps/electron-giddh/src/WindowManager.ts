@@ -1,4 +1,5 @@
 import { app, BrowserWindow as BrowserWindowElectron, ipcMain } from 'electron';
+import * as path from 'path';
 import AppUpdaterV1 from './AppUpdater';
 import { autoUpdater } from 'electron-updater';
 import { WebContentsSignal, WindowEvent } from './electronEventSignals';
@@ -76,7 +77,11 @@ export default class WindowManager {
                 icon: __dirname + '/assets/icon/favicon.ico',
                 show: false,
                 webPreferences: {
-                    nodeIntegration: true
+                    nodeIntegration: false,
+                    contextIsolation: true,
+                    sandbox: false,
+                    webSecurity: false,
+                    preload: path.join(__dirname, 'preload.js')
                 },
                 tabbingIdentifier: 'giddh'
             };
@@ -119,6 +124,7 @@ export default class WindowManager {
         }
     }
 
+
     private registerWindowEventHandlers(window: BrowserWindow, descriptor: WindowItem): void {
         window.on('close', () => {
             WindowManager.saveWindowState(window, descriptor);
@@ -128,8 +134,8 @@ export default class WindowManager {
             }
             this.stateManager.save();
         });
-        window.on('closed', (event: WindowEvent) => {
-            const index = this.windows.indexOf(event.sender);
+        window.on('closed', () => {
+            const index = this.windows.indexOf(window);
             console.assert(index >= 0);
             this.windows.splice(index, 1);
         });

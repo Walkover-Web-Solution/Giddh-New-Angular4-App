@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges, ViewChild, Inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges, ViewChild, Inject, ChangeDetectorRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountsAction } from '../../actions/accounts.actions';
@@ -17,12 +17,14 @@ import { SettingsIntegrationService } from '../../services/settings.integration.
 import { IForceClear } from '../../models/api-models/Sales';
 import { ServiceConfig } from '../../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { IOption } from '../../app.constant';
+import { Configuration, IOption } from '../../app.constant';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'payment-aside',
     templateUrl: './payment-aside.component.html',
     styleUrls: [`./payment-aside.component.scss`],
+    standalone:false
 })
 export class PaymentAsideComponent implements OnInit, OnChanges {
     /** This will hold local JSON data */
@@ -145,7 +147,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         private generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig,
         private settingsIntegrationService: SettingsIntegrationService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
@@ -156,7 +159,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
         // get all registered account
         this.store.pipe((select(c => c.session.companyUniqueName)), take(2)).subscribe(s => this.companyUniqueName = s);
@@ -194,7 +197,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.integratedBankList$.pipe(takeUntil(this.destroyed$)).subscribe((bankList: IntegratedBankList[]) => {
             this.selectIntegratedBankList = [];
             if (bankList && bankList.length) {
-                bankList.forEach(item => {
+                (Array.isArray(bankList) ? bankList : []).forEach(item => {
                     if (item && !item.errorMessage) {
                         item.bankName = item.bankName ? item.bankName : "";
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.uniqueName, additional: item });
@@ -210,7 +213,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.selectedAccForBulkPayment = this.selectedAccForBulkPayment?.filter((data, index) => {
             return this.selectedAccForBulkPayment?.indexOf(data) === index;
         });
-        this.selectedAccForBulkPayment.forEach(item => {
+        (Array.isArray(this.selectedAccForBulkPayment) ? this.selectedAccForBulkPayment : []).forEach(item => {
             this.addAccountTransactionsFormObject(item);
         });
         this.selectedAccForBulkPayment.map(item => {
@@ -248,7 +251,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             } else {
                 if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
                     this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
-                    this.selectedAccForBulkPayment = _.cloneDeep(this.selectedAccountsForBulkPayment);
+                    this.selectedAccForBulkPayment = cloneDeep(this.selectedAccountsForBulkPayment);
                     this.selectedAccForBulkPayment = this.selectedAccForBulkPayment?.filter(item => {
                         return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                     });
@@ -457,6 +460,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 this.toaster.showSnackBar("error", response.message, response.code);
                 this.paymentRequestId = '';
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -517,7 +521,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public payClicked(): void {
         this.paymentRequestId = '';
         this.prepareRequestObject();
-        this.bulkPayVendor();
+        setTimeout(() => {
+            this.bulkPayVendor();
+        }, 50);
     }
 
     /**
@@ -528,7 +534,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public prepareRequestObject(): void {
         this.requestObjectToGetOTP.bankPaymentTransactions = [];
         this.requestObjectToGetOTP.totalAmount = String(this.totalSelectedAccountAmount);
-        this.selectedAccForBulkPayment.forEach(item => {
+        (Array.isArray(this.selectedAccForBulkPayment) ? this.selectedAccForBulkPayment : []).forEach(item => {
             let transaction: BankTransactionForOTP = {
                 amount: '',
                 remarks: '',
@@ -569,7 +575,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         sec = Number(sec) < 10 ? '0' + sec : Number(sec);
         this.timerCountDown$ = of(min + ':' + sec);
         remaining -= 1;
-
+        this.changeDetectorRef.detectChanges();
         if (remaining >= 0 && this.timerOn) {
             this.countDownTimerRef = setTimeout(() => {
                 this.startTimer(remaining);

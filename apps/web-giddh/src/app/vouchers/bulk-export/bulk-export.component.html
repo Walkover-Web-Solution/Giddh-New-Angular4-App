@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'bulk-export-voucher'"
     (localeData)="localeData = $event"
@@ -7,39 +7,29 @@
 >
     <section
         [ngClass]="
-            exportForm.get('exportType').value === exportTypeEnum.excel ||
-            exportForm.get('exportType').value === exportTypeEnum.csv
+            exportForm.get('exportType').value === exportTypeEnum.excel || exportForm.get('exportType').value === exportTypeEnum.csv
                 ? 'mat-dialog-lg'
                 : 'mat-dialog-md'
         "
     >
         <div class="dialog-header d-flex justify-content-between align-items-center">
-            <span class="font-size-16 px-0"
-                >{{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }}
-                {{ inputData?.totalItems }}</span
-            >
+            <span class="font-size-16 px-0">
+                {{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ inputData?.totalItems }}
+            </span>
         </div>
         <div mat-dialog-content>
             <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
             <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async" class="p-3">
-                <p class="mb-2">
-                    {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
-                </p>
+                <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
                 <!-- Export attachment -->
                 <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
                     <div class="pb-2 clear-both export-type d-flex column-gap-15">
                         <div class="d-flex align-items-center">
                             <label class="width-150">{{ localeData?.attachment }}:</label>
-                            <mat-slide-toggle
-                                color="primary"
-                                name="attachmentExport"
-                                formControlName="attachmentExport"
-                            >
-                                <span>{{
-                                    exportForm.get("attachmentExport").value
-                                        ? commonLocaleData?.app_yes
-                                        : commonLocaleData?.app_no
-                                }}</span>
+                            <mat-slide-toggle color="primary" name="attachmentExport" formControlName="attachmentExport">
+                                <span>
+                                    {{ exportForm.get('attachmentExport').value ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                                </span>
                             </mat-slide-toggle>
                         </div>
                         <i
@@ -64,17 +54,12 @@
                                 [appTributeMention]="tributeConfig"
                                 [appTributeMentionValues]="fileFormatList"
                             />
-                            <div
-                                class="font-size-12 word-break pt-1 pb-1"
-                                *ngIf="exportForm.get('selectedFormatList').value?.length"
-                            >
-                                {{ exportForm.get("fileNameFormat").value }}
+                            <div class="font-size-12 word-break pt-1 pb-1" *ngIf="exportForm.get('selectedFormatList').value?.length">
+                                {{ exportForm.get('fileNameFormat').value }}
                             </div>
                         </div>
                     </div>
-                    <mat-divider
-                        [ngClass]="{ 'mt-2': !exportForm.get('selectedFormatList').value?.length }"
-                    ></mat-divider>
+                    <mat-divider [ngClass]="{ 'mt-2': !exportForm.get('selectedFormatList').value?.length }"></mat-divider>
                 </ng-container>
 
                 <!-- Export voucher -->
@@ -89,9 +74,7 @@
                         formControlName="voucherExport"
                         (change)="onVoucherExportChange($event)"
                     >
-                        <span>{{
-                            exportForm.get("voucherExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                        }}</span>
+                        <span>{{ exportForm.get('voucherExport').value ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}</span>
                     </mat-slide-toggle>
                 </div>
                 <ng-container *ngIf="exportForm.get('voucherExport').value">
@@ -147,7 +130,7 @@
                                 inputData?.voucherType === 'payment' ||
                                 inputData?.voucherType === 'credit note' ||
                                 inputData?.voucherType === 'debit note',
-                            'mat-form-field-invalid': !exportForm.get('copyTypes').value?.length && !isValidForm
+                            'mat-form-field-invalid': !exportForm.get('copyTypes').value?.length && !isValidForm,
                         }"
                         *ngIf="
                             (exportForm.get('exportType').value === exportTypeEnum.multiplePdf ||
@@ -182,16 +165,14 @@
                             <div class="setting">
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.billing_address }}:</label>
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        name="showBillingAddress"
-                                        formControlName="showBillingAddress"
-                                    >
-                                        <span>{{
-                                            exportForm.get("showBillingAddress").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                    <mat-slide-toggle color="primary" name="showBillingAddress" formControlName="showBillingAddress">
+                                        <span>
+                                            {{
+                                                exportForm.get('showBillingAddress').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -199,16 +180,14 @@
                             <div class="setting">
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.shipping_address }}:</label>
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        name="showShippingAddress"
-                                        formControlName="showShippingAddress"
-                                    >
-                                        <span>{{
-                                            exportForm.get("showShippingAddress").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                    <mat-slide-toggle color="primary" name="showShippingAddress" formControlName="showShippingAddress">
+                                        <span>
+                                            {{
+                                                exportForm.get('showShippingAddress').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -216,16 +195,14 @@
                             <div class="setting">
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.attention_to }}:</label>
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        name="showAttentionTo"
-                                        formControlName="showAttentionTo"
-                                    >
-                                        <span>{{
-                                            exportForm.get("showAttentionTo").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                    <mat-slide-toggle color="primary" name="showAttentionTo" formControlName="showAttentionTo">
+                                        <span>
+                                            {{
+                                                exportForm.get('showAttentionTo').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -233,16 +210,14 @@
                             <div class="setting">
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.mobile_number }}:</label>
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        name="showMobileNumber"
-                                        formControlName="showMobileNumber"
-                                    >
-                                        <span>{{
-                                            exportForm.get("showMobileNumber").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                    <mat-slide-toggle color="primary" name="showMobileNumber" formControlName="showMobileNumber">
+                                        <span>
+                                            {{
+                                                exportForm.get('showMobileNumber').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -251,11 +226,9 @@
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ commonLocaleData?.app_email }}:</label>
                                     <mat-slide-toggle color="primary" name="showEmail" formControlName="showEmail">
-                                        <span>{{
-                                            exportForm.get("showEmail").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                        <span>
+                                            {{ exportForm.get('showEmail').value ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -263,16 +236,12 @@
                             <div class="setting">
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.tax_value }}:</label>
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        name="showTaxValue"
-                                        formControlName="showTaxValue"
-                                    >
-                                        <span>{{
-                                            exportForm.get("showTaxValue").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                    <mat-slide-toggle color="primary" name="showTaxValue" formControlName="showTaxValue">
+                                        <span>
+                                            {{
+                                                exportForm.get('showTaxValue').value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -285,11 +254,13 @@
                                         name="showTaxableValueBeforeDiscount"
                                         formControlName="showTaxableValueBeforeDiscount"
                                     >
-                                        <span>{{
-                                            exportForm.get("showTaxableValueBeforeDiscount").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                        <span>
+                                            {{
+                                                exportForm.get('showTaxableValueBeforeDiscount').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -297,16 +268,14 @@
                             <div class="setting">
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.other_tax_value }}:</label>
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        name="showOtherTaxValue"
-                                        formControlName="showOtherTaxValue"
-                                    >
-                                        <span>{{
-                                            exportForm.get("showOtherTaxValue").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                    <mat-slide-toggle color="primary" name="showOtherTaxValue" formControlName="showOtherTaxValue">
+                                        <span>
+                                            {{
+                                                exportForm.get('showOtherTaxValue').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -314,16 +283,14 @@
                             <div class="setting">
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.discount_value }}:</label>
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        name="showDiscountValue"
-                                        formControlName="showDiscountValue"
-                                    >
-                                        <span>{{
-                                            exportForm.get("showDiscountValue").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                    <mat-slide-toggle color="primary" name="showDiscountValue" formControlName="showDiscountValue">
+                                        <span>
+                                            {{
+                                                exportForm.get('showDiscountValue').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -332,11 +299,13 @@
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.voucher_note }}:</label>
                                     <mat-slide-toggle color="primary" name="xxxx" formControlName="showVoucherNote">
-                                        <span>{{
-                                            exportForm.get("showVoucherNote").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                        <span>
+                                            {{
+                                                exportForm.get('showVoucherNote').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -344,16 +313,14 @@
                             <div class="setting">
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.e_invoice_details }}:</label>
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        name="showEInvoiceDetails"
-                                        formControlName="showEInvoiceDetails"
-                                    >
-                                        <span>{{
-                                            exportForm.get("showEInvoiceDetails").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                    <mat-slide-toggle color="primary" name="showEInvoiceDetails" formControlName="showEInvoiceDetails">
+                                        <span>
+                                            {{
+                                                exportForm.get('showEInvoiceDetails').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -366,11 +333,13 @@
                                         name="showAccountCustomFields"
                                         formControlName="showAccountCustomFields"
                                     >
-                                        <span>{{
-                                            exportForm.get("showAccountCustomFields").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                        <span>
+                                            {{
+                                                exportForm.get('showAccountCustomFields').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -383,11 +352,13 @@
                                         name="showVoucherCustomFields"
                                         formControlName="showVoucherCustomFields"
                                     >
-                                        <span>{{
-                                            exportForm.get("showVoucherCustomFields").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                        <span>
+                                            {{
+                                                exportForm.get('showVoucherCustomFields').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -395,16 +366,14 @@
                             <div class="setting">
                                 <div class="d-flex justify-content-between align-items-center h-100">
                                     <label>{{ localeData?.shipping_details }}:</label>
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        name="showShippingDetails"
-                                        formControlName="showShippingDetails"
-                                    >
-                                        <span>{{
-                                            exportForm.get("showShippingDetails").value
-                                                ? commonLocaleData?.app_yes
-                                                : commonLocaleData?.app_no
-                                        }}</span>
+                                    <mat-slide-toggle color="primary" name="showShippingDetails" formControlName="showShippingDetails">
+                                        <span>
+                                            {{
+                                                exportForm.get('showShippingDetails').value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}
+                                        </span>
                                     </mat-slide-toggle>
                                 </div>
                             </div>
@@ -415,18 +384,17 @@
 
                 <div class="mt-4 w-100 d-flex justify-content-end column-gap-1">
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         (click)="exportVouchers(false)"
                         [disabled]="!exportForm.get('attachmentExport').value && !exportForm.get('voucherExport').value"
                     >
                         {{ commonLocaleData?.app_download }}
                     </button>
-                    <button mat-stroked-button mat-dialog-close>
+                    <button matButton="outlined" mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
             </div>
         </div>
     </section>
-</ng-container>
+</div>

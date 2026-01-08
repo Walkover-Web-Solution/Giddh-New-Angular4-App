@@ -8,8 +8,11 @@ import { SmsKeyClass, } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_COMMUNICATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CampaignIntegrationService {
     private companyUniqueName: string;
 

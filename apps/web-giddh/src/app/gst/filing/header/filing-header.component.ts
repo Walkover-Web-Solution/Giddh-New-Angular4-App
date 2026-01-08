@@ -17,13 +17,15 @@ import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../../../services/service.config';
-import { ASIDE_PANE_CONFIG, RestrictedModules } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, Configuration, RestrictedModules } from '../../../app.constant';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'filing-header',
     templateUrl: 'filing-header.component.html',
-    styleUrls: ['filing-header.component.scss']
+    styleUrls: ['filing-header.component.scss'],
+    standalone:false
 })
 export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -104,6 +106,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private router: Router,
         public dialog: MatDialog
     ) {
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.gstSessionResponse$ = this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$));
@@ -125,7 +128,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 this.showDate = true;
             }
         });
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.companyGst$.subscribe(a => {
             if (a) {
                 this.activeCompanyGstNumber = a;
@@ -147,7 +149,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                     to: params['to']
                 };
                 if (!this.selectedMonth) {
-                    this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                    const fromDate = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT);
+                    this.selectedMonth = fromDate.isValid() ? fromDate.toISOString() : dayjs().startOf('month').toISOString();
                     this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
                 }
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));

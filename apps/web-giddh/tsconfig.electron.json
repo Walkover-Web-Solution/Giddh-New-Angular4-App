@@ -1,0 +1,22 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../dist/out-tsc/apps/web-giddh",
+        "types": [],
+        "typeRoots": [
+            "./src/customTypes"
+        ]
+    },
+    "exclude": [
+        "src/test.ts",
+        "**/*.spec.ts"
+    ],
+    "include": [
+        "src/**/*.d.ts"
+    ],
+    "files": [
+        "src/main.ts",
+        "src/main.electron.ts",
+        "src/polyfills.ts"
+    ]
+}

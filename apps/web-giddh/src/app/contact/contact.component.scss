@@ -1,4 +1,4 @@
-@use "../../assets/styles/abstracts/_mixins" as *;
+@use '../../assets/styles/abstracts/_mixins' as *;
 .dropdown-menu {
     > li {
         > a {
@@ -27,7 +27,7 @@
     }
 }
 
-.aging-table > tbody > tr:hover input[type="checkbox"] {
+.aging-table > tbody > tr:hover input[type='checkbox'] {
     position: relative !important;
     opacity: 1;
 }

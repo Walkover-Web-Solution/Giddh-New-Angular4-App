@@ -1,18 +1,10 @@
-<ng-container
-    appTranslate
-    [file]="'downloads/imports'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'downloads/imports'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <div class="import-table-container overflow-visible p-3">
         <div class="d-flex align-items-center justify-content-between mb-3">
             <div class="d-flex align-items-center">
                 <div
                     class="activity-filter-wrap"
-                    *ngIf="
-                        currentCompanyBranches?.length > 2 &&
-                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                    "
+                    *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
                     <div class="clear-both">
                         <div class="col-xs-12 col-sm-12">
@@ -27,8 +19,7 @@
                                             [labelValue]="currentBranch?.name"
                                             class="entity-dropdown"
                                             [name]="'currentBranch'"
-                                        >
-                                        </reactive-dropdown-field>
+                                        ></reactive-dropdown-field>
                                     </div>
                                 </div>
                             </div>
@@ -55,14 +46,14 @@
                         />
                     </div>
                     <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
-                        <button mat-stroked-button class="min-width-100 ml-2" (click)="resetFilter()">
+                        <button matButton="outlined" class="min-width-100 ml-2" (click)="resetFilter()">
                             <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                 </div>
             </div>
             <button
-                mat-stroked-button
+                matButton="outlined"
                 class="btn-stroked-icon"
                 (click)="getImports()"
                 [matTooltip]="commonLocaleData?.app_refresh"
@@ -77,59 +68,48 @@
         <div class="table-responsive table-content overflow-visible" *ngIf="!isLoading && dataSource?.length">
             <table mat-table [dataSource]="dataSource" class="import-table">
                 <!-- Requested importDate Column -->
-                <ng-container matColumnDef="importDate">
+                <div matColumnDef="importDate">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_date }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-                </ng-container>
+                </div>
                 <!-- Requested by Column -->
-                <ng-container matColumnDef="by">
+                <div matColumnDef="by">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_by }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.user.name }}</td>
-                </ng-container>
+                </div>
                 <!-- Requested module Column -->
-                <ng-container matColumnDef="module">
+                <div matColumnDef="module">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.module }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.type }}</td>
-                </ng-container>
+                </div>
                 <!-- Requested importFile Column -->
-                <ng-container matColumnDef="importFile">
+                <div matColumnDef="importFile">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_file }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <a
-                            target="_blank"
-                            *ngIf="!isElectron"
-                            [href]="element.path"
-                            mat-raised-button
-                            color="primary"
-                            class="import-button-status"
-                        >
+                        <a target="_blank" *ngIf="!isElectron" [href]="element.path" matButton="filled" class="import-button-status">
                             {{ commonLocaleData?.app_download }}
                         </a>
-                        <a
-                            *ngIf="isElectron"
-                            (click)="downloadFile(element.path)"
-                            mat-raised-button
-                            color="primary"
-                            class="import-button-status"
-                        >
-                            {{ commonLocaleData?.app_download }}</a
-                        >
+                        <a *ngIf="isElectron" (click)="downloadFile(element.path)" matButton="filled" class="import-button-status">
+                            {{ commonLocaleData?.app_download }}
+                        </a>
                     </td>
-                </ng-container>
+                </div>
                 <!-- Count Column -->
-                <ng-container matColumnDef="count">
+                <div matColumnDef="count">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <ng-container *ngIf="element?.status !== 'SUBMITTED'">
-                            <span>{{ localeData?.success }} : {{ element.count.success }}</span
-                            ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span
-                            ><br /><span>{{ localeData?.total }} : {{ element.count.total }}</span>
-                        </ng-container>
-                        <ng-container *ngIf="element?.status === 'SUBMITTED'"> - </ng-container>
+                        <div *ngIf="element?.status !== 'SUBMITTED'">
+                            <span>{{ localeData?.success }} : {{ element.count.success }}</span>
+                            <br />
+                            <span>{{ localeData?.failed }} : {{ element.count.failed }}</span>
+                            <br />
+                            <span>{{ localeData?.total }} : {{ element.count.total }}</span>
+                        </div>
+                        <div *ngIf="element?.status === 'SUBMITTED'">-</div>
                     </td>
-                </ng-container>
+                </div>
                 <!-- Error Sheet Column -->
-                <ng-container matColumnDef="errorSheet">
+                <div matColumnDef="errorSheet">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.error_sheet }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div
@@ -143,16 +123,15 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadErrorSheet(element)"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}
                         </a>
                     </td>
-                </ng-container>
+                </div>
                 <!-- Succes Sheet  Column -->
-                <ng-container matColumnDef="succesSheet">
+                <div matColumnDef="succesSheet">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.succes_sheet }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div
@@ -166,19 +145,18 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadSuccessSheet(element)"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}
                         </a>
                     </td>
-                </ng-container>
+                </div>
                 <!-- Expiry Date Column -->
-                <ng-container matColumnDef="expiry">
+                <div matColumnDef="expiry">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.expiry }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.expireAt }}</td>
-                </ng-container>
+                </div>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
@@ -192,8 +170,7 @@
                 (page)="handlePageEvent($event)"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
-            >
-            </mat-paginator>
+            ></mat-paginator>
             <section class="mb-custom-80"></section>
         </div>
         <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
@@ -223,4 +200,4 @@
             ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</ng-container>
+</div>

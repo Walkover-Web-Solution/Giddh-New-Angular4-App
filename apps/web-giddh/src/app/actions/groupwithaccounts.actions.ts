@@ -18,7 +18,9 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { LocaleService } from '../services/locale.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GroupWithAccountsAction {
     public static SHOW_ADD_NEW_FORM = 'SHOW_ADD_NEW_FORM';
     public static HIDE_ADD_NEW_FORM = 'HIDE_ADD_NEW_FORM';
@@ -162,7 +164,7 @@ export class GroupWithAccountsAction {
                 if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
+                    this._generalService.eventHandler.next({ name: eventsConst.groupAdded.toString(), payload: action.payload });
                     this._toasty.successToast(this.localeService.translate("app_messages.subgroup_added"), this.localeService.translate("app_success"));
                 }
                 return {
@@ -279,7 +281,7 @@ export class GroupWithAccountsAction {
                 if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._generalService.eventHandler.next({ name: eventsConst.groupUpdated, payload: action.payload });
+                    this._generalService.eventHandler.next({ name: eventsConst.groupUpdated.toString(), payload: action.payload });
                     this._toasty.successToast(this.localeService.translate("app_messages.group_updated"));
                 }
 

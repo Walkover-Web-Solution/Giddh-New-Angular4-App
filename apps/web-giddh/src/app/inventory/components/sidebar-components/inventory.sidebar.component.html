@@ -11,49 +11,31 @@
             <div class="btn-group">
                 <button
                     type="button"
-                    mat-stroked-button
+                    matButton="outlined"
                     [matMenuTriggerFor]="downloadMenu"
                     class="btn ml-0"
                 >
                     <i class="fa fa-ellipsis-v"></i>
                 </button>
                 <mat-menu #downloadMenu="matMenu">
-                    <button mat-menu-item [matMenuTriggerFor]="groupWiseMenu">
-                        Download all groups wise
-                    </button>
-                    <button mat-menu-item [matMenuTriggerFor]="stockWiseMenu">
-                        Download all stock wise
-                    </button>
-                    <button mat-menu-item [matMenuTriggerFor]="accountWiseMenu">
-                        Download all account wise
-                    </button>
+                    <button mat-menu-item [matMenuTriggerFor]="groupWiseMenu">Download all groups wise</button>
+                    <button mat-menu-item [matMenuTriggerFor]="stockWiseMenu">Download all stock wise</button>
+                    <button mat-menu-item [matMenuTriggerFor]="accountWiseMenu">Download all account wise</button>
                 </mat-menu>
-                
+
                 <mat-menu #groupWiseMenu="matMenu">
-                    <button mat-menu-item (click)="downloadAllInventoryReports('allgroup', 'xlsx')">
-                        XLS
-                    </button>
-                    <button mat-menu-item (click)="downloadAllInventoryReports('allgroup', 'csv')">
-                        CSV
-                    </button>
+                    <button mat-menu-item (click)="downloadAllInventoryReports('allgroup', 'xlsx')">XLS</button>
+                    <button mat-menu-item (click)="downloadAllInventoryReports('allgroup', 'csv')">CSV</button>
                 </mat-menu>
-                
+
                 <mat-menu #stockWiseMenu="matMenu">
-                    <button mat-menu-item (click)="downloadAllInventoryReports('allstock', 'xlsx')">
-                        XLS
-                    </button>
-                    <button mat-menu-item (click)="downloadAllInventoryReports('allstock', 'csv')">
-                        CSV
-                    </button>
+                    <button mat-menu-item (click)="downloadAllInventoryReports('allstock', 'xlsx')">XLS</button>
+                    <button mat-menu-item (click)="downloadAllInventoryReports('allstock', 'csv')">CSV</button>
                 </mat-menu>
-                
+
                 <mat-menu #accountWiseMenu="matMenu">
-                    <button mat-menu-item (click)="downloadAllInventoryReports('account', 'xlsx')">
-                        XLS
-                    </button>
-                    <button mat-menu-item (click)="downloadAllInventoryReports('account', 'csv')">
-                        CSV
-                    </button>
+                    <button mat-menu-item (click)="downloadAllInventoryReports('account', 'xlsx')">XLS</button>
+                    <button mat-menu-item (click)="downloadAllInventoryReports('account', 'csv')">CSV</button>
                 </mat-menu>
             </div>
         </div>

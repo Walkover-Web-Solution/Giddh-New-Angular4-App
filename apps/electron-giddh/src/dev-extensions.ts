@@ -1,27 +1,28 @@
 /*
  * Install DevTool extensions when Electron is in development mode
  */
-import { app } from 'electron';
+import { app, session } from 'electron';
 
 declare const ENV: string;
 
 if (ENV === 'development') {
-    // tslint:disable-next-line:no-var-requires
-    const installExtension = require('electron-devtools-installer').default;
-
     const extensions = [
         { name: 'Redux DevTools', id: 'lmhkpmbekcpmknklioeibfkpmmfibljd' },
     ];
 
-    app.once('ready', () => {
-        const userDataPath = app.getPath('userData');
-        extensions.forEach((ext) => {
-            installExtension(ext.id).then(() => {
-            }).catch((err) => {
-                console.error('Failed to install ' + ext.name, err);
-            });
-        });
-        require('devtron').install();
+    app.whenReady().then(async () => {
+        try {
+            // Use modern extension installation for Electron v39
+            for (const ext of extensions) {
+                try {
+                    await session.defaultSession.loadExtension(`./extensions/${ext.id}`);
+                    console.log(`Loaded extension: ${ext.name}`);
+                } catch (err) {
+                    console.warn(`Failed to load extension ${ext.name}:`, err);
+                }
+            }
+        } catch (err) {
+            console.error('Failed to load development extensions:', err);
+        }
     });
-
 }

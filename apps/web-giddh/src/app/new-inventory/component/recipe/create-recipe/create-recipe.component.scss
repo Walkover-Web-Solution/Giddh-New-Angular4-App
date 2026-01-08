@@ -35,7 +35,6 @@
             top: 80px;
         }
         .form-fields {
-
             small {
                 font-size: var(--font-size-12);
             }
@@ -120,7 +119,6 @@
 
                 .col-5 {
                     flex: unset !important;
-
                 }
             }
         }
@@ -155,8 +153,8 @@
             .variant-view {
                 position: relative;
                 &::before {
-                    content: "\ea00";
-                    font-family: "icomoon" !important;
+                    content: '\ea00';
+                    font-family: 'icomoon' !important;
                     display: block;
                     position: absolute;
                     right: -45px;

@@ -1,5 +1,5 @@
 <!--new inventory header-->
-<ng-container
+<div
     appTranslate
     [file]="'inventory'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -28,11 +28,7 @@
         <div class="inventory-transaction-list" *ngIf="!isLoading">
             <div
                 class="mb-3"
-                *ngIf="
-                    isDataAvailable ||
-                    stockReportRequest?.voucherTypes?.length ||
-                    stockReportRequest?.accountName?.length
-                "
+                *ngIf="isDataAvailable || stockReportRequest?.voucherTypes?.length || stockReportRequest?.accountName?.length"
             >
                 <div class="row">
                     <div class="col-12">
@@ -42,9 +38,7 @@
                                     <h5>
                                         {{ localeData?.reports?.transaction_count }}
                                         <div class="mt-2">
-                                            <span class="d-inline-flex number-total"
-                                                >{{ stockReportRequest?.totalItems ?? "-" }}
-                                            </span>
+                                            <span class="d-inline-flex number-total">{{ stockReportRequest?.totalItems ?? '-' }}</span>
                                         </div>
                                     </h5>
                                 </div>
@@ -59,26 +53,20 @@
                                                     stockTransactionReportBalance?.profit
                                                         ? activeCompany.baseCurrencySymbol +
                                                           ' ' +
-                                                          giddhRoundOff(
-                                                              stockTransactionReportBalance?.profit,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                          giddhRoundOff(stockTransactionReportBalance?.profit, giddhBalanceDecimalPlaces)
                                                         : activeCompany.baseCurrencySymbol + 0
                                                 "
                                             >
                                                 <amount-field
                                                     [amount]="
-                                                        stockTransactionReportBalance?.profit
-                                                            ? stockTransactionReportBalance?.profit
-                                                            : 0
+                                                        stockTransactionReportBalance?.profit ? stockTransactionReportBalance?.profit : 0
                                                     "
                                                     [currencySymbol]="activeCompany.baseCurrencySymbol"
                                                     [currencyCode]="activeCompany?.baseCurrency"
-                                                >
-                                                </amount-field>
+                                                ></amount-field>
                                             </span>
                                             <br />
-                                            <span class="d-inline-flex mt-1"> ({{ selectedDateRangeUi }}) </span>
+                                            <span class="d-inline-flex mt-1">({{ selectedDateRangeUi }})</span>
                                         </div>
                                     </h5>
                                 </div>
@@ -90,9 +78,7 @@
                                                 class="d-inline-flex number-total"
                                                 [matTooltipPosition]="'above'"
                                                 [matTooltip]="
-                                                    activeCompany.baseCurrencySymbol +
-                                                    ' ' +
-                                                    stockTransactionReportBalance?.opening?.amount
+                                                    activeCompany.baseCurrencySymbol + ' ' + stockTransactionReportBalance?.opening?.amount
                                                         ? giddhRoundOff(
                                                               stockTransactionReportBalance?.opening?.amount,
                                                               giddhBalanceDecimalPlaces
@@ -108,8 +94,7 @@
                                                     "
                                                     [currencySymbol]="activeCompany.baseCurrencySymbol"
                                                     [currencyCode]="activeCompany?.baseCurrency"
-                                                >
-                                                </amount-field>
+                                                ></amount-field>
                                             </span>
                                             <br />
                                             <span
@@ -134,9 +119,8 @@
                                                     "
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                >
-                                                </amount-field
-                                                >)
+                                                ></amount-field>
+                                                )
                                             </span>
                                         </div>
                                     </h5>
@@ -167,8 +151,7 @@
                                                     "
                                                     [currencySymbol]="activeCompany.baseCurrencySymbol"
                                                     [currencyCode]="activeCompany?.baseCurrency"
-                                                >
-                                                </amount-field>
+                                                ></amount-field>
                                             </span>
                                             <br />
                                             <span
@@ -193,9 +176,8 @@
                                                     "
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                >
-                                                </amount-field
-                                                >)
+                                                ></amount-field>
+                                                )
                                             </span>
                                         </div>
                                     </h5>
@@ -226,8 +208,7 @@
                                                     "
                                                     [currencySymbol]="activeCompany.baseCurrencySymbol"
                                                     [currencyCode]="activeCompany?.baseCurrency"
-                                                >
-                                                </amount-field>
+                                                ></amount-field>
                                             </span>
                                             <br />
                                             <span
@@ -252,9 +233,8 @@
                                                     "
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                >
-                                                </amount-field
-                                                >)
+                                                ></amount-field>
+                                                )
                                             </span>
                                         </div>
                                     </h5>
@@ -285,8 +265,7 @@
                                                     "
                                                     [currencySymbol]="activeCompany.baseCurrencySymbol"
                                                     [currencyCode]="activeCompany?.baseCurrency"
-                                                >
-                                                </amount-field>
+                                                ></amount-field>
                                             </span>
                                             <br />
                                             <span
@@ -311,9 +290,8 @@
                                                     "
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
-                                                >
-                                                </amount-field
-                                                >)
+                                                ></amount-field>
+                                                )
                                             </span>
                                         </div>
                                     </h5>
@@ -323,14 +301,7 @@
                     </div>
                 </div>
             </div>
-            <div
-                class="row"
-                *ngIf="
-                    isDataAvailable ||
-                    stockReportRequest?.voucherTypes?.length ||
-                    stockReportRequest?.accountName?.length
-                "
-            >
+            <div class="row" *ngIf="isDataAvailable || stockReportRequest?.voucherTypes?.length || stockReportRequest?.accountName?.length">
                 <div class="col-12 horizontal-padding">
                     <div
                         class="table-responsive inventory-report-table table-header-sticky overflow-visible"
@@ -345,28 +316,21 @@
                             [matSortDirection]="stockReportRequest?.sort"
                             class="table giddh-table on-mobile-view"
                         >
-                            <ng-container matColumnDef="entry_date">
+                            <div matColumnDef="entry_date">
                                 <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.date }}
                                 </th>
                                 <td data-title="Date" mat-cell *matCellDef="let element" class="common-column-width">
-                                    {{ element?.entryDate ?? "-" }}
+                                    {{ element?.entryDate ?? '-' }}
                                 </td>
-                            </ng-container>
+                            </div>
 
-                            <ng-container matColumnDef="voucherType">
+                            <div matColumnDef="voucherType">
                                 <th mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
                                     {{ localeData?.reports?.voucher_type }}
-                                    <i
-                                        class="fa fa-ellipsis-v ml-1 text-light mt-1 cursor-pointer"
-                                        aria-hidden="true"
-                                    ></i>
-                                    <mat-menu
-                                        #voucherTypesMenu="matMenu"
-                                        class="columns-wrapper"
-                                        (closed)="filterByVoucherTypes()"
-                                    >
-                                        <ng-container *ngFor="let item of voucherTypes; let idx = index">
+                                    <i class="fa fa-ellipsis-v ml-1 text-light mt-1 cursor-pointer" aria-hidden="true"></i>
+                                    <mat-menu #voucherTypesMenu="matMenu" class="columns-wrapper" (closed)="filterByVoucherTypes()">
+                                        <div *ngFor="let item of voucherTypes; let idx = index">
                                             <button
                                                 mat-menu-item
                                                 (click)="$event?.stopPropagation()"
@@ -379,17 +343,17 @@
                                                     [(ngModel)]="item.checked"
                                                     (click)="$event?.stopPropagation()"
                                                 >
-                                                    {{ item?.label }}</mat-checkbox
-                                                >
+                                                    {{ item?.label }}
+                                                </mat-checkbox>
                                             </button>
-                                        </ng-container>
+                                        </div>
                                     </mat-menu>
                                 </th>
                                 <td date-title="Voucher Type" mat-cell *matCellDef="let element">
                                     {{ element?.voucherType }}
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="account_name">
+                            </div>
+                            <div matColumnDef="account_name">
                                 <th
                                     class="td-search-box text-left report-column"
                                     mat-header-cell
@@ -397,17 +361,17 @@
                                     *matHeaderCellDef
                                     (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                                 >
-                                    <ng-container
+                                    <div
                                         *ngTemplateOutlet="
                                             searchTemplate;
                                             context: {
                                                 $implicit: showAccountSearchInput,
                                                 fieldName: 'name',
                                                 formControl: searchAccountName,
-                                                title: localeData?.reports?.account_name
+                                                title: localeData?.reports?.account_name,
                                             }
                                         "
-                                    ></ng-container>
+                                    ></div>
                                 </th>
                                 <td
                                     [data-title]="localeData?.reports?.account_name"
@@ -417,10 +381,10 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="element?.account?.name ? element?.account?.name : ''"
                                 >
-                                    {{ element?.account?.name ?? "-" }}
+                                    {{ element?.account?.name ?? '-' }}
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="stock_name">
+                            </div>
+                            <div matColumnDef="stock_name">
                                 <th class="text-left report-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.stock_name }}
                                 </th>
@@ -432,10 +396,10 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="element?.stock?.name ? element?.stock?.name : ''"
                                 >
-                                    {{ element?.stock?.name ?? "-" }}
+                                    {{ element?.stock?.name ?? '-' }}
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="variant_name">
+                            </div>
+                            <div matColumnDef="variant_name">
                                 <th class="text-left report-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.variant_name }}
                                 </th>
@@ -447,10 +411,10 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="element?.variant?.name ? element?.variant?.name : ''"
                                 >
-                                    {{ element?.variant?.name ?? "-" }}
+                                    {{ element?.variant?.name ?? '-' }}
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="inward_quantity">
+                            </div>
+                            <div matColumnDef="inward_quantity">
                                 <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.inwards }}
                                 </th>
@@ -460,25 +424,20 @@
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
-                                    [matTooltip]="
-                                        element?.type === 'dr'
-                                            ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces)
-                                            : ''
-                                    "
+                                    [matTooltip]="element?.type === 'dr' ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces) : ''"
                                 >
                                     <span class="d-inline-flex" *ngIf="element?.type === 'dr'">
                                         <amount-field
                                             [amount]="element?.quantity ? element?.quantity : '-'"
                                             [currencySymbol]="false"
                                             [currencyCode]="false"
-                                        >
-                                        </amount-field>
-                                        <span class="ml-1 unit-badge"> {{ element?.stockUnit?.code }}</span>
+                                        ></amount-field>
+                                        <span class="ml-1 unit-badge">{{ element?.stockUnit?.code }}</span>
                                     </span>
                                     <span *ngIf="element?.type === 'cr'">-</span>
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="outward_quantity">
+                            </div>
+                            <div matColumnDef="outward_quantity">
                                 <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.outwards }}
                                 </th>
@@ -488,25 +447,20 @@
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
-                                    [matTooltip]="
-                                        element?.type === 'cr'
-                                            ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces)
-                                            : ''
-                                    "
+                                    [matTooltip]="element?.type === 'cr' ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces) : ''"
                                 >
                                     <span class="d-inline-flex" *ngIf="element.type === 'cr'">
                                         <amount-field
                                             [amount]="element?.quantity ? element?.quantity : '-'"
                                             [currencySymbol]="false"
                                             [currencyCode]="false"
-                                        >
-                                        </amount-field>
-                                        <span class="ml-1 unit-badge"> {{ element?.stockUnit?.code }}</span>
+                                        ></amount-field>
+                                        <span class="ml-1 unit-badge">{{ element?.stockUnit?.code }}</span>
                                     </span>
                                     <span *ngIf="element?.type === 'dr'">-</span>
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="rate">
+                            </div>
+                            <div matColumnDef="rate">
                                 <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.rate }}
                                 </th>
@@ -529,12 +483,11 @@
                                             [amount]="element?.rate ? element?.rate : 0"
                                             [currencySymbol]="activeCompany.baseCurrencySymbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
-                                        >
-                                        </amount-field>
+                                        ></amount-field>
                                     </span>
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="transaction_val">
+                            </div>
+                            <div matColumnDef="transaction_val">
                                 <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.value }}
                                 </th>
@@ -557,21 +510,16 @@
                                             [amount]="element?.amount ? element?.amount : 0"
                                             [currencySymbol]="activeCompany.baseCurrencySymbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
-                                        >
-                                        </amount-field>
+                                        ></amount-field>
                                     </span>
                                 </td>
-                            </ng-container>
+                            </div>
                             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
                     <mat-paginator
-                        *ngIf="
-                            stockReportRequest?.totalItems > pageSizeOptions[0] &&
-                            !isLoading &&
-                            displayedColumns?.length
-                        "
+                        *ngIf="stockReportRequest?.totalItems > pageSizeOptions[0] && !isLoading && displayedColumns?.length"
                         [length]="stockReportRequest?.totalItems"
                         [pageSize]="stockReportRequest?.count"
                         [pageIndex]="stockReportRequest.page - 1"
@@ -602,7 +550,7 @@
             <div class="search-table">
                 <div class="align-items-center d-flex" [hidden]="show">
                     <span>{{ title }}</span>
-                    <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="icon button" class="h-auto">
+                    <button matIconButton (click)="toggleSearch(fieldName)" aria-label="icon button" class="h-auto">
                         <span class="icon-search font-size-15"></span>
                     </button>
                 </div>
@@ -618,4 +566,4 @@
             </div>
         </ng-template>
     </div>
-</ng-container>
+</div>

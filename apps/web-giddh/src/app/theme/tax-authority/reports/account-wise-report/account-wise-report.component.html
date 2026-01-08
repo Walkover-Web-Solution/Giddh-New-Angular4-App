@@ -1,11 +1,9 @@
-<ng-container appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
 
     <!-- Tax Sidebar code  -->
     <div class="position-relative w-100">
-        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
@@ -34,8 +32,7 @@
                             (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)"
                             (taxAuthorityUniqueName)="getFormControl('taxAuthorityUniqueName')?.patchValue($event)"
                             (taxUniqueName)="getFormControl('taxUniqueName')?.patchValue($event)"
-                            >
-                        </vat-report-filters>
+                        ></vat-report-filters>
                     </div>
                 </div>
             </div>
@@ -45,12 +42,15 @@
                     <div class="mt-5" *ngIf="(isLoading$ | async) || isTaxApiInProgress">
                         <giddh-page-loader></giddh-page-loader>
                     </div>
-                    <div class=" mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
+                    <div class="mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
                         <div class="white-box w-100" *ngIf="(accountWiseReport$ | async)?.responses?.length; else noData">
                             <!-- Tax Authority Table  -->
                             <div class="table-responsive">
-                                <table mat-table [dataSource]="(accountWiseReport$ | async)?.responses"
-                                class="table basic mt-4 sales-report-table">
+                                <table
+                                    mat-table
+                                    [dataSource]="(accountWiseReport$ | async)?.responses"
+                                    class="table basic mt-4 sales-report-table"
+                                >
                                     <!-- Customer Name -->
                                     <ng-container matColumnDef="customer_name">
                                         <th mat-header-cell *matHeaderCellDef>
@@ -64,8 +64,8 @@
                                         </td>
                                     </ng-container>
 
-                                     <!-- Total Sales -->
-                                     <ng-container matColumnDef="total_sales">
+                                    <!-- Total Sales -->
+                                    <ng-container matColumnDef="total_sales">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ commonLocaleData?.app_total + ' ' + commonLocaleData?.app_sales }}
                                         </th>
@@ -100,8 +100,8 @@
                                         </td>
                                     </ng-container>
 
-                                     <!-- Tax Collected -->
-                                     <ng-container matColumnDef="tax_collected">
+                                    <!-- Tax Collected -->
+                                    <ng-container matColumnDef="tax_collected">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.tax_collected }}
                                         </th>
@@ -133,7 +133,7 @@
                         </ng-template>
 
                         <!-- Pagination  -->
-                         <div *ngIf="pagination?.totalItems > pageSizeOptions[0]">
+                        <div *ngIf="pagination?.totalItems > pageSizeOptions[0]">
                             <mat-paginator
                                 (page)="handlePageChange($event)"
                                 [length]="pagination?.totalItems"
@@ -142,8 +142,7 @@
                                 [pageSizeOptions]="pageSizeOptions"
                                 [hidePageSize]="false"
                                 [pageIndex]="pageIndex"
-                            >
-                            </mat-paginator>
+                            ></mat-paginator>
                             <section class="mb-custom-80"></section>
                         </div>
                     </div>
@@ -151,4 +150,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

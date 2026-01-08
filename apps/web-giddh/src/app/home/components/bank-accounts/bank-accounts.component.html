@@ -1,10 +1,4 @@
-<div
-    id="live"
-    appTranslate
-    [file]="'home/bank-accounts'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div id="live" appTranslate [file]="'home/bank-accounts'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <mat-card>
         <div class="panel-heading d-flex justify-content-between">
             <strong>{{ localeData?.chart_title }}</strong>
@@ -25,7 +19,7 @@
                     [itemSize]="61"
                     *ngIf="!isLoading && bankAccounts?.length > 0"
                     class="virtual-group-list overflow-x-hidden"
-                    style="height: 334px;"
+                    style="height: 334px"
                     tabindex="0"
                 >
                     <div class="wrap-single-bank-detail">
@@ -47,15 +41,11 @@
                             </p>
                             <p class="bank-balance" [ngClass]="{ 'width-86': reLoginRequired }">
                                 <span>{{ localeData?.in_giddh }}</span>
-                                <span
-                                    >{{ activeCompany.baseCurrencySymbol }}
+                                <span>
+                                    {{ activeCompany.baseCurrencySymbol }}
                                     {{ bankaccount.closingBalance.amount | giddhNumberFormat }}
-                                    <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{
-                                        localeData?.cr_heading
-                                    }}</span>
-                                    <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
-                                        localeData?.dr_heading
-                                    }}</span>
+                                    <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{ localeData?.cr_heading }}</span>
+                                    <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{ localeData?.dr_heading }}</span>
                                 </span>
                             </p>
                             <ng-container *ngIf="bankaccount?.accountBankTransactionTotal?.bankName">
@@ -66,25 +56,18 @@
                                             [amount]="bankaccount.accountBankTransactionTotal?.closingBalance?.amount"
                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
-                                        >
-                                        </amount-field>
-                                        <span
-                                            *ngIf="
-                                                bankaccount.accountBankTransactionTotal.closingBalance.type == 'CREDIT'
-                                            "
-                                            >{{ localeData?.cr_heading }}</span
-                                        >
-                                        <span
-                                            *ngIf="
-                                                bankaccount.accountBankTransactionTotal.closingBalance.type == 'DEBIT'
-                                            "
-                                            >{{ localeData?.dr_heading }}</span
-                                        >
+                                        ></amount-field>
+                                        <span *ngIf="bankaccount.accountBankTransactionTotal.closingBalance.type == 'CREDIT'">
+                                            {{ localeData?.cr_heading }}
+                                        </span>
+                                        <span *ngIf="bankaccount.accountBankTransactionTotal.closingBalance.type == 'DEBIT'">
+                                            {{ localeData?.dr_heading }}
+                                        </span>
                                     </span>
                                 </p>
                             </ng-container>
                             <ng-container *ngIf="bankaccount.reLoginRequired">
-                                <button mat-icon-button [matMenuTriggerFor]="menu" class="company-name bank-menu">
+                                <button matIconButton [matMenuTriggerFor]="menu" class="company-name bank-menu">
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
                                 <mat-menu #menu="matMenu">
@@ -101,8 +84,7 @@
                     <p>{{ localeData?.no_banks_found }}</p>
                     <button
                         type="button"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="w-50"
                         *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
                         (click)="openInstitutionsDialog()"

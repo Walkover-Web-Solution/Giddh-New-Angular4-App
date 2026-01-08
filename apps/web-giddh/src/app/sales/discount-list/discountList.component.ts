@@ -7,7 +7,8 @@ import { SettingsDiscountService } from '../../services/settings.discount.servic
 @Component({
     selector: 'discount-list',
     templateUrl: 'discountList.component.html',
-    styleUrls: ['./discountList.component.scss']
+    styleUrls: ['./discountList.component.scss'],
+    standalone:false
 })
 
 export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
@@ -103,7 +104,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof DiscountListComponent
      */
     private processDiscountList(): void {
-        this.discountsList.forEach(acc => {
+        (Array.isArray(this.discountsList) ? this.discountsList : []).forEach(acc => {
             if (this.discountAccountsDetails) {
                 let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
                 if (!hasItem) {

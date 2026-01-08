@@ -5,6 +5,7 @@ import { DOWN_ARROW, ENTER, ESCAPE, UP_ARROW, BACKSPACE, TAB, RIGHT_ARROW, LEFT_
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
+import { filter, findIndex, indexOf } from '../../../../lodash-optimized';
 
 const DIRECTIONAL_KEYS = [
     LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
@@ -14,7 +15,9 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
 
 @Component({
     selector: "items-list-popup",
+    
     templateUrl: "./advance-list-items-popup.component.html",
+    standalone: false,
     styleUrls: ["./advance-list-items-popup.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

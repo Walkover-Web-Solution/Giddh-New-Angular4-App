@@ -16,8 +16,7 @@
                     [name]="'name'"
                     formControlName="name"
                     [autoFocus]="true"
-                >
-                </input-field>
+                ></input-field>
             </div>
             <div class="col-xs-12 col-sm-6">
                 <input-field
@@ -26,16 +25,12 @@
                     [label]="commonLocaleData?.app_unique_name"
                     [name]="'uniqueName'"
                     formControlName="uniqueName"
-                >
-                </input-field>
+                ></input-field>
             </div>
         </div>
         <div class="row pb-4">
             <div class="col-sm-6 closing-balance-width">
-                <div
-                    [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
-                    class="ml-0"
-                >
+                <div [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }" class="ml-0">
                     <input-field
                         [type]="'text'"
                         [label]="localeData?.balance_for_trigger"
@@ -47,28 +42,25 @@
                         [ngClass]="{ 'w100 remove-right-border-radius': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                         [placeholder]="'0.00'"
                         [allowDecimalDigitsOnly]="true"
-                    >
-                    </input-field>
+                    ></input-field>
                     <div class="d-flex">
                         <div
-                        class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
-                        (click)="closingBalanceTypeChanged('DEBIT')"
-                        [ngClass]="{
-                            'active-toggle-btn':
-                                groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
-                            'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
-                        }"
-                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
-                    >
-                        {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                            class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
+                            (click)="closingBalanceTypeChanged('DEBIT')"
+                            [ngClass]="{
+                                'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
+                                'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0,
+                            }"
+                            *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
+                        >
+                            {{ commonLocaleData?.app_dr?.toUpperCase() }}
                         </div>
                         <div
                             class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                             (click)="closingBalanceTypeChanged('CREDIT')"
                             [ngClass]="{
-                                'active-toggle-btn':
-                                    groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                                'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
+                                'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
+                                'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0,
                             }"
                             *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
                         >
@@ -89,13 +81,7 @@
                 formControlName="description"
             ></textarea>
         </div>
-        <button
-            class="pull-right"
-            mat-raised-button
-            color="primary"
-            [ladda]="isCreateGroupInProcess$ | async"
-            [disabled]="!groupDetailForm.valid"
-        >
+        <button class="pull-right" matButton="filled" [ladda]="isCreateGroupInProcess$ | async" [disabled]="!groupDetailForm.valid">
             {{ commonLocaleData?.app_add }}
         </button>
     </div>

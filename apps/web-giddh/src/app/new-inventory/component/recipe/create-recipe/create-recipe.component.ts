@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { cloneDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
@@ -8,10 +7,13 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
+import { cloneDeep, filter, forEach, isEqual } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'create-recipe',
+
     templateUrl: './create-recipe.component.html',
+    standalone: false,
     styleUrls: ['./create-recipe.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -148,7 +150,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             });
         }
 
-        this.recipeObject.manufacturingDetails.forEach(data => {
+        (Array.isArray(this.recipeObject.manufacturingDetails) ? this.recipeObject.manufacturingDetails : []).forEach(data => {
             if (data?.linkedStocks[0]
                 ?.variant.uniqueName || data?.byProducts[0]
                     ?.variant.uniqueName) {
@@ -681,14 +683,14 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public removeLinkedStock(recipeIndex: number, index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe_linked_stock,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_recipe_linked_stock,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -708,14 +710,14 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     */
     public removeByProductLinkedStock(recipeIndex: number, index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe_byproduct_stock,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_recipe_byproduct_stock,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -750,14 +752,14 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public removeRecipe(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_recipe,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

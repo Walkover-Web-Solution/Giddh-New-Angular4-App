@@ -19,7 +19,7 @@ import { createSelector } from 'reselect';
 import * as dayjs from 'dayjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { clone, cloneDeep, find } from '../../lodash-optimized';
+import { clone, cloneDeep, find, orderBy } from '../../lodash-optimized';
 import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -27,9 +27,9 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/default-menus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
+import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -56,7 +56,8 @@ interface SubscriptionErrorFlags {
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    styleUrls: ['./header.component.scss'],
+    standalone:false
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
@@ -118,7 +119,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userIsCompanyUser: boolean = false;
     public userName: string;
     public userEmail: string;
-    public isElectron: boolean = isElectron;
+    public isElectron: boolean = Configuration.isElectron;
     public isTodaysDateSelected: boolean = false;
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
@@ -253,7 +254,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isUKCompany: boolean = false;
     /** Holds true if lister is added on error message */
     public isErrorMessageListenerAdded: boolean = false;
-/** True if command dialog is open */
+    /** True if command dialog is open */
     public showCommandDialog: boolean = false;
 
     /**
@@ -298,7 +299,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private renderer: Renderer2
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
@@ -447,7 +448,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            let orderedCompanies = orderBy(companies, 'name');
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
@@ -619,7 +620,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let tempParams = lastState.substr(lastState.lastIndexOf('?'));
                 let urlParams = new URLSearchParams(tempParams);
                 let queryParams: any = {};
-                urlParams.forEach((val, key) => {
+                (Array.isArray(urlParams) ? urlParams : []).forEach((val, key) => {
                     queryParams[key] = val;
                 });
 
@@ -767,13 +768,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.isErrorMessageListenerAdded) {
             this.isErrorMessageListenerAdded = true;
             const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
-            liabilities.forEach((link: HTMLElement) => {
+            (Array.isArray(liabilities) ? liabilities : []).forEach((link: HTMLElement) => {
                 this.renderer.listen(link, 'click', () => {
                     this.goToLiabilities();
                 });
             });
             const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
-            obligation.forEach((link: HTMLElement) => {
+            (Array.isArray(obligation) ? obligation : []).forEach((link: HTMLElement) => {
                 this.renderer.listen(link, 'click', () => {
                     this.goToObligation();
                 });
@@ -783,15 +784,35 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngAfterViewInit() {
         /* TO SHOW NOTIFICATIONS */
-        if (window['Headway'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = './assets/js/headway-widget.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            scriptTag.async = true;
-            document.body.appendChild(scriptTag);
-        } else {
-            window['Headway']?.init();
+        // Only initialize Headway widget in web environment, not in Electron
+        if (!Configuration.isElectron) {
+            // Ensure HW_config is properly set for web environment
+            if (!window['HW_config']) {
+                window['HW_config'] = {
+                    selector: ".notification",
+                    account: "7eB4aJ",
+                    enabled: true
+                };
+            }
+
+            if (window['Headway'] === undefined) {
+                let scriptTag = document.createElement('script');
+                scriptTag.src = './assets/js/headway-widget.js';
+                scriptTag.type = 'text/javascript';
+                scriptTag.defer = true;
+                scriptTag.async = true;
+                scriptTag.onload = () => {
+                    // Initialize Headway after script loads
+                    setTimeout(() => {
+                        if (window['Headway']) {
+                            window['Headway'].init();
+                        }
+                    }, 100);
+                };
+                document.body.appendChild(scriptTag);
+            } else {
+                window['Headway']?.init();
+            }
         }
         /* TO SHOW NOTIFICATIONS */
 
@@ -801,13 +822,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         }
 
-        this.session$.subscribe(async (s) => {
+        this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
                     const whiteLabel = this.generalService.getDecodedWhiteLabel();
-                    window.location.href = (environment.production) ? await this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ? `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;
+                    window.location.href = (environment.PRODUCTION_ENV) ? this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ? `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
@@ -875,7 +896,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         };
 
                         if (!this.isTodaysDateSelected) {
-                            response.financialYears.forEach(key => {
+                            (Array.isArray(response.financialYears) ? response.financialYears : []).forEach(key => {
                                 if (this.selectedDateRange?.endDate >= dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
                                         uniqueName: key?.uniqueName,
@@ -914,10 +935,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportDialogRef?.close();
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
-                    width: '1000px',
-                    panelClass: 'aside-help-panel',
-                    hasBackdrop: false,
-                    position: {
+                            width: '1000px',
+                            panelClass: 'aside-help-panel',
+                            hasBackdrop: false,
+                            position: {
                         right: '0',
                         top: '0'
                     }
@@ -1050,7 +1071,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsDialogRef = this.dialog.open(ManageGroupsAccountsComponent, {
             width: '100%',
             height: '100%',
-            maxWidth: '100vw',
             maxHeight: '100vh',
             disableClose: true
         });
@@ -1096,7 +1116,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let elementClass = e?.target?.className?.toString();
         let validElement = true;
 
-        excludeElements.forEach(className => {
+        (Array.isArray(excludeElements) ? excludeElements : []).forEach(className => {
             if (elementClass?.indexOf(className) > -1) {
                 validElement = false;
             }
@@ -1198,13 +1218,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
-        this.dialogRefExpirePlanRef = this.dialog.open(template,{
+        this.dialogRefExpirePlanRef = this.dialog.open(template, {
             panelClass: 'mat-dialog-md'
         });
     }
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
-        this.dialogRefCrossLimitRef = this.dialog.open(template,{
+        this.dialogRefCrossLimitRef = this.dialog.open(template, {
             panelClass: 'mat-dialog-md'
         });
     }
@@ -1912,6 +1932,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public removeDepreciationMessage(): void {
         document.body?.classList?.remove("depreciation-message");
         this.showDepreciationMessage = false;
+    }
+
+    /**
+     * Opens notifications widget
+     *
+     * @memberof HeaderComponent
+     */
+    public openNotifications(): void {
+        if (!Configuration.isElectron && window['Headway']) {
+            window['Headway'].show();
+        }
     }
 
     /**

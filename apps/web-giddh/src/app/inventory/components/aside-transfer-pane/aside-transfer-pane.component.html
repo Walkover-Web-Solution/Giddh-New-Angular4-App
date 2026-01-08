@@ -2,10 +2,10 @@
     <div class="form-header" *ngIf="selectedAsideView == 'mainview'">
         <p>Create</p>
     </div>
-    <button mat-stroked-button (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
+    <button matButton="outlined" (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
         <i class="icon-cross"></i>
     </button>
-    <button mat-stroked-button id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView != 'mainview'">Back</button>
+    <button matButton="outlined" id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView != 'mainview'">Back</button>
     <div [ngSwitch]="selectedAsideView">
         <ng-container *ngSwitchCase="'inward'">
             <transfer-inward-note
@@ -15,8 +15,7 @@
                 [isLoading]="isLoading"
                 (onSave)="onSave($event)"
                 (onCancel)="onCancel()"
-            >
-            </transfer-inward-note>
+            ></transfer-inward-note>
         </ng-container>
         <ng-container *ngSwitchCase="'outward'">
             <transfer-outward-note
@@ -26,8 +25,7 @@
                 [isLoading]="isLoading"
                 (onSave)="onSave($event)"
                 (onCancel)="onCancel()"
-            >
-            </transfer-outward-note>
+            ></transfer-outward-note>
         </ng-container>
         <ng-container *ngSwitchCase="'transfer'">
             <transfer-notes
@@ -37,8 +35,7 @@
                 [isLoading]="isLoading"
                 (onSave)="onSave($event.entry, $event.user)"
                 (onCancel)="onCancel()"
-            >
-            </transfer-notes>
+            ></transfer-notes>
         </ng-container>
         <ng-container *ngSwitchCase="'createStock'">
             <div class="pt-2">
@@ -51,24 +48,16 @@
         <ng-container *ngSwitchDefault>
             <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
                 <div class="p-2 text-center">
-                    <button mat-raised-button color="primary" type="button" (click)="selectView('inward')">
-                        Inward Note
-                    </button>
+                    <button matButton="filled" type="button" (click)="selectView('inward')">Inward Note</button>
                 </div>
                 <div class="p-2 text-center">
-                    <button mat-raised-button color="primary" type="button" (click)="selectView('outward')">
-                        Outward Note
-                    </button>
+                    <button matButton="filled" type="button" (click)="selectView('outward')">Outward Note</button>
                 </div>
                 <div class="p-2 text-center">
-                    <button mat-raised-button color="primary" type="button" (click)="selectView('createStock')">
-                        Create Stock
-                    </button>
+                    <button matButton="filled" type="button" (click)="selectView('createStock')">Create Stock</button>
                 </div>
                 <div class="p-2 text-center">
-                    <button mat-raised-button color="primary" type="button" (click)="selectView('createAccount')">
-                        Create Account
-                    </button>
+                    <button matButton="filled" type="button" (click)="selectView('createAccount')">Create Account</button>
                 </div>
             </div>
         </ng-container>

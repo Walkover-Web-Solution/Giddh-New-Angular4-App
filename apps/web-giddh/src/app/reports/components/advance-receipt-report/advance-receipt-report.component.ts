@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
@@ -10,7 +10,6 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OrganizationType } from '../../../models/user-login-state';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
-import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AdvanceReceiptSummaryRequest } from '../../../models/api-models/Reports';
 import { GeneralService } from '../../../services/general.service';
@@ -18,18 +17,21 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { environment } from '../../../../environments/environment.generated';
 import { AppState } from '../../../store';
 import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../../constants/reports.constant';
-import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
+// import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../services/invoice.service';
+import { cloneDeep, filter, find, forEach, isArray, map, some } from '../../../lodash-optimized';
 
 @Component({
     selector: 'advance-receipt-report',
     templateUrl: './advance-receipt-report.component.html',
-    styleUrls: ['./advance-receipt-report.component.scss']
+    styleUrls: ['./advance-receipt-report.component.scss'],
+    standalone:false
 })
 export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, OnInit {
     /** Customer name search bar */
@@ -186,12 +188,11 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** Holds last filters applyed */
     public lastListingFilters: any;
     /** Hold true in production environment */
-    public isProdMode: boolean = PRODUCTION_ENV;
+    public isProdMode: boolean = environment.production;
 
     /** @ignore */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private generalAction: GeneralActions,
         private receiptService: ReceiptService,
         private store: Store<AppState>,
@@ -229,7 +230,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((applicationDate) => {
             if (applicationDate) {
                 this.universalDate = applicationDate;
-                let universalDate = _.cloneDeep(applicationDate);
+                let universalDate = cloneDeep(applicationDate);
                 this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
                 this.selectedDateRangeUi = dayjs(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -263,7 +264,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
@@ -309,46 +310,46 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public openModal(): void {
-        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ReceiptAdvanceSearchComponent);
+        // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ReceiptAdvanceSearchComponent);
         const viewContainerRef = this.receiptAdvanceSearchFilterModal.viewContainerRef;
         viewContainerRef.clear();
-        const componentRef = viewContainerRef.createComponent(componentFactory);
+        // const componentRef = viewContainerRef.createComponent(componentFactory);
 
         this.advanceSearchModel.adjustmentVoucherDetails.selectedValue = (this.searchQueryParams.receiptTypes?.length) ? this.searchQueryParams.receiptTypes[0] : undefined;
         this.advanceSearchModel.adjustmentVoucherDetails.isDisabled = !!this.searchQueryParams.receiptTypes?.length;
-        (componentRef.instance as ReceiptAdvanceSearchComponent).searchModel = cloneDeep(this.advanceSearchModel);
-        (componentRef.instance as ReceiptAdvanceSearchComponent).localeData = cloneDeep(this.localeData);
-        (componentRef.instance as ReceiptAdvanceSearchComponent).commonLocaleData = cloneDeep(this.commonLocaleData);
+        // (componentRef.instance as ReceiptAdvanceSearchComponent).searchModel = cloneDeep(this.advanceSearchModel);
+        // (componentRef.instance as ReceiptAdvanceSearchComponent).localeData = cloneDeep(this.localeData);
+        // (componentRef.instance as ReceiptAdvanceSearchComponent).commonLocaleData = cloneDeep(this.commonLocaleData);
 
-        merge(
-            (componentRef.instance as ReceiptAdvanceSearchComponent).closeModal,
-            (componentRef.instance as ReceiptAdvanceSearchComponent).cancel).pipe(takeUntil(this.destroyed$)).subscribe(() => {
+        // merge(
+            // (componentRef.instance as ReceiptAdvanceSearchComponent).closeModal,
+            // (componentRef.instance as ReceiptAdvanceSearchComponent).cancel).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                 // Listener for close and cancel event of modal
-                if (this.receiptAdvanceSearchDialogRef) {
-                    this.receiptAdvanceSearchDialogRef.close();
-                    this.receiptAdvanceSearchDialogRef = null;
-                }
-            });
-        (componentRef.instance as ReceiptAdvanceSearchComponent).confirm.pipe(takeUntil(this.destroyed$)).subscribe((data: ReceiptAdvanceSearchModel) => {
+                // if (this.receiptAdvanceSearchDialogRef) {
+                //     this.receiptAdvanceSearchDialogRef.close();
+                //     this.receiptAdvanceSearchDialogRef = null;
+                // }
+            // });
+        // (componentRef.instance as ReceiptAdvanceSearchComponent).confirm.pipe(takeUntil(this.destroyed$)).subscribe((data: ReceiptAdvanceSearchModel) => {
             // Listener for confirm event of modal
-            this.showClearFilter = true;
-            this.advanceSearchModel = cloneDeep(data);
-            if (data.adjustmentVoucherDetails.selectedValue) {
-                this.searchQueryParams.receiptTypes = [data.adjustmentVoucherDetails.selectedValue];
-            }
-            this.fetchAllReceipts({
-                companyUniqueName: this.activeCompanyUniqueName,
-                receiptTypes: this.searchQueryParams.receiptTypes,
-                totalAmount: data.totalAmountFilter.amount,
-                totalAmountOperation: data.totalAmountFilter.selectedValue,
-                unUsedAmount: data.unusedAmountFilter.amount,
-                unUsedAmountOperation: data.unusedAmountFilter.selectedValue
-            }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
-            if (this.receiptAdvanceSearchDialogRef) {
-                this.receiptAdvanceSearchDialogRef.close();
-                this.receiptAdvanceSearchDialogRef = null;
-            }
-        });
+            // this.showClearFilter = true;
+            // this.advanceSearchModel = cloneDeep(data);
+            // if (data.adjustmentVoucherDetails.selectedValue) {
+            //     this.searchQueryParams.receiptTypes = [data.adjustmentVoucherDetails.selectedValue];
+            // }
+            // this.fetchAllReceipts({
+            //     companyUniqueName: this.activeCompanyUniqueName,
+            //     receiptTypes: this.searchQueryParams.receiptTypes,
+            //     totalAmount: data.totalAmountFilter.amount,
+            //     totalAmountOperation: data.totalAmountFilter.selectedValue,
+            //     unUsedAmount: data.unusedAmountFilter.amount,
+            //     unUsedAmountOperation: data.unusedAmountFilter.selectedValue
+            // }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+            // if (this.receiptAdvanceSearchDialogRef) {
+            //     this.receiptAdvanceSearchDialogRef.close();
+            //     this.receiptAdvanceSearchDialogRef = null;
+            // }
+        // });
         this.receiptAdvanceSearchDialogRef = this.dialog.open(this.receiptAdvanceSearchTemplate, {
             panelClass: 'mat-dialog-lg',
             disableClose: true
@@ -500,10 +501,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     private subscribeToEvents(): void {
         merge(
-            fromEvent(this.customerName?.nativeElement, 'input'),
-            fromEvent(this.receiptNumber?.nativeElement, 'input'),
-            fromEvent(this.paymentMode?.nativeElement, 'input'),
-            fromEvent(this.invoiceNumber?.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+            this.customerName?.nativeElement ? fromEvent(this.customerName.nativeElement, 'input') : of(),
+            this.receiptNumber?.nativeElement ? fromEvent(this.receiptNumber.nativeElement, 'input') : of(),
+            this.paymentMode?.nativeElement ? fromEvent(this.paymentMode.nativeElement, 'input') : of(),
+            this.invoiceNumber?.nativeElement ? fromEvent(this.invoiceNumber.nativeElement, 'input') : of()).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
                 this.showClearFilter = true;
                 this.fetchAllReceipts(this.searchQueryParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
             });
@@ -669,7 +670,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.pageConfiguration.totalItems = response.body.totalItems;
                 this.allReceipts = (this.voucherApiVersion === 2) ? response.body.items : response.body.results;
 
-                this.allReceipts.forEach(receipt => {
+                (Array.isArray(this.allReceipts) ? this.allReceipts : []).forEach(receipt => {
                     let isSeleted = this.selectedReceipts?.some(selectedReceipt => selectedReceipt === receipt?.uniqueName);
                     if (isSeleted) {
                         receipt.isSelected = true;
@@ -701,7 +702,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
         }
     }
-    
+
     /**
     * Toggles the datepicker menu
     *
@@ -709,7 +710,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     * @memberof AdvanceReceiptReportComponent
     */
     public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {            
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
          } else {
             this.universalDatepickerTrigger?.closeMenu();
@@ -833,7 +834,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 return receipt;
             });
         } else {
-            this.allReceipts.forEach(receipt => {
+            (Array.isArray(this.allReceipts) ? this.allReceipts : []).forEach(receipt => {
                 receipt.isSelected = true;
                 this.selectedReceipts.push(receipt?.uniqueName);
             });
@@ -923,7 +924,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 if (response.status === 'success') {
                     this.selectedReceipts = [];
                     this.allReceiptsSelected = false;
-                    this.allReceipts.forEach((item) => {
+                    (Array.isArray(this.allReceipts) ? this.allReceipts : []).forEach((item) => {
                         item.isSelected = false;
                     });
                     let blob = this.generalService.base64ToBlob(response.body.data, 'application/xls', 512);

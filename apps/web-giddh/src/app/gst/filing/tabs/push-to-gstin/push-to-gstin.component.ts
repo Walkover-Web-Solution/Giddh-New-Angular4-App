@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
     selector: 'push-to-gstin',
     templateUrl: './push-to-gstin.component.html',
     styleUrls: ['./push-to-gstin.component.scss'],
+    standalone: false
 })
 export class PushToGstInComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: GstDatePeriod = null;
@@ -30,7 +31,7 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private gstrAction: GstReconcileActions,
-        private changeDetectorRef: ChangeDetectorRef, 
+        private changeDetectorRef: ChangeDetectorRef,
         private route: Router) {
 
         this.store.pipe(select(s => s.gstR.gstr1SummaryResponse), takeUntil(this.destroyed$)).subscribe(result => {

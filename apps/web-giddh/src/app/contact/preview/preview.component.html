@@ -1,15 +1,16 @@
-<ng-container
-    appTranslate
-    [file]="'contact/preview'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'contact/preview'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <giddh-page-loader
-        *ngIf="!isSearching && !isLoadMore && (getAccountsInProgress$ | async)"
-        [cssClass]="'no-data'"
-    ></giddh-page-loader>
-    <div class="invoice-preview-wrapper d-flex full-viewport-height" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
+    <giddh-page-loader *ngIf="!isSearching && !isLoadMore && (getAccountsInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
+    <div
+        appResizable
+        resizableTarget=".preview-list"
+        [minWidth]="300"
+        [maxWidthRatio]="0.5"
+        [defaultWidthRatio]="0.3"
+        [moduleName]="contact - preview"
+        class="invoice-preview-wrapper d-flex full-viewport-height"
+        *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)"
+    >
         <div class="preview-list pb-3">
             <div class="d-flex align-items-center column-gap-05 p-3 w-100 list-responsive row-gap-1">
                 <div class="position-relative search-field flex-grow-1">
@@ -19,32 +20,25 @@
                         [cssClass]="'form-control pl-3'"
                         [placeholder]="commonLocaleData?.app_search"
                         [formControl]="search"
-                    >
-                    </text-field>
+                    ></text-field>
                     <i class="icon-search position-absolute"></i>
                 </div>
             </div>
             <div class="mat-grid-wrapper">
-                <div
-                    class="mat-list-wrap overflow-auto contact-list"
-                    *ngIf="(getAccountsInProgress$ | async) === false"
-                >
+                <div class="mat-list-wrap overflow-auto contact-list" *ngIf="(getAccountsInProgress$ | async) === false">
                     <mat-list>
                         <ng-container *ngFor="let item of contactList; let i = index; let lastItem = last">
                             <mat-list-item
                                 class="single-invoice-detail cursor-pointer"
                                 [ngClass]="{
                                     'active': item?.uniqueName === selectedContact?.uniqueName,
-                                    'border-bottom': !lastItem
+                                    'border-bottom': !lastItem,
                                 }"
                                 (click)="setSelectedContact(item?.uniqueName, true)"
                             >
                                 <div class="d-flex justify-content-between align-items-center column-gap-05">
-                                    <div>
-                                        <span class="font-size-12 title-text">
-                                            {{ item?.uniqueName }}
-                                        </span>
-                                        <p class="text-light pr-5 text-wrap">
+                                    <div class="flex-grow-1 min-width-0">
+                                        <p class="mt-1 text-ellipsis w-100">
                                             {{ item?.name }}
                                         </p>
                                     </div>
@@ -62,11 +56,11 @@
                 ></giddh-page-loader>
             </div>
         </div>
-        <div class="preview-content">
+        <div class="preview-content flex-grow-1">
             <div class="position-relative overflow-visible">
                 <div class="clear-both overflow-visible">
                     <div class="position-absolute back-button">
-                        <button mat-stroked-button (click)="redirectToGetAllPage()">
+                        <button matButton="outlined" (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}
                         </button>
                     </div>
@@ -81,10 +75,7 @@
                         <mat-tab [label]="localeData?.statement">
                             <div class="wrapper-background bg-light-gray p-2 pt-1 pb-1 overflow-auto">
                                 <div class="account-statement-wrapper h-100">
-                                    <mat-card
-                                        class=" p-3 mat-card-wrapper"
-                                        *ngIf="selectedContact?.uniqueName && !isContactNotFound"
-                                    >
+                                    <mat-card class="p-3 mat-card-wrapper" *ngIf="selectedContact?.uniqueName && !isContactNotFound">
                                         <account-statement
                                             [activeAccountUniqueName]="selectedContact?.uniqueName"
                                             [branchUniqueName]="queryParams.branchUniqueName"
@@ -118,19 +109,18 @@
                         </mat-tab>
                         <mat-tab [label]="localeData?.account_details">
                             <div class="wrapper-background bg-light-gray d-flex flex-column overflow-auto">
-                                <div
-                                    class="account-details-wrapper w-100 pt-3 pb-3 pl-1 pr-1 flex-grow-1 d-flex flex-column"
-                                >
+                                <div class="account-details-wrapper w-100 pt-3 pb-3 pl-1 pr-1 flex-grow-1 d-flex flex-column">
                                     <div class="no-data" *ngIf="updateAccountInProcess$ | async">
                                         <giddh-page-loader></giddh-page-loader>
                                     </div>
                                     <mat-card *ngIf="!(updateAccountInProcess$ | async)">
                                         <div
-                                            class=" p-3 flex-grow-1"
+                                            class="p-3 flex-grow-1"
                                             *ngIf="
                                                 !(updateAccountInProcess$ | async) &&
                                                 (activeAccount$ | async) &&
-                                                !isContactNotFound && !isMasterOpen
+                                                !isContactNotFound &&
+                                                !isMasterOpen
                                             "
                                         >
                                             <account-update-new-details
@@ -149,8 +139,7 @@
                                                 [showVirtualAccount]="showVirtualAccount"
                                                 [isDebtorCreditor]="isDebtorCreditor"
                                                 (updateViaPatchApi)="updateAccount($event, true)"
-                                            >
-                                            </account-update-new-details>
+                                            ></account-update-new-details>
                                         </div>
                                         <ng-container *ngIf="isContactNotFound">
                                             <ng-container *ngTemplateOutlet="noContactFound"></ng-container>
@@ -164,7 +153,7 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>
 <!--delete Account modal  -->
 <ng-template #deleteAccountModal>
     <confirm-modal
@@ -172,8 +161,7 @@
         [body]="commonLocaleData?.app_delete_account_message"
         (cancelCallBack)="hideDeleteAccountModal()"
         (successCallBack)="deleteAccount()"
-    >
-    </confirm-modal>
+    ></confirm-modal>
 </ng-template>
 
 <!-- Single template for user not found -->

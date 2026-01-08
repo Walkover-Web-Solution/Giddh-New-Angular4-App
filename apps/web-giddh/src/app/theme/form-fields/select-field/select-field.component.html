@@ -1,4 +1,4 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate (commonLocaleData)="commonLocaleData = $event">
     <input
         type="text"
         [ngClass]="cssClass"
@@ -36,12 +36,9 @@
                 [matTooltip]="option?.label"
                 matTooltipPosition="right"
             >
-                <ng-template
-                    [ngTemplateOutletContext]="{ option: option }"
-                    [ngTemplateOutlet]="optionTemplate"
-                ></ng-template>
+                <ng-template [ngTemplateOutletContext]="{ option: option }" [ngTemplateOutlet]="optionTemplate"></ng-template>
                 <ng-container *ngIf="!optionTemplate">
-                    <span class="option-label"> {{ option?.label }}</span>
+                    <span class="option-label">{{ option?.label }}</span>
                     <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
                 </ng-container>
             </mat-option>
@@ -63,10 +60,7 @@
         </ng-container>
 
         <ng-template #scrollData>
-            <app-cdk-scroll
-                (fetchNextPage)="isPaginationEnabled ? scrollEndEvent($event) : ''"
-                [scrollableElementId]="scrollableElementId"
-            >
+            <app-cdk-scroll (fetchNextPage)="isPaginationEnabled ? scrollEndEvent($event) : ''" [scrollableElementId]="scrollableElementId">
                 <cdk-virtual-scroll-viewport
                     class="virtual-group-list overflow-x-hidden"
                     [itemSize]="33"
@@ -78,10 +72,10 @@
                             (fieldFilteredOptions?.length * 51 > 193
                                 ? 193
                                 : showCreateNew
-                                ? 51
-                                : fieldFilteredOptions?.length * 51
-                                ? fieldFilteredOptions?.length * 51
-                                : 51) + 'px'
+                                  ? 51
+                                  : fieldFilteredOptions?.length * 51
+                                    ? fieldFilteredOptions?.length * 51
+                                    : 51) + 'px',
                     }"
                 >
                     <mat-option
@@ -91,15 +85,10 @@
                         [matTooltip]="option?.label"
                         matTooltipPosition="right"
                     >
-                        <ng-template
-                            [ngTemplateOutletContext]="{ option: option }"
-                            [ngTemplateOutlet]="optionTemplate"
-                        ></ng-template>
+                        <ng-template [ngTemplateOutletContext]="{ option: option }" [ngTemplateOutlet]="optionTemplate"></ng-template>
                         <ng-container *ngIf="!optionTemplate">
-                            <span class="option-label"> {{ option?.label }}</span>
-                            <span class="option-value" *ngIf="showValueInLabel">{{
-                                option.additional?.uniqueName
-                            }}</span>
+                            <span class="option-label">{{ option?.label }}</span>
+                            <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
                         </ng-container>
                     </mat-option>
                     <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
@@ -112,8 +101,8 @@
                     >
                         <a href="javascript:;" role="option" class="options-class-create">
                             {{ commonLocaleData?.app_create_new }}
-                        </a></mat-option
-                    >
+                        </a>
+                    </mat-option>
                 </cdk-virtual-scroll-viewport>
             </app-cdk-scroll>
         </ng-template>
@@ -125,4 +114,4 @@
     >
         <span class="arrow-dropdown position-absolute"></span>
     </div>
-</ng-container>
+</div>

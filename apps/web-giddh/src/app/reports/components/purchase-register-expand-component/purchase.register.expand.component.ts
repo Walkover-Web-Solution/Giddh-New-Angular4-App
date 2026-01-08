@@ -19,11 +19,15 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment.generated';
+import { forEach, includes, map, set } from '../../../lodash-optimized';
 
 @Component({
     selector: "purchase-register-expand",
     templateUrl: "./purchase.register.expand.component.html",
     styleUrls: ["./purchase.register.expand.component.scss"],
+    standalone: false
 })
 export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
@@ -120,7 +124,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/icon/";
+        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedPurchaseRequestFilter.q = "";
@@ -140,7 +144,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.isDefaultLoaded = true;
             }
         });
-        
+
         combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
             if (params.from && params.to) {
                 this.from = params.from;
@@ -180,7 +184,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                     });
                     if (this.voucherNumberInput?.value) {
                         setTimeout(() => {
-                            this.invoiceSearch?.nativeElement.focus();
+                            if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                                this.invoiceSearch.nativeElement.focus();
+                            }
                         }, 200);
                     }
                 }
@@ -368,7 +374,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             let idx = this.from.split("-");
             this.monthYear = [];
             if (currentYearFrom === currentYearTo) {
-                this.monthNames.forEach((element) => {
+                (Array.isArray(this.monthNames) ? this.monthNames : []).forEach((element) => {
                     this.monthYear.push(element + " " + currentYearFrom);
                 });
             }
@@ -407,7 +413,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         if (fieldName === "invoiceNumber") {
             this.showSearchInvoiceNo = true;
             setTimeout(() => {
-                this.invoiceSearch?.nativeElement.focus();
+                if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                    this.invoiceSearch.nativeElement.focus();
+                }
             }, 200);
         } else {
             this.showSearchInvoiceNo = false;
@@ -507,10 +515,10 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             localeData: this.localeData,
         };
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
-            width: "630px",
-            panelClass: 'export-container',
-            data: exportData,
-        });
+                    width: "630px",
+                    panelClass: 'export-container',
+                    data: exportData
+                });
     }
 
     /**

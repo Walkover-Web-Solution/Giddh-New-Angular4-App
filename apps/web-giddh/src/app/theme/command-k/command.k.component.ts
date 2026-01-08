@@ -22,7 +22,8 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
     selector: 'command-k',
     styleUrls: ['./command.k.component.scss'],
     templateUrl: './command.k.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {

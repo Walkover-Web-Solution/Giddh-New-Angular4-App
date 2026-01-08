@@ -3,9 +3,15 @@ body {
     --bg-primary-color: var(--theme-primary-color);
     --border-color: var(--theme-border-color);
 
-    --theme-primary-light: color-mix(in oklch, var(--theme-primary-color) 10%, white);
-    --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) 10%, white);
-    --theme-warn-light: color-mix(in oklch, var(--theme-warn-color) 10%, white);
+    &.default-theme {
+        --lighter-percent: 10%;
+    }
+    &.dark-theme {
+        --lighter-percent: 30%;
+    }
+    --theme-primary-light: color-mix(in oklch, var(--theme-primary-color) var(--lighter-percent), white);
+    --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) var(--lighter-percent), white);
+    --theme-warn-light: color-mix(in oklch, var(--theme-warn-color) var(--lighter-percent), white);
 
     .theme-primary-light {
         background-color: var(--theme-primary-light) !important;
@@ -15,6 +21,10 @@ body {
     }
     .theme-warn-light {
         background-color: var(--theme-warn-light) !important;
+    }
+    .mat-app-background { 
+        background-color: var(--theme-background-color, var(--mat-sys-surface));
+        color: var(--theme-foreground-color, var(--mat-sys-on-surface));
     }
 
     &.default-theme,

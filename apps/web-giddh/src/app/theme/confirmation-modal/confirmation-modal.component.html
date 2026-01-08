@@ -1,7 +1,7 @@
 <div class="custom-confirmation-modal">
     <div class="dialog-header">
         <span [ngClass]="configuration?.headerCssClass">{{ configuration?.headerText }}</span>
-        <button mat-icon-button aria-label="close" (click)="handleButtonClick('Close')">
+        <button matIconButton aria-label="close" (click)="handleButtonClick('Close')">
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -10,8 +10,7 @@
         <p [ngClass]="configuration?.footerCssClass">{{ configuration?.footerText }}</p>
         <div class="d-flex column-gap-1 mt-3">
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 *ngFor="let button of configuration?.buttons"
                 (click)="handleButtonClick(button?.text)"
                 [ngClass]="button?.cssClass"

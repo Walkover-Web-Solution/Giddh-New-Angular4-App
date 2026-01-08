@@ -1,7 +1,8 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
-    selector: '[digitsOnlyDirective]'
+    selector: '[digitsOnlyDirective]',
+    standalone: false
 })
 export class DigitsOnlyDirective {
     public el: HTMLInputElement;
