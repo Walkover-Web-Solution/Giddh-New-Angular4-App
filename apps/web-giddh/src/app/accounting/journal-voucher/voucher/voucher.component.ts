@@ -285,7 +285,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public loadMoreInProgress: boolean = false;
     /** Holds voucher api version */
     public voucherApiVersion: number;
-    
+
     /** Global account search data for 'by' accounts */
     public byAccountSearchData = {
         accounts: [],
@@ -295,7 +295,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         totalItems: 0,
         isLoading: false
     };
-    
+
     /** Global account search data for 'to' accounts */
     public toAccountSearchData = {
         accounts: [],
@@ -305,7 +305,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         totalItems: 0,
         isLoading: false
     };
-    
+
     /** Display variable for HTML - separate from search logic */
     public displayAccountList: any[] = [];
     /** Item size for virtual scroll */
@@ -512,6 +512,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         ).subscribe((event: any) => {
             const inputValue = event.event.target.value;
             const transaction = event.transaction;
+
             // Check if transaction already has discount or tax applied
             const isDiscountApplied = transaction.get('isDiscountApplied')?.value;
             const isTaxApplied = transaction.get('isTaxApplied')?.value;
@@ -745,6 +746,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 );
             }
         }
+
         // Add index to form control if found
         if (selectedIndex !== undefined && selectedIndex !== -1) {
             const controlName = indexType === 'discount' ? 'selectedDiscountIndex' : 'selectedTaxIndex';
@@ -1141,6 +1143,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.displayAccountList = filteredDiscounts;
         this.handleKeyboardNavigationAfterTimeout();
     }
+
     /**
      * Search in tax list based on input value
      *
@@ -1358,6 +1361,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 transactionAtIndex.addControl('selectedAccountIndex', this.formBuilder.control(dropdownIndex));
             }
         }
+
         this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             let transaction;
             if (response?.body && (response?.body?.currency?.code || this.activeCompany?.baseCurrency) === this.activeCompany?.baseCurrency) {
@@ -1515,6 +1519,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             totalItems: 0,
             isLoading: false
         };
+
         // Reset 'to' account search data
         this.toAccountSearchData = {
             accounts: [],
@@ -1524,6 +1529,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             totalItems: 0,
             isLoading: false
         };
+
         // Reset display variable
         this.displayAccountList = [];
     }
@@ -1576,6 +1582,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             exceptGroups,
             count
         };
+
         this.searchService.searchAccountV2(requestObject).subscribe(data => {
             if (data && data.body && data.body.results) {
                 const searchResults = data.body.results.map((result, i) => {
@@ -1586,6 +1593,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         index: i
                     }
                 }) || [];
+
                 if (page === 1) {
                     searchData.accounts = searchResults;
                 } else {
@@ -1594,6 +1602,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         ...searchResults
                     ];
                 }
+
                 searchData.page = isInitialLoad ? 4 : (data.body.page || 1);
                 searchData.totalItems = data.body.totalItems;
             }
@@ -2907,6 +2916,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showLedgerAccountList = false;
         this.closeDiscountSidebar();
         this.closeTaxSidebar();
+
         // Ensure activeRowIndex is within valid bounds
         const maxRowIndex = transactionsFormArray.length - 1;
         if (this.activeRowIndex < 0) {
@@ -3213,6 +3223,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const viewport = this.virtualScrollViewport.getElementRef().nativeElement;
         const scrollTop = viewport.scrollTop;
         const itemHeight = this.itemSize; // Same as itemSize in template
+
         // Number of items currently hidden above the viewport
         const itemsAbove = Math.ceil(scrollTop / itemHeight);
         const visibleItems = Math.ceil(viewport.clientHeight / itemHeight);

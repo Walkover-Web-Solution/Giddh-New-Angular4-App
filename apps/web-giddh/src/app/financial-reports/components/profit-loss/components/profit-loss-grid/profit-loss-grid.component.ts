@@ -4,6 +4,7 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    Inject,
     Input,
     NgZone,
     OnChanges,
@@ -28,6 +29,7 @@ import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-
 import { Configuration } from '../../../../../app.constant';
 import { environment } from '../../../../../../environments/environment.generated';
 import { each, forEach, indexOf, keys } from '../../../../../lodash-optimized';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
 selector: 'profit-loss-grid',
@@ -76,13 +78,14 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
         private zone: NgZone,
         private financialReportsComponentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
     ) {
 
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.plSearchControl.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),

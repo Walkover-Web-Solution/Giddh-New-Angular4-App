@@ -7,7 +7,7 @@ body {
         --lighter-percent: 10%;
     }
     &.dark-theme {
-        --lighter-percent: 30%;
+        --lighter-percent: 20%;
     }
     --theme-primary-light: color-mix(in oklch, var(--theme-primary-color) var(--lighter-percent), white);
     --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) var(--lighter-percent), white);
@@ -76,7 +76,6 @@ body {
     }
 
     &.dark-theme {
-        // --text-primary-color: var(--color-white);
         --color-dark-gray: var(--color-light-gray);
         --color-image-filter-quaternary: brightness(0) invert(1);
         --table-background-color: #424242;

@@ -341,6 +341,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     }
 
+    /**
+     * Getter for portal domain controls
+     *
+     * @readonly
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public get portalDomainControls(): AbstractControl[] {
+        const portalDomainFormArray = this.addAccountForm?.get('portalDomain') as FormArray;
+        return portalDomainFormArray ? portalDomainFormArray.controls : [];
+    }
+
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {

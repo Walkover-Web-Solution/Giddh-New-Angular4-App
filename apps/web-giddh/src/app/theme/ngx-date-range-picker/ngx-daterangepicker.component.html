@@ -146,14 +146,14 @@
                         <!-- start date/ end date inputs container -->
                         <!-- month name -->
                         <div class="month-field">
-                            <button mat-button class="prev available" (click)="onScroll('top')" aria-label="prev"></button>
+                            <button matButton="outlined" class="prev available" (click)="onScroll('top')" aria-label="prev"></button>
                             <!-- month name and month dropdown -->
                             <div class="month-dropdown">
                                 <span class="month-name">
                                     <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
                                         {{ activeMonth ? locale.monthNames[activeMonth.calendar[1][1].month()] : '' }}
                                         {{ activeMonth ? activeMonth.calendar[1][1].format(' YYYY') : '' }}
-                                        <button mat-button class="prev available"></button>
+                                        <button matButton="outlined" class="prev available"></button>
                                     </ng-container>
                                     <ng-container *ngIf="!showDropdowns || !calendarVariables.start.dropdowns">
                                         {{ activeMonth ? locale.monthNames[activeMonth.calendar[1][1].month()] : '' }}
@@ -164,7 +164,7 @@
                             <!-- month name and month dropdown -->
                             <!-- navigate to previous and next month buttons -->
                             <div class="prev-next-btn">
-                                <button mat-button class="next available" (click)="onScroll('bottom')" aria-label="next"></button>
+                                <button matButton="outlined" class="next available" (click)="onScroll('bottom')" aria-label="next"></button>
                             </div>
                             <!-- navigate to previous and next month buttons -->
                         </div>

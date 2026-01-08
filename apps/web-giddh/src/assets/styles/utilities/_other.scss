@@ -54,7 +54,9 @@
 .only-bottom-radius {
     @include border-radius(0, 0, var(--mat-border-radius-4), var(--mat-border-radius-4));
 }
-
+.text-color-inherit {
+    color: inherit !important;
+}
 .text-primary {
     color: var(--text-primary-color) !important;
 }

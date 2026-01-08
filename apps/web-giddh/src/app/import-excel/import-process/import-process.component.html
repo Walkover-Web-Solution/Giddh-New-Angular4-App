@@ -3,7 +3,7 @@
     <div class="text-right">
         <div class="action-btn">
             <button matButton="outlined" [matTooltip]="commonLocaleData?.app_back" matTooltipPosition="above"  class="mr-2" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
-            <button mat-raised-button [matTooltip]="commonLocaleData?.app_import" matTooltipPosition="above" [disabled]="!importDisable" color="primary" [ladda]="isLoading" (click)="save()">
+            <button matButton="filled" [matTooltip]="commonLocaleData?.app_import" matTooltipPosition="above" [disabled]="!importDisable" color="primary" [ladda]="isLoading" (click)="save()">
                 {{ commonLocaleData?.app_import }}
             </button>
         </div>

@@ -2,7 +2,7 @@
     <div class="no-data" *ngIf="getAccountStatementInProgress$ | async">
         <giddh-page-loader></giddh-page-loader>
     </div>
-    <div class="common-wrapper">
+    <div class="common-wrapper" *ngIf="!(getAccountStatementInProgress$ | async)">
         <div class="account-statement p-20 mt-4">
             <table class="w-100">
                 <tr>

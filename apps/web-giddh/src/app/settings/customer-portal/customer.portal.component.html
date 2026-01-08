@@ -14,6 +14,7 @@
                                     [type]="'text'"
                                     [label]="'Portal Domain'"
                                     [readonly]="organizationType !== 'COMPANY'"
+                                    [autocomplete]="'off'"
                                     #domain
                                 ></input-field>
                             </div>
@@ -59,6 +60,7 @@
                                     [(ngModel)]="razorPayObj.userName"
                                     [name]="'username'"
                                     [required]="true"
+                                    [autocomplete]="'off'"
                                 ></input-field>
                             </div>
                             <div class="col-lg-4 col-md-6 col-xs-12">
@@ -69,6 +71,7 @@
                                     [(ngModel)]="razorPayObj.password"
                                     [name]="'password'"
                                     [required]="true"
+                                    [autocomplete]="'off'"
                                 ></input-field>
                             </div>
                         </div>
@@ -156,6 +159,7 @@
                                     [(ngModel)]="paypalObj.email"
                                     [name]="'collection_email'"
                                     [required]="true"
+                                     [autocomplete]="'off'"
                                 ></input-field>
                             </div>
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
@@ -236,6 +240,7 @@
                                     [name]="'merchantKey'"
                                     [required]="true"
                                     [showError]="isFormSubmitted"
+                                    [autocomplete]="'off'"
                                 ></input-field>
                             </div>
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
@@ -247,6 +252,7 @@
                                     [name]="'merchantSalt'"
                                     [required]="true"
                                     [showError]="isFormSubmitted"
+                                    [autocomplete]="'off'"
                                 ></input-field>
                             </div>
                         </div>

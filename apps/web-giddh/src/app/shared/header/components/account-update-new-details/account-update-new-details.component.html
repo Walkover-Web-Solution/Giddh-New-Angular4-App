@@ -283,7 +283,7 @@
                 <div class="pt-3 px-1 overflow-hidden" formArrayName="addresses" *ngIf="addAccountForm.get('addresses')?.length">
                     <ng-container
                         *ngFor="
-                            let gst of addAccountForm.get('addresses')['controls'] | slice: 0 : gstDetailsLength;
+                             let gst of addAccountForm.get('addresses')['controls'] | slice: 0 : gstDetailsLength;
                             let i = index;
                             let firstItem = first;
                             let lastItem = last
@@ -435,7 +435,7 @@
                         >
                             <button matButton="outlined" class="text-left w-50 pr-4" (click)="showMoreGst()">
                                 {{ commonLocaleData?.app_show_all }} ({{
-                                    addAccountForm.get("addresses")["controls"]?.length
+                                   addAccountForm.get("addresses")["controls"]?.length
                                 }})
                             </button>
                             <button matButton="outlined" class="text-left w-50" (click)="showLessGst()">
@@ -510,7 +510,7 @@
                 <div formArrayName="portalDomain" class="pt-3 px-1 overflow-hidden pb-5">
                     <div
                         class="row pb-4 align-items-center"
-                        *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
+                        *ngFor="let domain of portalDomainControls; let i = index"
                         [formGroupName]="i"
                     >
                         <div class="w-25 pl-3">
@@ -520,17 +520,16 @@
                                 [id]="'name' + i"
                                 [label]="localeData?.portal_attention_to"
                                 [placeholder]="localeData?.portal_attention_to"
-                                [type]="'email'"
+                                [type]="'text'"
                                 (input)="portalIndex = i"
                                 [autoFocus]="activePortalIndex === i"
                                 formControlName="name"
-                                ]
                             ></input-field>
                         </div>
                         <div class="pl-2">
                             <input-field
                                 appEnterNext
-                                [name]="'name_' + i"
+                                [name]="'email_' + i"
                                 [id]="'emailid' + i"
                                 [label]="commonLocaleData?.app_email_id"
                                 [placeholder]="commonLocaleData?.app_email_id"

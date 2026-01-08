@@ -77,7 +77,7 @@
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </ng-container>
             <div class="d-flex justify-content-end mt-3" *ngIf="localeData?.payment">
-                <button matButton="filled" type="submit" class="btn mr-1" [disabled]="accountUserForm?.invalid">
+                <button matButton="filled" type="submit" class="mr-1" [disabled]="accountUserForm?.invalid">
                     {{ activePayorAccount ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
                 </button>
             </div>

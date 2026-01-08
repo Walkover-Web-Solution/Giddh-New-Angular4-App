@@ -48,7 +48,7 @@ export function fetchWhiteLabel(): () => Promise<void> {
     return async () => {
         if (!whiteLabelConfig) {
             try {
-                const response = await fetch(`${Configuration.ApiUrl}white-label`);
+                const response = await fetch(`${Configuration.ApiUrl}/white-label`);
                 const data = await response.json();
                 localStorage.setItem('whiteLabel', JSON.stringify(data));
                 whiteLabelConfig = data;
@@ -99,25 +99,14 @@ const createHybridStorage = () => {
                     const urlParams = new URLSearchParams(window.location.search);
                     const queryCompanyUniqueName = urlParams.get('companyUniqueName');
                     const queryBranchUniqueName = urlParams.get('branchUniqueName');
-
                     if (queryCompanyUniqueName && localData) {
                         const localObj = JSON.parse(localData);
-
                         // Find the company from available companies
                         const targetCompany = localObj.companies?.find((company: any) =>
                             company.uniqueName === queryCompanyUniqueName
                         );
-
                         if (targetCompany) {
                             // Debug: Log the company structure to understand how branches are stored
-                            console.log('Target company structure:', {
-                                name: targetCompany.name,
-                                uniqueName: targetCompany.uniqueName,
-                                branches: targetCompany.branches,
-                                branchCount: targetCompany.branchCount,
-                                allKeys: Object.keys(targetCompany)
-                            });
-
                             // Validate that the branch belongs to the specified company
                             let validatedBranchUniqueName = '';
                             if (queryBranchUniqueName) {
@@ -139,18 +128,9 @@ const createHybridStorage = () => {
                                 companyUser: null, // Will be set by the app when company is selected
                                 currentBranchUniqueName: validatedBranchUniqueName
                             };
-
                             // Debug logging to check query params
-                            console.log('Query params detected:', {
-                                companyUniqueName: queryCompanyUniqueName,
-                                branchUniqueName: queryBranchUniqueName,
-                                targetCompany: targetCompany,
-                                queryTabData: queryTabData
-                            });
-
                             // Store query-based data in sessionStorage
                             sessionStorage.setItem('session', JSON.stringify(queryTabData));
-
                             // Update localStorage with the query company info and mark as latest selection
                             // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
                             const updatedLocalData = {
@@ -166,16 +146,9 @@ const createHybridStorage = () => {
                             // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
                             delete updatedLocalData.currentBranchUniqueName;
                             localStorage.setItem('session', JSON.stringify(updatedLocalData));
-
                             // Trigger company/branch switch APIs similar to switchCompany/switchBranch
                             setTimeout(() => {
                                 try {
-                                    console.log('Dispatching giddh-query-params-company-switch event with:', {
-                                        companyUniqueName: queryCompanyUniqueName,
-                                        branchUniqueName: validatedBranchUniqueName,
-                                        company: targetCompany
-                                    });
-
                                     // Dispatch actions to trigger API calls (similar to switchCompany/switchBranch)
                                     const event = new CustomEvent('giddh-query-params-company-switch', {
                                         detail: {
@@ -196,12 +169,10 @@ const createHybridStorage = () => {
                     if (!sessionData && localData) {
                         // New tab - initialize with localStorage data
                         const localObj = JSON.parse(localData);
-
                         // Check if localStorage has valid company data
                         const hasValidCompanyData = localObj.activeCompany &&
-                                                  localObj.activeCompany.uniqueName &&
-                                                  localObj.companyUniqueName;
-
+                            localObj.activeCompany.uniqueName &&
+                            localObj.companyUniqueName;
                         if (hasValidCompanyData) {
                             // Extract tab-specific data and store in sessionStorage for this tab
                             // Note: currentBranchUniqueName should NOT be inherited directly, but use lastActiveBranchUniqueName as fallback
@@ -214,10 +185,8 @@ const createHybridStorage = () => {
                                     }
                                 }
                             });
-
                             // Use lastActiveBranchUniqueName as fallback for new tabs (when no query params)
                             tabSpecificData.currentBranchUniqueName = localObj.lastActiveBranchUniqueName || '';
-
                             // Store tab-specific data in sessionStorage for future use
                             if (Object.keys(tabSpecificData).length > 0) {
                                 sessionStorage.setItem('session', JSON.stringify(tabSpecificData));
@@ -229,16 +198,12 @@ const createHybridStorage = () => {
                             // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
                             delete updatedLocalData.currentBranchUniqueName;
                             localStorage.setItem('session', JSON.stringify(updatedLocalData));
-
                             return JSON.stringify(updatedLocalData); // Return updated localStorage data
                         } else {
                             // No valid company data in localStorage - check if user has companies available
-                            console.warn('No valid company data found in localStorage for new tab. Checking available companies...');
-
                             // If user has companies available, try to use the first one as fallback
                             if (localObj.companies && localObj.companies.length > 0) {
                                 const firstCompany = localObj.companies[0];
-
                                 const fallbackTabData = {
                                     applicationDate: null,
                                     companyUniqueName: firstCompany.uniqueName,
@@ -250,10 +215,8 @@ const createHybridStorage = () => {
                                         ? (localObj.lastActiveBranchUniqueName || '')
                                         : '' // Reset branch when company changes
                                 };
-
                                 // Store fallback data in sessionStorage
                                 sessionStorage.setItem('session', JSON.stringify(fallbackTabData));
-
                                 // Update localStorage with the fallback company info and mark as latest selection
                                 // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
                                 const updatedLocalData = {
@@ -265,12 +228,9 @@ const createHybridStorage = () => {
                                 // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
                                 delete updatedLocalData.currentBranchUniqueName;
                                 localStorage.setItem('session', JSON.stringify(updatedLocalData));
-
                                 return JSON.stringify(updatedLocalData);
                             } else {
                                 // No companies available - initialize with empty defaults
-                                console.warn('No companies available. User may need to create a company or re-authenticate.');
-
                                 const defaultTabData = {
                                     applicationDate: null,
                                     companyUniqueName: '',
@@ -279,10 +239,8 @@ const createHybridStorage = () => {
                                     companyUser: null,
                                     currentBranchUniqueName: ''
                                 };
-
                                 // Store default data in sessionStorage
                                 sessionStorage.setItem('session', JSON.stringify(defaultTabData));
-
                                 // Return the full localStorage data (which contains user auth info)
                                 return localData;
                             }

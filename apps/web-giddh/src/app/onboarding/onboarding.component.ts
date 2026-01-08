@@ -137,8 +137,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
-                // let inventorySetting = cloneDeep(o);
-                this.CompanySettingsObj = o; // Use o directly instead of cloned version
+                let inventorySetting = cloneDeep(o);
+                this.CompanySettingsObj = inventorySetting;
             }
         });
     }

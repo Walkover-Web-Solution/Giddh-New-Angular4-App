@@ -74,7 +74,7 @@
                     >
                         <mat-tab [label]="localeData?.statement">
                             <div class="wrapper-background bg-light-gray p-2 pt-1 pb-1 overflow-auto">
-                                <div class="account-statement-wrapper h-100">
+                                <div class="account-statement-wrapper">
                                     <mat-card class="p-3 mat-card-wrapper" *ngIf="selectedContact?.uniqueName && !isContactNotFound">
                                         <account-statement
                                             [activeAccountUniqueName]="selectedContact?.uniqueName"
