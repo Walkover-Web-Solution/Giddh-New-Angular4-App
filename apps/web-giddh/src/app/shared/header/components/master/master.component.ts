@@ -294,10 +294,6 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
             this.masterColumnsData = cloneDeep(masterColumnsData);
         }
 
-        if (changes?.isSearchingGroups?.currentValue) {
-            this.showCreateNewButton = false;
-        }
-
         if (changes?.commonLocaleData) {
             this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
         }

@@ -219,6 +219,7 @@ export class TemplateFroalaComponent implements OnInit {
                     this.showDayOfWeek = Boolean(triggerDetails.executionTime.dayOfWeek);
                     this.onEntityChange({ value: triggerDetails.entity, label: triggerDetails.entity }, true);
                     this.clickedOutsideEmail();
+                    this.changesDetectionRef.detectChanges();
                 }
             });
             this.componentStore.getEmailConditionSuggestion(TriggerModuleEnum.VoucherDue);
