@@ -32,7 +32,7 @@
                                 <div class="mb-2">
                                     <div class="custom-tab w-100 d-flex">
                                         <button
-                                            mat-button
+                                            matButton="outlined"
                                             aria-label="account"
                                             (click)="getUsersByType('account')"
                                             [ngClass]="{ 'active': userFilterType === 'account' }"
@@ -40,7 +40,7 @@
                                             {{ commonLocaleData?.app_account }}
                                         </button>
                                         <button
-                                            mat-button
+                                            matButton="outlined"
                                             aria-label="group"
                                             (click)="getUsersByType('group')"
                                             [ngClass]="{ 'active': userFilterType === 'group' }"
@@ -121,11 +121,11 @@
                                                         matButton="outlined"
                                                         aria-label="discard"
                                                         (click)="discardChanges()"
-                                                        class="mr-3"
+                                                        class="text-white mr-3"
                                                     >
                                                         {{ localeData?.discard }}
                                                     </button>
-                                                    <button matButton="filled" aria-label="save" (click)="saveDiscount()">
+                                                    <button matButton="filled" class="bg-white text-black" aria-label="save" (click)="saveDiscount()">
                                                         {{ commonLocaleData?.app_save }}
                                                     </button>
                                                 </div>

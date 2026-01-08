@@ -2616,6 +2616,7 @@ ul.sub-list {
 
         &.bg-white {
             background: var(--color-white) !important;
+            color: var(--color-black) !important;
         }
     }
 
@@ -4710,6 +4711,10 @@ input[type='checkbox'][disabled]:after {
         .pl-sticky-group {
             background: var(--color-light-gray);
             color: var(--color-black);
+            --mat-checkbox-unselected-icon-color: var(--color-black);
+            --mat-checkbox-unselected-hover-icon-color: var(--color-black);
+            --mat-checkbox-unselected-focus-icon-color: var(--color-black);
+            --mat-checkbox-unselected-pressed-icon-color: var(--color-black);
         }
     }
 }

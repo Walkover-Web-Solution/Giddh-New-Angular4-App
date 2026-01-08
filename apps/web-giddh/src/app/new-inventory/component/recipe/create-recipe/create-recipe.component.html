@@ -432,7 +432,7 @@
                 </div>
             </div>
             <div class="row mt-2 add-recipe" *ngIf="recipeObject.manufacturingDetails?.length < variantsList?.length">
-                <button mat-button class="mb-2 ml-2" color="primary" (click)="addNewRecipe()" aria-label="add recipe">
+                <button matButton="outlined" class="mb-2 ml-2" color="primary" (click)="addNewRecipe()" aria-label="add recipe">
                     <span>+</span>
                     {{ localeData?.add_recipe }}
                 </button>

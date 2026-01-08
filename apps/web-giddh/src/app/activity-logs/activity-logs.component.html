@@ -11,7 +11,7 @@
             <div *ngFor="let selectedField of selectedFields; let i = index; trackBy: trackBySelectedField" class="filter-wrapper">
                 <div class="ml-1">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'fields'"
                         [placeholder]="localeData?.select_field"
                         [options]="fields"
@@ -33,7 +33,7 @@
                             type="text"
                             name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker h-100 bg-white"
+                            class="giddh-datepicker date-range-picker h-100 bg-white text-black"
                             readonly
                         />
                     </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="entity-wrapper ml-2" *ngIf="selectedField?.value === 'ENTITY'">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'entity'"
                         [placeholder]="commonLocaleData?.app_entity"
                         [options]="entities"
@@ -85,7 +85,7 @@
                             type="text"
                             name="selectedEntryDateRange"
                             [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker h-100 bg-white"
+                            class="giddh-datepicker date-range-picker h-100 bg-white text-black"
                             readonly
                         />
                     </div>
@@ -125,7 +125,7 @@
                             type="text"
                             name="selectedVoucherDateRange"
                             [value]="selectedVoucherDateRangeUi ? selectedVoucherDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker h-100 bg-white"
+                            class="giddh-datepicker date-range-picker h-100 bg-white text-black"
                             readonly
                         />
                     </div>
@@ -153,7 +153,7 @@
                 </div>
                 <div class="operation-wrapper ml-2" *ngIf="selectedField?.value === 'OPERATION'">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'operation'"
                         [placeholder]="localeData?.operation"
                         [options]="activityOperations"
@@ -165,7 +165,7 @@
                 </div>
                 <div class="user-wrapper ml-2" *ngIf="selectedField?.value === 'USERS'">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'user'"
                         [placeholder]="localeData?.user"
                         [options]="users"
@@ -177,7 +177,7 @@
                 </div>
                 <div class="user-wrapper ml-2" *ngIf="selectedField?.value === 'ACCOUNTS'">
                     <select-field
-                        [cssClass]="'form-control border bg-white'"
+                        [cssClass]="'form-control border bg-white text-black'"
                         [name]="'accounts'"
                         [placeholder]="commonLocaleData?.app_import_type?.base_accounts"
                         [options]="accounts"
@@ -198,7 +198,7 @@
                 </span>
                 <span class="and-text" *ngIf="i < selectedFields?.length - 1">&</span>
             </div>
-            <button mat-button (click)="addDefaultFilter()" class="add-button" aria-label="add">+</button>
+            <button matButton="outlined" (click)="addDefaultFilter()" class="add-button" aria-label="add">+</button>
         </div>
         <div class="button-wrapper mb-2">
             <button matButton="filled" class="min-width-160" (click)="getActivityLogs(true)" aria-label="get logs">

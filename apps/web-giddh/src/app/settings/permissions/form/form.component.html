@@ -40,7 +40,7 @@
             <!-- time span -->
             <div [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
                 <button
-                    mat-button
+                    matButton="outlined"
                     [matMenuTriggerFor]="menu"
                     (click)="showTimeSpan = !showTimeSpan"
                     type="button"
@@ -136,7 +136,7 @@
                     (clickOutside)="methodForToggleSection('rangeSpanSection')"
                 >
                     <button
-                        mat-button
+                        matButton="outlined"
                         [matMenuTriggerFor]="menurange"
                         (click)="showIPWrap = !showIPWrap"
                         type="button"
