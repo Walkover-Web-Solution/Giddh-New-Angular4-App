@@ -1,7 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { tap } from "rxjs/operators";
+import { tapResponse } from "@ngrx/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
@@ -45,20 +45,27 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
             switchMap((req) => {
                 this.patchState({ institutionsListInProgress: true });
                 return this.settingsIntegrationService.getAllInstitutions(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
-                                this.patchState({
-                                    institutionList: res.body,
+                                return this.patchState({
+                                    institutionList: res?.body ?? [],
                                     institutionsListInProgress: false
                                 });
                             } else {
-                                this.toasterService.showSnackBar("error", res.message);
-                                this.patchState({
-                                    institutionList: null,
+                                res.message && this.toasterService.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    institutionList: [],
                                     institutionsListInProgress: false
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                institutionList: [],
+                                institutionsListInProgress: false
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -77,20 +84,27 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
             switchMap((req) => {
                 this.patchState({ requistionListInProgress: true });
                 return this.settingsIntegrationService.getRequisition(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
-                                this.patchState({
-                                    requisitionList: res.body,
+                                return this.patchState({
+                                    requisitionList: res?.body ?? [],
                                     requistionListInProgress: false
                                 });
                             } else {
-                                this.toasterService.showSnackBar("error", res.message);
-                                this.patchState({
-                                    requisitionList: null,
+                                res.message && this.toasterService.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    requisitionList: [],
                                     requistionListInProgress: false
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                requisitionList: [],
+                                requistionListInProgress: false
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -108,18 +122,26 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
         return data.pipe(
             switchMap((req) => {
                 return this.settingsIntegrationService.createEndUserAgreementByInstitutionId(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({
-                                    createEndUserAgreementSuccess: true
+                                return this.patchState({
+                                    createEndUserAgreementSuccess: res?.body ?? [],
                                 });
                             } else {
-                                this.toasterService.showSnackBar("error", res.message);
-                                this.patchState({
-                                    createEndUserAgreementSuccess: false
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    createEndUserAgreementSuccess: []
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                createEndUserAgreementSuccess: []
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -138,18 +160,26 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
             switchMap((req) => {
                 this.patchState({ deleteAccountSuccess: false });
                 return this.settingsIntegrationService.deleteEndUserAgreementDetails(req).pipe(
-                    tap(
+                    tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({
+                                return this.patchState({
                                     deleteAccountSuccess: true
                                 });
                             } else {
-                                this.toasterService.showSnackBar("error", res.message);
-                                this.patchState({
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
                                     deleteAccountSuccess: false
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                deleteAccountSuccess: false
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
