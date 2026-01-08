@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, QueryList, ViewChildren, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -26,7 +26,8 @@ export interface ActiveTriggers {
     selector: 'app-advance-trigger',
     templateUrl: './advance-trigger.component.html',
     styleUrls: ['./advance-trigger.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     /* Selector for variableComponent type field */
@@ -125,6 +126,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private dialog: MatDialog,
         @Inject(ServiceConfig) private serviceConfig,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.resetCommunicationForm();
     }
@@ -172,9 +174,11 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                     this.createTrigger.communicationPlatform = this.platform;
                 }
                 this.isCommunicationPlatformsLoading = false;
+                this.changeDetectorRef.markForCheck();
             } else {
                 this.toasty.showSnackBar("error", response?.message);
                 this.isCommunicationPlatformsLoading = false;
+                this.changeDetectorRef.markForCheck();
             }
         });
     }
@@ -202,6 +206,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                 this.toasty.showSnackBar("error", response?.message);
             }
             this.isCommunicationPlatformVerificationInProcess = false;
+            this.changeDetectorRef.markForCheck();
         });
     }
 
@@ -271,10 +276,12 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.isActiveTriggersLoading = false;
+                this.changeDetectorRef.markForCheck();
             } else {
                 this.toasty.showSnackBar("error", response?.body);
                 this.isActiveTriggersLoading = false;
                 this.triggerObj.totalItems = 0;
+                this.changeDetectorRef.markForCheck();
             }
         });
     }
@@ -323,8 +330,10 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                     });
                     this.subConditionAction = response.body?.subCondition[0].action;
                 }
+                this.changeDetectorRef.markForCheck();
             } else {
                 this.toasty.showSnackBar("error", response?.message);
+                this.changeDetectorRef.markForCheck();
             }
         });
     }
@@ -366,8 +375,10 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                 this.createTrigger.condition.action = response?.body?.condition?.action;
                 this.createTrigger.condition.subConditions[0].action = response?.body?.condition?.subConditions[0]?.action;
                 this.createTrigger.condition.entity = response?.body?.condition?.entity;
+                this.changeDetectorRef.markForCheck();
             } else {
                 this.toasty.showSnackBar("error", response?.message);
+                this.changeDetectorRef.markForCheck();
             }
         });
     }
@@ -393,8 +404,10 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                 if (callback) {
                     callback();
                 }
+                this.changeDetectorRef.markForCheck();
             } else {
                 this.toasty.showSnackBar("error", response?.message);
+                this.changeDetectorRef.markForCheck();
             }
         });
     }
@@ -413,6 +426,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                         label: result?.name
                     }
                 });
+                this.changeDetectorRef.markForCheck();
             }
         });
     }
@@ -615,6 +629,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                 } else {
                     this.toasty.showSnackBar("error", response?.message);
                 }
+                this.changeDetectorRef.markForCheck();
             });
         }
     }
@@ -645,6 +660,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                 } else {
                     this.toasty.showSnackBar("error", response?.message);
                 }
+                this.changeDetectorRef.markForCheck();
             });
         }
     }
@@ -820,13 +836,18 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
             let attachmentExists = selectedValues.filter(val => val === 'Attachment');
             if (selectedValues.includes(attachmentExists[0])) {
                 this.createTrigger.campaignDetails.argsMapping[index].value = attachmentExists[0];
-                this.variableComponent.toArray()[index].chipList = attachmentExists;
+                // Safe ViewChildren access with lifecycle check
+                const variableComponents = this.variableComponent?.toArray();
+                if (variableComponents && variableComponents[index]) {
+                    variableComponents[index].chipList = attachmentExists;
+                }
             } else {
                 this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
             }
         } else {
             this.createTrigger.campaignDetails.argsMapping[index].value = '';
         }
+        this.changeDetectorRef.markForCheck();
     }
 
     /**

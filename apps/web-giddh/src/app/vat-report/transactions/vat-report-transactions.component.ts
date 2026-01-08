@@ -1,6 +1,6 @@
 import { ReplaySubject } from 'rxjs';
 import { takeUntil, delay } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, TemplateRef, } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VatReportTransactionsRequest } from '../../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
@@ -22,7 +22,8 @@ import { PageEvent } from '@angular/material/paginator';
     selector: 'app-vat-report-transactions',
     styleUrls: ['./vat-report-transactions.component.scss'],
     templateUrl: './vat-report-transactions.component.html',
-    standalone:false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.Default
 })
 
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
@@ -66,7 +67,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         private router: Router,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceActions: InvoiceActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceService: InvoiceService,
         private generalService: GeneralService,
         private receiptService: ReceiptService,
@@ -101,6 +101,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+                this.cdRef.markForCheck();
             }
         });
     }
@@ -137,11 +138,11 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             this.vatService.getVatReportTransactions(this.activeCompany.uniqueName, this.vatReportTransactionsRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this.vatReportTransactions = res.body;
-                    this.cdRef.detectChanges();
                 } else {
                     this.toasty.showSnackBar('error', res?.message);
                 }
                 this.isLoading = false;
+                this.cdRef.markForCheck();
             });
         }
     }
@@ -165,6 +166,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                         disableClose: true,
                         autoFocus: false
                     });
+            this.cdRef.markForCheck();
         }
     }
 
@@ -178,6 +180,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         if (userResponse.action === 'closed') {
             this.dialog.closeAll();
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
+            this.cdRef.markForCheck();
         }
     }
 
@@ -190,6 +193,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public closeInvoiceModel(e): void {
         setTimeout(() => {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
+            this.cdRef.markForCheck();
         }, 2000);
     }
 
@@ -221,6 +225,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
             this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice?.account?.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice?.voucherNumber));
         }
+        this.cdRef.markForCheck();
     }
 
     /**
@@ -248,6 +253,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 } else {
                     this.toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                 }
+                this.cdRef.markForCheck();
             });
         } else {
             let dataToSend = {
@@ -257,6 +263,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             };
 
             this.invoiceService.DownloadInvoice(this.selectedInvoice?.accountUniqueName, dataToSend)
+                .pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res) {
                         if (dataToSend.typeOfInvoice?.length > 1) {
@@ -266,6 +273,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     } else {
                         this.toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                     }
+                    this.cdRef.markForCheck();
                 });
         }
     }
