@@ -261,16 +261,28 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
     public editVoucher() {
         if (this.voucherApiVersion === 2) {
-            const url = this._router.serializeUrl(
-                this._router.createUrlTree([
-                  '/pages/vouchers',
-                  this.selectedVoucherType?.toString()?.replace(/-/g, ' '),
-                  this.accountUniqueName,
-                  this.selectedVoucherUniqueName,
-                  'edit'
-                ], { queryParams: { redirect: this._router.url } })
-              );
-              window.open(url, '_blank');
+            if (this.isElectron) {
+                // For Electron, use router navigation instead of window.open
+                this._router.navigate([
+                    '/pages/vouchers',
+                    this.selectedVoucherType?.toString()?.replace(/-/g, ' '),
+                    this.accountUniqueName,
+                    this.selectedVoucherUniqueName,
+                    'edit'
+                ], { queryParams: { redirect: this._router.url } });
+            } else {
+                // For web, use window.open to open in new tab
+                const url = this._router.serializeUrl(
+                    this._router.createUrlTree([
+                      '/pages/vouchers',
+                      this.selectedVoucherType?.toString()?.replace(/-/g, ' '),
+                      this.accountUniqueName,
+                      this.selectedVoucherUniqueName,
+                      'edit'
+                    ], { queryParams: { redirect: this._router.url } })
+                  );
+                  window.open(url, '_blank');
+            }
         } else {
             this._router.navigate(['/pages/proforma-invoice/invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo], { queryParams: { uniqueName: this.selectedVoucherUniqueName } });
         }
