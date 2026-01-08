@@ -114,58 +114,70 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const href = window.location.href;
             const path = window.location.pathname || '';
             const search = window.location.search || '';
+            const hostname = window.location.hostname || '';
+
+            // Check if current URL is books.giddh.com (with or without /login)
+            const isBooksGiddh = hostname === 'books.giddh.com';
+
+            // Enhanced login-like check to prevent infinite loops
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
-            // Generate returnUrl for any non-login-like path (including root path)
-            if (!isLoginLike) {
-                const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                if (environment.production && !Configuration.isElectron && !isLocalHost) {
+
+            const isLocalHost = (hostname === 'localhost' || hostname === '127.0.0.1');
+
+            if (environment.production && !Configuration.isElectron && !isLocalHost) {
+                // Case 1: books.giddh.com - redirect to region-specific URL
+                if (isBooksGiddh) {
                     const currentUrl = path + search;
                     let returnUrl = '';
-                    if (currentUrl.startsWith('/pages/')) {
-                        returnUrl = currentUrl.split('/pages/')[1] || '';
-                    } else {
-                        returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
+
+                    // Generate returnUrl only for non-login-like paths
+                    if (!isLoginLike && currentUrl !== '/' && currentUrl !== '/login') {
+                        if (currentUrl.startsWith('/pages/')) {
+                            returnUrl = currentUrl.split('/pages/')[1] || '';
+                        } else {
+                            returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
+                        }
                     }
-                    const regionLogin = this._generalService.getGiddhRegionUrl() + 'login';
+
+                    const regionLogin = this._generalService.getGiddhRegionUrl();
                     const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
 
                     // Prevent infinite loop: check if target URL is the same as current URL
                     const currentFullUrl = window.location.href;
-                    const currentDomain = window.location.origin;
-                    const targetDomain = new URL(target).origin;
 
-                    // If target domain is different from current domain, use window.location (cross-domain redirect)
-                    // If target domain is same as current domain, use router navigation (same-domain redirect)
-                    if (targetDomain !== currentDomain) {
-                        // Cross-domain redirect (e.g., books.giddh.com → giddh.com)
-                        if (target !== currentFullUrl && !currentFullUrl.includes(target)) {
-                            window.location.href = target;
-                        } else {
-                            // Fallback to router navigation to avoid infinite loop
-                            this.router.navigate(['/login']);
+                    try {
+                        const targetUrl = new URL(target);
+
+                        // Skip redirect if it would cause a loop
+                        if (target === currentFullUrl) {
+                            console.warn('Infinite loop prevented: target URL same as current URL');
+                            return;
                         }
-                    } else {
-                        // Same-domain redirect (e.g., apps.saltbooks.com → apps.saltbooks.com/login)
-                        // Use Angular router to avoid infinite redirect loops on same domain
-                        if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
-                            this.router.navigate(['/login'], { queryParams: { returnUrl } });
-                        } else {
-                            this.router.navigate(['/login']);
+
+                        // Always redirect from books.giddh.com to the region-specific URL
+                        console.log('Redirecting from books.giddh.com to:', target);
+                        window.location.href = target;
+
+                    } catch (error) {
+                        console.error('Error parsing target URL:', target, error);
+                        // Fallback: redirect to basic region URL
+                        const fallbackUrl = this._generalService.getGiddhRegionUrl();
+                        if (fallbackUrl !== currentFullUrl) {
+                            window.location.href = fallbackUrl;
                         }
                     }
                 } else {
-                    const currentUrl = path + search;
-                    let returnUrl = '';
-                    if (currentUrl.startsWith('/pages/')) {
-                        returnUrl = currentUrl.split('/pages/')[1] || '';
-                    } else {
-                        returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
-                    }
-                    if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
-                        try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) { }
-                        this.router.navigate(['/login'], { queryParams: { returnUrl } });
-                    } else {
-                        this.router.navigate(['/login']);
+                    // Case 2: Any other domain (like apps.saltbooks.com) - redirect to domain/login
+                    if (!isLoginLike) {
+                        const currentDomain = window.location.origin;
+                        const loginUrl = `${currentDomain}/login`;
+                        const currentFullUrl = window.location.href;
+
+                        // Skip redirect if already on login page or would cause loop
+                        if (loginUrl !== currentFullUrl && path !== '/login') {
+                            console.log('Redirecting to login on same domain:', loginUrl);
+                            window.location.href = loginUrl;
+                        }
                     }
                 }
             }
