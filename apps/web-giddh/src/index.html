@@ -38,14 +38,14 @@
         <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
         <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software" />
         <link rel="icon" href="./assets/images/favicons.png" type="image/png" sizes="16x16" />
-
+        
         <!-- Preload Inter fonts for better performance -->
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Regular.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_RegularItalic.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Medium.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_SemiBold.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Bold.ttf" type="font/ttf" crossorigin="anonymous" />
-
+        
         <link rel="stylesheet" href="./assets/styles/default.css" crossorigin="anonymous" />
 
         <script type="text/javascript">
@@ -54,32 +54,29 @@
             } catch (error) {
                 console.error(error);
             }
-            // Enhanced white label logo loading with fallback
+            // Add preconnect for domainName extracted from cookie
             window.onload = function () {
-                let whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
-                const logoUrl = './assets/images/giddh-big-logo.svg';
-                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || 'https://apitest.giddh.com';
-
+                let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
+                const logoUrl = "./assets/images/giddh-big-logo.svg";
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
+                
                 if (whiteLabelConfig) {
                     // Remove the h1 tag containing the image
-                    const logoContainer = document.querySelector('#main-giddh-loader h1');
+                    const logoContainer = document.querySelector("#main-giddh-loader h1");
                     if (logoContainer) {
                         logoContainer.remove();
                     }
                 } else {
                     // If no whiteLabel object, set the logo as usual
-                    const logoElement = document.getElementById('dynamic-logo');
-                    if (logoElement) {
-                        logoElement.src = logoUrl;
-                    }
+                    document.getElementById("dynamic-logo").src = logoUrl;
                 }
                 // Create a new preconnect link element
-                const preconnectLink = document.createElement('link');
-                preconnectLink.rel = 'preconnect';
+                const preconnectLink = document.createElement("link");
+                preconnectLink.rel = "preconnect";
                 preconnectLink.href = apiDomain;
-                document.head.appendChild(preconnectLink);
 
-                console.log('🎯 Index.html: Logo and preconnect setup completed');
+                // Append the preconnect link to the head
+                document.head.appendChild(preconnectLink);
             };
         </script>
         <link rel="preconnect" href="https://headway-widget.net" />
@@ -100,7 +97,7 @@
         <!-- End Google Tag Manager (noscript) -->
         <div id="main-giddh-loader">
             <h1>
-                <img id="dynamic-logo" width="150" alt="Giddh Logo" />
+                <img id="dynamic-logo" width="150" />
             </h1>
             <div class="loading-dots">
                 <span class="loading-dots-dot"></span>
@@ -108,9 +105,6 @@
                 <span class="loading-dots-dot"></span>
                 <span class="loading-dots-dot"></span>
                 <span class="loading-dots-dot"></span>
-            </div>
-            <div style="margin-top: 20px; color: #666; font-size: 14px; text-align: center;">
-                Loading white label configuration...
             </div>
         </div>
         <app-component></app-component>
