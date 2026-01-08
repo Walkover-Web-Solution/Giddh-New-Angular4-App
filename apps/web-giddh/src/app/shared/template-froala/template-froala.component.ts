@@ -117,8 +117,6 @@ export class TemplateFroalaComponent implements OnInit {
     public filteredActionList: IOption[] = [];
     /** Holds true if show day of week dropdown */
     public showDayOfWeek: boolean = null;
-    /** Holds selected time action value for day action dropdown */
-    public selectedTimeAction: string = '';
     /** Hold if user click outside of email section */
     public clickedInsideEmailSection: boolean = false;
     /** Holds all static emails (To, Cc, Bcc) combined in a single string */
@@ -595,6 +593,7 @@ export class TemplateFroalaComponent implements OnInit {
                 cc: [[]],
                 bcc: [[]],
                 replyTo: [[]],
+                selectedTimeAction: [''],
                 executionTime: this.getExecutionTimeFormGroup(),
                 actions: [[TriggerActionEnum.AttachVoucherPdf]],
                 html: [DEFAULT_TRIGGER_TEMPLATE, [Validators.required]],
@@ -949,7 +948,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.customTriggerForm?.get('executionTime')?.get('dayOfWeek')?.setValue(null, { emitEvent: false });
         if (event?.value) {
             this.showDayOfWeek = event.value === OtherTimeOptionsEnum.DayOfWeek;
-            this.selectedTimeAction = event.value;
+            this.customTriggerForm?.get('selectedTimeAction')?.setValue(event.value, { emitEvent: false });
             this.setTimeActionValidator();
         }
     }
@@ -1025,10 +1024,10 @@ export class TemplateFroalaComponent implements OnInit {
         const dayOfMonth = executionTime.get('dayOfMonth');
         const dayOfWeek = executionTime.get('dayOfWeek');
         if (dayOfWeek?.value) {
-            this.selectedTimeAction = OtherTimeOptionsEnum.DayOfWeek;
+            this.customTriggerForm?.get('selectedTimeAction')?.setValue(OtherTimeOptionsEnum.DayOfWeek, { emitEvent: false });
             return this.getLabelValue(this.timeOtherOptions, OtherTimeOptionsEnum.DayOfWeek);
         } else if (dayOfMonth?.value) {
-            this.selectedTimeAction = OtherTimeOptionsEnum.DayOfMonth;
+            this.customTriggerForm?.get('selectedTimeAction')?.setValue(OtherTimeOptionsEnum.DayOfMonth, { emitEvent: false });
             return this.getLabelValue(this.timeOtherOptions, OtherTimeOptionsEnum.DayOfMonth);
         }
         return '';
