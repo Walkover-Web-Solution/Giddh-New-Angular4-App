@@ -62,6 +62,9 @@
                         }
                     }
                 }
+                .list-viewport {
+                    height: calc(100vh - 209px);
+                }
             }
             .customer-right-side {
                 width: calc(100% - $sidebar-width);
