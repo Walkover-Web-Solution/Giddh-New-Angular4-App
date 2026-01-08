@@ -55,8 +55,8 @@
                                             class="navigation-item"
                                             style="cursor: pointer;"
                                         >
-                                            <div class="d-block clear-both">
-                                                <span [innerHTML]="tab?.icon"></span>
+                                            <div class="list-item d-inline-flex align-items-center column-gap-05">
+                                                <span [innerHTML]="tab?.icon" class="font-size-16"></span>
                                                 <span>{{ tab?.label }}</span>
                                             </div>
                                         </mat-list-item>
@@ -68,13 +68,13 @@
                                     <a
                                         href="javascript:;"
                                         aria-label="icon"
-                                        class="d-block clear-both"
+                                        class="list-item d-inline-flex align-items-center column-gap-05"
                                         [matMenuTriggerFor]="tagsMenu"
                                         #tagsMenuTrigger="matMenuTrigger"
                                         (menuOpened)="toggleTagMenu(true)"
                                         (menuClosed)="toggleTagMenu(false)"
                                     >
-                                        <span [innerHTML]="tab?.icon"></span>
+                                        <span [innerHTML]="tab?.icon" class="font-size-16"></span>
                                         <span>{{ tab?.label }}</span>
                                     </a>
                                 </mat-list-item>
