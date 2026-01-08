@@ -120,14 +120,14 @@
                     </div>
 
                     <!-- Day Action (Day of Week or Day of Month) -->
-                    <div>
+                    <div formGroupName="executionTime">
                         <reactive-dropdown-field
                             [labelValue]="getDayActionLabelValue()"
-                            [name]="'entity'"
+                            [name]="'dayAction'"
                             [label]="localeData?.day_action"
                             [placeholder]="localeData?.select_time_action"
                             [options]="timeOtherOptions"
-                            [(ngModel)]="selectedTimeAction"
+                            formControlName="selectedTimeAction"
                             (selectedOption)="onTimeActionChange($event)"
                             (onClear)="onTimeActionChange(); showDayOfWeek = null; setTimeActionValidator()"
                         ></reactive-dropdown-field>
@@ -138,7 +138,7 @@
                         <!-- Day of Week -->
                         <reactive-dropdown-field
                             *ngIf="showDayOfWeek; else dayOfMonthTemplate"
-                            [name]="'entity'"
+                            [name]="'dayOfWeek'"
                             [label]="localeData?.day_of_week"
                             [placeholder]="localeData?.select_day_of_week"
                             [options]="dayOfWeekOptions"
@@ -152,7 +152,7 @@
                         <!-- Day of Month -->
                         <ng-template #dayOfMonthTemplate>
                             <reactive-dropdown-field
-                                [name]="'entity'"
+                                [name]="'dayOfMonth'"
                                 [label]="localeData?.date_of_month"
                                 [placeholder]="localeData?.select_date_of_month"
                                 [options]="dayOfMonthOptions"

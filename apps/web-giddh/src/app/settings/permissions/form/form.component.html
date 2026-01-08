@@ -232,7 +232,7 @@
                     matButton="filled"
                     [ladda]="createPermissionInProcess$ | async"
                     [disabled]="isUserRestricted"
-                    class="mr-3"
+                    class="mr-2"
                 >
                     <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
                     <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
@@ -248,7 +248,7 @@
                 type="button"
                 color="primary"
                 *ngIf="!isUpdtCase"
-                class="pull-right create-btn mr-0"
+                class="pull-right create-btn mr-0 w125"
                 [routerLink]="['/pages/permissions/list']"
                 [queryParams]="{ tab: 'settings' }"
             >
