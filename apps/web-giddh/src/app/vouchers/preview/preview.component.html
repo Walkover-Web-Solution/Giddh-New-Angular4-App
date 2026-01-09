@@ -159,10 +159,7 @@
                                 <i class="fa fa-print"></i>
                             </button>
                             <button
-                                *ngIf="
-                                    defaultThermalTemplate?.templateType === 'thermal_template' &&
-                                    !invoiceType.isPurchaseOrder
-                                "
+                                *ngIf="defaultThermalTemplate?.templateType === 'thermal_template' && !invoiceType.isPurchaseOrder"
                                 matButton="outlined"
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_print_thermal"

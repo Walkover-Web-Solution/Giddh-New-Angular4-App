@@ -121,7 +121,12 @@
 
                                         <div class="form-group col-sm-4 col-12">
                                             <label>Tax</label>
-                                            <button type="button" class="form-control text-left" [matMenuTriggerFor]="taxMenu" matButton="outlined">
+                                            <button
+                                                type="button"
+                                                class="form-control text-left"
+                                                [matMenuTriggerFor]="taxMenu"
+                                                matButton="outlined"
+                                            >
                                                 Selected ({{ taxTempArray?.length }})
                                                 <span class="pull-right"><span class="caret"></span></span>
                                             </button>
@@ -352,12 +357,7 @@
                                         />
                                     </div>
                                     <div class="pull-right unit-add">
-                                        <button
-                                            matButton="outlined"
-                                            class="mr-0"
-                                            (click)="addPurchaseUnitRates(i)"
-                                            *ngIf="l"
-                                        >
+                                        <button matButton="outlined" class="mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l">
                                             <i class="icon-plus text-green"></i>
                                         </button>
                                         <button matButton="outlined" (click)="removePurchaseUnitRates(i)" *ngIf="!l">
@@ -595,12 +595,7 @@
                             >
                                 Delete Stock
                             </button>
-                            <button
-                                type="button"
-                                *ngIf="!isUpdatingStockForm"
-                                (click)="resetStockForm()"
-                                matButton="outlined"
-                            >
+                            <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()" matButton="outlined">
                                 Reset
                             </button>
                         </div>

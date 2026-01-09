@@ -228,12 +228,7 @@
                 </div>
             </div>
             <div class="action-button" [ngClass]="{ 'text-xl-right': isUpdtCase }">
-                <button
-                    matButton="filled"
-                    [ladda]="createPermissionInProcess$ | async"
-                    [disabled]="isUserRestricted"
-                    class="mr-2"
-                >
+                <button matButton="filled" [ladda]="createPermissionInProcess$ | async" [disabled]="isUserRestricted" class="mr-2">
                     <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
                     <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
                 </button>

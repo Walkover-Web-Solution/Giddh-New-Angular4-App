@@ -2,12 +2,9 @@
     <div>
         <div class="pull-right">
             <div class="btn-group">
-                <button
-                    type="button"
-                    matButton="outlined"
-                    [matMenuTriggerFor]="newMenu"
-                >
-                    New <i class="caret"></i>
+                <button type="button" matButton="outlined" [matMenuTriggerFor]="newMenu">
+                    New
+                    <i class="caret"></i>
                 </button>
                 <mat-menu #newMenu="matMenu" class="dropdown-option dropdown-menu-right">
                     <button mat-menu-item (click)="openGroupStockAsidePaneDialog('inward')">Inward Note</button>

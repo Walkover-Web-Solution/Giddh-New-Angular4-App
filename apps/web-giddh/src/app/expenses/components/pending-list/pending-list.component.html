@@ -108,19 +108,19 @@
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_action" class="action-btn">
                     <div class="d-flex column-gap-15">
                         <button
-                        matButton="filled"
-                        (click)="showApproveConfirmPopup(approveConfirm, expenses); $event.stopPropagation()"
-                        class="mt-2"
-                    >
-                        {{ localeData?.approve }}
-                    </button>
-                    <button
-                        matButton="outlined"
-                        (click)="showRejectConfirmPopup(rejectConfirm, expenses); $event.stopPropagation()"
-                        class="mt-2 mb-2"
-                    >
-                        {{ localeData?.reject }}
-                    </button>
+                            matButton="filled"
+                            (click)="showApproveConfirmPopup(approveConfirm, expenses); $event.stopPropagation()"
+                            class="mt-2"
+                        >
+                            {{ localeData?.approve }}
+                        </button>
+                        <button
+                            matButton="outlined"
+                            (click)="showRejectConfirmPopup(rejectConfirm, expenses); $event.stopPropagation()"
+                            class="mt-2 mb-2"
+                        >
+                            {{ localeData?.reject }}
+                        </button>
                     </div>
                 </td>
             </div>

@@ -5,7 +5,13 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div cdkFocusInitial class="dialog-header" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeEvent?.emit()">
+    <div
+        cdkFocusInitial
+        class="dialog-header"
+        [keyboardShortcut]="'esc'"
+        [config]="{ dialogMode: true }"
+        (onShortcutPress)="closeEvent?.emit()"
+    >
         <span>
             {{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}
         </span>
@@ -143,7 +149,10 @@
                 <div class="col-sm-12">
                     {{ localeData?.linked_account }}
                     <div class="custom-tags" *ngIf="taxForm?.get('accounts')?.value?.length">
-                        <span class="border border-radius-4 text-black theme-primary-light" *ngFor="let account of taxForm.get('accounts').value">
+                        <span
+                            class="border border-radius-4 text-black theme-primary-light"
+                            *ngFor="let account of taxForm.get('accounts').value"
+                        >
                             {{ account.name }}
                         </span>
                     </div>

@@ -123,12 +123,7 @@
                     <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
                         <div class="inc-dec">
                             <div class="plus-minus">
-                                <button
-                                    matButton="outlined"
-                                    class="mr-0"
-                                    aria-label="delete icon"
-                                    (click)="removeMappedUnit(i)"
-                                >
+                                <button matButton="outlined" class="mr-0" aria-label="delete icon" (click)="removeMappedUnit(i)">
                                     <i class="icon-trash text-red"></i>
                                 </button>
                             </div>
@@ -161,12 +156,7 @@
                         >
                             {{ commonLocaleData?.app_clear }}
                         </button>
-                        <button
-                            aria-label="close"
-                            matButton="outlined"
-                            type="button"
-                            (click)="closeAsideEvent.emit(false)"
-                        >
+                        <button aria-label="close" matButton="outlined" type="button" (click)="closeAsideEvent.emit(false)">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>

@@ -24,9 +24,7 @@
                     <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}:</label>
                     <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
                         <mat-radio-button id="pdf" [value]="'pdf'">{{ commonLocaleData?.app_pdf }}</mat-radio-button>
-                        <mat-radio-button id="excel" [value]="'xlsx'">{{
-                            commonLocaleData?.app_excel
-                        }}</mat-radio-button>
+                        <mat-radio-button id="excel" [value]="'xlsx'">{{ commonLocaleData?.app_excel }}</mat-radio-button>
                         <mat-radio-button id="csv" [value]="'csv'">{{ commonLocaleData?.app_csv }}</mat-radio-button>
                     </mat-radio-group>
                 </div>
