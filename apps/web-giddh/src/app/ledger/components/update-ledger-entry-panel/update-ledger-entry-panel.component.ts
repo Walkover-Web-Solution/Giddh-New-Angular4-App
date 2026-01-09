@@ -848,6 +848,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             } else {
                 this.toaster.showSnackBar("error", response?.message)
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
