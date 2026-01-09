@@ -50,8 +50,8 @@
                 [matTooltip]="option?.label"
                 matTooltipPosition="right"
             >
-                <div *ngIf="createNewText" class="position-sticky d-flex justify-content-between">
-                    <div class="item create-new">{{ createNewText }}</div>
+                <div class="position-sticky d-flex justify-content-between">
+                    <div class="item create-new">{{ createNewText || commonLocaleData?.app_create_new }}</div>
                     <div class="item create-new-command" *ngIf="showKeyboardCommand">
                         {{ showKeyboardCommand }}
                     </div>
@@ -100,7 +100,7 @@
                         matTooltipPosition="right"
                     >
                         <a href="javascript:;" role="option" class="options-class-create">
-                            {{ commonLocaleData?.app_create_new }}
+                            {{ createNewText || commonLocaleData?.app_create_new }}
                         </a>
                     </mat-option>
                 </cdk-virtual-scroll-viewport>
