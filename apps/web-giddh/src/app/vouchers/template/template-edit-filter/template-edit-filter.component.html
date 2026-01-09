@@ -1220,26 +1220,31 @@
                                         </div>
 
                                         <!-- Account custom fields start -->
-                                        <div class="mb-3 d-block px-3">
-                                            <mat-form-field appearance="outline">
-                                                <mat-label>{{ localeData?.account_custom_fields }}</mat-label>
-                                                <mat-select
-                                                    panelClass="py-0"
-                                                    name="accountCustomFieldUniqueNames"
-                                                    [multiple]="true"
-                                                    [placeholder]="localeData?.select_custom_fields"
-                                                    [(ngModel)]="customTemplate.accountCustomFieldUniqueNames"
-                                                    (ngModelChange)="onChangeFieldVisibility()"
-                                                >
-                                                    <mat-option
-                                                        *ngFor="let customField of accountCustomFields"
-                                                        [value]="customField?.value"
+                                        @if (
+                                            customTemplate.templateType !== templateTypeEnum.ThermalTemplate &&
+                                            customTemplate.templateType !== templateTypeEnum.TallyTemplate
+                                        ) {
+                                            <div class="mb-3 d-block px-3">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>{{ localeData?.account_custom_fields }}</mat-label>
+                                                    <mat-select
+                                                        panelClass="py-0"
+                                                        name="accountCustomFieldUniqueNames"
+                                                        [multiple]="true"
+                                                        [placeholder]="localeData?.select_custom_fields"
+                                                        [(ngModel)]="customTemplate.accountCustomFieldUniqueNames"
+                                                        (ngModelChange)="onChangeFieldVisibility()"
                                                     >
-                                                        {{ customField?.label }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
+                                                        <mat-option
+                                                            *ngFor="let customField of accountCustomFields"
+                                                            [value]="customField?.value"
+                                                        >
+                                                            {{ customField?.label }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        }
                                         <!-- Account custom fields end -->
 
                                         <!-- transport-details-start -->
