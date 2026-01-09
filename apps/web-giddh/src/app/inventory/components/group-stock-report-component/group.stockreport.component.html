@@ -12,7 +12,8 @@
             </div>
             <div class="clear-filter" *ngIf="isFilterCorrect && productName?.value?.length > 0">
                 <button matButton="outlined" (click)="resetFilter()">
-                    <span class="icon-cross"></span> Clear Filter
+                    <span class="icon-cross"></span>
+                    Clear Filter
                 </button>
             </div>
             <div class="clear-both right-inventory d-flex">
@@ -85,9 +86,7 @@
                             </div>
                         </th>
                         <ng-container *ngIf="groupStockReport?.count">
-                            <th class="text-center border-right border-bottom" width="20%" colspan="2">
-                                Opening stock
-                            </th>
+                            <th class="text-center border-right border-bottom" width="20%" colspan="2">Opening stock</th>
                             <th class="text-center border-right border-bottom" width="20%" colspan="2">Inwards</th>
                             <th class="text-center border-right border-bottom" width="20%" colspan="2">Outwards</th>
                             <th class="text-center border-bottom" width="20%" colspan="2">Closing Stock</th>
@@ -825,14 +824,7 @@
                             Search
                         </button>
                         <button matButton="outlined" type="button" (click)="advanceSearchAction('clear')">Clear</button>
-                        <button
-                            matIconButton
-                            aria-label="close"
-                            role="button"
-                            (click)="advanceSearchAction('cancel')"
-                        >
-                            Cancel
-                        </button>
+                        <button matIconButton aria-label="close" role="button" (click)="advanceSearchAction('cancel')">Cancel</button>
                     </div>
                 </div>
             </form>

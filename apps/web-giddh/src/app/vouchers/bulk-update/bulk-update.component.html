@@ -178,12 +178,7 @@
 
         <p>{{ localeData?.bulk_invoice_update_note }}</p>
         <div class="d-flex column-gap-1 mt-3">
-            <button
-                matButton="outlined"
-                color="primary"
-                (click)="updateBulkPO()"
-                [disabled]="bulkUpdateVoucherInProgress$ | async"
-            >
+            <button matButton="outlined" color="primary" (click)="updateBulkPO()" [disabled]="bulkUpdateVoucherInProgress$ | async">
                 {{ commonLocaleData?.app_update }}
             </button>
             <button matButton="outlined" (click)="onCancel()" role="button">{{ commonLocaleData?.app_cancel }}</button>

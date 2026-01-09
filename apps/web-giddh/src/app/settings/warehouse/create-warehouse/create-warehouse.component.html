@@ -81,12 +81,7 @@
                         <button matButton="outlined" type="button" aria-label="clear" (click)="handleFormClear()" class="mr-3">
                             {{ commonLocaleData?.app_clear }}
                         </button>
-                        <button
-                            aria-label="create warehouse"
-                            matButton="filled"
-                            type="submit"
-                            [disabled]="warehouseForm?.invalid"
-                        >
+                        <button aria-label="create warehouse" matButton="filled" type="submit" [disabled]="warehouseForm?.invalid">
                             {{ localeData?.create_warehouse }}
                         </button>
                     </div>

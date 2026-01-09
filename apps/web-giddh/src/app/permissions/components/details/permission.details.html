@@ -3,14 +3,9 @@
     <section id="single-role" *ngIf="roleObj && localeData?.page_heading">
         <div class="p-2 border-bottom clear-both text-center mb-3">
             <span class="lead">{{ newRole?.name }}</span>
-            <button matButton="outlined" class="pull-left" (click)="goToRoles()">{{commonLocaleData?.app_back}}</button>
-            <button
-                matButton="filled"
-                *ngIf="!newRole?.isUpdateCase"
-                class="pull-right ml-2"
-                (click)="addNewRole()"
-            >
-                {{commonLocaleData?.app_save}}
+            <button matButton="outlined" class="pull-left" (click)="goToRoles()">{{ commonLocaleData?.app_back }}</button>
+            <button matButton="filled" *ngIf="!newRole?.isUpdateCase" class="pull-right ml-2" (click)="addNewRole()">
+                {{ commonLocaleData?.app_save }}
             </button>
             <button
                 matButton="filled"

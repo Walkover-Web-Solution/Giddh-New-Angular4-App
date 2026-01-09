@@ -82,7 +82,7 @@
                     <div class="clear-both text-right" *ngIf="mode === 'update'">
                         <button
                             matButton="outlined"
-                            *ngIf="(!isCompany && !isConsolidatedBranch)"
+                            *ngIf="!isCompany && !isConsolidatedBranch"
                             class="btn-sm"
                             [ladda]="isDeleteLoading"
                             (click)="deleteInvoice()"
