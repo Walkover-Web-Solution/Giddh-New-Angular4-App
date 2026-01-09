@@ -359,7 +359,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         const dataArray = this.addBulkForm.get('data') as FormArray;
         const isAlreadySelected = dataArray?.value?.filter(data => data?.additional?.value === item.uniqueName);
 
-        console.log(item, index, dataArray, isAlreadySelected, this.itemsInProcess[item.uniqueName]);
         if ((isAlreadySelected?.length && !isAlreadySelected[0].additional?.hasVariants) || this.itemsInProcess[item.uniqueName]) {
             this.toaster.showSnackBar('warning', this.localeData?.item_selected);
             return;
