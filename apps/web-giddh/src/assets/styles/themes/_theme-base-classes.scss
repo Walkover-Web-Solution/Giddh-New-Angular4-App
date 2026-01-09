@@ -1,7 +1,7 @@
 body {
     --text-primary-color: var(--theme-primary-color);
     --bg-primary-color: var(--theme-primary-color);
-    --border-color: var(--theme-border-color);
+    --border-color: var(--color-silver);
 
     &.default-theme {
         --lighter-percent: 10%;
@@ -22,7 +22,7 @@ body {
     .theme-warn-light {
         background-color: var(--theme-warn-light) !important;
     }
-    .mat-app-background { 
+    .mat-app-background {
         background-color: var(--theme-background-color, var(--mat-sys-surface));
         color: var(--theme-foreground-color, var(--mat-sys-on-surface));
     }
@@ -60,8 +60,9 @@ body {
         --color-shadow-light: #00000033;
         --color-drag-bottom-shadow: #00000024;
         --color-drag-right-shadow: #0000001f;
-        --mat-menu-box-shadow: 0px 5px 5px -3px var(--color-shadow-light),
-            0px 8px 10px 1px var(--color-drag-bottom-shadow), 0px 3px 14px 2px var(--color-drag-right-shadow);
+        --mat-menu-box-shadow:
+            0px 5px 5px -3px var(--color-shadow-light), 0px 8px 10px 1px var(--color-drag-bottom-shadow),
+            0px 3px 14px 2px var(--color-drag-right-shadow);
 
         // Filter for Image
         --filter-image-color-white: brightness(0) invert(1);
@@ -70,7 +71,7 @@ body {
             contrast(100%);
 
         // Image url
-        --url-caret-image: url("../../images/caret-light.svg");
+        --url-caret-image: url('../../images/caret-light.svg');
 
         --table-background-color: #ffffff;
     }
@@ -79,7 +80,7 @@ body {
         --color-dark-gray: var(--color-light-gray);
         --color-image-filter-quaternary: brightness(0) invert(1);
         --table-background-color: #424242;
-        --url-caret-image: url("../../images/caret-dark.svg");
+        --url-caret-image: url('../../images/caret-dark.svg');
     }
 }
 

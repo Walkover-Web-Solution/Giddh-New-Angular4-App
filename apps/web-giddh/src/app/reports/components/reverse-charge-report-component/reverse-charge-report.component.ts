@@ -116,6 +116,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public isSearching: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** TrackBy function for table performance optimization */
+    public trackByFn = this.changeDetectionService.trackByFn;
 
     constructor(
         private store: Store<AppState>,
@@ -137,7 +139,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -264,9 +266,19 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     }
 
     /**
-     * TrackBy function for table performance optimization
-     */
-    public trackByFn = this.changeDetectionService.trackByFn;
+ * Handle page change
+ *
+ * @param {*} event
+ * @memberof ReverseChargeReport
+ */
+    public pageChanged(event: any): void {
+        if (event) {
+            this.reverseChargeReportResults.results = [];
+            this.reverseChargeReportGetRequest.page = event.pageIndex + 1;
+            this.reverseChargeReportGetRequest.count = event.pageSize;
+            this.getReverseChargeReport(false);
+        }
+    }
 
 
 

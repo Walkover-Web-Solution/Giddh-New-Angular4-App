@@ -945,12 +945,7 @@
                         </table>
 
                         <div class="d-flex justify-content-end column-gap-15 mt-2">
-                            <button
-                                matButton="outlined"
-                                id="ledger-reset-button"
-                                [hidden]="isBankTransaction"
-                                (click)="resetPanel()"
-                            >
+                            <button matButton="outlined" id="ledger-reset-button" [hidden]="isBankTransaction" (click)="resetPanel()">
                                 {{ commonLocaleData?.app_reset }}
                             </button>
 

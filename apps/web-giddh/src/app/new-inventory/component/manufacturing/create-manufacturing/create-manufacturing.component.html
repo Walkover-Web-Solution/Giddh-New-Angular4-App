@@ -134,12 +134,7 @@
                                         >
                                             {{ commonLocaleData?.app_create }}
                                         </button>
-                                        <button
-                                            matButton="outlined"
-                                            class="mt-2"
-                                            (click)="resetForm()"
-                                            *ngIf="!manufactureUniqueName"
-                                        >
+                                        <button matButton="outlined" class="mt-2" (click)="resetForm()" *ngIf="!manufactureUniqueName">
                                             {{ commonLocaleData?.app_clear }}
                                         </button>
                                         <button

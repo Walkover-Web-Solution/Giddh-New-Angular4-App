@@ -93,13 +93,7 @@
                             [placeholder]="commonLocaleData?.app_select_branch"
                         ></reactive-dropdown-field>
                     </div>
-                    <button
-                        *ngIf="showClearFilter"
-                        matButton="outlined"
-                        class="min-width-160 ml-2"
-                        color="primary"
-                        (click)="resetData()"
-                    >
+                    <button *ngIf="showClearFilter" matButton="outlined" class="min-width-160 ml-2" color="primary" (click)="resetData()">
                         {{ commonLocaleData?.app_clear }}
                     </button>
                 </div>

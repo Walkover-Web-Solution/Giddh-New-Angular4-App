@@ -8,15 +8,17 @@
 @mixin define-theme-colors($theme) {
     // Define the mapping between your custom names and M3 theme roles
     $theme-color-map: (
-        "primary":           primary,
-        "primary-contrast":  on-primary,
-        "accent":            tertiary,       // M3 'tertiary' replaces 'accent'
-        "accent-contrast":   on-tertiary,
-        "warn":              error,          // M3 'error' replaces 'warn'
-        "warn-contrast":     on-error,
-        "foreground":        on-surface,
-        "background":        surface,
-        "border":            outline         // M3 'outline' is the standard for borders/dividers
+        'primary': primary,
+        'primary-contrast': on-primary,
+        'accent': tertiary,
+        // M3 'tertiary' replaces 'accent'
+        'accent-contrast': on-tertiary,
+        'warn': error,
+        // M3 'error' replaces 'warn'
+        'warn-contrast': on-error,
+        'foreground': on-surface,
+        'background': surface,
+        'border': outline, // M3 'outline' is the standard for borders/dividers
     );
 
     // Generate CSS custom properties
@@ -29,7 +31,7 @@
         .theme-#{$name}-color {
             color: var(--theme-#{$name}-color) !important;
         }
-        
+
         .theme-#{$name}-bg-color {
             background-color: var(--theme-#{$name}-color) !important;
         }

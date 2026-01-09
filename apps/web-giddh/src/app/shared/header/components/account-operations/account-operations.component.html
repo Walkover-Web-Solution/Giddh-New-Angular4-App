@@ -34,7 +34,10 @@
                 <button matButton="filled" aria-label="share" class="pull-right" (click)="openShareAccountDialog()" color="primary">
                     {{ commonLocaleData?.app_share }}
                 </button>
-                <div class="text-primary text-right mr-2 clear-both pt-1" *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
+                <div
+                    class="text-primary text-right mr-2 clear-both pt-1"
+                    *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length"
+                >
                     {{ accountSharedWith }}
                 </div>
             </div>
