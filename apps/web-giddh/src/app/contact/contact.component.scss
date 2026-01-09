@@ -301,7 +301,6 @@ button.btn.btn-filter {
 }
 
 .mdc-icon-button {
-    width: 25px;
     i {
         line-height: 20px;
     }
@@ -332,10 +331,6 @@ button.btn.btn-filter {
 .customer-img {
     height: 360px;
     width: 489px;
-}
-
-.name-column-td {
-    min-width: max(150px, 10%);
 }
 
 @media screen and (max-width: 1280px) {
