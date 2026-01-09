@@ -455,7 +455,7 @@
                             [matColumnDef]="customerColumn.value"
                         >
                             <th
-                                class="mat-customer-name name-column"
+                                class="mat-customer-name"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchCustomerContainer
@@ -495,23 +495,19 @@
                                 [attr.data-title]="localeData?.customer"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column-td pl-2"
+                                class="hover-trigger pl-2"
                                 [ngClass]="{ 'hover-trigger--active': selectedCheckedContacts.length }"
                             >
-                                <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
+                                <div class="d-flex align-items-center column-gap-05 w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
                                     <mat-checkbox
                                         color="primary"
-                                        class="mr-2 checkbox-left-side-in-table hover-target"
+                                        class="checkbox-left-side-in-table hover-target"
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
                                         [(ngModel)]="account.isSelected"
                                         (change)="selectAccount($event, account)"
                                     ></mat-checkbox>
-                                    <a
-                                        href="javascript:;"
-                                        class="btn-link-2 text-ellipsis d-inline-block"
-                                        (click)="showAccountPreview(account?.uniqueName)"
-                                    >
+                                    <a href="javascript:;" class="btn-link-2" (click)="showAccountPreview(account?.uniqueName)">
                                         {{ account.name }}
                                     </a>
                                     <button
@@ -520,7 +516,7 @@
                                         [matMenuTriggerFor]="editModelBasic"
                                         #trigger="matMenuTrigger"
                                         aria-label="dots"
-                                        class="w-auto ml-auto hover-target"
+                                        class="ml-auto hover-target"
                                     >
                                         <i class="icon-dots-three-vertical font-size-15"></i>
                                     </button>
@@ -857,7 +853,7 @@
                             [matColumnDef]="col.value"
                         >
                             <th
-                                class="mat-vendor-name name-column"
+                                class="mat-vendor-name"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchCustomerContainer
@@ -897,23 +893,19 @@
                                 [attr.data-title]="commonLocaleData?.app_vendor_name"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column-td pl-2"
+                                class="hover-trigger pl-2"
                                 [ngClass]="{ 'hover-trigger--active': selectedCheckedContacts.length }"
                             >
-                                <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
+                                <div class="d-flex align-items-center column-gap-05 w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
                                         color="primary"
-                                        class="mr-2 checkbox-left-side-in-table hover-target"
+                                        class="checkbox-left-side-in-table hover-target"
                                         (change)="selectAccount($event, account)"
                                         [(ngModel)]="account.isSelected"
                                     ></mat-checkbox>
-                                    <a
-                                        href="javascript:;"
-                                        class="btn-link-2 text-ellipsis d-inline-block"
-                                        (click)="showAccountPreview(account?.uniqueName)"
-                                    >
+                                    <a href="javascript:;" class="btn-link-2" (click)="showAccountPreview(account?.uniqueName)">
                                         {{ account.name }}
                                     </a>
                                     <button
@@ -922,7 +914,7 @@
                                         [matMenuTriggerFor]="dropdownBasic2"
                                         #trigger="matMenuTrigger"
                                         aria-label="dot vertical"
-                                        class="w-auto ml-auto hover-target"
+                                        class="ml-auto hover-target"
                                     >
                                         <i class="icon-dots-three-vertical font-size-15"></i>
                                     </button>
