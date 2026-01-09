@@ -147,12 +147,7 @@
                             </ng-container>
                         </div>
                         <div class="d-flex justify-content-between mt-3">
-                            <button
-                                matButton="outlined"
-                                *ngIf="isCreateBySubscription"
-                                (click)="back()"
-                                aria-label="back"
-                            >
+                            <button matButton="outlined" *ngIf="isCreateBySubscription" (click)="back()" aria-label="back">
                                 {{ localeData?.back_to_subscription }}
                             </button>
                             <button
@@ -464,11 +459,7 @@
                                 <button matButton="filled" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
-                                <button
-                                    *ngIf="companiesList?.length === 0"
-                                    matButton="outlined"
-                                    (click)="openLogoutConfirmationDialog()"
-                                >
+                                <button *ngIf="companiesList?.length === 0" matButton="outlined" (click)="openLogoutConfirmationDialog()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                             </div>

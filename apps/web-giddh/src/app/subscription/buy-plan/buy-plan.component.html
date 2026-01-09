@@ -304,10 +304,7 @@
                                                             </span>
                                                         </button>
                                                         <button
-                                                            *ngIf="
-                                                                firstStepForm.get('planUniqueName').value !==
-                                                                plan?.uniqueName
-                                                            "
+                                                            *ngIf="firstStepForm.get('planUniqueName').value !== plan?.uniqueName"
                                                             matButton="outlined"
                                                             class="selected-plan-button mt-auto"
                                                             aria-label="monthly"

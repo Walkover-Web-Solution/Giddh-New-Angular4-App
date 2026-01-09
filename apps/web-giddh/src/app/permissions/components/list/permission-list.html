@@ -5,12 +5,8 @@
             <button matButton="filled" (click)="openPermissionDialog()">
                 {{ localeData?.add_new_role }}
             </button>
-            <button
-                matButton="outlined"
-                *ngIf="showBackButton"
-                [routerLink]="['/pages/settings/permission']"
-            >
-                {{commonLocaleData?.app_back}}
+            <button matButton="outlined" *ngIf="showBackButton" [routerLink]="['/pages/settings/permission']">
+                {{ commonLocaleData?.app_back }}
             </button>
         </div>
         <div class="col-sm-12 mt-3 p-0 role clear-both btn-show" *ngFor="let role of allRoles">
@@ -19,21 +15,11 @@
                     <span class="vertical-center">
                         <h1>{{ role.name }}</h1>
                         <div class="text-center mt-4 on-hover d-flex column-gap-1">
-                            <button
-                                matButton="outlined"
-                                *ngIf="!role.isFixed"
-                                (click)="updateRole(role)"
-                                class="text-black"
-                            >
-                                {{commonLocaleData?.app_edit}}
+                            <button matButton="outlined" *ngIf="!role.isFixed" (click)="updateRole(role)" class="text-black">
+                                {{ commonLocaleData?.app_edit }}
                             </button>
-                            <button
-                                matButton="outlined"
-                                *ngIf="!role.isFixed"
-                                (click)="deleteRole(role);"
-                                class="text-black"
-                            >
-                                {{commonLocaleData?.app_delete}}
+                            <button matButton="outlined" *ngIf="!role.isFixed" (click)="deleteRole(role)" class="text-black">
+                                {{ commonLocaleData?.app_delete }}
                             </button>
                             <button matButton="filled" (click)="updateRole(role)">
                                 {{ commonLocaleData?.app_view }}

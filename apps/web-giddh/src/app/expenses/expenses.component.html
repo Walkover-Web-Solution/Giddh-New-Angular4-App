@@ -33,12 +33,7 @@
                                                 readonly
                                             />
                                         </div>
-                                        <button
-                                            *ngIf="isFilterSelected"
-                                            (click)="clearFilter()"
-                                            matButton="outlined"
-                                            class="ml-1"
-                                        >
+                                        <button *ngIf="isFilterSelected" (click)="clearFilter()" matButton="outlined" class="ml-1">
                                             <span class="d-inline-flex align-items-center column-gap-05">
                                                 <span class="icon-cross font-size-12"></span>
                                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
@@ -134,12 +129,7 @@
                                                 readonly
                                             />
                                         </div>
-                                         <button
-                                            *ngIf="isFilterSelected"
-                                            (click)="clearFilter()"
-                                            matButton="outlined"
-                                            class="ml-1"
-                                        >
+                                        <button *ngIf="isFilterSelected" (click)="clearFilter()" matButton="outlined" class="ml-1">
                                             <span class="d-inline-flex align-items-center column-gap-05">
                                                 <span class="icon-cross font-size-12"></span>
                                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>

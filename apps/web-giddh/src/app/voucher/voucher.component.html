@@ -3130,15 +3130,8 @@
                                     </div>
                                 </div>
                                 <div class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4">
-                                    <div
-                                        class="pull-right position-relative update-mode d-flex column-gap-15"
-                                        *ngIf="!isUpdateMode"
-                                    >
-                                        <button
-                                            matButton="outlined"
-                                            (click)="resetInvoiceForm(invoiceForm)"
-                                            class="d-inline-block"
-                                        >
+                                    <div class="pull-right position-relative update-mode d-flex column-gap-15" *ngIf="!isUpdateMode">
+                                        <button matButton="outlined" (click)="resetInvoiceForm(invoiceForm)" class="d-inline-block">
                                             {{ commonLocaleData?.app_clear }}
                                         </button>
                                         <!-- region purchase invoice -->
@@ -3258,10 +3251,7 @@
                                                 <button
                                                     *ngIf="!isCompany && !isConsolidatedBranch"
                                                     matButton="outlined"
-                                                    [disabled]="
-                                                        !hasVoucherEntry ||
-                                                        (invoiceForm?.controls)['message2']?.errors?.maxlength
-                                                    "
+                                                    [disabled]="!hasVoucherEntry || (invoiceForm?.controls)['message2']?.errors?.maxlength"
                                                     (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                                     class="p"
                                                 >

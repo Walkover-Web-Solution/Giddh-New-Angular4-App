@@ -133,12 +133,7 @@
                                     >
                                         {{ commonLocaleData?.app_update }}
                                     </button>
-                                    <button
-                                        matButton="outlined"
-                                        aria-label="delete"
-                                        *ngIf="updateRazor"
-                                        (click)="deleteRazorPayDetails()"
-                                    >
+                                    <button matButton="outlined" aria-label="delete" *ngIf="updateRazor" (click)="deleteRazorPayDetails()">
                                         {{ commonLocaleData?.app_delete }}
                                     </button>
                                 </div>
@@ -159,7 +154,7 @@
                                     [(ngModel)]="paypalObj.email"
                                     [name]="'collection_email'"
                                     [required]="true"
-                                     [autocomplete]="'off'"
+                                    [autocomplete]="'off'"
                                 ></input-field>
                             </div>
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
@@ -285,12 +280,7 @@
                                     <button matButton="filled" aria-label="save" (click)="savePayuDetails()">
                                         {{ !updatePayu ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
                                     </button>
-                                    <button
-                                        matButton="outlined"
-                                        aria-label="delete"
-                                        *ngIf="updatePayu"
-                                        (click)="deletePayuDetails()"
-                                    >
+                                    <button matButton="outlined" aria-label="delete" *ngIf="updatePayu" (click)="deletePayuDetails()">
                                         {{ commonLocaleData?.app_delete }}
                                     </button>
                                 </div>

@@ -5,49 +5,54 @@
 // Use Angular Material's built-in M3 palettes directly
 $theme-primary: mat.$azure-palette;
 $theme-tertiary: mat.$blue-palette;
- 
-$giddh-light-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: $theme-primary,
-    tertiary: $theme-tertiary,
-    use-system-variables: true,
-  ),
-  typography: (
-    brand-family: var(--font-family),
-    plain-family: var(--font-family),
-    bold-weight: var(--font-weight-bold),
-    medium-weight: var(--font-weight-medium),
-    regular-weight: var(--font-weight-regular),
-    use-system-variables: true,
-  ),
-  density: (
-    scale: 0,
-  )
-));
 
-$giddh-dark-theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-     primary: $theme-primary,
-    tertiary: $theme-tertiary,
-    use-system-variables: true,
-  ),
-  typography: (
-    brand-family: var(--font-family),
-    plain-family: var(--font-family),
-    bold-weight: var(--font-weight-bold),
-    medium-weight: var(--font-weight-medium),
-    regular-weight: var(--font-weight-regular),
-    use-system-variables: true,
-  ),
-  density: (
-    scale: 0,
-  )
-));
+$giddh-light-theme: mat.define-theme(
+    (
+        color: (
+            theme-type: light,
+            primary: $theme-primary,
+            tertiary: $theme-tertiary,
+            use-system-variables: true,
+        ),
+        typography: (
+            brand-family: var(--font-family),
+            plain-family: var(--font-family),
+            bold-weight: var(--font-weight-bold),
+            medium-weight: var(--font-weight-medium),
+            regular-weight: var(--font-weight-regular),
+            use-system-variables: true,
+        ),
+        density: (
+            scale: 0,
+        ),
+    )
+);
+
+$giddh-dark-theme: mat.define-theme(
+    (
+        color: (
+            theme-type: dark,
+            primary: $theme-primary,
+            tertiary: $theme-tertiary,
+            use-system-variables: true,
+        ),
+        typography: (
+            brand-family: var(--font-family),
+            plain-family: var(--font-family),
+            bold-weight: var(--font-weight-bold),
+            medium-weight: var(--font-weight-medium),
+            regular-weight: var(--font-weight-regular),
+            use-system-variables: true,
+        ),
+        density: (
+            scale: 0,
+        ),
+    )
+);
 
 // Apply light theme by default
-html, body {
+html,
+body {
     @include mat.all-component-themes($giddh-light-theme);
     @include mat.system-level-typography($giddh-light-theme);
     @include mat.all-component-typographies($giddh-light-theme);
@@ -61,6 +66,7 @@ html, body {
     // Apply your custom mixin
     @include mixins.define-theme-colors($giddh-light-theme);
     --mat-sys-outline: var(--color-silver);
+
     // Density override
     @include mat.all-component-densities($giddh-light-theme);
 }
@@ -68,16 +74,16 @@ html, body {
     // Apply component colors
     @include mat.all-component-colors($giddh-dark-theme);
     @include mat.system-level-colors($giddh-dark-theme);
-    
+
     // Apply your custom mixin
     @include mixins.define-theme-colors($giddh-dark-theme);
-    
+
     // Dynamic Material Design System variables for dark theme only
     // Explicitly picks tone 40 for primary and tone 90 for on-primary from Azure palette
     --mat-sys-primary: #{map.get($theme-primary, 40)};
     --mat-sys-on-primary: #{map.get($theme-primary, 90)};
     --mat-button-outlined-label-text-color: var(--color-white, #ffffff);
-    
+
     // Density override
     @include mat.all-component-densities($giddh-dark-theme);
 }

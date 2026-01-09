@@ -175,11 +175,7 @@
                                     <td class="action">
                                         <button
                                             matButton="outlined"
-                                            [disabled]="
-                                                linkedStockQuantity.invalid ||
-                                                linkedStockRate.invalid ||
-                                                linkedStockList.invalid
-                                            "
+                                            [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid"
                                             (click)="addConsumption(linkedStocks, $event)"
                                             class="ico-btn p-0"
                                         >
@@ -434,9 +430,7 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button matButton="filled" type="submit" (click)="createEntry()">
-                                Save
-                            </button>
+                            <button matButton="filled" type="submit" (click)="createEntry()">Save</button>
                             <button matButton="outlined" type="button" (click)="goBackToListPage()">Cancel</button>
                         </div>
                         <div
@@ -448,9 +442,7 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button matButton="filled" type="submit" (click)="updateEntry()">
-                                Update
-                            </button>
+                            <button matButton="filled" type="submit" (click)="updateEntry()">Update</button>
                             <button matButton="outlined" type="button" (click)="deleteEntry()">Delete</button>
                         </div>
                     </form>

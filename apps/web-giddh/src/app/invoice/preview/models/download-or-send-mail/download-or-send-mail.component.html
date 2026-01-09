@@ -11,7 +11,13 @@
                 <button type="button" matButton="filled" class="mr-2 bg-white text-black" *ngIf="showEditButton" (click)="editVoucher()">
                     {{ commonLocaleData?.app_edit }}
                 </button>
-                <button type="button" matButton="filled" class="mr-2 bg-white text-black" [matMenuTriggerFor]="showMoreOptions" (click)="showEsign = false">
+                <button
+                    type="button"
+                    matButton="filled"
+                    class="mr-2 bg-white text-black"
+                    [matMenuTriggerFor]="showMoreOptions"
+                    (click)="showEsign = false"
+                >
                     {{ commonLocaleData?.app_more }}
                     <span class="caret"></span>
                 </button>
@@ -39,12 +45,7 @@
                 >
                     <mat-tab [label]="commonLocaleData?.app_send_email">
                         <div class="p-2">
-                            <textarea
-                                matInput
-                                class="form-control"
-                                #emailList
-                                [placeholder]="localeData?.enter_email_addresses"
-                            ></textarea>
+                            <textarea matInput class="form-control" #emailList [placeholder]="localeData?.enter_email_addresses"></textarea>
                             <div class="mt-3">
                                 <button
                                     [disabled]="!emailList?.value || (currentVoucherFilter === invoicesEnum && !invoiceType?.length)"

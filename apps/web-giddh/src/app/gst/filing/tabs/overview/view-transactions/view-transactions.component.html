@@ -22,7 +22,8 @@
             <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
                 <button matButton="outlined" type="button" [matMenuTriggerFor]="entityTypeMenu">
-                    {{ selectedFilter?.entityType }} <span class="caret"></span>
+                    {{ selectedFilter?.entityType }}
+                    <span class="caret"></span>
                 </button>
                 <mat-menu #entityTypeMenu="matMenu">
                     <ng-container *ngFor="let entity of gstr1entityType">
@@ -37,7 +38,8 @@
             <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
                 <button matButton="outlined" type="button" [matMenuTriggerFor]="entityTypeMenu">
-                    {{ selectedFilter?.entityType }} <span class="caret"></span>
+                    {{ selectedFilter?.entityType }}
+                    <span class="caret"></span>
                 </button>
                 <mat-menu #entityTypeMenu="matMenu">
                     <ng-container *ngFor="let entity of gstr2entityType">

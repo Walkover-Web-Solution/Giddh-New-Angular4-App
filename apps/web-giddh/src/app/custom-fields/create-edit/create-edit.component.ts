@@ -199,7 +199,6 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
             return;
         }
         this.toggleLoader(true);
-
         this.customFieldsService.create([this.customFieldRequest]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.custom_field_created);

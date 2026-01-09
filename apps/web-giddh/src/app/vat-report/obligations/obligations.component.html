@@ -108,12 +108,22 @@
                                 {{ commonLocaleData?.app_action }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                <button class="action-btn" *ngIf="element.status ===  'F'" matButton="outlined"
-                                    (click)="openViewReturnDialog(element?.start, element?.end, element?.periodKey)">{{
-                                    localeData?.view_return }}</button>
-                                <button class="action-btn" *ngIf="element.status ===  'O'" matButton="outlined"
-                                    (click)="openFileReturnDialog(element?.start, element?.end, element?.periodKey)">
-                                    {{ localeData?.file_return }}</button>
+                                <button
+                                    class="action-btn"
+                                    *ngIf="element.status === 'F'"
+                                    matButton="outlined"
+                                    (click)="openViewReturnDialog(element?.start, element?.end, element?.periodKey)"
+                                >
+                                    {{ localeData?.view_return }}
+                                </button>
+                                <button
+                                    class="action-btn"
+                                    *ngIf="element.status === 'O'"
+                                    matButton="outlined"
+                                    (click)="openFileReturnDialog(element?.start, element?.end, element?.periodKey)"
+                                >
+                                    {{ localeData?.file_return }}
+                                </button>
                             </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

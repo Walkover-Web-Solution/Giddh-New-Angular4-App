@@ -86,13 +86,9 @@
                                     class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                                     *ngIf="showClearFilter"
                                 >
-                                    <button
-                                        matButton="outlined"
-                                        class="mr-0"
-                                        (click)="resetAdvanceSearch()"
-                                        aria-label="filter"
-                                    >
-                                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                                    <button matButton="outlined" class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
+                                        <span class="icon-cross"></span>
+                                        {{ commonLocaleData?.app_clear_filter }}
                                     </button>
                                 </div>
                                 <!-- Invoice filter section ends -->
@@ -1021,11 +1017,7 @@
                                                     <button matButton="filled" (click)="send('sundrycreditors')" aria-label="set">
                                                         {{ messageBody.btn.set }}
                                                     </button>
-                                                    <button
-                                                        role="button"
-                                                        matButton="outlined"
-                                                        (click)="closeAllDialogs()"
-                                                    >
+                                                    <button role="button" matButton="outlined" (click)="closeAllDialogs()">
                                                         {{ commonLocaleData?.app_cancel }}
                                                     </button>
                                                 </div>
