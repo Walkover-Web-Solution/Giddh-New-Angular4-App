@@ -416,7 +416,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public refreshData() {
         this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
         let data = cloneDeep(this.filterForm?.value);
-        console.log(this.filterForm?.value, this.search, data);
         let a = this.search = '';
         this.seachChange.emit(a);
         data.refresh = true;
