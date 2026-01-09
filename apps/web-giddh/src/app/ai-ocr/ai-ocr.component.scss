@@ -32,13 +32,13 @@
     width: 36px;
     min-width: 36px;
     height: 36px;
-    margin: 0px 6px;
+    margin: 0px 6px 0px 0px;
 }
 
 .notification-badge {
-    top: -20px;
-    right: -156px;
+    top: -10px;
+    left: 190px;
     min-width: 20px;
     height: 20px;
-    background-color: var(--theme-primary-color);
+    background-color: var(--color-red);
 }

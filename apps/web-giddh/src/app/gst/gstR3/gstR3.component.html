@@ -19,7 +19,7 @@
     <div class="column content-column gst-filing-container navs-list">
         <div class="tax-engine">
             <div class="d-flex justify-content-between align-items-center flex-wrap column-gap-1 row-gap-15 mt-3">
-                <div class="d-flex column-gap-1 align-items-center">
+                <div class="d-flex column-gap-1 align-items-center pl-3">
                     <span class="font-size-16">
                         <a [routerLink]="['/gstfiling']" id="ember2007" class="ember-view cursor-pointer" aria-label="back svg">
                             <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-lg text-middle">
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="flex-grow-1">
-                    <div class="d-flex column-gap-1 align-items-center justify-content-end">
+                    <div class="d-flex column-gap-1 align-items-center justify-content-end pr-3">
                         <span *ngIf="!isTabScreen">
                             <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR3"></ng-container>
                         </span>
