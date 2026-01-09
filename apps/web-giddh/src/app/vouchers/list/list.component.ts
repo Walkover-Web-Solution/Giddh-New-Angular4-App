@@ -583,6 +583,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.settingForm.get('invoiceSettings.useCustomPaymentNumber')?.valueChanges.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(() => {
+            this.changeDetectorRef.detectChanges();
+        });
+
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.fields) {
