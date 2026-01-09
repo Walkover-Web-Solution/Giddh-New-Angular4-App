@@ -176,7 +176,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -416,6 +416,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public refreshData() {
         this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
         let data = cloneDeep(this.filterForm?.value);
+        let a = this.search = '';
+        this.seachChange.emit(a);
         data.refresh = true;
         this.onPropertyChanged.emit(data);
         this.emitExpand(false);
