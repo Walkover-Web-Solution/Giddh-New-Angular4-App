@@ -15,8 +15,12 @@
     <div [hidden]="isLoading && isEditMode" class="row mx-0 h-100">
         <div class="col-12">
             <div class="p-3 d-flex justify-content-start align-items-center flex-column h-100">
-                <button *ngIf="!firstTimeCreate && !isLoading" matButton="outlined" (click)="navigateBack()"
-                    class="position-absolute top-0 left-16">
+                <button
+                    *ngIf="!firstTimeCreate && !isLoading"
+                    matButton="outlined"
+                    (click)="navigateBack()"
+                    class="position-absolute top-0 left-16"
+                >
                     <span class="d-inline-flex align-items-center column-gap-05">
                         <i class="font-size-16 icon-left"></i>
                         <span>{{ commonLocaleData?.app_back }}</span>
@@ -47,13 +51,14 @@
                                                     </p>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-center">
-                                                    <button matButton="outlined" (click)="copyEmail()" ngxClipboard
-                                                        [cbContent]="getCompleteEmail()" class="mr-4 cursor-pointer">
-                                                        {{
-                                                        isCopied
-                                                        ? localeData?.copied
-                                                        : commonLocaleData?.app_copy
-                                                        }}
+                                                    <button
+                                                        matButton="outlined"
+                                                        (click)="copyEmail()"
+                                                        ngxClipboard
+                                                        [cbContent]="getCompleteEmail()"
+                                                        class="mr-4 cursor-pointer"
+                                                    >
+                                                        {{ isCopied ? localeData?.copied : commonLocaleData?.app_copy }}
                                                     </button>
                                                     <span (click)="toggleEmailEdit()" class="text-primary cursor-pointer">
                                                         {{ commonLocaleData?.app_edit }}

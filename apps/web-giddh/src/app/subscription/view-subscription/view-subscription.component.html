@@ -218,11 +218,9 @@
                             <button *ngIf="viewSubscriptionData?.isOwner" aria-label="buyplan" matButton="filled" (click)="changePlan()">
                                 {{ localeData?.change_subscription }}
                             </button>
-                            <button matButton="outlined"
-                                *ngIf="
-                                    viewSubscriptionData?.isOwner &&
-                                    viewSubscriptionData?.period?.toLowerCase() !== 'yearly'
-                                "
+                            <button
+                                matButton="outlined"
+                                *ngIf="viewSubscriptionData?.isOwner && viewSubscriptionData?.period?.toLowerCase() !== 'yearly'"
                                 aria-label="cancelsubscription"
                                 (click)="cancelSubscription()"
                             >

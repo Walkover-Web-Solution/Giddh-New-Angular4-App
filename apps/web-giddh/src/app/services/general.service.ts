@@ -669,12 +669,7 @@ export class GeneralService {
     public getGiddhRegionUrl(): string {
         const countryRegion = localStorage.getItem('Country-Region');
         const region = COUNTRY_REGION_MAP[countryRegion] || null;
-
-        // Use environment-specific AppUrl instead of hardcoded giddh.com
-        const baseUrl = environment.AppUrl || 'https://giddh.com';
-        const loginPath = '/login';
-
-        return region === 'gl' ? `${baseUrl}${loginPath}` : `${baseUrl}/${region}${loginPath}`;
+        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
     }
 
     /**
@@ -2516,7 +2511,7 @@ export class GeneralService {
                         document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
 
                         if (action === true) {
-                        // User confirmed to leave - clean up and navigate
+                            // User confirmed to leave - clean up and navigate
 
                             pageLeaveUtilityService.removeBrowserConfirmationDialog();
                             cleanupCallback();

@@ -301,11 +301,7 @@
                                     <p class="text-black">{{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
                                     <div class="remove-radio-btn">
                                         <span class="pr-2" *ngIf="!firstItem">
-                                            <button
-                                                matButton="outlined"
-                                                (click)="removeGstDetailsForm(i)"
-                                                class="bg-white mr-3"
-                                            >
+                                            <button matButton="outlined" (click)="removeGstDetailsForm(i)" class="bg-white mr-3">
                                                 <span class="text-red d-inline-flex align-items-center column-gap-1">
                                                     <i class="icon-cross"></i>
                                                     <span>{{ commonLocaleData?.app_remove }}</span>
@@ -454,10 +450,7 @@
                             </button>
                         </div>
                         <div *ngIf="lastItem">
-                            <button
-                                matButton="outlined"
-                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
-                            >
+                            <button matButton="outlined" (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()">
                                 + {{ localeData?.add_address }}
                             </button>
                             <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>

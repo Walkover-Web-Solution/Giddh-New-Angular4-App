@@ -14,7 +14,9 @@
     &.active {
         background-color: var(--theme-primary-light) !important;
 
-        .light-gray, p, .theme-foreground-color {
+        .light-gray,
+        p,
+        .theme-foreground-color {
             color: var(--color-black) !important;
         }
     }

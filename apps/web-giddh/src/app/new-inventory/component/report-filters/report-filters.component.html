@@ -76,7 +76,8 @@
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button matButton="outlined" class="create-btn-inventory ml-3 mr-0" (click)="resetFilter()">
-            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+            <span class="icon-cross"></span>
+            {{ commonLocaleData?.app_clear_filter }}
         </button>
     </div>
     <div class="ml-auto d-flex align-items-center">
@@ -172,7 +173,13 @@
             <i class="icon-search search-icon ml-2 mr-2" matIconPrefix *ngIf="!filtersChipList?.length"></i>
         </mat-form-field>
         <div class="menu-btn-control d-flex justify-content-end align-items-center">
-            <button matButton="outlined" aria-hidden="true" class="advance-filter-button font-size-14 box-shadow-none" (click)="exportReport()" [disabled]="isLoading$ | async">
+            <button
+                matButton="outlined"
+                aria-hidden="true"
+                class="advance-filter-button font-size-14 box-shadow-none"
+                (click)="exportReport()"
+                [disabled]="isLoading$ | async"
+            >
                 <i class="icon-download-circle mr-1"></i>
                 {{ commonLocaleData?.app_export }}
             </button>

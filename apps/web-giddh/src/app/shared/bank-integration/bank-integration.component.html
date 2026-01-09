@@ -48,7 +48,13 @@
                 </ng-container>
                 <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope">
                     <div class="form-group">
-                        <button aria-label="connect bank" matButton="filled" class="mr-4" color="primary" (click)="openInstitutionsDialog()">
+                        <button
+                            aria-label="connect bank"
+                            matButton="filled"
+                            class="mr-4"
+                            color="primary"
+                            (click)="openInstitutionsDialog()"
+                        >
                             {{ localeData?.payment?.connect_bank }}
                         </button>
                     </div>

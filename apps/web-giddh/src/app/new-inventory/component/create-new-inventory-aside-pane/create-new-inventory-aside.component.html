@@ -39,12 +39,22 @@
             </div>
             <div *ngIf="moduleType === 'inventory-adjustment'">
                 <div class="pb-3">
-                    <button matButton="filled" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']" class="w150">
+                    <button
+                        matButton="filled"
+                        (click)="closeAsidePane()"
+                        [routerLink]="['/pages/inventory/v2/adjust-product-and-service']"
+                        class="w150"
+                    >
                         Adjust Group
                     </button>
                 </div>
                 <div>
-                    <button matButton="filled" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']" class="w150">
+                    <button
+                        matButton="filled"
+                        (click)="closeAsidePane()"
+                        [routerLink]="['/pages/inventory/v2/adjust-product-and-service']"
+                        class="w150"
+                    >
                         Adjust Stock
                     </button>
                 </div>

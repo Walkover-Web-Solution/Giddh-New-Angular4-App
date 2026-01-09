@@ -83,7 +83,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private companyService: CompanyService
     ) {
         this.isProdMode = environment.production;
-        // Configuration.isElectron is already available via import
+        this.isElectron = Configuration.isElectron;
 
         // Bind the method for proper event listener cleanup
         this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
@@ -126,33 +126,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     } else {
                         returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
                     }
-                    const regionLogin = this._generalService.getGiddhRegionUrl() + 'login';
+                    const regionLogin = this._generalService.getGiddhRegionUrl() + '/login';
                     const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
-
-                    // Prevent infinite loop: check if target URL is the same as current URL
-                    const currentFullUrl = window.location.href;
-                    const currentDomain = window.location.origin;
-                    const targetDomain = new URL(target).origin;
-
-                    // If target domain is different from current domain, use window.location (cross-domain redirect)
-                    // If target domain is same as current domain, use router navigation (same-domain redirect)
-                    if (targetDomain !== currentDomain) {
-                        // Cross-domain redirect (e.g., books.giddh.com → giddh.com)
-                        if (target !== currentFullUrl && !currentFullUrl.includes(target)) {
-                            window.location.href = target;
-                        } else {
-                            // Fallback to router navigation to avoid infinite loop
-                            this.router.navigate(['/login']);
-                        }
-                    } else {
-                        // Same-domain redirect (e.g., apps.saltbooks.com → apps.saltbooks.com/login)
-                        // Use Angular router to avoid infinite redirect loops on same domain
-                        if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
-                            this.router.navigate(['/login'], { queryParams: { returnUrl } });
-                        } else {
-                            this.router.navigate(['/login']);
-                        }
-                    }
+                    window.location.href = target;
                 } else {
                     const currentUrl = path + search;
                     let returnUrl = '';
@@ -301,7 +277,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response?.value) {
                 document.querySelector("body")?.classList?.remove("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
                 document.querySelector("body")?.classList?.add(response?.value);
@@ -331,6 +307,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
             /* RAZORPAY */
 
+
             /* Xml */
             if (window['xmlScriptTag'] === undefined) {
                 let xmlScriptTag = document.createElement('script');
@@ -343,6 +320,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }, 1000);
 
         this._generalService.addLinkTag("./assets/styles/vendors/code-mirror.css");
+
 
         // if (this._generalService.getUrlParameter("region") === "uk") {
         //     this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
@@ -482,13 +460,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private handleQueryParamsCompanySwitch(detail: any): void {
+        console.log('handleQueryParamsCompanySwitch called with:', detail);
 
         if (!detail || !detail.companyUniqueName || !detail.company) {
-
+            console.warn('Invalid detail provided to handleQueryParamsCompanySwitch:', detail);
             return;
         }
 
         const { companyUniqueName, branchUniqueName, company } = detail;
+        console.log('Processing company/branch switch:', { companyUniqueName, branchUniqueName, company });
 
         // Reset active company data and warehouse response (same as switchCompany)
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
@@ -555,5 +535,4 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         };
         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
-
 }

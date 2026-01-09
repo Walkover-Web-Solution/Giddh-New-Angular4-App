@@ -46,7 +46,8 @@
                     </button>
                 </div>
                 <button *ngIf="showAdvanceSearchIcon" matButton="outlined" (click)="initialRequest()" class="mx-0">
-                    <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                    <span class="icon-cross icon-font-size-14"></span>
+                    {{ commonLocaleData?.app_clear_filter }}
                 </button>
                 <div class="d-flex align-items-center column-gap-1 ml-auto">
                     <watch-video [cssClass]="'text-primary'" [moduleName]="'DAYBOOK'"></watch-video>
