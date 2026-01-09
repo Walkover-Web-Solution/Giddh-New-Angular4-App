@@ -99,8 +99,8 @@ import { ${environment === 'prod' ? 'disableDebugTools' : 'enableDebugTools'} } 
 import { Environment } from './model';
 ${environment === 'prod' ? 'import { enableProdMode } from \'@angular/core\';\nenableProdMode();' : 'Error.stackTraceLimit = Infinity;'}
 export const environment: Environment = {
-    production: true,
-    showDevModule: false,
+    production: ${envConfig.PRODUCTION_ENV},
+    showDevModule: ${!envConfig.PRODUCTION_ENV},
     AppUrl: '${envConfig.AppUrl}',
     ApiUrl: '${envConfig.ApiUrl}',
     UkApiUrl: '${envConfig.UkApiUrl}',
@@ -130,7 +130,7 @@ export const environment: Environment = {
     ENV_PROVIDERS: []
 };
 // Set global variables for backward compatibility
-(window as any).PRODUCTION_ENV = true;
+(window as any).PRODUCTION_ENV = ${envConfig.PRODUCTION_ENV};
 (window as any).STAGING_ENV = ${envConfig.STAGING_ENV};
 (window as any).LOCAL_ENV = ${envConfig.LOCAL_ENV};
 (window as any).TEST_ENV = ${envConfig.TEST_ENV};
