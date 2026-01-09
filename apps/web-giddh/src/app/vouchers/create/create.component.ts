@@ -980,6 +980,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.particularDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.body) {
                 this.prefillParticularDetails(response.entryIndex, response.body);
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -1408,6 +1409,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                     this.startLoader(false);
                 }
+                setTimeout(() => {
+                    this.changeDetection.detectChanges();
+                }, 200);
             });
 
         /** Send email success */
