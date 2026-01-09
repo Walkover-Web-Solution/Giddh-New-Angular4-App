@@ -422,7 +422,7 @@
                                                                     [id]="'credit-select-' + i"
                                                                     [cssClass]="'form-control bg-transparent'"
                                                                     class="w-100"
-                                                                    [createNewText]="commonLocaleData.app_create_new"
+                                                                    [showCreateNew]="true"
                                                                     (createOption)="showQuickAccountModal()"
                                                                     [readonly]="isEinvoiceGenerated"
                                                                     [ngClass]="{ 'read-only': isEinvoiceGenerated }"
