@@ -70,6 +70,10 @@
         .active-link {
             background-color: var(--bg-primary-color);
 
+            .list-item {
+                    color: var(--color-white) !important;
+                }
+
             a {
                 span {
                     color: var(--color-white) !important;
