@@ -44,8 +44,8 @@ export enum AccountingGroupEnum {
     SundryDebtors = 'sundrydebtors'
 }
 
-/** Enum representing CRUD operations for data manipulation. */
-export enum CrudOperationEnum {
+/** Enum representing data operations for database manipulation, including CRUD and extended operations. */
+export enum DataOperationEnum {
     /** Create a new record in the database */
     CREATE = 'CREATE',
     /** Read/retrieve existing records from the database */

@@ -12,7 +12,7 @@ import { CreateUpdateGroupComponent } from "../create-update-group/create-update
 import { GeneralService } from "../../../services/general.service";
 import { StockCreateEditComponent } from "../stock-create-edit/stock-create-edit.component";
 import { cloneDeep} from '../../../lodash-optimized';
-import { CrudOperationEnum } from "../../../shared/Enums/common.enum";
+import { DataOperationEnum } from "../../../shared/Enums/common.enum";
 
 @Component({
     selector: "inventory-master",
@@ -575,13 +575,13 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.showCreateButtons = false;
         this.createUpdateStock = false;
 
-        if (!event || event == CrudOperationEnum.CREATE) {
+        if (!event || event == DataOperationEnum.CREATE) {
             this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
         } else {
             this.resetCurrentStockAndGroup();
             this.createBreadcrumbs();
         }
-        if (event == CrudOperationEnum.CREATE) {
+        if (event == DataOperationEnum.CREATE) {
             this.activeIndex -= 1;
         }
     }
@@ -619,7 +619,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
 
                 this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
 
-                if (event == CrudOperationEnum.CREATE) {
+                if (event == DataOperationEnum.CREATE) {
                     this.activeIndex -= 1;
                 }
 
