@@ -214,6 +214,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
      */
     public deleteCommunicationPlatform(platformUniqueName: string): void {
         let dialogRef = this.dialog?.open(ConfirmModalComponent, {
+            panelClass: "mat-dialog-sm",
             data: {
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.communication?.delete_platform,
