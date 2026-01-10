@@ -1,9 +1,6 @@
 <div [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeTaxesModal()">
     <div cdkFocusInitial class="dialog-header">
         <span>{{ commonLocaleData?.app_tax_applicable }}</span>
-        <button matIconButton aria-label="close" (click)="closeTaxesModal()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <div class="container-fluid px-0">
@@ -44,9 +41,12 @@
                     ></reactive-dropdown-field>
                 </div>
             </div>
-            <div class="mt-2">
+            <div class="mt-2 d-flex column-gap-1">
                 <button matButton="filled" type="button" [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod" (click)="saveTaxes()">
                     {{ commonLocaleData?.app_apply }}
+                </button>
+                <button matButton="outlined" type="button" (click)="closeTaxesModal()">
+                    {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>
         </div>
