@@ -2161,6 +2161,7 @@
                                                                 </ng-container>
                                                                 <div>
                                                                     <discount-dropdown
+                                                                        #discountDropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [amount]="transaction.get('amount.amountForAccount')?.value"
                                                                         [companyDecimalPlaces]="company.giddhBalanceDecimalPlaces"
@@ -2232,6 +2233,7 @@
                                                                 </ng-container>
                                                                 <div>
                                                                     <tax-dropdown
+                                                                        #taxDropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [date]="invoiceForm.get('date')?.value"
                                                                         [amount]="

@@ -67,6 +67,8 @@ import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
+import { TaxDropdownComponent } from "../../theme/tax-dropdown/tax-dropdown.component";
+import { DiscountDropdownComponent } from "../../theme/discount-dropdown/discount-dropdown.component";
 import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
 import { AddAccountRequest, UpdateAccountRequest } from "../../models/api-models/Account";
@@ -164,6 +166,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('addNewDeposit') addNewDeposit!: ElementRef<HTMLSpanElement>;
     /** Reference to the "Add new row/line" span element for focusing */
     @ViewChild('customerVendorDropdown') customerVendorDropdown!: ReactiveDropdownFieldComponent;
+    /** Reference to the tax dropdown component */
+    @ViewChild('taxDropdown') taxDropdown!: TaxDropdownComponent;
+    /** Reference to the discount dropdown component */
+    @ViewChild('discountDropdown') discountDropdown!: DiscountDropdownComponent;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -3647,6 +3653,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             },
             autoFocus: false
         });
+
+        this.taxAsideMenuRef.afterClosed().subscribe(() => {
+            if (this.taxDropdown) {
+                this.taxDropdown.focusTaxDropdown();
+            }
+        });
     }
 
     /**
@@ -3655,13 +3667,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateDiscountDialog(): void {
-        this.discountDialogRef = this.openDialogWithFocusManagement(() =>
-            this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG)
-        );
+        this.storeFocus();
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
         this.discountDialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
             if (response) {
                 this.componentStore.getDiscountsList();
+            }
+            if (this.discountDropdown) {
+                this.discountDropdown.focusDiscountDropdown();
             }
         });
     }
