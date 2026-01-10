@@ -4704,17 +4704,20 @@ input[type='checkbox'][disabled]:after {
 
     .account {
         background: var(--color-light-gray);
-        color: var(--color-black);
+        color: var(--theme-foreground-color);
         overflow: visible;
         min-height: 38px;
 
         .pl-sticky-group {
             background: var(--color-light-gray);
-            color: var(--color-black);
+            color: var(--theme-foreground-color);
             --mat-checkbox-unselected-icon-color: var(--color-black);
             --mat-checkbox-unselected-hover-icon-color: var(--color-black);
             --mat-checkbox-unselected-focus-icon-color: var(--color-black);
             --mat-checkbox-unselected-pressed-icon-color: var(--color-black);
+        }
+        amount-field {
+            color: var(--color-black) !important;
         }
     }
 }
@@ -4727,6 +4730,14 @@ input[type='checkbox'][disabled]:after {
     min-width: 300px !important;
     padding-block: 10px !important;
     padding-left: 15px !important;
+    background-color: var(--color-white) !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
+@include theme(dark) {
+    .pl-sticky-group {
+        background-color: var(--table-background-color) !important;
+    }
 }
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
