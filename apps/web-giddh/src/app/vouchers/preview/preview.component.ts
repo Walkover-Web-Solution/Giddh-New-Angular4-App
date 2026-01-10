@@ -1058,7 +1058,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
+        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
             if (this.selectedInvoice && this.selectedInvoice.blob) {
                 return saveAs(this.selectedInvoice.blob, `${this.selectedInvoice?.account?.name} - ${this.selectedInvoice.voucherNumber}.pdf`);
             } else {
