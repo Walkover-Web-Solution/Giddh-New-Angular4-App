@@ -86,13 +86,9 @@
                                     class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                                     *ngIf="showClearFilter"
                                 >
-                                    <button
-                                        matButton="outlined"
-                                        class="mr-0"
-                                        (click)="resetAdvanceSearch()"
-                                        aria-label="filter"
-                                    >
-                                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                                    <button matButton="outlined" class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
+                                        <span class="icon-cross"></span>
+                                        {{ commonLocaleData?.app_clear_filter }}
                                     </button>
                                 </div>
                                 <!-- Invoice filter section ends -->
@@ -256,9 +252,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div
-                                    class="total-details-box mr-1 border-none sales-purchase min-width-230 max-width-378"
-                                >
+                                <div class="total-details-box mr-1 border-none sales-purchase min-width-230 max-width-378">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
@@ -274,9 +268,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div
-                                    class="total-details-box mr-1 border-none payment-receipt min-width-230 max-width-378"
-                                >
+                                <div class="total-details-box mr-1 border-none payment-receipt min-width-230 max-width-378">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_receipt }}</span>
@@ -463,7 +455,7 @@
                             [matColumnDef]="customerColumn.value"
                         >
                             <th
-                                class="mat-customer-name name-column"
+                                class="mat-customer-name"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchCustomerContainer
@@ -503,26 +495,19 @@
                                 [attr.data-title]="localeData?.customer"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column-td pl-2"
+                                class="hover-trigger pl-2"
                                 [ngClass]="{ 'hover-trigger--active': selectedCheckedContacts.length }"
                             >
-                                <div
-                                    class="d-flex align-items-center w-100 cursor-pointer"
-                                    (dblclick)="trigger?.openMenu()"
-                                >
+                                <div class="d-flex align-items-center column-gap-05 w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
                                     <mat-checkbox
                                         color="primary"
-                                        class="mr-2 checkbox-left-side-in-table hover-target"
+                                        class="checkbox-left-side-in-table hover-target"
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
                                         [(ngModel)]="account.isSelected"
                                         (change)="selectAccount($event, account)"
                                     ></mat-checkbox>
-                                    <a
-                                        href="javascript:;"
-                                        class="btn-link-2 text-ellipsis d-inline-block"
-                                        (click)="showAccountPreview(account?.uniqueName)"
-                                    >
+                                    <a href="javascript:;" class="btn-link-2" (click)="showAccountPreview(account?.uniqueName)">
                                         {{ account.name }}
                                     </a>
                                     <button
@@ -531,7 +516,7 @@
                                         [matMenuTriggerFor]="editModelBasic"
                                         #trigger="matMenuTrigger"
                                         aria-label="dots"
-                                        class="w-auto ml-auto hover-target"
+                                        class="ml-auto hover-target"
                                     >
                                         <i class="icon-dots-three-vertical font-size-15"></i>
                                     </button>
@@ -868,7 +853,7 @@
                             [matColumnDef]="col.value"
                         >
                             <th
-                                class="mat-vendor-name name-column"
+                                class="mat-vendor-name"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchCustomerContainer
@@ -908,26 +893,19 @@
                                 [attr.data-title]="commonLocaleData?.app_vendor_name"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column-td pl-2"
+                                class="hover-trigger pl-2"
                                 [ngClass]="{ 'hover-trigger--active': selectedCheckedContacts.length }"
                             >
-                                <div
-                                    class="d-flex align-items-center w-100 cursor-pointer"
-                                    (dblclick)="trigger?.openMenu()"
-                                >
+                                <div class="d-flex align-items-center column-gap-05 w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
                                         color="primary"
-                                        class="mr-2 checkbox-left-side-in-table hover-target"
+                                        class="checkbox-left-side-in-table hover-target"
                                         (change)="selectAccount($event, account)"
                                         [(ngModel)]="account.isSelected"
                                     ></mat-checkbox>
-                                    <a
-                                        href="javascript:;"
-                                        class="btn-link-2 text-ellipsis d-inline-block"
-                                        (click)="showAccountPreview(account?.uniqueName)"
-                                    >
+                                    <a href="javascript:;" class="btn-link-2" (click)="showAccountPreview(account?.uniqueName)">
                                         {{ account.name }}
                                     </a>
                                     <button
@@ -936,7 +914,7 @@
                                         [matMenuTriggerFor]="dropdownBasic2"
                                         #trigger="matMenuTrigger"
                                         aria-label="dot vertical"
-                                        class="w-auto ml-auto hover-target"
+                                        class="ml-auto hover-target"
                                     >
                                         <i class="icon-dots-three-vertical font-size-15"></i>
                                     </button>
@@ -1031,11 +1009,7 @@
                                                     <button matButton="filled" (click)="send('sundrycreditors')" aria-label="set">
                                                         {{ messageBody.btn.set }}
                                                     </button>
-                                                    <button
-                                                        role="button"
-                                                        matButton="outlined"
-                                                        (click)="closeAllDialogs()"
-                                                    >
+                                                    <button role="button" matButton="outlined" (click)="closeAllDialogs()">
                                                         {{ commonLocaleData?.app_cancel }}
                                                     </button>
                                                 </div>

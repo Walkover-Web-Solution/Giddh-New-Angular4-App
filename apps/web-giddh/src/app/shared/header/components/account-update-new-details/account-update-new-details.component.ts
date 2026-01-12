@@ -1117,6 +1117,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public submit() {
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
+        this.checkNameFieldValidation();
 
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
@@ -2693,5 +2694,24 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public isTabActivated(textLabel: string): boolean {
         return this.activatedTabs.has(textLabel);
+    }
+
+    /**
+     * Checks name field validation using dynamic validation service
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private checkNameFieldValidation(): void {
+        const nameControl = this.addAccountForm.get('name');
+
+        // Use the dynamic validation service from GeneralService with localized message
+        this.generalService.validateFieldSimple(
+            nameControl,
+            this.localeData?.account_name || 'Account name',
+            100,
+            this.commonLocaleData?.app_field_validation_error,
+            'warning'
+        );
     }
 }

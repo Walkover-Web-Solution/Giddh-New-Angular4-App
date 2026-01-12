@@ -51,7 +51,8 @@
                     <p class="subHead border-bottom">
                         {{ acc.siteName }}
                         <button
-                            matButton="outlined" class="ml-2"
+                            matButton="outlined"
+                            class="ml-2"
                             [matTooltip]="commonLocaleData?.app_refresh"
                             matTooltipPosition="above"
                             (click)="onRefreshToken(acc.yodleeAccounts[0], false)"
@@ -61,7 +62,8 @@
                             {{ commonLocaleData?.app_refresh }}
                         </button>
                         <button
-                            matButton="outlined" class="ml-2"
+                            matButton="outlined"
+                            class="ml-2"
                             [matTooltip]="commonLocaleData?.app_refresh"
                             matTooltipPosition="above"
                             (click)="connectBank(acc.siteId, acc?.yodleeAccounts[0]?.providerAccount?.providerAccountId)"
@@ -124,11 +126,7 @@
                                     </div>
                                 </div>
                                 <div class="clear-both">
-                                    <button
-                                        matButton="outlined"
-                                        *ngIf="card.showAccList"
-                                        (click)="card.showAccList = false"
-                                    >
+                                    <button matButton="outlined" *ngIf="card.showAccList" (click)="card.showAccList = false">
                                         {{ localeData?.not_now }}
                                     </button>
                                     <button
@@ -148,7 +146,8 @@
                                     </button>
                                 </div>
                                 <button
-                                    matButton="outlined" class="font-size-16 position-absolute bank-delete"
+                                    matButton="outlined"
+                                    class="font-size-16 position-absolute bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
                                     <i class="icon-trash text-light" [matTooltip]="localeData?.delete_bank" matTooltipPosition="above"></i>
@@ -171,7 +170,8 @@
                                 <div class="balance text-left">{{ card.balanceCurrencyCode }} {{ card.balance }}</div>
                                 <div class="clear-both mt-4"></div>
                                 <button
-                                    matButton="outlined" class="font-size-16 position-absolute bank-delete"
+                                    matButton="outlined"
+                                    class="font-size-16 position-absolute bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
                                     <i class="icon-trash" [matTooltip]="localeData?.delete_bank" matTooltipPosition="above"></i>

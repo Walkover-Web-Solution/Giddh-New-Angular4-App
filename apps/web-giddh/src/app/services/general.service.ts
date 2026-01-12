@@ -30,6 +30,8 @@ import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
 import { Configuration } from '../app.constant';
 import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
+import { ToasterService } from './toaster.service';
+import { AbstractControl } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
@@ -120,7 +122,8 @@ export class GeneralService {
         private activatedRoute: ActivatedRoute,
         private http: HttpClient,
         @Optional() @Inject(ServiceConfig)
-        private config: IServiceConfigArgs
+        private config: IServiceConfigArgs,
+        private toasterService: ToasterService
     ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -2988,5 +2991,144 @@ export class GeneralService {
         });
 
         console.groupEnd();
+    }
+
+    /**
+     * Dynamic form field validation with customizable toaster messages
+     *
+     * @param {AbstractControl} control - The form control to validate
+     * @param {string} fieldName - Display name of the field for error messages
+     * @param {object} validationConfig - Configuration object for validation rules and messages
+     * @param {string} [toasterType='warning'] - Type of toaster (error, warning, success, info)
+     * @returns {boolean} - Returns true if validation passes, false if validation fails
+     * @memberof GeneralService
+     */
+    public validateFormField(
+        control: AbstractControl,
+        fieldName: string,
+        validationConfig: {
+            required?: { enabled: boolean; message?: string };
+            maxlength?: { enabled: boolean; maxLength: number; message?: string };
+            minlength?: { enabled: boolean; minLength: number; message?: string };
+            pattern?: { enabled: boolean; pattern: RegExp; message?: string };
+            email?: { enabled: boolean; message?: string };
+            custom?: { enabled: boolean; validator: (value: any) => boolean; message?: string };
+        },
+        toasterType: 'error' | 'warning' | 'success' | 'info' = 'warning'
+    ): boolean {
+        // Only validate if control is dirty (user has interacted with it)
+        if (!control || !control.dirty || control.valid) {
+            return true;
+        }
+
+        const errors = control.errors;
+        if (!errors) {
+            return true;
+        }
+
+        // Check required validation
+        if (validationConfig.required?.enabled && errors['required']) {
+            const message = validationConfig.required.message || `${fieldName} can not be blank`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check maxlength validation
+        if (validationConfig.maxlength?.enabled && errors['maxlength']) {
+            const message = validationConfig.maxlength.message ||
+                `${fieldName} can not be more than ${validationConfig.maxlength.maxLength} characters`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check minlength validation
+        if (validationConfig.minlength?.enabled && errors['minlength']) {
+            const message = validationConfig.minlength.message ||
+                `${fieldName} must be at least ${validationConfig.minlength.minLength} characters`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check pattern validation
+        if (validationConfig.pattern?.enabled && errors['pattern']) {
+            const message = validationConfig.pattern.message || `${fieldName} format is invalid`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check email validation
+        if (validationConfig.email?.enabled && errors['email']) {
+            const message = validationConfig.email.message || `${fieldName} must be a valid email address`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check custom validation
+        if (validationConfig.custom?.enabled && control.value && !validationConfig.custom.validator(control.value)) {
+            const message = validationConfig.custom.message || `${fieldName} is invalid`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Simplified form field validation for common use cases
+     *
+     * @param {AbstractControl} control - The form control to validate
+     * @param {string} fieldName - Display name of the field for error messages
+     * @param {number} [maxLength] - Maximum allowed length (optional)
+     * @param {string} [customMessage] - Custom error message (optional)
+     * @param {string} [toasterType='warning'] - Type of toaster (error, warning, success, info)
+     * @returns {boolean} - Returns true if validation passes, false if validation fails
+     * @memberof GeneralService
+     */
+    public validateFieldSimple(
+        control: AbstractControl,
+        fieldName: string,
+        maxLength?: number,
+        customMessage?: string,
+        toasterType: 'error' | 'warning' | 'success' | 'info' = 'warning'
+    ): boolean {
+        const config: any = {
+            required: { enabled: true },
+            maxlength: maxLength ? { enabled: true, maxLength } : { enabled: false }
+        };
+
+        // Use custom message if provided, otherwise use default pattern
+        if (customMessage) {
+            // Replace dynamic placeholders in the message
+            const processedMessage = this.replaceDynamicPlaceholders(customMessage, {
+                FIELD_NAME: fieldName,
+                MAX_LENGTH: maxLength?.toString() || '0'
+            });
+
+            config.required.message = processedMessage;
+            if (maxLength) {
+                config.maxlength.message = processedMessage;
+            }
+        }
+
+        return this.validateFormField(control, fieldName, config, toasterType);
+    }
+
+    /**
+     * Replaces dynamic placeholders in messages with actual values
+     *
+     * @param {string} message - The message template with placeholders
+     * @param {object} replacements - Object containing placeholder replacements
+     * @returns {string} - Message with placeholders replaced
+     * @memberof GeneralService
+     */
+    private replaceDynamicPlaceholders(message: string, replacements: { [key: string]: string }): string {
+        let processedMessage = message;
+
+        Object.keys(replacements).forEach(placeholder => {
+            const regex = new RegExp(`\\[${placeholder}\\]`, 'g');
+            processedMessage = processedMessage.replace(regex, replacements[placeholder]);
+        });
+
+        return processedMessage;
     }
 }

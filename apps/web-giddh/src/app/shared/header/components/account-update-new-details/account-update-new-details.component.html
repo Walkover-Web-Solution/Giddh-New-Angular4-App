@@ -283,7 +283,7 @@
                 <div class="pt-3 px-1 overflow-hidden" formArrayName="addresses" *ngIf="addAccountForm.get('addresses')?.length">
                     <ng-container
                         *ngFor="
-                             let gst of addAccountForm.get('addresses')['controls'] | slice: 0 : gstDetailsLength;
+                            let gst of addAccountForm.get('addresses')['controls'] | slice: 0 : gstDetailsLength;
                             let i = index;
                             let firstItem = first;
                             let lastItem = last
@@ -420,12 +420,9 @@
                                 </div>
                             </ng-container>
                             <div class="col-sm-12 mb-4" *ngIf="!firstItem">
-                                <button
-                                    matButton="outlined"
-                                    (click)="removeGstDetailsForm(i)"
-                                    class="grey-color btn-danger text-left"
-                                >
-                                    <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
+                                <button matButton="outlined" (click)="removeGstDetailsForm(i)" class="grey-color btn-danger text-left">
+                                    <i class="icon-cross"></i>
+                                    {{ commonLocaleData?.app_remove }}
                                 </button>
                             </div>
                         </div>
@@ -434,19 +431,14 @@
                             *ngIf="lastItem && addAccountForm.get('addresses')['controls']?.length > 3 && !moreGstDetailsVisible"
                         >
                             <button matButton="outlined" class="text-left w-50 pr-4" (click)="showMoreGst()">
-                                {{ commonLocaleData?.app_show_all }} ({{
-                                   addAccountForm.get("addresses")["controls"]?.length
-                                }})
+                                {{ commonLocaleData?.app_show_all }} ({{ addAccountForm.get('addresses')['controls']?.length }})
                             </button>
                             <button matButton="outlined" class="text-left w-50" (click)="showLessGst()">
                                 {{ commonLocaleData?.app_show_less }}
                             </button>
                         </div>
                         <div *ngIf="lastItem">
-                            <button
-                                matButton="outlined"
-                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
-                            >
+                            <button matButton="outlined" (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()">
                                 + {{ localeData?.add_address }}
                             </button>
                             <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
@@ -508,11 +500,7 @@
                 *ngIf="voucherApiVersion === 2 && (activeGroupUniqueName === accountingGroupEnum.SundryDebtors || isParentSundryDebtors)"
             >
                 <div formArrayName="portalDomain" class="pt-3 px-1 overflow-hidden pb-5">
-                    <div
-                        class="row pb-4 align-items-center"
-                        *ngFor="let domain of portalDomainControls; let i = index"
-                        [formGroupName]="i"
-                    >
+                    <div class="row pb-4 align-items-center" *ngFor="let domain of portalDomainControls; let i = index" [formGroupName]="i">
                         <div class="w-25 pl-3">
                             <input-field
                                 appEnterNext

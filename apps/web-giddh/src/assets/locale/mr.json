@@ -812,5 +812,6 @@
     "app_skip_and_next": "वगळा आणि पुढे",
     "app_save_and_next": "जतन करा आणि पुढे",
     "app_export_file_name_change_note": "फाईलचे नाव बदलण्यासाठी कंपनी सेटिंग पेजवर जा",
-    "app_unassigned": "नियुक्त न केलेले"
+    "app_unassigned": "नियुक्त न केलेले",
+    "app_field_validation_error": "[FIELD_NAME] रिकामे असू शकत नाही किंवा [MAX_LENGTH] अक्षरांपेक्षा जास्त असू शकत नाही"
 }
