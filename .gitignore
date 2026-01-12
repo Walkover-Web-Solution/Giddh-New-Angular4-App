@@ -177,7 +177,6 @@ package-lock.json
 .env
 .env.local
 .env.test
-.env.electron
 .env.stage
 .env.prod
 .env.test
