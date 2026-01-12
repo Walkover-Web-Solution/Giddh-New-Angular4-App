@@ -7800,8 +7800,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const index = addressControl.get('index')?.value;
         
         // If name exists, use it; otherwise use index + 1
-        const displayValue = name || (index !== null && index !== undefined ? index + 1 : '');
+        const displayValue = name || (index !== null && index !== undefined ? `${this.commonLocaleData?.app_address} ${index + 1}` : '');
         
-        return displayValue ? `(${this.commonLocaleData?.app_address} ${displayValue})` : '';
+        return displayValue ? `(${displayValue})` : '';
     }
 }
