@@ -3689,7 +3689,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.taxAsideMenuRef.afterClosed().subscribe(() => {
-            if (this.taxDropdown) {
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.taxDropdown) {
                 this.taxDropdown.focusTaxDropdown();
             }
         });
@@ -3708,7 +3708,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (response) {
                 this.componentStore.getDiscountsList();
             }
-            if (this.discountDropdown) {
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.discountDropdown) {
                 this.discountDropdown.focusDiscountDropdown();
             }
         });
