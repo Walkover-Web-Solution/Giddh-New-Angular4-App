@@ -7012,6 +7012,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Calculates and updates the rate per account based on amount and quantity
+     *
+     * @param {number} amount - The total amount
+     * @param {FormGroup} entryFormGroup - The entry form group containing transaction data
+     * @memberof VoucherCreateComponent
+     */
+    public calculateRatePerAccount(amount: number, entryFormGroup: FormGroup): void {
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        transactionFormGroup.get("stock.rate.rateForAccount")?.patchValue(amount / transactionFormGroup.get("stock.quantity")?.value);
+    }
+
+    /**
      * Switches currency
      *
      * @memberof VoucherCreateComponent
