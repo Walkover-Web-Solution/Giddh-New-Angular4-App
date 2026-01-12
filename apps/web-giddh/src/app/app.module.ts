@@ -43,12 +43,13 @@ import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
 let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
+whiteLabelConfig = whiteLabelConfig?.status === 'error' ? null : whiteLabelConfig;
 // FetchWhiteLabel returns an async function that fetches white-label data from an API, stores it in localStorage, and caches it in whiteLabelConfig.
 export function fetchWhiteLabel(): () => Promise<void> {
     return async () => {
         if (!whiteLabelConfig) {
             try {
-                const response = await fetch(`${Configuration.ApiUrl}/white-label`);
+                const response = await fetch(`${Configuration.ApiUrl}white-label`);
                 const data = await response.json();
                 localStorage.setItem('whiteLabel', JSON.stringify(data));
                 whiteLabelConfig = data;
