@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, of, takeUntil } from 'rxjs';
@@ -24,7 +24,7 @@ const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
     styleUrls: ['./adjust-payment-dialog.component.scss'],
     standalone:false
 })
-export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
+export class AdjustPaymentDialogComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Reference to the amount input field for focus management */
     @ViewChild('amountInput') public amountInput: InputFieldComponent;
     public newAdjustVoucherOptions: IOption[] = [];
@@ -131,6 +131,8 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     private globalKeydownListener?: (event: KeyboardEvent) => void;
     private globalMousedownListener?: () => void;
     private globalClickListener?: () => void;
+    /** Flag to control dropdown opening after view init */
+    public shouldOpenDropdown: boolean = false;
 
     constructor(
         private componentStore: VoucherComponentStore,
@@ -232,6 +234,15 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             }
         });
         this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
+    }
+
+    /**
+     * Lifecycle hook after view initialization
+     *
+     * @memberof AdjustPaymentDialogComponent
+     */
+    public ngAfterViewInit(): void {
+        this.shouldOpenDropdown = !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName && this.adjustVoucherForm?.adjustments?.length === 1;
     }
 
     /**
