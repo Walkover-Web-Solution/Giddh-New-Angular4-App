@@ -2832,6 +2832,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public fillBillingShippingAddress(entityType: string, addressType: string, address: any, index: number): void {
         this.invoiceForm.controls[entityType]?.get(addressType).get("index").patchValue(index);
+        this.invoiceForm.controls[entityType]?.get(addressType).get("name").patchValue(address.name);
         this.invoiceForm.controls[entityType]
             ?.get(addressType)
             .get("address")
@@ -2952,6 +2953,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getAddressFormGroup(): FormGroup {
         return this.formBuilder.group({
             index: [""], //temp
+            name: [""],
             address: [""],
             pincode: [""],
             taxNumber: [""],
@@ -7618,5 +7620,29 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.openAccountDropdown = true;
             this.changeDetection.detectChanges();
         }, 50);
+    }
+
+    /**
+     * Gets the address display text for billing or shipping details
+     * 
+     * @param {string} addressType - Type of address ('billing' or 'shipping')
+     * @param {string} entityType - Type of entity ('account' or 'company')
+     * @returns {string} The formatted address display text
+     * @memberof VoucherCreateComponent
+     */
+    public getAddressDisplayText(addressType: string, entityType: string): string {
+        const addressControl = this.invoiceForm?.controls?.[entityType]?.get(`${addressType}Details`);
+        
+        if (!addressControl) {
+            return '';
+        }
+
+        const name = addressControl.get('name')?.value;
+        const index = addressControl.get('index')?.value;
+        
+        // If name exists, use it; otherwise use index + 1
+        const displayValue = name || (index !== null && index !== undefined ? index + 1 : '');
+        
+        return displayValue ? `(${this.commonLocaleData?.app_address} ${displayValue})` : '';
     }
 }
