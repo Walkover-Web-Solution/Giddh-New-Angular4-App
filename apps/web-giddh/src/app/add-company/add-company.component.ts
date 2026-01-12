@@ -436,8 +436,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public initMobileNumberField(): void {
         let configuration = {
-            widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW),
-            tokenAuth: (this.serviceConfig.OTP_WIDGET_TOKEN_NEW || OTP_WIDGET_TOKEN_NEW),
+            widgetId: (this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID_NEW),
+            tokenAuth: (this.serviceConfig.OTP_TOKEN_AUTH || OTP_WIDGET_TOKEN_NEW),
             exposeMethods: true,
             success: (data: any) => { },
             failure: (error: any) => {
