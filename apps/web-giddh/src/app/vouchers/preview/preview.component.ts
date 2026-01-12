@@ -1058,13 +1058,13 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
+        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             if (this.selectedInvoice && this.selectedInvoice.blob) {
                 return saveAs(this.selectedInvoice.blob, `${this.selectedInvoice?.account?.name} - ${this.selectedInvoice.voucherNumber}.pdf`);
             } else {
                 return;
             }
-        } else if (this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote) {
+        } else if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
             if (this.selectedInvoice?.hasAttachment) {
                 this.openDownloadVoucher();
             } else {
