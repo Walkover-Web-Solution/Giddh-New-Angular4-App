@@ -8102,12 +8102,13 @@ button.ladda-button .ladda-label {
 
 #HW_badge_cont {
     visibility: visible !important;
-    width: auto !important;
-    top: 1px;
-    width: 30px !important;
+    top: 0px;
+    width: 35px !important;
     display: flex !important;
-    right: 12px !important;
+    right: 10px !important;
     position: absolute !important;
+    height: 35px !important;
+    border-radius: 50%;
 }
 
 #HW_badge {
