@@ -1388,7 +1388,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (entityCode === 'GBR') {
             if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Exclude Razorpay for monthly GBR
-                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
+                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL, PaymentProvider.PAYU].includes(provider.value));
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for yearly GBR
                 filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
