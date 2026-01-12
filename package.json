@@ -177,7 +177,6 @@
   },
   "lint-staged": {
     "*.ts": [
-      "tslint",
       "prettier --write"
     ],
     "*.{js,json,css,scss,html,md}": [

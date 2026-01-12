@@ -135,7 +135,7 @@ window.ApiUrl = 'https://api.giddh.com/';
 window.HW_config = window.HW_config || {
     selector: ".notification",
     account: "7eB4aJ",
-    enabled: !window.isElectron // Disable in Electron, enable in web
+    enabled: true
 };
 // Enhanced logo and preconnect initialization with retry mechanism
 function initializeLogo() {

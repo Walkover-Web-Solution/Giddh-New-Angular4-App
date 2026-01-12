@@ -784,35 +784,33 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngAfterViewInit() {
         /* TO SHOW NOTIFICATIONS */
-        // Only initialize Headway widget in web environment, not in Electron
-        if (!Configuration.isElectron) {
-            // Ensure HW_config is properly set for web environment
-            if (!window['HW_config']) {
-                window['HW_config'] = {
-                    selector: ".notification",
-                    account: "7eB4aJ",
-                    enabled: true
-                };
-            }
+        // Initialize Headway widget in both web and Electron environments
+        // Ensure HW_config is properly set
+        if (!window['HW_config']) {
+            window['HW_config'] = {
+                selector: ".notification",
+                account: "7eB4aJ",
+                enabled: true
+            };
+        }
 
-            if (window['Headway'] === undefined) {
-                let scriptTag = document.createElement('script');
-                scriptTag.src = './assets/js/headway-widget.js';
-                scriptTag.type = 'text/javascript';
-                scriptTag.defer = true;
-                scriptTag.async = true;
-                scriptTag.onload = () => {
-                    // Initialize Headway after script loads
-                    setTimeout(() => {
-                        if (window['Headway']) {
-                            window['Headway'].init();
-                        }
-                    }, 100);
-                };
-                document.body.appendChild(scriptTag);
-            } else {
-                window['Headway']?.init();
-            }
+        if (window['Headway'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = './assets/js/headway-widget.js';
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            scriptTag.async = true;
+            scriptTag.onload = () => {
+                // Initialize Headway after script loads
+                setTimeout(() => {
+                    if (window['Headway']) {
+                        window['Headway'].init();
+                    }
+                }, 100);
+            };
+            document.body.appendChild(scriptTag);
+        } else {
+            window['Headway']?.init();
         }
         /* TO SHOW NOTIFICATIONS */
 
@@ -1954,7 +1952,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public openNotifications(): void {
-        if (!Configuration.isElectron && window['Headway']) {
+        if (window['Headway']) {
             window['Headway'].show();
         }
     }
