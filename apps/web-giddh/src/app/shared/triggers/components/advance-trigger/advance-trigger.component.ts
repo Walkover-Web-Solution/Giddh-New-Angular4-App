@@ -400,6 +400,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
             } else {
                 this.toasty.showSnackBar("error", response?.message);
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
