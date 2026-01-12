@@ -34,6 +34,13 @@
 
         <link rel="stylesheet" href="./assets/styles/default.css" crossorigin="anonymous" />
         <script type="text/javascript">
+            try {
+                var HW_config = { selector: '.notification', account: '7eB4aJ' };
+                var jQuery = ($ = window.$ = window.jQuery = require('jquery'));
+            } catch (error) {
+                console.error(error);
+            }
+
             // Electron secure context - jQuery will be loaded from bundled assets
             // No require() available due to contextIsolation: true and nodeIntegration: false
             console.log('Electron secure context - jQuery loaded from assets');
