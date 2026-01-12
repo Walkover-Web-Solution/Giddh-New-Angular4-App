@@ -922,72 +922,82 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="px-3 d-flex flex-column row-gap-05 mt-4">
-                                            <p class="font-size-16 my-2">{{ localeData?.customer_details }}</p>
-                                            <!-- customer name -->
-                                            <div *ngIf="sectionSettings?.header.customerName">
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    class="d-block"
-                                                    name="customerNameCheckbox"
-                                                    [(ngModel)]="customTemplate.sections['header'].data['customerName'].display"
-                                                    (ngModelChange)="onChangeFieldVisibility()"
+                                        @if (
+                                            sectionSettings?.header.customerName ||
+                                            (sectionSettings?.header.attentionTo &&
+                                                customTemplate?.templateType !== templateTypeEnum.ThermalTemplate) ||
+                                            (sectionSettings?.header.customerEmail &&
+                                                customTemplate?.templateType !== templateTypeEnum.ThermalTemplate) ||
+                                            (sectionSettings?.header.customerMobileNumber &&
+                                                customTemplate?.templateType !== templateTypeEnum.ThermalTemplate)
+                                        ) {
+                                            <div class="px-3 d-flex flex-column row-gap-05 mt-4">
+                                                <p class="font-size-16 my-2">{{ localeData?.customer_details }}</p>
+                                                <!-- customer name -->
+                                                <div *ngIf="sectionSettings?.header.customerName">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        class="d-block"
+                                                        name="customerNameCheckbox"
+                                                        [(ngModel)]="customTemplate.sections['header'].data['customerName'].display"
+                                                        (ngModelChange)="onChangeFieldVisibility()"
+                                                    >
+                                                        <span class="ml-2">{{ localeData?.customer_name }}</span>
+                                                    </mat-checkbox>
+                                                </div>
+                                                <!-- attention to -->
+                                                <div
+                                                    *ngIf="
+                                                        sectionSettings?.header.attentionTo &&
+                                                        customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                    "
                                                 >
-                                                    <span class="ml-2">{{ localeData?.customer_name }}</span>
-                                                </mat-checkbox>
-                                            </div>
-                                            <!-- attention to -->
-                                            <div
-                                                *ngIf="
-                                                    sectionSettings?.header.attentionTo &&
-                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
-                                                "
-                                            >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    class="d-block"
-                                                    name="attentionToCheckbox"
-                                                    [(ngModel)]="customTemplate.sections['header'].data['attentionTo'].display"
-                                                    (ngModelChange)="onChangeFieldVisibility()"
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        class="d-block"
+                                                        name="attentionToCheckbox"
+                                                        [(ngModel)]="customTemplate.sections['header'].data['attentionTo'].display"
+                                                        (ngModelChange)="onChangeFieldVisibility()"
+                                                    >
+                                                        <span class="ml-2">{{ localeData?.attention_to }}</span>
+                                                    </mat-checkbox>
+                                                </div>
+                                                <!-- email id -->
+                                                <div
+                                                    *ngIf="
+                                                        sectionSettings?.header.customerEmail &&
+                                                        customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                    "
                                                 >
-                                                    <span class="ml-2">{{ localeData?.attention_to }}</span>
-                                                </mat-checkbox>
-                                            </div>
-                                            <!-- email id -->
-                                            <div
-                                                *ngIf="
-                                                    sectionSettings?.header.customerEmail &&
-                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
-                                                "
-                                            >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    class="d-block"
-                                                    name="emailIdCheckbox"
-                                                    [(ngModel)]="customTemplate.sections['header'].data['customerEmail'].display"
-                                                    (ngModelChange)="onChangeFieldVisibility()"
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        class="d-block"
+                                                        name="emailIdCheckbox"
+                                                        [(ngModel)]="customTemplate.sections['header'].data['customerEmail'].display"
+                                                        (ngModelChange)="onChangeFieldVisibility()"
+                                                    >
+                                                        <span class="ml-2">{{ localeData?.email_id }}</span>
+                                                    </mat-checkbox>
+                                                </div>
+                                                <!-- mobile number -->
+                                                <div
+                                                    *ngIf="
+                                                        sectionSettings?.header.customerMobileNumber &&
+                                                        customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                    "
                                                 >
-                                                    <span class="ml-2">{{ localeData?.email_id }}</span>
-                                                </mat-checkbox>
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        class="d-block"
+                                                        name="mobileNumberCheckbox"
+                                                        [(ngModel)]="customTemplate.sections['header'].data['customerMobileNumber'].display"
+                                                        (ngModelChange)="onChangeFieldVisibility()"
+                                                    >
+                                                        <span class="ml-2">{{ localeData?.mobile_number }}</span>
+                                                    </mat-checkbox>
+                                                </div>
                                             </div>
-                                            <!-- mobile number -->
-                                            <div
-                                                *ngIf="
-                                                    sectionSettings?.header.customerMobileNumber &&
-                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
-                                                "
-                                            >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    class="d-block"
-                                                    name="mobileNumberCheckbox"
-                                                    [(ngModel)]="customTemplate.sections['header'].data['customerMobileNumber'].display"
-                                                    (ngModelChange)="onChangeFieldVisibility()"
-                                                >
-                                                    <span class="ml-2">{{ localeData?.mobile_number }}</span>
-                                                </mat-checkbox>
-                                            </div>
-                                        </div>
+                                        }
                                         <div
                                             class="px-3 d-flex flex-column row-gap-05 mt-4"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
@@ -1220,26 +1230,31 @@
                                         </div>
 
                                         <!-- Account custom fields start -->
-                                        <div class="mb-3 d-block px-3">
-                                            <mat-form-field appearance="outline">
-                                                <mat-label>{{ localeData?.account_custom_fields }}</mat-label>
-                                                <mat-select
-                                                    panelClass="py-0"
-                                                    name="accountCustomFieldUniqueNames"
-                                                    [multiple]="true"
-                                                    [placeholder]="localeData?.select_custom_fields"
-                                                    [(ngModel)]="customTemplate.accountCustomFieldUniqueNames"
-                                                    (ngModelChange)="onChangeFieldVisibility()"
-                                                >
-                                                    <mat-option
-                                                        *ngFor="let customField of accountCustomFields"
-                                                        [value]="customField?.value"
+                                        @if (
+                                            customTemplate.templateType !== templateTypeEnum.ThermalTemplate &&
+                                            customTemplate.templateType !== templateTypeEnum.TallyTemplate
+                                        ) {
+                                            <div class="mb-3 d-block px-3">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>{{ localeData?.account_custom_fields }}</mat-label>
+                                                    <mat-select
+                                                        panelClass="py-0"
+                                                        name="accountCustomFieldUniqueNames"
+                                                        [multiple]="true"
+                                                        [placeholder]="localeData?.select_custom_fields"
+                                                        [(ngModel)]="customTemplate.accountCustomFieldUniqueNames"
+                                                        (ngModelChange)="onChangeFieldVisibility()"
                                                     >
-                                                        {{ customField?.label }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
+                                                        <mat-option
+                                                            *ngFor="let customField of accountCustomFields"
+                                                            [value]="customField?.value"
+                                                        >
+                                                            {{ customField?.label }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        }
                                         <!-- Account custom fields end -->
 
                                         <!-- transport-details-start -->
