@@ -2365,6 +2365,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
                 this.accountSearchRequest.isLoading = false;
+                this.changeDetection.detectChanges();
             });
     }
 
@@ -2411,6 +2412,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
                 this.stockSearchRequest.isLoading = false;
+                this.changeDetection.detectChanges()
             });
     }
 
@@ -4633,6 +4635,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             );
             this.invoiceForm.get("grandTotalMultiCurrency")?.patchValue(this.voucherTotals?.grandTotalMultiCurrency);
             this.calculateBalanceDue();
+            this.changeDetection.detectChanges();
         }, 100);
     }
 
