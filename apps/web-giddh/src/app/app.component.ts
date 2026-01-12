@@ -116,9 +116,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const search = window.location.search || '';
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
             // Generate returnUrl for any non-login-like path (including root path)
+            console.log("href", href);
+            console.log("path", path);
+            console.log("search", search);
+            console.log("isLoginLike", isLoginLike);
+            console.log(this._generalService.getGiddhRegionUrl());
+            console.log("environment.production", environment.production);
+            console.log("Configuration.isElectron", Configuration.isElectron);
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                if (environment.production && !Configuration.isElectron && !isLocalHost) {
+                if (environment.production && !Configuration.isElectron && !isLocalHost ) {
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
