@@ -175,14 +175,14 @@
     "typescript": "~5.9.0",
     "webpack": "^5.94.0"
   },
-  "lint-staged": {
-    "*.ts": [
-      "prettier --write"
-    ],
-    "*.{js,json,css,scss,html,md}": [
-      "prettier --write"
-    ]
-  },
+"lint-staged": {
+  "*.ts": [
+    "prettier --write"
+  ],
+  "*.{js,json,css,scss,html,md}": [
+    "prettier --write"
+  ]
+},
   "xplat": {
     "prefix": "foo"
   }

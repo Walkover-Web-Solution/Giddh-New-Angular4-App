@@ -1,7 +1,6 @@
 {
     "extends": "../../tslint.json",
     "rules": {
-        "no-inferrable-types": false,
-        "prefer-const": false
+        "no-inferrable-types": false
     }
 }

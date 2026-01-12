@@ -898,6 +898,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public submit() {
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
+        this.checkNameFieldValidation();
 
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
@@ -2006,6 +2007,25 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
         if (!uniqueName || !salesPersonList?.length) return false;
         return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
+    }
+
+    /**
+ * Checks name field validation using dynamic validation service
+ *
+ * @private
+ * @memberof AccountAddNewDetailsComponent
+ */
+    private checkNameFieldValidation(): void {
+        const nameControl = this.addAccountForm.get('name');
+
+        // Use the dynamic validation service from GeneralService with localized message
+        this.generalService.validateFieldSimple(
+            nameControl,
+            this.localeData?.account_name || 'Account name',
+            100,
+            this.commonLocaleData?.app_field_validation_error,
+            'warning'
+        );
     }
 }
 
