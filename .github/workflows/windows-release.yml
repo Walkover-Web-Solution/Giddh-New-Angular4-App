@@ -43,11 +43,18 @@ jobs:
       - name: Build Windows EXE
         run: npm run dist -- --win --x64
 
-      - name: Pick the generated EXE and stage as artifacts\unsigned\app.exe
+      - name: Extract version from package.json and prepare artifacts
         shell: pwsh
         run: |
+          # Extract version from package.json
+          $packageJson = Get-Content "package.json" | ConvertFrom-Json
+          $version = $packageJson.version
+          "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Package version: $version"
+
           if (!(Test-Path "dist")) { throw "dist/ folder not found. Update this workflow to match your electron-builder output dir." }
 
+          # Find the EXE file
           $exe = Get-ChildItem -Path "dist" -Filter "*.exe" -Recurse |
             Where-Object { $_.Name -notmatch "blockmap" } |
             Sort-Object Length -Descending |
@@ -55,8 +62,18 @@ jobs:
 
           if (-not $exe) { throw "No .exe found under dist/. Check your electron-builder configuration." }
 
+          # Find the latest.yml file
+          $latestYml = Get-ChildItem -Path "dist" -Filter "latest.yml" -Recurse | Select-Object -First 1
+          if (-not $latestYml) { Write-Host "Warning: latest.yml not found in dist/" }
+
+          # Create artifacts directory and copy files
           New-Item -ItemType Directory -Force -Path "artifacts\unsigned" | Out-Null
           Copy-Item $exe.FullName "artifacts\unsigned\app.exe" -Force
+
+          if ($latestYml) {
+            Copy-Item $latestYml.FullName "artifacts\unsigned\latest.yml" -Force
+            "LATEST_YML_PATH=$((Resolve-Path 'artifacts\unsigned\latest.yml').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          }
 
           "UNSIGNED_EXE=$((Resolve-Path 'artifacts\unsigned\app.exe').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
 
@@ -73,7 +90,7 @@ jobs:
           # malware_block: false  # optional
           # override: false       # optional
 
-      - name: Set SIGNED_EXE env + verify signature
+      - name: Set SIGNED_EXE env + verify signature + prepare final filenames
         shell: pwsh
         run: |
           $signed = Join-Path $env:GITHUB_WORKSPACE "artifacts\signed\app.exe"
@@ -92,6 +109,11 @@ jobs:
           Write-Host "Signature Status: $($sig.Status)"
           if ($sig.Status -ne "Valid") { throw "Signature verification failed: $($sig.StatusMessage)" }
 
+          # Create final filename with version
+          $finalExeName = "giddh Setup $env:PACKAGE_VERSION.exe"
+          "FINAL_EXE_NAME=$finalExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Final EXE name: $finalExeName"
+
       # --- AWS Auth (choose ONE path: OIDC role OR access keys) ---
 
       - name: Configure AWS (OIDC role)
@@ -109,18 +131,24 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Upload signed EXE to S3 (versioned path)
+      - name: Upload signed EXE and latest.yml to S3
         shell: pwsh
         run: |
           if ([string]::IsNullOrEmpty($env:S3_BUCKET)) { throw "S3_BUCKET secret is missing." }
           aws --version
 
-          $dest1 = "s3://$($env:S3_BUCKET)/releases/$($env:RELEASE_TAG)/app.exe"
+          # Upload the signed EXE with version-based filename
+          $dest1 = "s3://$($env:S3_BUCKET)/$($env:FINAL_EXE_NAME)"
           aws s3 cp "$env:SIGNED_EXE" "$dest1" --only-show-errors
+          Write-Host "Uploaded EXE to: $dest1"
 
-          if ($env:UPLOAD_LATEST -eq "true") {
-            $dest2 = "s3://$($env:S3_BUCKET)/releases/latest/app.exe"
-            aws s3 cp "$env:SIGNED_EXE" "$dest2" --only-show-errors
+          # Upload latest.yml if it exists
+          if ($env:LATEST_YML_PATH -and (Test-Path $env:LATEST_YML_PATH)) {
+            $dest2 = "s3://$($env:S3_BUCKET)/latest.yml"
+            aws s3 cp "$env:LATEST_YML_PATH" "$dest2" --only-show-errors
+            Write-Host "Uploaded latest.yml to: $dest2"
+          } else {
+            Write-Host "Warning: latest.yml not found, skipping upload"
           }
 
       - name: Done
