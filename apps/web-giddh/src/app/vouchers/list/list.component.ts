@@ -2767,10 +2767,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public getRedirectUrl(): string {
+        const baseUrl = AppUrl.endsWith('/') ? AppUrl : AppUrl + '/';
         if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-            return AppUrl + 'pages/purchase-management/purchase/settings';
+            return baseUrl + 'pages/purchase-management/purchase/settings';
         } else {
-            return AppUrl + 'pages/vouchers/preview/sales/settings';
+            return baseUrl + 'pages/vouchers/preview/sales/settings';
         }
     }
 
