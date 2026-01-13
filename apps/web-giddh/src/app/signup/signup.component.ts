@@ -469,8 +469,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.loaderService.show();
 
         let configuration = {
-            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID,
-            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || '33686b716134333831313239',
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || '205968TmXguUAwoD633af103P1',
             success: (data: any) => {
                 this.ngZone.run(() => {
                     this.initiateSignup(data);
