@@ -2066,19 +2066,17 @@
                                                             </ng-container>
                                                             <!-- Amount -->
                                                             <td [width]="hasStock ? '10%' : '14%'" formGroupName="amount">
-                                                                <ng-container *ngIf="activeEntryIndex !== entryIndex">
-                                                                    <div class="wrap-td-data">
-                                                                        <amount-field
-                                                                            [amount]="transaction.get('amount.amountForAccount')?.value"
-                                                                            [currencySymbol]="
-                                                                                isMultiCurrencyVoucher ? account.baseCurrencySymbol : false
-                                                                            "
-                                                                            [currencyCode]="
-                                                                                isMultiCurrencyVoucher ? account.baseCurrency : false
-                                                                            "
-                                                                        ></amount-field>
-                                                                    </div>
-                                                                </ng-container>
+                                                                <div class="wrap-td-data" *ngIf="activeEntryIndex !== entryIndex">
+                                                                    <amount-field
+                                                                        [amount]="transaction.get('amount.amountForAccount')?.value"
+                                                                        [currencySymbol]="
+                                                                            isMultiCurrencyVoucher ? account.baseCurrencySymbol : false
+                                                                        "
+                                                                        [currencyCode]="
+                                                                            isMultiCurrencyVoucher ? account.baseCurrency : false
+                                                                        "
+                                                                    ></amount-field>
+                                                                </div>
                                                                 <div>
                                                                     <div
                                                                         class="text-field-container"
@@ -2114,6 +2112,12 @@
                                                                             (keydown.enter)="$event.preventDefault()"
                                                                             (calculatedAmount)="
                                                                                 updateTransactionAmount(transaction, $event)
+                                                                            "
+                                                                            (input)="
+                                                                                calculateRatePerAccount(
+                                                                                    transaction.get('amount.amountForAccount')?.value,
+                                                                                    entry
+                                                                                )
                                                                             "
                                                                         />
                                                                     </div>
