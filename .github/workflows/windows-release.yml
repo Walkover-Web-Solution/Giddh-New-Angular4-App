@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - "v*.*.*"
+    branches:
+      - "test-electron-build-gh-action"
 
 permissions:
   contents: read
