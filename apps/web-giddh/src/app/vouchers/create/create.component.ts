@@ -3366,6 +3366,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * Opens other tax dialog
      *
+     * @param entry
+     * @param entryIndex
      * @memberof VoucherCreateComponent
      */
     public openOtherTaxDialog(entry: FormGroup, entryIndex: number): void {
@@ -3389,11 +3391,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .afterClosed()
             .pipe(take(1))
             .subscribe((response) => {
+                const entryFormGroup = this.getEntryFormGroup(entryIndex);
                 if (response) {
                     if (response?.tax) {
                         this.getSelectedOtherTax(response.entryIndex, response.tax, response.calculationMethod);
+                        this.restoreFocus();
                     } else {
-                        const entryFormGroup = this.getEntryFormGroup(entryIndex);
                         const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
 
                         for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
@@ -3407,11 +3410,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                         entryFormGroup.get("otherTax").reset();
                         entryFormGroup.get("otherTax.isChecked")?.setValue(false);
+                        this.focusOtherTaxCheckbox();
                         this.calculateReceiptPaymentAmount(entryFormGroup);
                     }
+                } else {
+                    if (entryFormGroup.get("otherTax.uniqueName")?.value) {
+                        this.restoreFocus();
+                    } else {
+                        this.focusOtherTaxCheckbox();
+                    }
                 }
-                this.restoreFocus();
             });
+    }
+
+    /**
+     * Focuses on the other tax checkbox element with a delay
+     * 
+     * @memberof VoucherCreateComponent
+     */
+    private focusOtherTaxCheckbox(): void {
+        setTimeout(() => {
+            const checkboxElement = document.getElementById('otherTaxRef');
+            if (checkboxElement) {
+                const inputElement = checkboxElement.querySelector('input[type="checkbox"]');
+                if (inputElement) {
+                    (inputElement as HTMLElement).focus();
+                }
+            }
+        }, 100);
     }
 
     /**
@@ -7659,4 +7685,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const displayValue = name || (index !== null && index !== undefined ? `${this.commonLocaleData?.app_address} ${index + 1}` : '');
         return displayValue ? `(${displayValue})` : '';
     }
+
+    public isAccountChangeInUpdateMode(): boolean {
+        return this.isUpdateMode && this.invoiceForm.get("account").value !== this.account?.id;
+     }
 }
