@@ -32,6 +32,7 @@ import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { DataOperationEnum } from "../../../shared/Enums/common.enum";
 
 @Component({
     selector: "stock-create-edit",
@@ -1179,7 +1180,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     }
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_successfully);
                     if (this.addStock) {
-                        this.closeAsideEvent.emit(false);
+                        this.closeAsideEvent.emit(DataOperationEnum.CREATE);
                     } else {
                         this.getVariantCustomFields();
                         if (this.groupList?.length) {
