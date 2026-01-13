@@ -1,9 +1,23 @@
-// Angular 21 Compatibility Layer - OnDestroy Lifecycle Fix
-import { ErrorHandler, Injectable } from '@angular/core';
+// Angular 21 Compatibility Layer - Comprehensive Error Handling
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { catchError, take } from 'rxjs/operators';
+import { BaseResponse } from './models/api-models/BaseResponse';
+import { EXCEPTION_API } from './services/apiurls/exception-log.api';
+import { GiddhErrorHandler } from './services/catchManager/catchmanger';
+import { GeneralService } from './services/general.service';
+import { HttpWrapperService } from './services/http-wrapper.service';
+import { IServiceConfigArgs, ServiceConfig } from './services/service.config';
 import { environment } from '../environments/environment.generated';
 
 @Injectable()
 export class Angular21CompatibilityErrorHandler implements ErrorHandler {
+    /** Company unique name for current session */
+    private companyUniqueName: string;
+
+    constructor(private injector: Injector) { }
+
     handleError(error: any): void {
         // Handle ChunkLoadError - reload page for Angular 21 lazy loading issues
         if (error?.name === 'ChunkLoadError' ||
@@ -22,17 +36,79 @@ export class Angular21CompatibilityErrorHandler implements ErrorHandler {
             error.message.includes("Cannot read properties of undefined (reading 'nativeElement')") ||
             error.message.includes("Cannot read property 'nativeElement' of undefined")
         )) {
-
             return;
         }
 
-        // Allow other errors to be handled normally
+        // Log other errors to server (consolidated from ExceptionLogService)
+        if (error.stack) {
+            this.addUiException({ component: '', exception: error.stack }).pipe(take(1)).subscribe(() => {
+                // Error logged successfully
+            }, () => {
+                // Error logging failed - continue silently
+            });
+        }
 
+        throw error;
+    }
+
+    /**
+     * This will Add UI Exception on slack channel #giddh-ui-exception
+     * Consolidated from ExceptionLogService
+     */
+    public addUiException(request: any): Observable<BaseResponse<any, any>> {
+        // Need to inject manually as ErrorHandler service is instantiated first and
+        // dependency injection is not available at that time
+        const generalService = this.injector.get(GeneralService);
+        const http = this.injector.get(HttpWrapperService);
+        const errorHandler = this.injector.get(GiddhErrorHandler);
+        const config: IServiceConfigArgs = this.injector.get(ServiceConfig) as IServiceConfigArgs;
+        const router = this.injector.get(Router);
+        let user;
+        if (generalService && generalService.user) {
+            user = generalService.user;
+        }
+
+        this.companyUniqueName = generalService.companyUniqueName;
+        const payloadJson = {
+            user_agent: navigator.userAgent,
+            user: (user) ? `Name: ${user.name} Email: ${user.email} Company Uniquename: ${this.companyUniqueName}` : `Company Uniquename: ${this.companyUniqueName}`,
+            page: (router) ? router.url : '',
+            error: (request.component) ? `${request.component} ${request.exception}` : request.exception,
+            env: environment.production ? 'PROD' : 'TEST'
+        };
+
+        const url = `${config.apiUrl}${EXCEPTION_API}`;
+
+        if (!(config.AppUrl || environment.AppUrl).includes('localhost') && !(config.AppUrl || environment.AppUrl).includes('dilpreet.giddh.com')) {
+            return http.post(url, payloadJson).pipe(
+                catchError((e) => errorHandler.HandleCatch<any, any>(e, request)));
+        } else {
+            return of();
+        }
     }
 }
 
 // Global error suppression for Angular 21 lifecycle issues
 export function applyAngular21Patches() {
+    // Get reference to the error handler for server logging
+    let errorHandlerInstance: Angular21CompatibilityErrorHandler | null = null;
+
+    // Function to get error handler instance
+    const getErrorHandler = () => {
+        if (!errorHandlerInstance) {
+            try {
+                // Try to get the error handler from Angular's injector if available
+                const injector = (window as any).ng?.getInjector?.();
+                if (injector) {
+                    errorHandlerInstance = injector.get(Angular21CompatibilityErrorHandler);
+                }
+            } catch (e) {
+                // Injector not available, continue without server logging
+            }
+        }
+        return errorHandlerInstance;
+    };
+
     // Patch console.error to suppress specific lifecycle errors and handle ChunkLoadError
     const originalConsoleError = console.error;
     console.error = function(...args: any[]) {
@@ -45,14 +121,24 @@ export function applyAngular21Patches() {
             return;
         }
 
+        // Suppress Angular 21 lifecycle errors
         if (message.includes("Cannot read properties of undefined (reading 'onDestroy')") ||
             message.includes("Cannot read property 'onDestroy' of undefined") ||
             message.includes("Cannot read properties of undefined (reading 'factory')") ||
             message.includes("Cannot read property 'factory' of undefined") ||
             message.includes("Cannot read properties of undefined (reading 'nativeElement')") ||
             message.includes("Cannot read property 'nativeElement' of undefined")) {
-
             return;
+        }
+
+        // Log other errors to server if error handler is available
+        const errorHandler = getErrorHandler();
+        if (errorHandler && args.length > 0 && typeof args[0] === 'string') {
+            try {
+                errorHandler.addUiException({ component: 'console.error', exception: message }).subscribe();
+            } catch (e) {
+                // Server logging failed, continue with console error
+            }
         }
 
         originalConsoleError.apply(console, args);

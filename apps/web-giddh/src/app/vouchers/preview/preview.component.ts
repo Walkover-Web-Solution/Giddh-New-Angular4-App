@@ -1064,7 +1064,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             } else {
                 return;
             }
-        } else if (this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote) {
+        } else if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
             if (this.selectedInvoice?.hasAttachment) {
                 this.openDownloadVoucher();
             } else {
