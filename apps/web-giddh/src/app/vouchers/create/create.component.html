@@ -413,15 +413,7 @@
                                             <span class="billing-deliver-label">{{ localeData?.deliver_from }}</span>
                                         </div>
                                         <div class="col-6" formGroupName="billingDetails">
-                                            <label
-                                                for="billingDetails"
-                                                class="billing-label"
-                                                [ngClass]="{
-                                                    'p-0':
-                                                        invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled ||
-                                                        invoiceType.isCashInvoice,
-                                                }"
-                                            >
+                                            <label for="billingDetails" class="billing-label">
                                                 <span>{{ localeData?.billing_address }}</span>
                                                 <span
                                                     *ngIf="
@@ -858,15 +850,7 @@
 
                                     <!-- Billing Address -->
                                     <div class="col-6" formGroupName="billingDetails">
-                                        <label
-                                            for="billingDetails"
-                                            class="billing-label"
-                                            [ngClass]="{
-                                                'p-0':
-                                                    invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled ||
-                                                    invoiceType.isCashInvoice,
-                                            }"
-                                        >
+                                        <label for="billingDetails" class="billing-label">
                                             <span>{{ localeData?.billing_address }}</span>
                                             <span
                                                 *ngIf="

@@ -3809,8 +3809,8 @@ label {
 }
 
 .breadcrumb > li + li:before {
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 4px;
+    padding-right: 4px;
     content: '>';
     font-size: var(--font-size-14);
     color: var(--color-dark-gray);
