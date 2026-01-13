@@ -7845,8 +7845,4 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         
         return displayValue ? `(${displayValue})` : '';
     }
-
-    public isAccountChangeInUpdateMode(): boolean {
-        return this.isUpdateMode && this.invoiceForm.get("account").value !== this.account?.id;
-     }
 }
