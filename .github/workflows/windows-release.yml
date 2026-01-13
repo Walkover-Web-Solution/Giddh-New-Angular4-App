@@ -1,0 +1,129 @@
+name: Windows EXE (build → eSigner sign → S3 upload)
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+  id-token: write # needed only if you use AWS OIDC (role-to-assume)
+
+concurrency:
+  group: windows-release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build_sign_upload:
+    runs-on: windows-latest
+
+    env:
+      RELEASE_TAG: ${{ github.ref_name }}
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      UPLOAD_LATEST: "true" # set to "false" if you don't want releases/latest/app.exe
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci
+
+      # Adjust this to your project scripts.
+      # Common options:
+      # - npm run build && npm run dist
+      # - npx electron-builder --win --x64 --publish never
+      - name: Build Windows EXE
+        run: npm run dist -- --win --x64
+
+      - name: Pick the generated EXE and stage as artifacts\unsigned\app.exe
+        shell: pwsh
+        run: |
+          if (!(Test-Path "dist")) { throw "dist/ folder not found. Update this workflow to match your electron-builder output dir." }
+
+          $exe = Get-ChildItem -Path "dist" -Filter "*.exe" -Recurse |
+            Where-Object { $_.Name -notmatch "blockmap" } |
+            Sort-Object Length -Descending |
+            Select-Object -First 1
+
+          if (-not $exe) { throw "No .exe found under dist/. Check your electron-builder configuration." }
+
+          New-Item -ItemType Directory -Force -Path "artifacts\unsigned" | Out-Null
+          Copy-Item $exe.FullName "artifacts\unsigned\app.exe" -Force
+
+          "UNSIGNED_EXE=$((Resolve-Path 'artifacts\unsigned\app.exe').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Sign EXE with SSL.com eSigner (cloud signing)
+        uses: SSLcom/esigner-codesign@v1.3.2
+        with:
+          command: sign
+          username: ${{ secrets.ES_USERNAME }}
+          password: ${{ secrets.ES_PASSWORD }}
+          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
+          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
+          file_path: ${{ env.UNSIGNED_EXE }}
+          output_path: ${{ github.workspace }}\artifacts\signed
+          # malware_block: false  # optional
+          # override: false       # optional
+
+      - name: Set SIGNED_EXE env + verify signature
+        shell: pwsh
+        run: |
+          $signed = Join-Path $env:GITHUB_WORKSPACE "artifacts\signed\app.exe"
+          if (!(Test-Path $signed)) {
+            # Fallback: find any signed exe in output dir
+            $fallback = Get-ChildItem -Path "artifacts\signed" -Filter "*.exe" -Recurse | Select-Object -First 1
+            if (-not $fallback) { throw "Signed EXE not found in artifacts\\signed. Check signing step output." }
+            $signed = $fallback.FullName
+            Copy-Item $signed (Join-Path $env:GITHUB_WORKSPACE "artifacts\signed\app.exe") -Force
+            $signed = Join-Path $env:GITHUB_WORKSPACE "artifacts\signed\app.exe"
+          }
+
+          "SIGNED_EXE=$signed" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+          $sig = Get-AuthenticodeSignature $signed
+          Write-Host "Signature Status: $($sig.Status)"
+          if ($sig.Status -ne "Valid") { throw "Signature verification failed: $($sig.StatusMessage)" }
+
+      # --- AWS Auth (choose ONE path: OIDC role OR access keys) ---
+
+      - name: Configure AWS (OIDC role)
+        if: secrets.AWS_ROLE_TO_ASSUME != ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Configure AWS (Access Keys)
+        if: secrets.AWS_ROLE_TO_ASSUME == ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload signed EXE to S3 (versioned path)
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrEmpty($env:S3_BUCKET)) { throw "S3_BUCKET secret is missing." }
+          aws --version
+
+          $dest1 = "s3://$($env:S3_BUCKET)/releases/$($env:RELEASE_TAG)/app.exe"
+          aws s3 cp "$env:SIGNED_EXE" "$dest1" --only-show-errors
+
+          if ($env:UPLOAD_LATEST -eq "true") {
+            $dest2 = "s3://$($env:S3_BUCKET)/releases/latest/app.exe"
+            aws s3 cp "$env:SIGNED_EXE" "$dest2" --only-show-errors
+          }
+
+      - name: Done
+        shell: pwsh
+        run: |
+          Write-Host "Uploaded signed EXE for $env:RELEASE_TAG"
