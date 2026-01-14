@@ -7641,8 +7641,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const index = addressControl.get('index')?.value;
         
         // If name exists, use it; otherwise use index + 1
-        const displayValue = name || (index !== null && index !== undefined ? index + 1 : '');
-        
-        return displayValue ? `(${this.commonLocaleData?.app_address} ${displayValue})` : '';
+        const displayValue = name || (index !== null && index !== undefined ? `${this.commonLocaleData?.app_address} ${index + 1}` : '');
+        this.invoiceForm.controls[entityType].get(`${addressType}Details`).get('index')?.patchValue(index);
+        return displayValue ? `(${displayValue})` : '';
     }
 }
