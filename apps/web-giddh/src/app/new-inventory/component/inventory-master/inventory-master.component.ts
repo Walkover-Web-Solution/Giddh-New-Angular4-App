@@ -458,6 +458,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.currentStock = {};
         this.createUpdateStock = false;
         this.createUpdateGroup = false;
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -581,8 +582,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             this.resetCurrentStockAndGroup();
             this.createBreadcrumbs();
         }
-        if (event == DataOperationEnum.CREATE) {
-            this.activeIndex -= 1;
+        if (event == DataOperationEnum.CREATE || event == DataOperationEnum.DELETE) {
+            this.activeIndex = Math.max(this.activeIndex - 1, 0);
         }
     }
 
@@ -619,8 +620,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
 
                 this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
 
-                if (event == DataOperationEnum.CREATE) {
-                    this.activeIndex -= 1;
+                if (event == DataOperationEnum.CREATE || event == DataOperationEnum.DELETE) {
+                    this.activeIndex = Math.max(this.activeIndex - 1, 0);
                 }
 
                 if (this.activeIndex <= 1) {

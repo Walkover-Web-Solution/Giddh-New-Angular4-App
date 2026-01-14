@@ -1944,7 +1944,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                         this.clearPageLeaveConfirmation();
                         this.toaster.showSnackBar("success", this.localeData?.stock_delete_successfully);
                         if (this.addStock) {
-                            this.closeAsideEvent.emit();
+                            this.closeAsideEvent.emit(DataOperationEnum.DELETE);
                         } else {
                             this.backClicked();
                         }
