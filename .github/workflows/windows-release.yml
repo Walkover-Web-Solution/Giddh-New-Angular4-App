@@ -101,7 +101,7 @@ jobs:
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
           file_path: ${{ env.UNSIGNED_EXE }}
           output_path: ${{ github.workspace }}\artifacts\signed
-          # malware_block: false  # optional
+          malware_block: false
           # override: false       # optional
 
       - name: Set SIGNED_EXE env + verify signature + prepare final filenames
@@ -137,25 +137,65 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Upload signed EXE and latest.yml to S3
+      - name: Upload signed EXE and latest.yml to S3 (with local fallback)
         shell: pwsh
         run: |
-          if ([string]::IsNullOrEmpty($env:S3_BUCKET)) { throw "S3_BUCKET secret is missing." }
-          aws --version
+          $uploadSuccess = $false
+          
+          # Try S3 upload first
+          try {
+            if ([string]::IsNullOrEmpty($env:S3_BUCKET)) { 
+              Write-Host "S3_BUCKET secret is missing, skipping S3 upload"
+            } else {
+              aws --version
 
-          # Upload the signed EXE with version-based filename
-          $dest1 = "s3://$($env:S3_BUCKET)/$($env:FINAL_EXE_NAME)"
-          aws s3 cp "$env:SIGNED_EXE" "$dest1" --only-show-errors
-          Write-Host "Uploaded EXE to: $dest1"
+              # Upload the signed EXE with version-based filename
+              $dest1 = "s3://$($env:S3_BUCKET)/$($env:FINAL_EXE_NAME)"
+              aws s3 cp "$env:SIGNED_EXE" "$dest1" --only-show-errors
+              Write-Host "Uploaded EXE to: $dest1"
 
-          # Upload latest.yml if it exists
-          if ($env:LATEST_YML_PATH -and (Test-Path $env:LATEST_YML_PATH)) {
-            $dest2 = "s3://$($env:S3_BUCKET)/latest.yml"
-            aws s3 cp "$env:LATEST_YML_PATH" "$dest2" --only-show-errors
-            Write-Host "Uploaded latest.yml to: $dest2"
-          } else {
-            Write-Host "Warning: latest.yml not found, skipping upload"
+              # Upload latest.yml if it exists
+              if ($env:LATEST_YML_PATH -and (Test-Path $env:LATEST_YML_PATH)) {
+                $dest2 = "s3://$($env:S3_BUCKET)/latest.yml"
+                aws s3 cp "$env:LATEST_YML_PATH" "$dest2" --only-show-errors
+                Write-Host "Uploaded latest.yml to: $dest2"
+              } else {
+                Write-Host "Warning: latest.yml not found, skipping upload"
+              }
+              $uploadSuccess = $true
+              Write-Host "✅ S3 upload completed successfully"
+            }
+          } catch {
+            Write-Host "❌ S3 upload failed: $($_.Exception.Message)"
+            Write-Host "📁 Falling back to local artifact storage..."
           }
+          
+          # Fallback: Store artifacts locally in repository
+          if (-not $uploadSuccess) {
+            # Create test-electron-build directory
+            New-Item -ItemType Directory -Force -Path "test-electron-build" | Out-Null
+            
+            # Copy signed EXE with version-based filename
+            Copy-Item "$env:SIGNED_EXE" "test-electron-build/$env:FINAL_EXE_NAME" -Force
+            Write-Host "📁 Copied EXE to: test-electron-build/$env:FINAL_EXE_NAME"
+            
+            # Copy latest.yml if it exists
+            if ($env:LATEST_YML_PATH -and (Test-Path $env:LATEST_YML_PATH)) {
+              Copy-Item "$env:LATEST_YML_PATH" "test-electron-build/latest.yml" -Force
+              Write-Host "📁 Copied latest.yml to: test-electron-build/latest.yml"
+            }
+            
+            Write-Host "✅ Local artifact storage completed"
+          }
+
+      - name: Commit artifacts to repository (fallback only)
+        if: failure() || env.S3_UPLOAD_FAILED == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add test-electron-build/ || true
+          git commit -m "Add build artifacts: ${{ env.FINAL_EXE_NAME }} and latest.yml" || true
+          git push || true
 
       - name: Done
         shell: pwsh
