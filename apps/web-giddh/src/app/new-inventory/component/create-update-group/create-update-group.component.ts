@@ -635,7 +635,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         this.clearPageLeaveConfirmation();
                         this.toaster.showSnackBar("success", this.localeData?.group_delete);
                         if (this.addGroup) {
-                            this.closeAsideEvent.emit();
+                            this.closeAsideEvent.emit(DataOperationEnum.DELETE);
                         } else {
                             this.cancelEdit();
                         }

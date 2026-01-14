@@ -614,6 +614,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 discounts.removeAt(stockFormArrayIndex);
                 if (discounts.length === 0) this.currentUserStocks = [];
                 this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
+                this.currentUserStocks.splice(stockFormArrayIndex, 1);
                 const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
             }
