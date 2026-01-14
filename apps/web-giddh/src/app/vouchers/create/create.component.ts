@@ -5179,7 +5179,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         // Filter out custom fields with empty values
         if (invoiceForm.account?.customFields?.length) {
-            invoiceForm.account.customFields = invoiceForm.account.customFields.filter((field: { uniqueName: string; value: string }) => field.value);
+            invoiceForm.account.customFields = invoiceForm.account.customFields.filter((field: { uniqueName: string; value: any }) => {
+                return field.value !== null && 
+                       field.value !== undefined && 
+                       (typeof field.value !== 'string' || field.value.trim() !== '');
+            });
         } 
 
         if (!this.invoiceType.isPurchaseOrder) {
@@ -7833,10 +7837,53 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const matchingCustomField = customFieldsMap.get(uniqueName);
                 
                 if (matchingCustomField) {
-                    customField.patchValue(matchingCustomField);
+                    // Convert values before patching
+                    const convertedField = this.parseCustomFieldValue(matchingCustomField);
+                    customField.patchValue(convertedField);
                 }
             });
         }
+    }
+
+    /**
+     * Parses and converts custom field values to their appropriate types
+     * 
+     * @param {any} field - The custom field object containing value to be parsed
+     * @returns {any} The field object with converted value property
+     * @memberof VoucherCreateComponent
+     */
+    private parseCustomFieldValue(field: any): any {
+        if (!field || field.value === null || field.value === undefined) {
+            return field;
+        }
+        
+        return {
+            ...field,
+            value: this.convertValueToAppropriateType(field.value)
+        };
+    }
+
+    /**
+     * Converts string values to their appropriate JavaScript types (boolean, number, or string)
+     * 
+     * @param {any} value - The value to be converted
+     * @returns {boolean | number | string} The converted value in its appropriate type
+     * @memberof VoucherCreateComponent
+     */
+    private convertValueToAppropriateType(value: any): boolean | number | string {
+        if (typeof value !== 'string') return value;
+        
+        const trimmed = value.trim();
+        if (trimmed === '') return trimmed;
+        
+        const lower = trimmed.toLowerCase();
+        if (lower === 'true') return true;
+        if (lower === 'false') return false;
+        
+        const num = Number(trimmed);
+        if (!isNaN(num) && isFinite(num)) return num;
+        
+        return value;
     }
 
     /**
