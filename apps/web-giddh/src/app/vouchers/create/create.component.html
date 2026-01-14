@@ -2044,7 +2044,7 @@
                                                             </ng-container>
                                                             <!-- Amount -->
                                                             <td [width]="hasStock ? '10%' : '14%'" formGroupName="amount">
-                                                                <div class="wrap-td-data" [hidden]="activeEntryIndex === entryIndex">
+                                                                <div class="wrap-td-data" *ngIf="activeEntryIndex !== entryIndex">
                                                                     <amount-field
                                                                         [amount]="transaction.get('amount.amountForAccount')?.value"
                                                                         [currencySymbol]="
@@ -2058,7 +2058,7 @@
                                                                 <div>
                                                                     <div
                                                                         class="text-field-container"
-                                                                        [hidden]="activeEntryIndex !== entryIndex"
+                                                                        *ngIf="activeEntryIndex === entryIndex"
                                                                     >
                                                                         <input
                                                                             matInput
@@ -2090,6 +2090,12 @@
                                                                             (keydown.enter)="$event.preventDefault()"
                                                                             (calculatedAmount)="
                                                                                 updateTransactionAmount(transaction, $event)
+                                                                            "
+                                                                            (input)="
+                                                                                calculateRatePerAccount(
+                                                                                    transaction.get('amount.amountForAccount')?.value,
+                                                                                    entry
+                                                                                )
                                                                             "
                                                                         />
                                                                     </div>
@@ -2333,6 +2339,7 @@
                                                                     formControlName="isChecked"
                                                                     (change)="openOtherTaxDialog(entry, entryIndex)"
                                                                     #otherTaxRef
+                                                                    id="otherTaxRef"
                                                                     (keydown.enter)="
                                                                         $event.preventDefault();
                                                                         otherTaxRef.toggle();

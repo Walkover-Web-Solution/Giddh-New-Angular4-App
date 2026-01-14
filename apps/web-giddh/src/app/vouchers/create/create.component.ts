@@ -558,6 +558,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public accountCustomFields$: BehaviorSubject<IOption[]> = new BehaviorSubject<IOption[]>([]);
     /** Holds enum of FormFieldsType */
     public formFieldsType: typeof FormFieldsType = FormFieldsType;
+    /** True if account changed */
+    public isAccountChanged: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1157,6 +1159,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             .patchValue(voucherDetails.account?.mobileNumber ?? "");
                         this.account.mobileNumber = voucherDetails.account?.mobileNumber ?? "";
                     }
+                    this.populateCustomFields(voucherDetails?.account?.customFields);
 
                     if (voucherDetails?.purchaseOrderDetails?.length && !this.isCopyMode) {
                         this.purchaseOrderDetailsForEdit = voucherDetails?.purchaseOrderDetails;
@@ -1918,20 +1921,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                     this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomCreditNoteNumber;
-                } else if (
-                    this.voucherType === VoucherTypeEnum.estimate ||
-                    this.voucherType === VoucherTypeEnum.generateEstimate ||
-                    this.voucherType === VoucherTypeEnum.proforma ||
-                    this.voucherType === VoucherTypeEnum.generateProforma
-                ) {
-                    this.applyRoundOff = true;
-                    this.useCustomVoucherNumber = true;
-                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                    this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
-                } else if (this.voucherType === VoucherTypeEnum.receipt) {
+                } if (this.voucherType === VoucherTypeEnum.receipt) {
                     this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomReceiptNumber;
                 } else if (this.voucherType === VoucherTypeEnum.payment) {
                     this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomPaymentNumber;
+                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate) {
+                    this.applyRoundOff = settings.estimateSettings.estimateRoundOff;
+                    this.useCustomVoucherNumber = true;
+                } else if (this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    this.applyRoundOff = settings.proformaSettings?.proformaRoundOff;
+                    this.useCustomVoucherNumber = true;
+                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                    this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
+                    this.applyRoundOff = settings.purchaseBillSettings?.purchaseOrderRoundOff;
                 }
 
                 this.invoiceForm.get("roundOffApplicable")?.patchValue(this.applyRoundOff);
@@ -2550,6 +2552,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public selectAccount(event: any, isClear: boolean = false): void {
         this.useDefaultAccountDetails = true;
+        this.isAccountChanged = true;
         if (isClear) {
             if (
                 this.invoiceForm.controls["account"]?.get("customerName")?.value ||
@@ -2734,24 +2737,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.otherApplicableTaxes = accountData.otherApplicableTaxes;
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
-        const customFieldsFormArray = this.customFieldsFormArray;
-        if (customFieldsFormArray) {
-            this.resetCustomFieldsValue(customFieldsFormArray);
-        }
-        if (accountData.customFields?.length) {
-            this.account.customFields = accountData.customFields;
-            const customFieldsMap = new Map(
-                accountData.customFields.map((field: any) => [field.uniqueName, field])
-            );
-
-            customFieldsFormArray.controls.forEach((customField: FormGroup) => {
-                const uniqueName = customField.get('uniqueName')?.value;
-                const matchingCustomField = customFieldsMap.get(uniqueName);
-                
-                if (matchingCustomField) {
-                    customField.patchValue(matchingCustomField);
-                }
-            });
+        if (!this.isUpdateMode || this.isAccountChangeInUpdateMode()) {
+            this.populateCustomFields(accountData.customFields);
         }
         this.account.excludeTax = !this.showTaxColumn;
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
@@ -3400,6 +3387,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * Opens other tax dialog
      *
+     * @param entry
+     * @param entryIndex
      * @memberof VoucherCreateComponent
      */
     public openOtherTaxDialog(entry: FormGroup, entryIndex: number): void {
@@ -3423,11 +3412,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .afterClosed()
             .pipe(take(1))
             .subscribe((response) => {
+                const entryFormGroup = this.getEntryFormGroup(entryIndex);
                 if (response) {
                     if (response?.tax) {
                         this.getSelectedOtherTax(response.entryIndex, response.tax, response.calculationMethod);
+                        this.restoreFocus();
                     } else {
-                        const entryFormGroup = this.getEntryFormGroup(entryIndex);
                         const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
 
                         for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
@@ -3441,11 +3431,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                         entryFormGroup.get("otherTax").reset();
                         entryFormGroup.get("otherTax.isChecked")?.setValue(false);
+                        this.focusOtherTaxCheckbox();
                         this.calculateReceiptPaymentAmount(entryFormGroup);
                     }
+                } else {
+                    if (entryFormGroup.get("otherTax.uniqueName")?.value) {
+                        this.restoreFocus();
+                    } else {
+                        this.focusOtherTaxCheckbox();
+                    }
                 }
-                this.restoreFocus();
             });
+    }
+
+    /**
+     * Focuses on the other tax checkbox element with a delay
+     * 
+     * @memberof VoucherCreateComponent
+     */
+    private focusOtherTaxCheckbox(): void {
+        setTimeout(() => {
+            const checkboxElement = document.getElementById('otherTaxRef');
+            if (checkboxElement) {
+                const inputElement = checkboxElement.querySelector('input[type="checkbox"]');
+                if (inputElement) {
+                    (inputElement as HTMLElement).focus();
+                }
+            }
+        }, 100);
     }
 
     /**
@@ -3689,7 +3702,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.taxAsideMenuRef.afterClosed().subscribe(() => {
-            if (this.taxDropdown) {
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.taxDropdown) {
                 this.taxDropdown.focusTaxDropdown();
             }
         });
@@ -3708,7 +3721,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (response) {
                 this.componentStore.getDiscountsList();
             }
-            if (this.discountDropdown) {
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.discountDropdown) {
                 this.discountDropdown.focusDiscountDropdown();
             }
         });
@@ -5165,7 +5178,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         // Filter out custom fields with empty values
         if (invoiceForm.account?.customFields?.length) {
-            invoiceForm.account.customFields = invoiceForm.account.customFields.filter((field: { uniqueName: string; value: string }) => field.value);
+            invoiceForm.account.customFields = invoiceForm.account.customFields.filter((field: { uniqueName: string; value: any }) => {
+                return field.value !== null && 
+                       field.value !== undefined && 
+                       (typeof field.value !== 'string' || field.value.trim() !== '');
+            });
         } 
 
         if (!this.invoiceType.isPurchaseOrder) {
@@ -5687,6 +5704,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         };
         this.hasStock = false;
         this.showWarehouse = false;
+        this.isAccountChanged = false;
 
         this.isAdjustAmount = false;
         this.adjustPaymentData = {
@@ -7015,6 +7033,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Calculates and updates the rate per account based on amount and quantity
+     *
+     * @param {number} amount - The total amount
+     * @param {FormGroup} entryFormGroup - The entry form group containing transaction data
+     * @memberof VoucherCreateComponent
+     */
+    public calculateRatePerAccount(amount: number, entryFormGroup: FormGroup): void {
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        transactionFormGroup.get("stock.rate.rateForAccount")?.patchValue(amount / transactionFormGroup.get("stock.quantity")?.value);
+    }
+
+    /**
      * Switches currency
      *
      * @memberof VoucherCreateComponent
@@ -7785,6 +7815,77 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Populates custom fields form array with account custom fields data
+     * 
+     * @param {any[]} customFields - Array of custom fields from account data
+     * @memberof VoucherCreateComponent
+     */
+    private populateCustomFields(customFields: any[]): void {
+        const customFieldsFormArray = this.customFieldsFormArray;
+        if (customFieldsFormArray) {
+            this.resetCustomFieldsValue(customFieldsFormArray);
+        }
+        if (customFields?.length) {
+            this.account.customFields = customFields;
+            const customFieldsMap = new Map(
+                customFields.map((field: any) => [field.uniqueName, field])
+            );
+
+            customFieldsFormArray.controls.forEach((customField: FormGroup) => {
+                const uniqueName = customField.get('uniqueName')?.value;
+                const matchingCustomField = customFieldsMap.get(uniqueName);
+                
+                if (matchingCustomField) {
+                    // Convert values before patching
+                    const convertedField = this.parseCustomFieldValue(matchingCustomField);
+                    customField.patchValue(convertedField);
+                }
+            });
+        }
+    }
+
+    /**
+     * Parses and converts custom field values to their appropriate types
+     * 
+     * @param {any} field - The custom field object containing value to be parsed
+     * @returns {any} The field object with converted value property
+     * @memberof VoucherCreateComponent
+     */
+    private parseCustomFieldValue(field: any): any {
+        if (!field || field.value === null || field.value === undefined) {
+            return field;
+        }
+        
+        return {
+            ...field,
+            value: this.convertValueToAppropriateType(field.value)
+        };
+    }
+
+    /**
+     * Converts string values to their appropriate JavaScript types (boolean, number, or string)
+     * 
+     * @param {any} value - The value to be converted
+     * @returns {boolean | number | string} The converted value in its appropriate type
+     * @memberof VoucherCreateComponent
+     */
+    private convertValueToAppropriateType(value: any): boolean | number | string {
+        if (typeof value !== 'string') return value;
+        
+        const trimmed = value.trim();
+        if (trimmed === '') return trimmed;
+        
+        const lower = trimmed.toLowerCase();
+        if (lower === 'true') return true;
+        if (lower === 'false') return false;
+        
+        const num = Number(trimmed);
+        if (!isNaN(num) && isFinite(num)) return num;
+        
+        return value;
+    }
+
+    /**
      * Gets the address display text for billing or shipping details
      * 
      * @param {string} addressType - Type of address ('billing' or 'shipping')
@@ -7807,4 +7908,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         
         return displayValue ? `(${displayValue})` : '';
     }
+
+    /**
+     * Checks if the account has changed in update mode
+     * 
+     * @returns {boolean} True if the account has changed in update mode
+     * @memberof VoucherCreateComponent
+     */
+    public isAccountChangeInUpdateMode(): boolean {
+        return this.isUpdateMode && this.isAccountChanged;
+     }
 }
