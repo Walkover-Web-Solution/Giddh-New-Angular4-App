@@ -86,8 +86,18 @@ jobs:
           credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
           file_path: ${{ env.UNSIGNED_APP_EXE }}
-          output_path: ${{ env.UNPACKED_DIR }}
-          override: true
+          output_path: artifacts/signed
+
+      - name: Copy signed executable back to unpacked directory
+        shell: pwsh
+        run: |
+          # Find the signed executable
+          $signedExe = Get-ChildItem -Path "artifacts/signed" -Filter "*.exe" | Select-Object -First 1
+          if (-not $signedExe) { throw "Signed executable not found in artifacts/signed" }
+          
+          # Copy it back to the unpacked directory, replacing the unsigned one
+          Copy-Item $signedExe.FullName "$env:UNPACKED_DIR\$($signedExe.Name)" -Force
+          Write-Host "Copied signed executable to: $env:UNPACKED_DIR\$($signedExe.Name)"
 
       - name: Verify app executable signature
         shell: pwsh
