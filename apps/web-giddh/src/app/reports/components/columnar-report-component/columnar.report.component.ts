@@ -17,7 +17,8 @@ import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, PAGINATION_LIMIT } from '../../../
 import { GroupService } from '../../../services/group.service';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
-import { concat, forEach, map } from '../../../lodash-optimized';
+import { cloneDeep, concat, forEach, map } from '../../../lodash-optimized';
+import { clone } from 'jsondiffpatch';
 
 @Component({
     selector: 'columnar-report-component',
@@ -238,6 +239,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public selectFinancialYear(event): void {
         if (event && event.value) {
             this.financialYearSelected = event.value;
+            
+            let financialYearStartLabel = dayjs(event?.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+            let financialYearEndLabel = dayjs(event?.value?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+            this.activeFinancialYearLabel = financialYearStartLabel + " - " + financialYearEndLabel;
+
             this.exportRequest.financialYear = dayjs(event.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
 
             let financialYearStarts = dayjs(new Date(event.value?.financialYearStarts?.split("-")?.reverse()?.join("-")));
@@ -362,10 +368,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             (Array.isArray(this.selectYear) ? this.selectYear : []).forEach(key => {
                 if (key?.value?.uniqueName === this.activeFinancialYear) {
                     this.selectFinancialYear(key);
-
-                    let financialYearStarts = dayjs(key?.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    let financialYearEnds = dayjs(key?.value?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    this.activeFinancialYearLabel = financialYearStarts + " - " + financialYearEnds;
                 }
             });
         }
