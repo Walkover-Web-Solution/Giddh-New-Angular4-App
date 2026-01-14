@@ -58,8 +58,6 @@
         "requestedExecutionLevel": "asInvoker",
         "artifactName": "${productName}-${version}-${arch}.${ext}",
         "verifyUpdateCodeSignature": false,
-        "rfc3161TimeStampServer": "http://timestamp.digicert.com",
-        "timeStampServer": "http://timestamp.digicert.com",
         "files": [
             "**/*",
             "!node_modules/**/*"
