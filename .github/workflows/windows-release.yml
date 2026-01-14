@@ -44,7 +44,7 @@ jobs:
       # - npm run build && npm run dist
       # - npx electron-builder --win --x64 --publish never
       - name: Build Windows EXE
-        run: npm run dist -- --win --x64
+        run: npm run package:windows
 
       - name: Extract version from package.json and prepare artifacts
         shell: pwsh
