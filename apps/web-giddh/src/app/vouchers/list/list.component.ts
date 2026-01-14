@@ -3002,7 +3002,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             changePOStatusOnExpiry: [false],
             useCustomPONumber: [false],
             enableVoucherDownload: [true],
-            invoiceSettings: this.createInvoiceSettingsForm()
+            invoiceSettings: this.createInvoiceSettingsForm(),
+            purchaseOrderRoundOff: [true]
         });
     }
 
@@ -3103,7 +3104,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             sendSms: [null],
             enableProforma: [false],
             autoWhatsApp: [false],
-            branchProformaNumberPrefix: [null]
+            branchProformaNumberPrefix: [null],
+            proformaRoundOff: [true]
         });
     }
 
@@ -3123,7 +3125,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             autoMail: [true],
             enableEstimate: [false],
             autoWhatsApp: [false],
-            branchEstimateNumberPrefix: [null]
+            branchEstimateNumberPrefix: [null],
+            estimateRoundOff: [true]
         });
     }
 
@@ -3225,10 +3228,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.applyRoundOff = setting.invoiceSettings.debitNoteRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                         this.applyRoundOff = setting.invoiceSettings.creditNoteRoundOff;
-                    } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
-                        this.applyRoundOff = true;
+                    } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate) {
+                        this.applyRoundOff = setting.estimateSettings.estimateRoundOff;
+                    } else if (this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                        this.applyRoundOff = setting.proformaSettings?.proformaRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                        this.applyRoundOff = true;
+                        this.applyRoundOff = setting.purchaseBillSettings?.purchaseOrderRoundOff;
                     }
                 } else if (!setting) {
                     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
