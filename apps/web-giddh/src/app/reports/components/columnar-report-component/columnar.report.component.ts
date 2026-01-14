@@ -17,8 +17,6 @@ import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, PAGINATION_LIMIT } from '../../../
 import { GroupService } from '../../../services/group.service';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
-import { cloneDeep, concat, forEach, map } from '../../../lodash-optimized';
-import { clone } from 'jsondiffpatch';
 
 @Component({
     selector: 'columnar-report-component',
@@ -240,8 +238,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         if (event && event.value) {
             this.financialYearSelected = event.value;
             
-            let financialYearStartLabel = dayjs(event?.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-            let financialYearEndLabel = dayjs(event?.value?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+            const financialYearStartLabel = dayjs(event?.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+            const financialYearEndLabel = dayjs(event?.value?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
             this.activeFinancialYearLabel = financialYearStartLabel + " - " + financialYearEndLabel;
 
             this.exportRequest.financialYear = dayjs(event.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
