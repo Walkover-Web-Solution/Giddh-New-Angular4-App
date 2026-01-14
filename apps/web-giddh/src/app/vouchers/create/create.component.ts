@@ -5153,7 +5153,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         // Filter out custom fields with empty values
         if (invoiceForm.account?.customFields?.length) {
-            invoiceForm.account.customFields = invoiceForm.account.customFields.filter((field: { uniqueName: string; value: any }) => field.value !== null && field.value !== undefined);
+            invoiceForm.account.customFields = invoiceForm.account.customFields.filter((field: { uniqueName: string; value: any }) => {
+                return field.value !== null && 
+                       field.value !== undefined && 
+                       (typeof field.value !== 'string' || field.value.trim() !== '');
+            });
         } 
 
         if (!this.invoiceType.isPurchaseOrder) {
