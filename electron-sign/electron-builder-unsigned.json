@@ -1,48 +1,23 @@
 {
     "appId": "com.giddh.prod",
     "electronVersion": "39.2.7",
-    "publish": [
-        {
-            "provider": "s3",
-            "bucket": "giddh-app-builds"
-        }
-    ],
     "directories": {
         "buildResources": "resources",
         "output": "../electrongiddh-packages"
     },
-    "afterSign": "./../../../electron-sign/notarize.js",
     "mac": {
         "category": "public.app-category.finance",
         "target": [
             "dmg",
             "zip"
         ],
-        "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
-        "type": "distribution",
-        "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
-        "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
-        "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
         "icon": "icon.png",
-        "hardenedRuntime": true,
-        "gatekeeperAssess": false
+        "hardenedRuntime": false,
+        "gatekeeperAssess": false,
+        "identity": null
     },
     "dmg": {
         "sign": false
-    },
-    "mas": {
-        "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
-        "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
-        "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile"
-    },
-    "linux": {
-        "icon": "icon.png",
-        "maintainer": "Walkover Technologies Pvt Ltd",
-        "target": [
-            "AppImage",
-            "snap",
-            "zip"
-        ]
     },
     "win": {
         "target": [
@@ -71,6 +46,15 @@
         "installerHeaderIcon": "resources/icon.ico",
         "deleteAppDataOnUninstall": false,
         "runAfterFinish": true
+    },
+    "linux": {
+        "icon": "icon.png",
+        "maintainer": "Walkover Technologies Pvt Ltd",
+        "target": [
+            "AppImage",
+            "snap",
+            "zip"
+        ]
     },
     "asar": true
 }

@@ -71,6 +71,8 @@
     "electron:fix": "node scripts/fix-electron-build.js",
     "electron:build-complete": "npm run build:electron && npm run electron:fix && npm run electron:build",
     "package:mac:test": "npm run build.electron.giddh.test && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --macos --x64 --publish always && node ../../../scripts/build-success-message.js test",
+    "package:mac:unsigned": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-unsigned.json --macos --x64 && node ../../../scripts/build-success-message.js prod",
+    "package:mac:local": "npm run prepare.electron.giddh && ELECTRON_ENV=true node scripts/build-env.js local && ELECTRON_ENV=true node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build electron-giddh --configuration=local && node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-unsigned.json --macos --x64",
     "release:windows:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --win --ia32 --x64 --publish always",
     "release:mac:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --macos --x64 --publish always"
   },
