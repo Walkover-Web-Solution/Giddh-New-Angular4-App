@@ -390,7 +390,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
 
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -2758,8 +2758,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string): void {
         const dataToSave = {
             code: authCode,
-            client_secret: GOOGLE_CLIENT_SECRET,
-            client_id: GOOGLE_CLIENT_ID,
+            client_secret: (this.serviceConfig.GOOGLE_CLIENT_SECRET || GOOGLE_CLIENT_SECRET),
+            client_id: (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID),
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl()
         };
@@ -2773,10 +2773,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public getRedirectUrl(): string {
+        const baseUrl = AppUrl.endsWith('/') ? AppUrl : AppUrl + '/';
         if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-            return AppUrl + 'pages/purchase-management/purchase/settings';
+            return baseUrl + 'pages/purchase-management/purchase/settings';
         } else {
-            return AppUrl + 'pages/vouchers/preview/sales/settings';
+            return baseUrl + 'pages/vouchers/preview/sales/settings';
         }
     }
 
@@ -3001,7 +3002,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             changePOStatusOnExpiry: [false],
             useCustomPONumber: [false],
             enableVoucherDownload: [true],
-            invoiceSettings: this.createInvoiceSettingsForm()
+            invoiceSettings: this.createInvoiceSettingsForm(),
+            purchaseOrderRoundOff: [true]
         });
     }
 
@@ -3102,7 +3104,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             sendSms: [null],
             enableProforma: [false],
             autoWhatsApp: [false],
-            branchProformaNumberPrefix: [null]
+            branchProformaNumberPrefix: [null],
+            proformaRoundOff: [true]
         });
     }
 
@@ -3122,7 +3125,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             autoMail: [true],
             enableEstimate: [false],
             autoWhatsApp: [false],
-            branchEstimateNumberPrefix: [null]
+            branchEstimateNumberPrefix: [null],
+            estimateRoundOff: [true]
         });
     }
 
@@ -3224,10 +3228,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.applyRoundOff = setting.invoiceSettings.debitNoteRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                         this.applyRoundOff = setting.invoiceSettings.creditNoteRoundOff;
-                    } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
-                        this.applyRoundOff = true;
+                    } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate) {
+                        this.applyRoundOff = setting.estimateSettings.estimateRoundOff;
+                    } else if (this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                        this.applyRoundOff = setting.proformaSettings?.proformaRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                        this.applyRoundOff = true;
+                        this.applyRoundOff = setting.purchaseBillSettings?.purchaseOrderRoundOff;
                     }
                 } else if (!setting) {
                     this.store.dispatch(this.invoiceActions.getInvoiceSetting());

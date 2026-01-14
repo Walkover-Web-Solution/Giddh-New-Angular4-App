@@ -129,6 +129,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
                     window.location.href = target;
                 } else {
+                    // Soft redirect for other domains or local development
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
