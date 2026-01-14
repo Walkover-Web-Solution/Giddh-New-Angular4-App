@@ -2778,7 +2778,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             ) {
                 let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
                 defaultAddress = companyDefaultAddress.defaultAddress;
-                index = companyDefaultAddress.defaultAddressIndex;
+                const findIndex = this.company.addresses.findIndex((address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName);
+                index =  findIndex > -1 ? findIndex : 0;
 
                 if (defaultAddress) {
                     this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
@@ -7905,7 +7906,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         
         // If name exists, use it; otherwise use index + 1
         const displayValue = name || (index !== null && index !== undefined ? `${this.commonLocaleData?.app_address} ${index + 1}` : '');
-        this.invoiceForm.controls[entityType].get(`${addressType}Details`).get('index')?.patchValue(index);
         return displayValue ? `(${displayValue})` : '';
     }
 
