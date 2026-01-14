@@ -56,7 +56,14 @@
         "legalTrademarks": "",
         "signAndEditExecutable": false,
         "requestedExecutionLevel": "asInvoker",
-        "artifactName": "${productName}-${version}-${arch}.${ext}"
+        "artifactName": "${productName}-${version}-${arch}.${ext}",
+        "verifyUpdateCodeSignature": false,
+        "rfc3161TimeStampServer": "http://timestamp.digicert.com",
+        "timeStampServer": "http://timestamp.digicert.com",
+        "files": [
+            "**/*",
+            "!node_modules/**/*"
+        ]
     },
     "nsis": {
         "oneClick": false,
@@ -70,7 +77,21 @@
         "uninstallerIcon": "resources/icon.ico",
         "installerHeaderIcon": "resources/icon.ico",
         "deleteAppDataOnUninstall": false,
-        "runAfterFinish": true
+        "runAfterFinish": true,
+        "differentialPackage": false,
+        "packElevateHelper": false,
+        "allowElevation": false,
+        "installerSidebar": "resources/icon.ico"
     },
-    "asar": true
+    "asar": true,
+    "asarUnpack": [
+        "**/*.node"
+    ],
+    "extraResources": [
+        {
+            "from": "resources",
+            "to": "resources",
+            "filter": ["**/*"]
+        }
+    ]
 }

@@ -43,7 +43,7 @@ jobs:
       # Common options:
       # - npm run build && npm run dist
       # - npx electron-builder --win --x64 --publish never
-      - name: Build Windows EXE
+      - name: Build Electron App (unpacked)
         env:
           ELECTRON_ENV: true
         run: |
@@ -53,11 +53,10 @@ jobs:
           npx ng build electron-giddh --configuration=prod
           node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html
           cd dist/apps/web-giddh
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --ia32 --x64
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --dir
           cd ../../../
-          node scripts/build-success-message.js prod
 
-      - name: Extract version from package.json and prepare artifacts
+      - name: Extract version and find unpacked app executable
         shell: pwsh
         run: |
           # Extract version from package.json
@@ -66,32 +65,19 @@ jobs:
           "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Package version: $version"
 
-          if (!(Test-Path "dist")) { throw "dist/ folder not found. Update this workflow to match your electron-builder output dir." }
+          # Find the unpacked win-unpacked directory
+          $unpackedDir = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "win-unpacked" -Directory -Recurse | Select-Object -First 1
+          if (-not $unpackedDir) { throw "win-unpacked directory not found. Check electron-builder output." }
 
-          # Find the EXE file
-          $exe = Get-ChildItem -Path "dist" -Filter "*.exe" -Recurse |
-            Where-Object { $_.Name -notmatch "blockmap" } |
-            Sort-Object Length -Descending |
-            Select-Object -First 1
+          # Find the Electron app executable (not the installer)
+          $appExe = Get-ChildItem -Path $unpackedDir.FullName -Filter "*.exe" | Select-Object -First 1
+          if (-not $appExe) { throw "No app.exe found in win-unpacked directory." }
 
-          if (-not $exe) { throw "No .exe found under dist/. Check your electron-builder configuration." }
+          "UNSIGNED_APP_EXE=$($appExe.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "UNPACKED_DIR=$($unpackedDir.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Found app executable: $($appExe.FullName)"
 
-          # Find the latest.yml file
-          $latestYml = Get-ChildItem -Path "dist" -Filter "latest.yml" -Recurse | Select-Object -First 1
-          if (-not $latestYml) { Write-Host "Warning: latest.yml not found in dist/" }
-
-          # Create artifacts directory and copy files
-          New-Item -ItemType Directory -Force -Path "artifacts\unsigned" | Out-Null
-          Copy-Item $exe.FullName "artifacts\unsigned\app.exe" -Force
-
-          if ($latestYml) {
-            Copy-Item $latestYml.FullName "artifacts\unsigned\latest.yml" -Force
-            "LATEST_YML_PATH=$((Resolve-Path 'artifacts\unsigned\latest.yml').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
-          }
-
-          "UNSIGNED_EXE=$((Resolve-Path 'artifacts\unsigned\app.exe').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-      - name: Sign EXE with SSL.com eSigner (cloud signing)
+      - name: Sign Electron app executable with SSL.com eSigner
         uses: SSLcom/esigner-codesign@v1.3.2
         with:
           command: sign
@@ -99,32 +85,55 @@ jobs:
           password: ${{ secrets.ES_PASSWORD }}
           credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
-          file_path: ${{ env.UNSIGNED_EXE }}
-          output_path: artifacts/signed
+          file_path: ${{ env.UNSIGNED_APP_EXE }}
+          output_path: ${{ env.UNPACKED_DIR }}
+          override: true
 
-      - name: Set SIGNED_EXE env + verify signature + prepare final filenames
+      - name: Verify app executable signature
         shell: pwsh
         run: |
-          $signed = Join-Path $env:GITHUB_WORKSPACE "artifacts\signed\app.exe"
-          if (!(Test-Path $signed)) {
-            # Fallback: find any signed exe in output dir
-            $fallback = Get-ChildItem -Path "artifacts\signed" -Filter "*.exe" -Recurse | Select-Object -First 1
-            if (-not $fallback) { throw "Signed EXE not found in artifacts\\signed. Check signing step output." }
-            $signed = $fallback.FullName
-            Copy-Item $signed (Join-Path $env:GITHUB_WORKSPACE "artifacts\signed\app.exe") -Force
-            $signed = Join-Path $env:GITHUB_WORKSPACE "artifacts\signed\app.exe"
+          $appExe = Get-ChildItem -Path "$env:UNPACKED_DIR" -Filter "*.exe" | Select-Object -First 1
+          $sig = Get-AuthenticodeSignature $appExe.FullName
+          Write-Host "App Signature Status: $($sig.Status)"
+          if ($sig.Status -ne "Valid") { throw "App signature verification failed: $($sig.StatusMessage)" }
+
+      - name: Build signed installer from signed app
+        shell: pwsh
+        run: |
+          cd dist/apps/web-giddh
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --prepackaged "$env:UNPACKED_DIR" --publish never
+          cd ../../../
+          node scripts/build-success-message.js prod
+
+      - name: Find and prepare installer for upload
+        shell: pwsh
+        run: |
+          # Find the installer EXE
+          $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse |
+            Where-Object { $_.Name -notmatch "blockmap" -and $_.Directory.Name -ne "win-unpacked" } |
+            Sort-Object Length -Descending |
+            Select-Object -First 1
+
+          if (-not $installer) { throw "No installer found. Check electron-builder output." }
+
+          # Find latest.yml
+          $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
+
+          # Create artifacts directory
+          New-Item -ItemType Directory -Force -Path "artifacts\final" | Out-Null
+          Copy-Item $installer.FullName "artifacts\final\installer.exe" -Force
+
+          if ($latestYml) {
+            Copy-Item $latestYml.FullName "artifacts\final\latest.yml" -Force
+            "LATEST_YML_PATH=$((Resolve-Path 'artifacts\final\latest.yml').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
           }
 
-          "SIGNED_EXE=$signed" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-          $sig = Get-AuthenticodeSignature $signed
-          Write-Host "Signature Status: $($sig.Status)"
-          if ($sig.Status -ne "Valid") { throw "Signature verification failed: $($sig.StatusMessage)" }
-
-          # Create final filename with version
+          "FINAL_INSTALLER=$((Resolve-Path 'artifacts\final\installer.exe').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          
+          # Create final filename
           $finalExeName = "giddh Setup $env:PACKAGE_VERSION.exe"
           "FINAL_EXE_NAME=$finalExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
-          Write-Host "Final EXE name: $finalExeName"
+          Write-Host "Final installer: $finalExeName"
 
       # --- AWS Auth (using access keys only for now) ---
 
@@ -147,10 +156,10 @@ jobs:
             } else {
               aws --version
 
-              # Upload the signed EXE with version-based filename
+              # Upload the signed installer with version-based filename
               $dest1 = "s3://$($env:S3_BUCKET)/$($env:FINAL_EXE_NAME)"
-              aws s3 cp "$env:SIGNED_EXE" "$dest1" --only-show-errors
-              Write-Host "Uploaded EXE to: $dest1"
+              aws s3 cp "$env:FINAL_INSTALLER" "$dest1" --only-show-errors
+              Write-Host "Uploaded installer to: $dest1"
 
               # Upload latest.yml if it exists
               if ($env:LATEST_YML_PATH -and (Test-Path $env:LATEST_YML_PATH)) {
@@ -173,9 +182,9 @@ jobs:
             # Create test-electron-build directory
             New-Item -ItemType Directory -Force -Path "test-electron-build" | Out-Null
             
-            # Copy signed EXE with version-based filename
-            Copy-Item "$env:SIGNED_EXE" "test-electron-build/$env:FINAL_EXE_NAME" -Force
-            Write-Host "📁 Copied EXE to: test-electron-build/$env:FINAL_EXE_NAME"
+            # Copy signed installer with version-based filename
+            Copy-Item "$env:FINAL_INSTALLER" "test-electron-build/$env:FINAL_EXE_NAME" -Force
+            Write-Host "📁 Copied installer to: test-electron-build/$env:FINAL_EXE_NAME"
             
             # Copy latest.yml if it exists
             if ($env:LATEST_YML_PATH -and (Test-Path $env:LATEST_YML_PATH)) {
