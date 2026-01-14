@@ -100,9 +100,7 @@ jobs:
           credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
           file_path: ${{ env.UNSIGNED_EXE }}
-          output_path: ${{ github.workspace }}\artifacts\signed
-          malware_block: false
-          # override: false       # optional
+          output_path: artifacts/signed
 
       - name: Set SIGNED_EXE env + verify signature + prepare final filenames
         shell: pwsh
