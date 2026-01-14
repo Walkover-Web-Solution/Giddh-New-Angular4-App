@@ -169,6 +169,8 @@ xplat/**/*.ngfactory.ts
 xplat/**/*.ngsummary.json
 
 /apps/electron-giddh/src/node_modules
+
+package-lock.json
 /apps/electron-giddh/src/
 
 # Environment Variables - SECURITY: Never commit credentials to public repo
