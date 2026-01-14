@@ -77,6 +77,12 @@ jobs:
           "UNPACKED_DIR=$($unpackedDir.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Found app executable: $($appExe.FullName)"
 
+      - name: Create artifacts directory for signing
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "artifacts/signed" | Out-Null
+          Write-Host "Created artifacts/signed directory"
+
       - name: Sign Electron app executable with SSL.com eSigner
         uses: SSLcom/esigner-codesign@v1.3.2
         with:
