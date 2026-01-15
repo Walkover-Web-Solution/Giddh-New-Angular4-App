@@ -93,6 +93,8 @@ jobs:
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
           file_path: ${{ env.UNSIGNED_APP_EXE }}
           output_path: artifacts/signed
+          malware_block: false
+          environment_name: PROD
 
       - name: Copy signed executable back to unpacked directory
         shell: pwsh
@@ -110,8 +112,23 @@ jobs:
         run: |
           $appExe = Get-ChildItem -Path "$env:UNPACKED_DIR" -Filter "*.exe" | Select-Object -First 1
           $sig = Get-AuthenticodeSignature $appExe.FullName
-          Write-Host "App Signature Status: $($sig.Status)"
-          if ($sig.Status -ne "Valid") { throw "App signature verification failed: $($sig.StatusMessage)" }
+          Write-Host "========================================="
+          Write-Host "Signature Verification Results:"
+          Write-Host "File: $($appExe.FullName)"
+          Write-Host "Status: $($sig.Status)"
+          Write-Host "Status Message: $($sig.StatusMessage)"
+          Write-Host "Signer Certificate Subject: $($sig.SignerCertificate.Subject)"
+          Write-Host "Signer Certificate Issuer: $($sig.SignerCertificate.Issuer)"
+          Write-Host "Signer Certificate Thumbprint: $($sig.SignerCertificate.Thumbprint)"
+          Write-Host "Time Stamper Certificate: $($sig.TimeStamperCertificate.Subject)"
+          Write-Host "========================================="
+          
+          if ($sig.Status -ne "Valid") { 
+            Write-Host "ERROR: Signature verification failed!"
+            throw "App signature verification failed: $($sig.StatusMessage)" 
+          }
+          
+          Write-Host "✅ Signature is valid and embedded correctly"
 
       - name: Build signed installer from signed app
         shell: pwsh

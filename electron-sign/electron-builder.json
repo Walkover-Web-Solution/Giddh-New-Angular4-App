@@ -1,6 +1,8 @@
 {
     "appId": "com.giddh.prod",
     "electronVersion": "39.2.7",
+    "productName": "giddh",
+    "icon": "resources/icon.ico",
     "publish": [
         {
             "provider": "s3",
