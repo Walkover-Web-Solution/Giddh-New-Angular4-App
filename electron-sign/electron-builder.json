@@ -2,7 +2,7 @@
     "appId": "com.giddh.prod",
     "electronVersion": "39.2.7",
     "productName": "giddh",
-    "icon": "resources/icon.ico",
+    "icon": "resources/icon",
     "publish": [
         {
             "provider": "s3",
@@ -54,7 +54,7 @@
             },
             "zip"
         ],
-        "icon": "resources/icon.ico",
+        "icon": "resources/icon",
         "legalTrademarks": "",
         "signAndEditExecutable": false,
         "requestedExecutionLevel": "asInvoker",
@@ -69,19 +69,20 @@
         "menuCategory": "Accounting",
         "shortcutName": "Giddh",
         "perMachine": false,
-        "installerIcon": "resources/icon.ico",
-        "uninstallerIcon": "resources/icon.ico",
-        "installerHeaderIcon": "resources/icon.ico",
+        "installerIcon": "resources/icon",
+        "uninstallerIcon": "resources/icon",
+        "installerHeaderIcon": "resources/icon",
         "deleteAppDataOnUninstall": false,
         "runAfterFinish": true,
         "differentialPackage": false,
         "packElevateHelper": false,
         "allowElevation": false,
-        "installerSidebar": "resources/icon.ico"
+        "installerSidebar": "resources/icon"
     },
     "asar": true,
     "asarUnpack": [
-        "**/*.node"
+        "**/*.node",
+        "**/build/icons/*.png"
     ],
     "extraResources": [
         {
