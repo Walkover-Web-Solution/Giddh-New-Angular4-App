@@ -353,4 +353,17 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             }
         }, 150);
     }
+
+    /**
+     * Focuses the discount dropdown input element
+     *
+     * @memberof DiscountDropdownComponent
+     */
+    public focusDiscountDropdown(): void {
+        setTimeout(() => {
+            if (this.discountInput?.nativeElement) {
+                this.discountInput.nativeElement.focus();
+            }
+        }, 100);
+    }
 }

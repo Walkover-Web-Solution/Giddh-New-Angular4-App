@@ -67,6 +67,8 @@ import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
+import { TaxDropdownComponent } from "../../theme/tax-dropdown/tax-dropdown.component";
+import { DiscountDropdownComponent } from "../../theme/discount-dropdown/discount-dropdown.component";
 import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
 import { AddAccountRequest, UpdateAccountRequest } from "../../models/api-models/Account";
@@ -164,6 +166,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('addNewDeposit') addNewDeposit!: ElementRef<HTMLSpanElement>;
     /** Reference to the "Add new row/line" span element for focusing */
     @ViewChild('customerVendorDropdown') customerVendorDropdown!: ReactiveDropdownFieldComponent;
+    /** Reference to the tax dropdown component */
+    @ViewChild('taxDropdown') taxDropdown!: TaxDropdownComponent;
+    /** Reference to the discount dropdown component */
+    @ViewChild('discountDropdown') discountDropdown!: DiscountDropdownComponent;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -2751,7 +2757,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             ) {
                 let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
                 defaultAddress = companyDefaultAddress.defaultAddress;
-                index = companyDefaultAddress.defaultAddressIndex;
+                const findIndex = this.company.addresses.findIndex((address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName);
+                index =  findIndex > -1 ? findIndex : 0;
 
                 if (defaultAddress) {
                     this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
@@ -2832,6 +2839,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public fillBillingShippingAddress(entityType: string, addressType: string, address: any, index: number): void {
         this.invoiceForm.controls[entityType]?.get(addressType).get("index").patchValue(index);
+        this.invoiceForm.controls[entityType]?.get(addressType).get("name").patchValue(address.name);
         this.invoiceForm.controls[entityType]
             ?.get(addressType)
             .get("address")
@@ -2952,6 +2960,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getAddressFormGroup(): FormGroup {
         return this.formBuilder.group({
             index: [""], //temp
+            name: [""],
             address: [""],
             pincode: [""],
             taxNumber: [""],
@@ -3357,6 +3366,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * Opens other tax dialog
      *
+     * @param entry
+     * @param entryIndex
      * @memberof VoucherCreateComponent
      */
     public openOtherTaxDialog(entry: FormGroup, entryIndex: number): void {
@@ -3380,11 +3391,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .afterClosed()
             .pipe(take(1))
             .subscribe((response) => {
+                const entryFormGroup = this.getEntryFormGroup(entryIndex);
                 if (response) {
                     if (response?.tax) {
                         this.getSelectedOtherTax(response.entryIndex, response.tax, response.calculationMethod);
+                        this.restoreFocus();
                     } else {
-                        const entryFormGroup = this.getEntryFormGroup(entryIndex);
                         const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
 
                         for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
@@ -3398,11 +3410,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                         entryFormGroup.get("otherTax").reset();
                         entryFormGroup.get("otherTax.isChecked")?.setValue(false);
+                        this.focusOtherTaxCheckbox();
                         this.calculateReceiptPaymentAmount(entryFormGroup);
                     }
+                } else {
+                    if (entryFormGroup.get("otherTax.uniqueName")?.value) {
+                        this.restoreFocus();
+                    } else {
+                        this.focusOtherTaxCheckbox();
+                    }
                 }
-                this.restoreFocus();
             });
+    }
+
+    /**
+     * Focuses on the other tax checkbox element with a delay
+     * 
+     * @memberof VoucherCreateComponent
+     */
+    private focusOtherTaxCheckbox(): void {
+        setTimeout(() => {
+            const checkboxElement = document.getElementById('otherTaxRef');
+            if (checkboxElement) {
+                const inputElement = checkboxElement.querySelector('input[type="checkbox"]');
+                if (inputElement) {
+                    (inputElement as HTMLElement).focus();
+                }
+            }
+        }, 100);
     }
 
     /**
@@ -3644,6 +3679,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             },
             autoFocus: false
         });
+
+        this.taxAsideMenuRef.afterClosed().subscribe(() => {
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.taxDropdown) {
+                this.taxDropdown.focusTaxDropdown();
+            }
+        });
     }
 
     /**
@@ -3652,13 +3693,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateDiscountDialog(): void {
-        this.discountDialogRef = this.openDialogWithFocusManagement(() =>
-            this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG)
-        );
+        this.storeFocus();
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
         this.discountDialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
             if (response) {
                 this.componentStore.getDiscountsList();
+            }
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.discountDropdown) {
+                this.discountDropdown.focusDiscountDropdown();
             }
         });
     }
@@ -7618,5 +7661,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.openAccountDropdown = true;
             this.changeDetection.detectChanges();
         }, 50);
+    }
+
+    /**
+     * Gets the address display text for billing or shipping details
+     * 
+     * @param {string} addressType - Type of address ('billing' or 'shipping')
+     * @param {string} entityType - Type of entity ('account' or 'company')
+     * @returns {string} The formatted address display text
+     * @memberof VoucherCreateComponent
+     */
+    public getAddressDisplayText(addressType: string, entityType: string): string {
+        const addressControl = this.invoiceForm?.controls?.[entityType]?.get(`${addressType}Details`);
+        
+        if (!addressControl) {
+            return '';
+        }
+
+        const name = addressControl.get('name')?.value;
+        const index = addressControl.get('index')?.value;
+        
+        // If name exists, use it; otherwise use index + 1
+        const displayValue = name || (index !== null && index !== undefined ? `${this.commonLocaleData?.app_address} ${index + 1}` : '');
+        return displayValue ? `(${displayValue})` : '';
     }
 }

@@ -145,7 +145,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
      */
     public ngAfterViewInit(): void {
         setTimeout(() => {
-            this.dropdownRef?.selectField?.nativeElement?.focus();
+            this.dropdownRef?.openDropdownPanel();
         }, 200);
     }
 

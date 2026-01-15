@@ -335,4 +335,17 @@ export class TaxDropdownComponent implements OnChanges {
             }
         }, 150);
     }
+
+    /**
+     * Focuses the tax dropdown input element
+     *
+     * @memberof TaxDropdownComponent
+     */
+    public focusTaxDropdown(): void {
+        setTimeout(() => {
+            if (this.taxInput?.nativeElement) {
+                this.taxInput.nativeElement.focus();
+            }
+        }, 100);
+    }
 }
