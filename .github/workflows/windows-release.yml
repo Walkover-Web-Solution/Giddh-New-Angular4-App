@@ -95,6 +95,7 @@ jobs:
           output_path: artifacts/signed
           malware_block: false
           environment_name: PROD
+          override: true
 
       - name: Copy signed executable back to unpacked directory
         shell: pwsh
@@ -129,6 +130,28 @@ jobs:
           }
           
           Write-Host "✅ Signature is valid and embedded correctly"
+
+      - name: Verify publisher name in executable
+        shell: pwsh
+        run: |
+          $appExe = Get-ChildItem -Path "$env:UNPACKED_DIR" -Filter "*.exe" | Select-Object -First 1
+          
+          # Get file version info which includes company name
+          $fileInfo = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($appExe.FullName)
+          Write-Host "========================================="
+          Write-Host "Executable Metadata:"
+          Write-Host "File: $($appExe.FullName)"
+          Write-Host "Company Name: $($fileInfo.CompanyName)"
+          Write-Host "Product Name: $($fileInfo.ProductName)"
+          Write-Host "File Version: $($fileInfo.FileVersion)"
+          Write-Host "Product Version: $($fileInfo.ProductVersion)"
+          Write-Host "========================================="
+          
+          if ([string]::IsNullOrEmpty($fileInfo.CompanyName)) {
+            Write-Host "WARNING: Company Name is not set in the executable metadata"
+          } else {
+            Write-Host "✅ Company Name is properly set: $($fileInfo.CompanyName)"
+          }
 
       - name: Build signed installer from signed app
         shell: pwsh
