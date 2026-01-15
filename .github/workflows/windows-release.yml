@@ -54,18 +54,47 @@ jobs:
           node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html
           
           # Ensure updated icon is copied to dist folder
-          Copy-Item "apps/web-giddh/src/resources/icon.ico" "dist/apps/web-giddh/resources/icon.ico" -Force
-          Copy-Item "apps/electron-giddh/src/resources/icon.ico" "dist/apps/web-giddh/resources/icon.ico" -Force
+          Write-Host "📦 Copying icon files..."
+          $iconSource = "apps/electron-giddh/src/resources/icon.ico"
+          $iconDest = "dist/apps/web-giddh/resources/icon.ico"
+          
+          if (Test-Path $iconSource) {
+              $iconSize = (Get-Item $iconSource).Length
+              Write-Host "  Source icon: $iconSource ($iconSize bytes)"
+              Copy-Item $iconSource $iconDest -Force
+              Write-Host "  ✅ Copied to: $iconDest"
+              
+              if (Test-Path $iconDest) {
+                  $destSize = (Get-Item $iconDest).Length
+                  Write-Host "  ✅ Verified destination: $destSize bytes"
+              }
+          } else {
+              Write-Host "  ❌ ERROR: Source icon not found!"
+              exit 1
+          }
           
           # Copy tray icons for Windows tray functionality
+          Write-Host "📦 Copying tray icons..."
           New-Item -ItemType Directory -Force -Path "dist/apps/web-giddh/build/icons" | Out-Null
           Copy-Item "apps/web-giddh/src/build/icons/*.png" "dist/apps/web-giddh/build/icons/" -Force -ErrorAction SilentlyContinue
           Copy-Item "apps/electron-giddh/src/build/icons/*.png" "dist/apps/web-giddh/build/icons/" -Force -ErrorAction SilentlyContinue
-          Write-Host "Copied updated multi-resolution icon and tray icons to dist folder"
+          $trayIcons = Get-ChildItem "dist/apps/web-giddh/build/icons/*.png" -ErrorAction SilentlyContinue
+          Write-Host "  ✅ Copied $($trayIcons.Count) tray icon files"
           
           cd dist/apps/web-giddh
+          Write-Host "🔨 Building Electron app with electron-builder..."
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --dir
           cd ../../../
+          
+          # Verify the built executable exists and has an icon
+          Write-Host "🔍 Verifying built executable..."
+          $exePath = Get-ChildItem -Path "dist/apps/electrongiddh-packages/win-unpacked" -Filter "*.exe" -Recurse | Select-Object -First 1
+          if ($exePath) {
+              Write-Host "  ✅ Found executable: $($exePath.FullName)"
+              Write-Host "  Size: $($exePath.Length) bytes"
+          } else {
+              Write-Host "  ⚠️ WARNING: Executable not found in expected location"
+          }
 
       - name: Extract version and find unpacked app executable
         shell: pwsh
