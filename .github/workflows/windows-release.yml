@@ -56,7 +56,12 @@ jobs:
           # Ensure updated icon is copied to dist folder
           Copy-Item "apps/web-giddh/src/resources/icon.ico" "dist/apps/web-giddh/resources/icon.ico" -Force
           Copy-Item "apps/electron-giddh/src/resources/icon.ico" "dist/apps/web-giddh/resources/icon.ico" -Force
-          Write-Host "Copied updated multi-resolution icon to dist folder from both paths"
+          
+          # Copy tray icons for Windows tray functionality
+          New-Item -ItemType Directory -Force -Path "dist/apps/web-giddh/build/icons" | Out-Null
+          Copy-Item "apps/web-giddh/src/build/icons/*.png" "dist/apps/web-giddh/build/icons/" -Force -ErrorAction SilentlyContinue
+          Copy-Item "apps/electron-giddh/src/build/icons/*.png" "dist/apps/web-giddh/build/icons/" -Force -ErrorAction SilentlyContinue
+          Write-Host "Copied updated multi-resolution icon and tray icons to dist folder"
           
           cd dist/apps/web-giddh
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --dir

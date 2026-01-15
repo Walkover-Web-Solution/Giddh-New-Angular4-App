@@ -88,6 +88,11 @@
             "from": "resources",
             "to": "resources",
             "filter": ["**/*"]
+        },
+        {
+            "from": "build/icons",
+            "to": "build/icons",
+            "filter": ["**/*"]
         }
     ]
 }
