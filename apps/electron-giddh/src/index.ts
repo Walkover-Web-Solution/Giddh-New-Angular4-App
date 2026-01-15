@@ -237,7 +237,6 @@ function createTray(): void {
 
         let trayIconPath: string | null = null;
         
-        // Find the first path that exists
         for (const testPath of possiblePaths) {
             console.log('  Testing:', testPath);
             if (fs.existsSync(testPath)) {
