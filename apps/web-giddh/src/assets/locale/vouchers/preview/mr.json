@@ -503,6 +503,8 @@
     "tax_rate": "कराचे दर",
     "bill_from": "बिल फ्रॉम",
     "ship_from": "शिप फ्रॉम",
+    "bill_to": "बिल टो",
+    "ship_to": "शिप टो",
     "template_set_as_default_successfully": "टेम्पलेट डिफ़ॉल्ट रूपांतरित किया गया", 
     "are_you_sure_you_want_to_delete":"तुम्हाला खात्री आहे की तुम्ही \"<b>${template.name}</b>\" टेम्प्लेट हटवू इच्छिता?",
     "account_custom_fields": "खाता कस्टम फील्ड्स",
