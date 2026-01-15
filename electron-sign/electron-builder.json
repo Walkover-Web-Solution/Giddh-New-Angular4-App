@@ -57,11 +57,7 @@
         "signAndEditExecutable": false,
         "requestedExecutionLevel": "asInvoker",
         "artifactName": "${productName}-${version}-${arch}.${ext}",
-        "verifyUpdateCodeSignature": false,
-        "files": [
-            "**/*",
-            "!node_modules/**/*"
-        ]
+        "verifyUpdateCodeSignature": false
     },
     "nsis": {
         "oneClick": false,
