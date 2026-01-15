@@ -77,83 +77,7 @@ jobs:
           "UNPACKED_DIR=$($unpackedDir.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Found app executable: $($appExe.FullName)"
 
-      - name: Create artifacts directory for signing
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path "artifacts/signed" | Out-Null
-          Write-Host "Created artifacts/signed directory"
-
-      - name: Sign Electron app executable with SSL.com eSigner
-        uses: SSLcom/esigner-codesign@v1.3.2
-        with:
-          command: sign
-          username: ${{ secrets.ES_USERNAME }}
-          password: ${{ secrets.ES_PASSWORD }}
-          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
-          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
-          file_path: ${{ env.UNSIGNED_APP_EXE }}
-          output_path: artifacts/signed
-          malware_block: false
-          environment_name: PROD
-          override: true
-
-      - name: Copy signed executable back to unpacked directory
-        shell: pwsh
-        run: |
-          # Find the signed executable
-          $signedExe = Get-ChildItem -Path "artifacts/signed" -Filter "*.exe" | Select-Object -First 1
-          if (-not $signedExe) { throw "Signed executable not found in artifacts/signed" }
-          
-          # Copy it back to the unpacked directory, replacing the unsigned one
-          Copy-Item $signedExe.FullName "$env:UNPACKED_DIR\$($signedExe.Name)" -Force
-          Write-Host "Copied signed executable to: $env:UNPACKED_DIR\$($signedExe.Name)"
-
-      - name: Verify app executable signature
-        shell: pwsh
-        run: |
-          $appExe = Get-ChildItem -Path "$env:UNPACKED_DIR" -Filter "*.exe" | Select-Object -First 1
-          $sig = Get-AuthenticodeSignature $appExe.FullName
-          Write-Host "========================================="
-          Write-Host "Signature Verification Results:"
-          Write-Host "File: $($appExe.FullName)"
-          Write-Host "Status: $($sig.Status)"
-          Write-Host "Status Message: $($sig.StatusMessage)"
-          Write-Host "Signer Certificate Subject: $($sig.SignerCertificate.Subject)"
-          Write-Host "Signer Certificate Issuer: $($sig.SignerCertificate.Issuer)"
-          Write-Host "Signer Certificate Thumbprint: $($sig.SignerCertificate.Thumbprint)"
-          Write-Host "Time Stamper Certificate: $($sig.TimeStamperCertificate.Subject)"
-          Write-Host "========================================="
-          
-          if ($sig.Status -ne "Valid") { 
-            Write-Host "ERROR: Signature verification failed!"
-            throw "App signature verification failed: $($sig.StatusMessage)" 
-          }
-          
-          Write-Host "✅ Signature is valid and embedded correctly"
-
-      - name: Verify publisher name in executable
-        shell: pwsh
-        run: |
-          $appExe = Get-ChildItem -Path "$env:UNPACKED_DIR" -Filter "*.exe" | Select-Object -First 1
-          
-          # Get file version info which includes company name
-          $fileInfo = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($appExe.FullName)
-          Write-Host "========================================="
-          Write-Host "Executable Metadata:"
-          Write-Host "File: $($appExe.FullName)"
-          Write-Host "Company Name: $($fileInfo.CompanyName)"
-          Write-Host "Product Name: $($fileInfo.ProductName)"
-          Write-Host "File Version: $($fileInfo.FileVersion)"
-          Write-Host "Product Version: $($fileInfo.ProductVersion)"
-          Write-Host "========================================="
-          
-          if ([string]::IsNullOrEmpty($fileInfo.CompanyName)) {
-            Write-Host "WARNING: Company Name is not set in the executable metadata"
-          } else {
-            Write-Host "✅ Company Name is properly set: $($fileInfo.CompanyName)"
-          }
-
-      - name: Build signed installer from signed app
+      - name: Build installer from unpacked app
         shell: pwsh
         run: |
           cd dist/apps/web-giddh
@@ -161,7 +85,7 @@ jobs:
           cd ../../../
           node scripts/build-success-message.js prod
 
-      - name: Find and prepare installer for upload
+      - name: Find unsigned installer
         shell: pwsh
         run: |
           # Find the installer EXE
@@ -172,24 +96,77 @@ jobs:
 
           if (-not $installer) { throw "No installer found. Check electron-builder output." }
 
-          # Find latest.yml
-          $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
-
-          # Create artifacts directory
-          New-Item -ItemType Directory -Force -Path "artifacts\final" | Out-Null
-          Copy-Item $installer.FullName "artifacts\final\installer.exe" -Force
-
-          if ($latestYml) {
-            Copy-Item $latestYml.FullName "artifacts\final\latest.yml" -Force
-            "LATEST_YML_PATH=$((Resolve-Path 'artifacts\final\latest.yml').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
-          }
-
-          "FINAL_INSTALLER=$((Resolve-Path 'artifacts\final\installer.exe').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "UNSIGNED_INSTALLER=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Found unsigned installer: $($installer.FullName)"
           
           # Create final filename
           $finalExeName = "giddh Setup $env:PACKAGE_VERSION.exe"
           "FINAL_EXE_NAME=$finalExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
-          Write-Host "Final installer: $finalExeName"
+          Write-Host "Final installer name will be: $finalExeName"
+
+      - name: Create artifacts directory for signed installer
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "artifacts/final" | Out-Null
+          Write-Host "Created artifacts/final directory"
+
+      - name: Sign final installer with SSL.com eSigner
+        uses: SSLcom/esigner-codesign@v1.3.2
+        with:
+          command: sign
+          username: ${{ secrets.ES_USERNAME }}
+          password: ${{ secrets.ES_PASSWORD }}
+          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
+          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
+          file_path: ${{ env.UNSIGNED_INSTALLER }}
+          output_path: artifacts/final
+          malware_block: false
+          environment_name: PROD
+          override: true
+
+      - name: Verify installer signature
+        shell: pwsh
+        run: |
+          # Find the signed installer
+          $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
+          if (-not $signedInstaller) { throw "Signed installer not found in artifacts/final" }
+          
+          # Verify signature
+          $sig = Get-AuthenticodeSignature $signedInstaller.FullName
+          Write-Host "========================================="
+          Write-Host "INSTALLER Signature Verification:"
+          Write-Host "File: $($signedInstaller.FullName)"
+          Write-Host "Status: $($sig.Status)"
+          Write-Host "Status Message: $($sig.StatusMessage)"
+          Write-Host "Signer Certificate Subject: $($sig.SignerCertificate.Subject)"
+          Write-Host "Signer Certificate Issuer: $($sig.SignerCertificate.Issuer)"
+          Write-Host "Signer Certificate Thumbprint: $($sig.SignerCertificate.Thumbprint)"
+          Write-Host "Time Stamper Certificate: $($sig.TimeStamperCertificate.Subject)"
+          Write-Host "========================================="
+          
+          if ($sig.Status -ne "Valid") { 
+            Write-Host "ERROR: Installer signature verification failed!"
+            throw "Installer signature verification failed: $($sig.StatusMessage)" 
+          }
+          
+          Write-Host "✅ Installer signature is valid!"
+          
+          # Set path for upload
+          "FINAL_INSTALLER=$($signedInstaller.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Prepare latest.yml for upload
+        shell: pwsh
+        run: |
+          # Find latest.yml
+          $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
+          
+          if ($latestYml) {
+            Copy-Item $latestYml.FullName "artifacts/final/latest.yml" -Force
+            "LATEST_YML_PATH=$((Resolve-Path 'artifacts/final/latest.yml').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
+            Write-Host "Prepared latest.yml for upload"
+          } else {
+            Write-Host "Warning: latest.yml not found"
+          }
 
       # --- AWS Auth (using access keys only for now) ---
 
