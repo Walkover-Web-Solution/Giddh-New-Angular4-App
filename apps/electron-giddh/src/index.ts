@@ -28,6 +28,19 @@ app.on("ready", () => {
     windowManager.openWindows();
     createTray();
 });
+app.on('before-quit', () => {
+    if (tray) {
+        tray.destroy();
+        tray = null;
+    }
+});
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        if (!tray) {
+            app.quit();
+        }
+    }
+});
 ipcMain.on("open-url", (event, arg) => {
     windowManager.openWindows(arg);
 });
@@ -201,41 +214,98 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
 
 function createTray(): void {
     try {
-        const trayIconPath = require('path').join(
-            app.isPackaged ? process.resourcesPath : __dirname,
-            'build/icons/tray.png'
-        );
+        const path = require('path');
+        const fs = require('fs');
+        
+        // Try multiple possible locations for the tray icon
+        const possiblePaths = [
+            // For packaged app - extraResources
+            path.join(process.resourcesPath, 'build', 'icons', 'tray.png'),
+            // For packaged app - app.asar.unpacked
+            path.join(process.resourcesPath, 'app.asar.unpacked', 'build', 'icons', 'tray.png'),
+            // For development
+            path.join(__dirname, 'build', 'icons', 'tray.png'),
+            // Fallback to smaller icon
+            path.join(process.resourcesPath, 'build', 'icons', 'tray-small.png'),
+            path.join(__dirname, 'build', 'icons', 'tray-small.png')
+        ];
 
-        const image = nativeImage.createFromPath(trayIconPath);
-        if (image.isEmpty()) {
-            console.warn('Tray icon not found');
+        console.log('🔍 Tray icon loading - Debug info:');
+        console.log('  process.resourcesPath:', process.resourcesPath);
+        console.log('  __dirname:', __dirname);
+        console.log('  app.isPackaged:', app.isPackaged);
+
+        let trayIconPath: string | null = null;
+        
+        // Find the first path that exists
+        for (const testPath of possiblePaths) {
+            console.log('  Testing:', testPath);
+            if (fs.existsSync(testPath)) {
+                trayIconPath = testPath;
+                console.log('  ✅ Found at:', testPath);
+                break;
+            }
+        }
+
+        if (!trayIconPath) {
+            console.error('❌ Tray icon not found in any location');
             return;
         }
 
+        const image = nativeImage.createFromPath(trayIconPath);
+        if (image.isEmpty()) {
+            console.error('❌ Tray icon image is empty');
+            return;
+        }
+
+        console.log('📐 Image size:', image.getSize());
+        
         const resizedImage = image.resize({ width: 16, height: 16 });
         resizedImage.setTemplateImage(false);
+        
         tray = new Tray(resizedImage);
         tray.setToolTip('Giddh - Accounting Software');
 
         const contextMenu = Menu.buildFromTemplate([
-            { label: 'Open Giddh', click: () => windowManager?.openWindows() },
-            { label: 'Hide to Tray', click: () => windowManager?.focusFirstWindow() },
+            { 
+                label: 'Open Giddh', 
+                click: () => {
+                    if (windowManager) {
+                        windowManager.openWindows();
+                        windowManager.focusFirstWindow();
+                    }
+                }
+            },
             { type: 'separator' },
-            { label: 'Quit', click: () => app.quit() }
+            { 
+                label: 'About Giddh', 
+                click: () => console.log('About Giddh')
+            },
+            { type: 'separator' },
+            { 
+                label: 'Quit', 
+                click: () => app.quit() 
+            }
         ]);
 
         tray.setContextMenu(contextMenu);
+        
         tray.on('click', () => {
             if (windowManager) {
                 windowManager.focusFirstWindow();
-            } else {
-                windowManager?.openWindows();
+            }
+        });
+        
+        tray.on('double-click', () => {
+            if (windowManager) {
+                windowManager.openWindows();
+                windowManager.focusFirstWindow();
             }
         });
 
-        console.log('✅ Tray icon created');
+        console.log('✅ Tray icon created successfully');
     } catch (error) {
-        console.error('Error creating tray:', error);
+        console.error('❌ Error creating tray:', error);
     }
 }
 
