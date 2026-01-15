@@ -282,7 +282,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public openTransporterDialog(): void {
         this.transporterDialogRef = this.dialog.open(this.transporterTemplate, ASIDE_PANE_CONFIG);
-        this.generateNewTransporterForm.reset();
+        if (this.generateNewTransporterForm) {
+            this.generateNewTransporterForm.reset();
+        }
         this.transportEditMode = false;
     }
 

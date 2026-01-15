@@ -63,7 +63,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS
-    
+
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
@@ -167,7 +167,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public clearTransportForm(): void {
-        this.generateNewTransporterForm.reset();
+        if (this.generateNewTransporterForm) {
+            this.generateNewTransporterForm.reset();
+        }
     }
 
     /**
