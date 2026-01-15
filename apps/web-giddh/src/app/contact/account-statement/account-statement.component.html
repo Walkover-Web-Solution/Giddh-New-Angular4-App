@@ -324,8 +324,11 @@
                                 >
                                     {{
                                         element.closingBalance?.amount >= 0
-                                            ? (element.closingBalance?.type === transactionType.Credit ? '-' : '') +
-                                              (element.closingBalance.amount | giddhNumberFormat)
+                                            ? (element.closingBalance?.type === transactionType.Credit
+                                                  ? contactActiveTab === 'vendor'
+                                                      ? ''
+                                                      : '-'
+                                                  : '') + (element.closingBalance.amount | giddhNumberFormat)
                                             : ''
                                     }}
                                 </td>

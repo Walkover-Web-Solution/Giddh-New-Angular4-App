@@ -148,7 +148,6 @@
                                                 (selectedOption)="stockGroupUniqueName = $event?.value; stockGroupName = $event.label"
                                                 [labelValue]="stockGroupName"
                                                 [showError]="isFormSubmitted && !stockGroupUniqueName"
-                                                [readonly]="queryParams?.stockUniqueName"
                                             ></reactive-dropdown-field>
                                             <button
                                                 aria-label="move btn"
