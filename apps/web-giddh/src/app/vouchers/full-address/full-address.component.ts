@@ -20,4 +20,17 @@ export class FullAddressComponent {
     @Input() public company: any;
     /** Holds tax types */
     public taxTypes: any = TaxType;
+
+    /**
+     * Gets the address display text, showing name if available or address number as fallback
+     *
+     * @returns {string} The formatted address display text
+     * @memberof FullAddressComponent
+     */
+    public getAddressDisplayText(): string {
+        // If address has a name, use it; otherwise use addressNo
+        const displayValue = this.address?.name || (this.addressNo ? `${this.commonLocaleData?.app_address} ${this.addressNo}` : '');
+        
+        return displayValue;
+    }
 }

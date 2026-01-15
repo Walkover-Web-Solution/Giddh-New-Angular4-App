@@ -429,8 +429,7 @@
                                                         !invoiceType.isCashInvoice
                                                     "
                                                 >
-                                                    &#40;{{ commonLocaleData?.app_address }}
-                                                    {{ invoiceForm.controls['account'].get('billingDetails').get('index')?.value + 1 }}&#41;
+                                                    {{ getAddressDisplayText('billing', 'account') }}
                                                 </span>
                                             </label>
                                             <i
@@ -605,10 +604,7 @@
                                             >
                                                 <span>{{ localeData?.shipping_address }}</span>
                                                 <span>
-                                                    &#40;{{ commonLocaleData?.app_address }}
-                                                    {{
-                                                        invoiceForm.controls['account'].get('shippingDetails').get('index')?.value + 1
-                                                    }}&#41;
+                                                    {{ getAddressDisplayText('shipping', 'account') }}
                                                 </span>
                                             </label>
                                             <i
@@ -878,8 +874,7 @@
                                                     !invoiceType.isCashInvoice
                                                 "
                                             >
-                                                &#40;{{ commonLocaleData?.app_address }}
-                                                {{ invoiceForm.controls['company'].get('billingDetails').get('index')?.value + 1 }}&#41;
+                                                {{ getAddressDisplayText('billing', 'company') }}
                                             </span>
                                         </label>
                                         <i
@@ -1030,8 +1025,7 @@
                                         >
                                             <span>{{ localeData?.shipping_address }}</span>
                                             <span>
-                                                &#40;{{ commonLocaleData?.app_address }}
-                                                {{ invoiceForm.controls['company'].get('shippingDetails').get('index')?.value + 1 }}&#41;
+                                                {{ getAddressDisplayText('shipping', 'company') }}
                                             </span>
                                         </label>
                                         <i
@@ -2167,6 +2161,7 @@
                                                                 </ng-container>
                                                                 <div>
                                                                     <discount-dropdown
+                                                                        #discountDropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [amount]="transaction.get('amount.amountForAccount')?.value"
                                                                         [companyDecimalPlaces]="company.giddhBalanceDecimalPlaces"
@@ -2238,6 +2233,7 @@
                                                                 </ng-container>
                                                                 <div>
                                                                     <tax-dropdown
+                                                                        #taxDropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [date]="invoiceForm.get('date')?.value"
                                                                         [amount]="
@@ -2359,6 +2355,7 @@
                                                                     formControlName="isChecked"
                                                                     (change)="openOtherTaxDialog(entry, entryIndex)"
                                                                     #otherTaxRef
+                                                                    id="otherTaxRef"
                                                                     (keydown.enter)="
                                                                         $event.preventDefault();
                                                                         otherTaxRef.toggle();
