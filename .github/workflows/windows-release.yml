@@ -52,6 +52,12 @@ jobs:
           node scripts/build-env.js prod
           npx ng build electron-giddh --configuration=prod
           node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html
+          
+          # Ensure updated icon is copied to dist folder
+          Copy-Item "apps/web-giddh/src/resources/icon.ico" "dist/apps/web-giddh/resources/icon.ico" -Force
+          Copy-Item "apps/electron-giddh/src/resources/icon.ico" "dist/apps/web-giddh/resources/icon.ico" -Force
+          Write-Host "Copied updated multi-resolution icon to dist folder from both paths"
+          
           cd dist/apps/web-giddh
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --dir
           cd ../../../
