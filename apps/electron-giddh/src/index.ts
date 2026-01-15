@@ -1,4 +1,4 @@
-import { app, ipcMain } from "electron";
+import { app, ipcMain, Tray, Menu, nativeImage } from "electron";
 import setMenu from "./AppMenuManager";
 import { log } from "./util";
 import WindowManager from "./WindowManager";
@@ -12,6 +12,7 @@ let LOCAL_ENV = true;
 let PRODUCTION_ENV = false;
 let APP_URL = 'file://' + __dirname + '/index.html';  // Direct path to packaged Angular app
 let APP_FOLDER = '';
+let tray: Tray | null = null;
 
 // Electron-specific configuration
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
@@ -25,6 +26,7 @@ app.on("ready", () => {
     setMenu();
     windowManager = new WindowManager();
     windowManager.openWindows();
+    createTray();
 });
 ipcMain.on("open-url", (event, arg) => {
     windowManager.openWindows(arg);
@@ -196,3 +198,45 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
             });
     }
 });
+
+function createTray(): void {
+    try {
+        const trayIconPath = require('path').join(
+            app.isPackaged ? process.resourcesPath : __dirname,
+            'build/icons/tray.png'
+        );
+
+        const image = nativeImage.createFromPath(trayIconPath);
+        if (image.isEmpty()) {
+            console.warn('Tray icon not found');
+            return;
+        }
+
+        const resizedImage = image.resize({ width: 16, height: 16 });
+        resizedImage.setTemplateImage(false);
+        tray = new Tray(resizedImage);
+        tray.setToolTip('Giddh - Accounting Software');
+
+        const contextMenu = Menu.buildFromTemplate([
+            { label: 'Open Giddh', click: () => windowManager?.openWindows() },
+            { label: 'Hide to Tray', click: () => windowManager?.focusFirstWindow() },
+            { type: 'separator' },
+            { label: 'Quit', click: () => app.quit() }
+        ]);
+
+        tray.setContextMenu(contextMenu);
+        tray.on('click', () => {
+            if (windowManager) {
+                windowManager.focusFirstWindow();
+            } else {
+                windowManager?.openWindows();
+            }
+        });
+
+        console.log('✅ Tray icon created');
+    } catch (error) {
+        console.error('Error creating tray:', error);
+    }
+}
+
+
