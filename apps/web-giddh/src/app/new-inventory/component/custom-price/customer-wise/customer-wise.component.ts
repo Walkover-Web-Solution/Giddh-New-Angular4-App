@@ -526,7 +526,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             variantUniqueName: (type === 'variant') ? uniqueName : '',
             stockUniqueName: (type === 'stock') ? uniqueName : '',
         };
-
         let index = 0;
 
         if (type === "user") {
@@ -571,7 +570,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         }
                         this.currentUserStocks.splice(stockFormArrayIndex, 1);
                         this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
-                        this.getAllDiscount(currentUser, this.stockSearchQuery);
                     }
                     this.toaster.successToast(response?.body);
                 } else {
@@ -616,10 +614,11 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 discounts.removeAt(stockFormArrayIndex);
                 if (discounts.length === 0) this.currentUserStocks = [];
                 this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
+                this.currentUserStocks.splice(stockFormArrayIndex, 1);
                 const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
-                this.getAllDiscount(this.currentUser, this.stockSearchQuery);
             }
+            this.changeDetectorRef.detectChanges();
         }
     }
 

@@ -1003,7 +1003,7 @@
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
                                             <p class="font-size-16 my-2">{{ localeData?.billing_details }}</p>
-                                            <!-- billing address -->
+                                            <!-- billing from address -->
                                             <div *ngIf="sectionSettings?.header.billingAddress" class="mt-4">
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -1045,6 +1045,52 @@
                                                                         customTemplate?.templateType === 'tally_template' ? 20 : 18,
                                                                         customTemplate?.sections?.['header']?.data?.['billingAddress']
                                                                             ?.label
+                                                                    )
+                                                                }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- bill to address -->
+                                            <div
+                                                *ngIf="
+                                                    sectionSettings?.header.billTo &&
+                                                    (templateType === voucherTypeEnum.purchase_order ||
+                                                        templateType === voucherTypeEnum.purchase_bill) &&
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                "
+                                                class="mt-3"
+                                            >
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="billToCheckbox"
+                                                        [(ngModel)]="customTemplate.sections['header'].data['billTo'].display"
+                                                        (ngModelChange)="onChangeFieldVisibility(); changeDisableBilling()"
+                                                    ></mat-checkbox>
+                                                    <div class="ml-2 w-100">
+                                                        <div>
+                                                            <input-field
+                                                                [type]="'text'"
+                                                                [label]="localeData?.bill_to"
+                                                                name="billTo"
+                                                                [maxlength]="20"
+                                                                [(ngModel)]="customTemplate.sections['header'].data['billTo'].label"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
+                                                                [readonly]="!customTemplate.sections['header'].data['billTo']?.display"
+                                                            ></input-field>
+                                                        </div>
+                                                        <div>
+                                                            <p class="mt-1">
+                                                                <span class="light-gray font-size-12">
+                                                                    {{ localeData?.characters_left }}
+                                                                </span>
+                                                                {{
+                                                                    getRemainingCharacters(
+                                                                        20,
+                                                                        customTemplate?.sections?.['header']?.data?.['billTo']?.label
                                                                     )
                                                                 }}
                                                             </p>
@@ -1119,7 +1165,7 @@
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
                                             <p class="font-size-16 my-2">{{ localeData?.shipping_details }}</p>
-                                            <!-- shipping address -->
+                                            <!-- shipping from address -->
                                             <div *ngIf="sectionSettings?.header.shippingAddress" class="mt-4">
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -1164,6 +1210,52 @@
                                                                         customTemplate?.templateType === 'tally_template' ? 20 : 18,
                                                                         customTemplate?.sections?.['header']?.data?.['shippingAddress']
                                                                             ?.label
+                                                                    )
+                                                                }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Ship to address -->
+                                            <div
+                                                *ngIf="
+                                                    sectionSettings?.header.shipTo &&
+                                                    (templateType === voucherTypeEnum.purchase_order ||
+                                                        templateType === voucherTypeEnum.purchase_bill) &&
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                "
+                                                class="mt-4"
+                                            >
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="shipToCheckbox"
+                                                        [(ngModel)]="customTemplate.sections['header'].data['shipTo'].display"
+                                                        (ngModelChange)="onChangeFieldVisibility(); changeDisableBilling()"
+                                                    ></mat-checkbox>
+                                                    <div class="ml-2 w-100">
+                                                        <div>
+                                                            <input-field
+                                                                [type]="'text'"
+                                                                [label]="localeData?.ship_to"
+                                                                name="shipTo"
+                                                                [maxlength]="20"
+                                                                [(ngModel)]="customTemplate.sections['header'].data['shipTo'].label"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
+                                                                [readonly]="!customTemplate.sections['header'].data['shipTo']?.display"
+                                                            ></input-field>
+                                                        </div>
+                                                        <div>
+                                                            <p class="mt-1">
+                                                                <span class="light-gray font-size-12">
+                                                                    {{ localeData?.characters_left }}
+                                                                </span>
+                                                                {{
+                                                                    getRemainingCharacters(
+                                                                        20,
+                                                                        customTemplate?.sections?.['header']?.data?.['shipTo']?.label
                                                                     )
                                                                 }}
                                                             </p>
