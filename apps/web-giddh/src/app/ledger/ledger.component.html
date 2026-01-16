@@ -3078,16 +3078,31 @@
                             *ngIf="ledgerStatementViewGridColumnsValue.length > 4"
                             colspan="{{ ledgerStatementViewGridColumnsValue[4] }}"
                         >
-                            <div class="p-2 w-100 text-right">
-                                <amount-field
-                                    [amount]="txn?.closing?.amount"
-                                    [currencySymbol]="txn?.currencySymbol"
-                                    [currencyCode]="txn?.currencyCode"
-                                ></amount-field>
-                                &nbsp;
-                                <span>
-                                    {{ txn?.closing?.amount > 0 ? (txn?.closing?.type === 'DEBIT' ? localeData?.dr : localeData?.cr) : '' }}
-                                </span>
+                            <div class="d-flex align-items-end flex-column p-2 w-100">
+                                <p>
+                                    <amount-field
+                                        [amount]="txn?.closing?.amount"
+                                        [currencySymbol]="txn?.currencySymbol"
+                                        [currencyCode]="txn?.currencyCode"
+                                    ></amount-field>
+                                    &nbsp;
+                                    <span>
+                                        {{
+                                            txn?.closing?.amount > 0
+                                                ? txn?.closing?.type === 'DEBIT'
+                                                    ? localeData?.dr
+                                                    : localeData?.cr
+                                                : ''
+                                        }}
+                                    </span>
+                                </p>
+                                <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                    <amount-field
+                                        [amount]="txn?.closing?.convertedAmount"
+                                        [currencySymbol]="txn?.convertedCurrencySymbol"
+                                        [currencyCode]="txn?.convertedCurrencyCode"
+                                    ></amount-field>
+                                </p>
                             </div>
                         </mat-grid-tile>
 
