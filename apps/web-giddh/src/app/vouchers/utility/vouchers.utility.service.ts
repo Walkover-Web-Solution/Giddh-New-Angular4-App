@@ -524,9 +524,7 @@ export class VouchersUtilityService {
             const selectedAddressAddress = Array.isArray(selectedAddress?.address) && selectedAddress.address[0]
                 ? selectedAddress.address[0]
                 : "";
-            const state = add?.state 
-                          ? add.state?.name ? add.state?.name : add.stateName ? add.stateName : ""
-                          : add.county?.name ? add.county?.name : ""
+            const state = add?.state?.name || add?.stateName || add?.county?.name || "";
             const taxNumber = !selectedAddress?.taxNumber ? "" : selectedAddress?.taxNumber;
 
             if (address === selectedAddressAddress && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === taxNumber)) {
