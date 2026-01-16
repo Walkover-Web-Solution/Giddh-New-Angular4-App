@@ -82,6 +82,24 @@ jobs:
           TRAY_ICON_COUNT=$(ls -1 dist/apps/web-giddh/build/icons/*.png 2>/dev/null | wc -l)
           echo "  ✅ Copied $TRAY_ICON_COUNT tray icon files"
           
+          # Copy preload.js to build output directory
+          echo "📦 Copying preload.js..."
+          PRELOAD_SOURCE="apps/electron-giddh/src/preload.js"
+          PRELOAD_DEST="dist/apps/web-giddh/preload.js"
+          
+          if [ -f "$PRELOAD_SOURCE" ]; then
+              cp "$PRELOAD_SOURCE" "$PRELOAD_DEST"
+              echo "  ✅ Copied preload.js to: $PRELOAD_DEST"
+              
+              if [ -f "$PRELOAD_DEST" ]; then
+                  PRELOAD_SIZE=$(stat -f%z "$PRELOAD_DEST")
+                  echo "  ✅ Verified preload.js: $PRELOAD_SIZE bytes"
+              fi
+          else
+              echo "  ❌ ERROR: preload.js not found at $PRELOAD_SOURCE!"
+              exit 1
+          fi
+          
           cd dist/apps/web-giddh
           echo "🔨 Building macOS Universal app with electron-builder..."
           npx electron-builder build --config ./../../../electron-sign/electron-builder-mac-unsigned.json --mac --universal
