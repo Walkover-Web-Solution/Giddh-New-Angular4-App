@@ -26,6 +26,8 @@ import { ServiceConfig } from '../../services/service.config';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 import { ExportFileNameComponent } from '../export-file-name/export-file-name.component';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { CompanyActions } from '../../actions/company.actions';
+
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -195,7 +197,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private router: Router,
         public route: ActivatedRoute,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private companyActions: CompanyActions
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
@@ -1033,6 +1036,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 } else if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                 }
+                this.settingsProfileService.GetProfileInfo().pipe(take(1)).subscribe((response: any) => {
+                    if (response && response.status === "success" && response.body) {
+                        this.store.dispatch(this.settingsProfileActions.handleCompanyProfileResponse(response));
+                        this.store.dispatch(this.companyActions.setActiveCompanyData(response.body));
+                    }
+                });
                 this._toasty.successToast('Address created successfully');
             } else {
                 this._toasty.errorToast(response?.message);
