@@ -373,11 +373,14 @@ export class VouchersUtilityService {
 
                 delete entry.otherTax;
             });
+            // Custom fields are not cleaned
+            const customFields = invoiceForm.account?.customFields;
 
             invoiceForm = cleaner?.clean(invoiceForm, {
                 nullCleaner: true
             });
 
+            invoiceForm.account.customFields = customFields;
             return invoiceForm;
         }
     }
