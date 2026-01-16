@@ -3,11 +3,15 @@
 name: macOS DMG (build → unsigned → S3 upload)
 
 on:
+  workflow_run:
+    workflows: ["Version Increment"]
+    types:
+      - completed
+    branches:
+      - "test-electron-build-gh-action"
   push:
     tags:
       - "v*.*.*"
-    branches:
-      - "test-electron-build-gh-action"
 
 permissions:
   contents: write # needed to push version changes back to repository
@@ -41,46 +45,6 @@ jobs:
 
       - name: Install deps
         run: npm install
-
-      - name: Auto-increment version
-        shell: bash
-        run: |
-          # Read current version from main package.json
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
-          echo "Current version: $CURRENT_VERSION"
-          
-          # Parse version (assuming semantic versioning x.y.z)
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
-          
-          # Increment patch version by 1
-          PATCH=$((PATCH + 1))
-          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
-          echo "New version: $NEW_VERSION"
-          
-          # Update main package.json
-          node -e "const fs = require('fs'); const pkg = require('./package.json'); pkg.version = '$NEW_VERSION'; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');"
-          echo "✅ Updated main package.json to version $NEW_VERSION"
-          
-          # Update electron-giddh package.json
-          node -e "const fs = require('fs'); const pkg = require('./apps/electron-giddh/src/package.json'); pkg.version = '$NEW_VERSION'; fs.writeFileSync('apps/electron-giddh/src/package.json', JSON.stringify(pkg, null, 2) + '\n');"
-          echo "✅ Updated electron-giddh package.json to version $NEW_VERSION"
-          
-          # Set environment variable for later steps
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-
-      - name: Commit version bump
-        shell: bash
-        run: |
-          # Get the new version from package.json
-          NEW_VERSION=$(node -p "require('./package.json').version")
-          
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add package.json apps/electron-giddh/src/package.json
-          git commit -m "Auto-increment version to $NEW_VERSION [skip ci]"
-          git push
-          
-          echo "✅ Committed and pushed version bump to $NEW_VERSION"
 
       - name: Build macOS Universal App
         env:
