@@ -416,14 +416,18 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (Configuration.isElectron) {
             // Use native Electron OAuth exclusively for Electron
             try {
-                const { ipcRenderer } = (window as any).require("electron");
+                const electronAPI = (window as any).electronAPI;
+
+                if (!electronAPI) {
+                    throw new Error('Electron API not available');
+                }
 
                 if (provider === "google") {
                     // Send authentication request to main process
-                    ipcRenderer.send("authenticate", provider);
+                    electronAPI.send("authenticate", provider);
 
                     // Listen for response from main process
-                    ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                    electronAPI.once('take-your-gmail-token', (arg) => {
                         // Handle error response from main process
                         if (arg && arg.error) {
                             this.toaster.errorToast('Google authentication failed: ' + arg.error);

@@ -382,7 +382,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                         ipcRenderer.send("authenticate", provider);
 
                         // Listen for response
-                        ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                        ipcRenderer.once('take-your-gmail-token', (arg) => {
 
                             // Handle error response from main process
                             if (arg && arg.error) {
