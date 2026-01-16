@@ -58,12 +58,13 @@ jobs:
           
           # Ensure updated icon is copied to dist folder
           echo "📦 Copying icon files..."
-          ICON_SOURCE="apps/electron-giddh/src/resources/icon.png"
-          ICON_DEST="dist/apps/web-giddh/resources/icon.png"
+          ICON_SOURCE="apps/electron-giddh/src/resources/icon.icns"
+          ICON_DEST="dist/apps/web-giddh/resources/icon.icns"
           
           if [ -f "$ICON_SOURCE" ]; then
               ICON_SIZE=$(stat -f%z "$ICON_SOURCE")
               echo "  Source icon: $ICON_SOURCE ($ICON_SIZE bytes)"
+              mkdir -p "$(dirname "$ICON_DEST")"
               cp "$ICON_SOURCE" "$ICON_DEST"
               echo "  ✅ Copied to: $ICON_DEST"
               
@@ -72,7 +73,7 @@ jobs:
                   echo "  ✅ Verified destination: $DEST_SIZE bytes"
               fi
           else
-              echo "  ❌ ERROR: Source icon not found!"
+              echo "  ❌ ERROR: Source icon not found at $ICON_SOURCE!"
               exit 1
           fi
           

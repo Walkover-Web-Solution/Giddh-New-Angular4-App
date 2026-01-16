@@ -23,7 +23,7 @@
                 "arch": ["universal"]
             }
         ],
-        "icon": "icon.png",
+        "icon": "icon.icns",
         "hardenedRuntime": false,
         "gatekeeperAssess": false,
         "type": "development",
@@ -33,7 +33,7 @@
         "sign": false,
         "artifactName": "${productName}-${version}.${ext}",
         "title": "${productName} ${version}",
-        "icon": "icon.png",
+        "icon": "icon.icns",
         "iconSize": 80,
         "contents": [
             {
