@@ -3,15 +3,11 @@
 name: Windows EXE (build → eSigner sign → S3 upload)
 
 on:
-  workflow_run:
-    workflows: ["Version Increment"]
-    types:
-      - completed
-    branches:
-      - "test-electron-build-gh-action"
   push:
     tags:
       - "v*.*.*"
+    branches:
+      - "test-electron-build-gh-action"
 
 permissions:
   contents: write # needed to push version changes back to repository
@@ -24,6 +20,7 @@ concurrency:
 jobs:
   build_sign_upload:
     runs-on: windows-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
     env:
       RELEASE_TAG: ${{ github.ref_name }}
