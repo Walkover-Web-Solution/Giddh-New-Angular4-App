@@ -10,7 +10,7 @@ on:
       - "test-electron-build-gh-action"
 
 permissions:
-  contents: read
+  contents: write # needed to push version changes back to repository
   id-token: write # needed only if you use AWS OIDC (role-to-assume)
 
 concurrency:
@@ -30,6 +30,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -38,6 +41,54 @@ jobs:
 
       - name: Install deps
         run: npm install
+
+      - name: Auto-increment version
+        shell: pwsh
+        run: |
+          # Read current version from main package.json
+          $packageJson = Get-Content "package.json" | ConvertFrom-Json
+          $currentVersion = $packageJson.version
+          Write-Host "Current version: $currentVersion"
+          
+          # Parse version (assuming semantic versioning x.y.z)
+          $versionParts = $currentVersion.Split('.')
+          $major = [int]$versionParts[0]
+          $minor = [int]$versionParts[1] 
+          $patch = [int]$versionParts[2]
+          
+          # Increment patch version by 1
+          $patch++
+          $newVersion = "$major.$minor.$patch"
+          Write-Host "New version: $newVersion"
+          
+          # Update main package.json
+          $packageJson.version = $newVersion
+          $packageJson | ConvertTo-Json -Depth 100 | Set-Content "package.json"
+          Write-Host "✅ Updated main package.json to version $newVersion"
+          
+          # Update electron-giddh package.json
+          $electronPackageJson = Get-Content "apps/electron-giddh/src/package.json" | ConvertFrom-Json
+          $electronPackageJson.version = $newVersion
+          $electronPackageJson | ConvertTo-Json -Depth 100 | Set-Content "apps/electron-giddh/src/package.json"
+          Write-Host "✅ Updated electron-giddh package.json to version $newVersion"
+          
+          # Set environment variable for later steps
+          "NEW_VERSION=$newVersion" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Commit version bump
+        shell: pwsh
+        run: |
+          # Get the new version from package.json
+          $packageJson = Get-Content "package.json" | ConvertFrom-Json
+          $newVersion = $packageJson.version
+          
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json apps/electron-giddh/src/package.json
+          git commit -m "Auto-increment version to $newVersion [skip ci]"
+          git push
+          
+          Write-Host "✅ Committed and pushed version bump to $newVersion"
 
       # Adjust this to your project scripts.
       # Common options:
