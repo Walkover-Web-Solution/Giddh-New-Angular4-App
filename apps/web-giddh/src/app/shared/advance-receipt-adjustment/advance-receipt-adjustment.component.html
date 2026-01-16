@@ -115,28 +115,6 @@
                     </div>
                 </div>
                 <form #adjustAdvancePaymentForm="ngForm" autocomplete="off" class="d-flex flex-column flex-grow-1">
-                    <div class="row voucher-form">
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <strong>
-                                    <label for="name">
-                                        {{ localeData?.adjustment_voucher }}
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <strong>
-                                    <label>
-                                        {{ commonLocaleData?.app_amount }}
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                </strong>
-                            </div>
-                        </div>
-                    </div>
                     <ng-container
                         *ngFor="let entry of adjustVoucherForm?.adjustments; let entryIdx = index; let first = first; let last = last"
                     >
@@ -144,6 +122,7 @@
                             <div class="col-5">
                                 <div class="form-group">
                                     <reactive-dropdown-field
+                                        [openDropdown]="shouldOpenDropdown"
                                         [autocomplete]="'off'"
                                         [readonly]="shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null"
                                         *ngIf="voucherApiVersion === 2"
