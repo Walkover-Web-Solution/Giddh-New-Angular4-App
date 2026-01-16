@@ -173,6 +173,7 @@ xplat/**/*.ngsummary.json
 package-lock.json
 /apps/electron-giddh/src/*
 !/apps/electron-giddh/src/package.json
+!/apps/electron-giddh/src/preload.js
 
 # Environment Variables - SECURITY: Never commit credentials to public repo
 .env
