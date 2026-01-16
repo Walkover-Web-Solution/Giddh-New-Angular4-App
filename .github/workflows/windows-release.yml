@@ -53,8 +53,8 @@ jobs:
         run: |
           node scripts/clean-old-builds.js
           npm run prepare.electron.giddh
-          node scripts/build-env.js prod
-          npx ng build electron-giddh --configuration=prod
+          node scripts/build-env.js test
+          npx ng build electron-giddh --configuration=test
           node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html
           
           # Ensure updated icon is copied to dist folder
