@@ -153,20 +153,13 @@ jobs:
           echo "  Source: $DMG_FILE"
           echo "  Destination: $FINAL_NAME"
           
-          # Upload versioned DMG
-          aws s3 cp "$DMG_FILE" "s3://$BUCKET/releases/mac/$VERSION/$FINAL_NAME" \
+          # Upload DMG directly to bucket root (flat structure)
+          aws s3 cp "$DMG_FILE" "s3://$BUCKET/$FINAL_NAME" \
             --content-type "application/x-apple-diskimage" \
             --metadata "version=$VERSION,platform=macos,arch=universal"
           
-          echo "✅ Uploaded versioned DMG: releases/mac/$VERSION/$FINAL_NAME"
-          
-          # Upload to latest if enabled
-          if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
-              aws s3 cp "$DMG_FILE" "s3://$BUCKET/releases/mac/latest/$FINAL_NAME" \
-                --content-type "application/x-apple-diskimage" \
-                --metadata "version=$VERSION,platform=macos,arch=universal"
-              echo "✅ Uploaded to latest: releases/mac/latest/$FINAL_NAME"
-          fi
+          echo "✅ Uploaded DMG: $FINAL_NAME"
+          echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/$FINAL_NAME"
 
       - name: Upload latest-mac.yml to S3
         if: env.LATEST_MAC_YML != ''
@@ -178,20 +171,13 @@ jobs:
           
           echo "📤 Uploading latest-mac.yml to S3..."
           
-          # Upload versioned yml
-          aws s3 cp "$YML_FILE" "s3://$BUCKET/releases/mac/$VERSION/latest-mac.yml" \
+          # Upload yml directly to bucket root (flat structure)
+          aws s3 cp "$YML_FILE" "s3://$BUCKET/latest-mac.yml" \
             --content-type "text/yaml" \
             --metadata "version=$VERSION,platform=macos"
           
-          echo "✅ Uploaded versioned yml: releases/mac/$VERSION/latest-mac.yml"
-          
-          # Upload to latest if enabled
-          if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
-              aws s3 cp "$YML_FILE" "s3://$BUCKET/releases/mac/latest/latest-mac.yml" \
-                --content-type "text/yaml" \
-                --metadata "version=$VERSION,platform=macos"
-              echo "✅ Uploaded to latest: releases/mac/latest/latest-mac.yml"
-          fi
+          echo "✅ Uploaded latest-mac.yml"
+          echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/latest-mac.yml"
 
       - name: Build Summary
         if: always()
@@ -204,10 +190,8 @@ jobs:
           echo "DMG: ${{ env.FINAL_DMG_NAME }}"
           echo "Architecture: Universal (Intel + Apple Silicon)"
           echo "S3 Bucket: ${{ env.S3_BUCKET }}"
-          echo "S3 Path (versioned): releases/mac/${{ env.PACKAGE_VERSION }}/"
-          echo "S3 Path (latest): releases/mac/latest/"
           echo "========================================="
           echo "Download URLs:"
-          echo "https://${{ env.S3_BUCKET }}.s3.${{ env.AWS_REGION }}.amazonaws.com/releases/mac/${{ env.PACKAGE_VERSION }}/${{ env.FINAL_DMG_NAME }}"
-          echo "https://${{ env.S3_BUCKET }}.s3.${{ env.AWS_REGION }}.amazonaws.com/releases/mac/latest/${{ env.FINAL_DMG_NAME }}"
-          echo "========================================="
+          echo "DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.FINAL_DMG_NAME }}"
+          echo "YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/latest-mac.yml"
+          echo "=========================================="
