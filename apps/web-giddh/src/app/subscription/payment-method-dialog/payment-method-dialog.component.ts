@@ -94,6 +94,18 @@ export class PaymentMethodDialogComponent implements OnInit {
         });
 
         window.addEventListener('message', event => {
+            // Validate origin to prevent XSS attacks
+            const allowedOrigins = [
+                'https://pay.gocardless.com',
+                'https://api.gocardless.com',
+                window.location.origin
+            ];
+
+            if (!allowedOrigins.includes(event.origin)) {
+                console.warn('Blocked message from untrusted origin:', event.origin);
+                return;
+            }
+
             if (this.router.url === '/pages/user-details/subscription') {
                 if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
                     this.isLoading = true;

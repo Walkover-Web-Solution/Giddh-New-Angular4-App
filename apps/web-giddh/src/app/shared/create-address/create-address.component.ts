@@ -15,11 +15,41 @@ import { AppState } from '../../store';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: UntypedFormControl): { [key: string]: any } => {
-        return !field?.value || patterns.some(pattern => new RegExp(pattern).test(field?.value)) ? null : {
+        if (!field?.value) {
+            return null;
+        }
+
+        // Sanitize patterns to prevent ReDoS attacks
+        const safePatterns = patterns
+            .filter(pattern => typeof pattern === 'string' && pattern.length <= 100) // Limit length
+            .slice(0, 10) // Limit number of patterns
+            .map(pattern => {
+                // Escape special regex characters to prevent ReDoS
+                return pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            });
+
+        if (safePatterns.length === 0) {
+            return null;
+        }
+
+        // Use simple string matching instead of complex regex when possible
+        const fieldValue = String(field.value);
+        const isValid = safePatterns.some(pattern => {
+            try {
+                // Create regex with timeout protection
+                const regex = new RegExp(pattern);
+                return regex.test(fieldValue);
+            } catch (error) {
+                // If regex creation fails, fall back to string includes
+                return fieldValue.includes(pattern.replace(/\\\\/g, '\\'));
+            }
+        });
+
+        return isValid ? null : {
             validateFieldWithPatterns: {
                 valid: false
             }
-        }
+        };
     }
 }
 

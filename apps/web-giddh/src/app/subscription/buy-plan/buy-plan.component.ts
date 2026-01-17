@@ -549,6 +549,20 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
+            // Validate origin to prevent XSS attacks
+            const allowedOrigins = [
+                'https://pay.gocardless.com',
+                'https://api.gocardless.com',
+                'https://checkout.razorpay.com',
+                'https://api.razorpay.com',
+                window.location.origin
+            ];
+
+            if (!allowedOrigins.includes(event.origin)) {
+                console.warn('Blocked message from untrusted origin:', event.origin);
+                return;
+            }
+
             if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
                 if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
                     if (this.upgradePlan && this.upgradeRegion === 'GBR') {
@@ -1809,6 +1823,20 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             transactionId: string;
             provider: string;
         }>) => {
+            // Validate origin to prevent XSS attacks
+            const allowedOrigins = [
+                'https://secure.payu.in',
+                'https://test.payu.in',
+                'https://sandboxsecure.payu.in',
+                window.location.origin
+            ];
+
+            if (!allowedOrigins.includes(event.origin)) {
+                console.warn('Blocked PayU message from untrusted origin:', event.origin);
+                window.removeEventListener("message", handlePayUMessage);
+                return;
+            }
+
             if (event.data?.status?.toLocaleLowerCase() === 'success' && event.data.transactionId) {
                 const model = {
                     payuTransactionId: event.data.transactionId,

@@ -225,7 +225,7 @@ export class MaskApplierService {
                         break;
                     case Separators.NOT_SEPARATED:
                         shiftCustomOperator = '';
-                        break;    
+                        break;
                 }
                 let resultSpecialCharLength: number = (result.match(new RegExp(shiftCustomOperator, 'g')) || [])?.length;
                 let inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || [])?.length;
@@ -499,10 +499,13 @@ export class MaskApplierService {
         if (precision < Infinity) {
             let precisionRegEx: RegExp;
 
+            // Sanitize precision to prevent ReDoS attacks
+            const safePrecision = Math.max(0, Math.min(20, parseInt(String(precision), 10) || 0));
+
             if (decimalMarker === '.') {
-                precisionRegEx = new RegExp(`\\.\\d{${precision}}.*$`);
+                precisionRegEx = new RegExp(`\\.\\d{${safePrecision}}.*$`);
             } else if (decimalMarker === ',') {
-                precisionRegEx = new RegExp(`,\\d{${precision}}.*$`);
+                precisionRegEx = new RegExp(`,\\d{${safePrecision}}.*$`);
             }
 
             const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);

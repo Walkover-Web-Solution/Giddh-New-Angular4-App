@@ -283,6 +283,18 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
+            // Validate origin to prevent XSS attacks
+            const allowedOrigins = [
+                'https://appleid.apple.com',
+                'https://accounts.google.com',
+                window.location.origin
+            ];
+
+            if (!allowedOrigins.includes(event.origin)) {
+                console.warn('Blocked message from untrusted origin:', event.origin);
+                return;
+            }
+
             if (event?.data && typeof event?.data === "string") {
                 const data: any = event?.data?.split("&").reduce(function (prev, curr, i, arr) {
                     var params = curr.split("=");

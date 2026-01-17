@@ -129,24 +129,74 @@ class PrettierFormatter {
     }
 
     /**
+     * Sanitize file path to prevent command injection
+     */
+    sanitizeFilePath(filePath) {
+        // Resolve to absolute path and normalize
+        const resolvedPath = path.resolve(filePath);
+
+        // Check if path is within allowed directories
+        const allowedPaths = [
+            path.resolve('./apps'),
+            path.resolve('./libs'),
+            path.resolve('./scripts'),
+            path.resolve('./tools')
+        ];
+
+        const isAllowed = allowedPaths.some(allowedPath =>
+            resolvedPath.startsWith(allowedPath)
+        );
+
+        if (!isAllowed) {
+            throw new Error(`File path not in allowed directories: ${filePath}`);
+        }
+
+        // Remove any shell metacharacters
+        const sanitized = resolvedPath.replace(/[;&|`$(){}[\]]/g, '');
+
+        return sanitized;
+    }
+
+    /**
      * Format a single file with Prettier
      */
     formatFile(filePath) {
         try {
+            // Sanitize file path to prevent command injection
+            const sanitizedPath = this.sanitizeFilePath(filePath);
+
             // Check if file exists and is readable
-            if (!fs.existsSync(filePath)) {
+            if (!fs.existsSync(sanitizedPath)) {
                 this.skippedFiles++;
                 return false;
             }
 
-            // Run Prettier on the file
-            execSync(`npx prettier --write "${filePath}"`, {
-                stdio: 'pipe',
-                timeout: 30000 // 30 second timeout per file
-            });
+            // Use spawn instead of execSync for better security
+            const { spawn } = require('child_process');
 
-            this.processedFiles++;
-            return true;
+            return new Promise((resolve) => {
+                const prettier = spawn('npx', ['prettier', '--write', sanitizedPath], {
+                    stdio: 'pipe',
+                    timeout: 30000
+                });
+
+                prettier.on('close', (code) => {
+                    if (code === 0) {
+                        this.processedFiles++;
+                        resolve(true);
+                    } else {
+                        this.errors.push(`Error formatting ${filePath}: Prettier exited with code ${code}`);
+                        this.skippedFiles++;
+                        resolve(false);
+                    }
+                });
+
+                prettier.on('error', (error) => {
+                    this.errors.push(`Error formatting ${filePath}: ${error.message}`);
+                    this.skippedFiles++;
+                    resolve(false);
+                });
+            });
         } catch (error) {
             this.errors.push(`Error formatting ${filePath}: ${error.message}`);
             this.skippedFiles++;
@@ -157,7 +207,7 @@ class PrettierFormatter {
     /**
      * Format files in batches for better performance
      */
-    formatFilesBatch(files, batchSize = 50) {
+    async formatFilesBatch(files, batchSize = 50) {
         const batches = [];
         for (let i = 0; i < files.length; i += batchSize) {
             batches.push(files.slice(i, i + batchSize));
@@ -165,18 +215,37 @@ class PrettierFormatter {
 
         for (let i = 0; i < batches.length; i++) {
             const batch = batches[i];
-            const fileList = batch.map(f => `"${f}"`).join(' ');
 
             try {
-                execSync(`npx prettier --write ${fileList}`, {
-                    stdio: 'pipe',
-                    timeout: 120000 // 2 minute timeout per batch
+                // Sanitize all file paths in the batch
+                const sanitizedFiles = batch.map(f => this.sanitizeFilePath(f));
+
+                // Use spawn for secure batch processing
+                const { spawn } = require('child_process');
+
+                await new Promise((resolve, reject) => {
+                    const prettier = spawn('npx', ['prettier', '--write', ...sanitizedFiles], {
+                        stdio: 'pipe',
+                        timeout: 120000 // 2 minute timeout per batch
+                    });
+
+                    prettier.on('close', (code) => {
+                        if (code === 0) {
+                            this.processedFiles += batch.length;
+                            resolve();
+                        } else {
+                            reject(new Error(`Prettier exited with code ${code}`));
+                        }
+                    });
+
+                    prettier.on('error', (error) => {
+                        reject(error);
+                    });
                 });
-                this.processedFiles += batch.length;
             } catch (error) {
                 // Fallback to individual file processing for this batch
                 for (const file of batch) {
-                    this.formatFile(file);
+                    await this.formatFile(file);
                 }
             }
         }
@@ -218,7 +287,7 @@ class PrettierFormatter {
     /**
      * Format specific file types
      */
-    formatByType(directory, fileType) {
+    async formatByType(directory, fileType) {
         const extensions = {
             'typescript': ['.ts'],
             'html': ['.html'],
@@ -235,7 +304,7 @@ class PrettierFormatter {
         this.targetExtensions = extensions[fileType];
 
         const files = this.findFilesToFormat(directory);
-        this.formatFilesBatch(files);
+        await this.formatFilesBatch(files);
 
         this.targetExtensions = originalExtensions;
     }
@@ -243,7 +312,7 @@ class PrettierFormatter {
     /**
      * Main execution function
      */
-    run(targetDirectory = './apps/web-giddh/src', options = {}) {
+    async run(targetDirectory = './apps/web-giddh/src', options = {}) {
         // Check if Prettier is available
         if (!this.checkPrettierInstallation()) {
             if (!this.installPrettier()) {
@@ -253,7 +322,7 @@ class PrettierFormatter {
 
         // Handle specific file type formatting
         if (options.fileType) {
-            this.formatByType(targetDirectory, options.fileType);
+            await this.formatByType(targetDirectory, options.fileType);
             return this.generateReport();
         }
 
@@ -265,7 +334,7 @@ class PrettierFormatter {
         }
 
         // Format files in batches for better performance
-        this.formatFilesBatch(files);
+        await this.formatFilesBatch(files);
 
         // Generate and return report
         return this.generateReport();
@@ -274,25 +343,32 @@ class PrettierFormatter {
 
 // CLI execution
 if (require.main === module) {
-    const formatter = new PrettierFormatter();
+    (async () => {
+        const formatter = new PrettierFormatter();
 
-    // Parse command line arguments
-    const args = process.argv.slice(2);
-    const targetDir = args[0] || './apps/web-giddh/src';
-    const fileType = args.find(arg => arg.startsWith('--type='))?.split('=')[1];
+        // Parse command line arguments
+        const args = process.argv.slice(2);
+        const targetDir = args[0] || './apps/web-giddh/src';
+        const fileType = args.find(arg => arg.startsWith('--type='))?.split('=')[1];
 
-    const options = {
-        fileType: fileType
-    };
+        const options = {
+            fileType: fileType
+        };
 
-    // Run formatter
-    const report = formatter.run(targetDir, options);
+        try {
+            // Run formatter
+            const report = await formatter.run(targetDir, options);
 
-    if (report) {
-        process.exit(0);
-    } else {
-        process.exit(1);
-    }
+            if (report) {
+                process.exit(0);
+            } else {
+                process.exit(1);
+            }
+        } catch (error) {
+            console.error('Formatter error:', error.message);
+            process.exit(1);
+        }
+    })();
 }
 
 module.exports = PrettierFormatter;

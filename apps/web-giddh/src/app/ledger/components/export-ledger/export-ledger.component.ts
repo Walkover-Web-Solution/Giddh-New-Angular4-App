@@ -265,8 +265,12 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     let fileNameFormat = this.selectedFormatList?.trim();
                     if (fileNameFormat?.length) {
                         (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach(format => {
-                            const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
-                            fileNameFormat = fileNameFormat.replace(pattern, `\${${format.key}}`);
+                            // Sanitize format.value to prevent ReDoS attacks
+                            const sanitizedValue = format.value?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') || '';
+                            // Use string replacement instead of RegExp for better security
+                            const searchPattern = `{${sanitizedValue}}`;
+                            const replaceValue = `\${${format.key}}`;
+                            fileNameFormat = fileNameFormat.split(searchPattern).join(replaceValue);
                         });
                         postRequest.fileNameFormat = fileNameFormat;
                     } else {
