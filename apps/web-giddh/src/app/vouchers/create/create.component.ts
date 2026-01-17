@@ -1921,19 +1921,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                     this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomCreditNoteNumber;
-                } if (this.voucherType === VoucherTypeEnum.receipt) {
-                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomReceiptNumber;
-                } else if (this.voucherType === VoucherTypeEnum.payment) {
-                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomPaymentNumber;
-                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate) {
-                    this.applyRoundOff = settings.estimateSettings.estimateRoundOff;
-                    this.useCustomVoucherNumber = true;
-                } else if (this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    this.applyRoundOff = settings.proformaSettings?.proformaRoundOff;
+                 } else if (
+                    this.voucherType === VoucherTypeEnum.estimate ||
+                    this.voucherType === VoucherTypeEnum.generateEstimate ||
+                    this.voucherType === VoucherTypeEnum.proforma ||
+                    this.voucherType === VoucherTypeEnum.generateProforma
+                ) {
+                    this.applyRoundOff = true;
                     this.useCustomVoucherNumber = true;
                 } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
-                    this.applyRoundOff = settings.purchaseBillSettings?.purchaseOrderRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.receipt) {
+                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomReceiptNumber;
+                } else if (this.voucherType === VoucherTypeEnum.payment) {
+                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomPaymentNumber;
                 }
 
                 this.invoiceForm.get("roundOffApplicable")?.patchValue(this.applyRoundOff);
