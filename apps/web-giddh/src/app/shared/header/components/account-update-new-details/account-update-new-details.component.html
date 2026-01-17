@@ -907,24 +907,17 @@
                                             ></input-field>
                                             <mat-radio-group
                                                 appEnterNext
-                                                name="ownerPermission"
-                                                [value]="customFieldsItem.get('value')?.value"
+                                                formControlName="value"
                                                 *ngIf="item.fieldType?.type === availableFieldTypes.Boolean"
                                                 class="d-flex flex-column"
                                             >
-                                                <mat-radio-button
-                                                    color="primary"
-                                                    [value]="true"
-                                                    (change)="selectedBooleanCustomField($event.value, index)"
-                                                    (keydown.enter)="$event.target.click()"
-                                                >
+                                                <mat-radio-button color="primary" [value]="true" (keydown.enter)="$event.target.click()">
                                                     {{ commonLocaleData?.app_true?.toUpperCase() }}
                                                 </mat-radio-button>
                                                 <mat-radio-button
                                                     appEnterNext
                                                     color="primary"
                                                     [value]="false"
-                                                    (change)="selectedBooleanCustomField($event.value, index)"
                                                     (keydown.enter)="$event.target.click()"
                                                 >
                                                     {{ commonLocaleData?.app_false?.toUpperCase() }}
