@@ -2,6 +2,11 @@
 
 name: UI build
 
+# Explicit permissions to prevent write-all access
+permissions:
+  contents: read
+  actions: read
+
 # Controls when the action will run.
 on:
   push:
