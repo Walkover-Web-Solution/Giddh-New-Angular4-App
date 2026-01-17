@@ -325,9 +325,9 @@
                                     {{
                                         element.closingBalance?.amount >= 0
                                             ? (contactActiveTab === 'vendor' && element.closingBalance?.type === transactionType.Credit
-                                                  ? '-'
+                                                  ? ''
                                                   : contactActiveTab === 'vendor'
-                                                    ? ''
+                                                    ? '-'
                                                     : contactActiveTab === 'customer' &&
                                                         element.closingBalance?.type === transactionType.Credit
                                                       ? '-'
