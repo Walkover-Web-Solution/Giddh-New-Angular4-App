@@ -131,9 +131,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.totalRecords = response.totalItems;
                 this.balanceDue = this.responseAccountList.accountSummary?.closingBalance?.amount >= 0
                     ? (this.contactActiveTab === 'vendor' && this.responseAccountList.accountSummary.closingBalance.type === this.transactionType.Credit
-                        ? '-'
-                        : this.contactActiveTab === 'vendor'
                         ? ''
+                        : this.contactActiveTab === 'vendor'
+                        ? '-'
                         : this.contactActiveTab === 'customer' && this.responseAccountList.accountSummary.closingBalance.type === this.transactionType.Credit
                         ? '-'
                         : '') +
