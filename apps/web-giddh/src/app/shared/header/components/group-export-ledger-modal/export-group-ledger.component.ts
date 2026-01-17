@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild, Input } from '@angu
 import { MatMenuTrigger } from '@angular/material/menu';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some, cloneDeep } from '../../../../lodash-optimized';
+import { ExportColumnsHelper } from '../../../helpers/export-columns.helper';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -135,65 +136,7 @@ export class ExportGroupLedgerComponent implements OnInit {
             let exportRequest: ExportBodyRequest = new ExportBodyRequest();
             exportRequest.exportType = "MASTER_EXPORT";
             exportRequest.groupUniqueNames = [this.activeGroupUniqueName];
-            exportRequest.columnsToExport = [];
-            const formValue = this.exportFormValue;
-            if (formValue.openingBalance) {
-                exportRequest.columnsToExport?.push("Opening Balance");
-            }
-            if (formValue.openingBalanceType) {
-                exportRequest.columnsToExport?.push("Opening Balance Type");
-            }
-            if (formValue.foreignOpeningBalance) {
-                exportRequest.columnsToExport?.push("Foreign Opening Balance");
-            }
-            if (formValue.foreignOpeningBalanceType) {
-                exportRequest.columnsToExport?.push("Foreign Opening Balance Type");
-            }
-            if (formValue.currency) {
-                exportRequest.columnsToExport?.push("Currency");
-            }
-            if (formValue.mobileNumber) {
-                exportRequest.columnsToExport?.push("Mobile Number");
-            }
-            if (formValue.email) {
-                exportRequest.columnsToExport?.push("Email");
-            }
-            if (formValue.attentionTo) {
-                exportRequest.columnsToExport?.push("Attention to");
-            }
-            if (formValue.remark) {
-                exportRequest.columnsToExport?.push("Remark");
-            }
-            if (formValue.address) {
-                exportRequest.columnsToExport?.push("Address");
-            }
-            if (formValue.pinCode) {
-                exportRequest.columnsToExport?.push("Pin Code");
-            }
-            if (formValue.taxNumber) {
-                exportRequest.columnsToExport?.push("Tax Number");
-            }
-            if (formValue.partyType) {
-                exportRequest.columnsToExport?.push("Party Type");
-            }
-            if (formValue.bankName) {
-                exportRequest.columnsToExport?.push("Bank Name");
-            }
-            if (formValue.bankAccountNumber) {
-                exportRequest.columnsToExport?.push("Bank Account Number");
-            }
-            if (formValue.ifscCode) {
-                exportRequest.columnsToExport?.push("IFSC Code");
-            }
-            if (formValue.beneficiaryName) {
-                exportRequest.columnsToExport?.push("Beneficiary Name");
-            }
-            if (formValue.branchName) {
-                exportRequest.columnsToExport?.push("Branch Name");
-            }
-            if (formValue.swiftCode) {
-                exportRequest.columnsToExport?.push("Swift Code");
-            }
+            exportRequest.columnsToExport = ExportColumnsHelper.buildColumnsToExport(this.exportFormValue);
             this.isLoading = true;
             this.ledgerService.exportData(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;

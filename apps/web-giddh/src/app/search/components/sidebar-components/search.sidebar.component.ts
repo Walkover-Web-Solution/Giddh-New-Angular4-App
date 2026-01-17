@@ -14,12 +14,13 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OrganizationType } from '../../../models/user-login-state';
 import { GroupService } from '../../../services/group.service';
 import { cloneDeep, concat, find, map } from '../../../lodash-optimized';
+import { DatepickerMethodsHelper } from '../../../shared/helpers/datepicker-methods.helper';
 
 @Component({
     selector: 'search-sidebar',
-    
+    // tslint:disable-next-line:component-max-inline-declarations
     standalone: false,templateUrl: './search.sidebar.component.html',
-    styleUrls: [`./search.sidebar.component.scss`],
+    styleUrls: ['./search.sidebar.component.scss'],
 })
 export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -242,22 +243,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SearchSidebarComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
-            return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.toggleGiddhDatepicker(false);
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-        }
+        DatepickerMethodsHelper.dateSelectedCallback(value, this, this.universalDatepickerTrigger);
     }
 
     /**

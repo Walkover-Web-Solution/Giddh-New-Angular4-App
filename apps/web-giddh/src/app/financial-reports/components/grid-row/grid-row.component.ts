@@ -6,13 +6,12 @@ import {
     EventEmitter,
     Inject,
     Input,
-    OnChanges,
     OnDestroy,
     OnInit,
     Output,
     Renderer2,
-    SimpleChanges,
 } from '@angular/core';
+import { FinancialGridRowBase } from '../../base/financial-grid-row-base';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
@@ -36,9 +35,7 @@ selector: '[grid-row]',
     providers: [FinancialReportsComponentStore],
     standalone: false
 })
-export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
-    @Input() public groupDetail: ChildGroup;
-    @Input() public search: string;
+export class GridRowComponent extends FinancialGridRowBase implements OnInit, OnDestroy {
     @Input() public from: string;
     @Input() public to: string;
     @Input() public padding: string;
@@ -57,45 +54,23 @@ export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof GridRowComponent
      */
     @Output() public openAccountModal: EventEmitter<any> = new EventEmitter();
-    /** Subject to release subscription memory */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold current url */
     private currentUrl: string = "";
 
     constructor(
-        private cd: ChangeDetectorRef,
+        protected cd: ChangeDetectorRef,
         private searchService: SearchService,
         private renderer: Renderer2,
         @Inject(DOCUMENT) private document: Document,
         private router: Router,
-        private financialReportsComponentStore: FinancialReportsComponentStore,
-        private tlPlService: TlPlService,
+        protected financialReportsComponentStore: FinancialReportsComponentStore,
+        protected tlPlService: TlPlService,
         private generalService: GeneralService
     ) {
+        super(cd, financialReportsComponentStore, tlPlService);
         this.currentUrl = this.router.url;
     }
 
-    /**
-     * Component lifecycle hook
-     *
-     * @memberof GridRowComponent
-     */
-    public ngOnInit(): void {
-        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.tlPlService.isReportTailed$.next(true);
-            }
-        });
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
-            this.cd.detectChanges();
-        }
-        if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
-            this.cd.detectChanges();
-        }
-    }
 
     /**
       *  This will be redirect to ledger

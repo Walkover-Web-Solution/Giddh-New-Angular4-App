@@ -24,6 +24,7 @@ import { DaybookQueryRequest, ExportBodyRequest } from '../../../../models/api-m
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { differenceBy, each, flatten, flattenDeep, map, omit, union } from '../../../../lodash-optimized';
+import { GroupFlattenHelper } from '../../../helpers/group-flatten.helper';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { Router } from '@angular/router';
@@ -37,7 +38,7 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
 @Component({
     selector: 'account-operations',
     templateUrl: './account-operations.component.html',
-    styleUrls: [`./account-operations.component.scss`],
+    styleUrls: ['./account-operations.component.scss'],
     standalone: false
 })
 
@@ -429,27 +430,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc?.uniqueName));
     }
 
-    public flattenGroup(rawList: any[], parents: any[] = []) {
-        let listofUN;
-        listofUN = map(rawList, (listItem) => {
-            let newParents;
-            let result;
-            newParents = union([], parents);
-            newParents.push({
-                name: listItem?.name,
-                uniqueName: listItem?.uniqueName
-            });
-            listItem = Object.assign({}, listItem, { parentGroups: [] });
-            listItem.parentGroups = newParents;
-            if (listItem?.groups?.length > 0) {
-                result = this.flattenGroup(listItem.groups, newParents);
-                result.push(omit(listItem, 'groups'));
-            } else {
-                result = omit(listItem, 'groups');
-            }
-            return result;
-        });
-        return flatten(listofUN);
+    public flattenGroup(rawList: any[], parents: any[] = []): any[] {
+        return GroupFlattenHelper.flattenGroup(rawList, parents);
     }
 
     public isRootLevelGroupFunc(uniqueName: string) {

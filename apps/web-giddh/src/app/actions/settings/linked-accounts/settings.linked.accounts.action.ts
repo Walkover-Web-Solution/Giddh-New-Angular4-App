@@ -1,5 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { ActionResponseValidatorHelper } from '../helpers/action-response-validator.helper';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action } from '@ngrx/store';
@@ -227,17 +228,7 @@ export class SettingsLinkedAccountsActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response?.status === 'error') {
-            if (showToast) {
-                this.toasty.errorToast(response.message);
-            }
-            return errorAction;
-        } else {
-            if (showToast && typeof response.body === 'string') {
-                this.toasty.successToast(response.body);
-            }
-        }
-        return successAction;
+        return ActionResponseValidatorHelper.validateResponse(response, successAction, this.toasty, showToast, errorAction);
     }
 
 }

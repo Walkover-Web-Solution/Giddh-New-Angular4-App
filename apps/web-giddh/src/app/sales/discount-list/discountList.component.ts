@@ -1,6 +1,7 @@
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { DiscountProcessingHelper } from '../../ledger/helpers/discount-processing.helper';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 
@@ -97,31 +98,11 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    /**
-     * This will process discount list
-     *
-     * @private
-     * @memberof DiscountListComponent
-     */
     private processDiscountList(): void {
-        (Array.isArray(this.discountsList) ? this.discountsList : []).forEach(acc => {
-            if (this.discountAccountsDetails) {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
-                if (!hasItem) {
-                    let obj: LedgerDiscountClass = new LedgerDiscountClass();
-                    obj.amount = acc.discountValue;
-                    obj.discountValue = acc.discountValue;
-                    obj.discountType = acc.discountType;
-                    obj.isActive = false;
-                    obj.particular = acc.linkAccount?.uniqueName;
-                    obj.discountUniqueName = acc?.uniqueName;
-                    obj.name = acc.name;
-                    this.discountAccountsDetails.push(obj);
-                }
-            } else {
-                this.discountAccountsDetails = [];
-            }
-        });
+        this.discountAccountsDetails = DiscountProcessingHelper.processDiscountList(
+            this.discountsList,
+            this.discountAccountsDetails
+        );
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
