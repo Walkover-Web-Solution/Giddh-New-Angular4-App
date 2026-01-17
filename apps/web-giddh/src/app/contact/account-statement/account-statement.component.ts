@@ -39,8 +39,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     @Input() public to: string;
     /** Branch unique name (input from parent) */
     @Input() public branchUniqueName: string;
-    /** Active tab (input from parent) */
-    @Input() public contactActiveTab: string;
     /** Reference to the Material sort component */
     @ViewChild(MatSort) sort!: MatSort;
     /** Holds localized JSON data specific to this module */
@@ -132,7 +130,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.balanceDue = this.responseAccountList.accountSummary?.closingBalance?.amount >= 0
                     ? (this.responseAccountList.accountSummary.closingBalance.type ===
                         this.transactionType.Credit
-                        ? this.contactActiveTab === 'vendor' ? '' : '-'
+                        ? "-"
                         : "") +
                     (this.responseAccountList.accountAddress?.currency?.symbol ?? "") +
                     this.giddhNumberFormatPipe.transform(this.responseAccountList.accountSummary.closingBalance.amount)

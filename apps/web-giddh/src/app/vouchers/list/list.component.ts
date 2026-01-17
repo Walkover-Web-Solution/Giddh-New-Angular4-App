@@ -390,7 +390,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
 
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -2758,8 +2758,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string): void {
         const dataToSave = {
             code: authCode,
-            client_secret: (this.serviceConfig.GOOGLE_CLIENT_SECRET || GOOGLE_CLIENT_SECRET),
-            client_id: (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID),
+            client_secret: GOOGLE_CLIENT_SECRET,
+            client_id: GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl()
         };
@@ -2773,11 +2773,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public getRedirectUrl(): string {
-        const baseUrl = AppUrl.endsWith('/') ? AppUrl : AppUrl + '/';
         if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-            return baseUrl + 'pages/purchase-management/purchase/settings';
+            return AppUrl + 'pages/purchase-management/purchase/settings';
         } else {
-            return baseUrl + 'pages/vouchers/preview/sales/settings';
+            return AppUrl + 'pages/vouchers/preview/sales/settings';
         }
     }
 
