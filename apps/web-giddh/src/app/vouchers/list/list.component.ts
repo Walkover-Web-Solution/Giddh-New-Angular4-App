@@ -1077,104 +1077,208 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private getSelectedTabIndex(): void {
         if (!this.isCompany && !this.isConsolidatedBranch) {
-            if (this.activeTabGroup === 0) {
-                if (this.voucherType === 'estimates' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'proformas' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
-                    this.selectedTabIndex = 3;
-                } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 4;
-                } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 5;
-                }
-            } else if (this.activeTabGroup === 1) {
-                if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if (this.voucherType === VoucherTypeEnum.creditNote && this.activeModule === 'list') {
-                    this.selectedTabIndex = 1;
-                } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'pending') {
-                    this.selectedTabIndex = 2;
-                } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 3;
-                } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 4;
-                }
-            } else if (this.activeTabGroup === 2) {
-                if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 3;
-                }
-            } else if (this.activeTabGroup === 3) {
-                if (this.voucherType === 'receipt' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'pending') {
-                    this.selectedTabIndex = 1;
-                } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 2;
-                }
-            } else if (this.activeTabGroup === 4) {
-                if (this.voucherType === 'payment' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
-                    this.selectedTabIndex = 1;
-                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 2;
-                }
-            }
+            this.setTabIndexForNonCompany();
         } else {
-            if (this.activeTabGroup === 0) {
-                if (this.voucherType === 'estimates' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'proformas' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
-                    this.selectedTabIndex = 3;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 4;
-                }
-            } else if (this.activeTabGroup === 1) {
-                if (this.voucherType === 'debit note' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'credit note' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
-                    this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 3;
-                }
-            } else if (this.activeTabGroup === 2) {
-                if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 2;
-                }
-            } else if (this.activeTabGroup === 3) {
-                if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'pending') {
-                    this.selectedTabIndex = 1;
-                }
-            } else if (this.activeTabGroup === 4) {
-                if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
-                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
-                    this.selectedTabIndex = 1;
-                }
-            }
+            this.setTabIndexForCompany();
         }
+
+        this.applyRouteTabIndex();
+    }
+
+    /**
+     * Set tab index for non-company/non-consolidated branch
+     */
+    private setTabIndexForNonCompany(): void {
+        switch (this.activeTabGroup) {
+            case 0:
+                this.setSalesTabIndex();
+                break;
+            case 1:
+                this.setDebitCreditTabIndex();
+                break;
+            case 2:
+                this.setPurchaseTabIndex();
+                break;
+            case 3:
+                this.setReceiptTabIndex();
+                break;
+            case 4:
+                this.setPaymentTabIndex();
+                break;
+        }
+    }
+
+    /**
+     * Set tab index for company/consolidated branch
+     */
+    private setTabIndexForCompany(): void {
+        switch (this.activeTabGroup) {
+            case 0:
+                this.setSalesTabIndexForCompany();
+                break;
+            case 1:
+                this.setDebitCreditTabIndexForCompany();
+                break;
+            case 2:
+                this.setPurchaseTabIndexForCompany();
+                break;
+            case 3:
+                this.setReceiptTabIndexForCompany();
+                break;
+            case 4:
+                this.setPaymentTabIndexForCompany();
+                break;
+        }
+    }
+
+    /**
+     * Set sales tab index for non-company
+     */
+    private setSalesTabIndex(): void {
+        if (this.voucherType === 'estimates' && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if (this.voucherType === 'proformas' && this.activeModule === 'list') {
+            this.selectedTabIndex = 1;
+        } else if (this.voucherType === 'sales' && this.activeModule === 'list') {
+            this.selectedTabIndex = 2;
+        } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
+            this.selectedTabIndex = 3;
+        } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'settings') {
+            this.selectedTabIndex = 4;
+        } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'templates') {
+            this.selectedTabIndex = 5;
+        }
+    }
+
+    /**
+     * Set debit/credit tab index for non-company
+     */
+    private setDebitCreditTabIndex(): void {
+        if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if (this.voucherType === VoucherTypeEnum.creditNote && this.activeModule === 'list') {
+            this.selectedTabIndex = 1;
+        } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'pending') {
+            this.selectedTabIndex = 2;
+        } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'settings') {
+            this.selectedTabIndex = 3;
+        } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'templates') {
+            this.selectedTabIndex = 4;
+        }
+    }
+
+    /**
+     * Set purchase tab index for non-company
+     */
+    private setPurchaseTabIndex(): void {
+        if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
+            this.selectedTabIndex = 1;
+        } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
+            this.selectedTabIndex = 2;
+        } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
+            this.selectedTabIndex = 3;
+        }
+    }
+
+    /**
+     * Set receipt tab index for non-company
+     */
+    private setReceiptTabIndex(): void {
+        if (this.voucherType === 'receipt' && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'pending') {
+            this.selectedTabIndex = 1;
+        } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'settings') {
+            this.selectedTabIndex = 2;
+        }
+    }
+
+    /**
+     * Set payment tab index for non-company
+     */
+    private setPaymentTabIndex(): void {
+        if (this.voucherType === 'payment' && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
+            this.selectedTabIndex = 1;
+        } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'settings') {
+            this.selectedTabIndex = 2;
+        }
+    }
+
+    /**
+     * Set sales tab index for company
+     */
+    private setSalesTabIndexForCompany(): void {
+        if (this.voucherType === 'estimates' && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if (this.voucherType === 'proformas' && this.activeModule === 'list') {
+            this.selectedTabIndex = 1;
+        } else if (this.voucherType === 'sales' && this.activeModule === 'list') {
+            this.selectedTabIndex = 2;
+        } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
+            this.selectedTabIndex = 3;
+        } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
+            this.selectedTabIndex = 4;
+        }
+    }
+
+    /**
+     * Set debit/credit tab index for company
+     */
+    private setDebitCreditTabIndexForCompany(): void {
+        if (this.voucherType === 'debit note' && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if (this.voucherType === 'credit note' && this.activeModule === 'list') {
+            this.selectedTabIndex = 1;
+        } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
+            this.selectedTabIndex = 2;
+        } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
+            this.selectedTabIndex = 3;
+        }
+    }
+
+    /**
+     * Set purchase tab index for company
+     */
+    private setPurchaseTabIndexForCompany(): void {
+        if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
+            this.selectedTabIndex = 1;
+        } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
+            this.selectedTabIndex = 2;
+        }
+    }
+
+    /**
+     * Set receipt tab index for company
+     */
+    private setReceiptTabIndexForCompany(): void {
+        if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'pending') {
+            this.selectedTabIndex = 1;
+        }
+    }
+
+    /**
+     * Set payment tab index for company
+     */
+    private setPaymentTabIndexForCompany(): void {
+        if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'list') {
+            this.selectedTabIndex = 0;
+        } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
+            this.selectedTabIndex = 1;
+        }
+    }
+
+    /**
+     * Apply route-specific tab index
+     */
+    private applyRouteTabIndex(): void {
         this.isRouteApplied = false;
         if (this.queryParams.tabIndex === '4') {
             this.isRouteApplied = true;
@@ -1189,146 +1293,167 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private redirectToSelectedTab(selectedTabIndex: number): void {
-        let voucherType = "";
-        let activeModule = "";
+        const { voucherType, activeModule } = this.getVoucherTypeAndModule(selectedTabIndex);
+        this.navigateToVoucherRoute(voucherType, activeModule);
+    }
+
+    /**
+     * Get voucher type and active module based on selected tab index
+     */
+    private getVoucherTypeAndModule(selectedTabIndex: number): { voucherType: string; activeModule: string } {
         if (!this.isCompany && !this.isConsolidatedBranch) {
-            if (this.activeTabGroup === 0) {
-                if (selectedTabIndex === 0) {
-                    voucherType = "estimates";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = "proformas";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = "sales";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 3) {
-                    voucherType = "sales";
-                    activeModule = "pending";
-                } else if (selectedTabIndex === 4) {
-                    voucherType = "sales";
-                    activeModule = "settings";
-                } else if (selectedTabIndex === 5) {
-                    voucherType = "sales";
-                    activeModule = "templates";
-                }
-            } else if (this.activeTabGroup === 1) {
-                if (selectedTabIndex === 0) {
-                    voucherType = "debit-note";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = "credit-note";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = "debit-note";
-                    activeModule = "pending";
-                } else if (selectedTabIndex === 3) {
-                    voucherType = "debit-note";
-                    activeModule = "settings";
-                } else if (selectedTabIndex === 4) {
-                    voucherType = "debit-note";
-                    activeModule = "templates";
-                }
-            } else if (this.activeTabGroup === 2) {
-                if (selectedTabIndex === 0) {
-                    voucherType = "purchase-order";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = "purchase";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = "purchase";
-                    activeModule = "settings";
-                } else if (selectedTabIndex === 3) {
-                    voucherType = "purchase";
-                    activeModule = "templates";
-                }
-            } else if (this.activeTabGroup === 3) {
-                if (selectedTabIndex === 0) {
-                    voucherType = "receipt";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = this.voucherTypeEnum.receipt;
-                    activeModule = "pending";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = this.voucherTypeEnum.receipt;
-                    activeModule = "settings";
-                }
-            } else if (this.activeTabGroup === 4) {
-                if (selectedTabIndex === 0) {
-                    voucherType = "payment";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = this.voucherTypeEnum.payment;
-                    activeModule = "pending";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = this.voucherTypeEnum.payment;
-                    activeModule = "settings";
-                }
-            }
+            return this.getVoucherTypeForNonCompany(selectedTabIndex);
         } else {
-            if (this.activeTabGroup === 0) {
-                if (selectedTabIndex === 0) {
-                    voucherType = "estimates";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = "proformas";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = "sales";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 3) {
-                    voucherType = "sales";
-                    activeModule = "pending";
-                } else if (selectedTabIndex === 4) {
-                    voucherType = "sales";
-                    activeModule = "templates";
-                }
-            } else if (this.activeTabGroup === 1) {
-                if (selectedTabIndex === 0) {
-                    voucherType = "debit-note";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = "credit-note";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = "debit-note";
-                    activeModule = "pending";
-                } else if (selectedTabIndex === 3) {
-                    voucherType = "debit-note";
-                    activeModule = "templates";
-                }
-            } else if (this.activeTabGroup === 2) {
-                if (selectedTabIndex === 0) {
-                    voucherType = "purchase-order";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = "purchase";
-                    activeModule = "list";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = "purchase";
-                    activeModule = "templates";
-                }
-            } else if (this.activeTabGroup === 3) {
-                if (selectedTabIndex === 0) {
-                    voucherType = this.voucherTypeEnum.receipt;
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = this.voucherTypeEnum.receipt;
-                    activeModule = "pending";
-                }
-            } else if (this.activeTabGroup === 4) {
-                if (selectedTabIndex === 0) {
-                    voucherType = this.voucherTypeEnum.payment;
-                    activeModule = "list";
-                } else if (selectedTabIndex === 1) {
-                    voucherType = this.voucherTypeEnum.payment;
-                    activeModule = "pending";
-                }
-            }
+            return this.getVoucherTypeForCompany(selectedTabIndex);
         }
+    }
+
+    /**
+     * Get voucher type and module for non-company/non-consolidated branch
+     */
+    private getVoucherTypeForNonCompany(selectedTabIndex: number): { voucherType: string; activeModule: string } {
+        switch (this.activeTabGroup) {
+            case 0:
+                return this.getSalesVoucherType(selectedTabIndex, false);
+            case 1:
+                return this.getDebitCreditVoucherType(selectedTabIndex, false);
+            case 2:
+                return this.getPurchaseVoucherType(selectedTabIndex, false);
+            case 3:
+                return this.getReceiptVoucherType(selectedTabIndex, false);
+            case 4:
+                return this.getPaymentVoucherType(selectedTabIndex, false);
+            default:
+                return { voucherType: "", activeModule: "" };
+        }
+    }
+
+    /**
+     * Get voucher type and module for company/consolidated branch
+     */
+    private getVoucherTypeForCompany(selectedTabIndex: number): { voucherType: string; activeModule: string } {
+        switch (this.activeTabGroup) {
+            case 0:
+                return this.getSalesVoucherType(selectedTabIndex, true);
+            case 1:
+                return this.getDebitCreditVoucherType(selectedTabIndex, true);
+            case 2:
+                return this.getPurchaseVoucherType(selectedTabIndex, true);
+            case 3:
+                return this.getReceiptVoucherType(selectedTabIndex, true);
+            case 4:
+                return this.getPaymentVoucherType(selectedTabIndex, true);
+            default:
+                return { voucherType: "", activeModule: "" };
+        }
+    }
+
+    /**
+     * Get sales voucher type and module
+     */
+    private getSalesVoucherType(selectedTabIndex: number, isCompany: boolean): { voucherType: string; activeModule: string } {
+        switch (selectedTabIndex) {
+            case 0:
+                return { voucherType: "estimates", activeModule: "list" };
+            case 1:
+                return { voucherType: "proformas", activeModule: "list" };
+            case 2:
+                return { voucherType: "sales", activeModule: "list" };
+            case 3:
+                return { voucherType: "sales", activeModule: "pending" };
+            case 4:
+                return { voucherType: "sales", activeModule: isCompany ? "templates" : "settings" };
+            case 5:
+                return { voucherType: "sales", activeModule: "templates" };
+            default:
+                return { voucherType: "", activeModule: "" };
+        }
+    }
+
+    /**
+     * Get debit/credit voucher type and module
+     */
+    private getDebitCreditVoucherType(selectedTabIndex: number, isCompany: boolean): { voucherType: string; activeModule: string } {
+        switch (selectedTabIndex) {
+            case 0:
+                return { voucherType: "debit-note", activeModule: "list" };
+            case 1:
+                return { voucherType: "credit-note", activeModule: "list" };
+            case 2:
+                return { voucherType: "debit-note", activeModule: "pending" };
+            case 3:
+                return { voucherType: "debit-note", activeModule: isCompany ? "templates" : "settings" };
+            case 4:
+                return { voucherType: "debit-note", activeModule: "templates" };
+            default:
+                return { voucherType: "", activeModule: "" };
+        }
+    }
+
+    /**
+     * Get purchase voucher type and module
+     */
+    private getPurchaseVoucherType(selectedTabIndex: number, isCompany: boolean): { voucherType: string; activeModule: string } {
+        switch (selectedTabIndex) {
+            case 0:
+                return { voucherType: "purchase-order", activeModule: "list" };
+            case 1:
+                return { voucherType: "purchase", activeModule: "list" };
+            case 2:
+                return { voucherType: "purchase", activeModule: isCompany ? "templates" : "settings" };
+            case 3:
+                return { voucherType: "purchase", activeModule: "templates" };
+            default:
+                return { voucherType: "", activeModule: "" };
+        }
+    }
+
+    /**
+     * Get receipt voucher type and module
+     */
+    private getReceiptVoucherType(selectedTabIndex: number, isCompany: boolean): { voucherType: string; activeModule: string } {
+        switch (selectedTabIndex) {
+            case 0:
+                return {
+                    voucherType: isCompany ? this.voucherTypeEnum.receipt : "receipt",
+                    activeModule: "list"
+                };
+            case 1:
+                return { voucherType: this.voucherTypeEnum.receipt, activeModule: "pending" };
+            case 2:
+                return { voucherType: this.voucherTypeEnum.receipt, activeModule: "settings" };
+            default:
+                return { voucherType: "", activeModule: "" };
+        }
+    }
+
+    /**
+     * Get payment voucher type and module
+     */
+    private getPaymentVoucherType(selectedTabIndex: number, isCompany: boolean): { voucherType: string; activeModule: string } {
+        switch (selectedTabIndex) {
+            case 0:
+                return {
+                    voucherType: isCompany ? this.voucherTypeEnum.payment : "payment",
+                    activeModule: "list"
+                };
+            case 1:
+                return { voucherType: this.voucherTypeEnum.payment, activeModule: "pending" };
+            case 2:
+                return { voucherType: this.voucherTypeEnum.payment, activeModule: "settings" };
+            default:
+                return { voucherType: "", activeModule: "" };
+        }
+    }
+
+    /**
+     * Navigate to voucher route with appropriate query parameters
+     */
+    private navigateToVoucherRoute(voucherType: string, activeModule: string): void {
+        const routePath = `/pages/vouchers/preview/${voucherType}/${activeModule}`;
+
         if (this.queryParams.page) {
-            this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
+            this.router.navigate([routePath], {
                 queryParams: {
                     page: this.queryParams.page ?? 1,
                     from: this.queryParams.from,
@@ -1336,13 +1461,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
         } else if (this.queryParams.tabIndex) {
-            this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
+            this.router.navigate([routePath], {
                 queryParams: {
                     tabIndex: this.queryParams.tabIndex ?? 0,
                 }
             });
         } else {
-            this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule]);
+            this.router.navigate([routePath]);
         }
     }
     /**

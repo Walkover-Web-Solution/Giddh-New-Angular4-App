@@ -182,81 +182,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$)).subscribe((response: Gstr3bOverviewResult2) => {
-
             if (response) {
-                this.gstr3BData = response;
-                if (this.gstr3BData.ret_period) {
-                    this.selectedMMYYYY = this.gstr3BData.ret_period
-                }
-                if (this.gstr3BData) {
-
-                    if (this.gstr3BData.sup_details) {
-                        this.gstr3BData.sumTaxVal =
-                            ((this.gstr3BData.sup_details.osup_det ?
-                                (this.gstr3BData.sup_details.osup_det.txval ? this.gstr3BData.sup_details.osup_det.txval : 0) : 0) +
-                                (this.gstr3BData.sup_details.isup_rev ?
-                                    (this.gstr3BData.sup_details.isup_rev.txval ? this.gstr3BData.sup_details.isup_rev.txval : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nil_exmp ?
-                                    (this.gstr3BData.sup_details.osup_nil_exmp.txval ? this.gstr3BData.sup_details.osup_nil_exmp.txval : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nongst ?
-                                    (this.gstr3BData.sup_details.osup_nongst.txval ? this.gstr3BData.sup_details.osup_nongst.txval : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_zero ?
-                                    (this.gstr3BData.sup_details.osup_zero.txval ? this.gstr3BData.sup_details.osup_zero.txval : 0) : 0));
-
-                        this.gstr3BData.sumIamtVal =
-                            ((this.gstr3BData.sup_details.osup_det ?
-                                (this.gstr3BData.sup_details.osup_det.iamt ? this.gstr3BData.sup_details.osup_det.iamt : 0) : 0) +
-                                (this.gstr3BData.sup_details.isup_rev ?
-                                    (this.gstr3BData.sup_details.isup_rev.iamt ? this.gstr3BData.sup_details.isup_rev.iamt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nil_exmp ?
-                                    (this.gstr3BData.sup_details.osup_nil_exmp.iamt ? this.gstr3BData.sup_details.osup_nil_exmp.iamt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nongst ?
-                                    (this.gstr3BData.sup_details.osup_nongst.iamt ? this.gstr3BData.sup_details.osup_nongst.iamt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_zero ?
-                                    (this.gstr3BData.sup_details.osup_zero.iamt ? this.gstr3BData.sup_details.osup_zero.iamt : 0) : 0));
-
-                        this.gstr3BData.sumCamtval =
-                            ((this.gstr3BData.sup_details.osup_det ?
-                                (this.gstr3BData.sup_details.osup_det.camt ? this.gstr3BData.sup_details.osup_det.camt : 0) : 0) +
-                                (this.gstr3BData.sup_details.isup_rev ?
-                                    (this.gstr3BData.sup_details.isup_rev.camt ? this.gstr3BData.sup_details.isup_rev.camt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nil_exmp ?
-                                    (this.gstr3BData.sup_details.osup_nil_exmp.camt ? this.gstr3BData.sup_details.osup_nil_exmp.camt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nongst ?
-                                    (this.gstr3BData.sup_details.osup_nongst.camt ? this.gstr3BData.sup_details.osup_nongst.camt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_zero ?
-                                    (this.gstr3BData.sup_details.osup_zero.camt ? this.gstr3BData.sup_details.osup_zero.camt : 0) : 0));
-
-                        this.gstr3BData.sumSamtval =
-                            ((this.gstr3BData.sup_details.osup_det ?
-                                (this.gstr3BData.sup_details.osup_det.samt ? this.gstr3BData.sup_details.osup_det.samt : 0) : 0) +
-                                (this.gstr3BData.sup_details.isup_rev ?
-                                    (this.gstr3BData.sup_details.isup_rev.samt ? this.gstr3BData.sup_details.isup_rev.samt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nil_exmp ?
-                                    (this.gstr3BData.sup_details.osup_nil_exmp.samt ? this.gstr3BData.sup_details.osup_nil_exmp.samt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nongst ?
-                                    (this.gstr3BData.sup_details.osup_nongst.samt ? this.gstr3BData.sup_details.osup_nongst.samt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_zero ?
-                                    (this.gstr3BData.sup_details.osup_zero.samt ? this.gstr3BData.sup_details.osup_zero.samt : 0) : 0));
-
-                        this.gstr3BData.sumCsamtval =
-                            ((this.gstr3BData.sup_details.osup_det ?
-                                (this.gstr3BData.sup_details.osup_det.csamt ? this.gstr3BData.sup_details.osup_det.csamt : 0) : 0) +
-                                (this.gstr3BData.sup_details.isup_rev ?
-                                    (this.gstr3BData.sup_details.isup_rev.csamt ? this.gstr3BData.sup_details.isup_rev.csamt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nil_exmp ?
-                                    (this.gstr3BData.sup_details.osup_nil_exmp.csamt ? this.gstr3BData.sup_details.osup_nil_exmp.csamt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_nongst ?
-                                    (this.gstr3BData.sup_details.osup_nongst.csamt ? this.gstr3BData.sup_details.osup_nongst.csamt : 0) : 0) +
-                                (this.gstr3BData.sup_details.osup_zero ?
-                                    (this.gstr3BData.sup_details.osup_zero.csamt ? this.gstr3BData.sup_details.osup_zero.csamt : 0) : 0));
-                    }
-                }
-                this.setGstrUserTableData();
-                this.setGstr3bTableData();
-                this.setGstr3bSuppliesTableData();
-                this.setIctTableData();
-                this.setExemptValuesTableData();
+                this.processGstr3BOverviewData(response);
             }
         });
         this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
@@ -849,5 +776,64 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     */
     public buyPlan(subscriptionId: string): void {
         this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
+    }
+
+    /**
+     * Process GSTR3B overview data and calculate summary values
+     */
+    private processGstr3BOverviewData(response: Gstr3bOverviewResult2): void {
+        this.gstr3BData = response;
+
+        if (this.gstr3BData.ret_period) {
+            this.selectedMMYYYY = this.gstr3BData.ret_period;
+        }
+
+        if (this.gstr3BData && this.gstr3BData.sup_details) {
+            this.calculateSupplyDetailsSummary();
+        }
+
+        this.updateTableData();
+    }
+
+    /**
+     * Calculate summary values for supply details
+     */
+    private calculateSupplyDetailsSummary(): void {
+        const supDetails = this.gstr3BData.sup_details;
+
+        this.gstr3BData.sumTaxVal = this.calculateFieldSum(supDetails, 'txval');
+        this.gstr3BData.sumIamtVal = this.calculateFieldSum(supDetails, 'iamt');
+        this.gstr3BData.sumCamtval = this.calculateFieldSum(supDetails, 'camt');
+        this.gstr3BData.sumSamtval = this.calculateFieldSum(supDetails, 'samt');
+        this.gstr3BData.sumCsamtval = this.calculateFieldSum(supDetails, 'csamt');
+    }
+
+    /**
+     * Calculate sum for a specific field across all supply detail categories
+     */
+    private calculateFieldSum(supDetails: any, fieldName: string): number {
+        const categories = ['osup_det', 'isup_rev', 'osup_nil_exmp', 'osup_nongst', 'osup_zero'];
+
+        return categories.reduce((sum, category) => {
+            return sum + this.getFieldValue(supDetails[category], fieldName);
+        }, 0);
+    }
+
+    /**
+     * Get field value with null safety
+     */
+    private getFieldValue(categoryData: any, fieldName: string): number {
+        return categoryData && categoryData[fieldName] ? categoryData[fieldName] : 0;
+    }
+
+    /**
+     * Update all table data
+     */
+    private updateTableData(): void {
+        this.setGstrUserTableData();
+        this.setGstr3bTableData();
+        this.setGstr3bSuppliesTableData();
+        this.setIctTableData();
+        this.setExemptValuesTableData();
     }
 }

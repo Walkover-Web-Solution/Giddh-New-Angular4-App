@@ -46,6 +46,110 @@ export class MaskApplierService {
         this.validation = this._config.validation;
     }
 
+    /**
+     * Check if mask expression is a separator type
+     */
+    private isSeparatorMask(maskExpression: string): boolean {
+        return maskExpression.startsWith(Separators.SEPARATOR) ||
+               maskExpression.startsWith(Separators.DOT_SEPARATOR) ||
+               maskExpression.startsWith(Separators.COMMA_SEPARATOR) ||
+               maskExpression.startsWith(Separators.IND_COMMA_SEPARATED) ||
+               maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED) ||
+               maskExpression.startsWith(Separators.INT_COMMA_SEPARATED) ||
+               maskExpression.startsWith(Separators.INT_SPACE_SEPARATED) ||
+               maskExpression.startsWith(Separators.NOT_SEPARATED);
+    }
+
+    /**
+     * Check if input value contains invalid characters for separator masks
+     */
+    private hasInvalidCharacters(inputValue: string): boolean {
+        return !!(inputValue.match('[wа-яА-Я]') ||
+                 inputValue.match('[ЁёА-я]') ||
+                 inputValue.match('[a-z]|[A-Z]') ||
+                 inputValue.match(/[-@#!$%\\^&*()_£¬+|~=`{}\[\]:";<>?\/]/));
+    }
+
+    /**
+     * Process input value for basic separator mask
+     */
+    private processSeparatorInput(inputValue: string): string {
+        if (
+            inputValue.includes(',') &&
+            inputValue?.endsWith(',') &&
+            inputValue?.indexOf(',') !== inputValue.lastIndexOf(',')
+        ) {
+            inputValue = inputValue.substring(0, inputValue?.length - 1);
+        }
+        return inputValue?.replace('.', ' ');
+    }
+
+    /**
+     * Process input value for dot separator mask
+     */
+    private processDotSeparatorInput(inputValue: string): string {
+        if (
+            inputValue?.indexOf('.') !== -1 &&
+            inputValue?.indexOf('.') === inputValue.lastIndexOf('.') &&
+            (inputValue?.indexOf('.') > 3 || inputValue?.length < 6)
+        ) {
+            inputValue = inputValue?.replace('.', ',');
+        }
+        return inputValue?.length > 1 && inputValue[0] === '0' && inputValue[1] !== ','
+            ? inputValue.slice(1, inputValue?.length)
+            : inputValue;
+    }
+
+    /**
+     * Process input value for comma separator mask
+     */
+    private processCommaSeparatorInput(inputValue: string): string {
+        return inputValue?.length > 1 && inputValue[0] === '0' && inputValue[1] !== '.'
+            ? inputValue.slice(1, inputValue?.length)
+            : inputValue;
+    }
+
+    /**
+     * Process separator formatting with validation and precision
+     */
+    private processSeparatorFormatting(inputValue: string, precision: number): string {
+        if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:.";<>?\/]/)) {
+            inputValue = inputValue.substring(0, inputValue?.length - 1);
+        }
+        inputValue = this.checkInputPrecision(inputValue, precision, ',');
+        const strForSep = inputValue?.replace(/\s/g, '');
+        return this.separator(strForSep, ' ', ',', precision);
+    }
+
+    /**
+     * Process dot separator formatting with validation and precision
+     */
+    private processDotSeparatorFormatting(inputValue: string, precision: number): string {
+        if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
+            inputValue = inputValue.substring(0, inputValue?.length - 1);
+        }
+        inputValue = this.checkInputPrecision(inputValue, precision, ',');
+        const strForSep = inputValue?.replace(/\./g, '');
+        return this.separator(strForSep, '.', ',', precision);
+    }
+
+    /**
+     * Process comma separator formatting with validation and precision
+     */
+    private processCommaSeparatorFormatting(inputValue: string, precision: number): string {
+        const strForSep = inputValue?.replace(/,/g, '');
+        return this.separator(strForSep, ',', '.', precision);
+    }
+
+    /**
+     * Process Indian comma separated formatting with custom precision
+     */
+    private processIndCommaSeparatedFormatting(inputValue: string, precision: number): string {
+        inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
+        const strForSep = inputValue?.replace(/,/g, '');
+        return this.currencySeparator(strForSep, ',', '.', precision, true);
+    }
+
     // tslint:disable-next-line:no-any
     public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
         const [mask, customPattern] = maskAndPattern;
@@ -94,77 +198,30 @@ export class MaskApplierService {
             } else {
                 result = inputValue.substring(0, inputValue?.length - 1);
             }
-        } else if (
-            maskExpression.startsWith(Separators.SEPARATOR) ||
-            maskExpression.startsWith(Separators.DOT_SEPARATOR) ||
-            maskExpression.startsWith(Separators.COMMA_SEPARATOR) ||
-            maskExpression.startsWith(Separators.IND_COMMA_SEPARATED) ||
-            maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED) ||
-            maskExpression.startsWith(Separators.INT_COMMA_SEPARATED) ||
-            maskExpression.startsWith(Separators.INT_SPACE_SEPARATED) ||
-            maskExpression.startsWith(Separators.NOT_SEPARATED)
-        ) {
-            if (
-                inputValue.match('[wа-яА-Я]') ||
-                inputValue.match('[ЁёА-я]') ||
-                inputValue.match('[a-z]|[A-Z]') ||
-                inputValue.match(/[-@#!$%\\^&*()_£¬+|~=`{}\[\]:";<>?\/]/)
-            ) {
+        } else if (this.isSeparatorMask(maskExpression)) {
+            if (this.hasInvalidCharacters(inputValue)) {
                 inputValue = this._checkInput(inputValue);
             }
             let precision: number = this.getPrecision(maskExpression);
             let strForSep: string;
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
-                if (
-                    inputValue.includes(',') &&
-                    inputValue?.endsWith(',') &&
-                    inputValue?.indexOf(',') !== inputValue.lastIndexOf(',')
-                ) {
-                    inputValue = inputValue.substring(0, inputValue?.length - 1);
-                }
-                inputValue = inputValue?.replace('.', ' ');
+                inputValue = this.processSeparatorInput(inputValue);
             }
             if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
-                if (
-                    inputValue?.indexOf('.') !== -1 &&
-                    inputValue?.indexOf('.') === inputValue.lastIndexOf('.') &&
-                    (inputValue?.indexOf('.') > 3 || inputValue?.length < 6)
-                ) {
-                    inputValue = inputValue?.replace('.', ',');
-                }
-                inputValue =
-                    inputValue?.length > 1 && inputValue[0] === '0' && inputValue[1] !== ','
-                        ? inputValue.slice(1, inputValue?.length)
-                        : inputValue;
+                inputValue = this.processDotSeparatorInput(inputValue);
             }
             if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
-                inputValue =
-                    inputValue?.length > 1 && inputValue[0] === '0' && inputValue[1] !== '.'
-                        ? inputValue.slice(1, inputValue?.length)
-                        : inputValue;
+                inputValue = this.processCommaSeparatorInput(inputValue);
             }
 
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:.";<>?\/]/)) {
-                    inputValue = inputValue.substring(0, inputValue?.length - 1);
-                }
-                inputValue = this.checkInputPrecision(inputValue, precision, ',');
-                strForSep = inputValue?.replace(/\s/g, '');
-                result = this.separator(strForSep, ' ', ',', precision);
+                result = this.processSeparatorFormatting(inputValue, precision);
             } else if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
-                    inputValue = inputValue.substring(0, inputValue?.length - 1);
-                }
-                inputValue = this.checkInputPrecision(inputValue, precision, ',');
-                strForSep = inputValue?.replace(/\./g, '');
-                result = this.separator(strForSep, '.', ',', precision);
+                result = this.processDotSeparatorFormatting(inputValue, precision);
             } else if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
-                strForSep = inputValue?.replace(/,/g, '');
-                result = this.separator(strForSep, ',', '.', precision);
+                result = this.processCommaSeparatorFormatting(inputValue, precision);
             } else if (maskExpression.startsWith(Separators.IND_COMMA_SEPARATED)) {
-                inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
-                strForSep = inputValue?.replace(/,/g, '');
-                result = this.currencySeparator(strForSep, ',', '.', precision, true);
+                result = this.processIndCommaSeparatedFormatting(inputValue, precision);
             } else if (maskExpression.startsWith(Separators.INT_SPACE_SEPARATED)) {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
                 strForSep = inputValue?.replace(/[ ,']/g, '');
@@ -225,7 +282,7 @@ export class MaskApplierService {
                         break;
                     case Separators.NOT_SEPARATED:
                         shiftCustomOperator = '';
-                        break;    
+                        break;
                 }
                 let resultSpecialCharLength: number = (result.match(new RegExp(shiftCustomOperator, 'g')) || [])?.length;
                 let inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || [])?.length;
@@ -499,10 +556,13 @@ export class MaskApplierService {
         if (precision < Infinity) {
             let precisionRegEx: RegExp;
 
+            // Sanitize precision to prevent ReDoS attacks
+            const safePrecision = Math.max(0, Math.min(20, parseInt(String(precision), 10) || 0));
+
             if (decimalMarker === '.') {
-                precisionRegEx = new RegExp(`\\.\\d{${precision}}.*$`);
+                precisionRegEx = new RegExp(`\\.\\d{${safePrecision}}.*$`);
             } else if (decimalMarker === ',') {
-                precisionRegEx = new RegExp(`,\\d{${precision}}.*$`);
+                precisionRegEx = new RegExp(`,\\d{${safePrecision}}.*$`);
             }
 
             const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);

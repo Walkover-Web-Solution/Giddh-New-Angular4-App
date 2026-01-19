@@ -3,8 +3,8 @@
  * Debug Cleanup Script
  * Removes console.log, console.error, console.warn and other debug artifacts from production code
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 class DebugCleaner {
     constructor() {
         this.processedFiles = 0;
@@ -15,13 +15,47 @@ class DebugCleaner {
         this.verbose = process.argv.includes('--verbose');
     }
     /**
+     * Sanitize file path to prevent path traversal
+     */
+    sanitizePath(basePath, userPath) {
+        // Resolve paths to absolute paths
+        const resolvedBase = path.resolve(basePath);
+        const resolvedUser = path.resolve(basePath, userPath);
+
+        // Check if the resolved user path is within the base path
+        if (!resolvedUser.startsWith(resolvedBase + path.sep) && resolvedUser !== resolvedBase) {
+            throw new Error(`Path traversal attempt detected: ${userPath}`);
+        }
+
+        return resolvedUser;
+    }
+
+    /**
      * Find all TypeScript and JavaScript files to process
      */
     findSourceFiles(dir, sourceFiles = []) {
         try {
+            // Validate that dir is within allowed paths
+            const allowedPaths = [
+                path.resolve('./apps'),
+                path.resolve('./libs'),
+                path.resolve('./scripts'),
+                path.resolve('./tools')
+            ];
+
+            const resolvedDir = path.resolve(dir);
+            const isAllowed = allowedPaths.some(allowedPath =>
+                resolvedDir.startsWith(allowedPath)
+            );
+
+            if (!isAllowed) {
+                throw new Error(`Directory not in allowed paths: ${dir}`);
+            }
+
             const files = fs.readdirSync(dir);
             for (const file of files) {
-                const fullPath = path.join(dir, file);
+                // Sanitize the file path to prevent path traversal
+                const fullPath = this.sanitizePath(dir, file);
                 const stat = fs.statSync(fullPath);
                 if (stat.isDirectory()) {
                     // Skip node_modules, dist, and other build directories
@@ -47,7 +81,7 @@ class DebugCleaner {
         try {
             const content = fs.readFileSync(filePath, 'utf8');
             let cleanedContent = content;
-            let fileRemovals = 0;
+            const fileRemovals = 0;
             // Pattern 1: Simple console statements (console.log, console.error, etc.)
             const simpleConsolePattern = /^\s*console\.(log|error|warn|info|debug|trace)\s*\([^;]*\);\s*$/gm;
             const simpleMatches = cleanedContent.match(simpleConsolePattern);

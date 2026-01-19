@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
 /**
  * Clean old Electron builds before creating new ones
  * This prevents confusion between old and new builds with same version
@@ -38,7 +38,7 @@ function cleanBuildDirectory() {
     log(`🧹 Cleaning existing builds with same version ${version}...`, 'cyan');
     try {
         const files = fs.readdirSync(buildDir);
-        let cleanedCount = 0;
+        const cleanedCount = 0;
         files.forEach(file => {
             const filePath = path.join(buildDir, file);
             const stat = fs.statSync(filePath);
@@ -51,11 +51,11 @@ function cleanBuildDirectory() {
                 if (stat.isDirectory()) {
                     log(`🗂️  Removing directory with same version: ${file}`, 'yellow');
                     fs.rmSync(filePath, { recursive: true, force: true });
-                    cleanedCount++;
+                    cleanedCount += 1;
                 } else {
                     log(`🗑️  Removing file with same version: ${file}`, 'yellow');
                     fs.unlinkSync(filePath);
-                    cleanedCount++;
+                    cleanedCount += 1;
                 }
             }
         });

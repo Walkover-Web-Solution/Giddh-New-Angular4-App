@@ -140,7 +140,7 @@ window.HW_config = window.HW_config || {
 // Enhanced logo and preconnect initialization with retry mechanism
 function initializeLogo() {
     try {
-        let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel") || "null");
+        const whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel") || "null");
         const logoUrl = "./assets/images/giddh-big-logo.svg";
         const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
         if (whiteLabelConfig) {
@@ -156,7 +156,7 @@ function initializeLogo() {
                 // Set logo source with error handling
                 logoElement.onerror = function() {
                     setTimeout(() => {
-                        logoElement.src = logoUrl + '?retry=' + Date.now();
+                        logoElement.src = `${logoUrl}?retry=${Date.now()}`;
                     }, 1000);
                 };
                 logoElement.onload = function() {
@@ -165,7 +165,7 @@ function initializeLogo() {
                 // Fallback: ensure logo is set after a delay
                 setTimeout(() => {
                     if (!logoElement.complete || logoElement.naturalWidth === 0) {
-                        logoElement.src = logoUrl + '?fallback=' + Date.now();
+                        logoElement.src = `${logoUrl}?fallback=${Date.now()}`;
                     }
                 }, 2000);
             } else {
@@ -183,7 +183,7 @@ function initializeLogo() {
         setTimeout(() => {
             const logoElement = document.getElementById("dynamic-logo");
             if (logoElement) {
-                logoElement.src = "./assets/images/giddh-big-logo.svg?error=" + Date.now();
+                logoElement.src = `./assets/images/giddh-big-logo.svg?error=${Date.now()}`;
             }
         }, 1000);
     }
@@ -209,8 +209,8 @@ window.onerror = function (msg, url, line, col, error) {
     )) {
         return true; // Prevent default error handling
     }
-    var extra = !col ? "" : "\ncolumn: " + col;
-    extra += !error ? "" : "\nerror: " + error;
+    const extra = !col ? "" : `\ncolumn: ${col}`;
+    const fullExtra = extra + (!error ? "" : `\nerror: ${error}`);
     return false;
 };
 // Global console.error interceptor for comprehensive error suppression

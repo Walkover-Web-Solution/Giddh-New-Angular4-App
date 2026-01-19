@@ -1,4 +1,4 @@
-const path = require('path');
+import path from 'path';
 
 module.exports = {
   optimization: {
@@ -15,7 +15,7 @@ module.exports = {
           priority: 30,
           enforce: true
         },
-        
+
         // Angular Material separate chunk
         material: {
           test: /[\\/]node_modules[\\/]@angular[\\/]material/,
@@ -24,7 +24,7 @@ module.exports = {
           priority: 25,
           enforce: true
         },
-        
+
         // Froala Editor - async loading
         froala: {
           test: /[\\/]node_modules[\\/]froala-editor/,
@@ -33,7 +33,7 @@ module.exports = {
           priority: 20,
           enforce: true
         },
-        
+
         // Chart.js - async loading
         charts: {
           test: /[\\/]node_modules[\\/](chart\.js|chartjs-)/,
@@ -42,7 +42,7 @@ module.exports = {
           priority: 20,
           enforce: true
         },
-        
+
         // D3 - async loading
         d3: {
           test: /[\\/]node_modules[\\/]d3/,
@@ -51,7 +51,7 @@ module.exports = {
           priority: 20,
           enforce: true
         },
-        
+
         // jQuery and related
         jquery: {
           test: /[\\/]node_modules[\\/](jquery|bootstrap)/,
@@ -60,7 +60,7 @@ module.exports = {
           priority: 15,
           enforce: true
         },
-        
+
         // Other large libraries
         libs: {
           test: /[\\/]node_modules[\\/](dayjs|moment|lodash|google-libphonenumber)/,
@@ -69,7 +69,7 @@ module.exports = {
           priority: 10,
           enforce: true
         },
-        
+
         // Default vendor chunk for remaining node_modules
         default: {
           test: /[\\/]node_modules[\\/]/,
@@ -81,7 +81,7 @@ module.exports = {
       }
     }
   },
-  
+
   resolve: {
     alias: {
       // Use ES modules version of lodash for better tree shaking

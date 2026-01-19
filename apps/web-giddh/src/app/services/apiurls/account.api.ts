@@ -1,7 +1,7 @@
 const COMMON_URL_FOR_ACCOUNT = 'company/:companyUniqueName/accounts/:accountUniqueName';
 const COMMON_URL_FOR_ACCOUNT_V2 = 'v2/company/:companyUniqueName/accounts/:accountUniqueName';
 export const ACCOUNTS_API_V2 = {
-    GET: COMMON_URL_FOR_ACCOUNT_V2 + '?source=:source',
+    GET: `${COMMON_URL_FOR_ACCOUNT_V2}?source=:source`,
     UPDATE_WITH_ACCOUNT_UNIQUE_NAME: COMMON_URL_FOR_ACCOUNT_V2,
     UPDATE: 'v2/company/:companyUniqueName/groups/:groupUniqueName/accounts/:accountUniqueName',
     CREATE: 'v2/company/:companyUniqueName/groups/:groupUniqueName/accounts'
@@ -10,13 +10,13 @@ export const ACCOUNTS_API_V2 = {
 export const ACCOUNTS_API = {
     UPDATE: COMMON_URL_FOR_ACCOUNT,
     DELETE: COMMON_URL_FOR_ACCOUNT, // delete method,
-    MERGE: COMMON_URL_FOR_ACCOUNT + '/merge',
-    UNMERGE: COMMON_URL_FOR_ACCOUNT + '/un-merge',
-    MOVE: COMMON_URL_FOR_ACCOUNT + '/move',
+    MERGE: `${COMMON_URL_FOR_ACCOUNT}/merge`,
+    UNMERGE: `${COMMON_URL_FOR_ACCOUNT}/un-merge`,
+    MOVE: `${COMMON_URL_FOR_ACCOUNT}/move`,
     SHARE: 'company/:companyUniqueName/role/:roleUniqueName/assign',
     CHANGE_PERMISSION: 'company/:companyUniqueName/uer/:assignRoleEntryUniqueName',
-    SHARED_WITH: COMMON_URL_FOR_ACCOUNT + '/shared-with',
-    TAX_HIERARCHY: COMMON_URL_FOR_ACCOUNT + '/tax-hierarchy', // get call
+    SHARED_WITH: `${COMMON_URL_FOR_ACCOUNT}/shared-with`,
+    TAX_HIERARCHY: `${COMMON_URL_FOR_ACCOUNT}/tax-hierarchy`, // get call
     FLATTEN_ACCOUNTS: 'company/:companyUniqueName/flatten-accounts?q=:q&page=:page&count=:count', // get call
     CREATE_UPDATE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/contacts'
 };

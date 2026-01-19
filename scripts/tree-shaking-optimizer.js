@@ -5,6 +5,9 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { optimizeLodashImports: optimizeLodashImportsUtil } = require('./lodash-optimizer-utils');
+const { MATERIAL_MODULE_MAP } = require('./material-module-map');
+const { findTypeScriptFiles: findTypeScriptFilesUtil } = require('./file-finder-utils');
 class TreeShakingOptimizer {
     constructor() {
         this.processedFiles = 0;
@@ -16,25 +19,10 @@ class TreeShakingOptimizer {
     }
     /**
      * Find TypeScript files for optimization
+     * Uses shared utility for consistent file discovery
      */
     findTypeScriptFiles(dir, tsFiles = []) {
-        try {
-            const files = fs.readdirSync(dir);
-            for (const file of files) {
-                const fullPath = path.join(dir, file);
-                const stat = fs.statSync(fullPath);
-                if (stat.isDirectory()) {
-                    if (!['node_modules', 'dist', '.git', '.angular', 'coverage'].includes(file)) {
-                        this.findTypeScriptFiles(fullPath, tsFiles);
-                    }
-                } else if (file.endsWith('.ts') && !file.endsWith('.d.ts')) {
-                    tsFiles.push(fullPath);
-                }
-            }
-        } catch (error) {
-            this.errors.push(`Error reading directory ${dir}: ${error.message}`);
-        }
-        return tsFiles;
+        return findTypeScriptFilesUtil(dir, tsFiles);
     }
     /**
      * Optimize imports in a TypeScript file
@@ -76,35 +64,10 @@ class TreeShakingOptimizer {
     }
     /**
      * Optimize lodash imports for better tree shaking
+     * Uses shared utility with 'lodash' package
      */
     optimizeLodashImports(content) {
-        let optimizedContent = content;
-        let count = 0;
-        // Convert default lodash imports to specific imports
-        const lodashDefaultPattern = /import\s+_\s+from\s+['"]lodash['"];?\s*\n/g;
-        if (lodashDefaultPattern.test(optimizedContent)) {
-            // Find lodash usage patterns
-            const lodashUsagePattern = /_\.(\w+)/g;
-            const usedMethods = new Set();
-            let match;
-            while ((match = lodashUsagePattern.exec(optimizedContent)) !== null) {
-                usedMethods.add(match[1]);
-            }
-            if (usedMethods.size > 0) {
-                const specificImports = Array.from(usedMethods).map(method => method).join(', ');
-                optimizedContent = optimizedContent.replace(
-                    lodashDefaultPattern,
-                    `import { ${specificImports} } from 'lodash';\n`
-                );
-                // Update usage from _.method to method
-                usedMethods.forEach(method => {
-                    const usagePattern = new RegExp(`_\\.${method}`, 'g');
-                    optimizedContent = optimizedContent.replace(usagePattern, method);
-                });
-                count++;
-            }
-        }
-        return { content: optimizedContent, count };
+        return optimizeLodashImportsUtil(content, 'lodash');
     }
     /**
      * Optimize Angular Material imports
@@ -121,26 +84,11 @@ class TreeShakingOptimizer {
                 if (importsMatch) {
                     const imports = importsMatch[1].split(',').map(imp => imp.trim());
                     const specificImports = imports.map(imp => {
-                        const moduleMap = {
-                            'MatButtonModule': '@angular/material/button',
-                            'MatCardModule': '@angular/material/card',
-                            'MatFormFieldModule': '@angular/material/form-field',
-                            'MatInputModule': '@angular/material/input',
-                            'MatSelectModule': '@angular/material/select',
-                            'MatDialogModule': '@angular/material/dialog',
-                            'MatIconModule': '@angular/material/icon',
-                            'MatToolbarModule': '@angular/material/toolbar',
-                            'MatSidenavModule': '@angular/material/sidenav',
-                            'MatListModule': '@angular/material/list',
-                            'MatTableModule': '@angular/material/table',
-                            'MatPaginatorModule': '@angular/material/paginator',
-                            'MatSortModule': '@angular/material/sort'
-                        };
-                        return moduleMap[imp] ? `import { ${imp} } from '${moduleMap[imp]}';` : null;
+                        return MATERIAL_MODULE_MAP[imp] ? `import { ${imp} } from '${MATERIAL_MODULE_MAP[imp]}';` : null;
                     }).filter(Boolean);
                     if (specificImports.length > 0) {
                         optimizedContent = optimizedContent.replace(match, specificImports.join('\n') + '\n');
-                        count++;
+                        count += 1;
                     }
                 }
             });
@@ -179,7 +127,7 @@ class TreeShakingOptimizer {
                     }).filter(Boolean);
                     if (specificImports.length > 0) {
                         optimizedContent = optimizedContent.replace(match, specificImports.join('\n') + '\n');
-                        count++;
+                        count += 1;
                     }
                 }
             });
@@ -207,7 +155,7 @@ class TreeShakingOptimizer {
     generateWebpackConfig() {
         const webpackConfig = `
 // webpack.config.js - Tree Shaking Optimizations
-const path = require('path');
+import path from 'path';
 module.exports = {
   mode: 'production',
   optimization: {

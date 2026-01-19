@@ -169,85 +169,14 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         }
 
         case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
-            let newState = cloneDeep(state);
-            let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = action.payload;
-            let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request?.entryUniqueNames;
-            // Check if requested form ledger
-            if (res?.status === 'success' && action.payload.queryString && action.payload.queryString.requestedFrom === 'ledger') {
-                return state;
-            }
-            if (res?.status === 'success' && reqObj?.length > 0) {
-                // check for failed entries
-                if (isArray(res.body) && res.body?.length > 0) {
-                    let failedEntriesArr: string[] = [];
-                    let needToRemoveEleArr: string[] = [];
-                    forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
-                        forEach(item.failedEntries, (uniqueName: string) => {
-                            failedEntriesArr.push(uniqueName);
-                            newState.ledgers.results = map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                                if (o?.uniqueName === uniqueName) {
-                                    o.hasGenerationErr = true;
-                                    o.errMsg = item.reason;
-                                }
-                                return o;
-                            });
-                        });
-                    });
-                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        forEach(item.entries, (uniqueName: string) => {
-                            // find index and push
-                            if (indexOf(failedEntriesArr, uniqueName) === -1) {
-                                needToRemoveEleArr.push(uniqueName);
-                            }
-                        });
-                    });
-
-                    forEach(needToRemoveEleArr, (uniqueName: string) => {
-                        newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                            return o?.uniqueName !== uniqueName;
-                        });
-                    });
-
-                } else if (typeof res.body === 'string') {
-                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        forEach(item.entries, (uniqueName: string) => {
-                            newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                                return o?.uniqueName !== uniqueName;
-                            });
-                        });
-                    });
-                    if (newState.ledgers.results?.length === 0) {
-                        newState.isBulkInvoiceGeneratedWithoutErrors = true;
-                    }
-                }
-                newState.isBulkInvoiceGenerated = true;
-                return Object.assign({}, state, newState);
-            }
-            newState.isBulkInvoiceGenerated = true;
-            return Object.assign({}, state, newState);
+            return handleGenerateBulkInvoiceResponse(state, action.payload);
         }
         case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
-            let newState = cloneDeep(state);
-            let res: BaseResponse<InvoiceTemplateDetailsResponse, string> = action.payload;
-            if (res?.status === 'success') {
-                newState.invoiceTemplateConditions = res.body;
-                return Object.assign({}, state, newState);
-            }
-            return state;
+            return handleGetInvoiceTemplateDetailsResponse(state, action.payload);
         }
 
         case INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE: {
-            let newState = cloneDeep(state);
-            let res: BaseResponse<InvoiceSetting, string> = action.payload;
-            if (res?.status === 'success') {
-                newState.settings = res.body;
-                newState.hasInvoiceSettingPermissions = true;
-                return Object.assign({}, state, newState);
-            } else if (res?.status === 'error' && res.statusCode === UNAUTHORISED) {
-                newState.hasInvoiceSettingPermissions = false;
-                return Object.assign({}, state, newState);
-            }
-            return state;
+            return handleGetInvoiceSettingResponse(state, action.payload);
         }
         case INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE: {
             let newState = cloneDeep(state);
@@ -515,4 +444,100 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
     }
+}
+
+/**
+ * Handle generate bulk invoice response
+ */
+function handleGenerateBulkInvoiceResponse(state: InvoiceState, payload: any): InvoiceState {
+let newState = cloneDeep(state);
+let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = payload;
+let reqObj: GenerateBulkInvoiceRequest[] = payload.request?.entryUniqueNames;
+
+// Check if requested from ledger
+if (res?.status === 'success' && payload.queryString && payload.queryString.requestedFrom === 'ledger') {
+    return state;
+}
+
+if (res?.status === 'success' && reqObj?.length > 0) {
+    // Check for failed entries
+    if (isArray(res.body) && res.body?.length > 0) {
+        let failedEntriesArr: string[] = [];
+        let needToRemoveEleArr: string[] = [];
+
+        forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
+            forEach(item.failedEntries, (uniqueName: string) => {
+                failedEntriesArr.push(uniqueName);
+                newState.ledgers.results = map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    if (o?.uniqueName === uniqueName) {
+                        o.hasGenerationErr = true;
+                        o.errMsg = item.reason;
+                    }
+                    return o;
+                });
+            });
+        });
+
+        forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+            forEach(item.entries, (uniqueName: string) => {
+                if (indexOf(failedEntriesArr, uniqueName) === -1) {
+                    needToRemoveEleArr.push(uniqueName);
+                }
+            });
+        });
+
+        forEach(needToRemoveEleArr, (uniqueName: string) => {
+            newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                return o?.uniqueName !== uniqueName;
+            });
+        });
+
+    } else if (typeof res.body === 'string') {
+        forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+            forEach(item.entries, (uniqueName: string) => {
+                newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    return o?.uniqueName !== uniqueName;
+                });
+            });
+        });
+        if (newState.ledgers.results?.length === 0) {
+            newState.isBulkInvoiceGeneratedWithoutErrors = true;
+        }
+    }
+    newState.isBulkInvoiceGenerated = true;
+    return Object.assign({}, state, newState);
+}
+
+newState.isBulkInvoiceGenerated = true;
+return Object.assign({}, state, newState);
+}
+
+/**
+ * Handle get invoice template details response
+ */
+function handleGetInvoiceTemplateDetailsResponse(state: InvoiceState, payload: any): InvoiceState {
+    let newState = cloneDeep(state);
+    let res: BaseResponse<InvoiceTemplateDetailsResponse, string> = payload;
+    if (res?.status === 'success') {
+        newState.invoiceTemplateConditions = res.body;
+        return Object.assign({}, state, newState);
+    }
+    return state;
+}
+
+/**
+ * Handle get invoice setting response
+ */
+function handleGetInvoiceSettingResponse(state: InvoiceState, payload: any): InvoiceState {
+    let newState = cloneDeep(state);
+    let res: BaseResponse<InvoiceSetting, string> = payload;
+    if (res?.status === 'success') {
+        newState.settings = res.body;
+        newState.hasInvoiceSettingPermissions = true;
+        return Object.assign({}, state, newState);
+    } else if (res?.status === 'error' && res.statusCode === UNAUTHORISED) {
+        newState.hasInvoiceSettingPermissions = false;
+        return Object.assign({}, state, newState);
+    }
+    return state;
 }

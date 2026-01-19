@@ -3,8 +3,8 @@
  * Documentation Generator Script
  * Enhances code documentation by adding JSDoc comments and improving code readability
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 class DocumentationGenerator {
     constructor() {
         this.processedFiles = 0;
@@ -16,26 +16,11 @@ class DocumentationGenerator {
     }
     /**
      * Find TypeScript files that need documentation
+     * Uses shared utility for consistent file discovery
      */
     findTypeScriptFiles(dir, tsFiles = []) {
-        try {
-            const files = fs.readdirSync(dir);
-            for (const file of files) {
-                const fullPath = path.join(dir, file);
-                const stat = fs.statSync(fullPath);
-                if (stat.isDirectory()) {
-                    // Skip node_modules, dist, and other build directories
-                    if (!['node_modules', 'dist', '.git', '.angular', 'coverage'].includes(file)) {
-                        this.findTypeScriptFiles(fullPath, tsFiles);
-                    }
-                } else if (file.endsWith('.ts') && !file.endsWith('.d.ts') && !file.endsWith('.spec.ts')) {
-                    tsFiles.push(fullPath);
-                }
-            }
-        } catch (error) {
-            this.errors.push(`Error reading directory ${dir}: ${error.message}`);
-        }
-        return tsFiles;
+        const files = findTypeScriptFilesUtil(dir, tsFiles);
+        return files.filter(file => !file.endsWith('.spec.ts'));
     }
     /**
      * Analyze TypeScript file and add missing documentation
@@ -44,13 +29,13 @@ class DocumentationGenerator {
         try {
             const content = fs.readFileSync(filePath, 'utf8');
             let enhancedContent = content;
-            let additions = 0;
+            const additions = 0;
             // Add file header documentation if missing
             if (!content.startsWith('/**') && !content.startsWith('/*')) {
                 const fileName = path.basename(filePath);
                 const fileHeader = this.generateFileHeader(fileName);
                 enhancedContent = fileHeader + '\n\n' + enhancedContent;
-                additions++;
+                additions += 1;
             }
             // Add class documentation
             enhancedContent = this.addClassDocumentation(enhancedContent);
@@ -149,7 +134,7 @@ ${match}`;
      * @returns {${returnType.trim()}} ${this.generateReturnDescription(returnType)}
      */
 ${match}`;
-            count++;
+            count += 1;
             return methodDoc;
         });
         return { content: modifiedContent, count };
@@ -174,7 +159,7 @@ ${match}`;
      * @memberof ${this.extractClassName(content)}
      */
 ${match}`;
-            count++;
+            count += 1;
             return propertyDoc;
         });
         return { content: modifiedContent, count };
@@ -197,7 +182,7 @@ ${match}`;
  * @interface ${interfaceName}
  */
 ${match}`;
-            count++;
+            count += 1;
             return interfaceDoc;
         });
         return { content: modifiedContent, count };

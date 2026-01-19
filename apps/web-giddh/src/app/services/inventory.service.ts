@@ -698,94 +698,123 @@ export class InventoryService {
 
     public downloadAllInventoryReports(request: InventoryDownloadRequest): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url: string = null;
-        let requestObject;
-        if (request.reportType === 'allgroup') {
-            url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_ALL_GROUP_REPORT
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''))
-                ?.replace(':entity', encodeURIComponent(request.entity ? request.entity?.toString() : ''))
-                ?.replace(':value', encodeURIComponent(request?.value ? request.value?.toString() : ''))
-                ?.replace(':number', encodeURIComponent(request.number ? request.number?.toString() : ''))
-                ?.replace(':condition', encodeURIComponent(request.condition ? request.condition?.toString() : ''))
-        }
-        else if (request.reportType === 'group') {
-            requestObject = {
-                entity: request.entity,
-                value: request?.value,
-                number: request.number,
-                condition: request.condition,
-                warehouseUniqueName: request.warehouseUniqueName,
-                branchUniqueName: request.branchUniqueName
-            };
-            url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_GROUP_REPORT
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':stockGroupUniquename', encodeURIComponent(request.stockGroupUniqueName))
-                ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''));
-        } else if (request.reportType === 'allstock') {
-            url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_HIERARCHICAL_STOCKS_REPORT
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':stockGroupUniquename', encodeURIComponent(request.stockGroupUniqueName))
-                ?.replace(':stockUniqueName', encodeURIComponent(request.stockUniqueName))
-                ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''))
-                ?.replace(':page', encodeURIComponent(request.page ? request.page?.toString() : ''))
-                ?.replace(':count', encodeURIComponent(request.count ? request.count?.toString() : ''));
-        } else if (request.reportType === 'stock') {
-            requestObject = {
-                warehouseUniqueName: request.warehouseUniqueName,
-                branchUniqueName: request.branchUniqueName
-            };
-            url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':stockGroupUniqueName', encodeURIComponent(request.stockGroupUniqueName))
-                ?.replace(':stockUniqueName', encodeURIComponent(request.stockUniqueName))
-                ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''))
-                ?.replace(':page', encodeURIComponent(request.page ? request.page?.toString() : ''))
-                ?.replace(':count', encodeURIComponent(request.count ? request.count?.toString() : ''));
-        } else if (request.reportType === 'account') {
-            url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCKS_ARRANGED_BY_ACCOUNT_REPORT
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''));
-        }
+        const { url, requestObject } = this.buildInventoryReportUrl(request);
 
-        if (request.reportType === 'group' || request.reportType === 'stock') {
+        return this.executeInventoryReportRequest(url, requestObject, request);
+    }
+
+    private buildInventoryReportUrl(request: InventoryDownloadRequest): { url: string, requestObject?: any } {
+        const baseParams = {
+            companyUniqueName: this.companyUniqueName,
+            format: request.format,
+            from: request.from?.toString() || '',
+            to: request.to?.toString() || '',
+            sortBy: request.sortBy?.toString() || '',
+            sort: request.sort?.toString() || ''
+        };
+
+        switch (request.reportType) {
+            case 'allgroup':
+                return {
+                    url: this.buildUrlWithParams(INVENTORY_API.DOWNLOAD_INVENTORY_ALL_GROUP_REPORT, {
+                        ...baseParams,
+                        entity: request.entity?.toString() || '',
+                        value: request.value?.toString() || '',
+                        number: request.number?.toString() || '',
+                        condition: request.condition?.toString() || ''
+                    })
+                };
+
+            case 'group':
+                return {
+                    url: this.buildUrlWithParams(INVENTORY_API.DOWNLOAD_INVENTORY_GROUP_REPORT, {
+                        ...baseParams,
+                        stockGroupUniquename: request.stockGroupUniqueName
+                    }),
+                    requestObject: {
+                        entity: request.entity,
+                        value: request.value,
+                        number: request.number,
+                        condition: request.condition,
+                        warehouseUniqueName: request.warehouseUniqueName,
+                        branchUniqueName: request.branchUniqueName
+                    }
+                };
+
+            case 'allstock':
+                return {
+                    url: this.buildUrlWithParams(INVENTORY_API.DOWNLOAD_INVENTORY_HIERARCHICAL_STOCKS_REPORT, {
+                        ...baseParams,
+                        stockGroupUniquename: request.stockGroupUniqueName,
+                        stockUniqueName: request.stockUniqueName,
+                        page: request.page?.toString() || '',
+                        count: request.count?.toString() || ''
+                    })
+                };
+
+            case 'stock':
+                return {
+                    url: this.buildUrlWithParams(INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT, {
+                        ...baseParams,
+                        stockGroupUniqueName: request.stockGroupUniqueName,
+                        stockUniqueName: request.stockUniqueName,
+                        page: request.page?.toString() || '',
+                        count: request.count?.toString() || ''
+                    }),
+                    requestObject: {
+                        warehouseUniqueName: request.warehouseUniqueName,
+                        branchUniqueName: request.branchUniqueName
+                    }
+                };
+
+            case 'account':
+                return {
+                    url: this.buildUrlWithParams(INVENTORY_API.DOWNLOAD_INVENTORY_STOCKS_ARRANGED_BY_ACCOUNT_REPORT, baseParams)
+                };
+
+            default:
+                throw new Error(`Unsupported report type: ${request.reportType}`);
+        }
+    }
+
+    private buildUrlWithParams(apiEndpoint: string, params: { [key: string]: string }): string {
+        let url = this.config.apiUrl + apiEndpoint;
+
+        Object.entries(params).forEach(([key, value]) => {
+            const placeholder = `:${key}`;
+            if (url.includes(placeholder)) {
+                url = url.replace(placeholder, encodeURIComponent(value));
+            }
+        });
+
+        return url;
+    }
+
+    private executeInventoryReportRequest(url: string, requestObject: any, request: InventoryDownloadRequest): Observable<BaseResponse<any, string>> {
+        const isPostRequest = request.reportType === 'group' || request.reportType === 'stock';
+
+        if (isPostRequest) {
             if (request.branchUniqueName === this.generalService.companyUniqueName) {
                 // Delete the branch unique name when company is selected in the dropdown
                 delete request.branchUniqueName;
-                delete requestObject.branchUniqueName;
+                delete requestObject?.branchUniqueName;
             }
-            return this.http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error, '', {})));
+            return this.http.post(url, requestObject).pipe(
+                catchError((error) => this.errorHandler.HandleCatch<any, string>(error, '', {}))
+            );
         } else {
             if (request.branchUniqueName) {
                 url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
             }
-            return this.http.get(url)
-                .pipe(map((res) => {
+            return this.http.get(url).pipe(
+                map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {}))
+            );
         }
     }
 

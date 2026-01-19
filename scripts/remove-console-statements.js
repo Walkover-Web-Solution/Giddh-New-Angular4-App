@@ -5,8 +5,8 @@
  * Safely removes console.log, console.warn, console.error statements while preserving code structure
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 // Files to process
 const filesToProcess = [

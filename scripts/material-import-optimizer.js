@@ -5,6 +5,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { MATERIAL_MODULE_MAP } = require('./material-module-map');
 class MaterialImportOptimizer {
     constructor() {
         this.processedFiles = 0;
@@ -44,60 +45,21 @@ class MaterialImportOptimizer {
             const content = fs.readFileSync(filePath, 'utf8');
             let optimizedContent = content;
             let optimizations = 0;
-            // Material module mapping
-            const moduleMap = {
-                'MatButtonModule': '@angular/material/button',
-                'MatCardModule': '@angular/material/card',
-                'MatFormFieldModule': '@angular/material/form-field',
-                'MatInputModule': '@angular/material/input',
-                'MatSelectModule': '@angular/material/select',
-                'MatDialogModule': '@angular/material/dialog',
-                'MatIconModule': '@angular/material/icon',
-                'MatToolbarModule': '@angular/material/toolbar',
-                'MatSidenavModule': '@angular/material/sidenav',
-                'MatListModule': '@angular/material/list',
-                'MatTableModule': '@angular/material/table',
-                'MatPaginatorModule': '@angular/material/paginator',
-                'MatSortModule': '@angular/material/sort',
-                'MatCheckboxModule': '@angular/material/checkbox',
-                'MatRadioModule': '@angular/material/radio',
-                'MatSlideToggleModule': '@angular/material/slide-toggle',
-                'MatProgressSpinnerModule': '@angular/material/progress-spinner',
-                'MatProgressBarModule': '@angular/material/progress-bar',
-                'MatSnackBarModule': '@angular/material/snack-bar',
-                'MatTooltipModule': '@angular/material/tooltip',
-                'MatMenuModule': '@angular/material/menu',
-                'MatTabsModule': '@angular/material/tabs',
-                'MatStepperModule': '@angular/material/stepper',
-                'MatExpansionModule': '@angular/material/expansion',
-                'MatChipsModule': '@angular/material/chips',
-                'MatAutocompleteModule': '@angular/material/autocomplete',
-                'MatDatepickerModule': '@angular/material/datepicker',
-                'MatSliderModule': '@angular/material/slider',
-                'MatGridListModule': '@angular/material/grid-list',
-                'MatBadgeModule': '@angular/material/badge',
-                'MatBottomSheetModule': '@angular/material/bottom-sheet',
-                'MatButtonToggleModule': '@angular/material/button-toggle',
-                'MatDividerModule': '@angular/material/divider',
-                'MatRippleModule': '@angular/material/core',
-                'MatNativeDateModule': '@angular/material/core',
-                'MatCommonModule': '@angular/material/core'
-            };
             // Replace barrel imports with specific imports
             const barrelImportPattern = /import\s*\{\s*([^}]+)\s*\}\s*from\s*['"]@angular\/material['"];?\s*\n/g;
             optimizedContent = optimizedContent.replace(barrelImportPattern, (match, imports) => {
                 const importList = imports.split(',').map(imp => imp.trim());
                 const specificImports = [];
                 importList.forEach(imp => {
-                    if (moduleMap[imp]) {
-                        specificImports.push(`import { ${imp} } from '${moduleMap[imp]}';`);
+                    if (MATERIAL_MODULE_MAP[imp]) {
+                        specificImports.push(`import { ${imp} } from '${MATERIAL_MODULE_MAP[imp]}';`);
                     } else {
                         // Keep unknown imports as barrel import
                         specificImports.push(`import { ${imp} } from '@angular/material';`);
                     }
                 });
                 if (specificImports.length > 0) {
-                    optimizations++;
+                    optimizations += 1;
                     return specificImports.join('\n') + '\n';
                 }
                 return match;

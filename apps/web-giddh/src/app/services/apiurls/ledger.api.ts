@@ -2,13 +2,13 @@ const UNIVERSAL_URI_LEDGER = 'company/:companyUniqueName/accounts/:accountUnique
 
 export const LEDGER_API = {
     // ledger methods get,create,delete,update
-    GET: UNIVERSAL_URI_LEDGER + 'transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to',
+    GET: `${UNIVERSAL_URI_LEDGER}transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to`,
     CREATE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2',
     CREATE_BULK: 'company/:companyUniqueName/accounts/:accountUniqueName/bulk-ledgers-v2',
     RECONCILIATION: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/reconcile',
-    UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName',
+    UNIVERSAL: `${UNIVERSAL_URI_LEDGER}:entryUniqueName`,
     // A New API Endpoint Added to Differenciate for Get Transactions
-    GET_TRANSACTION: UNIVERSAL_URI_LEDGER + ':entryUniqueName?baseRef=true',
+    GET_TRANSACTION: `${UNIVERSAL_URI_LEDGER}:entryUniqueName?baseRef=true`,
     DELETE_LEDGER_ENTRY: 'company/:companyUniqueName/accounts/:accountUniqueName/entries/' + ':entryUniqueName',
     // ledger utility related mail,share
     MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?', // post call

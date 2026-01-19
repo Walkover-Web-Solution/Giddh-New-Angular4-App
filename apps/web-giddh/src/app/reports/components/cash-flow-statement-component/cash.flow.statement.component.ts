@@ -12,6 +12,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from "file-saver";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
+import { DatepickerMethodsHelper } from '../../../shared/helpers/datepicker-methods.helper';
 
 @Component({
     selector: 'cash-flow-statement-component',
@@ -119,24 +120,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      * @memberof CashFlowStatementComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
-            return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-
-        this.toggleGiddhDatepicker(false);
-
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-        }
+        DatepickerMethodsHelper.dateSelectedCallback(value, this, this.universalDatepickerTrigger);
     }
 
     /**

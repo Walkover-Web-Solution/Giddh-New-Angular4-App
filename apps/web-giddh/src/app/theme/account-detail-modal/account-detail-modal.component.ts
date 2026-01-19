@@ -150,63 +150,12 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      * @memberof AccountDetailModalComponent
      */
     public goToRoute(part: string, additionalParams: string = '', accUniqueName: string = ''): void {
-        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}` : location.href + `?returnUrl=${part}/${accUniqueName || this.accountUniqueName}`;
-        if (additionalParams) {
-            url = `${url}${additionalParams}`;
-        }
+        let url = this.buildInitialUrl(part, additionalParams, accUniqueName);
 
         if (Configuration.isElectron) {
-            try {
-                let electronIpcAvailable = false;
-
-                // Try electronAPI first (secure context)
-                if ((window as any).electronAPI && (window as any).electronAPI.send) {
-                    try {
-                        url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName || this.accountUniqueName}` : ""}`;
-                        (window as any).electronAPI.send('open-url', url);
-                        electronIpcAvailable = true;
-                    } catch (ipcError) {
-
-                    }
-                }
-
-                // Try legacy electron require (fallback)
-                if (!electronIpcAvailable && (window as any).require) {
-                    try {
-                        const electron = (window as any).require('electron');
-                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
-                            url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName || this.accountUniqueName}` : ""}`;
-                            electron.ipcRenderer.send('open-url', url);
-                            electronIpcAvailable = true;
-                        }
-                    } catch (requireError) {
-
-                    }
-                }
-
-                // Fallback to regular window.open if IPC not available
-                if (!electronIpcAvailable) {
-
-                    if (part === 'ledger') {
-                        const separator = url.includes('?') ? '&' : '?';
-                        url = url + `${separator}redirectUrl=${encodeURIComponent(location.href)}`;
-                    }
-                    (window as any).open(url);
-                }
-            } catch (error) {
-
-                if (part === 'ledger') {
-                    const separator = url.includes('?') ? '&' : '?';
-                    url = url + `${separator}redirectUrl=${encodeURIComponent(location.href)}`;
-                }
-                (window as any).open(url);
-            }
+            this.handleElectronNavigation(part, accUniqueName, url);
         } else {
-            if (part === 'ledger') {
-                const separator = url.includes('?') ? '&' : '?';
-                url = url + `${separator}redirectUrl=${encodeURIComponent(location.href)}`;
-            }
-            (window as any).open(url);
+            this.handleWebNavigation(part, url);
         }
     }
 
@@ -238,5 +187,75 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public getUpdatedList(event: any): void {
         this.modalClosed.emit(event);
         this.asideMenuDialogRef.close();
+    }
+
+    /**
+     * Build initial URL based on voucher API version and parameters
+     */
+    private buildInitialUrl(part: string, additionalParams: string, accUniqueName: string): string {
+        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}` : location.href + `?returnUrl=${part}/${accUniqueName || this.accountUniqueName}`;
+        if (additionalParams) {
+            url = `${url}${additionalParams}`;
+        }
+        return url;
+    }
+
+    /**
+     * Handle navigation in Electron environment
+     */
+    private handleElectronNavigation(part: string, accUniqueName: string, url: string): void {
+        try {
+            let electronIpcAvailable = false;
+
+            // Try electronAPI first (secure context)
+            if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                try {
+                    url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName || this.accountUniqueName}` : ""}`;
+                    (window as any).electronAPI.send('open-url', url);
+                    electronIpcAvailable = true;
+                } catch (ipcError) {
+                    // Silent error handling
+                }
+            }
+
+            // Try legacy electron require (fallback)
+            if (!electronIpcAvailable && (window as any).require) {
+                try {
+                    const electron = (window as any).require('electron');
+                    if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                        url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName || this.accountUniqueName}` : ""}`;
+                        electron.ipcRenderer.send('open-url', url);
+                        electronIpcAvailable = true;
+                    }
+                } catch (requireError) {
+                    // Silent error handling
+                }
+            }
+
+            // Fallback to regular window.open if IPC not available
+            if (!electronIpcAvailable) {
+                this.openUrlWithRedirect(part, url);
+            }
+        } catch (error) {
+            this.openUrlWithRedirect(part, url);
+        }
+    }
+
+    /**
+     * Handle navigation in web environment
+     */
+    private handleWebNavigation(part: string, url: string): void {
+        this.openUrlWithRedirect(part, url);
+    }
+
+    /**
+     * Open URL with redirect parameter for ledger routes
+     */
+    private openUrlWithRedirect(part: string, url: string): void {
+        if (part === 'ledger') {
+            const separator = url.includes('?') ? '&' : '?';
+            url = url + `${separator}redirectUrl=${encodeURIComponent(location.href)}`;
+        }
+        (window as any).open(url);
     }
 }

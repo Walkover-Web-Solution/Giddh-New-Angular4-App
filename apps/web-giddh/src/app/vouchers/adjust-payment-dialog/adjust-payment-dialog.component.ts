@@ -10,6 +10,8 @@ import { IOption } from '../../app.constant';
 import { AdjustAdvancePaymentModal, Adjustment, AdvanceReceiptRequest, VoucherAdjustments } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GeneralService } from '../../services/general.service';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
+import { TdsTaxCalculationHelper } from '../../shared/helpers/tds-tax-calculation.helper';
+import { VoucherSelectionHelper } from '../../shared/helpers/voucher-selection.helper';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../services/toaster.service';
 import { NgForm } from '@angular/forms';
@@ -412,13 +414,14 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public tdsTaxSelected(event: IOption): void {
-        if (event && event.additional && event.additional && event.additional.taxDetail && event.additional.taxDetail[0].taxValue && this.adjustPayment && this.adjustPayment.subTotal) {
-            this.tdsAmount = cloneDeep(this.calculateTdsAmount(Number(this.adjustPayment.subTotal), Number(event.additional.taxDetail[0].taxValue)));
-            this.adjustVoucherForm.tdsTaxUniqueName = cloneDeep(event?.value);
-            this.adjustVoucherForm.tdsAmount.amountForAccount = cloneDeep(this.tdsAmount);
-            this.changeTdsAmount(this.tdsAmount);
-            this.tdsTypeBox?.nativeElement?.classList?.remove('error-box');
-        }
+        this.tdsAmount = TdsTaxCalculationHelper.tdsTaxSelected(
+            event,
+            this.adjustPayment,
+            this.adjustVoucherForm,
+            this.giddhBalanceDecimalPlaces,
+            this.tdsTypeBox,
+            (amount) => this.changeTdsAmount(amount)
+        );
     }
 
     /**
@@ -428,15 +431,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public changeTdsAmount(event): void {
-        if (!Number(event) && this.adjustVoucherForm && this.adjustVoucherForm.tdsTaxUniqueName) {
-            if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
-                this.tdsAmountBox.nativeElement.classList.add('error-box');
-            }
-        } else {
-            if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
-                this.tdsAmountBox.nativeElement.classList.remove('error-box');
-            }
-        }
+        TdsTaxCalculationHelper.changeTdsAmount(event, this.adjustVoucherForm, this.tdsAmountBox);
     }
 
     /**
@@ -446,17 +441,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public isTdsSelected(event: any): void {
-        if (event) {
-            this.adjustVoucherForm.tdsAmount = {
-                amountForAccount: null
-            };
-            this.adjustVoucherForm.tdsTaxUniqueName = '';
-            this.adjustVoucherForm.description = '';
-        } else {
-            delete this.adjustVoucherForm['tdsAmount'];
-            delete this.adjustVoucherForm['description'];
-            delete this.adjustVoucherForm['tdsTaxUniqueName'];
-        }
+        TdsTaxCalculationHelper.isTdsSelected(event, this.adjustVoucherForm);
     }
 
     /**
@@ -468,11 +453,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateInclusiveTaxAmount(productAmount: number, rate: number): number {
-        let taxAmount: number = 0;
-        let amount: number = 0;
-        amount = cloneDeep(Number(productAmount));
-        taxAmount = Number((amount * rate) / (rate + 100));
-        return Number(taxAmount.toFixed(this.giddhBalanceDecimalPlaces));
+        return TdsTaxCalculationHelper.calculateInclusiveTaxAmount(productAmount, rate, this.giddhBalanceDecimalPlaces);
     }
 
 
@@ -485,11 +466,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateTdsAmount(productAmount: number, rate: number): number {
-        let taxAmount: number = 0;
-        let amount: number = 0;
-        amount = cloneDeep(Number(productAmount));
-        taxAmount = Number((amount * rate) / 100);
-        return Number(taxAmount.toFixed(this.giddhBalanceDecimalPlaces));
+        return TdsTaxCalculationHelper.calculateTdsAmount(productAmount, rate, this.giddhBalanceDecimalPlaces);
     }
 
     /**
@@ -620,37 +597,11 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getAdvanceReceiptUnselectedVoucher(): IOption[] {
-        let options: IOption[] = [];
-        let adjustVoucherAdjustment = [];
-        (Array.isArray(this.newAdjustVoucherOptions) ? this.newAdjustVoucherOptions : []).forEach(item => {
-            options.push(item);
-        });
-        adjustVoucherAdjustment = cloneDeep(this.adjustVoucherForm.adjustments);
-
-        for (let i = options?.length - 1; i >= 0; i--) {
-            for (let j = 0; j < adjustVoucherAdjustment?.length; j++) {
-                if (options[i] && options[i].label && adjustVoucherAdjustment[j] && adjustVoucherAdjustment[j].voucherNumber &&
-                    options[i]?.value && adjustVoucherAdjustment[j].uniqueName &&
-                    ((options[i].label.trim() !== '-' && options[i].label.trim() !== this.commonLocaleData?.app_not_available && adjustVoucherAdjustment[j].voucherNumber.trim() !== '-' && adjustVoucherAdjustment[j].voucherNumber.trim() !== this.commonLocaleData?.app_not_available && options[i].label.trim() === adjustVoucherAdjustment[j].voucherNumber.trim()) ||
-                        ((options[i].label.trim() === '-' || options[i].label.trim() === this.commonLocaleData?.app_not_available) && (adjustVoucherAdjustment[j].voucherNumber.trim() === '-' || adjustVoucherAdjustment[j].voucherNumber.trim() === this.commonLocaleData?.app_not_available) && options[i]?.value && adjustVoucherAdjustment[j].uniqueName && options[i]?.value.trim() === adjustVoucherAdjustment[j].uniqueName.trim()))) {
-                    options.splice(i, 1);
-                }
-            }
-        }
-        (Array.isArray(options) ? options : []).forEach(item => {
-            if (item) {
-                delete item['isHilighted'];
-            }
-        });
-
-        options = uniqBy(options, (item) => {
-            if (item.label === '-' || item.label === this.commonLocaleData?.app_not_available) {
-                return item.value;
-            } else {
-                return item.value && item.label.trim();
-            }
-        });
-        return options;
+        return VoucherSelectionHelper.getAdvanceReceiptUnselectedVoucher(
+            this.newAdjustVoucherOptions,
+            this.adjustVoucherForm.adjustments,
+            this.commonLocaleData
+        );
     }
 
     /**

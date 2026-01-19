@@ -41,7 +41,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
     public showEmailTextarea: boolean = false;
     public showPdfWrap: boolean = false;
-    public showEsign: boolean = false;
     public showEditButton: boolean = false;
     public isErrOccured$: Observable<boolean>;
     public invoiceType: string[] = [];

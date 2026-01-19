@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 function safeCleanFile(filePath) {
     try {
         const content = fs.readFileSync(filePath, 'utf8');
@@ -36,14 +36,14 @@ const safeFiles = [
     'apps/web-giddh/src/main.ts',
     'apps/web-giddh/src/main.electron.ts'
 ];
-let totalRemovals = 0;
-let filesModified = 0;
+const totalRemovals = 0;
+const filesModified = 0;
 safeFiles.forEach(filePath => {
     const fullPath = path.join(__dirname, '..', filePath);
     if (fs.existsSync(fullPath)) {
         const removals = safeCleanFile(fullPath);
         if (removals > 0) {
-            filesModified++;
+            filesModified += 1;
             totalRemovals += removals;
         }
     }

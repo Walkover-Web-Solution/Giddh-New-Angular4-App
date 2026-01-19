@@ -11,13 +11,7 @@
                 <button type="button" matButton="filled" class="mr-2 bg-white text-black" *ngIf="showEditButton" (click)="editVoucher()">
                     {{ commonLocaleData?.app_edit }}
                 </button>
-                <button
-                    type="button"
-                    matButton="filled"
-                    class="mr-2 bg-white text-black"
-                    [matMenuTriggerFor]="showMoreOptions"
-                    (click)="showEsign = false"
-                >
+                <button type="button" matButton="filled" class="mr-2 bg-white text-black" [matMenuTriggerFor]="showMoreOptions">
                     {{ commonLocaleData?.app_more }}
                     <span class="caret"></span>
                 </button>
@@ -26,13 +20,6 @@
         <button matIconButton aria-label="Close" (click)="onCancel('closed')">
             <i class="icon-cross"></i>
         </button>
-
-        <!-- drop down for Esignature area -->
-        <div class="dropdown-menu ml-5" [ngClass]="{ open: showEsign }">
-            <div class="form-group">
-                <e-sign-modal-component [localeData]="localeData"></e-sign-modal-component>
-            </div>
-        </div>
 
         <!-- drop down for invoice copies -->
         <mat-menu #showMoreOptions="matMenu">

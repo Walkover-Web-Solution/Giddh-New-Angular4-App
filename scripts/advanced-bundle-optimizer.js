@@ -3,8 +3,10 @@
  * Advanced Bundle Optimizer
  * Implements lazy loading and import optimizations for large libraries
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+const { MATERIAL_MODULE_MAP } = require('./material-module-map');
+const { optimizeLodashImports: optimizeLodashImportsUtil } = require('./lodash-optimizer-utils');
 class AdvancedBundleOptimizer {
     constructor() {
         this.processedFiles = 0;
@@ -58,7 +60,7 @@ class AdvancedBundleOptimizer {
         try {
             const content = fs.readFileSync(filePath, 'utf8');
             let optimizedContent = content;
-            let optimizations = 0;
+            const optimizations = 0;
             // Optimize Angular Material imports
             const materialOptimizations = this.optimizeAngularMaterialImports(optimizedContent);
             optimizedContent = materialOptimizations.content;
@@ -96,46 +98,16 @@ class AdvancedBundleOptimizer {
         optimizedContent = optimizedContent.replace(barrelImportPattern, (match, imports) => {
             const importList = imports.split(',').map(imp => imp.trim());
             const specificImports = [];
-            const moduleMap = {
-                'MatButtonModule': '@angular/material/button',
-                'MatCardModule': '@angular/material/card',
-                'MatFormFieldModule': '@angular/material/form-field',
-                'MatInputModule': '@angular/material/input',
-                'MatSelectModule': '@angular/material/select',
-                'MatDialogModule': '@angular/material/dialog',
-                'MatIconModule': '@angular/material/icon',
-                'MatToolbarModule': '@angular/material/toolbar',
-                'MatSidenavModule': '@angular/material/sidenav',
-                'MatListModule': '@angular/material/list',
-                'MatTableModule': '@angular/material/table',
-                'MatPaginatorModule': '@angular/material/paginator',
-                'MatSortModule': '@angular/material/sort',
-                'MatCheckboxModule': '@angular/material/checkbox',
-                'MatRadioModule': '@angular/material/radio',
-                'MatSlideToggleModule': '@angular/material/slide-toggle',
-                'MatProgressSpinnerModule': '@angular/material/progress-spinner',
-                'MatProgressBarModule': '@angular/material/progress-bar',
-                'MatSnackBarModule': '@angular/material/snack-bar',
-                'MatTooltipModule': '@angular/material/tooltip',
-                'MatMenuModule': '@angular/material/menu',
-                'MatTabsModule': '@angular/material/tabs',
-                'MatStepperModule': '@angular/material/stepper',
-                'MatExpansionModule': '@angular/material/expansion',
-                'MatChipsModule': '@angular/material/chips',
-                'MatAutocompleteModule': '@angular/material/autocomplete',
-                'MatDatepickerModule': '@angular/material/datepicker',
-                'MatSliderModule': '@angular/material/slider'
-            };
             importList.forEach(imp => {
-                if (moduleMap[imp]) {
-                    specificImports.push(`import { ${imp} } from '${moduleMap[imp]}';`);
+                if (MATERIAL_MODULE_MAP[imp]) {
+                    specificImports.push(`import { ${imp} } from '${MATERIAL_MODULE_MAP[imp]}';`);
                 } else {
                     // Keep unknown imports as is
                     specificImports.push(`import { ${imp} } from '@angular/material';`);
                 }
             });
             if (specificImports.length > 0) {
-                count++;
+                count += 1;
                 return specificImports.join('\n');
             }
             return match;
@@ -144,36 +116,10 @@ class AdvancedBundleOptimizer {
     }
     /**
      * Optimize lodash imports for better tree shaking
+     * Uses shared utility with 'lodash-es' package for ES module tree shaking
      */
     optimizeLodashImports(content) {
-        let optimizedContent = content;
-        let count = 0;
-        // Replace default lodash import with specific imports
-        const lodashDefaultPattern = /import\s+_\s+from\s+['"]lodash['"];?\s*\n/g;
-        if (lodashDefaultPattern.test(optimizedContent)) {
-            // Find lodash usage patterns
-            const lodashUsagePattern = /_\.(\w+)/g;
-            const usedMethods = new Set();
-            let match;
-            while ((match = lodashUsagePattern.exec(optimizedContent)) !== null) {
-                usedMethods.add(match[1]);
-            }
-            if (usedMethods.size > 0) {
-                // Replace with specific imports
-                const specificImports = Array.from(usedMethods).map(method => method).join(', ');
-                optimizedContent = optimizedContent.replace(
-                    lodashDefaultPattern,
-                    `import { ${specificImports} } from 'lodash-es';\n`
-                );
-                // Update usage from _.method to method
-                usedMethods.forEach(method => {
-                    const usagePattern = new RegExp(`_\\.${method}`, 'g');
-                    optimizedContent = optimizedContent.replace(usagePattern, method);
-                });
-                count++;
-            }
-        }
-        return { content: optimizedContent, count };
+        return optimizeLodashImportsUtil(content, 'lodash-es');
     }
     /**
      * Add dynamic imports for heavy libraries
@@ -200,11 +146,11 @@ class AdvancedBundleOptimizer {
                 // Add dynamic import method before the last closing brace
                 const lastBraceIndex = optimizedContent.lastIndexOf('}');
                 if (lastBraceIndex > -1) {
-                    optimizedContent = optimizedContent.slice(0, lastBraceIndex) + 
-                                    dynamicImportMethod + '\n' + 
+                    optimizedContent = optimizedContent.slice(0, lastBraceIndex) +
+                                    dynamicImportMethod + '\n' +
                                     optimizedContent.slice(lastBraceIndex);
                 }
-                count++;
+                count += 1;
             }
         }
         return { content: optimizedContent, count };

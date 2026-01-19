@@ -82,152 +82,417 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private warehouseActions: WarehouseActions,
         private companyService: CompanyService
     ) {
+        this.initializeEnvironmentFlags();
+        this.setupEventBindings();
+        this.setupSessionSubscription();
+        this.processUrlParameters();
+        this.handleAuthenticationRedirect();
+        this.setupLoadingSubscription();
+        this.initializeElectronIntegration();
+        this.setupRouterEventHandling();
+        this.initializeCodeMirror();
+    }
+
+    /**
+     * Initialize environment and configuration flags
+     */
+    private initializeEnvironmentFlags(): void {
         this.isProdMode = environment.production;
         this.isElectron = Configuration.isElectron;
+    }
 
-        // Bind the method for proper event listener cleanup
+    /**
+     * Setup event bindings for proper cleanup
+     */
+    private setupEventBindings(): void {
         this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
+    }
 
+    /**
+     * Setup session state subscription
+     */
+    private setupSessionSubscription(): void {
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
-            if (ss?.user && ss.user.session && ss.user.session.id) {
-                let a = pick(ss.user, ['isNewUser']);
-                a.isNewUser = true;
-                this._generalService.user = { ...ss.user.user, ...a };
-                if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
-                    this._generalService.sessionId = ss.user.session.id;
-                }
-            } else {
-                this._generalService.user = null;
-                this._generalService.sessionId = null;
-            }
-            this._generalService.companyUniqueName = ss.companyUniqueName;
+            this.handleSessionStateChange(ss);
         });
+    }
 
-        if (this._generalService.getUrlParameter("companyUniqueName")) {
-            this._generalService.setParameterInLocalStorage("companyUniqueName", this._generalService.getUrlParameter("companyUniqueName"));
+    /**
+     * Handle session state changes
+     */
+    private handleSessionStateChange(sessionState: any): void {
+        if (this.isValidSession(sessionState)) {
+            this.setUserSession(sessionState);
+        } else {
+            this.clearUserSession();
         }
-        if (this._generalService.getUrlParameter("version")) {
-            this._generalService.setParameterInLocalStorage("voucherApiVersion", this._generalService.getUrlParameter("version"));
+        this._generalService.companyUniqueName = sessionState.companyUniqueName;
+    }
+
+    /**
+     * Check if session state is valid
+     */
+    private isValidSession(sessionState: any): boolean {
+        return sessionState?.user && sessionState.user.session && sessionState.user.session.id;
+    }
+
+    /**
+     * Set user session data
+     */
+    private setUserSession(sessionState: any): void {
+        const userFlags = pick(sessionState.user, ['isNewUser']);
+        userFlags.isNewUser = true;
+        this._generalService.user = { ...sessionState.user.user, ...userFlags };
+
+        if (sessionState.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
+            this._generalService.sessionId = sessionState.user.session.id;
         }
+    }
 
-        if (!(this._generalService.user && this._generalService.sessionId)) {
-            const href = window.location.href;
-            const path = window.location.pathname || '';
-            const search = window.location.search || '';
-            const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
-            // Generate returnUrl for any non-login-like path (including root path)
-            console.log("href", href);
-            console.log("path", path);
-            console.log("search", search);
-            console.log("isLoginLike", isLoginLike);
-            console.log(this._generalService.getGiddhRegionUrl());
-            console.log("environment.production", environment.production);
-            console.log("Configuration.isElectron", Configuration.isElectron);
-            if (!isLoginLike) {
-                const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
-                const isGiddhDomain = href.includes('books.giddh.com') || href.includes('test.giddh.com') || href.includes('books.giddh.com/login') || href.includes('test.giddh.com/login');
+    /**
+     * Clear user session data
+     */
+    private clearUserSession(): void {
+        this._generalService.user = null;
+        this._generalService.sessionId = null;
+    }
 
-                if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
-                    // Hard redirect for books.giddh.com or test.giddh.com domains
-                    const currentUrl = path + search;
-                    let returnUrl = '';
-                    if (currentUrl.startsWith('/pages/')) {
-                        returnUrl = currentUrl.split('/pages/')[1] || '';
-                    } else {
-                        returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
-                    }
-                    const regionLogin = this._generalService.getGiddhRegionUrl() + '/login';
-                    const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
-                    window.location.href = target;
-                } else {
-                    // Soft redirect for other domains or local development
-                    const currentUrl = path + search;
-                    let returnUrl = '';
-                    if (currentUrl.startsWith('/pages/')) {
-                        returnUrl = currentUrl.split('/pages/')[1] || '';
-                    } else {
-                        returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
-                    }
-                    if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
-                        try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) { }
-                        this.router.navigate(['/login'], { queryParams: { returnUrl } });
-                    } else {
-                        this.router.navigate(['/login']);
-                    }
-                }
-            }
+    /**
+     * Process URL parameters and store them locally
+     */
+    private processUrlParameters(): void {
+        this.storeCompanyUniqueNameParameter();
+        this.storeVersionParameter();
+    }
+
+    /**
+     * Store company unique name parameter if present
+     */
+    private storeCompanyUniqueNameParameter(): void {
+        const companyUniqueName = this._generalService.getUrlParameter("companyUniqueName");
+        if (companyUniqueName) {
+            this._generalService.setParameterInLocalStorage("companyUniqueName", companyUniqueName);
         }
+    }
 
+    /**
+     * Store version parameter if present
+     */
+    private storeVersionParameter(): void {
+        const version = this._generalService.getUrlParameter("version");
+        if (version) {
+            this._generalService.setParameterInLocalStorage("voucherApiVersion", version);
+        }
+    }
+
+    /**
+     * Handle authentication redirect logic
+     */
+    private handleAuthenticationRedirect(): void {
+        if (!this.isUserAuthenticated()) {
+            this.processUnauthenticatedUser();
+        }
+    }
+
+    /**
+     * Check if user is authenticated
+     */
+    private isUserAuthenticated(): boolean {
+        return !!(this._generalService.user && this._generalService.sessionId);
+    }
+
+    /**
+     * Process unauthenticated user redirect logic
+     */
+    private processUnauthenticatedUser(): void {
+        const locationInfo = this.getLocationInfo();
+        this.logLocationInfo(locationInfo);
+
+        if (!locationInfo.isLoginLike) {
+            this.handleRedirectLogic(locationInfo);
+        }
+    }
+
+    /**
+     * Get current location information
+     */
+    private getLocationInfo(): any {
+        const href = window.location.href;
+        const path = window.location.pathname || '';
+        const search = window.location.search || '';
+        const isLoginLike = this.isLoginLikePage(href);
+
+        return { href, path, search, isLoginLike };
+    }
+
+    /**
+     * Check if current page is login-like
+     */
+    private isLoginLikePage(href: string): boolean {
+        const loginLikePages = ['login', 'token-verify', 'download', 'verify-subscription-ownership', 'dns'];
+        return loginLikePages.some(page => href.includes(page));
+    }
+
+    /**
+     * Log location information for debugging
+     */
+    private logLocationInfo(locationInfo: any): void {
+        console.log("href", locationInfo.href);
+        console.log("path", locationInfo.path);
+        console.log("search", locationInfo.search);
+        console.log("isLoginLike", locationInfo.isLoginLike);
+        console.log(this._generalService.getGiddhRegionUrl());
+        console.log("environment.production", environment.production);
+        console.log("Configuration.isElectron", Configuration.isElectron);
+    }
+
+    /**
+     * Handle redirect logic based on environment and domain
+     */
+    private handleRedirectLogic(locationInfo: any): void {
+        const environmentInfo = this.getEnvironmentInfo(locationInfo.href);
+
+        if (this.shouldUseHardRedirect(environmentInfo)) {
+            this.performHardRedirect(locationInfo);
+        } else {
+            this.performSoftRedirect(locationInfo);
+        }
+    }
+
+    /**
+     * Get environment information for redirect logic
+     */
+    private getEnvironmentInfo(href: string): any {
+        const isLocalHost = this.isLocalHostEnvironment();
+        const isGiddhDomain = this.isGiddhDomainEnvironment(href);
+
+        return { isLocalHost, isGiddhDomain };
+    }
+
+    /**
+     * Check if running on localhost
+     */
+    private isLocalHostEnvironment(): boolean {
+        return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    }
+
+    /**
+     * Check if running on Giddh domain
+     */
+    private isGiddhDomainEnvironment(href: string): boolean {
+        const giddhDomains = ['books.giddh.com', 'test.giddh.com', 'books.giddh.com/login', 'test.giddh.com/login'];
+        return giddhDomains.some(domain => href.includes(domain));
+    }
+
+    /**
+     * Determine if hard redirect should be used
+     */
+    private shouldUseHardRedirect(environmentInfo: any): boolean {
+        return environment.production &&
+               !Configuration.isElectron &&
+               !environmentInfo.isLocalHost &&
+               environmentInfo.isGiddhDomain;
+    }
+
+    /**
+     * Perform hard redirect to region login
+     */
+    private performHardRedirect(locationInfo: any): void {
+        const returnUrl = this.extractReturnUrl(locationInfo.path, locationInfo.search);
+        const regionLogin = this._generalService.getGiddhRegionUrl() + '/login';
+        const target = this.buildRedirectTarget(regionLogin, returnUrl);
+        window.location.href = target;
+    }
+
+    /**
+     * Perform soft redirect using Angular router
+     */
+    private performSoftRedirect(locationInfo: any): void {
+        const returnUrl = this.extractReturnUrl(locationInfo.path, locationInfo.search);
+
+        if (this.shouldIncludeReturnUrl(returnUrl)) {
+            this.storeReturnUrlInSession(returnUrl);
+            this.router.navigate(['/login'], { queryParams: { returnUrl } });
+        } else {
+            this.router.navigate(['/login']);
+        }
+    }
+
+    /**
+     * Extract return URL from current path and search
+     */
+    private extractReturnUrl(path: string, search: string): string {
+        const currentUrl = path + search;
+
+        if (currentUrl.startsWith('/pages/')) {
+            return currentUrl.split('/pages/')[1] || '';
+        } else {
+            return currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
+        }
+    }
+
+    /**
+     * Build redirect target URL with return URL if needed
+     */
+    private buildRedirectTarget(regionLogin: string, returnUrl: string): string {
+        return this.shouldIncludeReturnUrl(returnUrl) ?
+            `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` :
+            regionLogin;
+    }
+
+    /**
+     * Check if return URL should be included
+     */
+    private shouldIncludeReturnUrl(returnUrl: string): boolean {
+        const excludedUrls = ['login', 'token-verify', ''];
+        return returnUrl && !excludedUrls.includes(returnUrl);
+    }
+
+    /**
+     * Store return URL in session storage
+     */
+    private storeReturnUrlInSession(returnUrl: string): void {
+        try {
+            sessionStorage.setItem('returnUrl', returnUrl);
+        } catch (_) {
+            // Silently handle storage errors
+        }
+    }
+
+    /**
+     * Setup loading state subscription
+     */
+    private setupLoadingSubscription(): void {
         this._generalService.IAmLoaded.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.IAmLoaded = s;
         });
+    }
 
+    /**
+     * Initialize Electron integration if running in Electron
+     */
+    private initializeElectronIntegration(): void {
         if (Configuration.isElectron) {
-            // electronOauth2 - Use secure Electron API
-            try {
-                const electron = (window as any).require("electron");
-                if (electron && electron.ipcRenderer) {
-                    const { ipcRenderer } = electron;
-                    // Send server environment to main process
-                    ipcRenderer.send("take-server-environment", {
-                        'production': environment.production,
-                        'isLocalEnv': !environment.production,
-                        'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
-                        'APP_FOLDER': environment.APP_FOLDER
-                    });
-                    // Handle app close requests
-                    ipcRenderer.on('app-close-requested', () => {
-                        this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
-                            if (confirmed) {
-                                ipcRenderer.send('force-close');
-                            }
-                        });
-                    });
-                } else if ((window as any).electronAPI) {
-                    // Fallback: Use secure electronAPI if available
-                    const electronAPI = (window as any).electronAPI;
-                    // Send server environment to main process
-                    electronAPI.send("take-server-environment", {
-                        'production': environment.production,
-                        'isLocalEnv': !environment.production,
-                        'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
-                        'APP_FOLDER': environment.APP_FOLDER
-                    });
-                    // Handle app close requests (note: electronAPI.on might not support this channel)
-                    if (electronAPI.on) {
-                        electronAPI.on('app-close-requested', () => {
-                            this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
-                                if (confirmed) {
-                                    electronAPI.send('force-close');
-                                }
-                            });
-                        });
-                    }
-                } else {
-
-                }
-            } catch (error) {
-
-            }
+            this.setupElectronCommunication();
         }
+    }
 
-        /** This will be use for dialog close on route event */
-        this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
+    /**
+     * Setup Electron IPC communication
+     */
+    private setupElectronCommunication(): void {
+        try {
+            const electron = this.getElectronInstance();
+            if (electron?.ipcRenderer) {
+                this.setupIpcRenderer(electron.ipcRenderer);
+            } else if (this.getElectronAPI()) {
+                this.setupElectronAPI();
+            }
+        } catch (error) {
+            // Silently handle Electron communication errors
+        }
+    }
+
+    /**
+     * Get Electron instance
+     */
+    private getElectronInstance(): any {
+        return (window as any).require?.("electron");
+    }
+
+    /**
+     * Get Electron API instance
+     */
+    private getElectronAPI(): any {
+        return (window as any).electronAPI;
+    }
+
+    /**
+     * Setup IPC renderer communication
+     */
+    private setupIpcRenderer(ipcRenderer: any): void {
+        this.sendServerEnvironmentToMain(ipcRenderer);
+        this.setupAppCloseHandler(ipcRenderer);
+    }
+
+    /**
+     * Setup Electron API communication
+     */
+    private setupElectronAPI(): void {
+        const electronAPI = this.getElectronAPI();
+        this.sendServerEnvironmentToMain(electronAPI);
+
+        if (electronAPI.on) {
+            this.setupAppCloseHandler(electronAPI);
+        }
+    }
+
+    /**
+     * Send server environment configuration to main process
+     */
+    private sendServerEnvironmentToMain(communicator: any): void {
+        const environmentConfig = {
+            'production': environment.production,
+            'isLocalEnv': !environment.production,
+            'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
+            'APP_FOLDER': environment.APP_FOLDER
+        };
+
+        communicator.send("take-server-environment", environmentConfig);
+    }
+
+    /**
+     * Setup app close request handler
+     */
+    private setupAppCloseHandler(communicator: any): void {
+        communicator.on('app-close-requested', () => {
+            this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                if (confirmed) {
+                    communicator.send('force-close');
+                }
+            });
+        });
+    }
+
+    /**
+     * Setup router event handling for dialog management
+     */
+    private setupRouterEventHandling(): void {
+        this.router.events.pipe(
+            filter(event => event instanceof NavigationStart),
+            takeUntil(this.destroyed$)
+        ).subscribe((event: any) => {
             if (event) {
                 this.dialog?.closeAll();
             }
         });
+    }
 
-        /* Codemirror */
-        if (window['CodeMirror'] === undefined) {
-            let codeMirrorScriptTag = document.createElement('script');
-            codeMirrorScriptTag.src = './assets/js/codemirror.min.js';
-            codeMirrorScriptTag.type = 'text/javascript';
-            codeMirrorScriptTag.defer = true;
-            document.body.appendChild(codeMirrorScriptTag);
+    /**
+     * Initialize CodeMirror if not already loaded
+     */
+    private initializeCodeMirror(): void {
+        if (!this.isCodeMirrorLoaded()) {
+            this.loadCodeMirrorScript();
         }
-        /* Codemirror */
+    }
+
+    /**
+     * Check if CodeMirror is already loaded
+     */
+    private isCodeMirrorLoaded(): boolean {
+        return window['CodeMirror'] !== undefined;
+    }
+
+    /**
+     * Load CodeMirror script dynamically
+     */
+    private loadCodeMirrorScript(): void {
+        const codeMirrorScriptTag = document.createElement('script');
+        codeMirrorScriptTag.src = './assets/js/codemirror.min.js';
+        codeMirrorScriptTag.type = 'text/javascript';
+        codeMirrorScriptTag.defer = true;
+        document.body.appendChild(codeMirrorScriptTag);
     }
 
     public sidebarStatusChange(event) {

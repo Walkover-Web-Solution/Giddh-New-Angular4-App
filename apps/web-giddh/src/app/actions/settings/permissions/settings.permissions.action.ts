@@ -1,5 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
+import { ActionResponseValidatorHelper } from '../helpers/action-response-validator.helper';
 import { SETTINGS_PERMISSION_ACTIONS } from './settings.permissions.const';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -53,17 +54,7 @@ export class SettingsPermissionActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response?.status === 'error') {
-            if (showToast) {
-                this.toasty.errorToast(response.message);
-            }
-            return errorAction;
-        } else {
-            if (showToast && typeof response.body === 'string') {
-                this.toasty.successToast(response.body);
-            }
-        }
-        return successAction;
+        return ActionResponseValidatorHelper.validateResponse(response, successAction, this.toasty, showToast, errorAction);
     }
 
 }

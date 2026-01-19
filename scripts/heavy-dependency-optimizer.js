@@ -3,8 +3,8 @@
  * Heavy Dependency Optimizer
  * Identifies and optimizes the largest bundle contributors
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 class HeavyDependencyOptimizer {
     constructor() {
         this.optimizations = [];
@@ -27,8 +27,8 @@ class HeavyDependencyOptimizer {
             'bootstrap': { size: '1.1MB', impact: 'MEDIUM', replacement: 'Custom CSS or Angular Material only' },
             'moment': { size: '2.9MB', impact: 'HIGH', replacement: 'Already using dayjs - remove if present' }
         };
-        let totalCurrentSize = 0;
-        let totalPotentialSavings = 0;
+        const totalCurrentSize = 0;
+        const totalPotentialSavings = 0;
         Object.keys(heavyDeps).forEach(dep => {
             if (packageJson.dependencies[dep] || packageJson.devDependencies?.[dep]) {
                 const info = heavyDeps[dep];

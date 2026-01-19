@@ -249,7 +249,17 @@ export class MaskService extends MaskApplierService {
     }
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
-        return new RegExp(specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'), 'gi');
+        // Sanitize input to prevent ReDoS attacks
+        const sanitizedChars = specialCharactersForRemove
+            .filter(item => typeof item === 'string' && item.length <= 10) // Limit length
+            .map((item: string) => item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) // Escape special chars
+            .slice(0, 50); // Limit array size
+
+        if (sanitizedChars.length === 0) {
+            return /(?!)/; // Return regex that matches nothing
+        }
+
+        return new RegExp(sanitizedChars.join('|'), 'gi');
     }
 
     private _checkSymbols(result: string): string | number | undefined | null {

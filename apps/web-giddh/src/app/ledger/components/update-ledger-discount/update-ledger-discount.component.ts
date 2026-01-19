@@ -5,6 +5,7 @@ import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { DiscountProcessingHelper } from '../../helpers/discount-processing.helper';
 
 export class UpdateLedgerDiscountData {
     public particular: INameUniqueName = { name: '', uniqueName: '' };
@@ -124,24 +125,10 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
      * @memberof UpdateLedgerDiscountComponent
      */
     private processDiscountList(): void {
-        this.discountsList?.forEach(acc => {
-            if (this.discountAccountsDetails) {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
-                if (!hasItem) {
-                    let obj: LedgerDiscountClass = new LedgerDiscountClass();
-                    obj.amount = acc.discountValue;
-                    obj.discountValue = acc.discountValue;
-                    obj.discountType = acc.discountType;
-                    obj.isActive = false;
-                    obj.particular = acc.linkAccount?.uniqueName;
-                    obj.discountUniqueName = acc?.uniqueName;
-                    obj.name = acc.name;
-                    this.discountAccountsDetails.push(obj);
-                }
-            } else {
-                this.discountAccountsDetails = [];
-            }
-        });
+        this.discountAccountsDetails = DiscountProcessingHelper.processDiscountList(
+            this.discountsList,
+            this.discountAccountsDetails
+        );
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {

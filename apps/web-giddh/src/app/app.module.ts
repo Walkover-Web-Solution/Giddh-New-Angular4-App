@@ -70,6 +70,230 @@ const APP_PROVIDERS = [
 // tslint:disable-next-line:prefer-const
 let CONDITIONAL_IMPORTS = [];
 /**
+ * Handle session data retrieval with complex query parameter and tab logic
+ */
+function handleSessionDataRetrieval(sessionData: string | null, localData: string | null, config: any): string | null {
+    // Check for query parameters first - this takes precedence over stored data
+    const queryResult = handleQueryParameterProcessing(localData);
+    if (queryResult) {
+        return queryResult;
+    }
+
+    // Handle new tab scenario: only localStorage data exists
+    if (!sessionData && localData) {
+        return handleNewTabScenario(localData, config);
+    }
+
+    // Normal scenario: merge sessionStorage and localStorage
+    if (sessionData && localData) {
+        return mergeSessionAndLocalData(sessionData, localData, config);
+    }
+
+    // Fallback: return whatever data is available
+    return sessionData || localData;
+}
+
+/**
+ * Handle query parameter processing for company/branch switching
+ */
+function handleQueryParameterProcessing(localData: string | null): string | null {
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryCompanyUniqueName = urlParams.get('companyUniqueName');
+    const queryBranchUniqueName = urlParams.get('branchUniqueName');
+
+    if (!queryCompanyUniqueName || !localData) {
+        return null;
+    }
+
+    const localObj = JSON.parse(localData);
+    const targetCompany = localObj.companies?.find((company: any) =>
+        company.uniqueName === queryCompanyUniqueName
+    );
+
+    if (!targetCompany) {
+        return null;
+    }
+
+    return processQueryCompanySwitch(localObj, targetCompany, queryCompanyUniqueName, queryBranchUniqueName);
+}
+
+/**
+ * Process company switch from query parameters
+ */
+function processQueryCompanySwitch(localObj: any, targetCompany: any, queryCompanyUniqueName: string, queryBranchUniqueName: string | null): string {
+    // Validate branch belongs to company
+    let validatedBranchUniqueName = '';
+    if (queryBranchUniqueName) {
+        const targetBranch = targetCompany.branches?.find((branch: any) =>
+            branch.uniqueName === queryBranchUniqueName
+        );
+        if (targetBranch) {
+            validatedBranchUniqueName = queryBranchUniqueName;
+        }
+    }
+
+    // Create tab-specific data with validated query params
+    const queryTabData = {
+        applicationDate: null,
+        companyUniqueName: queryCompanyUniqueName,
+        todaySelected: false,
+        activeCompany: targetCompany,
+        companyUser: null,
+        currentBranchUniqueName: validatedBranchUniqueName
+    };
+
+    // Store query-based data in sessionStorage
+    sessionStorage.setItem('session', JSON.stringify(queryTabData));
+
+    // Update localStorage with query company info
+    const updatedLocalData = {
+        ...localObj,
+        companyUniqueName: queryCompanyUniqueName,
+        activeCompany: targetCompany,
+        lastAccessedAt: Date.now()
+    };
+
+    if (validatedBranchUniqueName) {
+        updatedLocalData.lastActiveBranchUniqueName = validatedBranchUniqueName;
+    }
+
+    delete updatedLocalData.currentBranchUniqueName;
+    localStorage.setItem('session', JSON.stringify(updatedLocalData));
+
+    // Trigger company/branch switch event
+    triggerCompanySwitchEvent(queryCompanyUniqueName, validatedBranchUniqueName, targetCompany);
+
+    return JSON.stringify(updatedLocalData);
+}
+
+/**
+ * Trigger company switch event for API calls
+ */
+function triggerCompanySwitchEvent(companyUniqueName: string, branchUniqueName: string, company: any): void {
+    setTimeout(() => {
+        try {
+            const event = new CustomEvent('giddh-query-params-company-switch', {
+                detail: {
+                    companyUniqueName,
+                    branchUniqueName,
+                    company
+                }
+            });
+            window.dispatchEvent(event);
+        } catch (error) {
+            // Handle error silently
+        }
+    }, 100);
+}
+
+/**
+ * Handle new tab scenario with localStorage data initialization
+ */
+function handleNewTabScenario(localData: string, config: any): string {
+    const localObj = JSON.parse(localData);
+    const hasValidCompanyData = localObj.activeCompany &&
+        localObj.activeCompany.uniqueName &&
+        localObj.companyUniqueName;
+
+    if (hasValidCompanyData) {
+        return initializeValidCompanyData(localObj, config);
+    } else {
+        return initializeFallbackCompanyData(localObj, localData);
+    }
+}
+
+/**
+ * Initialize tab with valid company data
+ */
+function initializeValidCompanyData(localObj: any, config: any): string {
+    const tabSpecificData: any = {};
+
+    (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
+        if (localObj.hasOwnProperty(tabKey)) {
+            if (tabKey !== 'currentBranchUniqueName') {
+                tabSpecificData[tabKey] = localObj[tabKey];
+            }
+        }
+    });
+
+    tabSpecificData.currentBranchUniqueName = localObj.lastActiveBranchUniqueName || '';
+
+    if (Object.keys(tabSpecificData).length > 0) {
+        sessionStorage.setItem('session', JSON.stringify(tabSpecificData));
+    }
+
+    const updatedLocalData = { ...localObj, lastAccessedAt: Date.now() };
+    delete updatedLocalData.currentBranchUniqueName;
+    localStorage.setItem('session', JSON.stringify(updatedLocalData));
+
+    return JSON.stringify(updatedLocalData);
+}
+
+/**
+ * Initialize fallback company data when no valid company exists
+ */
+function initializeFallbackCompanyData(localObj: any, localData: string): string {
+    if (localObj.companies && localObj.companies.length > 0) {
+        const firstCompany = localObj.companies[0];
+        const fallbackTabData = {
+            applicationDate: null,
+            companyUniqueName: firstCompany.uniqueName,
+            todaySelected: false,
+            activeCompany: firstCompany,
+            companyUser: null,
+            currentBranchUniqueName: (localObj.companyUniqueName === firstCompany.uniqueName)
+                ? (localObj.lastActiveBranchUniqueName || '')
+                : ''
+        };
+
+        sessionStorage.setItem('session', JSON.stringify(fallbackTabData));
+
+        const updatedLocalData = {
+            ...localObj,
+            companyUniqueName: firstCompany.uniqueName,
+            activeCompany: firstCompany,
+            lastAccessedAt: Date.now()
+        };
+
+        delete updatedLocalData.currentBranchUniqueName;
+        localStorage.setItem('session', JSON.stringify(updatedLocalData));
+
+        return JSON.stringify(updatedLocalData);
+    } else {
+        // No companies available - initialize with empty defaults
+        const defaultTabData = {
+            applicationDate: null,
+            companyUniqueName: '',
+            todaySelected: false,
+            activeCompany: null,
+            companyUser: null,
+            currentBranchUniqueName: ''
+        };
+
+        sessionStorage.setItem('session', JSON.stringify(defaultTabData));
+        return localData;
+    }
+}
+
+/**
+ * Merge session and local storage data
+ */
+function mergeSessionAndLocalData(sessionData: string, localData: string, config: any): string {
+    const sessionObj = JSON.parse(sessionData);
+    const localObj = JSON.parse(localData);
+    const merged = { ...localObj };
+
+    // Override with tab-specific data from sessionStorage
+    (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
+        if (sessionObj.hasOwnProperty(tabKey)) {
+            merged[tabKey] = sessionObj[tabKey];
+        }
+    });
+
+    return JSON.stringify(merged);
+}
+
+/**
  * Hybrid Storage Strategy
  * Uses sessionStorage for tab-specific data and localStorage for persistent data
  */
@@ -87,190 +311,31 @@ const createHybridStorage = () => {
             permission: ['roles', 'permissions', 'pages']
         }
     };
+
     return {
         getItem: (key: string): string | null => {
             try {
                 if (!['session', 'permission', 'branchConsolidated'].includes(key)) {
                     return sessionStorage.getItem(key) || localStorage.getItem(key);
                 }
+
                 const sessionData = sessionStorage.getItem(key);
                 const localData = localStorage.getItem(key);
+
                 if (key === 'session') {
-                    // Check for query parameters first - this takes precedence over stored data
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const queryCompanyUniqueName = urlParams.get('companyUniqueName');
-                    const queryBranchUniqueName = urlParams.get('branchUniqueName');
-                    if (queryCompanyUniqueName && localData) {
-                        const localObj = JSON.parse(localData);
-                        // Find the company from available companies
-                        const targetCompany = localObj.companies?.find((company: any) =>
-                            company.uniqueName === queryCompanyUniqueName
-                        );
-                        if (targetCompany) {
-                            // Debug: Log the company structure to understand how branches are stored
-                            // Validate that the branch belongs to the specified company
-                            let validatedBranchUniqueName = '';
-                            if (queryBranchUniqueName) {
-                                // Check if the branch exists in the target company's branches
-                                const targetBranch = targetCompany.branches?.find((branch: any) =>
-                                    branch.uniqueName === queryBranchUniqueName
-                                );
-                                if (targetBranch) {
-                                    validatedBranchUniqueName = queryBranchUniqueName;
-                                } else {
-                                }
-                            }
-                            // Create tab-specific data with validated query params
-                            const queryTabData = {
-                                applicationDate: null,
-                                companyUniqueName: queryCompanyUniqueName,
-                                todaySelected: false,
-                                activeCompany: targetCompany,
-                                companyUser: null, // Will be set by the app when company is selected
-                                currentBranchUniqueName: validatedBranchUniqueName
-                            };
-                            // Debug logging to check query params
-                            // Store query-based data in sessionStorage
-                            sessionStorage.setItem('session', JSON.stringify(queryTabData));
-                            // Update localStorage with the query company info and mark as latest selection
-                            // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
-                            const updatedLocalData = {
-                                ...localObj,
-                                companyUniqueName: queryCompanyUniqueName,
-                                activeCompany: targetCompany,
-                                lastAccessedAt: Date.now() // Mark as recently selected
-                            };
-                            // Store last active branch as fallback for future new tabs (only if validated)
-                            if (validatedBranchUniqueName) {
-                                updatedLocalData.lastActiveBranchUniqueName = validatedBranchUniqueName;
-                            }
-                            // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
-                            delete updatedLocalData.currentBranchUniqueName;
-                            localStorage.setItem('session', JSON.stringify(updatedLocalData));
-                            // Trigger company/branch switch APIs similar to switchCompany/switchBranch
-                            setTimeout(() => {
-                                try {
-                                    // Dispatch actions to trigger API calls (similar to switchCompany/switchBranch)
-                                    const event = new CustomEvent('giddh-query-params-company-switch', {
-                                        detail: {
-                                            companyUniqueName: queryCompanyUniqueName,
-                                            branchUniqueName: validatedBranchUniqueName,
-                                            company: targetCompany
-                                        }
-                                    });
-                                    window.dispatchEvent(event);
-                                } catch (error) {
-                                }
-                            }, 100);
-                            return JSON.stringify(updatedLocalData);
-                        } else {
-                        }
-                    }
-                    // Handle new tab scenario: only localStorage data exists
-                    if (!sessionData && localData) {
-                        // New tab - initialize with localStorage data
-                        const localObj = JSON.parse(localData);
-                        // Check if localStorage has valid company data
-                        const hasValidCompanyData = localObj.activeCompany &&
-                            localObj.activeCompany.uniqueName &&
-                            localObj.companyUniqueName;
-                        if (hasValidCompanyData) {
-                            // Extract tab-specific data and store in sessionStorage for this tab
-                            // Note: currentBranchUniqueName should NOT be inherited directly, but use lastActiveBranchUniqueName as fallback
-                            const tabSpecificData: any = {};
-                            (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
-                                if (localObj.hasOwnProperty(tabKey)) {
-                                    // Skip currentBranchUniqueName - will be set from fallback below
-                                    if (tabKey !== 'currentBranchUniqueName') {
-                                        tabSpecificData[tabKey] = localObj[tabKey];
-                                    }
-                                }
-                            });
-                            // Use lastActiveBranchUniqueName as fallback for new tabs (when no query params)
-                            tabSpecificData.currentBranchUniqueName = localObj.lastActiveBranchUniqueName || '';
-                            // Store tab-specific data in sessionStorage for future use
-                            if (Object.keys(tabSpecificData).length > 0) {
-                                sessionStorage.setItem('session', JSON.stringify(tabSpecificData));
-                            }
-                            // Update localStorage timestamp to mark this company as recently accessed
-                            // This helps maintain the "latest company selection" behavior
-                            // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
-                            const updatedLocalData = { ...localObj, lastAccessedAt: Date.now() };
-                            // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
-                            delete updatedLocalData.currentBranchUniqueName;
-                            localStorage.setItem('session', JSON.stringify(updatedLocalData));
-                            return JSON.stringify(updatedLocalData); // Return updated localStorage data
-                        } else {
-                            // No valid company data in localStorage - check if user has companies available
-                            // If user has companies available, try to use the first one as fallback
-                            if (localObj.companies && localObj.companies.length > 0) {
-                                const firstCompany = localObj.companies[0];
-                                const fallbackTabData = {
-                                    applicationDate: null,
-                                    companyUniqueName: firstCompany.uniqueName,
-                                    todaySelected: false,
-                                    activeCompany: firstCompany,
-                                    companyUser: null, // Will be set by the app when company is selected
-                                    // Use lastActiveBranchUniqueName as fallback if available for this company
-                                    currentBranchUniqueName: (localObj.companyUniqueName === firstCompany.uniqueName)
-                                        ? (localObj.lastActiveBranchUniqueName || '')
-                                        : '' // Reset branch when company changes
-                                };
-                                // Store fallback data in sessionStorage
-                                sessionStorage.setItem('session', JSON.stringify(fallbackTabData));
-                                // Update localStorage with the fallback company info and mark as latest selection
-                                // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
-                                const updatedLocalData = {
-                                    ...localObj,
-                                    companyUniqueName: firstCompany.uniqueName,
-                                    activeCompany: firstCompany,
-                                    lastAccessedAt: Date.now() // Mark as recently selected
-                                };
-                                // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
-                                delete updatedLocalData.currentBranchUniqueName;
-                                localStorage.setItem('session', JSON.stringify(updatedLocalData));
-                                return JSON.stringify(updatedLocalData);
-                            } else {
-                                // No companies available - initialize with empty defaults
-                                const defaultTabData = {
-                                    applicationDate: null,
-                                    companyUniqueName: '',
-                                    todaySelected: false,
-                                    activeCompany: null,
-                                    companyUser: null,
-                                    currentBranchUniqueName: ''
-                                };
-                                // Store default data in sessionStorage
-                                sessionStorage.setItem('session', JSON.stringify(defaultTabData));
-                                // Return the full localStorage data (which contains user auth info)
-                                return localData;
-                            }
-                        }
-                    }
-                    // Normal scenario: merge sessionStorage and localStorage
-                    if (sessionData && localData) {
-                        const sessionObj = JSON.parse(sessionData);
-                        const localObj = JSON.parse(localData);
-                        const merged = { ...localObj };
-                        // Override with tab-specific data from sessionStorage
-                        (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
-                            if (sessionObj.hasOwnProperty(tabKey)) {
-                                merged[tabKey] = sessionObj[tabKey];
-                            }
-                        });
-                        return JSON.stringify(merged);
-                    }
-                    // Fallback: return whatever data is available
-                    return sessionData || localData;
+                    return handleSessionDataRetrieval(sessionData, localData, config);
                 }
+
                 // For permission (always from localStorage)
                 if (key === 'permission') {
                     return localData;
                 }
+
                 // For branchConsolidated (prefer sessionStorage, fallback to localStorage)
                 if (key === 'branchConsolidated') {
                     return sessionData || localData;
                 }
+
                 return sessionData || localData;
             } catch (error) {
                 return localStorage.getItem(key);

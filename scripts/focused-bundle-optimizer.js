@@ -2,8 +2,8 @@
 /**
  * Focused Bundle Optimizer - Targeted approach for <10MB bundle
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 class FocusedBundleOptimizer {
     constructor() {
         this.optimizations = [];
@@ -14,7 +14,7 @@ class FocusedBundleOptimizer {
     resetOptimizations() {
         const angularJsonPath = './angular.json';
         if (fs.existsSync(angularJsonPath)) {
-            let angularConfig = JSON.parse(fs.readFileSync(angularJsonPath, 'utf8'));
+            const angularConfig = JSON.parse(fs.readFileSync(angularJsonPath, 'utf8'));
             const prodConfig = angularConfig.projects['web-giddh'].architect.build.configurations.prod;
             // Conservative optimization settings
             prodConfig.optimization = {

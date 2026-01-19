@@ -14,6 +14,7 @@ import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { digitsOnly } from '../../../helpers';
 import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
 import { cloneDeep, difference, differenceBy, flatten, flattenDeep, map, omit, union, uniq } from '../../../../lodash-optimized';
+import { GroupFlattenHelper } from '../../../helpers/group-flatten.helper';
 import { LedgerDiscountComponent } from '../../../../ledger/components/ledger-discount/ledger-discount.component';
 import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
@@ -400,27 +401,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.deleteGroupConfirmationDialogRef?.close();
     }
 
-    public flattenGroup(rawList: any[], parents: any[] = []) {
-        let listofUN;
-        listofUN = map(rawList, (listItem) => {
-            let newParents;
-            let result;
-            newParents = union([], parents);
-            newParents.push({
-                name: listItem.name,
-                uniqueName: listItem?.uniqueName
-            });
-            listItem = Object.assign({}, listItem, { parentGroups: [] });
-            listItem.parentGroups = newParents;
-            if (listItem?.groups?.length > 0) {
-                result = this.flattenGroup(listItem.groups, newParents);
-                result.push(omit(listItem, 'groups'));
-            } else {
-                result = omit(listItem, 'groups');
-            }
-            return result;
-        });
-        return flatten(listofUN);
+    public flattenGroup(rawList: any[], parents: any[] = []): any[] {
+        return GroupFlattenHelper.flattenGroup(rawList, parents);
     }
 
     public makeGroupListFlatwithLessDtl(rawList: any) {

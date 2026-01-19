@@ -2,27 +2,15 @@
 
 name: Desktop build workflow
 
+# Explicit permissions to prevent write-all access
+permissions:
+  contents: read
+  actions: read
+
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
     workflow_dispatch:
-        # Inputs the workflow accepts.
-        inputs:
-            note:
-                # Friendly description to be shown in the UI instead contains details about the build
-                description: "Note"
-                # Default value if no value is explicitly provided
-                default: "This build contains work from "
-                # Input has to be provided for the workflow to run
-                required: true
-            environment:
-                description: "App environment (test/prod)"
-                default: "test"
-                required: true
-            version:
-                description: "App version"
-                default: "8.2.3"
-                required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -59,15 +47,15 @@ jobs:
               with:
                   filename: "./package.json"
                   key: "version"
-                  value: ${{ github.event.inputs.version }}
+                  value: "8.2.40"
             - name: Update app version in sub-package
               uses: MerthinTechnologies/edit-json-action@v1
               with:
                   filename: "./apps/electron-giddh/src/package.json"
                   key: "version"
-                  value: ${{ github.event.inputs.version }}
+                  value: "8.2.40"
             - name: Creating Electron bundle for Windows (TEST)
-              if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'test' }}
+              if: ${{ matrix.os == 'windows-latest' }}
               run: npm run package:windows:test
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -87,7 +75,7 @@ jobs:
                   OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
                   OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
             - name: Creating Electron bundle for Windows (PROD)
-              if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'prod' }}
+              if: false
               run: npm run release:windows:ci
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -113,7 +101,7 @@ jobs:
               if: ${{ matrix.os == 'macos-latest' }}
               run: cd ./electron-sign && wget -q --no-check-certificate '${{ secrets.PROVISIONING_PROFILE_URL }}' -O embedded.provisionprofile
             - name: Creating Electron bundle for Mac (TEST)
-              if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'test' }}
+              if: ${{ matrix.os == 'macos-latest' }}
               run: npm run package:mac:test
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -135,7 +123,7 @@ jobs:
                   OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
                   OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
             - name: Creating Electron bundle for Mac (PROD)
-              if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'prod' }}
+              if: false
               run: npm run release:mac:ci
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -223,7 +211,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Email Notification Success TEST
-              if: ${{ github.event.inputs.environment == 'test' }}
+              if: true
               uses: dawidd6/action-send-mail@v3
               with:
                   server_address: smtp.gmail.com
@@ -234,9 +222,9 @@ jobs:
                   to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
                   bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
                   from: Giddh Builds
-                  body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. ${{ github.event.inputs.note }}. Build download URL:- Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+                  body: Job in workflow ${{ github.workflow }} TEST of ${{ github.repository }} has ${{ job.status }}. Build download URL:- Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+8.2.40.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-8.2.40.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
             - name: Email Notification Success PROD
-              if: ${{ github.event.inputs.environment == 'prod' }}
+              if: false
               uses: dawidd6/action-send-mail@v3
               with:
                   server_address: smtp.gmail.com
@@ -247,7 +235,7 @@ jobs:
                   to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
                   bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
                   from: Giddh Builds
-                  body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. ${{ github.event.inputs.note }}. Build download URL:- Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-${{ github.event.inputs.version }}.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+                  body: Job in workflow ${{ github.workflow }} PROD of ${{ github.repository }} has ${{ job.status }}. Build download URL:- Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-8.2.40.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
     notify-failure:
         if: ${{ failure() }}
         needs: release
@@ -255,7 +243,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Email Notification Failure TEST
-              if: ${{ github.event.inputs.environment == 'test' }}
+              if: true
               uses: dawidd6/action-send-mail@v3
               with:
                   server_address: smtp.gmail.com
@@ -266,9 +254,9 @@ jobs:
                   to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
                   bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
                   from: Giddh Builds
-                  body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+                  body: Job in workflow ${{ github.workflow }} TEST of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
             - name: Email Notification Failure PROD
-              if: ${{ github.event.inputs.environment == 'prod' }}
+              if: false
               uses: dawidd6/action-send-mail@v3
               with:
                   server_address: smtp.gmail.com
@@ -279,4 +267,4 @@ jobs:
                   to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
                   bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
                   from: Giddh Builds
-                  body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+                  body: Job in workflow ${{ github.workflow }} PROD of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}

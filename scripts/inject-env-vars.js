@@ -67,7 +67,7 @@ function generateEnvScript(envVars) {
         RAZORPAY_KEY: envVars.RAZORPAY_KEY || envVars.RAZORPAY_KEY_TEST || ''
     };
     // Generate script content
-    let script = '<!-- Environment Variables - Injected at Build Time -->\n<script>\n';
+    const script = '<!-- Environment Variables - Injected at Build Time -->\n<script>\n';
     Object.keys(config).forEach(key => {
         const value = typeof config[key] === 'string' ? `"${config[key]}"` : config[key];
         script += `  window.${key} = ${value};\n`;

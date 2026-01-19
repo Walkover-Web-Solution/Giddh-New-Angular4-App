@@ -67,10 +67,13 @@ try {
             isObject: (value: any) => typeof value === 'object' && value !== null,
             isEqual: (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b),
             get: (obj: any, path: string, defaultValue?: any) => {
+                if (!obj || typeof path !== 'string') return defaultValue;
                 const keys = path.split('.');
                 let result = obj;
                 for (const key of keys) {
-                    if (result == null) return defaultValue;
+                    if (result == null || key === '__proto__' || key === 'constructor' || key === 'prototype') {
+                        return defaultValue;
+                    }
                     result = result[key];
                 }
                 return result !== undefined ? result : defaultValue;
@@ -241,10 +244,13 @@ const {
     },
     startsWith = (str: string, target: string) => str.startsWith(target),
     get = (obj: any, path: string, defaultValue?: any) => {
+        if (!obj || typeof path !== 'string') return defaultValue;
         const keys = path.split('.');
         let result = obj;
         for (const key of keys) {
-            if (result == null) return defaultValue;
+            if (result == null || key === '__proto__' || key === 'constructor' || key === 'prototype') {
+                return defaultValue;
+            }
             result = result[key];
         }
         return result !== undefined ? result : defaultValue;
@@ -261,16 +267,28 @@ const {
     keys = (obj: any) => Object.keys(obj),
     values = (obj: any) => Object.values(obj),
     has = (obj: any, path: string) => {
+        if (!obj || typeof path !== 'string') return false;
         const keys = path.split('.');
         let current = obj;
         for (const key of keys) {
-            if (current == null || !(key in current)) return false;
+            if (current == null || key === '__proto__' || key === 'constructor' || key === 'prototype' || !(key in current)) {
+                return false;
+            }
             current = current[key];
         }
         return true;
     },
     set = (obj: any, path: string, value: any) => {
+        if (!obj || typeof path !== 'string') return obj;
         const keys = path.split('.');
+
+        // Check for prototype pollution attempts
+        for (const key of keys) {
+            if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+                return obj; // Reject dangerous keys
+            }
+        }
+
         let current = obj;
         for (let i = 0; i < keys.length - 1; i++) {
             const key = keys[i];
@@ -279,7 +297,10 @@ const {
             }
             current = current[key];
         }
-        current[keys[keys.length - 1]] = value;
+        const finalKey = keys[keys.length - 1];
+        if (finalKey !== '__proto__' && finalKey !== 'constructor' && finalKey !== 'prototype') {
+            current[finalKey] = value;
+        }
         return obj;
     }
 } = lodash;
