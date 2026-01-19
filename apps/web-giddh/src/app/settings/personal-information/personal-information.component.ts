@@ -10,12 +10,19 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ServiceConfig } from '../../services/service.config';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'personal-information',
     templateUrl: './personal-information.component.html',
     styleUrls: ['./personal-information.component.scss'],
     standalone: false
 })
+/**
+ * PersonalInformationComponent component
+ * Handles personalinformation functionality and user interactions
+ */
 export class PersonalInformationComponent implements OnInit, OnChanges, OnDestroy {
 
     /** Decides when to emit the value for UPDATE operation */
@@ -72,6 +79,10 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig,  private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private store: Store<AppState>) {
         this.initProfileForm();
         this.portalUrl = (this.serviceConfig.PORTAL_URL || PORTAL_URL);
@@ -84,6 +95,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      */
     public ngOnInit(): void {
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -92,6 +106,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
         this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res && this.profileForm.dirty) {
                 this.saveProfile.emit(this.updatedData);
             }
@@ -114,53 +131,122 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.profileData && changes.profileData.currentValue !== changes.profileData.previousValue) {
+            /**
+             * Handles if functionality
+             */
             if (this.profileData?.alias || this.profileData?.name) {
                 this.profileForm.patchValue(this.profileData);
                 this.portalLoginUrl = `${this.portalUrl}${this.profileData.portalDomain}/${this.region}/login`;
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.organizationType === 'COMPANY') {
                 this.profileForm?.get('name')?.valueChanges?.pipe(
+                    /**
+                     * Handles takeUntil functionality
+                     */
                     takeUntil(this.destroyed$),
+                    /**
+                     * Handles debounceTime functionality
+                     */
                     debounceTime(700),
+                    /**
+                     * Handles pairwise functionality
+                     */
                     pairwise(), // Emits [previousValue, currentValue]
+                    /**
+                     * Handles filter functionality
+                     */
                     filter(([prev, curr]) => prev !== curr) // Only proceed if values are different
                 ).subscribe(([prev, curr]) => {
                     this.profileUpdated('name');
                 });
 
                 this.profileForm?.get('portalDomain')?.valueChanges?.pipe(
+                    /**
+                     * Handles takeUntil functionality
+                     */
                     takeUntil(this.destroyed$),
+                    /**
+                     * Handles debounceTime functionality
+                     */
                     debounceTime(700),
+                    /**
+                     * Handles pairwise functionality
+                     */
                     pairwise(),
+                    /**
+                     * Handles filter functionality
+                     */
                     filter(([prev, curr]) => prev !== curr)
                 ).subscribe(([prev, curr]) => {
                     this.profileUpdated('portalDomain');
                 });
 
                 this.profileForm?.get('nameAlias')?.valueChanges?.pipe(
+                    /**
+                     * Handles takeUntil functionality
+                     */
                     takeUntil(this.destroyed$),
+                    /**
+                     * Handles debounceTime functionality
+                     */
                     debounceTime(700),
+                    /**
+                     * Handles pairwise functionality
+                     */
                     pairwise(),
+                    /**
+                     * Handles filter functionality
+                     */
                     filter(([prev, curr]) => prev !== curr)
                 ).subscribe(([prev, curr]) => {
                     this.profileUpdated('nameAlias');
                 });
 
                 this.profileForm?.get('headQuarterAlias')?.valueChanges?.pipe(
+                    /**
+                     * Handles takeUntil functionality
+                     */
                     takeUntil(this.destroyed$),
+                    /**
+                     * Handles debounceTime functionality
+                     */
                     debounceTime(700),
+                    /**
+                     * Handles pairwise functionality
+                     */
                     pairwise(),
+                    /**
+                     * Handles filter functionality
+                     */
                     filter(([prev, curr]) => prev !== curr)
                 ).subscribe(([prev, curr]) => {
                     this.profileUpdated('headQuarterAlias');
                 });
             } else {
                 this.profileForm?.get('alias')?.valueChanges?.pipe(
+                    /**
+                     * Handles takeUntil functionality
+                     */
                     takeUntil(this.destroyed$),
+                    /**
+                     * Handles debounceTime functionality
+                     */
                     debounceTime(700),
+                    /**
+                     * Handles pairwise functionality
+                     */
                     pairwise(),
+                    /**
+                     * Handles filter functionality
+                     */
                     filter(([prev, curr]) => prev !== curr)
                 ).subscribe(([prev, curr]) => {
                     this.profileUpdated('alias');
@@ -219,6 +305,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      */
     public profileUpdated(keyName: string): void {
         const value = this.profileForm?.get(keyName).value;
+        /**
+         * Handles if functionality
+         */
         if (this.updatedData[keyName] !== value) {
             this.updatedData[keyName] = value;
             this.saveProfileSubject.next(true);
@@ -233,8 +322,14 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public checkPortalDomain(keyName: any): void {
+        /**
+         * Handles if functionality
+         */
         if (keyName) {
             this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(keyName);
+            /**
+             * Handles if functionality
+             */
             if (this.isValidDomain) {
                 this.profileUpdated('portalDomain');
             } else {
@@ -252,6 +347,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
         const urlToCopy = this.portalLoginUrl;
         this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);

@@ -19,6 +19,9 @@ export default function setMenu() {
             {
                 label: 'New Window',
                 accelerator: 'CmdOrCtrl+N',
+                /**
+                 * Handles click functionality
+                 */
                 click: (menuItem, browserWindow: BrowserWindow, event) => {
                     const windowManager = new WindowManager();
                     windowManager.openWindows();
@@ -37,13 +40,22 @@ export default function setMenu() {
             {
                 label: 'Check For Update',
                 accelerator: 'CmdOrCtrl+U',
+                /**
+                 * Handles click functionality
+                 */
                 click: (item: any, focusedWindow: any, event) => {
                     //
+                    /**
+                     * Handles checkForUpdates functionality
+                     */
                     checkForUpdates(item, focusedWindow, event);
                 }
             },
             {
                 label: `About Giddh v${getAppVersion()}`,
+                /**
+                 * Handles click functionality
+                 */
                 click: async () => {
                     try {
                         const result = await dialog.showMessageBox({
@@ -107,7 +119,13 @@ export default function setMenu() {
                 {
                     label: 'Reload',
                     accelerator: 'CmdOrCtrl+R',
+                    /**
+                     * Handles click functionality
+                     */
                     click: (item: any, focusedWindow: any) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (focusedWindow != null) {
                             focusedWindow.reload();
                         }
@@ -116,7 +134,13 @@ export default function setMenu() {
                 {
                     label: 'Enter Full Screen',
                     accelerator: process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11',
+                    /**
+                     * Handles click functionality
+                     */
                     click: (item: any, focusedWindow: any) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (focusedWindow) {
                             focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
                         }
@@ -125,7 +149,13 @@ export default function setMenu() {
                 {
                     label: 'Open Dev Tool',
                     accelerator: 'Command+I',
+                    /**
+                     * Handles click functionality
+                     */
                     click: (item: any, focusedWindow: any) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (focusedWindow != null) {
                             focusedWindow.webContents.openDevTools();
                         }
@@ -135,6 +165,9 @@ export default function setMenu() {
         },
         windowsMenu
     ];
+    /**
+     * Handles if functionality
+     */
     if (process.platform === 'darwin') {
         template.unshift({
             label: name,
@@ -166,6 +199,9 @@ export default function setMenu() {
                 {
                     label: 'Quit',
                     accelerator: 'Command+Q',
+                    /**
+                     * Handles click functionality
+                     */
                     click: () => {
                         app.quit();
                     }

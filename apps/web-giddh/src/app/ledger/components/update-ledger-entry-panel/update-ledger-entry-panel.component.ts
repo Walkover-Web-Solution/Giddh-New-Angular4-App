@@ -75,6 +75,9 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'update-ledger-entry-panel',
     templateUrl: './update-ledger-entry-panel.component.html',
@@ -82,6 +85,10 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
     providers: [SalesPersonComponentStore],
     standalone:false
 })
+/**
+ * UpdateLedgerEntryPanelComponent component
+ * Handles updateledgerentrypanel functionality and user interactions
+ */
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
     @ViewChild(MatAccordion) public accordion: MatAccordion;
@@ -342,6 +349,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** True if last adjustment info is open */
     public isLastAdjustmentInfoOpen: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private accountService: AccountService,
         private breakPointObservar: BreakpointObserver,
@@ -390,22 +401,37 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.currencyList$ = this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (this.isPettyCash) {
             document.querySelector('body').classList.add('ledger-body');
         }
+        /**
+         * Handles if functionality
+         */
         if (this.searchResultsPaginationPage) {
             this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
         }
 
         this.getAllDiscounts();
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             this.allowParentGroup.push("loanandoverdraft");
         }
@@ -415,7 +441,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.getSalesPersonList();
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length > 0) {
+                /**
+                 * Handles lodashMap functionality
+                 */
                 lodashMap(response?.body, (tag) => {
                     tag.label = tag.name;
                     tag.value = tag.name;
@@ -427,6 +459,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.branches = response;
             } else {
@@ -434,6 +469,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
         this.store.pipe(select(appState => appState.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === true) {
                 this.store.dispatch(this.ledgerAction.refreshLedger(false));
                 this.entryAccountUniqueName = "";
@@ -442,6 +480,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            /**
+             * Handles if functionality
+             */
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
@@ -450,7 +491,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.selectedLedger.voucher = { name: '', shortCode: '' };
         this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
 
+        /**
+         * Handles if functionality
+         */
         if (this.isPettyCash) {
+            /**
+             * Handles if functionality
+             */
             if (this.pettyCashEntry) {
                 this.entryUniqueName = this.pettyCashEntry.uniqueName;
                 this.accountUniqueName = this.pettyCashEntry.particular?.uniqueName;
@@ -458,8 +505,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => {
+            /**
+             * Handles if functionality
+             */
             if (taxes) {
                 (Array.isArray(taxes) ? taxes : []).forEach((tax) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
                         this.allowedSelectionOfAType.type.push(tax.taxType);
                     }
@@ -470,7 +523,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         // get entry name and ledger account uniqueName
+        /**
+         * Handles observableCombineLatest functionality
+         */
         observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            /**
+             * Handles if functionality
+             */
             if (resp[0] && resp[1]) {
                 this.entryUniqueName = resp[0];
                 this.accountUniqueName = resp[1];
@@ -478,7 +537,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
 
+        /**
+         * Handles observableCombineLatest functionality
+         */
         observableCombineLatest([this.activeAccountSubject]).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response[0]) {
                 // set account details for multi currency account
                 this.prepareMultiCurrencyObject(this.vm.selectedLedger);
@@ -486,6 +551,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         this.totalAmountChanged$.pipe(debounceTime(500), takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.vm.inventoryTotalChanged();
             }
@@ -493,6 +561,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         // check if delete entry is success
         this.isDeleteTrxEntrySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(del => {
+            /**
+             * Handles if functionality
+             */
             if (del) {
                 this.store.dispatch(this.ledgerAction.resetDeleteTrxEntryModal());
                 this.closeUpdateLedgerModal.emit(true);
@@ -502,18 +573,30 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         // check if update entry is success
         this.isTxnUpdateSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(upd => {
+            /**
+             * Handles if functionality
+             */
             if (upd) {
                 this.store.dispatch(this.ledgerAction.ResetUpdateLedger());
                 this.resetPreviousSearchResults();
                 this.baseAccountChanged = false;
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
                 }, 50);
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (this.vm) {
             this.vm.compundTotalObserver.pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res || res === 0) {
                         this.checkAdvanceReceiptOrInvoiceAdjusted();
                     }
@@ -524,6 +607,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.assignStockVariantDetails();
     }
 
+    /**
+     * Toggles show state
+     */
     public toggleShow(): void {
         this.condition = !this.condition;
         this.condition2 = !this.condition;
@@ -532,11 +618,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /** Track by function for items */
+    /**
+     * Handles trackByFunction functionality
+     */
     public trackByFunction(index: number, item: ILedgerTransactionItem): any {
         return item?.particular?.uniqueName;
     }
 
+    /**
+     * Handles prepareMultiCurrencyObject functionality
+     */
     private prepareMultiCurrencyObject(accountDetails: any) {
+        /**
+         * Handles if functionality
+         */
         if (this.isPettyCash) {
             // In case of petty cash account unique name will be received
             this.multiCurrencyAccDetails = {
@@ -555,6 +650,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.vm.foreignCurrencyDetails = { code: this.profileObj?.baseCurrency, symbol: this.profileObj.baseCurrencySymbol };
 
+        /**
+         * Handles if functionality
+         */
         if (this.vm.isMultiCurrencyAvailable) {
             let currencies: ICurrencyResponse[] = [];
             let multiCurrencyAccCurrency: ICurrencyResponse;
@@ -580,7 +678,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.transaction = this.entryTransactionData?.transaction;
         this.index = this.entryTransactionData?.index;
         this.transactionsList = this.entryTransactionData?.transactionsList;
+        /**
+         * Handles if functionality
+         */
         if (this.transaction?.entryUniqueName) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.hideTax();
                 this.hideDiscount();
@@ -589,18 +693,33 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes['isPettyCash']) {
             this.isPettyCash = changes['isPettyCash'].currentValue;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes['carouselNext'] && changes['carouselNext'].currentValue) {
             this.moveToNextTransactions();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes['carouselPrevious'] && changes['carouselPrevious'].currentValue) {
             this.moveToPreviousTransactions();
         }
+        /**
+         * Handles if functionality
+         */
         if (changes['pettyCashEntry'] && changes['pettyCashEntry'].currentValue !== changes['pettyCashEntry'].previousValue) {
             this.accountPettyCashStream = changes['pettyCashEntry'].currentValue.body;
         }
@@ -609,31 +728,55 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // because we have already done this in get transaction response observable
         // so no need to do this
         // we will just check for account change in petty cash entry details screen
+        /**
+         * Handles if functionality
+         */
         if (changes['pettyCashBaseAccountUniqueName']
             && !changes['pettyCashBaseAccountUniqueName'].firstChange
             && changes['pettyCashBaseAccountUniqueName'].currentValue
             !== changes['pettyCashBaseAccountUniqueName'].previousValue) {
+            /**
+             * Handles if functionality
+             */
             if (this.isPettyCash) {
                 this.accountUniqueName = changes['pettyCashBaseAccountUniqueName'].currentValue;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.accountUniqueName) {
                     this.pettyCashAccountChanged();
                 }
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes['generateEInvoice'] && this.vm?.selectedLedger) {
             this.vm.selectedLedger.generateEInvoice = changes['generateEInvoice']?.currentValue;
             this.saveLedgerTransaction();
         }
     }
 
+    /**
+     * Handles addBlankTrx functionality
+     */
     public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
+            /**
+             * Handles if functionality
+             */
             if (Number(txn.amount) === 0) {
                 txn.amount = undefined;
             }
             let lastTxn = last(lodashFilter(this.vm.selectedLedger.transactions, p => p.type === type));
+            /**
+             * Handles if functionality
+             */
             if (txn?.particular?.uniqueName && lastTxn?.particular?.uniqueName) {
                 let blankTrxnRow = this.vm.blankTransactionItem(type);
                 this.vm.selectedLedger.transactions.push(blankTrxnRow);
@@ -651,6 +794,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public uploadFile(): void {
         const selectedFile: any = document.getElementById("invoiceFile");
+        /**
+         * Handles if functionality
+         */
         if (selectedFile?.files?.length) {
             const file = selectedFile?.files[0];
 
@@ -661,6 +807,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.loaderService.hide();
                     this.isFileUploading = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'success') {
                         this.vm.selectedLedger.attachedFile = response.body?.uniqueName;
                         this.vm.selectedLedger.attachedFileName = response.body?.name;
@@ -676,7 +825,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Handles selectAccount functionality
+     */
     public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp?: SelectFieldComponent, clearAccount?: boolean, isVariantChanged?: boolean) {
+        /**
+         * Handles if functionality
+         */
         if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
@@ -688,6 +843,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
             // check if need to showEntryPanel
             // first check with opened ledger
+            /**
+             * Handles if functionality
+             */
             if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
                 this.vm.showNewEntryPanel = true;
             } else {
@@ -697,27 +855,48 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
             return;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (!txn.isUpdated) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.vm.selectedLedger.taxes && this.vm.selectedLedger.taxes.length && !txn.isTax) {
                     txn.isUpdated = true;
                 }
             }
             // check if txn.selectedAccount is already set so it means account name is changed without firing deselect event
+            /**
+             * Handles if functionality
+             */
             if (txn?.selectedAccount) {
                 // check if discount is added and update component as needed
                 this.vm.discountArray.map(d => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (d.particular === txn.selectedAccount?.uniqueName) {
                         d.amount = 0;
                     }
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (e.label) {
                 txn.particular.name = e.label;
                 txn.particular.uniqueName = e.value;
             }
             // if there's stock entry
+            /**
+             * Handles if functionality
+             */
             if (e.additional?.stock) {
                 // check if we already have stock entry
+                /**
+                 * Handles if functionality
+                 */
                 if (this.vm.isThereStockEntry(e?.value)) {
                     txn.particular.uniqueName = null;
                     txn.particular.name = null;
@@ -727,6 +906,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 } else {
                     // add unitArrays in txn for stock entry
                     let requestObject;
+                    /**
+                     * Handles if functionality
+                     */
                     if (e.additional.stock) {
                         requestObject = {
                             stockUniqueName: e.additional.stock?.uniqueName,
@@ -739,6 +921,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             } else {
                 this.searchService.loadDetails(e?.value).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     // directly assign additional property
+                    /**
+                     * Handles if functionality
+                     */
                     if (data && data.body) {
                         // Take taxes of parent group
                         const taxes = this.generalService.fetchTaxesOnPriority(
@@ -770,6 +955,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                         // check if need to showEntryPanel
                         // first check with opened lager
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
                             this.vm.showNewEntryPanel = true;
                         } else {
@@ -784,7 +972,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Handles txnamountchange event
+     */
     public onTxnAmountChange(txn: ILedgerTransactionItem) {
+        /**
+         * Handles if functionality
+         */
         if (txn) {
             txn.convertedAmount = this.vm.calculateConversionRate(txn.amount);
             txn.isUpdated = true;
@@ -792,6 +986,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Shows deleteattachedfilemodal element
+     */
     public showDeleteAttachedFileModal() {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '630px',
@@ -804,12 +1001,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.deleteAttachedFile();
             }
         });
     }
 
+    /**
+     * Shows deleteentrymodal element
+     */
     public showDeleteEntryModal() {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '630px',
@@ -823,24 +1026,42 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.deleteTrxEntry();
             }
         });
     }
 
+    /**
+     * Deletes trxentry
+     */
     public deleteTrxEntry() {
         let uniqueName = (this.vm.selectedLedger && this.vm.selectedLedger.particular) ? this.vm.selectedLedger.particular.uniqueName : undefined;
+        /**
+         * Handles if functionality
+         */
         if (uniqueName) {
             this.store.dispatch(this.ledgerAction.deleteTrxEntry(uniqueName, this.entryUniqueName));
         }
     }
 
+    /**
+     * Deletes attachedfile
+     */
     public deleteAttachedFile() {
         this.ledgerService.removeAttachment(this.vm.selectedLedger?.attachedFile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 this.vm.selectedLedger.attachedFile = '';
                 this.vm.selectedLedger.attachedFileName = '';
+                /**
+                 * Handles if functionality
+                 */
                 if (this.fileInputElement && this.fileInputElement.nativeElement) {
                     this.fileInputElement.nativeElement.value = '';
                 }
@@ -863,24 +1084,42 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.selectedWarehouseName = event?.label;
     }
 
+    /**
+     * Saves ledgertransaction data
+     */
     public saveLedgerTransaction() {
+        /**
+         * Handles if functionality
+         */
         if (!this.validateDates()) {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!this.validateStockVariant()) {
             return;
         }
 
         const requestObj = this.prepareRequestObject();
+        /**
+         * Handles if functionality
+         */
         if (!requestObj) {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!this.validatePettyCashTransactions(requestObj)) {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!this.validateRcmTaxes(requestObj)) {
             return;
         }
@@ -899,6 +1138,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Validate entry and cheque clearance dates
      */
     private validateDates(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!this.validateEntryDate()) {
             return false;
         }
@@ -909,11 +1151,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Validate entry date format and value
      */
     private validateEntryDate(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!this.vm.selectedLedger.entryDate) {
             return true;
         }
 
         const entryDate = this.parseDateValue(this.vm.selectedLedger.entryDate);
+        /**
+         * Handles if functionality
+         */
         if (!entryDate.isValid()) {
             this.toaster.showSnackBar("error", this.localeData?.invalid_date);
             this.loaderService.hide();
@@ -928,11 +1176,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Validate cheque clearance date format and value
      */
     private validateChequeClearanceDate(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!this.vm.selectedLedger.chequeClearanceDate) {
             return true;
         }
 
         const chequeClearanceDate = this.parseDateValue(this.vm.selectedLedger.chequeClearanceDate);
+        /**
+         * Handles if functionality
+         */
         if (!chequeClearanceDate.isValid()) {
             this.toaster.showSnackBar("error", this.localeData?.invalid_cheque_clearance_date);
             this.loaderService.hide();
@@ -947,8 +1201,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Parse date value from object or string format
      */
     private parseDateValue(dateValue: any): any {
+        /**
+         * Handles return functionality
+         */
         return (typeof dateValue === "object") ?
+            /**
+             * Handles dayjs functionality
+             */
             dayjs(dateValue) :
+            /**
+             * Handles dayjs functionality
+             */
             dayjs(dateValue, GIDDH_DATE_FORMAT);
     }
 
@@ -956,8 +1219,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Format date value to standard format
      */
     private formatDateValue(dateValue: any): string {
+        /**
+         * Handles return functionality
+         */
         return (typeof dateValue === "object") ?
+            /**
+             * Handles dayjs functionality
+             */
             dayjs(dateValue).format(GIDDH_DATE_FORMAT) :
+            /**
+             * Handles dayjs functionality
+             */
             dayjs(dateValue, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
     }
 
@@ -965,6 +1237,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Validate stock variant selection
      */
     private validateStockVariant(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.stockTrxEntry?.inventory && !this.selectedStockVariant.uniqueName) {
             return false;
         }
@@ -982,6 +1257,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Validate petty cash transactions
      */
     private validatePettyCashTransactions(requestObj: LedgerResponse): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!this.isPettyCash) {
             return true;
         }
@@ -990,11 +1268,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             d?.uniqueName === 'others' && d?.isDummy
         );
 
+        /**
+         * Handles if functionality
+         */
         if (isThereOthersDummyAcc) {
             const isThereDummyOtherTrx = requestObj.transactions.some(s =>
                 s.particular?.uniqueName === 'others'
             );
 
+            /**
+             * Handles if functionality
+             */
             if (isThereDummyOtherTrx) {
                 this.toaster.showSnackBar("error", this.localeData?.invalid_account_transaction_error);
                 return false;
@@ -1007,7 +1291,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Validate RCM taxes requirement
      */
     private validateRcmTaxes(requestObj: LedgerResponse): boolean {
+        /**
+         * Handles if functionality
+         */
         if (this.isRcmEntry && (!requestObj.taxes || requestObj.taxes?.length === 0)) {
+            /**
+             * Handles if functionality
+             */
             if (this.taxControll?.taxInputElement?.nativeElement) {
                 this.taxControll.taxInputElement.nativeElement?.classList?.add('error-box');
                 return false;
@@ -1020,6 +1310,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Configure basic request object properties
      */
     private configureRequestObject(requestObj: LedgerResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (!requestObj) {
             return;
         }
@@ -1034,6 +1327,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Calculate exchange rate based on currency selection
      */
     private calculateExchangeRate(): number {
+        /**
+         * Handles return functionality
+         */
         return (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ?
             (1 / this.vm.selectedLedger?.exchangeRate) :
             this.vm.selectedLedger?.exchangeRate;
@@ -1043,9 +1339,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Determine sub voucher type
      */
     private determineSubVoucher(): string {
+        /**
+         * Handles if functionality
+         */
         if (this.isRcmEntry) {
             return SubVoucher.ReverseCharge;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.isAdvanceReceipt) {
             return SubVoucher.AdvanceReceipt;
         }
@@ -1064,6 +1366,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Filter tax transactions if not tax-only mode
      */
     private filterTaxTransactions(requestObj: LedgerResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.taxOnlyTransactions && requestObj.voucherType !== "jr") {
             requestObj.transactions = requestObj.transactions?.filter(tx => !tx.isTax);
         }
@@ -1073,6 +1378,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Filter roundoff transactions for API v2
      */
     private filterRoundoffTransactions(requestObj: LedgerResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2 &&
             (requestObj.voucherGenerated || requestObj.generateInvoice) &&
             requestObj.voucherType !== "jr") {
@@ -1087,6 +1395,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private updateInventoryDetails(requestObj: LedgerResponse): void {
         requestObj.transactions.map((transaction: any) => {
+            /**
+             * Handles if functionality
+             */
             if (transaction?.inventory && this.isStockPresent) {
                 this.updateTransactionInventory(transaction);
             }
@@ -1107,6 +1418,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Update warehouse details in transaction inventory
      */
     private updateWarehouseDetails(transaction: any): void {
+        /**
+         * Handles if functionality
+         */
         if (transaction?.inventory.warehouse) {
             transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
             transaction.inventory.warehouse.name = this.selectedWarehouseName;
@@ -1132,6 +1446,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Clean up voucher adjustments
      */
     private cleanupVoucherAdjustments(requestObj: LedgerResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (requestObj?.voucherAdjustments?.adjustments?.length > 0) {
             (Array.isArray(requestObj.voucherAdjustments.adjustments) ?
                 requestObj.voucherAdjustments.adjustments : []
@@ -1153,13 +1470,22 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Handle reference voucher for specific voucher types
      */
     private handleReferenceVoucher(requestObj: LedgerResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (requestObj.voucherType !== VoucherTypeEnum.creditNote &&
             requestObj.voucherType !== VoucherTypeEnum.debitNote) {
+            /**
+             * Handles if functionality
+             */
             if (this.voucherApiVersion === 2) {
                 requestObj.referenceVoucher = null;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (requestObj.referenceVoucher) {
             delete requestObj.referenceVoucher.number;
             delete requestObj.referenceVoucher.date;
@@ -1171,6 +1497,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Remove sales person property
      */
     private removeSalesPerson(requestObj: LedgerResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (requestObj.salesPerson) {
             delete requestObj.salesPerson;
         }
@@ -1185,6 +1514,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) ||
             !this.isAdjustVoucherSelected;
 
+        /**
+         * Handles if functionality
+         */
         if (shouldClearAdjustments) {
             this.vm.selectedLedger.voucherAdjustments = undefined;
             requestObj.voucherAdjustments = undefined;
@@ -1203,6 +1535,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Handle advance receipt specific configurations
      */
     private handleAdvanceReceipt(requestObj: LedgerResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isAdvanceReceipt) {
             requestObj.voucherType = 'rcpt';
             requestObj.transactions[0].amount = this.vm.advanceReceiptAmount;
@@ -1213,6 +1548,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Apply API v2 specific adjustments
      */
     private applyApiV2Adjustments(requestObj: LedgerResponse): LedgerResponse {
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             return this.adjustmentUtilityService.getAdjustmentObject(requestObj);
         }
@@ -1223,6 +1561,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Execute the transaction based on petty cash mode
      */
     private executeTransaction(requestObj: LedgerResponse): LedgerResponse | void {
+        /**
+         * Handles if functionality
+         */
         if (this.isPettyCash) {
             return requestObj;
         }
@@ -1238,6 +1579,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj['handleNetworkDisconnection'] = true;
         requestObj['refreshLedger'] = false;
 
+        /**
+         * Handles if functionality
+         */
         if (this.entryAccountUniqueName && this.entryAccountUniqueName !== this.changedAccountUniq) {
             requestObj['refreshLedger'] = true;
         }
@@ -1247,6 +1591,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Dispatch the appropriate update action
      */
     private dispatchUpdateAction(requestObj: LedgerResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (this.baseAccountChanged) {
             this.store.dispatch(this.ledgerAction.updateTxnEntry(
                 requestObj,
@@ -1268,6 +1615,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public ngOnDestroy(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isPettyCash) {
             document.querySelector('body').classList.remove('ledger-body');
         }
@@ -1278,9 +1628,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         document.querySelector('body')?.classList?.remove('update-ledger-entry-panel-popup');
     }
 
+    /**
+     * Handles downloadAttachedFile functionality
+     */
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
         this.ledgerService.downloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+            /**
+             * Handles if functionality
+             */
             if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body?.uploadedFile, `image/${d.body?.fileType}`, 512);
                 return saveAs(blob, d.body?.name);
@@ -1290,14 +1646,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
+    /**
+     * Handles downloadInvoice functionality
+     */
     public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();
         let downloadRequest = new DownloadLedgerRequest();
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             downloadRequest.uniqueName = transaction?.voucherUniqueName;
         }
         downloadRequest.voucherType = (transaction?.voucherGeneratedType) ? transaction?.voucherGeneratedType : transaction?.voucher?.name;
         this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+            /**
+             * Handles if functionality
+             */
             if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.activeAccount.name} - ${transaction?.voucherNumber}.pdf`);
@@ -1307,16 +1672,28 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
+    /**
+     * Shows quickaccountmodal element
+     */
     public showQuickAccountModal() {
         this.showQuickAccountModalFromUpdateLedger.emit(true);
     }
 
+    /**
+     * Handles changeBaseAccount functionality
+     */
     public changeBaseAccount(acc) {
         this.openDropDown = false;
+        /**
+         * Handles if functionality
+         */
         if (!acc) {
             this.toaster.showSnackBar("error", this.localeData?.account_unchanged);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (acc === this.baseAcc) {
             this.toaster.showSnackBar("error", this.localeData?.account_unchanged);
             return;
@@ -1326,11 +1703,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.baseAccountChanged = true;
         this.accountUniqueName = acc?.value;
 
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             // get flatten_accounts list && get transactions list && get ledger account list
+            /**
+             * Handles observableCombineLatest functionality
+             */
             observableCombineLatest([this.selectedLedgerStream$, this.accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$])
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe((resp: any[]) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (resp[0] && resp[1] && resp[2]) {
                         this.initEntry(resp, true);
                     }
@@ -1338,7 +1724,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Opens baseaccountmodal
+     */
     public openBaseAccountModal() {
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
             this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
             return;
@@ -1356,9 +1748,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             name: event?.label,
             shortCode: event?.value,
         }
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             this.resetInvoiceList();
         }
+        /**
+         * Handles if functionality
+         */
         if (event?.value === VoucherTypeEnum.creditNote || event?.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
         }
@@ -1374,9 +1772,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleVoucherAdjustment(isUpdateMode?: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.vm.selectedLedger?.voucherGenerated && this.vm.selectedLedger?.voucher?.shortCode !== 'pur') {
             // Voucher must be generated for all vouchers except purchase order
             this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
+            /**
+             * Handles if functionality
+             */
             if (this.isAdjustAdvanceReceiptSelected) {
                 this.isAdjustAdvanceReceiptSelected = false;
             } else if (this.isAdjustReceiptSelected) {
@@ -1386,9 +1790,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucherAdjustments && !this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments = [];
         }
+        /**
+         * Handles if functionality
+         */
         if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected || this.isAdjustVoucherSelected) && (!this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length || isUpdateMode)) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
@@ -1403,6 +1813,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public checkForGeneratedVoucher(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event && this.vm.selectedLedger?.voucher?.shortCode !== 'pur' && !this.vm.selectedLedger?.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
             this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
@@ -1418,24 +1831,36 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public getInvoiceListsForCreditNote(): void {
         let request;
 
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             let particularAccount = (this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.vm.selectedLedger?.particular : this.vm.selectedLedger?.transactions[0]?.particular;
 
             request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: particularAccount, voucherType: this.vm.selectedLedger?.voucher?.shortCode, ledgerAccount: this.activeAccount });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!request) {
             return;
         }
 
         request.number = this.searchReferenceVoucher;
 
+        /**
+         * Handles if functionality
+         */
         if (request.number) {
             this.resetInvoiceList();
         }
 
         request.page = this.referenceVouchersCurrentPage;
 
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2 && request.page > 1 && this.referenceVouchersTotalPages < request.page) {
             return;
         }
@@ -1443,6 +1868,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.referenceVouchersCurrentPage++;
 
         let date;
+        /**
+         * Handles if functionality
+         */
         if (typeof this.vm.selectedLedger.entryDate === 'string') {
             date = this.vm.selectedLedger.entryDate;
         } else {
@@ -1450,11 +1878,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body) {
                 this.referenceVouchersTotalPages = response.body.totalPages;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body.results || response.body.items) {
                     let items = [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.body.results) {
                         items = response.body.results;
                     } else if (response.body.items) {
@@ -1471,11 +1908,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
                 let invoiceSelected;
                 let selectedInvoice;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherApiVersion === 2) {
                     selectedInvoice = this.vm.selectedLedger?.referenceVoucher ? this.vm.selectedLedger?.referenceVoucher : false;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (selectedInvoice) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.voucherApiVersion === 2) {
                         selectedInvoice.number = this.generalService.getVoucherNumberLabel(selectedInvoice?.voucherType, selectedInvoice?.number, this.commonLocaleData);
 
@@ -1486,6 +1932,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         };
 
                         const linkedInvoice = this.invoiceList.find(invoice => invoice?.value === invoiceSelected?.value);
+                        /**
+                         * Handles if functionality
+                         */
                         if (!linkedInvoice) {
                             this.invoiceList.push(invoiceSelected);
                         }
@@ -1510,13 +1959,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.forceClear$ = observableOf({ status: true });
         this.selectedInvoice = '';
 
+        /**
+         * Handles if functionality
+         */
         if (!this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
             this.vm.selectedLedger.generateInvoice = this.manualGenerateVoucherChecked;
         }
     }
 
+    /**
+     * Retrieves invoicelists data
+     */
     public getInvoiceLists() {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt') {
+            /**
+             * Handles if functionality
+             */
             if (this.isPettyCash && !this.accountUniqueName) {
                 let message = this.localeData?.account_entry_error;
                 message = message?.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
@@ -1528,8 +1989,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Handles selectInvoice functionality
+     */
     public selectInvoice(invoiceNo, ev) {
         invoiceNo.isSelected = ev.target?.checked;
+        /**
+         * Handles if functionality
+         */
         if (ev.target?.checked) {
             this.vm.selectedLedger.invoicesToBePaid.push(invoiceNo.label);
         } else {
@@ -1545,8 +2012,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public creditNoteInvoiceSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value && event.additional) {
+            /**
+             * Handles if functionality
+             */
             if (this.vm.selectedLedger) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherApiVersion === 2) {
                     this.vm.selectedLedger.referenceVoucher = {
                         uniqueName: event.value
@@ -1555,7 +2031,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
             this.vm.selectedLedger.generateInvoice = true;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.vm.selectedLedger) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherApiVersion === 2) {
                     this.vm.selectedLedger.referenceVoucher = null;
                 }
@@ -1563,16 +2045,28 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Opens headerdropdown
+     */
     public openHeaderDropDown() {
         this.entryAccountUniqueName = "";
 
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2 || !this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
             this.entryAccountUniqueName = this.vm.selectedLedger.particular?.uniqueName;
             this.openDropDown = true;
         }
     }
 
+    /**
+     * Handles keydownPressed functionality
+     */
     public keydownPressed(e) {
+        /**
+         * Handles if functionality
+         */
         if (e?.code === 'ArrowDown') {
             this.keydownClassAdded = true;
         } else if (e?.code === 'Enter' && this.keydownClassAdded) {
@@ -1584,51 +2078,96 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     }
 
+    /**
+     * Toggles asidepaneopen state
+     */
     public toggleAsidePaneOpen() {
+        /**
+         * Handles if functionality
+         */
         if (document.getElementById('createNewId')) {
             document.getElementById('createNewId').click();
             this.keydownClassAdded = false;
         }
+        /**
+         * Handles if functionality
+         */
         if (document.getElementById('createNewId2')) {
             document.getElementById('createNewId2').click();
             this.keydownClassAdded = false;
         }
     }
 
+    /**
+     * Hides discounttax element
+     */
     public hideDiscountTax(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.discountComponent) {
             this.discountComponent.discountMenu = false;
         }
     }
 
+    /**
+     * Hides discount element
+     */
     public hideDiscount(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.discountComponent) {
             this.discountComponent?.change();
             this.discountComponent.discountMenu = false;
         }
     }
 
+    /**
+     * Hides tax element
+     */
     public hideTax(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.taxControll) {
             this.taxControll?.change();
         }
     }
 
+    /**
+     * Toggles currency state
+     */
     public async toggleCurrency() {
         this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrencyForDisplay === 1 ? 0 : 1;
         let rate = 0;
+        /**
+         * Handles if functionality
+         */
         if (Number(this.vm.selectedLedger?.exchangeRate)) {
             rate = 1 / this.vm.selectedLedger?.exchangeRate;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger) {
             this.vm.selectedLedger = { ...this.vm.selectedLedger, exchangeRate: rate };
         }
     }
 
+    /**
+     * Handles exchangeRateChanged functionality
+     */
     public exchangeRateChanged() {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger) {
             this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger?.exchangeRate) || 0;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.vm.stockTrxEntry && this.vm.stockTrxEntry.inventory && this.vm.stockTrxEntry.inventory.unit && this.vm.selectedLedger && this.vm.selectedLedger.unitRates) {
             const stock = this.vm.stockTrxEntry.unitRate.find(rate => {
                 return rate.stockUnitCode === this.vm.stockTrxEntry.inventory.unit.code;
@@ -1648,6 +2187,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public changeRcmCheckboxState(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isPettyCash && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch) && (this.branches && this.branches.length > 1)) {
             return;
         }
@@ -1662,11 +2204,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public toggleRcmCheckbox(event: any, element: string): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isPettyCash && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch) && (this.branches && this.branches.length > 1)) {
             return;
         }
         let isChecked;
 
+        /**
+         * Handles if functionality
+         */
         if (element === "checkbox") {
             isChecked = event?.checked;
             this.rcmCheckbox['checked'] = !isChecked;
@@ -1696,6 +2244,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleRcmChange(action: string): void {
+        /**
+         * Handles if functionality
+         */
         if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
@@ -1715,10 +2266,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
         this.vm.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
+        /**
+         * Handles if functionality
+         */
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.isAdvanceReceipt && !restrictPopup) {
+            /**
+             * Handles if functionality
+             */
             if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
                 this.advanceReceiptRemoveDialogRef = this.dialog.open(ConfirmModalComponent, {
                             width: '630px',
@@ -1742,12 +2302,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     // petty cash account changes, change all things related to account uniquename
     // like multi currency account, base account etc...
+    /**
+     * Handles pettyCashAccountChanged functionality
+     */
     private pettyCashAccountChanged() {
         // set account details for multi currency account
         this.prepareMultiCurrencyObject(this.accountUniqueName);
         // end multi currency assign
     }
 
+    /**
+     * Handles assignPrefixAndSuffixForCurrency functionality
+     */
     private assignPrefixAndSuffixForCurrency() {
         this.vm.isPrefixAppliedForCurrency = this.vm.isPrefixAppliedForCurrency = !(['AED'].includes(this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails?.code : this.vm.foreignCurrencyDetails?.code));
         this.vm.selectedPrefixForCurrency = this.vm.isPrefixAppliedForCurrency ?
@@ -1767,6 +2333,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleQuantityChange(value: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.vm && this.vm.stockTrxEntry && this.vm.stockTrxEntry.inventory) {
             this.vm.stockTrxEntry.inventory.quantity = Number(this.vm.stockTrxEntry.inventory.quantity);
         }
@@ -1779,12 +2348,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.searchResultsPaginationData.page) {
             this.onSearchQueryChanged(
                 this.searchResultsPaginationData.query,
                 this.searchResultsPaginationData.page + 1,
                 this.searchResultsPaginationData.query ? true : false,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.searchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -1810,6 +2385,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+        /**
+         * Handles if functionality
+         */
         if (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback) {
             this.searchResultsPaginationData.query = query;
             const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount?.uniqueName) : '';
@@ -1824,12 +2402,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 accountUniqueName: encodeURIComponent(accountUniqueName),
                 count: API_BULK_FETCH_LIMIT
             }
+            /**
+             * Handles if functionality
+             */
             if (this.isAccountSearchData) {
                 this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!data?.body?.results?.length || (data?.body?.results?.length && API_BULK_FETCH_LIMIT !== data?.body?.count)) {
                         this.isAccountSearchData = false;
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (data && data.body && data.body.results) {
                         const searchResults = data.body.results.map(result => {
                             return {
@@ -1839,6 +2426,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             }
                         }) || [];
                         this.noResultsFoundLabel = SearchResultText.NotFound;
+                        /**
+                         * Handles if functionality
+                         */
                         if (page === 1) {
                             this.searchResults = searchResults;
                         } else {
@@ -1848,7 +2438,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             ];
                         }
                         this.searchResultsPaginationData.page = data.body.page;
+                        /**
+                         * Handles if functionality
+                         */
                         if (successCallback) {
+                            /**
+                             * Handles successCallback functionality
+                             */
                             successCallback(data.body.results);
                         } else {
                             this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
@@ -1896,8 +2492,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private isStockItemPresent(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger.transactions) {
+            /**
+             * Handles for functionality
+             */
             for (let index = 0; index < this.vm.selectedLedger.transactions.length; index++) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.vm.selectedLedger.transactions[index].inventory) {
                     return true;
                 }
@@ -1915,7 +2520,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private isRcmEntryPresent(transactions: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (transactions) {
+            /**
+             * Handles for functionality
+             */
             for (let index = 0; index < transactions.length; index++) {
                 const selectedAccountDetails = {
                     uniqueName: transactions[index].particular?.uniqueName || '',
@@ -1923,9 +2534,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
                 const activeAccountDetails = {
                     uniqueName: this.baseAccountDetails.particular ? this.baseAccountDetails.particular?.uniqueName : '',
+                    /**
+                     * Handles parentGroups functionality
+                     */
                     parentGroups: (this.baseAccountDetails && this.baseAccountDetails.parentGroups) ? this.baseAccountDetails.parentGroups : []
                 }
                 const isRcmEntry = this.generalService.shouldShowRcmSection(activeAccountDetails, selectedAccountDetails, this.activeCompany);
+                /**
+                 * Handles if functionality
+                 */
                 if (isRcmEntry) {
                     return true;
                 }
@@ -1944,6 +2561,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private checkTouristSchemeApplicable(baseAccountDetails: any, selectedAccountDetails, companyProfile): boolean {
+        /**
+         * Handles if functionality
+         */
         if (baseAccountDetails?.touristSchemeApplicable) {
             return true;
         } else if (baseAccountDetails?.voucher && (baseAccountDetails?.voucher?.name === 'sales' || baseAccountDetails?.voucher?.name === 'cash') && selectedAccountDetails && selectedAccountDetails.body && selectedAccountDetails.body.parentGroups && selectedAccountDetails.body.parentGroups.length > 1 && selectedAccountDetails.body?.parentGroups[1]?.uniqueName && this.allowParentGroup.includes(selectedAccountDetails.body.parentGroups[1]?.uniqueName) && companyProfile && companyProfile.countryV2 && companyProfile.countryV2.alpha2CountryCode && companyProfile.countryV2.alpha2CountryCode === 'AE') {
@@ -1971,6 +2591,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public allowAlphanumericChar(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value) {
             this.vm.selectedLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
         }
@@ -1993,10 +2616,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public openAdjustmentInfo(isOpen: boolean): void {
         this.isLastAdjustmentInfoOpen = isOpen;
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.isAdjustmentInfoOpen = isOpen;
         } else {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isLastAdjustmentInfoOpen) {
                     this.isAdjustmentInfoOpen = isOpen;
                 }
@@ -2011,6 +2643,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public adjustedInvoiceAmountChange(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             let totalAmount: number = 0;
             (Array.isArray(this.vm.selectedLedger.voucherAdjustments.adjustments) ? this.vm.selectedLedger.voucherAdjustments.adjustments : []).forEach(item => {
@@ -2028,6 +2663,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public calculateInclusiveTaxesForAdvanceReceiptsInvoices(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
                 item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
@@ -2041,6 +2679,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     * @memberof UpdateLedgerEntryPanelComponent
     */
     public adjustedReceiptsAmountChange(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             let totalAmount: number = 0;
             (Array.isArray(this.vm.selectedLedger.voucherAdjustments.adjustments) ? this.vm.selectedLedger.voucherAdjustments.adjustments : []).forEach(item => {
@@ -2059,6 +2700,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public calculateInclusiveTaxesForAdvanceReceipts(): void {
         let totalAmount: number = 0;
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
                 item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
@@ -2075,6 +2719,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public checkAdjustedAmountExceed(totalAmount: number): void {
+        /**
+         * Handles if functionality
+         */
         if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
             this.isAdjustedAmountExcess = true;
             this.adjustedExcessAmount = Number(totalAmount) - Number(this.vm.compoundTotal);
@@ -2091,6 +2738,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public checkAdvanceReceiptOrInvoiceAdjusted(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === 'receipt') {
             this.adjustedInvoiceAmountChange();
         } else if (this.isAdjustedWithAdvanceReceipt && this.vm.selectedLedger.voucherGeneratedType === 'sales') {
@@ -2107,6 +2757,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any): void {
         this.isAdvanceReceipt = !userResponse;
         this.handleAdvanceReceiptChange(true);
+        /**
+         * Handles if functionality
+         */
         if (this.isAdvanceReceipt) {
             this.vm.selectedLedger.voucher.shortCode = "advance-receipt";
             this.vm.selectedLedger.voucher.name = this.commonLocaleData?.app_voucher_types?.advance_receipt;
@@ -2124,8 +2777,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
+            /**
+             * Handles if functionality
+             */
             if (adjustments) {
                 (Array.isArray(adjustments) ? adjustments : []).forEach(adjustment => {
                     adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment?.voucherType, adjustment?.voucherNumber, this.commonLocaleData);
@@ -2138,6 +2797,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     tdsAmount: null,
                     description: null
                 };
+                /**
+                 * Handles if functionality
+                 */
                 if (!adjustments || !adjustments?.length) {
                     // No adjustments done clear the adjustment checkbox
                     this.isAdjustReceiptSelected = false;
@@ -2145,6 +2807,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.isAdjustAdvanceReceiptSelected = false;
                     this.isAdjustVoucherSelected = false;
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.selectInvoice) {
                         this.vm.selectedLedger.generateInvoice = this.manualGenerateVoucherChecked;
                     }
@@ -2164,12 +2829,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments && !this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
             // No adjustments done clear the adjustment checkbox
             this.isAdjustReceiptSelected = false;
             this.isAdjustVoucherSelected = false;
             this.isAdjustAdvanceReceiptSelected = false;
 
+            /**
+             * Handles if functionality
+             */
             if (!this.vm.isInvoiceGeneratedAlready) {
                 this.vm.selectedLedger.voucherGenerated = this.manualGenerateVoucherChecked;
             }
@@ -2187,19 +2858,31 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private prepareAdjustVoucherConfiguration(): void {
         let customerUniqueName = [];
         this.vm.selectedLedger.transactions?.forEach(transaction => {
+            /**
+             * Handles if functionality
+             */
             if (transaction?.particular && transaction?.particular?.uniqueName) {
                 const uniqueName = transaction?.particular?.uniqueName.split('#')[0];
                 customerUniqueName.push(uniqueName);
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (!this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length && this.originalVoucherAdjustments?.adjustments?.length) {
             // If length of voucher adjustment is 0 i.e., user has changed its original adjustments but has not performed update operation
             // and voucher already has original adjustments to it then show the
             // original adjustments in adjustment popup
             this.vm.selectedLedger.voucherAdjustments = cloneDeep(this.originalVoucherAdjustments);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             (Array.isArray(this.vm.selectedLedger.voucherAdjustments.adjustments) ? this.vm.selectedLedger.voucherAdjustments.adjustments : []).forEach(adjustment => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!adjustment.balanceDue) {
                     adjustment.balanceDue = cloneDeep(adjustment.adjustmentAmount);
                 } else if (!adjustment.adjustmentAmount) {
@@ -2244,11 +2927,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             let particularAccount;
 
             const mainTransaction = this.vm.selectedLedger?.transactions?.filter(transaction => !transaction?.isDiscount && !transaction?.isTax && transaction?.particular?.uniqueName && transaction?.particular?.uniqueName !== 'roundoff');
 
+            /**
+             * Handles particularAccount functionality
+             */
             particularAccount = (this.vm.selectedLedger?.particular?.uniqueName === this.activeAccount?.uniqueName) ? mainTransaction[0]?.particular : this.vm.selectedLedger?.particular;
 
             this.invoiceListRequestParams = { particularAccount: particularAccount, voucherType: this.vm.selectedLedger?.voucher?.name, ledgerAccount: this.activeAccount };
@@ -2265,8 +2954,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private makeAdjustmentCalculation(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
             this.isAdjustVoucherSelected = true;
+            /**
+             * Handles if functionality
+             */
             if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'sales')) {
                 this.isAdjustedInvoicesWithAdvanceReceipt = true;
                 this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
@@ -2277,6 +2972,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.isAdjustedWithAdvanceReceipt = false;
                 this.isAdjustedInvoicesWithAdvanceReceipt = false;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.isAdvanceReceipt) {
                 this.isAdjustAdvanceReceiptSelected = true;
             } else if (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt') {
@@ -2313,6 +3011,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private formatAdjustments(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
             (Array.isArray(this.vm.selectedLedger.voucherAdjustments.adjustments) ? this.vm.selectedLedger.voucherAdjustments.adjustments : []).forEach(adjustment => {
                 adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
@@ -2331,6 +3032,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // check we already have others account in flatten account, then don't do anything
         this.searchService.searchAccountV2({ q: 'others' }).subscribe(response => {
             const isThereOthersAcc = !!response?.body?.results?.length;
+            /**
+             * Handles if functionality
+             */
             if (!isThereOthersAcc) {
                 // add new dummy account in flatten account array
                 this.vm.otherAccountList.push({
@@ -2348,6 +3052,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.vm.voucherTypeList = [{
                 label: this.commonLocaleData?.app_voucher_types?.sales,
@@ -2384,9 +3091,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.availableItcList[2].label = this.localeData?.others;
 
             // get flatten_accounts list && get transactions list && get ledger account list
+            /**
+             * Handles observableCombineLatest functionality
+             */
             observableCombineLatest([this.selectedLedgerStream$, this.accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$])
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe((resp: any[]) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (resp[0] && resp[1] && resp[2]) {
                         this.initEntry(resp);
                     }
@@ -2405,12 +3118,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private initEntry(resp: any[], updateBaseAccountParticular?: boolean): void {
         // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
+        /**
+         * Handles if functionality
+         */
         if (this.isPettyCash && this.accountUniqueName && resp[1]?.status !== 'success') {
             return;
         }
 
         this.checkSundryDebtorCreditorStatus(resp[1]);
 
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0], this.vm.selectedLedger.voucherGeneratedType);
             this.transactionDetails = cloneDeep(resp[0]);
@@ -2418,6 +3137,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.isEinvoiceGenerated = resp[0].einvoiceGenerated;
 
+        /**
+         * Handles if functionality
+         */
         if (updateBaseAccountParticular) {
             this.updateBaseAccountParticular(resp);
         }
@@ -2429,6 +3151,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[0].transactions);
         this.isTouristSchemeApplicable = this.checkTouristSchemeApplicable(resp[0], resp[1], resp[2]);
         this.shouldShowRcmTaxableAmount = resp[0].reverseChargeTaxableAmount !== undefined && resp[0].reverseChargeTaxableAmount !== null;
+        /**
+         * Handles if functionality
+         */
         if (this.shouldShowRcmTaxableAmount) {
             // Received taxable amount is a truthy value
             resp[0].reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(resp[0].reverseChargeTaxableAmount);
@@ -2449,6 +3174,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.originalVoucherAdjustments = cloneDeep(this.vm.selectedLedger?.voucherAdjustments);
         this.formatAdjustments();
         const voucherGeneratedType = this.vm.selectedLedger.voucherGeneratedType || this.vm.selectedLedger.voucher?.shortCode;
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger && !this.invoiceList?.length && (voucherGeneratedType === VoucherTypeEnum.creditNote ||
             voucherGeneratedType === VoucherTypeEnum.debitNote)) {
             this.getInvoiceListsForCreditNote();
@@ -2461,6 +3189,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
         this.vm.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger.voucher && this.vm.selectedLedger.voucher?.shortCode === 'rcpt' && this.isAdvanceReceipt) {
             this.vm.selectedLedger.voucher.shortCode = 'advance-receipt';
             this.vm.selectedLedger.voucher.name = this.commonLocaleData?.app_voucher_types?.advance_receipt;
@@ -2468,6 +3199,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger?.voucher?.shortCode, this.commonLocaleData);
         this.makeAdjustmentCalculation();
 
+        /**
+         * Handles if functionality
+         */
         if (this.isPettyCash) {
             this.vm.selectedLedger.transactions?.forEach(item => {
                 item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
@@ -2483,6 +3217,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // special case in petty cash mode
                 // others account entry
                 // need to assign dummy particular, when we found particular uniquename as null
+                /**
+                 * Handles if functionality
+                 */
                 if (!f.particular?.uniqueName) {
                     f.particular.uniqueName = 'others';
                     f.particular.name = 'others';
@@ -2507,6 +3244,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         otherTaxesModal.itemLabel = resp[0].particular.name;
 
         let tax: TaxResponse;
+        /**
+         * Handles if functionality
+         */
         if (resp[0].tcsTaxes && resp[0].tcsTaxes.length) {
             tax = companyTaxes.find(f => f?.uniqueName === resp[0].tcsTaxes[0]);
             this.vm.selectedLedger.otherTaxType = 'tcs';
@@ -2515,6 +3255,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.selectedLedger.otherTaxType = 'tds';
         }
 
+        /**
+         * Handles if functionality
+         */
         if (tax) {
             otherTaxesModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
         }
@@ -2529,6 +3272,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.baseAcc = resp[0].particular?.uniqueName;
         this.firstBaseAccountSelected = resp[0].particular?.uniqueName;
 
+        /**
+         * Handles if functionality
+         */
         if (resp[0].salesPerson) {
             this.vm.selectedLedger.salesPersonUniqueName = resp[0].salesPerson.uniqueName;
         } else {
@@ -2540,8 +3286,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.selectedLedger.transactions?.map((t, index) => {
             t.amount = giddhRoundOff(t.amount, this.vm.giddhBalanceDecimalPlaces);
 
+            /**
+             * Handles if functionality
+             */
             if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t?.isTax && t?.particular?.uniqueName !== 'roundoff') {
                 let category = this.vm.getAccountCategory(t.particular, t.particular?.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.vm.isValidCategory(category)) {
                     /**
                      * replace transaction amount with the actualAmount key that we got in response of get-ledger
@@ -2553,14 +3305,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         t.amount = this.vm.selectedLedger.actualAmount;
                     }
                     // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
+                    /**
+                     * Handles if functionality
+                     */
                     if (t.inventory) {
                         t.inventory.amount = this.vm.selectedLedger.actualAmount;
                         t.inventory.rate = this.vm.selectedLedger.actualRate;
                     }
                 }
             }
+            /**
+             * Handles if functionality
+             */
             if (t.inventory) {
                 this.selectedStockVariant = { name: t.inventory.variant?.name, uniqueName: t.inventory.variant?.uniqueName };
+                /**
+                 * Handles if functionality
+                 */
                 if (this.selectedStockUniquenName !== t.inventory.stock?.uniqueName) {
                     /** Load stock variant only when stock has changed (stock will not be changed if the
                      user only updates the entry) */
@@ -2571,6 +3332,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.vm.isInclusiveEntry = t.inventory.taxInclusive;
 
                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
+                /**
+                 * Handles if functionality
+                 */
                 if (unitRates && unitRates.length) {
                     (Array.isArray(unitRates) ? unitRates : []).forEach(rate => rate.code = rate?.stockUnitCode);
                     t.unitRate = unitRates;
@@ -2597,6 +3361,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 t.particular.name = t.particular?.name + ' (' + t.inventory.stock?.name + ')';
                 // Show warehouse dropdown only for stock items
                 const warehouseDetails = t.inventory.warehouse;
+                /**
+                 * Handles if functionality
+                 */
                 if (warehouseDetails) {
                     this.selectedWarehouse = warehouseDetails?.uniqueName;
                     this.selectedWarehouseName = warehouseDetails?.name;
@@ -2623,8 +3390,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            /**
+             * Handles if functionality
+             */
             if (warehouses) {
                 let warehouseResults = cloneDeep(warehouses.results);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.selectedWarehouse) {
                     warehouseResults = warehouseResults?.filter(warehouse => this.selectedWarehouse === warehouse?.uniqueName || !warehouse.isArchived);
                 }
@@ -2638,6 +3411,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         // check if entry allows to show discount and taxes box
         // first check with opened lager
+        /**
+         * Handles if functionality
+         */
         if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
             this.vm.showNewEntryPanel = true;
         } else {
@@ -2647,16 +3423,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         this.vm.reInitilizeDiscount(resp[0]);
+        /**
+         * Handles if functionality
+         */
         if (!updateBaseAccountParticular && (this.isPettyCash || this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1))) {
             this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
             this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.vm.stockTrxEntry) {
             this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
         }
         this.existingTaxTxn = lodashFilter(this.vm.selectedLedger.transactions, (o) => o.isTax);
         //#endregion
+        /**
+         * Handles if functionality
+         */
         if (!this.vm.showNewEntryPanel || this.isAdvanceReceipt) {
             // Calculate entry total for credit and debit transactions when UI panel at the bottom to update
             // transaction is not visible or current transaction is advance receipt as discount field is not displayed
@@ -2666,18 +3451,33 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.generateCompoundTotal();
         }
         this.vm.generatePanelAmount();
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.vm.calculateOtherTaxes(this.vm.selectedLedger.otherTaxModal);
             }, 200);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.isAdvanceReceipt) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.handleAdvanceReceiptChange();
             }, 100);
         }
 
         /** Since we are not showing amount bar in case of journal voucher, calculation is not working automatically so we are calculating here */
+        /**
+         * Handles if functionality
+         */
         if (this.vm.selectedLedger.voucher.shortCode === 'jr') {
             this.vm.inventoryAmountChanged();
         }
@@ -2697,17 +3497,32 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public downloadFiles(downloadOption: string, event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             let dataToSend = {
                 voucherType: this.vm.selectedLedger.voucherGeneratedType,
+                /**
+                 * Handles entryUniqueName functionality
+                 */
                 entryUniqueName: (this.vm.selectedLedger.voucherUniqueName) ? undefined : this.vm.selectedLedger?.uniqueName,
+                /**
+                 * Handles uniqueName functionality
+                 */
                 uniqueName: (this.vm.selectedLedger.voucherUniqueName) ? this.vm.selectedLedger.voucherUniqueName : undefined
             };
 
             let fileName = (downloadOption === "VOUCHER") ? this.vm.selectedLedger.voucherNumber + '.pdf' : this.vm.selectedLedger.attachedFile;
 
             this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status !== "error") {
+                    /**
+                     * Saves as data
+                     */
                     saveAs(response, fileName);
                 } else {
                     this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -2771,6 +3586,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public getPurchaseSettings(): void {
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
                 this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
             } else {
@@ -2809,6 +3627,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            /**
+             * Handles map functionality
+             */
             map((variants: IVariant[]) => (Array.isArray(variants) ? variants : []).map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName }))), takeUntil(this.destroyed$)).subscribe(res => {
                 this.stockVariants.next(res);
                 this.changeDetectorRef.detectChanges();
@@ -2823,6 +3644,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private assignStockVariantDetails(): void {
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.length && res.findIndex(variant => variant.value === this.selectedStockVariant.uniqueName) === -1) {
                 // Only reset the stock variant when the stock is changed
                 this.selectedStockVariant = { name: res[0].label, uniqueName: res[0].value };
@@ -2847,6 +3671,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             event.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             // directly assign additional property
+            /**
+             * Handles if functionality
+             */
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
                 const taxes = this.generalService.fetchTaxesOnPriority(
@@ -2871,6 +3698,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     uNameStr: data.body.parentGroups.join(', '),
                     category: data.body.category
                 };
+                /**
+                 * Handles if functionality
+                 */
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
@@ -2880,6 +3710,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let stockUniqueName = '';
                 let stockUnitUniqueName = '';
                 const stockDetails = txn?.selectedAccount.stock;
+                /**
+                 * Handles if functionality
+                 */
                 if (txn?.selectedAccount && stockDetails) {
                     const variantUnitRates = txn.selectedAccount?.stock?.variant?.unitRates;
                     const defaultUnit = {
@@ -2900,6 +3733,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     stockUniqueName = stockDetails?.uniqueName;
 
                     const matchedUnit = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                    /**
+                     * Handles if functionality
+                     */
                     if (matchedUnit?.length && txn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
                         rate = Number((matchedUnit[0].rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
 
@@ -2907,6 +3743,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                         txn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
                             this.vm.discountArray = this.vm.discountArray?.map(item => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (variantDiscount?.discount?.uniqueName === item?.discountUniqueName) {
                                     item.isActive = true;
                                 }
@@ -2916,9 +3755,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     } else {
                         this.vm.discountArray = this.vm.discountArray?.map((item, index) => { if (index > 0) { item.isActive = false; } return item; });
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
                             (Array.isArray(this.accountOtherApplicableDiscount) ? this.accountOtherApplicableDiscount : []).forEach(element => {
                                 this.vm.discountArray = this.vm.discountArray?.map(item => {
+                                    /**
+                                     * Handles if functionality
+                                     */
                                     if (element?.uniqueName === item?.discountUniqueName) {
                                         item.isActive = true;
                                     }
@@ -2929,6 +3774,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (stockName && stockUniqueName) {
                     txn.inventory = {
                         stock: {
@@ -2948,20 +3796,32 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         rate
                     };
                     // Stock item, show the warehouse & variant drop down
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.isStockPresent) {
                         this.isStockPresent = true;
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.selectedStockUniquenName !== stockUniqueName) {
                         // Load variants only when stock changes
                         this.selectedStockUniquenName = stockUniqueName;
                         this.loadStockVariants(stockUniqueName);
                     }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (rate > 0) {
                     txn.amount = rate;
                 }
                 // check if need to showEntryPanel
                 // first check with opened lager
+                /**
+                 * Handles if functionality
+                 */
                 if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
                     this.vm.showNewEntryPanel = true;
                 } else {
@@ -2970,6 +3830,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
                 }
                 const category = txn?.selectedAccount.category;
+                /**
+                 * Handles if functionality
+                 */
                 if (stockDetails && ((stockDetails.variant?.salesTaxInclusive && category === 'income') ||
                     (stockDetails.variant?.purchaseTaxInclusive && category === 'expenses') ||
                     (stockDetails.variant?.fixedAssetTaxInclusive && category === 'fixedassets'))) {
@@ -2995,6 +3858,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
         this.discountDialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getAllDiscounts();
             }
@@ -3010,6 +3876,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private getAllDiscounts(): void {
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountsList = response?.body;
                 this.changeDetectorRef.detectChanges();
@@ -3046,7 +3915,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public moveToNextTransactions(): void {
         let nextIndex = this.index + 1;
 
+        /**
+         * Handles while functionality
+         */
         while (nextIndex < this.transactionsList.length) {
+            /**
+             * Handles if functionality
+             */
             if (this.transactionsList[nextIndex]?.entryUniqueName !== this.transaction?.entryUniqueName) {
                 this.index = nextIndex;
                 this.transaction = this.transactionsList[this.index];
@@ -3072,6 +3947,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public moveToPreviousTransactions(): void {
         // If currently at "No Data Found" state and moving back, restore the last valid entry
+        /**
+         * Handles if functionality
+         */
         if (this.isShowNoDataFound && this.index === this.transactionsList.length) {
             this.index = this.transactionsList.length - 1; // Move to last entry
             this.transaction = this.transactionsList[this.index];
@@ -3082,7 +3960,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         let prevIndex = this.index - 1;
 
+        /**
+         * Handles while functionality
+         */
         while (prevIndex >= 0) {
+            /**
+             * Handles if functionality
+             */
             if (this.transactionsList[prevIndex]?.entryUniqueName !== this.transaction?.entryUniqueName) {
                 this.index = prevIndex;
                 this.transaction = this.transactionsList[this.index];
@@ -3109,18 +3993,33 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public closeAll(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.menuTrigger) {
             this.menuTrigger.closeMenu();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.autocompleteTrigger) {
             this.autocompleteTrigger.closePanel();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.matSelect) {
             this.matSelect.close();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.isDatepickerOpen) {
             const overlayElement = document.querySelector('.cdk-overlay-pane.mat-datepicker-popup');
+            /**
+             * Handles if functionality
+             */
             if (overlayElement) {
                 this.renderer.setStyle(overlayElement, 'display', 'none');
             }
@@ -3134,7 +4033,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public sliderRefreshData(): void {
         // get entry name and ledger account uniqueName
+        /**
+         * Handles observableCombineLatest functionality
+         */
         observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            /**
+             * Handles if functionality
+             */
             if (resp[0] && resp[1]) {
                 this.entryUniqueName = this.transaction?.entryUniqueName;
                 this.accountUniqueName = resp[1];
@@ -3197,12 +4102,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             isPartOfMultiEntryVoucher = response?.isPartOfMultiEntryVoucher
         });
 
+        /**
+         * Handles if functionality
+         */
         if (!isPartOfMultiEntryVoucher) {
             this.vm.selectedLedger.salesPerson.name = event?.label;
             this.vm.selectedLedger.salesPersonUniqueName = event?.value;
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if ((defaultSalesPerson === event?.value) || (this.vm.selectedLedger.salesPersonUniqueName === event?.value)) {
             return;
         }
@@ -3216,6 +4127,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.vm.selectedLedger.salesPerson.name = event?.label;
                 this.vm.selectedLedger.salesPersonUniqueName = event?.value;
@@ -3256,6 +4170,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Check if account is sundry debtor or creditor
      */
     private checkSundryDebtorCreditorStatus(accountData: any): void {
+        /**
+         * Handles if functionality
+         */
         if (accountData?.body?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(accountData?.body?.parentGroups[1]?.uniqueName)) {
             this.isSundryDebtorCreditor = true;
         } else {
@@ -3280,9 +4197,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         resp[0].particularType = resp[1].body?.accountType;
 
+        /**
+         * Handles if functionality
+         */
         if (resp[1].body?.currency !== resp[2]?.baseCurrency) {
             let date = dayjs().format(GIDDH_DATE_FORMAT);
             this.ledgerService.GetCurrencyRateNewApi(resp[1].body?.currency, resp[2]?.baseCurrency, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.vm.selectedLedger) {
                     this.vm.selectedLedger.exchangeRate = response.body;
                 }
@@ -3295,20 +4218,35 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private setupActiveAccountAndDiscounts(resp: any[]): void {
         // Special check for petty cash mode
+        /**
+         * Handles if functionality
+         */
         if (this.isPettyCash) {
+            /**
+             * Handles if functionality
+             */
             if (resp[0].othersCategory) {
                 this.checkForOtherAccount();
             }
             this.prepareMultiCurrencyObject(this.activeAccount);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.activeAccount) {
+            /**
+             * Handles if functionality
+             */
             if (this.activeAccount.currency && this.vm.isMultiCurrencyAvailable) {
                 this.baseCurrency = this.activeAccount.currency;
             }
 
             this.accountOtherApplicableDiscount = [];
 
+            /**
+             * Handles if functionality
+             */
             if (this.activeAccount.applicableDiscounts && this.activeAccount.applicableDiscounts.length) {
                 this.accountOtherApplicableDiscount = this.activeAccount.applicableDiscounts;
             } else if (this.activeAccount.inheritedDiscounts && this.activeAccount.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount?.length)) {

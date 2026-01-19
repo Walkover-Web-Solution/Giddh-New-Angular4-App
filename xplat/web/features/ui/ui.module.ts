@@ -14,8 +14,15 @@ const MODULES = [
     UISharedModule
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [...MODULES],
     exports: [...MODULES]
 })
+/**
+ * UIModule module
+ * Implements UIModule functionality
+ */
 export class UIModule { }

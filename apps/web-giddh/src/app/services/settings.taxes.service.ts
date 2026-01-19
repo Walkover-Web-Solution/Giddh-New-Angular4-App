@@ -11,12 +11,23 @@ import { ITaxAuthority } from '../models/interfaces/tax.interface';
 import { CreateTaxAuthority, SalesTaxReport, SalesTaxReportRequest } from '../theme/tax-authority/utility/tax-authority.const';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsTaxesService service
+ * Provides settingstaxes related business logic and data operations
+ */
 export class SettingsTaxesService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
@@ -143,6 +154,9 @@ export class SettingsTaxesService {
     public getExportSaleTaxReport(reportType: string, params: SalesTaxReportRequest, isExport: boolean = false): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl;
+        /**
+         * Handles switch functionality
+         */
         switch (reportType) {
             case SalesTaxReport.TaxAuthorityWise: apiUrl +=
                 (isExport ? COMPANY_API.EXPORT_SALES_TAX_AUTHORITY_WISE_REPORT : COMPANY_API.GET_SALES_TAX_AUTHORITY_WISE_REPORT)

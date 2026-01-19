@@ -12,16 +12,30 @@ import { GSTR_API } from './apiurls/gst-r.api';
 import { GST_RETURN_API } from './apiurls/purchase-invoice.api';
 import { concat, get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * GstReconcileService service
+ * Provides gstreconcile related business logic and data operations
+ */
 export class GstReconcileService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
+    /**
+     * Handles GstReconcileGenerateOtp functionality
+     */
     public GstReconcileGenerateOtp(userName: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
@@ -30,6 +44,9 @@ export class GstReconcileService {
             ?.replace(':userName', encodeURIComponent(userName))
         )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<string, string> = res;
                     data.queryString = userName;
@@ -38,6 +55,9 @@ export class GstReconcileService {
                 , catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
+    /**
+     * Handles GstReconcileVerifyOtp functionality
+     */
     public GstReconcileVerifyOtp(model: VerifyOtpRequest): Observable<BaseResponse<string, VerifyOtpRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
@@ -45,6 +65,9 @@ export class GstReconcileService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
             model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<string, VerifyOtpRequest> = res;
                     data.request = model;
@@ -53,6 +76,9 @@ export class GstReconcileService {
                 , catchError((e) => this.errorHandler.HandleCatch<string, VerifyOtpRequest>(e, '')));
     }
 
+    /**
+     * Handles GstReconcileGetInvoices functionality
+     */
     public GstReconcileGetInvoices(model: GstReconcileInvoiceRequest): Observable<BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
@@ -66,19 +92,31 @@ export class GstReconcileService {
             ?.replace(':refresh', model.refresh?.toString())
             ?.replace(':gstReturnType', model.gstReturnType?.toString());
 
+        /**
+         * Handles if functionality
+         */
         if (model.monthYear) {
             url = `${url}&monthYear=${model.monthYear}`;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (model.category) {
             url = `${url}&category=${model.category}`;
         }
+        /**
+         * Handles if functionality
+         */
         if (model.gstin) {
             url = url.concat(`&gstin=${model.gstin}`);
         }
 
         return this.http.get(url)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest> = res;
                     data.queryString = model;
@@ -87,6 +125,9 @@ export class GstReconcileService {
                 , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest>(e, '')));
     }
 
+    /**
+     * Handles GetGstrOverview functionality
+     */
     public GetGstrOverview(type: string, requestParam: GstOverViewRequest): Observable<BaseResponse<GstOverViewResult, GstOverViewRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
@@ -97,6 +138,9 @@ export class GstReconcileService {
             ?.replace(':gstType', type)
         )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<GstOverViewResult, GstOverViewRequest> = res;
                     data.queryString = { requestParam, type };
@@ -105,6 +149,9 @@ export class GstReconcileService {
                 , catchError((e) => this.errorHandler.HandleCatch<GstOverViewResult, GstOverViewRequest>(e, '', { requestParam, type })));
     }
 
+    /**
+     * Handles GetGstr3BOverview functionality
+     */
     public GetGstr3BOverview(type: string, requestParam: GstOverViewRequest): Observable<BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
@@ -115,6 +162,9 @@ export class GstReconcileService {
             ?.replace(':gstType-summary', type)
         )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<Gstr3bOverviewResult, GstOverViewRequest> = res;
                     data.queryString = { requestParam, type };
@@ -123,6 +173,9 @@ export class GstReconcileService {
                 , catchError((e) => this.errorHandler.HandleCatch<Gstr3bOverviewResult, GstOverViewRequest>(e, '', { requestParam, type })));
     }
 
+    /**
+     * Handles GetSummaryTransaction functionality
+     */
     public GetSummaryTransaction(type: string, requestParam: any): Observable<BaseResponse<GstTransactionResult, GStTransactionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS
@@ -138,6 +191,9 @@ export class GstReconcileService {
             ?.replace(':status', requestParam?.status)
         )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<GstTransactionResult, GStTransactionRequest> = res;
                     data.queryString = { requestParam, type };
@@ -146,6 +202,9 @@ export class GstReconcileService {
                 , catchError((e) => this.errorHandler.HandleCatch<GstTransactionResult, GStTransactionRequest>(e, '')));
     }
 
+    /**
+     * Handles GetGstr1SummaryDetails functionality
+     */
     public GetGstr1SummaryDetails(model: Gstr1SummaryRequest): Observable<BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GSTR_API.GSTR1_SUMMARY_DETAILS
@@ -156,6 +215,9 @@ export class GstReconcileService {
             ?.replace(':monthYear', model.monthYear)
         )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest> = res;
                     data.queryString = { model };
@@ -164,6 +226,9 @@ export class GstReconcileService {
                 , catchError((e) => this.errorHandler.HandleCatch<Gstr1SummaryResponse, Gstr1SummaryRequest>(e, '')));
     }
 
+    /**
+     * Handles DownloadGSTRSheet functionality
+     */
     public DownloadGSTRSheet(reqObj: GstrSheetDownloadRequest): Observable<BaseResponse<any, GstrSheetDownloadRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
@@ -182,6 +247,9 @@ export class GstReconcileService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, GstrSheetDownloadRequest>(e)));
     }
 
+    /**
+     * Handles SaveGSPSession functionality
+     */
     public SaveGSPSession(model: GstSaveGspSessionRequest): Observable<BaseResponse<any, GstSaveGspSessionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + GSTR_API.SAVE_GSP_SESSION
@@ -196,6 +264,9 @@ export class GstReconcileService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, GstSaveGspSessionRequest>(e)));
     }
 
+    /**
+     * Handles SaveGSPSessionWithOTP functionality
+     */
     public SaveGSPSessionWithOTP(model: GstSaveGspSessionRequest): Observable<BaseResponse<string, GstSaveGspSessionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + GSTR_API.SAVE_GSP_SESSION_WITH_OTP
@@ -211,6 +282,9 @@ export class GstReconcileService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, GstSaveGspSessionRequest>(e)));
     }
 
+    /**
+     * Handles FileGstr1 functionality
+     */
     public FileGstr1(model: FileGstr1Request): Observable<BaseResponse<string, FileGstr1Request>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + GSTR_API.FILE_GSTR1
@@ -227,6 +301,9 @@ export class GstReconcileService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, FileGstr1Request>(e)));
     }
 
+    /**
+     * Handles GetGSPSession functionality
+     */
     public GetGSPSession(gstin: string): Observable<BaseResponse<GetGspSessionResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GST_RETURN_API.GET_GSP_SESSION
@@ -361,6 +438,9 @@ export class GstReconcileService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
             model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = model;
@@ -383,6 +463,9 @@ export class GstReconcileService {
             ?.replace(':lutNumberUniqueName', encodeURIComponent(model?.uniqueName)),
             model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = model;

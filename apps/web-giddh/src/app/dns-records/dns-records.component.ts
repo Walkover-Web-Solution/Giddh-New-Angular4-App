@@ -9,6 +9,10 @@ import { ServiceConfig } from '../services/service.config';
 import { Configuration } from '../app.constant';
 import { environment } from '../../environments/environment.generated';
 import { map } from '../lodash-optimized';
+/**
+ * GetDomainList interface definition
+ * Defines the structure and contract for GetDomainList objects
+ */
 export interface GetDomainList {
     type: any;
     hostName: any;
@@ -19,12 +23,19 @@ export interface GetDomainList {
 }
 /** Hold information of activity logs */
 const ELEMENT_DATA: GetDomainList[] = [];
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'dns-records',
     templateUrl: './dns-records.component.html',
     styleUrls: ['./dns-records.component.scss'],
     standalone: false
 })
+/**
+ * DnsRecordsComponent component
+ * Handles dnsrecords functionality and user interactions
+ */
 export class DnsRecordsComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -49,6 +60,10 @@ export class DnsRecordsComponent implements OnInit {
     public giddhLogoSrc: string = '';
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private route: ActivatedRoute,
         private settingsProfileService: SettingsProfileService,
         private toaster: ToasterService,
@@ -69,6 +84,9 @@ export class DnsRecordsComponent implements OnInit {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-text-primary-logo.svg';
 
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([
             this.route.queryParams.pipe(takeUntil(this.destroyed$)),
             this.route.params.pipe(takeUntil(this.destroyed$))
@@ -88,9 +106,15 @@ export class DnsRecordsComponent implements OnInit {
     public getDomainListData(uniqueName: string): void {
         this.shouldShowLoader = true;
         this.settingsProfileService.getDomainListTableData(uniqueName, this.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 this.shouldShowLoader = false;
                 this.domain.name = response.body[0]?.domainName
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.body?.length) {
                     this.dataSource = response.body?.map(portal => {
                         return { type: 'CNAME', hostName: portal.domainName, value: 'environment.PORTAL_URL_PLACEHOLDER', status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
@@ -113,11 +137,17 @@ export class DnsRecordsComponent implements OnInit {
     public copyUrl(value: any, host: any, type: any): void {
         const urlToCopy = value;
         this.clipboardService.copyFromContent(urlToCopy);
+        /**
+         * Handles if functionality
+         */
         if (type === 'host') {
             host.isCopiedHostName = true;
         } else {
             host.isCopiedValue = true;
         }
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             host.isCopiedHostName = false;
             host.isCopiedValue = false;

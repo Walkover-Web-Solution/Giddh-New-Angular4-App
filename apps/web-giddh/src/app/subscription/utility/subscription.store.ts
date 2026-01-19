@@ -8,6 +8,10 @@ import { SubscriptionsService } from "../../services/subscriptions.service";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 
+/**
+ * SubscriptionState interface definition
+ * Defines the structure and contract for SubscriptionState objects
+ */
 export interface SubscriptionState {
     subscriptionListInProgress: boolean;
     subscriptionList: any
@@ -43,13 +47,27 @@ export const DEFAULT_SUBSCRIPTION_STATE: SubscriptionState = {
 
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * SubscriptionComponentStore store
+ * Manages subscriptioncomponent state using NgRx ComponentStore
+ */
 export class SubscriptionComponentStore extends ComponentStore<SubscriptionState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
         private store: Store<AppState>
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_SUBSCRIPTION_STATE);
     }
 
@@ -64,17 +82,29 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
      */
     readonly getAllSubscriptions = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ subscriptionListInProgress: true });
                 return this.subscriptionService.getAllSubscriptions(req?.pagination, req?.model).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     subscriptionList: res ?? [],
                                     subscriptionListInProgress: false,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -92,6 +122,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -105,11 +138,20 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     */
     readonly cancelSubscription = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ cancelSubscriptionInProgress: true });
                 return this.subscriptionService.cancelSubscriptionById(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', res?.body);
                                 return this.patchState({
@@ -117,6 +159,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                                     cancelSubscription: true,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -134,6 +179,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -148,11 +196,20 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
      */
     readonly transferSubscription = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ transferSubscriptionInProgress: false });
                 return this.subscriptionService.transferSubscription(req.model, req.params).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', res?.body);
                                 return this.patchState({
@@ -160,6 +217,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                                     transferSubscriptionSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -176,6 +236,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -189,11 +252,20 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     */
     readonly verifyOwnership = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ verifyOwnershipInProgress: true, rejectReason: null });
                 return this.subscriptionService.verifyOwnership(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Subscription ownership verified successfully.');
                                 return this.patchState({
@@ -202,6 +274,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                                     verifyOwnershipInProgress: false,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -220,6 +295,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -233,17 +311,29 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
  */
     readonly getSubScribedCompanies = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ subscribedCompaniesInProgress: true });
                 return this.subscriptionService.getSubScribedCompanies().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     subscribedCompanies: res?.body ?? null,
                                     subscribedCompaniesInProgress: false,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -261,6 +351,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -274,15 +367,27 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     */
     readonly buyPlan = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.subscriptionService.buyPlan(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     buyPlanSuccess: res?.body ?? null,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -299,6 +404,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -312,11 +420,20 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     */
     readonly getAllCompaniesBySubscriptionId = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ companiesListInProgress: true });
                 return this.subscriptionService.getCompaniesBySubscriptionId(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     companiesList: res?.body ?? [],
@@ -338,6 +455,9 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

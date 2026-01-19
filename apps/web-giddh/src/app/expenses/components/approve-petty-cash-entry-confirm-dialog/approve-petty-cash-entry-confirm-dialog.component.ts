@@ -6,11 +6,18 @@ import { SearchService } from '../../../services/search.service';
 import { IOption } from '../../../app.constant';
 import { concat, map, some } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'petty-cash-approve-confirm-dialog',
     templateUrl: './approve-petty-cash-entry-confirm-dialog.component.html',
     standalone: false
 })
+/**
+ * ApprovePettyCashEntryConfirmDialogComponent component
+ * Handles approvepettycashentryconfirmdialog functionality and user interactions
+ */
 export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     /** Show/hide option to choose expense category */
     @Input() public showCategoryOption: boolean = false;
@@ -90,6 +97,10 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
         query: ''
     };
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private searchService: SearchService,
         private generalService: GeneralService
@@ -102,7 +113,13 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.showCategoryOption) {
+            /**
+             * Handles if functionality
+             */
             if (this.selectedEntryForApprove?.baseAccount?.uniqueName && !this.selectedEntryForApprove?.particular?.uniqueName) {
                 this.selectedEntryForApprove.particular = this.selectedEntryForApprove.baseAccount;
             }
@@ -117,6 +134,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public buildCreatorString(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedEntryForApprove && this.selectedEntryForApprove.createdBy) {
             this.byCreator = this.localeData?.by_creator;
             this.byCreator = this.byCreator?.replace("[CREATOR_NAME]", this.selectedEntryForApprove.createdBy.name);
@@ -135,9 +155,15 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     private prepareEntryAgainstObject(res: any): void {
         this.cashOrBankEntry = res?.particular ? this.isCashBankAccount(res.particular) : false;
         this.pettyCashEntryType = res?.entryType;
+        /**
+         * Handles if functionality
+         */
         if (res?.entryType === 'sales') {
             this.entryAgainstObject.base = this.cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
             this.entryAgainstObject.against = this.cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.loadDefaultCashBankAccountsSuggestions();
             } else {
@@ -146,6 +172,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
         } else if (res?.entryType === 'expense') {
             this.entryAgainstObject.base = this.cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
             this.entryAgainstObject.against = this.cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expenses';
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.loadDefaultCashBankAccountsSuggestions();
             } else {
@@ -211,6 +240,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     private isCashBankAccount(particular: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (particular) {
             return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && parent?.uniqueName === 'loanandoverdraft'));
         }
@@ -244,10 +276,16 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public onSelectEntryAgainstAccount(option: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (option && option.value) {
             this.showEntryAgainstRequired = false;
             this.pettyCashEntry.particular.uniqueName = option.value;
             this.pettyCashEntry.particular.name = option.label;
+            /**
+             * Handles if functionality
+             */
             if (this.selectedEntryForApprove) {
                 this.selectedEntryForApprove.baseAccount.uniqueName = option.value;
                 this.selectedEntryForApprove.baseAccount.name = option.label;
@@ -264,6 +302,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
         this.showEntryAgainstRequired = false;
         this.pettyCashEntry.particular.uniqueName = "";
         this.pettyCashEntry.particular.name = "";
+        /**
+         * Handles if functionality
+         */
         if (this.selectedEntryForApprove) {
             this.selectedEntryForApprove.baseAccount.uniqueName = "";
             this.selectedEntryForApprove.baseAccount.name = "";
@@ -278,13 +319,22 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public handleAccountScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.pettyCashEntryType === 'sales') {
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.handleCashBankScrollEnd();
             } else {
                 this.handleDebtorScrollEnd();
             }
         } else if (this.pettyCashEntryType === 'expense') {
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.handleCashBankScrollEnd();
             } else {
@@ -301,11 +351,17 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public handleDebtorScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.debtorAccountsSearchResultsPaginationData.page < this.debtorAccountsSearchResultsPaginationData.totalPages) {
             this.onDebtorAccountSearchQueryChanged(
                 this.debtorAccountsSearchResultsPaginationData.query,
                 this.debtorAccountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.debtorAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -327,11 +383,17 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public handleCashBankScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.cashBankAccountsSearchResultsPaginationData.page < this.cashBankAccountsSearchResultsPaginationData.totalPages) {
             this.onCashBankAccountSearchQueryChanged(
                 this.cashBankAccountsSearchResultsPaginationData.query,
                 this.cashBankAccountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.cashBankAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -353,11 +415,17 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public handleCreditorScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.creditorAccountsSearchResultsPaginationData.page < this.creditorAccountsSearchResultsPaginationData.totalPages) {
             this.onDebtorAccountSearchQueryChanged(
                 this.creditorAccountsSearchResultsPaginationData.query,
                 this.creditorAccountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.creditorAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -380,13 +448,22 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public onAccountSearchQueryChanged(query: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.pettyCashEntryType === 'sales') {
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.onCashBankAccountSearchQueryChanged(query);
             } else {
                 this.onDebtorAccountSearchQueryChanged(query);
             }
         } else if (this.pettyCashEntryType === 'expense') {
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.onCashBankAccountSearchQueryChanged(query);
             } else {
@@ -407,6 +484,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     public onDebtorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.debtorAccountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultDebtorScrollApiCall &&
             (query || (this.defaultDebtorAccountSuggestions && this.defaultDebtorAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -416,6 +496,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                 group: 'sundrydebtors'
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -423,6 +506,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.debtorsAccountsOptions = searchResults;
                     } else {
@@ -434,7 +520,13 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                     this.entryAgainstObject.dropDownOption = [...this.debtorsAccountsOptions];
                     this.debtorAccountsSearchResultsPaginationData.page = data.body.page;
                     this.debtorAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultDebtorAccountPaginationData.page = this.debtorAccountsSearchResultsPaginationData.page;
@@ -447,6 +539,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
             this.debtorAccountsSearchResultsPaginationData.page = this.defaultDebtorAccountPaginationData.page;
             this.debtorAccountsSearchResultsPaginationData.totalPages = this.defaultDebtorAccountPaginationData.totalPages;
             this.preventDefaultDebtorScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultDebtorScrollApiCall = false;
             }, 500);
@@ -463,15 +558,24 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     public onCashBankAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.cashBankAccountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultCashBankScrollApiCall &&
             (query || (this.defaultCashBankAccountSuggestions && this.defaultCashBankAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
+                /**
+                 * Handles group functionality
+                 */
                 group: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('cash, bankaccounts, loanandoverdraft') : encodeURIComponent('cash, bankaccounts')
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -479,6 +583,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.cashAndBankAccountsOptions = searchResults;
                     } else {
@@ -490,7 +597,13 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                     this.entryAgainstObject.dropDownOption = [...this.cashAndBankAccountsOptions];
                     this.cashBankAccountsSearchResultsPaginationData.page = data.body.page;
                     this.cashBankAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultCashBankAccountPaginationData.page = this.cashBankAccountsSearchResultsPaginationData.page;
@@ -503,6 +616,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
             this.cashBankAccountsSearchResultsPaginationData.page = this.defaultCashBankAccountPaginationData.page;
             this.cashBankAccountsSearchResultsPaginationData.totalPages = this.defaultCashBankAccountPaginationData.totalPages;
             this.preventDefaultCashBankScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultCashBankScrollApiCall = false;
             }, 500);
@@ -519,6 +635,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     public onCreditorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.creditorAccountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultCreditorScrollApiCall &&
             (query || (this.defaultCreditorAccountSuggestions && this.defaultCreditorAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -528,6 +647,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                 group: 'sundrycreditors'
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -535,6 +657,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.creditorsAccountsOptions = searchResults;
                     } else {
@@ -546,7 +671,13 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                     this.entryAgainstObject.dropDownOption = [...this.creditorsAccountsOptions];
                     this.creditorAccountsSearchResultsPaginationData.page = data.body.page;
                     this.creditorAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultCreditorAccountPaginationData.page = this.creditorAccountsSearchResultsPaginationData.page;
@@ -559,6 +690,9 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
             this.creditorAccountsSearchResultsPaginationData.page = this.defaultCreditorAccountPaginationData.page;
             this.creditorAccountsSearchResultsPaginationData.totalPages = this.defaultCreditorAccountPaginationData.totalPages;
             this.preventDefaultCreditorScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultCreditorScrollApiCall = false;
             }, 500);
@@ -572,10 +706,16 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public confirmApproveEntry(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
             this.showEntryAgainstRequired = true;
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.showCategoryOption) {
             this.approveEntry.emit(this.selectedEntryForApprove);
         } else {

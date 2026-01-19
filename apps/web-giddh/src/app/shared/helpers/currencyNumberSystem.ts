@@ -1,3 +1,7 @@
+/**
+ * ICurrencynumberSystem interface definition
+ * Defines the structure and contract for ICurrencynumberSystem objects
+ */
 export interface ICurrencynumberSystem {
     value: any;
     name: string;

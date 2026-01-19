@@ -19,6 +19,9 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerPortalComponentStore } from './utility/customer-portal.store';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'customer-portal',
     templateUrl: './customer.portal.component.html',
@@ -26,6 +29,10 @@ import { CustomerPortalComponentStore } from './utility/customer-portal.store';
     providers: [CustomerPortalComponentStore],
     standalone: false
 })
+/**
+ * CustomerPortalComponent component
+ * Handles customerportal functionality and user interactions
+ */
 export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -169,6 +176,10 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private generalService: GeneralService,
         private store: Store<AppState>,
@@ -188,6 +199,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         this.componentStore.payuCrudOperation({ method: HttpMethod.GET });
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -205,7 +219,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
 
+            /**
+             * Handles if functionality
+             */
             if (organization) {
+                /**
+                 * Handles if functionality
+                 */
                 if (organization.type === OrganizationType.Branch || this.isConsolidatedBranch) {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                     this.organizationType = OrganizationType.Branch;
@@ -221,9 +241,18 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         // getting all page data of integration page
         this.store.pipe(select(data => data?.settings?.integration), takeUntil(this.destroyed$)).subscribe((response) => {
             // set razor pay form data
+            /**
+             * Handles if functionality
+             */
             if (response?.razorPayForm) {
+                /**
+                 * Handles if functionality
+                 */
                 if (typeof response?.razorPayForm !== "string") {
                     this.razorPayObj = cloneDeep(response?.razorPayForm);
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.razorPayObj && this.razorPayObj.account === null) {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                     }
@@ -236,10 +265,19 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
 
             // set paypal form data
+            /**
+             * Handles if functionality
+             */
             if (response?.paypalForm) {
+                /**
+                 * Handles if functionality
+                 */
                 if (typeof response?.paypalForm !== "string") {
                     this.paypalObj = cloneDeep(response?.paypalForm);
                     this.linkedAccountLabel = this.paypalObj?.account?.name;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.paypalObj && this.paypalObj.account === null) {
                         this.paypalObj.account = { name: null, uniqueName: null };
                     }
@@ -253,11 +291,26 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         });
 
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(appState => appState.settings.profile),
+            /**
+             * Handles map functionality
+             */
             map(response => response?.portalDomain),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((portalDomain) => {
+            /**
+             * Handles if functionality
+             */
             if (portalDomain) {
                 this.profileForm.get('portalDomain').patchValue(portalDomain, { emitEvent: false });
                 this.profileData.portalDomain = portalDomain;
@@ -266,13 +319,31 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.organizationType === 'COMPANY') {
             const initialValue = this.profileForm?.get('portalDomain')?.value;
             this.profileForm?.get('portalDomain')?.valueChanges?.pipe(
+                /**
+                 * Handles startWith functionality
+                 */
                 startWith(initialValue),
+                /**
+                 * Handles debounceTime functionality
+                 */
                 debounceTime(700),
+                /**
+                 * Handles pairwise functionality
+                 */
                 pairwise(),
+                /**
+                 * Handles filter functionality
+                 */
                 filter(([prev, curr]) => prev !== curr && curr !== this.profileData.portalDomain),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)
             ).subscribe(([prev, curr]) => {
                 this.store.dispatch(this.settingsProfileActions.PatchProfile({ portalDomain: curr }));
@@ -280,6 +351,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         }
 
         this.payuDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.merchantKey) {
                 this.payuForm.patchValue({
                     merchantKey: response?.merchantKey,
@@ -325,6 +399,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     }
 
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit(): void {
         this.loadDefaultAccountsSuggestions();
         this.paypalLoadDefaultAccountsSuggestions();
@@ -334,7 +411,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
 
     }
 
+    /**
+     * Sets dummydata value
+     */
     public setDummyData() {
+        /**
+         * Handles if functionality
+         */
         if (this.razorPayObj) {
             this.razorPayObj.userName = '';
             this.razorPayObj.password = '';
@@ -350,10 +433,16 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     * @memberof CustomerPortalComponent
     */
     public selectLinkedAccount(event: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.linkedAccountLabel = event.label;
             this.paypalAccounts$.subscribe((arr: IOption[]) => {
                 let res = find(arr, (account) => account?.value === event.value);
+                /**
+                 * Handles if functionality
+                 */
                 if (res) {
                     this.paypalObj.account.name = res.text;
                 }
@@ -368,6 +457,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     * @memberof CustomerPortalComponent
     */
     public setPaypalDummyData(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.paypalObj) {
             this.paypalObj.email = null;
             this.paypalObj.account = { name: null, uniqueName: null };
@@ -379,11 +471,17 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * @memberof CustomerPortalComponent
      */
     public paypalHandleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.paypalAccountsSearchResultsPaginationData.page < this.paypalAccountsSearchResultsPaginationData.totalPages) {
             this.paypalOnAccountSearchQueryChanged(
                 this.paypalAccountsSearchResultsPaginationData.query,
                 this.paypalAccountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.paypalAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -413,6 +511,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
 
         query = query?.trim() || "";
 
+        /**
+         * Handles if functionality
+         */
         if (query === this.previousPaypalSearchQuery) {
             return;
         }
@@ -420,6 +521,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         this.previousPaypalSearchQuery = query;
         this.paypalAccountsSearchResultsPaginationData.query = query;
 
+        /**
+         * Handles if functionality
+         */
         if (!this.paypalPreventDefaultScrollApiCall &&
             (query || (this.paypalDefaultAccountSuggestions && this.paypalDefaultAccountSuggestions.length === 0) || successCallback)) {
 
@@ -429,6 +533,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             };
 
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.body?.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -437,6 +544,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                         }
                     }) || [];
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.paypalAccounts = searchResults;
                     } else {
@@ -447,7 +557,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                     this.paypalAccountsSearchResultsPaginationData.page = data.body.page;
                     this.paypalAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.paypalAccountsSearchResultsPaginationData.page = data.body.page;
@@ -464,6 +580,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             this.paypalAccountsSearchResultsPaginationData.totalPages = this.paypalDefaultAccountPaginationData.totalPages;
 
             this.paypalPreventDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.paypalPreventDefaultScrollApiCall = false;
             }, 500);
@@ -477,11 +596,17 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * @memberof CustomerPortalComponent
      */
     public handleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
             this.onAccountSearchQueryChanged(
                 this.accountsSearchResultsPaginationData.query,
                 this.accountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -510,6 +635,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
 
         query = query?.trim() || "";
 
+        /**
+         * Handles if functionality
+         */
         if (query === this.previousAccountSearchQuery) {
             return;
         }
@@ -517,6 +645,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         this.previousAccountSearchQuery = query;
         this.accountsSearchResultsPaginationData.query = query;
 
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -526,6 +657,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             };
 
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.body?.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -534,6 +668,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                         }
                     }) || [];
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.accounts = searchResults;
                     } else {
@@ -544,7 +681,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultAccountPaginationData.page = data.body.page;
@@ -561,6 +704,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
 
             this.preventDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
             }, 500);
@@ -568,26 +714,47 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     }
 
 
+    /**
+     * Handles selectAccount functionality
+     */
     public selectAccount(event: IOption) {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.razorPayObj.account.uniqueName = event.value;
             this.razorPayObj.account.name = event.label;
         }
     }
 
+    /**
+     * Saves razorpaydetails data
+     */
     public saveRazorPayDetails() {
         let data = cloneDeep(this.razorPayObj);
         this.store.dispatch(this.settingsIntegrationActions.SaveRazorPayDetails(data));
     }
 
+    /**
+     * Updates existing razorpaydetails
+     */
     public updateRazorPayDetails() {
         let data = cloneDeep(this.razorPayObj);
         this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
     }
 
+    /**
+     * Handles unlinkAccountFromRazorPay functionality
+     */
     public unlinkAccountFromRazorPay() {
+        /**
+         * Handles if functionality
+         */
         if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account?.uniqueName) {
             let data = cloneDeep(this.razorPayObj);
+            /**
+             * Handles if functionality
+             */
             if (data) {
                 data.account.uniqueName = null;
                 data.account.name = null;
@@ -598,6 +765,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         }
     }
 
+    /**
+     * Deletes razorpaydetails
+     */
     public deleteRazorPayDetails() {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '585px',
@@ -610,6 +780,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         });
 
         confirmModalDialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
             }
@@ -624,6 +797,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      */
     public savePaypalDetails(): void {
         let data = cloneDeep(this.paypalObj);
+        /**
+         * Handles if functionality
+         */
         if (!(this.validateEmail(data?.email))) {
             this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
             return;
@@ -640,6 +816,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      */
     public updatePaypalDetails(): void {
         let data = cloneDeep(this.paypalObj);
+        /**
+         * Handles if functionality
+         */
         if (!(this.validateEmail(data?.email))) {
             this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
             return;
@@ -654,8 +833,14 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * @memberof CustomerPortalComponent
      */
     public unlinkAccountFromPaypal(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.paypalObj.account && this.paypalObj.account.name && this.paypalObj.account?.uniqueName) {
             let data = cloneDeep(this.paypalObj);
+            /**
+             * Handles if functionality
+             */
             if (data) {
                 data.account.uniqueName = null;
                 data.account.name = null;
@@ -686,6 +871,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         });
 
         confirmModalDialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
                 this.linkedAccountLabel = '';
@@ -766,6 +954,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      */
     public profileUpdated(keyName: string): void {
         const value = this.profileForm?.get(keyName).value;
+        /**
+         * Handles if functionality
+         */
         if (this.updatedData[keyName] !== value) {
             this.updatedData[keyName] = value;
             this.saveProfileSubject.next(true);
@@ -781,6 +972,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         const urlToCopy = this.portalLoginUrl;
         this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);
@@ -805,6 +999,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * @memberof CustomerPortalComponent
      */
     public unlinkAccountFromPayu(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.payuForm.get('accountUniqueName')?.value) {
             this.payuForm.get('accountUniqueName').setValue(null);
             this.payuForm.get('accountUniqueName').markAsPristine();
@@ -821,10 +1018,16 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * @memberof CustomerPortalComponent
      */
     public selectPayuLinkedAccount(event: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.payuLinkedAccountLabel = event.label;
             this.payuAccounts$.pipe(take(1)).subscribe((arr: IOption[]) => {
                 let res = find(arr, (account) => account?.value === event.value);
+                /**
+                 * Handles if functionality
+                 */
                 if (res) {
                     this.payuForm.get('accountUniqueName').patchValue(event.value);
                 }
@@ -838,11 +1041,17 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * @memberof CustomerPortalComponent
      */
     public payuHandleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.payuAccountsSearchResultsPaginationData.page < this.payuAccountsSearchResultsPaginationData.totalPages) {
             this.payuOnAccountSearchQueryChanged(
                 this.payuAccountsSearchResultsPaginationData.query,
                 this.payuAccountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.payuAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -870,6 +1079,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
 
         query = query?.trim() || "";
 
+        /**
+         * Handles if functionality
+         */
         if (query === this.previousPayuSearchQuery) {
             return;
         }
@@ -877,6 +1089,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         this.previousPayuSearchQuery = query;
         this.payuAccountsSearchResultsPaginationData.query = query;
 
+        /**
+         * Handles if functionality
+         */
         if (!this.payuPreventDefaultScrollApiCall &&
             (query || (this.payuDefaultAccountSuggestions && this.payuDefaultAccountSuggestions.length === 0) || successCallback)) {
 
@@ -886,6 +1101,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             };
 
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.body?.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -894,6 +1112,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                         }
                     }) || [];
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.payuAccounts = searchResults;
                     } else {
@@ -904,7 +1125,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                     this.payuAccountsSearchResultsPaginationData.page = data.body.page;
                     this.payuAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.payuAccountsSearchResultsPaginationData.page = data.body.page;
@@ -921,6 +1148,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             this.payuAccountsSearchResultsPaginationData.totalPages = this.payuDefaultAccountPaginationData.totalPages;
 
             this.payuPreventDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.payuPreventDefaultScrollApiCall = false;
             }, 500);
@@ -935,6 +1165,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      */
     public savePayuDetails(): void {
         this.isFormSubmitted = false;
+        /**
+         * Handles if functionality
+         */
         if (this.payuForm.invalid) {
             this.isFormSubmitted = true;
             return;
@@ -962,6 +1195,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         });
 
         confirmModalDialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 // For DELETE
                 this.componentStore.payuCrudOperation({

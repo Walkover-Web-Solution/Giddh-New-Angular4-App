@@ -2,6 +2,9 @@ import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { DnsRecordsComponent } from "./dns-records.component";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -12,5 +15,9 @@ import { DnsRecordsComponent } from "./dns-records.component";
     ],
     exports: [RouterModule]
 })
+/**
+ * DnsRecordsRoutingModule module
+ * Implements DnsRecordsRoutingModule functionality
+ */
 export class DnsRecordsRoutingModule {
 }

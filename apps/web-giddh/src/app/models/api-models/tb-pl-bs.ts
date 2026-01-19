@@ -1,5 +1,9 @@
 import { ChildGroup, ClosingBalance, ForwardedBalance, OpeningBalance } from './Search';
 
+/**
+ * TrialBalanceExportExcelRequest interface definition
+ * Defines the structure and contract for TrialBalanceExportExcelRequest objects
+ */
 export interface TrialBalanceExportExcelRequest {
     fromDate?: string;
     toDate?: string;
@@ -7,6 +11,10 @@ export interface TrialBalanceExportExcelRequest {
     filename?: string;
 }
 
+/**
+ * TrialBalanceRequest interface definition
+ * Defines the structure and contract for TrialBalanceRequest objects
+ */
 export interface TrialBalanceRequest {
     from?: string;
     to?: string;
@@ -17,25 +25,45 @@ export interface TrialBalanceRequest {
     filename?: string;
     view?: string;
 }
+/**
+ * ComparedProfitLossRequest interface definition
+ * Defines the structure and contract for ComparedProfitLossRequest objects
+ */
 export interface ComparedProfitLossRequest {
     compareType?: 'month' |'year' |'quarter' |'period';
     compareValue?: number;
 }
 
+/**
+ * ProfitLossRequest interface definition
+ * Defines the structure and contract for ProfitLossRequest objects
+ */
 export interface ProfitLossRequest extends TrialBalanceRequest, ComparedProfitLossRequest {
     fy?: number;
     projectUniqueName?: string;
 }
 
+/**
+ * GetCogsRequest class
+ * Implements GetCogsRequest functionality
+ */
 export class GetCogsRequest {
     public from: string;
     public to: string;
 }
 
+/**
+ * ProfitLossDateRangeResponse class
+ * Implements ProfitLossDateRangeResponse functionality
+ */
 export class ProfitLossDateRangeResponse<T> {
     [dateRange: string]: T;
 }
 
+/**
+ * GetCogsResponse class
+ * Implements GetCogsResponse functionality
+ */
 export class GetCogsResponse {
     public closingInventory: number = 0;
     public cogs: number = 0;
@@ -47,6 +75,10 @@ export class GetCogsResponse {
     public toDate: string = '';
 }
 
+/**
+ * BalanceSheetData interface definition
+ * Defines the structure and contract for BalanceSheetData objects
+ */
 export interface BalanceSheetData {
     assets?: ChildGroup[];
     liabilities?: ChildGroup[];
@@ -59,6 +91,10 @@ export interface BalanceSheetData {
     message?: string;
 }
 
+/**
+ * ProfitLossData interface definition
+ * Defines the structure and contract for ProfitLossData objects
+ */
 export interface ProfitLossData {
     inProfit?: boolean;
     incArr?: ChildGroup[];
@@ -78,6 +114,10 @@ export interface ProfitLossData {
     headers?: string[];
 }
 
+/**
+ * AccountDetails interface definition
+ * Defines the structure and contract for AccountDetails objects
+ */
 export interface AccountDetails {
     forwardedBalance: ForwardedBalance;
     creditTotal: number;
@@ -88,10 +128,18 @@ export interface AccountDetails {
     message?: string;
 }
 
+/**
+ * BalanceSheetRequest interface definition
+ * Defines the structure and contract for BalanceSheetRequest objects
+ */
 export interface BalanceSheetRequest extends TrialBalanceRequest {
     fy?: number;
 }
 
+/**
+ * BalanceSheetData interface definition
+ * Defines the structure and contract for BalanceSheetData objects
+ */
 export interface BalanceSheetData {
     inProfit?: boolean;
     incArr?: ChildGroup[];
@@ -103,16 +151,28 @@ export interface BalanceSheetData {
     dates?: BalanceSheetRequest;
 }
 
+/**
+ * GetRevenueResponse class
+ * Implements GetRevenueResponse functionality
+ */
 export class GetRevenueResponse {
     public amount: number = 0;
     public type: string = '';
 }
 
+/**
+ * GetTotalExpenseResponse class
+ * Implements GetTotalExpenseResponse functionality
+ */
 export class GetTotalExpenseResponse {
     public amount: number = 0;
     public type: string = '';
 }
 
+/**
+ * GetIncomeBeforeTaxes class
+ * Implements GetIncomeBeforeTaxes functionality
+ */
 export class GetIncomeBeforeTaxes {
     public amount: number = 0;
     public type: string = '';

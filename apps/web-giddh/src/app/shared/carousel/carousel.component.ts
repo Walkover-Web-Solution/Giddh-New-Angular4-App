@@ -4,6 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HtmlElementEnum } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'giddh-carousel',
     templateUrl: './carousel.component.html',
@@ -15,6 +18,10 @@ import { HtmlElementEnum } from '../../app.constant';
     ],
     standalone: true
 })
+/**
+ * CarouselComponent component
+ * Handles carousel functionality and user interactions
+ */
 export class CarouselComponent {
     /** Holds template of slide on the component itself */
     @ContentChild('slideTemplate', { static: false }) public slideTemplate: TemplateRef<any>;
@@ -29,6 +36,10 @@ export class CarouselComponent {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
     ) { }
 
@@ -51,6 +62,9 @@ export class CarouselComponent {
     }
 
     @HostListener('window:keydown', ['$event'])
+    /**
+     * Handles keydown event
+     */
     handleKeyDown(event: KeyboardEvent) {
         // Get the active element in the document
         const activeElement = document.activeElement;
@@ -61,7 +75,13 @@ export class CarouselComponent {
             activeElement.tagName === HtmlElementEnum.Textarea
         );
 
+        /**
+         * Handles if functionality
+         */
         if (!isInputFocused) { // Only navigate if no input field is focused
+            /**
+             * Handles if functionality
+             */
             if (event.key === 'ArrowRight') {
                 this.handleNavigateNext();
                 event.preventDefault();

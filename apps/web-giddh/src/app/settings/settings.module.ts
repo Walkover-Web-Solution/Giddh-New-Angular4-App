@@ -81,6 +81,9 @@ import { CompanyAuthKeyComponent } from './company-auth-key/company-auth-key.com
 import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company-auth-key/create-company-auth-key.component';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         SettingsComponent,
@@ -173,5 +176,9 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     ],
 })
 
+/**
+ * SettingsModule module
+ * Implements SettingsModule functionality
+ */
 export class SettingsModule {
 }

@@ -22,6 +22,9 @@ import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { InventoryComponentStore } from "../inventory.store";
 import { cloneDeep, concat, filter, find, forEach, includes, indexOf, map, some } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "report-filters",
 
@@ -31,6 +34,10 @@ import { cloneDeep, concat, filter, find, forEach, includes, indexOf, map, some 
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [InventoryComponentStore]
 })
+/**
+ * ReportFiltersComponent component
+ * Handles reportfilters functionality and user interactions
+ */
 export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
@@ -151,6 +158,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Hide selected options from dropdown list */
     public hideSelectedOptions: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public dialog: MatDialog,
         private location: Location,
@@ -171,22 +182,37 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.reportUniqueName && this.searchPage !== "GROUP") {
             this.autoSelectSearchOption = true;
             this.searchRequest.q = this.reportUniqueName;
         }
 
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.pullUniversalDate) {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.universalDate && !this.todaySelected) {
                             this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                             this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -205,7 +231,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                             this.balanceStockReportRequest.to = "";
                         }
                         this.stockReportRequest.page = 1;
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.autoSelectSearchOption) {
+                            /**
+                             * Sets timeout value
+                             */
                             setTimeout(() => {
                                 this.emitFilters();
                             }, 100);
@@ -215,7 +247,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                     this.selectedBranch = this.stockReportRequest?.branchUniqueNames || [];
                     this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames || [];
                     this.stockReportRequest.page = 1;
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.autoSelectSearchOption) {
+                        /**
+                         * Sets timeout value
+                         */
                         setTimeout(() => {
                             this.emitFilters();
                         }, 100);
@@ -228,6 +266,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
         this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             let branchesClone = cloneDeep(this.allBranches);
+            /**
+             * Handles if functionality
+             */
             if (search) {
                 branchesClone = this.allBranches?.filter(branch => (branch.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
             }
@@ -236,6 +277,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
         this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             let warehousesClone = cloneDeep(this.currentWarehouses);
+            /**
+             * Handles if functionality
+             */
             if (search) {
                 warehousesClone = this.currentWarehouses?.filter(warehouse => (warehouse.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
             }
@@ -243,10 +287,22 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.searchFilters?.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined && typeof searchedText === 'string') {
                 this.searchRequest.q = searchedText;
                 this.searchInventory();
@@ -262,6 +318,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.fromToDate?.currentValue?.from) {
             this.selectedDateRange = { startDate: dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT), endDate: dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT) };
             this.selectedDateRangeUi = dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -272,32 +331,59 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.moduleName !== InventoryModuleName.transaction && changes?.moduleName?.currentValue !== this.moduleName) {
+            /**
+             * Handles if functionality
+             */
             if (changes?.searchPage?.currentValue || changes?.moduleType?.currentValue) {
                 this.searchInventory();
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (changes?.stockReportRequest?.currentValue) {
+            /**
+             * Handles if functionality
+             */
             if (changes?.stockReportRequest?.currentValue?.stockGroups) {
                 changes?.stockReportRequest?.currentValue?.stockGroups?.forEach(group => {
                     this.filtersChipList.push(group);
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (changes?.stockReportRequest?.currentValue?.stocks) {
                 changes?.stockReportRequest?.currentValue?.stocks?.forEach(stock => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (stock?.uniqueName !== this.reportUniqueName) {
                         this.filtersChipList.push(stock);
                     }
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (changes?.stockReportRequest?.currentValue?.variants) {
                 changes?.stockReportRequest?.currentValue?.variants?.forEach(variant => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (variant?.uniqueName !== this.reportUniqueName) {
                         this.filtersChipList.push(variant);
                     }
                 });
             }
 
+            /**
+             * Handles if functionality
+             */
             if (changes?.stockReportRequest?.currentValue?.branchUniqueNames?.length) {
                 this.selectedBranch = changes?.stockReportRequest?.currentValue?.branchUniqueNames;
                 this.stockReportRequest.branchUniqueNames = this.selectedBranch;
@@ -305,6 +391,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.selectedBranch = changes?.stockReportRequestExport?.currentValue?.branchUniqueNames;
                 this.stockReportRequestExport.branchUniqueNames = this.selectedBranch;
             }
+            /**
+             * Handles if functionality
+             */
             if (changes?.stockReportRequest?.currentValue?.warehouseUniqueNames?.length) {
                 this.selectedWarehouse = changes?.stockReportRequest?.currentValue?.warehouseUniqueNames;
                 this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
@@ -348,6 +437,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
         /* for column value filter selected common */
         this.dynamicCustomColumns?.forEach(column => {
+            /**
+             * Handles if functionality
+             */
             if (column?.value === 'inward_quantity') {
                 this.stockReportRequestExport.showInwardsQty = true;
             }
@@ -355,7 +447,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.stockReportRequestExport.showOutwardsQty = true;
             }
             /* for value filter selected in item, variant & group */
+            /**
+             * Handles if functionality
+             */
             if (InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.group) {
+                /**
+                 * Handles if functionality
+                 */
                 if (column?.value === 'group_name') {
                     this.stockReportRequestExport.showGroupName = true;
                 }
@@ -379,19 +477,34 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             /* for value filter selected in item, variant & transaction */
+            /**
+             * Handles if functionality
+             */
             if ((InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.transaction) && column?.value === 'stock_name') {
                 this.stockReportRequestExport.showStockName = true;
             }
             /* for value filter selected in item & variant both */
+            /**
+             * Handles if functionality
+             */
             if ((InventoryReportType.stock || InventoryReportType.variant) && column?.value === 'unit_name') {
                 this.stockReportRequestExport.showUnitName = true;
             }
             /* for value filter selected in variant & transaction both */
+            /**
+             * Handles if functionality
+             */
             if ((InventoryReportType.variant || InventoryReportType.transaction) && column?.value === 'variant_name') {
                 this.stockReportRequestExport.showVariantName = true;
             }
             /* for value filter selected in Transaction */
+            /**
+             * Handles if functionality
+             */
             if (InventoryReportType.transaction) {
+                /**
+                 * Handles if functionality
+                 */
                 if (column?.value === 'entry_date') {
                     this.stockReportRequestExport.showDate = true;
                 }
@@ -441,6 +554,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
         /* for column value filter selected common */
         this.displayedColumns?.forEach(column => {
+            /**
+             * Handles if functionality
+             */
             if (column === 'inward_quantity') {
                 this.stockReportRequestExport.showInwardsQty = true;
             }
@@ -448,7 +564,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.stockReportRequestExport.showOutwardsQty = true;
             }
             /* for value filter selected in item, variant & group */
+            /**
+             * Handles if functionality
+             */
             if (InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.group) {
+                /**
+                 * Handles if functionality
+                 */
                 if (column === 'group_name') {
                     this.stockReportRequestExport.showGroupName = true;
                 }
@@ -472,19 +594,34 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             /* for value filter selected in item, variant & transaction */
+            /**
+             * Handles if functionality
+             */
             if ((InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.transaction) && column === 'stock_name') {
                 this.stockReportRequestExport.showStockName = true;
             }
             /* for value filter selected in item & variant both */
+            /**
+             * Handles if functionality
+             */
             if ((InventoryReportType.stock || InventoryReportType.variant) && column === 'unit_name') {
                 this.stockReportRequestExport.showUnitName = true;
             }
             /* for value filter selected in variant & transaction both */
+            /**
+             * Handles if functionality
+             */
             if ((InventoryReportType.variant || InventoryReportType.transaction) && column === 'variant_name') {
                 this.stockReportRequestExport.showVariantName = true;
             }
             /* for value filter selected in Transaction */
+            /**
+             * Handles if functionality
+             */
             if (InventoryReportType.transaction) {
+                /**
+                 * Handles if functionality
+                 */
                 if (column === 'entry_date') {
                     this.stockReportRequestExport.showDate = true;
                 }
@@ -522,6 +659,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             ariaLabel: 'Advance search Dialog'
         });
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.advanceSearchModalResponse = response;
                 this.stockReportRequest.param = response.stockReportRequest?.param;
@@ -560,6 +700,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      */
     private emitFilters(): void {
         let mappedDynamicValues: string[] = [];
+        /**
+         * Handles if functionality
+         */
         if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
             mappedDynamicValues = this.dynamicCustomColumns.map(column => column.value);
         } else {
@@ -574,6 +717,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public isFilterActive(): void {
+        /**
+         * Handles if functionality
+         */
         if (((this.isCompany || this.isConsolidatedBranch) && this.selectedBranch?.length) || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
             this.showClearFilter = true;
         } else {
@@ -600,10 +746,16 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.getBranches(false);
         //Reset Date with universal date
         this.universalDate$.subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.fromDate = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = cloneDeep(res);
+                /**
+                 * Handles if functionality
+                 */
                 if (universalDate && !this.todaySelected) {
                     this.selectedDateRange = { startDate: dayjs(res[0]), endDate: dayjs(res[1]) };
                     this.selectedDateRangeUi = dayjs(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -623,6 +775,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
 
+            /**
+             * Handles if functionality
+             */
             if (!this.isCompany && !this.isConsolidatedBranch) {
                 this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
@@ -654,12 +809,18 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getBranchWiseWarehouse(): void {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body) {
                 this.allBranchWarehouses = response.body;
                 this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isCompany && !this.isConsolidatedBranch) {
                     this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
                     this.stockReportRequestExport.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
@@ -679,6 +840,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getBranches(apiCall: boolean = true): void {
         this.allWarehouses = [];
+        /**
+         * Handles if functionality
+         */
         if (!this.isCompany && !this.isConsolidatedBranch) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
             this.allWarehouses = currentBranch[0]?.warehouses;
@@ -687,6 +851,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
             });
         }
+        /**
+         * Handles if functionality
+         */
         if (this.selectedBranch?.length === 0) {
             this.warehouses = this.allWarehouses;
         } else {
@@ -701,6 +868,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.stockReportRequestExport.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
+        /**
+         * Handles if functionality
+         */
         if (!this.isCompany && !this.isConsolidatedBranch) {
             this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
@@ -710,6 +880,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.balanceStockReportRequest.warehouseUniqueNames = cloneDeep(this.stockReportRequest.warehouseUniqueNames);
         this.stockReportRequest.page = 1;
 
+        /**
+         * Handles if functionality
+         */
         if (apiCall) {
             this.emitFilters();
         }
@@ -725,17 +898,26 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.todaySelected = false;
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -758,7 +940,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -777,11 +965,17 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public selectChiplistValue(option: any): void {
         this.stockReportRequest.page = 1;
         const selectOptionValue = option?.option?.value;
+        /**
+         * Handles if functionality
+         */
         if (option?.option?.value?.type === 'STOCK GROUP') {
             this.stockReportRequest.stockGroupUniqueNames = [option?.option?.value?.uniqueName];
             this.stockReportRequest.stockGroups = [option?.option?.value];
         } else if (option?.option?.value?.type === 'STOCK') {
             const findStockColumnCheck = this.customiseColumns?.find(value => value?.value === "stock_name");
+            /**
+             * Handles if functionality
+             */
             if (this.stockReportRequest.stockUniqueNames?.length === 0 && findStockColumnCheck?.checked) {
                 findStockColumnCheck.checked = false;
                 this.refreshColumns.next();
@@ -789,11 +983,17 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 findStockColumnCheck.checked = true;
                 this.refreshColumns.next();
             }
+            /**
+             * Handles if functionality
+             */
             if (this.stockReportRequest.stockUniqueNames?.length) {
                 this.stockReportRequest.stockUniqueNames.push(option?.option?.value?.uniqueName);
             } else {
                 this.stockReportRequest.stockUniqueNames = [option?.option?.value?.uniqueName];
             }
+            /**
+             * Handles if functionality
+             */
             if (this.stockReportRequest.stocks?.length) {
                 this.stockReportRequest.stocks.push(option?.option?.value);
             } else {
@@ -801,6 +1001,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
         } else {
             const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variant_name");
+            /**
+             * Handles if functionality
+             */
             if (this.stockReportRequest.variantUniqueNames?.length === 0 && findVariantColumnCheck?.checked) {
                 findVariantColumnCheck.checked = false;
                 this.refreshColumns.next();
@@ -808,11 +1011,17 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 findVariantColumnCheck.checked = true;
                 this.refreshColumns.next();
             }
+            /**
+             * Handles if functionality
+             */
             if (this.stockReportRequest.variantUniqueNames?.length) {
                 this.stockReportRequest.variantUniqueNames.push(option?.option?.value?.uniqueName);
             } else {
                 this.stockReportRequest.variantUniqueNames = [option?.option?.value?.uniqueName];
             }
+            /**
+             * Handles if functionality
+             */
             if (this.stockReportRequest.variants?.length) {
                 this.stockReportRequest.variants.push(option?.option?.value);
             } else {
@@ -843,22 +1052,40 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public removeOption(selectOptionValue: any, index: number): void {
         this.stockReportRequest.page = 1;
         this.filtersChipList?.splice(index, 1);
+        /**
+         * Handles if functionality
+         */
         if (selectOptionValue) {
+            /**
+             * Handles if functionality
+             */
             if (selectOptionValue.type === "STOCK GROUP") {
                 this.stockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames?.filter(value => value != selectOptionValue.uniqueName);
                 this.stockReportRequest.stockGroups = this.stockReportRequest.stockGroups?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
             }
+            /**
+             * Handles if functionality
+             */
             if (selectOptionValue.type === "STOCK") {
                 this.stockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames.filter(value => value != selectOptionValue.uniqueName);
                 this.stockReportRequest.stocks = this.stockReportRequest.stocks?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.stockReportRequest.stockUniqueNames.length <= 1) {
                     this.customiseColumns.find(value => value?.value === "stock_name").checked = (this.stockReportRequest.stockUniqueNames?.length === 1 ? false : true);
                     this.refreshColumns.next();
                 }
             }
+            /**
+             * Handles if functionality
+             */
             if (selectOptionValue.type === "VARIANT") {
                 this.stockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames?.filter(value => value != selectOptionValue.uniqueName);
                 this.stockReportRequest.variants = this.stockReportRequest.variants?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.stockReportRequest.variantUniqueNames?.length <= 1) {
                     this.customiseColumns.find(value => value?.value === "variant_name").checked = (this.stockReportRequest.variantUniqueNames.length === 1 ? false : true);
                     this.refreshColumns.next();
@@ -884,6 +1111,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private getFilteredOptionsForHideSelected(options: any[]): any[] {
+        /**
+         * Handles if functionality
+         */
         if (!this.hideSelectedOptions || !options) {
             return options || [];
         }
@@ -907,15 +1137,24 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
+        /**
+         * Handles if functionality
+         */
         if (loadMore) {
             this.searchRequest.page++;
         } else {
             this.searchRequest.page = 1;
         }
         this.searchRequest.searchPage = this.searchPage;
+        /**
+         * Handles if functionality
+         */
         if (this.searchRequest.page === 1 || this.searchRequest.page <= this.searchRequest.totalPages) {
             delete this.searchRequest.totalItems;
             delete this.searchRequest.totalPages;
+            /**
+             * Handles if functionality
+             */
             if (this.searchRequest.variantUniqueNames?.length) {
                 this.isVariantSelected = true;
             } else {
@@ -923,12 +1162,21 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
             let searchRequest = cloneDeep(this.searchRequest);
 
+            /**
+             * Handles if functionality
+             */
             if (this.autoSelectSearchOption) {
                 searchRequest.searchPage = searchRequest.searchPage === 'STOCK' ? 'GROUP' : searchRequest.searchPage === 'VARIANT' ? 'STOCK' : searchRequest.searchPage === 'TRANSACTION' ? 'VARIANT' : 'GROUP';
             }
             this.inventoryService.searchStockTransactionReport(searchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.body && response.status === 'success') {
                     let allOptions = [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (loadMore) {
                         allOptions = this.fieldFilteredOptions.concat(response.body.results);
                     } else {
@@ -938,9 +1186,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                     this.fieldFilteredOptions = this.getFilteredOptionsForHideSelected(allOptions);
                     this.searchRequest.totalItems = response.body.totalItems;
                     this.searchRequest.totalPages = response.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.autoSelectSearchOption) {
                         this.autoSelectSearchOption = false;
                         let selectedOption = this.fieldFilteredOptions?.filter(option => option?.uniqueName === this.reportUniqueName);
+                        /**
+                         * Handles if functionality
+                         */
                         if (selectedOption?.length) {
                             this.selectChiplistValue({ option: { value: selectedOption[0] } });
                         } else {
@@ -953,6 +1207,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 } else {
                     this.fieldFilteredOptions = [];
                     this.searchRequest.totalItems = 0;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.autoSelectSearchOption) {
                         this.autoSelectSearchOption = false;
                         this.searchRequest.q = '';
@@ -1002,9 +1259,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public editInventory(): void {
         let type = this.filtersChipList[0]?.type;
         let uniqueName = this.filtersChipList[0]?.uniqueName;
+        /**
+         * Handles if functionality
+         */
         if (type === 'STOCK GROUP') {
             this.router.navigate(['/pages/inventory/v2/group', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
         }
+        /**
+         * Handles if functionality
+         */
         if (type === 'STOCK') {
             this.router.navigate(['/pages/inventory/v2/stock', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
         }
@@ -1028,6 +1291,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         stockReportRequestExport.inventoryType = this.moduleType;
 
         // this is for Item wise export
+        /**
+         * Handles if functionality
+         */
         if (this.searchPage === InventoryReportType.stock) {
             // data is coming from inventory store
             this.componentStore.exportStock({

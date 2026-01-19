@@ -19,14 +19,27 @@ import { LocaleService } from '../../services/locale.service';
 import { GeneralService } from '../../services/general.service';
 import { forEach, isArray } from '../../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * LedgerActions actions
+ * Defines ledger related action creators for state management
+ */
 export class LedgerActions {
 
     public GetTransactions$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.GET_TRANSACTION),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 let req: TransactionsRequest = action.payload as TransactionsRequest;
                 return this.ledgerService.GetLedgerTransactions(req);
@@ -40,8 +53,17 @@ export class LedgerActions {
 
     public GetAccountDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.GET_LEDGER_ACCOUNT),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.accountService.GetAccountDetailsV2(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<AccountResponseV2, string>(res, {
                 type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
                 payload: res
@@ -52,8 +74,17 @@ export class LedgerActions {
 
     public DownloadInvoiceFile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.DOWNLOAD_LEDGER_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.ledgerService.DownloadInvoice(action.payload?.body, action.payload.accountUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<string, DownloadLedgerRequest>(res, {
                 type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
                 payload: res
@@ -64,8 +95,17 @@ export class LedgerActions {
 
     public CreateBlankLedger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.CREATE_BLANK_LEDGER_REQUEST),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.ledgerService.CreateLedger(action.payload.model, action.payload.accountUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<LedgerResponse[], BlankLedgerVM>(res, {
                 type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
                 payload: res
@@ -82,8 +122,17 @@ export class LedgerActions {
      */
     public CreateBulkBlankLedgers$: Observable<Action> = createEffect(() => this.action$
     .pipe(
+        /**
+         * Handles ofType functionality
+         */
         ofType(LEDGER.CREATE_BULK_BLANK_LEDGER_REQUEST),
+        /**
+         * Handles switchMap functionality
+         */
         switchMap((action: CustomActions) => this.ledgerService.createBulkLedger(action.payload.model, action.payload.accountUniqueName)),
+        /**
+         * Handles map functionality
+         */
         map(res => this.validateResponse<LedgerResponse[], BlankLedgerVM>(res, {
             type: LEDGER.CREATE_BULK_BLANK_LEDGER_RESPONSE,
             payload: res
@@ -94,15 +143,33 @@ export class LedgerActions {
 
     public DeleteTrxEntry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.DELETE_TRX_ENTRY),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.ledgerService.DeleteLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.deleteTrxEntryResponse(res))));
 
     public DeleteTrxEntryResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.DELETE_TRX_ENTRY_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 let res = action.payload as BaseResponse<string, string>;
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     this.toaster.showSnackBar("success", this.localeService.translate("app_messages.entry_deleted"), this.localeService.translate("app_success"));
                 } else {
@@ -115,21 +182,39 @@ export class LedgerActions {
 
     public shareAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.LEDGER_SHARE_ACCOUNT),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) =>
                 this.accountService.AccountShare(
                     action.payload?.body,
                     action.payload.accountUniqueName
                 )
             ),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.shareAccountResponse(response);
             })));
 
     public shareAccountResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'error') {
                     this.toaster.showSnackBar("error", action.payload.message, action.payload.code);
                     return {
@@ -144,16 +229,34 @@ export class LedgerActions {
 
     public sharedAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.accountService.AccountShareWith(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.sharedAccountWithResponse(response);
             })));
 
     public sharedAccountResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'error') {
                     this.toaster.showSnackBar("error", action.payload.message, action.payload.code);
                 }
@@ -164,18 +267,36 @@ export class LedgerActions {
 
     public updateTxnEntry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.UPDATE_TXN_ENTRY),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.ledgerService.UpdateLedgerTransactions(action.payload.model,
                 action.payload.accountUniqueName, action.payload.entryUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(resp => {
                 return this.updateTxnEntryResponse(resp);
             })));
 
     public updateTxnEntryResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.UPDATE_TXN_ENTRY_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 let response: BaseResponse<LedgerResponse, LedgerUpdateRequest> = action.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'error') {
                     this.toaster.showSnackBar("error", response.message, response.code);
                     return { type: 'EmptyAction' };
@@ -189,10 +310,16 @@ export class LedgerActions {
                     }
                 } else {
                     this.toaster.showSnackBar("success", this.localeService.translate("app_messages.entry_updated"));
+                    /**
+                     * Handles if functionality
+                     */
                     if (action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
                         this.store.dispatch(this.refreshLedger(true));
                     }
                      
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.generalService.voucherApiVersion !== 2 && response.request.generateInvoice && !response?.body?.voucherGenerated) {
                         let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
                         let entryUniqueName = response.queryString.entryUniqueName.split('?')[0];
@@ -208,16 +335,34 @@ export class LedgerActions {
 
     public CreateQuickAccountV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.CREATE_QUICK_ACCOUNT),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.createQuickAccountResponseV2(response);
             })));
 
     public CreateQuickAccountResponseV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'error') {
                     this.toaster.showSnackBar("error", action.payload.message, action.payload.code);
                     return {
@@ -231,17 +376,35 @@ export class LedgerActions {
 
     public AdvanceSearch$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.ADVANCE_SEARCH),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from,
                 action.payload.to, '', action.payload.page, action.payload.count, action.payload.q, action.payload.branchUniqueName, action.payload.paginationToken)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.advanceSearchResponse(response);
             })));
 
     public AdvanceSearchResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.ADVANCE_SEARCH_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'error') {
                     this.toaster.showSnackBar("error", action.payload.message, action.payload.code);
                 }
@@ -250,10 +413,25 @@ export class LedgerActions {
 
     public generateUpdatedLedgerInvoice$: Observable<CustomActions> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.GENERATE_UPDATED_LEDGER_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.invoiceServices.GenerateBulkInvoice({ combined: false }, action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'success') {
+                    /**
+                     * Handles if functionality
+                     */
                     if (typeof response?.body === 'string') {
                         this.toaster.showSnackBar("success", response?.body);
                         this.store.dispatch(this.setTxnForEdit(''));
@@ -269,8 +447,17 @@ export class LedgerActions {
 
     public getLedgerTrxDetails$: Observable<CustomActions> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.GET_LEDGER_TRX_DETAILS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.ledgerService.GetLedgerTransactionDetails(action.payload.accountUniqueName, action.payload.entryName)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.validateResponse(response, {
                     type: LEDGER.GET_LEDGER_TRX_DETAILS_RESPONSE,
@@ -283,11 +470,20 @@ export class LedgerActions {
 
     public GetReconciliation$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.GET_RECONCILIATION),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 let req: TransactionsRequest = action.payload as TransactionsRequest;
                 return this.ledgerService.GetReconciliation(req, req.accountUniqueName);
             }), map(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'success') {
                     this.toaster.showSnackBar("info", response?.body?.message);
                 } else {
@@ -301,22 +497,49 @@ export class LedgerActions {
 
     public DeleteMultipleLedgerEntries$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.ledgerService.DeleteMultipleLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueNames)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.DeleteMultipleLedgerEntriesResponse(res))));
 
     public DeleteMultipleLedgerEntriesResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 let res: any = action.payload as BaseResponse<any, string>;
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
+                    /**
+                     * Handles if functionality
+                     */
                     if (Array.isArray(res?.body)) {
                         let errorMessage = res?.body[0].reason;
                         let failedEntries = res?.body[0].failedEntries;
+                        /**
+                         * Handles if functionality
+                         */
                         if (errorMessage) {
                             this.toaster.showSnackBar("error", errorMessage, this.localeService.translate("app_error"));
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (failedEntries && failedEntries.length) {
                             return this.SetFailedBulkEntries(failedEntries);
                         }
@@ -333,37 +556,73 @@ export class LedgerActions {
 
     public GenerateBulkLedgerInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.invoiceServices.GenerateBulkInvoice(action.payload.reqObj, action.payload?.body, action.payload.requestedFrom)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GenerateBulkLedgerInvoiceResponse(response);
             })));
 
     public GenerateBulkLedgerInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response?.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this.toaster.showSnackBar("error", data.message, data.code);
                 } else if (data?.status === 'einvoice-confirm') {
                     return this.setBulkGenerateConfirm(data);
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (typeof data.body === 'string') {
                         this.toaster.showSnackBar("success", data.body);
                     } else if (isArray(data.body) && data.body?.length > 0) {
                         // Block will execute if multiple invoice generate
+                        /**
+                         * Handles if functionality
+                         */
                         if (data && data.queryString && data.queryString.reqObj && !data.queryString.reqObj.combined) {
+                            /**
+                             * Handles forEach functionality
+                             */
                             forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (item.failedEntries) {
                                     this.toaster.showSnackBar("warning", item.reason);
                                 }
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (data.request && data.request.length > 0 && data.request[0].entries && data.request[0].entries.length > data.body?.length) {
                                     this.toaster.showSnackBar("success", this.localeService.translate("app_messages.vouchers_generated"));
                                 }
                             });
                         } else {
                             //  Block will execute if compound invoice generate
+                            /**
+                             * Handles forEach functionality
+                             */
                             forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
                                 this.toaster.showSnackBar("warning", item.reason);
                             });
@@ -376,7 +635,13 @@ export class LedgerActions {
 
     public GetLedgerBalance$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LEDGER.GET_LEDGER_BALANCE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 let req: any = action.payload;
                 return this.ledgerService.getLedgerBalance(req);
@@ -388,6 +653,10 @@ export class LedgerActions {
                 payload: res
             }))));
 
+    /**
+     * Creates an instance of actions
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions,
         private toaster: ToasterService,
         private store: Store<AppState>,
@@ -398,6 +667,9 @@ export class LedgerActions {
         private generalService: GeneralService) {
     }
 
+    /**
+     * Handles GetTransactions functionality
+     */
     public GetTransactions(request: TransactionsRequest): CustomActions {
         return {
             type: LEDGER.GET_TRANSACTION,
@@ -405,6 +677,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles GetLedgerAccount functionality
+     */
     public GetLedgerAccount(value: string): CustomActions {
         return {
             type: LEDGER.GET_LEDGER_ACCOUNT,
@@ -412,6 +687,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles DownloadInvoice functionality
+     */
     public DownloadInvoice(value: DownloadLedgerRequest, accountUniqueName: string): CustomActions {
         return {
             type: LEDGER.DOWNLOAD_LEDGER_INVOICE,
@@ -419,6 +697,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles CreateBlankLedger functionality
+     */
     public CreateBlankLedger(model: BlankLedgerVM, accountUniqueName: string): CustomActions {
         return {
             type: LEDGER.CREATE_BLANK_LEDGER_REQUEST,
@@ -453,6 +734,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Sets txnforedit value
+     */
     public setTxnForEdit(txnUniqueName: string) {
         return {
             type: LEDGER.SET_SELECTED_TXN_FOR_EDIT,
@@ -460,6 +744,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Sets accountforedit value
+     */
     public setAccountForEdit(accountUniqueName: string) {
         return {
             type: LEDGER.SET_SELECTED_ACCOUNT_FOR_EDIT,
@@ -467,18 +754,27 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles ResetLedger functionality
+     */
     public ResetLedger(): CustomActions {
         return {
             type: LEDGER.RESET_LEDGER
         };
     }
 
+    /**
+     * Handles ResetUpdateLedger functionality
+     */
     public ResetUpdateLedger(): CustomActions {
         return {
             type: LEDGER.RESET_UPDATE_TXN_ENTRY
         };
     }
 
+    /**
+     * Deletes trxentry
+     */
     public deleteTrxEntry(accountUniqueName: string, entryUniqueName: string): CustomActions {
         return {
             type: LEDGER.DELETE_TRX_ENTRY,
@@ -486,6 +782,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles shareAccount functionality
+     */
     public shareAccount(value: ShareAccountRequest, accountUniqueName: string): CustomActions {
         return {
             type: LEDGER.LEDGER_SHARE_ACCOUNT,
@@ -497,6 +796,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles shareAccountResponse functionality
+     */
     public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): CustomActions {
         return {
             type: LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE,
@@ -504,6 +806,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles sharedAccountWith functionality
+     */
     public sharedAccountWith(accountUniqueName: string): CustomActions {
         return {
             type: LEDGER.LEDGER_SHARED_ACCOUNT_WITH,
@@ -511,6 +816,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles sharedAccountWithResponse functionality
+     */
     public sharedAccountWithResponse(value: BaseResponse<AccountSharedWithResponse[], string>): CustomActions {
         return {
             type: LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE,
@@ -518,6 +826,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Deletes trxentryresponse
+     */
     public deleteTrxEntryResponse(res: BaseResponse<string, string>): CustomActions {
         return {
             type: LEDGER.DELETE_TRX_ENTRY_RESPONSE,
@@ -525,6 +836,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Updates existing txnentry
+     */
     public updateTxnEntry(model: LedgerUpdateRequest, accountUniqueName: string, entryUniqueName: string): CustomActions {
         return {
             type: LEDGER.UPDATE_TXN_ENTRY,
@@ -532,6 +846,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Updates existing txnentryresponse
+     */
     public updateTxnEntryResponse(payload: BaseResponse<LedgerResponse, LedgerUpdateRequest>): CustomActions {
         return {
             type: LEDGER.UPDATE_TXN_ENTRY_RESPONSE,
@@ -539,12 +856,18 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Resets quickaccountmodal to default state
+     */
     public resetQuickAccountModal(): CustomActions {
         return {
             type: LEDGER.RESET_QUICK_ACCOUNT_MODAL
         };
     }
 
+    /**
+     * Creates new quickaccountv2
+     */
     public createQuickAccountV2(value: string, account: AccountRequestV2): CustomActions {
         return {
             type: LEDGER.CREATE_QUICK_ACCOUNT,
@@ -556,6 +879,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Creates new quickaccountresponsev2
+     */
     public createQuickAccountResponseV2(value: BaseResponse<AccountResponseV2, AccountRequestV2>): CustomActions {
         return {
             type: LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE,
@@ -563,12 +889,18 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Resets deletetrxentrymodal to default state
+     */
     public resetDeleteTrxEntryModal() {
         return {
             type: LEDGER.RESET_DELETE_TRX_ENTRY_MODAL
         };
     }
 
+    /**
+     * Handles doAdvanceSearch functionality
+     */
     public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, page?: number, count?: number, q?: string, branchUniqueName?: string, paginationToken?: string): CustomActions {
         return {
             type: LEDGER.ADVANCE_SEARCH,
@@ -576,6 +908,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles advanceSearchResponse functionality
+     */
     public advanceSearchResponse(value: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>): CustomActions {
         return {
             type: LEDGER.ADVANCE_SEARCH_RESPONSE,
@@ -583,6 +918,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles generateUpdatedLedgerInvoice functionality
+     */
     public generateUpdatedLedgerInvoice(model: GenerateBulkInvoiceRequest[]): CustomActions {
         return {
             type: LEDGER.GENERATE_UPDATED_LEDGER_INVOICE,
@@ -590,6 +928,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Retrieves ledgertrxdetails data
+     */
     public getLedgerTrxDetails(accountUniqueName: string, entryName: string): CustomActions {
         return {
             type: LEDGER.GET_LEDGER_TRX_DETAILS,
@@ -599,12 +940,18 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Resets ledgertrxdetails to default state
+     */
     public resetLedgerTrxDetails(): CustomActions {
         return {
             type: LEDGER.RESET_LEGER_TRX_DETAILS
         };
     }
 
+    /**
+     * Handles GetReconciliation functionality
+     */
     public GetReconciliation(request: any): CustomActions {
         return {
             type: LEDGER.GET_RECONCILIATION,
@@ -612,6 +959,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles DeleteMultipleLedgerEntries functionality
+     */
     public DeleteMultipleLedgerEntries(accountUniqueName: string, entryUniqueNames: string[]): CustomActions {
         return {
             type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES,
@@ -619,6 +969,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles DeleteMultipleLedgerEntriesResponse functionality
+     */
     public DeleteMultipleLedgerEntriesResponse(res: BaseResponse<any, string>): CustomActions {
         return {
             type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE,
@@ -626,6 +979,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles GenerateBulkLedgerInvoice functionality
+     */
     public GenerateBulkLedgerInvoice(reqObj: { combined: boolean }, model: any, requestedFrom?: string): CustomActions {
         return {
             type: LEDGER.GENERATE_BULK_LEDGER_INVOICE,
@@ -633,6 +989,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles GenerateBulkLedgerInvoiceResponse functionality
+     */
     public GenerateBulkLedgerInvoiceResponse(model: any): CustomActions {
         return {
             type: LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE,
@@ -640,6 +999,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles GetCurrencyRate functionality
+     */
     public GetCurrencyRate(curreny: string): CustomActions {
         return {
             type: LEDGER.GET_CURRENCY_RATE,
@@ -647,6 +1009,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles GetCurrencyRateResponse functionality
+     */
     public GetCurrencyRateResponse(res): CustomActions {
         return {
             type: LEDGER.GET_CURRENCY_RATE_RESPONSE,
@@ -654,6 +1019,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles SelectDeSelectAllEntries functionality
+     */
     public SelectDeSelectAllEntries(mode: 'debit' | 'credit' | 'all', isChecked: boolean): CustomActions {
         return {
             type: LEDGER.SELECT_DESELECT_ALL_ENTRIES,
@@ -661,6 +1029,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles SelectGivenEntries functionality
+     */
     public SelectGivenEntries(entries: string[]): CustomActions {
         return {
             type: LEDGER.SELECT_GIVEN_ENTRIES,
@@ -669,6 +1040,9 @@ export class LedgerActions {
     }
 
 
+    /**
+     * Handles DeSelectGivenEntries functionality
+     */
     public DeSelectGivenEntries(entries: string[]): CustomActions {
         return {
             type: LEDGER.DESELECT_GIVEN_ENTRIES,
@@ -676,6 +1050,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles SetFailedBulkEntries functionality
+     */
     public SetFailedBulkEntries(entries: string[]): CustomActions {
         return {
             type: LEDGER.SET_FAILED_BULK_ENTRIES,
@@ -683,6 +1060,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles GetLedgerBalance functionality
+     */
     public GetLedgerBalance(request: any): CustomActions {
         return {
             type: LEDGER.GET_LEDGER_BALANCE,
@@ -690,6 +1070,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Handles GetLedgerBalanceResponse functionality
+     */
     public GetLedgerBalanceResponse(res: any): CustomActions {
         return {
             type: LEDGER.GET_LEDGER_BALANCE_RESPONSE,
@@ -698,12 +1081,21 @@ export class LedgerActions {
     }
 
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }, isCreateLedger?: boolean): CustomActions {
+        /**
+         * Handles if functionality
+         */
         if (response?.status === 'error') {
+            /**
+             * Handles if functionality
+             */
             if (showToast) {
                 this.toaster.showSnackBar("error", response.message);
             }
             return errorAction;
         } else if (response?.status === "confirm" ||  response?.status === 'einvoice-confirm') {
+            /**
+             * Handles if functionality
+             */
             if (isCreateLedger) {
                 return {
                     type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
@@ -711,6 +1103,9 @@ export class LedgerActions {
                 }
             }
         } else {
+            /**
+             * Handles if functionality
+             */
             if (showToast && typeof response.body === 'string') {
                 this.toaster.showSnackBar("success", response.body);
             }
@@ -732,6 +1127,9 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Sets bulkgenerateconfirm value
+     */
     public setBulkGenerateConfirm(body: any): CustomActions {
         return {
             type: LEDGER.SHOW_BULK_GENERATE_VOUCHER_CONFIRMATION,

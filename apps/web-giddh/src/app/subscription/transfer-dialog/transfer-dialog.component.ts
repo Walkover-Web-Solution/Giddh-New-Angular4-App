@@ -4,6 +4,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'transfer-dialog',
     templateUrl: './transfer-dialog.component.html',
@@ -12,6 +15,10 @@ import { SubscriptionComponentStore } from '../utility/subscription.store';
     providers: [SubscriptionComponentStore],
     standalone: false
 })
+/**
+ * TransferDialogComponent component
+ * Handles transferdialog functionality and user interactions
+ */
 export class TransferDialogComponent implements OnInit {
     /** Holds Store Transfer Subscription Success state observable*/
     public readonly transferSubscriptionSuccess$ = this.subscriptionComponentStore.select(state => state.transferSubscriptionSuccess);
@@ -26,6 +33,10 @@ export class TransferDialogComponent implements OnInit {
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private subscriptionComponentStore: SubscriptionComponentStore,
         @Inject(MAT_DIALOG_DATA) public subscriptionId,
@@ -43,6 +54,9 @@ export class TransferDialogComponent implements OnInit {
         this.initForm();
 
         this.transferSubscriptionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.dialogRef.close(true);
             }
@@ -69,6 +83,9 @@ export class TransferDialogComponent implements OnInit {
      */
     public onSubmit(): void {
         this.isFormSubmitted = false;
+        /**
+         * Handles if functionality
+         */
         if (this.transferForm.invalid) {
             this.isFormSubmitted = true;
             return;

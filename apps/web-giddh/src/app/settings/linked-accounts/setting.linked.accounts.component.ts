@@ -19,12 +19,19 @@ import { cloneDeep } from '../../lodash-optimized';
 import { Router } from '@angular/router';
 import { IOption } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'setting-linked-accounts',
     templateUrl: './setting.linked.accounts.component.html',
     styleUrls: ['./setting.linked.accounts.component.scss'],
     standalone: false
 })
+/**
+ * SettingLinkedAccountsComponent component
+ * Handles settinglinkedaccounts functionality and user interactions
+ */
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     @ViewChild('connectBankTemplate', { static: true }) public connectBankTemplate: TemplateRef<any>;
@@ -74,6 +81,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
@@ -89,6 +100,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.needReloadingLinkedAccounts$ = this.store.pipe(select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         /** Temporarily redirecting to home until we fix the working of this module */
         this.router.navigate(['/pages/home']);
@@ -102,18 +116,27 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(p => p.settings), takeUntil(this.destroyed$)).subscribe((o) => {
+            /**
+             * Handles if functionality
+             */
             if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
                 this.ebankAccounts = cloneDeep(o.linkedAccounts.bankAccounts);
             }
         });
 
         this.store.pipe(select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts), takeUntil(this.destroyed$)).subscribe((o) => {
+            /**
+             * Handles if functionality
+             */
             if (this.isRefreshWithCredentials) {
                 this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
             }
         });
 
         this.store.pipe(select(p => p.settings.linkedAccounts.iframeSource), takeUntil(this.destroyed$)).subscribe((source) => {
+            /**
+             * Handles if functionality
+             */
             if (source) {
                 this.connectBankDialogRef = this.dialog.open(this.connectBankTemplate, {
                     panelClass: 'mat-dialog-md',
@@ -125,12 +148,18 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.loadDefaultAccountsSuggestions();
 
         this.needReloadingLinkedAccounts$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
             }
         });
     }
 
+    /**
+     * Retrieves initialebankinfo data
+     */
     public getInitialEbankInfo() {
         this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
     }
@@ -144,6 +173,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
      */
     public connectBank(selectedProvider?, providerAccountId?) {
         // get token info
+        /**
+         * Handles if functionality
+         */
         if (selectedProvider) {
             this.selectedProvider = selectedProvider;
             this.isRefreshWithCredentials = false;
@@ -160,7 +192,13 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
      */
     public yodleeBank() {
         this._settingsLinkedAccountsService.GetYodleeToken().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.body?.user) {
                     let token = cloneDeep(data.body.user?.accessTokens[0]);
                     this.yodleeForm?.patchValue({
@@ -194,20 +232,41 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
     }
 
+    /**
+     * Closes confirmationmodal
+     */
     public closeConfirmationModal(isUserAgree: boolean) {
+        /**
+         * Handles if functionality
+         */
         if (isUserAgree) {
             let accountId = this.selectedAccount.itemAccountId;
             let accountUniqueName = '';
+            /**
+             * Handles if functionality
+             */
             if (this.selectedAccount.giddhAccount && this.selectedAccount.giddhAccount.uniqueName) {
                 accountUniqueName = this.selectedAccount.giddhAccount.uniqueName;
             }
+            /**
+             * Handles switch functionality
+             */
             switch (this.actionToPerform) {
                 case 'DeleteAddedBank':
                     let deleteWithAccountId = true;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.selectedBank?.status !== 'ALREADY_ADDED') {
+                        /**
+                         * Handles accountId functionality
+                         */
                         accountId = (this.selectedAccount && this.selectedAccount.providerAccount) ? this.selectedAccount.providerAccount.providerAccountId : 0;
                         deleteWithAccountId = false;
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (accountId) {
                         this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId, deleteWithAccountId));
                     }
@@ -229,15 +288,27 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.actionToPerform = null;
     }
 
+    /**
+     * Handles refreshaccounts event
+     */
     public onRefreshAccounts() {
         this.store.dispatch(this.settingsLinkedAccountsActions.RefreshAllAccounts());
     }
 
+    /**
+     * Handles reconnectaccount event
+     */
     public onReconnectAccount(account) {
         this.store.dispatch(this.settingsLinkedAccountsActions.ReconnectAccount(account.loginId));
     }
 
+    /**
+     * Handles deleteaddedbank event
+     */
     public onDeleteAddedBank(bankName, account, bank) {
+        /**
+         * Handles if functionality
+         */
         if (bankName && account) {
             this.selectedBank = cloneDeep(bank);
             this.selectedAccount = cloneDeep(account);
@@ -252,8 +323,17 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles refreshtoken event
+     */
     public onRefreshToken(account, isUpdateAccount) {
+        /**
+         * Handles if functionality
+         */
         if (isUpdateAccount) {
+            /**
+             * Handles if functionality
+             */
             if (!this.providerAccountId && account) {
                 this.providerAccountId = account.providerAccountId;
                 delete account['providerAccountId'];
@@ -261,12 +341,21 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(this.providerAccountId, account));
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (account && account.providerAccount) {
             this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.providerAccount.providerAccountId, {}));
         }
     }
 
+    /**
+     * Handles accountselect event
+     */
     public onAccountSelect(account, data) {
+        /**
+         * Handles if functionality
+         */
         if (data && data.value) {
             // Link bank account
             this.dataToUpdate = {
@@ -286,6 +375,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles unlinkbankaccount event
+     */
     public onUnlinkBankAccount(account) {
         this.selectedAccount = cloneDeep(account);
         let message = this.localeData?.unlink_account_message;
@@ -298,6 +390,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles updatedate event
+     */
     public onUpdateDate(date, account) {
         this.dateToUpdate = dayjs(date).format(GIDDH_DATE_FORMAT);
         this.selectedAccount = cloneDeep(account);
@@ -311,6 +406,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -327,6 +425,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
      */
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.accountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -335,6 +436,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                 page
             }
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -342,6 +446,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                             label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.accounts = searchResults;
                     } else {
@@ -352,7 +459,13 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                     }
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultAccountPaginationData.page = data.body.page;
@@ -365,6 +478,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
             this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
             this.preventDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
             }, 500);
@@ -378,11 +494,17 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
      * @memberof SettingLinkedAccountsComponent
      */
     public handleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
             this.onAccountSearchQueryChanged(
                 this.accountsSearchResultsPaginationData.query,
                 this.accountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {

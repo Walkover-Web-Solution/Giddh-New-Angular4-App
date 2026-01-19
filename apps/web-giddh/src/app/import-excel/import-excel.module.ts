@@ -21,6 +21,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         ImportComponent,
@@ -53,5 +56,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         HamburgerMenuModule
     ],
 })
+/**
+ * ImportExcelModule module
+ * Implements ImportExcelModule functionality
+ */
 export class ImportExcelModule {
 }

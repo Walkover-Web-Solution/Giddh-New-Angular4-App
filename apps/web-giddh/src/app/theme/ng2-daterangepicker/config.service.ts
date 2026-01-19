@@ -1,23 +1,43 @@
 import { Injectable } from '@angular/core';
 import * as $ from 'jquery';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * DaterangepickerConfig service
+ * Provides daterangepickerconfig related business logic and data operations
+ */
 export class DaterangepickerConfig {
 
     public settings: any;
     public skipCSS: boolean = false;
     private addedCSS = false;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.settings = {};
     }
 
+    /**
+     * Handles embedCSS functionality
+     */
     public embedCSS(): void {
         // avoid adding duplicated styles
+        /**
+         * Handles if functionality
+         */
         if (this.addedCSS) {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.skipCSS === false) {
             $('head').append(`<style>
             .daterangepicker.single .calendar,.daterangepicker.single .ranges,.ranges{float:none}

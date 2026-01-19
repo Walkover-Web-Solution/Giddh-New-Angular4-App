@@ -12,17 +12,32 @@ import { PAGINATION_LIMIT } from '../app.constant';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { concat, get, keys } from '../lodash-optimized';
 
+/**
+ * IBankRefreshResponse interface definition
+ * Defines the structure and contract for IBankRefreshResponse objects
+ */
 interface IBankRefreshResponse {
     success: boolean;
     message: string;
 }
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ContactService service
+ * Provides contact related business logic and data operations
+ */
 export class ContactService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
         private generalService: GeneralService,
@@ -106,6 +121,9 @@ export class ContactService {
         let url = this.buildBaseContactsUrl();
         url = this.replaceUrlParameters(url, params);
 
+        /**
+         * Handles if functionality
+         */
         if (branchUniqueName) {
             url = this.appendBranchParameter(url, branchUniqueName);
         }
@@ -157,6 +175,9 @@ export class ContactService {
      * Execute contacts request (POST or GET based on postData)
      */
     private executeContactsRequest(url: string, postData?: ContactAdvanceSearchModal): Observable<BaseResponse<any, string>> {
+        /**
+         * Handles if functionality
+         */
         if (this.shouldUsePostRequest(postData)) {
             return this.executePostRequest(url, postData);
         } else {
@@ -176,7 +197,13 @@ export class ContactService {
      */
     private executePostRequest(url: string, postData: ContactAdvanceSearchModal): Observable<BaseResponse<any, string>> {
         return this.http.post(url, postData).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => this.mapContactsResponse(res)),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
         );
     }
@@ -186,7 +213,13 @@ export class ContactService {
      */
     private executeGetRequest(url: string): Observable<BaseResponse<any, string>> {
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => this.mapContactsResponse(res)),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
         );
     }
@@ -200,6 +233,9 @@ export class ContactService {
         return data;
     }
 
+    /**
+     * Handles addComment functionality
+     */
     public addComment(comment, accountUniqueName): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let description = comment;
@@ -210,6 +246,9 @@ export class ContactService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
     }
 
+    /**
+     * Deletes comment
+     */
     public deleteComment(accountUniqueName): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + CONTACT_API.ADD_COMMENT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
@@ -219,6 +258,9 @@ export class ContactService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
     }
 
+    /**
+     * Handles GetContactsDashboard functionality
+     */
     public GetContactsDashboard(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number = PAGINATION_LIMIT, query?: string, sortBy: string = '',
         order: string = 'asc', postData?: ContactAdvanceSearchModal): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
@@ -236,6 +278,9 @@ export class ContactService {
             ?.replace(':fromDate', fromDate)
             ?.replace(':toDate', toDate);
 
+        /**
+         * Handles if functionality
+         */
         if (postData && Object.keys(postData)?.length > 0) {
             return this.http.post(url, postData).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;
@@ -262,6 +307,9 @@ export class ContactService {
         url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         url = url.replace(':accountUniqueName', encodeURIComponent(accountUniqueName ?? ''));
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = '';
@@ -276,11 +324,17 @@ export class ContactService {
     */
     public sendBulkEmailTemplate(model: SendBulkEmailTemplateRequest): Observable<BaseResponse<any, string>> {
         return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
         );
     }
@@ -316,6 +370,9 @@ export class ContactService {
                 .replace(':to', encodeURIComponent(model.to))
                 .replace(':sort', encodeURIComponent(model.sort))
                 .replace(':q', encodeURIComponent(model.q));
+            /**
+             * Handles if functionality
+             */
             if (branchUniqueName) {
                 url = url.concat(`&branchUniqueName=${branchUniqueName}`);
             }
@@ -330,6 +387,9 @@ export class ContactService {
         });
         const handleError = (e: any) => this.errorHandler.HandleCatch<any, any>(e);
 
+        /**
+         * Handles if functionality
+         */
         if (requestObj.method === 'POST') {
             return this.http.post(buildUrl(), body).pipe(handleResponse, catchError(handleError));
         } else {
@@ -345,11 +405,17 @@ export class ContactService {
      */
     public exportAccountStatement(requestObj: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.generalService.replaceUrlPlaceholders(ACCOUNT_STATEMENT_API.EXPORT_ACCOUNT_STATEMENT, requestObj.queryParam), requestObj.payload).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
         );
     }

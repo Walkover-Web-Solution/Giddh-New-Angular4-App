@@ -7,6 +7,9 @@ import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BankIntegrationComponentStore } from '../utility/bank-integration.store';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'institutions-list',
     styleUrls: ['./institutions-list.component.scss'],
@@ -15,6 +18,10 @@ import { BankIntegrationComponentStore } from '../utility/bank-integration.store
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * InstitutionsListComponent component
+ * Handles institutionslist functionality and user interactions
+ */
 export class InstitutionsListComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -39,6 +46,10 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     /** Hold filetered item from bank list*/
     public filteredBanks: any[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: BankIntegrationComponentStore, 
         public dialogRef: MatDialogRef<InstitutionsListComponent>,
@@ -59,6 +70,9 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.getAllInstitutionsList();
         this.institutionsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.institutions = response.results;
                 this.filteredBanks = response.results;
@@ -67,6 +81,9 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
         });
 
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.openWindow(response.link);
                 this.dialogRef.close(response?.reference);
@@ -107,6 +124,9 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
      * @memberof InstitutionsListComponent
      */
     public filterInstitutions(searchText: string): void {
+        /**
+         * Handles if functionality
+         */
         if (searchText) {
             const lowerCaseTerm = searchText.toLowerCase();
             this.filteredBanks = this.institutions.filter(item =>

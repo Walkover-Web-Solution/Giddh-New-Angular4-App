@@ -1,8 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+/**
+ * ProgressSpinnerMode interface definition
+ * Defines the structure and contract for ProgressSpinnerMode objects
+ */
 type ProgressSpinnerMode = 'determinate' | 'indeterminate';
+/**
+ * ProgressSpinnerColor interface definition
+ * Defines the structure and contract for ProgressSpinnerColor objects
+ */
 type ProgressSpinnerColor = 'primary' | 'accent' | 'warn' | false; 
 
+/**
+ * Handles Component functionality
+ */
 @Component({
   selector: 'giddh-progress-spinner',
   templateUrl: './giddh-progress-spinner.component.html',
@@ -12,6 +23,10 @@ type ProgressSpinnerColor = 'primary' | 'accent' | 'warn' | false;
     MatProgressSpinnerModule
   ]
 })
+/**
+ * GiddhProgressSpinnerComponent component
+ * Handles giddhprogressspinner functionality and user interactions
+ */
 export class GiddhProgressSpinnerComponent  {
   /** The diameter of the spinner, in pixels. */
   @Input() public diameter: number = 20;
@@ -22,5 +37,9 @@ export class GiddhProgressSpinnerComponent  {
   /** The value of the spinner, used in 'determinate' mode to indicate progress. */
   @Input() public value: number = 50;
 
+  /**
+   * Creates an instance of component
+   * Initializes component dependencies and sets up initial state
+   */
   constructor() { }
 }

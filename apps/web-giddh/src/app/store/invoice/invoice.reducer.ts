@@ -11,6 +11,10 @@ import { LEDGER } from 'apps/web-giddh/src/app/actions/ledger/ledger.const';
 import { UNAUTHORISED } from '../../app.constant';
 import { cloneDeep, concat, filter, findIndex, forEach, indexOf, isArray, map, remove } from '../../lodash-optimized';
 
+/**
+ * InvoiceState interface definition
+ * Defines the structure and contract for InvoiceState objects
+ */
 export interface InvoiceState {
     base64Data: string;
     ledgers: GetAllLedgersOfInvoicesResponse;
@@ -66,6 +70,9 @@ export const initialState: InvoiceState = {
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
@@ -73,6 +80,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.base64Data = res.body;
                 return Object.assign({}, state, newState);
@@ -90,8 +100,14 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             newState.isBulkInvoiceGeneratedWithoutErrors = false;
             newState.isGetAllLedgerDataInProgress = false;
             let res: BaseResponse<GetAllLedgersOfInvoicesResponse, CommonPaginatedRequest> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let body = cloneDeep(res.body);
+                /**
+                 * Handles if functionality
+                 */
                 if (body?.results?.length > 0) {
                     body?.results.map((item: ILedgersInvoiceResult) => {
                         item.isSelected = (item.isSelected) ? true : false;
@@ -114,6 +130,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             let uniq: string[] = action.payload;
             newState.ledgers.results.map((item: ILedgersInvoiceResult) => {
                 let idx = indexOf(uniq, item?.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (idx !== -1) {
                     return item.isSelected = true;
                 } else {
@@ -130,6 +149,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.invoiceData = res.body;
             } else {
@@ -159,6 +181,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.ledgers.results = remove(newState.ledgers.results, (item: ILedgersInvoiceResult) => {
                     return !item.isSelected;
@@ -181,9 +206,15 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let uniqueName = res.queryString?.uniquename;
                 let indx = newState.settings.webhooks?.findIndex((obj) => obj?.uniqueName === uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (indx > -1) {
                     newState.settings.webhooks.splice(indx, 1);
                 }
@@ -194,6 +225,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let emailId = res.queryString.emailId;
                 newState.settings.invoiceSettings.email = emailId;
@@ -205,6 +239,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.settings.webhooks = null;
                 return Object.assign({}, state, newState);
@@ -214,6 +251,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let form = res.queryString.form;
                 newState.settings.invoiceSettings = form.invoiceSettings;
@@ -234,6 +274,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.settings.razorPayform = res.body;
                 return Object.assign({}, state, newState);
@@ -243,6 +286,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let form = res.queryString.form;
                 newState.settings.razorPayform = form;
@@ -253,6 +299,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.DELETE_RAZORPAY_DETAIL_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.settings.razorPayform = new RazorPayDetailsResponse();
                 return Object.assign({}, state, newState);
@@ -262,6 +311,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.DELETE_INVOICE_EMAIL_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.settings.invoiceSettings.email = null;
                 newState.settings.invoiceSettings.emailVerified = false;
@@ -272,6 +324,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let form = res.queryString.form;
                 newState.settings.razorPayform = form;
@@ -287,6 +342,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 // Just refreshing the list for now
                 newState.invoices = null;
@@ -317,6 +375,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return s;
         }
         case INVOICE.RECURRING.UPDATE_RECURRING_INVOICE_RESPONSE: {
+            /**
+             * Handles if functionality
+             */
             if (action.payload) {
                 const recurringVoucherDetails = state.recurringInvoiceData.recurringInvoices.recurringVoucherDetails
                     ?.filter(p => p?.uniqueName !== action.payload?.uniqueName)
@@ -356,18 +417,36 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = action.payload;
             let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request;
             // Check if requested form ledger
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success' && action.payload.queryString && action.payload.queryString.requestedFrom === 'ledger') {
                 return state;
             }
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success' && reqObj?.length > 0) {
                 // check for failed entries
+                /**
+                 * Handles if functionality
+                 */
                 if (isArray(res.body) && res.body?.length > 0) {
                     let failedEntriesArr: string[] = [];
                     let needToRemoveEleArr: string[] = [];
+                    /**
+                     * Handles forEach functionality
+                     */
                     forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
+                        /**
+                         * Handles forEach functionality
+                         */
                         forEach(item.failedEntries, (uniqueName: string) => {
                             failedEntriesArr.push(uniqueName);
                             newState.ledgers.results = map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (o?.uniqueName === uniqueName) {
                                     o.hasGenerationErr = true;
                                     o.errMsg = item.reason;
@@ -376,15 +455,27 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                             });
                         });
                     });
+                    /**
+                     * Handles forEach functionality
+                     */
                     forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                        /**
+                         * Handles forEach functionality
+                         */
                         forEach(item.entries, (uniqueName: string) => {
                             // find index and push
+                            /**
+                             * Handles if functionality
+                             */
                             if (indexOf(failedEntriesArr, uniqueName) === -1) {
                                 needToRemoveEleArr.push(uniqueName);
                             }
                         });
                     });
 
+                    /**
+                     * Handles forEach functionality
+                     */
                     forEach(needToRemoveEleArr, (uniqueName: string) => {
                         newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                             return o?.uniqueName !== uniqueName;
@@ -392,13 +483,22 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                     });
 
                 } else if (typeof res.body === 'string') {
+                    /**
+                     * Handles forEach functionality
+                     */
                     forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                        /**
+                         * Handles forEach functionality
+                         */
                         forEach(item.entries, (uniqueName: string) => {
                             newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                                 return o?.uniqueName !== uniqueName;
                             });
                         });
                     });
+                    /**
+                     * Handles if functionality
+                     */
                     if (newState.ledgers.results?.length === 0) {
                         newState.isBulkInvoiceGeneratedWithoutErrors = true;
                     }
@@ -455,20 +555,38 @@ let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = payload;
 let reqObj: GenerateBulkInvoiceRequest[] = payload.request?.entryUniqueNames;
 
 // Check if requested from ledger
+/**
+ * Handles if functionality
+ */
 if (res?.status === 'success' && payload.queryString && payload.queryString.requestedFrom === 'ledger') {
     return state;
 }
 
+/**
+ * Handles if functionality
+ */
 if (res?.status === 'success' && reqObj?.length > 0) {
     // Check for failed entries
+    /**
+     * Handles if functionality
+     */
     if (isArray(res.body) && res.body?.length > 0) {
         let failedEntriesArr: string[] = [];
         let needToRemoveEleArr: string[] = [];
 
+        /**
+         * Handles forEach functionality
+         */
         forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
+            /**
+             * Handles forEach functionality
+             */
             forEach(item.failedEntries, (uniqueName: string) => {
                 failedEntriesArr.push(uniqueName);
                 newState.ledgers.results = map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (o?.uniqueName === uniqueName) {
                         o.hasGenerationErr = true;
                         o.errMsg = item.reason;
@@ -478,14 +596,26 @@ if (res?.status === 'success' && reqObj?.length > 0) {
             });
         });
 
+        /**
+         * Handles forEach functionality
+         */
         forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+            /**
+             * Handles forEach functionality
+             */
             forEach(item.entries, (uniqueName: string) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (indexOf(failedEntriesArr, uniqueName) === -1) {
                     needToRemoveEleArr.push(uniqueName);
                 }
             });
         });
 
+        /**
+         * Handles forEach functionality
+         */
         forEach(needToRemoveEleArr, (uniqueName: string) => {
             newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                 return o?.uniqueName !== uniqueName;
@@ -493,13 +623,22 @@ if (res?.status === 'success' && reqObj?.length > 0) {
         });
 
     } else if (typeof res.body === 'string') {
+        /**
+         * Handles forEach functionality
+         */
         forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+            /**
+             * Handles forEach functionality
+             */
             forEach(item.entries, (uniqueName: string) => {
                 newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                     return o?.uniqueName !== uniqueName;
                 });
             });
         });
+        /**
+         * Handles if functionality
+         */
         if (newState.ledgers.results?.length === 0) {
             newState.isBulkInvoiceGeneratedWithoutErrors = true;
         }
@@ -518,6 +657,9 @@ return Object.assign({}, state, newState);
 function handleGetInvoiceTemplateDetailsResponse(state: InvoiceState, payload: any): InvoiceState {
     let newState = cloneDeep(state);
     let res: BaseResponse<InvoiceTemplateDetailsResponse, string> = payload;
+    /**
+     * Handles if functionality
+     */
     if (res?.status === 'success') {
         newState.invoiceTemplateConditions = res.body;
         return Object.assign({}, state, newState);
@@ -531,6 +673,9 @@ function handleGetInvoiceTemplateDetailsResponse(state: InvoiceState, payload: a
 function handleGetInvoiceSettingResponse(state: InvoiceState, payload: any): InvoiceState {
     let newState = cloneDeep(state);
     let res: BaseResponse<InvoiceSetting, string> = payload;
+    /**
+     * Handles if functionality
+     */
     if (res?.status === 'success') {
         newState.settings = res.body;
         newState.hasInvoiceSettingPermissions = true;

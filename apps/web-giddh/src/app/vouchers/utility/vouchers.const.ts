@@ -1,3 +1,7 @@
+/**
+ * TaxSupportedCountries enumeration
+ * Defines constant values for TaxSupportedCountries
+ */
 export enum TaxSupportedCountries {
     IN = 'IN',
     UAE = 'UAE',
@@ -8,6 +12,10 @@ export enum TaxSupportedCountries {
     US = 'US'
 };
 
+/**
+ * TaxType enumeration
+ * Defines constant values for TaxType
+ */
 export enum TaxType {
     GST = 'GST',
     TRN = 'TRN',
@@ -15,6 +23,10 @@ export enum TaxType {
     SALES_TAX = 'SALES_TAX'
 };
 
+/**
+ * VoucherTypeEnum enumeration
+ * Defines constant values for VoucherTypeEnum
+ */
 export enum VoucherTypeEnum {
     sales = 'sales',
     purchase = 'purchase',
@@ -48,6 +60,10 @@ export const SearchType = {
 
 export const BriedAccountsGroup = 'cash, bankaccounts, loanandoverdraft';
 
+/**
+ * AccountType enumeration
+ * Defines constant values for AccountType
+ */
 export enum AccountType {
     customer = 'customer',
     bank = 'bank'
@@ -66,6 +82,10 @@ export enum OtherTaxTypeEnum {
 };
 
 /** Enum for Tax Collection Deduction Types */
+/**
+ * TaxCollectionDeductionType enumeration
+ * Defines constant values for TaxCollectionDeductionType
+ */
 export enum TaxCollectionDeductionType {
     TCS_RECEIVABLE = 'tcsrc',
     TDS_RECEIVABLE = 'tdsrc',
@@ -88,6 +108,10 @@ export const VoucherReportFilterModuleEnum = {
 }
 
 /** Enum for Estimate Table Columns */
+/**
+ * EstimateTableColumnsEnum enumeration
+ * Defines constant values for EstimateTableColumnsEnum
+ */
 export enum EstimateTableColumnsEnum {
     EstimateNo = 'estimate_no',
     EstimateDate = 'estimateDate',
@@ -102,6 +126,10 @@ export enum EstimateTableColumnsEnum {
 };
 
 /** Enum for Proforma Table Columns */
+/**
+ * ProformaTableColumnsEnum enumeration
+ * Defines constant values for ProformaTableColumnsEnum
+ */
 export enum ProformaTableColumnsEnum {
     ProformaNo ='proforma_no',
     ProformaDate ='proformaDate',
@@ -116,6 +144,10 @@ export enum ProformaTableColumnsEnum {
 };
 
 /** Enum for Sales Table Columns */
+/**
+ * SalesTableColumnsEnum enumeration
+ * Defines constant values for SalesTableColumnsEnum
+ */
 export enum SalesTableColumnsEnum {
     InvoiceNo = 'invoice_no',
     Customer = 'customer',
@@ -131,6 +163,10 @@ export enum SalesTableColumnsEnum {
 }
 
 /** Enum for Credit/Debit Note Table Columns */
+/**
+ * CreditDebitNoteTableColumnsEnum enumeration
+ * Defines constant values for CreditDebitNoteTableColumnsEnum
+ */
 export enum CreditDebitNoteTableColumnsEnum {
     CreditNoteNo = 'cr_note_no',
     DebitNoteNo = 'dr_note_no',
@@ -146,6 +182,10 @@ export enum CreditDebitNoteTableColumnsEnum {
 };
 
 /** Enum for Purchase order Table Columns */
+/**
+ * PurchaseOrderTableColumnsEnum enumeration
+ * Defines constant values for PurchaseOrderTableColumnsEnum
+ */
 export enum PurchaseOrderTableColumnsEnum {
     OrderNo = 'order_no',
     VendorName = 'vendor_name',
@@ -156,6 +196,10 @@ export enum PurchaseOrderTableColumnsEnum {
 };
 
 /** Enum for Purchase Bill Table Columns */
+/**
+ * PurchaseBillTableColumnsEnum enumeration
+ * Defines constant values for PurchaseBillTableColumnsEnum
+ */
 export enum PurchaseBillTableColumnsEnum {
     BillNo = 'bill_no',
     Vendor = 'vendor',
@@ -170,6 +214,10 @@ export enum PurchaseBillTableColumnsEnum {
 };
 
 /** Enum for Receipt Table Columns */
+/**
+ * ReceiptTableColumnsEnum enumeration
+ * Defines constant values for ReceiptTableColumnsEnum
+ */
 export enum ReceiptTableColumnsEnum {
     Receipt = 'receipt',
     Date = 'date',
@@ -182,6 +230,10 @@ export enum ReceiptTableColumnsEnum {
 };
 
 /** Enum for Payment Table Columns */
+/**
+ * PaymentTableColumnsEnum enumeration
+ * Defines constant values for PaymentTableColumnsEnum
+ */
 export enum PaymentTableColumnsEnum {
     Payment = 'payment',
     Date = 'date',
@@ -193,6 +245,10 @@ export enum PaymentTableColumnsEnum {
 };
 
 /** Enum for user interaction types */
+/**
+ * InteractionType enumeration
+ * Defines constant values for InteractionType
+ */
 export enum InteractionType {
     KEYBOARD = 'keyboard',
     MOUSE = 'mouse',

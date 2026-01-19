@@ -16,12 +16,19 @@ import { GroupService } from '../../../services/group.service';
 import { cloneDeep, concat, find, map } from '../../../lodash-optimized';
 import { DatepickerMethodsHelper } from '../../../shared/helpers/datepicker-methods.helper';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'search-sidebar',
     // tslint:disable-next-line:component-max-inline-declarations
     standalone: false,templateUrl: './search.sidebar.component.html',
     styleUrls: ['./search.sidebar.component.scss'],
 })
+/**
+ * SearchSidebarComponent component
+ * Handles searchsidebar functionality and user interactions
+ */
 export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public pageChangeEvent: any = null;
@@ -100,9 +107,15 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         private settingsBranchAction: SettingsBranchActions
     ) { }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -113,6 +126,9 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.loadDefaultGroupsSuggestions();
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -123,12 +139,18 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -144,10 +166,16 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -161,6 +189,9 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -169,11 +200,23 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: any) {
+        /**
+         * Handles if functionality
+         */
         if ('pageChangeEvent' in changes && changes['pageChangeEvent'].currentValue) {
+            /**
+             * Handles if functionality
+             */
             if (changes['pageChangeEvent'].firstChange || (!changes['pageChangeEvent'].previousValue || changes['pageChangeEvent'].currentValue.page !== changes['pageChangeEvent'].previousValue.page)) {
                 let page = changes.pageChangeEvent.currentValue.page;
                 this.paginationPageNumber = page;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.filterEventQuery) {
                     this.getClosingBalance(false, null, this.paginationPageNumber, this.filterEventQuery);
                 } else {
@@ -183,13 +226,22 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('filterEventQuery' in changes && changes['filterEventQuery'].currentValue) {
+            /**
+             * Handles if functionality
+             */
             if (changes['filterEventQuery'].firstChange || (!changes['filterEventQuery'].previousValue || changes['filterEventQuery'].currentValue !== changes['filterEventQuery'].previousValue)) {
                 this.getClosingBalance(false, null, this.paginationPageNumber, changes['filterEventQuery'].currentValue);
             }
         }
     }
 
+    /**
+     * Retrieves closingbalance data
+     */
     public getClosingBalance(isRefresh: boolean, event: any, page?: number, searchReqBody?: any) {
         let searchRequest: SearchRequest = {
             groupName: this.groupUniqueName,
@@ -200,21 +252,33 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             branchUniqueName: this.currentBranch?.uniqueName
         };
         this.store.dispatch(this.searchActions.GetStocksReport(searchRequest, searchReqBody));
+        /**
+         * Handles if functionality
+         */
         if (event) {
             event.target.blur();
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles selectgroup event
+     */
     public onSelectGroup(group: IOption) {
         this.groupName = group.label;
         this.groupUniqueName = group?.value;
     }
 
+    /**
+     * Handles selectedDate functionality
+     */
     public selectedDate(value: any) {
         this.fromDate = dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT);
         this.toDate = dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT);
@@ -227,7 +291,13 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SearchSidebarComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -268,6 +338,9 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.groupsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -278,6 +351,9 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                 branchUniqueName: this.currentBranch?.uniqueName
             };
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -285,6 +361,9 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.searchedGroups = searchResults;
                     } else {
@@ -295,7 +374,13 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
@@ -308,6 +393,9 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
             this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
             this.preventDefaultGroupScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultGroupScrollApiCall = false;
             }, 500);
@@ -321,11 +409,17 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SearchSidebarComponent
      */
     public handleGroupScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
             this.onGroupSearchQueryChanged(
                 this.groupsSearchResultsPaginationData.query,
                 this.groupsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {

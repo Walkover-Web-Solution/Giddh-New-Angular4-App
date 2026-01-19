@@ -23,6 +23,9 @@ import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/s
 import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-list-branch-transfer',
     templateUrl: './list-branch-transfer.component.html',
@@ -30,6 +33,10 @@ import { saveAs } from 'file-saver';
     standalone:false
 })
 
+/**
+ * ListBranchTransferComponent component
+ * Handles listbranchtransfer functionality and user interactions
+ */
 export class ListBranchTransferComponent implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
@@ -142,6 +149,9 @@ export class ListBranchTransferComponent implements OnInit {
     public isConsolidatedBranch: boolean;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
+        /**
+         * Handles return functionality
+         */
         return (
             (this.branchTransferForm?.controls['sender']?.value ||
                 this.branchTransferForm?.controls['receiver']?.value ||
@@ -154,6 +164,10 @@ export class ListBranchTransferComponent implements OnInit {
         );
     }
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public dialog: MatDialog,
         private generalService: GeneralService,
@@ -166,12 +180,18 @@ export class ListBranchTransferComponent implements OnInit {
         private router: Router
     ) {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
+        /**
+         * Handles if functionality
+         */
         if (this.currentOrganizationType === 'BRANCH') {
             this.displayedColumns = ['s_no', 'date', 'voucher_type', 'voucher_no', 'sender_receiver', 'from_warehouse', 'to_warehouse', 'totalAmount', 'action'];
         } else {
             this.displayedColumns = ['s_no', 'date', 'voucher_type', 'voucher_no', 'sender', 'receiver', 'from_warehouse', 'to_warehouse', 'totalAmount', 'action'];
         }
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
@@ -187,6 +207,9 @@ export class ListBranchTransferComponent implements OnInit {
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -194,6 +217,9 @@ export class ListBranchTransferComponent implements OnInit {
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initAllForms();
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.datePicker = [dayjs(universalDate[0], GIDDH_DATE_FORMAT).toDate(), dayjs(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
@@ -208,6 +234,9 @@ export class ListBranchTransferComponent implements OnInit {
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -223,10 +252,16 @@ export class ListBranchTransferComponent implements OnInit {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
@@ -240,6 +275,9 @@ export class ListBranchTransferComponent implements OnInit {
                     }
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -248,50 +286,110 @@ export class ListBranchTransferComponent implements OnInit {
         });
 
         this.branchTransferForm?.controls['sender'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getBranchTransferList(true);
             }
         });
         this.branchTransferForm?.controls['receiver'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getBranchTransferList(true);
             }
         });
         this.branchTransferForm?.controls['senderReceiver'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getBranchTransferList(true);
             }
         });
         this.branchTransferForm?.controls['fromWarehouse'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getBranchTransferList(true);
             }
         });
         this.branchTransferForm?.controls['toWarehouse'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getBranchTransferList(true);
@@ -328,6 +426,9 @@ export class ListBranchTransferComponent implements OnInit {
      */
     public getBranchTransferList(resetPage: boolean): void {
         this.isLoading = true;
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.branchTransferPaginationObject.page = 1;
         }
@@ -336,7 +437,13 @@ export class ListBranchTransferComponent implements OnInit {
         this.branchTransferGetRequestParams.count = this.branchTransferPaginationObject.count;
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferForm.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response?.status === "success") {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.branchTransferPaginationObject.totalItems > 0 && response.body?.items?.length === 0 && this.branchTransferPaginationObject.page > 1) {
                     this.branchTransferPaginationObject.page = response.body.totalPages;
                     this.getBranchTransferList(false);
@@ -375,18 +482,33 @@ export class ListBranchTransferComponent implements OnInit {
      * @memberof ListBranchTransferComponent
      */
     public toggleSearch(fieldName: string) {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Sender') {
             this.showSender = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Receiver') {
             this.showReceiver = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Sender/Reciever') {
             this.showSenderReciever = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'From Warehouse') {
             this.showFromWarehouse = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'To Warehouse') {
             this.showToWarehouse = true;
         }
@@ -402,31 +524,55 @@ export class ListBranchTransferComponent implements OnInit {
      * @memberof ListBranchTransferComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (searchedFieldName === 'Sender') {
+            /**
+             * Handles if functionality
+             */
             if (this.branchTransferForm?.controls['sender'].value !== null && this.branchTransferForm?.controls['sender'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Receiver') {
+            /**
+             * Handles if functionality
+             */
             if (this.branchTransferForm?.controls['receiver'].value !== null && this.branchTransferForm?.controls['receiver'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Sender/Reciever') {
+            /**
+             * Handles if functionality
+             */
             if (this.branchTransferForm?.controls['senderReceiver'].value !== null && this.branchTransferForm?.controls['senderReceiver'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'From Warehouse') {
+            /**
+             * Handles if functionality
+             */
             if (this.branchTransferForm?.controls['fromWarehouse'].value !== null && this.branchTransferForm?.controls['fromWarehouse'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'To Warehouse') {
+            /**
+             * Handles if functionality
+             */
             if (this.branchTransferForm?.controls['toWarehouse'].value !== null && this.branchTransferForm?.controls['toWarehouse'].value !== '') {
                 return;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (searchedFieldName === 'Sender') {
                 this.showSender = false;
             } else if (searchedFieldName === 'Receiver') {
@@ -454,6 +600,9 @@ export class ListBranchTransferComponent implements OnInit {
         downloadBranchTransferRequest.uniqueName = item?.uniqueName;
 
         this.inventoryService.downloadBranchTransfer(this.activeCompany?.uniqueName, downloadBranchTransferRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === "success") {
                 let blob = this.generalService.base64ToBlob(res?.body, 'application/pdf', 512);
                 return saveAs(blob, item.voucherNo + `.pdf`);
@@ -473,9 +622,15 @@ export class ListBranchTransferComponent implements OnInit {
     public showEditBranchTransferPopup(item: any): void {
         this.branchTransferMode = item.voucherType;
         let branchMode = '';
+        /**
+         * Handles if functionality
+         */
         if (this.branchTransferMode === 'receiptnote') {
             branchMode = 'receipt-note';
         }
+        /**
+         * Handles if functionality
+         */
         if (this.branchTransferMode === 'deliverynote') {
             branchMode = 'delivery-challan';
         }
@@ -502,6 +657,9 @@ export class ListBranchTransferComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === 'Yes') {
                 this.deleteNewBranchTransfer()
             } else {
@@ -518,6 +676,9 @@ export class ListBranchTransferComponent implements OnInit {
     public deleteNewBranchTransfer(): void {
         this.dialog.closeAll();
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", response.body);
                 this.getBranchTransferList(false);
@@ -534,6 +695,9 @@ export class ListBranchTransferComponent implements OnInit {
      * @memberof ListBranchTransfer
      */
     public handleBranchChange(selectedEntity: any): void {
+        /**
+         * Handles if functionality
+         */
         if (selectedEntity.value) {
             this.currentBranch.name = selectedEntity.label;
             this.branchTransferGetRequestParams.branchUniqueName = selectedEntity.value;
@@ -554,6 +718,9 @@ export class ListBranchTransferComponent implements OnInit {
      * @memberof ListBranchTransferComponent
      */
     public handlePageEvent(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.branchTransferPaginationObject.count !== event.pageSize) {
             this.branchTransferPaginationObject.page = 1;
         } else {
@@ -587,6 +754,9 @@ export class ListBranchTransferComponent implements OnInit {
      * @memberof ListBranchTransfer
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -601,16 +771,25 @@ export class ListBranchTransferComponent implements OnInit {
     * @memberof ListBranchTransfer
     */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -685,6 +864,9 @@ export class ListBranchTransferComponent implements OnInit {
     public search(): void {
         this.showClearFilter = true;
         this.branchTransferForm.controls['amount'].setValue(this.branchTransferAdvanceSearchFormObj.amount);
+        /**
+         * Handles if functionality
+         */
         if (this.branchTransferAdvanceSearchFormObj.amountOperator === 'Equals') {
             this.branchTransferForm.controls['amountOperator'].setValue('equal');
         } else if (this.branchTransferAdvanceSearchFormObj.amountOperator === 'Excluded') {
@@ -694,6 +876,9 @@ export class ListBranchTransferComponent implements OnInit {
         } else if (this.branchTransferAdvanceSearchFormObj.amountOperator === "Greater than") {
             this.branchTransferForm.controls['amountOperator'].setValue('greater');
         }
+        /**
+         * Handles if functionality
+         */
         if (this.branchTransferAdvanceSearchFormObj.voucherType === 'Receipt Note') {
             this.branchTransferForm.controls['voucherType'].setValue('receiptnote');
         } else if (this.branchTransferAdvanceSearchFormObj.voucherType === 'Delivery Challan') {
@@ -743,6 +928,9 @@ export class ListBranchTransferComponent implements OnInit {
     * @memberof ListBranchTransfer
     */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.amountOperators = [

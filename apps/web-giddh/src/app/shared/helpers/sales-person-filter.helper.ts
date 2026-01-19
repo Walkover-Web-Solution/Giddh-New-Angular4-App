@@ -30,6 +30,9 @@ export class SalesPersonFilterHelper {
         });
 
         salesPersonDropdown.valueChanges.pipe(debounceTime(700), takeUntil(destroyed$)).subscribe((search: string) => {
+            /**
+             * Handles if functionality
+             */
             if (!search) {
                 salesPersonList$.pipe(take(1)).subscribe((res: any) => {
                     component.filteredSalesPersonList = res as IOption[];

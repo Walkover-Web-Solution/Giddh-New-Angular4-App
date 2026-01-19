@@ -8,6 +8,9 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         FormsModule,
@@ -25,5 +28,9 @@ import { MatButtonModule } from '@angular/material/button';
         SendEmailComponent
     ]
 })
+/**
+ * SendEmailModule module
+ * Implements SendEmailModule functionality
+ */
 export class SendEmailModule {
 }

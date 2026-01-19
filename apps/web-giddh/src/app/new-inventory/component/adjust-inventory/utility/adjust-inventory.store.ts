@@ -10,6 +10,10 @@ import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service"
 import { BaseResponse } from "apps/web-giddh/src/app/models/api-models/BaseResponse";
 import { GroupService } from "apps/web-giddh/src/app/services/group.service";
 
+/**
+ * AdjustInventoryState interface definition
+ * Defines the structure and contract for AdjustInventoryState objects
+ */
 export interface AdjustInventoryState {
     expensesAccountList: any;
     reasonList: any;
@@ -44,17 +48,31 @@ export const DEFAULT_ADJUSTINVENTORY_STATE: AdjustInventoryState = {
     createReasonIsSuccess: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * AdjustInventoryComponentStore store
+ * Manages adjustinventorycomponent state using NgRx ComponentStore
+ */
 export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventoryState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private inventoryService: InventoryService,
         private groupService: GroupService,
         private store: Store<AppState>
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_ADJUSTINVENTORY_STATE);
     }
 
@@ -82,15 +100,27 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
      */
     readonly getExpensesAccounts = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.groupService.getMasters(req, 1).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     expensesAccountList: res?.body ?? []
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
@@ -104,6 +134,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             return this.patchState({ expensesAccountList: [] });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -117,15 +150,27 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
      */
     readonly getAllReasons = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 return this.inventoryService.getInventoryAdjustReasons().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     reasonList: res.body ?? []
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
@@ -141,6 +186,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -154,15 +202,27 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     */
     readonly getItemWiseReport = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.inventoryService.searchStockTransactionReport(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     itemWiseReport: res?.body ?? []
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
@@ -178,6 +238,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -191,15 +254,27 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     */
     readonly getVariantWiseReport = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles mergeMap functionality
+             */
             mergeMap((req) => {
                 return this.inventoryService.getVariantWiseReport(req.queryParams, req.stockReportRequest).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     variantWiseReport: res?.body ?? []
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
@@ -215,6 +290,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -229,15 +307,27 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
    */
     readonly getStockGroupClosingBalance = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles mergeMap functionality
+             */
             mergeMap((req) => {
                 return this.inventoryService.getStockTransactionReportBalance(req.queryParams, req.balanceStockReportRequest).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     stockGroupClosingBalance: res?.body ?? [],
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
@@ -253,6 +343,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -267,15 +360,27 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
      */
     readonly getAdjustInventoryData = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles mergeMap functionality
+             */
             mergeMap((req) => {
                 return this.inventoryService.getInventoryAdjust(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     adjustInventoryData: res?.body ?? [],
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
@@ -291,6 +396,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -304,15 +412,27 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     */
     readonly getInventorySearch = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.inventoryService.getAdjustmentInventoryReport(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     inventorySearch: res ?? [],
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
@@ -328,6 +448,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -342,11 +465,20 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
       */
     readonly createReason = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ createReasonInProgress: true, createReasonIsSuccess: false });
                 return this.inventoryService.createInventoryAdjustReason(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({ createReasonInProgress: false, createReasonIsSuccess: true });
@@ -360,6 +492,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             return this.patchState({ createReasonInProgress: false, createReasonIsSuccess: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -373,11 +508,20 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     */
     readonly createInventoryAdjustment = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ createAdjustInventoryInProgress: true, createAdjustInventoryIsSuccess: null });
                 return this.inventoryService.createInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toaster.showSnackBar('success', res?.body);
                                 return this.patchState({
@@ -385,6 +529,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                                     createAdjustInventoryIsSuccess: true,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
@@ -401,6 +548,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -414,11 +564,20 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     */
     readonly updateInventoryAdjustment = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ updateAdjustInventoryInProgress: true, updateAdjustInventoryIsSuccess: null });
                 return this.inventoryService.updateInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toaster.showSnackBar('success', res?.body);
                                 return this.patchState({
@@ -426,6 +585,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                                     updateAdjustInventoryIsSuccess: true,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
@@ -442,6 +604,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

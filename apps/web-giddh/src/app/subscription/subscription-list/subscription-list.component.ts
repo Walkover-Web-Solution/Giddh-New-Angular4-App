@@ -20,6 +20,9 @@ import { CompanyListDialogComponent } from '../company-list-dialog/company-list-
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
@@ -28,6 +31,10 @@ import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/
     providers: [SubscriptionComponentStore, BuyPlanComponentStore, CompanyListDialogComponentStore],
     standalone: false
 })
+/**
+ * SubscriptionListComponent component
+ * Handles subscriptionlist functionality and user interactions
+ */
 export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** Mat menu instance reference */
     @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
@@ -118,6 +125,10 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** This will use for voucher api version */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -146,9 +157,15 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.getAllSubscriptions(false);
         /** Get Discount List */
         this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.subscriptions = response?.body?.results;
                 this.dataSource = new MatTableDataSource<any>(response?.body?.results);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.dataSource?.filteredData?.length || this.subscriptionListForm?.controls['companyName']?.value ||
                     this.subscriptionListForm?.controls['billingAccountName']?.value ||
                     this.subscriptionListForm?.controls['subscriberName']?.value ||
@@ -169,82 +186,163 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             }
         });
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
             }
         });
 
         this.cancelSubscription$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.router.navigate(['/pages/user-details/subscription']);
             }
         });
 
         this.subscriptionListForm?.controls['companyName'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showName = false;
             }
         });
         this.subscriptionListForm?.controls['billingAccountName'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showBillingAccount = false;
             }
         });
         this.subscriptionListForm?.controls['subscriberName'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showSubscriber = false;
             }
         });
         this.subscriptionListForm?.controls['countryName'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showCountry = false;
             }
         });
         this.subscriptionListForm?.controls['planName'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showPlanSubName = false;
@@ -252,14 +350,29 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         });
 
         this.subscriptionListForm?.controls['duration'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showMonthlyYearly = false;
@@ -267,6 +380,9 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getAllSubscriptions(null);
             }
@@ -332,35 +448,62 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (searchedFieldName === 'companyName') {
+            /**
+             * Handles if functionality
+             */
             if (this.subscriptionListForm?.controls['companyName'].value !== null && this.subscriptionListForm?.controls['companyName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Billing Account') {
+            /**
+             * Handles if functionality
+             */
             if (this.subscriptionListForm?.controls['billingAccountName'].value !== null && this.subscriptionListForm?.controls['billingAccountName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Subscriber') {
+            /**
+             * Handles if functionality
+             */
             if (this.subscriptionListForm?.controls['subscriberName'].value !== null && this.subscriptionListForm?.controls['subscriberName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Country') {
+            /**
+             * Handles if functionality
+             */
             if (this.subscriptionListForm?.controls['countryName'].value !== null && this.subscriptionListForm?.controls['countryName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Plan Name') {
+            /**
+             * Handles if functionality
+             */
             if (this.subscriptionListForm?.controls['planName'].value !== null && this.subscriptionListForm?.controls['planName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Monthly/Yearly') {
+            /**
+             * Handles if functionality
+             */
             if (this.subscriptionListForm?.controls['duration'].value !== null && this.subscriptionListForm?.controls['duration'].value !== '') {
                 return;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (searchedFieldName === 'companyName') {
                 this.showName = false;
             } else if (searchedFieldName === 'Billing Account') {
@@ -385,6 +528,9 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public toggleSearch(fieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Company') {
             this.showName = true;
         } else if (fieldName === 'Billing Account') {
@@ -463,6 +609,9 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.statusOptions = [
@@ -522,6 +671,9 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public getAllSubscriptions(resetPage: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.subscriptionRequestParams.page = 1;
         }
@@ -562,6 +714,9 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         });
 
         cancelDialogRef.afterClosed().subscribe((action) => {
+            /**
+             * Handles if functionality
+             */
             if (action) {
                 this.componentStore.cancelSubscription(id);
             } else {
@@ -596,6 +751,9 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public buyPlan(subscription: any, type: string): void {
+        /**
+         * Handles if functionality
+         */
         if (type === 'renew') {
             this.router.navigate(
                 ['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId],
@@ -692,6 +850,9 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     * @memberof SubscriptionListComponent
     */
     public addOrMoveCompanyCallback(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.getAllSubscriptions(false);
         }

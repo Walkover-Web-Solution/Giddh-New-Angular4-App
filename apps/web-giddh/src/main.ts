@@ -4,11 +4,20 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { applyAngular21Patches } from './app/angular21-compatibility';
 // Only import electron-compatibility in Electron environment
+/**
+ * Handles if functionality
+ */
 if (typeof window !== 'undefined' && (window as any).isElectron) {
+  /**
+   * Handles import functionality
+   */
   import('./app/electron-compatibility');
 }
 
 // Apply Angular 21 compatibility patches immediately
+/**
+ * Handles applyAngular21Patches functionality
+ */
 applyAngular21Patches();
 
 // Import environment.generated.ts early to ensure global constants are set
@@ -57,6 +66,9 @@ const detectElectron = () => {
     const message = args.join(' ');
 
     // Suppress specific Angular 21 onDestroy errors
+    /**
+     * Handles if functionality
+     */
     if (message.includes('Cannot read properties of undefined (reading \'onDestroy\')') ||
         message.includes('Cannot read properties of undefined (reading \'factory\')') ||
         message.includes('createEmbeddedViewImpl') ||
@@ -76,6 +88,9 @@ const detectElectron = () => {
   console.warn = function(...args: any[]) {
     const message = args.join(' ');
 
+    /**
+     * Handles if functionality
+     */
     if (message.includes('onDestroy') ||
         message.includes('factory') ||
         message.includes('ComponentFactoryResolver')) {
@@ -87,6 +102,9 @@ const detectElectron = () => {
 
   // Global error handler for unhandled errors
   window.onerror = function(message, source, lineno, colno, error) {
+    /**
+     * Handles if functionality
+     */
     if (typeof message === 'string' &&
         (message.includes('Cannot read properties of undefined (reading \'onDestroy\')') ||
          message.includes('Cannot read properties of undefined (reading \'factory\')'))) {
@@ -100,8 +118,14 @@ const detectElectron = () => {
 
   // Handle unhandled promise rejections
   window.addEventListener('unhandledrejection', function(event) {
+    /**
+     * Handles if functionality
+     */
     if (event.reason && typeof event.reason.message === 'string') {
       const message = event.reason.message;
+      /**
+       * Handles if functionality
+       */
       if (message.includes('Cannot read properties of undefined (reading \'onDestroy\')') ||
           message.includes('Cannot read properties of undefined (reading \'factory\')')) {
         event.preventDefault();
@@ -116,7 +140,13 @@ const detectElectron = () => {
     try {
       return originalDefineProperty.call(this, obj, prop, descriptor);
     } catch (error: any) {
+      /**
+       * Handles if functionality
+       */
       if (error && error.message && typeof error.message === 'string') {
+        /**
+         * Handles if functionality
+         */
         if (error.message.includes('onDestroy') || error.message.includes('factory')) {
           // Suppress Angular 21 property access errors
           return obj;
@@ -127,16 +157,28 @@ const detectElectron = () => {
   };
 })();
 
+/**
+ * Handles if functionality
+ */
 if ((window as any).environment?.production) {
+  /**
+   * Handles enableProdMode functionality
+   */
   enableProdMode();
 }
 
+/**
+ * Handles platformBrowserDynamic functionality
+ */
 platformBrowserDynamic().bootstrapModule(AppModule)
   .then(moduleRef => {
     // Initialize environment validation after app bootstrap
     const validator = moduleRef.injector.get(EnvironmentValidatorService);
     const status = validator.getValidationStatus();
 
+    /**
+     * Handles if functionality
+     */
     if (status.status === 'error') {
 
     } else if (status.status === 'warning') {
@@ -147,6 +189,9 @@ platformBrowserDynamic().bootstrapModule(AppModule)
   })
   .catch(err => {
     // Only log non-Angular 21 compatibility errors
+    /**
+     * Handles if functionality
+     */
     if (!err.message ||
         (!err.message.includes('onDestroy') && !err.message.includes('factory'))) {
 

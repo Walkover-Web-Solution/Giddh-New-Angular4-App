@@ -1,5 +1,9 @@
 import { NgModuleRef } from '@angular/core';
 
+/**
+ * Environment interface definition
+ * Defines the structure and contract for Environment objects
+ */
 export interface Environment {
     production: boolean;
     ENV_PROVIDERS: any;
@@ -21,5 +25,8 @@ export interface Environment {
     STAGING_ENV: boolean;
     LOCAL_ENV: boolean;
     TEST_ENV: boolean;
+    /**
+     * Handles decorateModuleRef functionality
+     */
     decorateModuleRef(modRef: NgModuleRef<any>): NgModuleRef<any>;
 }

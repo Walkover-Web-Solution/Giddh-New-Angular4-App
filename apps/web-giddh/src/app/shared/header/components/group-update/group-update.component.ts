@@ -21,6 +21,9 @@ import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'group-update',
     templateUrl: 'group-update.component.html',
@@ -28,6 +31,10 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
     standalone: false
 })
 
+/**
+ * GroupUpdateComponent component
+ * Handles groupupdate functionality and user interactions
+ */
 export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -104,6 +111,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public voucherApiVersion: number;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private _fb: UntypedFormBuilder,
         private store: Store<AppState>,
@@ -119,11 +130,20 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.showEditGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showEditGroup), takeUntil(this.destroyed$));
         this.activeGroupSelected$ = this.store.pipe(select(state => {
+            /**
+             * Handles if functionality
+             */
             if (state.groupwithaccounts.activeAccount) {
+                /**
+                 * Handles if functionality
+                 */
                 if (state.groupwithaccounts.activeAccountTaxHierarchy) {
                     return difference(state.groupwithaccounts.activeAccountTaxHierarchy.applicableTaxes.map(p => p?.uniqueName), state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p?.uniqueName));
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (state.groupwithaccounts.activeGroupTaxHierarchy) {
                     return difference(state.groupwithaccounts.activeGroupTaxHierarchy.applicableTaxes.map(p => p?.uniqueName), state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p?.uniqueName));
                 }
@@ -134,6 +154,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroupTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
         this.isUpdateGroupInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupInProcess), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.groupDetailForm?.markAsPristine();
@@ -141,6 +164,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.taxPopOverTemplate = '<div><label>' + this.localeData?.tax_inherited + ':</label><ul><li>@inTax.name</li></ul></div>';
         this.groupDetailForm = this._fb.group({
@@ -166,20 +192,32 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
+            /**
+             * Handles if functionality
+             */
             if (!this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
                 this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
             }
         });
 
         this.activeGroup$.subscribe((activeGroup) => {
+            /**
+             * Handles if functionality
+             */
             if (activeGroup) {
                 this.uniqueName = activeGroup.uniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (activeGroup.applicableDiscounts && activeGroup.applicableDiscounts.length) {
                     const applicableDiscounts = activeGroup.applicableDiscounts;
                     this.defaultDiscountLabel = applicableDiscounts.map(p => p.name) || [];
                     this.discountGroupForm.get('discounts').patchValue(applicableDiscounts.map(p => p.uniqueName) || []);
                 }
                 this.groupDetailForm?.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType });
+                /**
+                 * Handles if functionality
+                 */
                 if (activeGroup.fixed) {
                     this.groupDetailForm.get('name').disable();
                     this.groupDetailForm.get('uniqueName').disable();
@@ -189,6 +227,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.groupDetailForm.get('uniqueName').enable();
                     this.groupDetailForm.get('description').enable();
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!activeGroup.fixed && activeGroup?.category) {
                     // Again load the group suggestions for Move to group operations when activeGroup has all the details
                     // done to avoid redundant API calls
@@ -197,22 +238,40 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.autoFocus?.nativeElement.focus();
         }, 50);
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([
             this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy)),
             this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroup)),
             this.store.pipe(select((state: AppState) => state.company && state.company.taxes))
         ]).pipe(takeUntil(this.destroyed$)).subscribe((result) => {
+            /**
+             * Handles if functionality
+             */
             if (result[0] && result[1] && result[2]) {
                 const activeGroupTaxHierarchy = result[0];
                 const activeGroup = result[1];
                 const taxes = result[2];
                 let arr: IOption[] = [];
+                /**
+                 * Handles if functionality
+                 */
                 if (taxes) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (activeGroup) {
                         let applicableTaxes = activeGroupTaxHierarchy?.applicableTaxes.map(p => p?.uniqueName);
+                        /**
+                         * Handles if functionality
+                         */
                         if (activeGroupTaxHierarchy) {
                             // prepare drop down options
                             this.companyTaxDropDown = differenceBy(taxes.map(p => {
@@ -221,14 +280,23 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                                 return { label: p?.name, value: p?.uniqueName, additional: p };
                             }), 'value');
 
+                            /**
+                             * Handles if functionality
+                             */
                             if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
                                 let inheritedTaxes = flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
                                 let allTaxes = applicableTaxes?.filter(f => inheritedTaxes?.indexOf(f) === -1);
                                 // set value in tax group form
+                                /**
+                                 * Sets timeout value
+                                 */
                                 setTimeout(() => {
                                     this.taxGroupForm.setValue({ taxes: allTaxes });
                                 }, 200);
                             } else {
+                                /**
+                                 * Sets timeout value
+                                 */
                                 setTimeout(() => {
                                     this.taxGroupForm.setValue({ taxes: applicableTaxes });
                                 }, 200);
@@ -239,6 +307,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                                 return { label: p?.name, value: p?.uniqueName, additional: p };
                             });
                             // set value in tax group form
+                            /**
+                             * Sets timeout value
+                             */
                             setTimeout(() => {
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }, 200);
@@ -249,6 +320,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.companyTaxDropDown = arr;
                 }
 
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.filterTaxesForDebtorCreditor();
                 }, 200);
@@ -256,10 +330,19 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         this.isTaxableGroup$ = this.store.pipe(select(state => {
             let result: boolean = false;
+            /**
+             * Handles if functionality
+             */
             if (state.groupwithaccounts.activeGroup) {
+                /**
+                 * Handles if functionality
+                 */
                 if (state.groupwithaccounts.activeAccount) {
                     return false;
                 }
@@ -277,12 +360,21 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             let activeAccount: AccountResponseV2 = null;
             let activeGroup: GroupResponse = null;
             this.store.pipe(take(1)).subscribe(s => {
+                /**
+                 * Handles if functionality
+                 */
                 if (s.groupwithaccounts) {
                     activeGroup = s.groupwithaccounts.activeGroup;
                     activeAccount = s.groupwithaccounts.activeAccount;
                 }
             });
+            /**
+             * Handles if functionality
+             */
             if (activeGroup && !activeAccount) {
+                /**
+                 * Handles if functionality
+                 */
                 if (a) {
                     this.showEditTaxSection = true;
                 }
@@ -290,7 +382,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    /**
+     * Calculates total value
+     */
     public calculateTotal() {
+        /**
+         * Handles if functionality
+         */
         if (this.currentTxn && this.currentTxn.amount) {
             let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
             this.totalForTax = total;
@@ -298,18 +396,36 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    /**
+     * Handles amountChanged functionality
+     */
     public amountChanged() {
+        /**
+         * Handles if functionality
+         */
         if (this.discountControl) {
             this.discountControl.change();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.currentTxn && this.currentTxn.selectedAccount) {
+            /**
+             * Handles if functionality
+             */
             if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.currentTxn.inventory.quantity) {
                     this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
                 }
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.isAmountFirst || this.isTotalFirts) {
             return;
         } else {
@@ -317,25 +433,40 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    /**
+     * Handles changePrice functionality
+     */
     public changePrice(val: string) {
         this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
         this.calculateTotal();
     }
 
+    /**
+     * Handles changeQuantity functionality
+     */
     public changeQuantity(val: string) {
         this.currentTxn.inventory.quantity = Number(val);
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
         this.calculateTotal();
     }
 
+    /**
+     * Calculates amount value
+     */
     public calculateAmount() {
 
+        /**
+         * Handles if functionality
+         */
         if (!(typeof this.currentTxn.total === 'string')) {
             return;
         }
         let fixDiscount = 0;
         let percentageDiscount = 0;
+        /**
+         * Handles if functionality
+         */
         if (this.discountControl) {
             percentageDiscount = this.discountControl.discountAccountsDetails?.filter(f => f.isActive)
                 .filter(s => s.discountType === 'PERCENTAGE')
@@ -355,16 +486,28 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.currentTxn.amount = Number(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(this.currentTxn.tax)) /
             (1 - 0.01 * percentageDiscount + 0.01 * Number(this.currentTxn.tax) - 0.0001 * percentageDiscount * Number(this.currentTxn.tax))).toFixed(2));
 
+        /**
+         * Handles if functionality
+         */
         if (this.discountControl) {
             this.discountControl.ledgerAmount = this.currentTxn.amount;
             this.discountControl.change();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.currentTxn?.selectedAccount) {
+            /**
+             * Handles if functionality
+             */
             if (this.currentTxn.selectedAccount.stock) {
                 this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.isTotalFirts || this.isAmountFirst) {
             return;
         } else {
@@ -374,7 +517,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
 
+    /**
+     * Hides tax element
+     */
     public hideTax(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.taxControll) {
             this.taxControll.change();
         }
@@ -401,10 +550,16 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.deleteGroupConfirmationDialogRef?.close();
     }
 
+    /**
+     * Handles flattenGroup functionality
+     */
     public flattenGroup(rawList: any[], parents: any[] = []): any[] {
         return GroupFlattenHelper.flattenGroup(rawList, parents);
     }
 
+    /**
+     * Handles makeGroupListFlatwithLessDtl functionality
+     */
     public makeGroupListFlatwithLessDtl(rawList: any) {
         let obj;
         obj = map(rawList, (item: any) => {
@@ -418,10 +573,19 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         return obj;
     }
 
+    /**
+     * Handles customMoveGroupFilter functionality
+     */
     public customMoveGroupFilter(term: string, item: IOption): boolean {
+        /**
+         * Handles return functionality
+         */
         return (item?.label?.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value?.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
+    /**
+     * Handles moveGroup functionality
+     */
     public moveGroup() {
         let activeGroupUniqueName: string;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
@@ -432,6 +596,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.moveGroupForm.reset();
     }
 
+    /**
+     * Deletes group
+     */
     public deleteGroup() {
         let activeGroupUniqueName: string;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
@@ -439,6 +606,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.closeDeleteGroupDialog();
     }
 
+    /**
+     * Updates existing group
+     */
     public updateGroup() {
         let activeGroupUniqueName: string;
         let uniqueName = this.groupDetailForm.get('uniqueName');
@@ -448,16 +618,25 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm?.value, activeGroupUniqueName));
     }
 
+    /**
+     * Handles taxHierarchy functionality
+     */
     public async taxHierarchy() {
         this.showTaxes = false;
         let activeAccount: AccountResponseV2 = null;
         let activeGroupUniqueName: string = null;
         this.store.pipe(take(1)).subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s.groupwithaccounts) {
                 activeAccount = s.groupwithaccounts.activeAccount;
                 activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (activeAccount) {
             this.store.dispatch(this.companyActions.getTax());
             this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
@@ -468,10 +647,16 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    /**
+     * Handles applyTax functionality
+     */
     public applyTax() {
         let activeAccount: AccountResponseV2 = null;
         let activeGroup: GroupResponse = null;
         this.store.pipe(take(1)).subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s.groupwithaccounts) {
                 activeAccount = s.groupwithaccounts.activeAccount;
                 activeGroup = s.groupwithaccounts.activeGroup;
@@ -481,6 +666,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         data.isAccount = false;
         data.taxes = [];
         this.activeGroupTaxHierarchy$.pipe(take(1)).subscribe((t) => {
+            /**
+             * Handles if functionality
+             */
             if (t) {
                 (Array.isArray(t.inheritedTaxes) ? t.inheritedTaxes : []).forEach(tt => {
                     (Array.isArray(tt.applicableTaxes) ? tt.applicableTaxes : []).forEach(ttt => {
@@ -495,20 +683,35 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.showEditTaxSection = false;
     }
 
+    /**
+     * Retrieves accountfromgroup data
+     */
     public getAccountFromGroup(activeGroup: GroupResponse, result: boolean): boolean {
         this.isDebtorCreditorGroups = Boolean(this.isDebtorCreditorGroup(activeGroup));
+        /**
+         * Handles if functionality
+         */
         if (activeGroup.category === 'income' || activeGroup.category === 'expenses' || this.isDebtorCreditorGroups) {
             result = true;
         }
         return result;
     }
 
+    /**
+     * Handles closingBalanceTypeChanged functionality
+     */
     public closingBalanceTypeChanged(type: string) {
+        /**
+         * Handles if functionality
+         */
         if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -524,10 +727,22 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public isDebtorCreditorGroup(activeGroup: GroupResponse, returnIndividualStatus?: boolean): boolean | { isCreditor?: boolean, isDebtor?: boolean } {
         let isTaxableGroup: boolean = false;
+        /**
+         * Handles if functionality
+         */
         if (activeGroup && activeGroup.parentGroups) {
+            /**
+             * Handles isTaxableGroup functionality
+             */
             isTaxableGroup = (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors') || activeGroup.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrydebtors' || groupName?.uniqueName === 'sundrycreditors');
         }
+        /**
+         * Handles if functionality
+         */
         if (returnIndividualStatus) {
+            /**
+             * Handles if functionality
+             */
             if (activeGroup?.uniqueName === 'sundrydebtors' || activeGroup?.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrydebtors')) {
                 return { isDebtor: true };
             } else if (activeGroup?.uniqueName === 'sundrycreditors' || activeGroup?.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrycreditors')) {
@@ -546,6 +761,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let activeGroupUniqueName: string;
         this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp?.uniqueName);
 
+        /**
+         * Handles if functionality
+         */
         if (activeGroupUniqueName) {
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.uniqueName;
@@ -562,6 +780,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof GroupUpdateComponent
      */
     public taxesSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.isTaxesSaveDisable$ = of(false);
             this.taxGroupForm.get('taxes').patchValue(event);
@@ -575,6 +796,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof GroupUpdateComponent
      */
     public discountSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.discountGroupForm.get('discounts').patchValue(event);
             this.isDiscountSaveDisable$ = of(false);
@@ -592,6 +816,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.groupsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -601,6 +828,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 count: DROPDOWN_ITEMS_COUNT_LIMIT
             };
             this.groupService.searchGroups(requestObject).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     let activeGroupUniqueName: string;
                     this.activeGroupUniqueName$.pipe(take(1)).subscribe(uniqueName => activeGroupUniqueName = uniqueName);
@@ -611,6 +841,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.searchedGroups = searchResults;
                     } else {
@@ -621,7 +854,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
@@ -634,6 +873,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
             this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
             this.preventDefaultGroupScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultGroupScrollApiCall = false;
             }, 500);
@@ -647,11 +889,17 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof SearchSidebarComponent
      */
     public handleGroupScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
             this.onGroupSearchQueryChanged(
                 this.groupsSearchResultsPaginationData.query,
                 this.groupsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -697,6 +945,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let activeGroup;
         this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
         const { isDebtor, isCreditor }: any = this.isDebtorCreditorGroup(activeGroup, true);
+        /**
+         * Handles if functionality
+         */
         if (isDebtor) {
             // Only allow TDS receivable and TCS payable
             this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => ['tdsrc', 'tcspay']?.indexOf(tax?.additional?.taxType) > -1);
@@ -707,6 +958,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             // Only normal (non-other) taxes
             this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => TCS_TDS_TAXES_TYPES?.indexOf(tax?.additional?.taxType) === -1);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.companyTaxDropDown?.length) {
             const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
             this.defaultTaxLabel = selectedTaxes.map((selectTax: any) => {

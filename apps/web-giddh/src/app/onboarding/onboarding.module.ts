@@ -11,6 +11,9 @@ import { FormsModule } from "@angular/forms";
 import { MatListModule } from "@angular/material/list";
 import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-account/generic.aside.menu.account.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         OnboardingComponent
@@ -29,6 +32,10 @@ import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-acco
     ]
 })
 
+/**
+ * OnboardingModule module
+ * Implements OnboardingModule functionality
+ */
 export class OnboardingModule {
 
 }

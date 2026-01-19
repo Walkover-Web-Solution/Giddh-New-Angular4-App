@@ -13,6 +13,9 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatListModule } from "@angular/material/list";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         VoucherAddBulkItemsComponent
@@ -36,6 +39,10 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         VoucherAddBulkItemsComponent
     ]
 })
+/**
+ * VoucherAddBulkItemsModule module
+ * Implements VoucherAddBulkItemsModule functionality
+ */
 export class VoucherAddBulkItemsModule {
 
 }

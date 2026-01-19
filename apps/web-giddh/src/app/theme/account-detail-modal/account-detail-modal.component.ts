@@ -13,6 +13,9 @@ import { Router } from '@angular/router';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 import { Configuration } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: '[account-detail-modal-component]',
     templateUrl: './account-detail-modal.component.html',
@@ -20,6 +23,10 @@ import { Configuration } from '../../app.constant';
     standalone: false
 })
 
+/**
+ * AccountDetailModalComponent component
+ * Handles accountdetailmodal functionality and user interactions
+ */
 export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     /** Template reference for aside menu */
     @ViewChild('asideMenuTemplate') public asideMenuTemplate: TemplateRef<any>;
@@ -54,6 +61,10 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     /** Hold current url */
     private currentUrl: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private _toaster: ToasterService,
         private _accountService: AccountService,
@@ -65,7 +76,13 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         this.currentUrl = this.router.url;
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.accInfo && changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
             && (changes['accountUniqueName'].currentValue !== changes['accountUniqueName'].previousValue)) {
             // Call the API only when the account info is not passed to avoid multiple API calls
@@ -82,6 +99,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public getAccountDetails(accountUniqueName: string): void {
         this.isLoading = true;
         this._accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 this.isLoading = false;
                 this.accInfo = response.body;
@@ -93,9 +113,18 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Handles performActions functionality
+     */
     public performActions(type: number, event?: any) {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case 0: // go to add and manage
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.closeOnEdit) {
                     this.activeGroupUniqueName = this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]?.uniqueName;
                     this.openAccountAsidePaneDialog();
@@ -106,6 +135,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 break;
 
             case 1: // go to ledger
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.voucherApiVersion === 2) {
                     const additionalParams = this.from && this.to ? `/${this.accountUniqueName}/${this.from}/${this.to}` : `/${this.accountUniqueName}`;
                     this.goToRoute("ledger", additionalParams, this.accountUniqueName);
@@ -115,10 +147,19 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 break;
 
             case 2: // go to sales/ purchase/ debit note or credit note generate page
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherType === VoucherTypeEnum.sales) {
                     // special case, because we don't have cash invoice as voucher type at api side so we are handling it ui side
                     let isCashInvoice = this.accountUniqueName === 'cash';
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.generalService.voucherApiVersion === 2) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (isCashInvoice) {
                             this.goToRoute("vouchers/cash/create", "", "");
                         } else {
@@ -129,6 +170,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                     }
                 } else {
                     // for purchase/ debit and credit note
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.generalService.voucherApiVersion === 2) {
                         this.goToRoute("vouchers/" + this.voucherType.toString().replace(/-/g, " ") + "/" + this.accountUniqueName + "/create", "", "");
                     } else {
@@ -152,6 +196,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public goToRoute(part: string, additionalParams: string = '', accUniqueName: string = ''): void {
         let url = this.buildInitialUrl(part, additionalParams, accUniqueName);
 
+        /**
+         * Handles if functionality
+         */
         if (Configuration.isElectron) {
             this.handleElectronNavigation(part, accUniqueName, url);
         } else {
@@ -194,6 +241,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      */
     private buildInitialUrl(part: string, additionalParams: string, accUniqueName: string): string {
         let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}` : location.href + `?returnUrl=${part}/${accUniqueName || this.accountUniqueName}`;
+        /**
+         * Handles if functionality
+         */
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
@@ -208,6 +258,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             let electronIpcAvailable = false;
 
             // Try electronAPI first (secure context)
+            /**
+             * Handles if functionality
+             */
             if ((window as any).electronAPI && (window as any).electronAPI.send) {
                 try {
                     url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName || this.accountUniqueName}` : ""}`;
@@ -219,9 +272,15 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             }
 
             // Try legacy electron require (fallback)
+            /**
+             * Handles if functionality
+             */
             if (!electronIpcAvailable && (window as any).require) {
                 try {
                     const electron = (window as any).require('electron');
+                    /**
+                     * Handles if functionality
+                     */
                     if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
                         url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName || this.accountUniqueName}` : ""}`;
                         electron.ipcRenderer.send('open-url', url);
@@ -233,6 +292,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             }
 
             // Fallback to regular window.open if IPC not available
+            /**
+             * Handles if functionality
+             */
             if (!electronIpcAvailable) {
                 this.openUrlWithRedirect(part, url);
             }
@@ -252,6 +314,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      * Open URL with redirect parameter for ledger routes
      */
     private openUrlWithRedirect(part: string, url: string): void {
+        /**
+         * Handles if functionality
+         */
         if (part === 'ledger') {
             const separator = url.includes('?') ? '&' : '?';
             url = url + `${separator}redirectUrl=${encodeURIComponent(location.href)}`;

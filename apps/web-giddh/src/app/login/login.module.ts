@@ -8,6 +8,9 @@ import { LaddaModule } from 'angular2-ladda';
 import { SharedModule } from '../shared/shared.module';
 import { LoaderModule } from '../loader/loader.module';
 import { MatDialogModule } from '@angular/material/dialog';
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         MatButtonModule,
@@ -24,5 +27,9 @@ import { MatDialogModule } from '@angular/material/dialog';
         LoginComponent
     ]
 })
+/**
+ * LoginModule module
+ * Implements LoginModule functionality
+ */
 export class LoginModule {
 }

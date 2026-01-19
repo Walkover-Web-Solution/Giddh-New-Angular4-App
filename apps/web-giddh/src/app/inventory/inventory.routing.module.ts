@@ -11,6 +11,9 @@ import { InventoryWelcomeComponent } from "./components/welcome-inventory/welcom
 import { InvViewService } from "./inv.view.service";
 import { NewBranchTransferListComponent } from "./components/new-branch-transfer/new.branch.transfer.list.component";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -63,4 +66,8 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
     exports: [RouterModule],
     providers: [InvViewService]
 })
+/**
+ * InventoryRoutingModule module
+ * Implements InventoryRoutingModule functionality
+ */
 export class InventoryRoutingModule { }

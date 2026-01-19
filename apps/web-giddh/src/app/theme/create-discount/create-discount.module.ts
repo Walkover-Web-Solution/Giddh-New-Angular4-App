@@ -11,6 +11,9 @@ import { TranslateDirectiveModule } from "../translate/translate.directive.modul
 import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
 import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         CreateDiscountComponent
@@ -32,6 +35,10 @@ import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardS
         CreateDiscountComponent
     ]
 })
+/**
+ * CreateDiscountModule module
+ * Implements CreateDiscountModule functionality
+ */
 export class CreateDiscountModule {
     
 }

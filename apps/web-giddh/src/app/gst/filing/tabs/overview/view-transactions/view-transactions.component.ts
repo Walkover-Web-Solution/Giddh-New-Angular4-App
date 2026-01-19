@@ -31,6 +31,9 @@ export const filterTransaction = {
     count: PAGINATION_LIMIT
 };
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'view-transactions',
@@ -38,6 +41,10 @@ export const filterTransaction = {
     styleUrls: ['./view-transactions.component.scss'],
     standalone: false
 })
+/**
+ * ViewTransactionsComponent component
+ * Handles viewtransactions functionality and user interactions
+ */
 export class ViewTransactionsComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: any = null;
     @Input() public selectedGst: string = null;
@@ -100,6 +107,10 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     /** Holds voucher type enum */
     public voucherTypeEnum: any = VoucherTypeEnum;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private gstAction: GstReconcileActions,
         private store: Store<AppState>, private route: Router,
         private activatedRoute: ActivatedRoute,
@@ -116,6 +127,9 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.gstr1entityType = [
             { label: this.commonLocaleData?.app_all, value: '' },
@@ -161,6 +175,9 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
         this.activatedRoute.firstChild.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.selectedGstNumber = params.selectedGst;
+            /**
+             * Handles if functionality
+             */
             if ((params?.entityType === 'registered-notes') || (params?.entityType === 'unregistered-notes')) {
                 this.filterParam.entityType = '';
                 this.filterParam.type = params.entityType;
@@ -176,8 +193,14 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
+    /**
+     * Handles viewFilteredTxn functionality
+     */
     public viewFilteredTxn(filter, val) {
         this.filterParam[filter] = val;
+        /**
+         * Handles if functionality
+         */
         if (filter === 'entityType') {
             this.filterParam.type = this.filterParam.type ?? 'all';
             this.filterParam.status = 'all';
@@ -204,8 +227,14 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @memberof ViewTransactionsComponent
      */
     public onSelectInvoice(invoice: any): void {
+        /**
+         * Handles if functionality
+         */
         if (invoice?.voucherType !== this.voucherTypeEnum.purchase) {
             let downloadVoucherRequestObject;
+            /**
+             * Handles if functionality
+             */
             if (invoice && invoice.account) {
                 this.selectedInvoice = invoice;
                 this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
@@ -214,37 +243,70 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Closes downloadorsendmailpopup
+     */
     public closeDownloadOrSendMailPopup(userResponse: any) {
         this.downloadOrSendMailDialogRef?.close();
+        /**
+         * Handles if functionality
+         */
         if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
     }
 
+    /**
+     * Closes invoicemodel
+     */
     public closeInvoiceModel(e) {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }, 2000);
     }
 
+    /**
+     * Handles mapFilters functionality
+     */
     public mapFilters() {
         let filters = cloneDeep(this.filterParam);
+        /**
+         * Handles if functionality
+         */
         if (this.selectedGst === GstReport.Gstr1) {
             this.displayedColumns.splice(4, 0, 'voucherType');
             let selected = find(this.gstr1entityType, o => o?.value === filters.entityType);
+            /**
+             * Handles if functionality
+             */
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
         } else {
             let selected = find(this.gstr2entityType, o => o?.value === filters.entityType);
+            /**
+             * Handles if functionality
+             */
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.filterParam.type) {
             let selected;
+            /**
+             * Handles if functionality
+             */
             if (this.selectedGst === GstReport.Gstr1) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.filterParam.entityType === 'advance-receipt') {
                     selected = find(this.otherEntityType, o => o?.value === filters.type)
                 } else {
@@ -253,6 +315,9 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             } else {
                 selected = find(this.gstr2InvoiceType, o => o?.value === filters.type);
             }
+            /**
+             * Handles if functionality
+             */
             if (selected) {
                 this.selectedFilter.type = selected.label;
             }
@@ -261,6 +326,9 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -284,9 +352,15 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @memberof ViewTransactionsComponent
      */
     public onDownloadOrSendMailEvent(userResponse: any): void {
+        /**
+         * Handles if functionality
+         */
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
+            /**
+             * Handles if functionality
+             */
             if (this.voucherApiVersion === 2) {
                 this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account?.uniqueName, {
                     email: { to: userResponse.emails },
@@ -314,6 +388,9 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @memberof ViewTransactionsComponent
      */
     public onDownloadInvoiceEvent(invoiceCopy): void {
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             let model: DownloadVoucherRequest = {
                 voucherType: this.selectedInvoice.voucherType,
@@ -324,7 +401,13 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
             let accountUniqueName: string = this.selectedInvoice.account?.uniqueName;
             this.receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (model.typeOfInvoice?.length > 1) {
                         return saveAs(res, `${model.voucherNumber[0]}.` + 'zip');
                     }
@@ -341,7 +424,13 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             };
             this.invoiceService.DownloadInvoice(this.selectedInvoice.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (dataToSend.typeOfInvoice?.length > 1) {
                             return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
                         }

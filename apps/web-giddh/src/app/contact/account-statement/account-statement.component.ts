@@ -17,6 +17,9 @@ import { TransactionType } from "../../models/api-models/Ledger";
 import { saveAs } from 'file-saver';
 import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "account-statement",
     templateUrl: "account-statement.component.html",
@@ -24,6 +27,10 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
     providers: [ContactComponentStore],
     standalone:false
 })
+/**
+ * AccountStatementComponent component
+ * Handles accountstatement functionality and user interactions
+ */
 export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
@@ -107,6 +114,10 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Balance due */
     public balanceDue: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public dialog: MatDialog,
         private contactComponentStore: ContactComponentStore,
@@ -125,6 +136,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response.transactionDetailList?.length) {
                 this.accountListData = response.transactionDetailList;
                 this.responseAccountList = response;
@@ -156,12 +170,18 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.transactionInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const searchValue = search?.trim();
 
+            /**
+             * Handles if functionality
+             */
             if (searchValue || searchValue === '') {
                 this.accountListRequest.q = searchValue;
                 this.isSearching = true;
                 this.accountListRequest.page = 1;
                 this.advanceFiltersApplied = false;
                 this.clearFilter = true;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isLoading) {
                     this.getAccountStatementList();
                 }
@@ -169,8 +189,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         });
 
         this.contactComponentStore.exportAccountStatementResponse$.pipe(takeUntil(this.destroyed$)).subscribe(exportResponse => {
+            /**
+             * Handles if functionality
+             */
             if (exportResponse?.data) {
                 const data = this.generalService.base64ToBlob(exportResponse.data, 'application/xml', 512);
+                /**
+                 * Saves as data
+                 */
                 saveAs(data, exportResponse.name);
             }
         });
@@ -184,6 +210,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public toggleSearch(event: any, fieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === "transactionsField") {
             this.showTransactionInput = true;
         }
@@ -219,6 +248,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.advanceSearchRequest.accountUniqueName = this.activeAccountUniqueName;
 
+        /**
+         * Handles if functionality
+         */
         if (!onlyResetValue) {
             this.getAccountStatementList();
         }
@@ -242,6 +274,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public setDefaultParam(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeAccountUniqueName) {
             this.transactionInput.patchValue(null, { emitEvent: false });
             this.showTransactionInput = false;
@@ -268,6 +303,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
             this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
             this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+            /**
+             * Handles if functionality
+             */
             if (!this.isLoading) {
                 this.getAccountStatementList();
             }
@@ -282,9 +320,15 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public closeAdvanceSearchPopup(event: any) {
         this.advanceSearchDialogRef?.close();
+        /**
+         * Handles if functionality
+         */
         if (!event.isClose && event.advanceSearchData) {
             this.advanceFiltersApplied = true;
             this.clearFilter = true;
+            /**
+             * Handles if functionality
+             */
             if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
                 this.selectedDateRange = { startDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
                 this.selectedDateRangeUi = dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -300,6 +344,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public onOpenAdvanceSearch(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                 page: 0,
@@ -324,7 +371,13 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.accountListData = [];
         const advReq = this.advanceSearchRequest.dataToSend;
+        /**
+         * Handles if functionality
+         */
         if (this.advanceFiltersApplied) {
+            /**
+             * Handles if functionality
+             */
             if (!isAdvanceSearch) {
                 this.accountListRequest.page = 1;
             }
@@ -338,6 +391,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             };
             this.contactComponentStore.getAccountStatementList(requestObj);
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.branchUniqueName) {
                 this.accountListRequest.branchUniqueName = this.branchUniqueName;
             }
@@ -364,6 +420,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.activeAccountUniqueName?.currentValue && changes?.activeAccountUniqueName?.currentValue !== changes?.activeAccountUniqueName?.previousValue) {
             this.setDefaultParam();
         }
@@ -376,6 +435,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -399,16 +461,25 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 bsRangeValue: [from, to]
             })
         });
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -428,15 +499,27 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (searchedFieldName === 'transactions') {
+            /**
+             * Handles if functionality
+             */
             if (this.transactionInput.value !== null && this.transactionInput.value !== '') {
                 return;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (searchedFieldName === 'transactions') {
                 this.showTransactionInput = false;
             }

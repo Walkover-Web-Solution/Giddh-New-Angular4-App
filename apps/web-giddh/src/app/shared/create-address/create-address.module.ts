@@ -15,6 +15,9 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         CreateAddressComponent
@@ -39,6 +42,10 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
         CreateAddressComponent
     ]
 })
+/**
+ * CreateAddressModule module
+ * Implements CreateAddressModule functionality
+ */
 export class CreateAddressModule {
 
 }

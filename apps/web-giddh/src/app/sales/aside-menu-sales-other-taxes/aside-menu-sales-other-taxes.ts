@@ -4,6 +4,9 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { cloneDeep } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-aside-menu-sales-other-taxes',
     templateUrl: './aside-menu-sales-other-taxes.html',
@@ -12,6 +15,10 @@ import { IOption } from '../../app.constant';
     standalone: false
 })
 
+/**
+ * AsideMenuSalesOtherTaxes class
+ * Implements AsideMenuSalesOtherTaxes functionality
+ */
 export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
@@ -27,9 +34,16 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     /** This will hold default data of other taxes */
     public defaultOtherTaxesModal: SalesOtherTaxesModal;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.calculationMethodOptions = [
             { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
@@ -44,11 +58,20 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
             })
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
             this.otherTaxesModal = changes.otherTaxesModal.currentValue;
             this.defaultOtherTaxesModal = cloneDeep(changes.otherTaxesModal.currentValue);
 
+            /**
+             * Handles if functionality
+             */
             if (this.defaultOtherTaxesModal.appliedOtherTax) {
                 this.selectedTaxUniqueName = this.defaultOtherTaxesModal.appliedOtherTax?.uniqueName;
                 this.applyTax({ label: this.defaultOtherTaxesModal.appliedOtherTax?.name, value: this.defaultOtherTaxesModal.appliedOtherTax?.uniqueName });
@@ -56,12 +79,24 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Handles applyTax functionality
+     */
     public applyTax(tax: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (tax && tax.value) {
             this.defaultOtherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
+            /**
+             * Handles if functionality
+             */
             if (!this.selectedTaxUniqueName) {
                 let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
                 const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
+                /**
+                 * Handles if functionality
+                 */
                 if (!isTdsTax) {
                     this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
                 } else {
@@ -71,11 +106,17 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Handles clear event
+     */
     public onClear(): void {
         this.defaultOtherTaxesModal.appliedOtherTax = null;
         this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
     }
 
+    /**
+     * Saves taxes data
+     */
     public saveTaxes(): void {
         this.otherTaxesModal = cloneDeep(this.defaultOtherTaxesModal);
         this.applyTaxes.emit(this.otherTaxesModal);

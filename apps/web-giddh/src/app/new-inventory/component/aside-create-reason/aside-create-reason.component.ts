@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { set } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-create-reason',
     
@@ -12,6 +15,10 @@ import { set } from '../../../lodash-optimized';
     styleUrls: ['./aside-create-reason.component.scss'],
     providers: [AdjustInventoryComponentStore]
 })
+/**
+ * AsideCreateNewReasonComponent component
+ * Handles asidecreatenewreason functionality and user interactions
+ */
 export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
     /* Aside pane state*/
     public asideMenuState: string = 'out';
@@ -30,6 +37,10 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
     /** Holds if form is valid or not */
     public isValidForm: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: AdjustInventoryComponentStore,
         private formBuilder: FormBuilder
@@ -43,6 +54,9 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
     public ngOnInit(): void {
         this.initReasonForm();
         this.componentStore.createReasonIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.closeAsideEvent.emit(true);
             }
@@ -86,6 +100,9 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
      */
     public saveReason(): void {
         this.isValidForm = !this.reasonForm.invalid;
+        /**
+         * Handles if functionality
+         */
         if (this.reasonForm.invalid) {
             return;
         }

@@ -40,9 +40,15 @@ const initialState: CurrentCommonState = {
 };
 
 export function CommonReducer(state: CurrentCommonState = initialState, action: CustomActions): CurrentCommonState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case CommonActions.GET_COUNTRY_RESPONSE:
             let countries: BaseResponse<CountryResponse[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (countries?.status === 'success') {
                 return Object.assign({}, state, {
                     countries: countries.body
@@ -51,6 +57,9 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
             return Object.assign({}, state, {});
         case CommonActions.GET_ALL_COUNTRY_RESPONSE:
             let countriesRes: BaseResponse<CountryResponse[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (countriesRes?.status === 'success') {
                 return Object.assign({}, state, {
                     countriesAll: countriesRes.body
@@ -60,6 +69,9 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
 
         case CommonActions.GET_CALLING_CODES_RESPONSE:
             let callingcodes: BaseResponse<CallingCodesResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (callingcodes?.status === 'success') {
                 return Object.assign({}, state, {
                     callingcodes: callingcodes.body
@@ -74,6 +86,9 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
         }
         case CommonActions.GET_ONBOARDING_FORM_RESPONSE:
             let onboardingform: BaseResponse<OnboardingFormResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (onboardingform?.status === 'success') {
                 return Object.assign({}, state, {
                     onboardingform: onboardingform.body,
@@ -84,6 +99,9 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
 
         case CommonActions.GET_PARTY_TYPE_RESPONSE:
             let partyTypeRes: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (partyTypeRes?.status === 'success') {
                 return Object.assign({}, state, {
                     partyTypes: partyTypeRes.body?.partyTypes

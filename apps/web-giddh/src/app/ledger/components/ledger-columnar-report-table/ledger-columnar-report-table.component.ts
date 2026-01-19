@@ -12,6 +12,9 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 import { PageEvent } from '@angular/material/paginator';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'ledger-columnar-report-table',
     templateUrl: './ledger-columnar-report-table.component.html',
@@ -20,6 +23,10 @@ import { PageEvent } from '@angular/material/paginator';
     standalone: false
 })
 
+/**
+ * LedgerColumnarReportTableComponent component
+ * Handles ledgercolumnarreporttable functionality and user interactions
+ */
 export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, OnChanges {
     /** Company unique name */
     public companyUniqueName: string = '';
@@ -52,6 +59,10 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     /** Columns to display in table */
     public tableHeadingColumns: string[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,
         private store: Store<AppState>,
@@ -61,6 +72,9 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     ) {
         this.tableHeadingColumns = this.getDefaultColumns();
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
+            /**
+             * Handles if functionality
+             */
             if (state && state.session && state.session.companyUniqueName) {
                 this.companyUniqueName = cloneDeep(state.session.companyUniqueName);
             }
@@ -87,6 +101,9 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      * @memberof LedgerColumnarReportTableComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes && changes['columnarReportExportRequest'] && changes['columnarReportExportRequest'].currentValue) {
             this.columnarReportExportRequest = changes['columnarReportExportRequest'].currentValue;
         }
@@ -123,10 +140,19 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
         this.isLoading = true;
         this.ledgerService.exportLedgerColumnarReportTable(this.getColumnarRequestModel, this.companyUniqueName, this.accountUniquename, body).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body && response.body.results) {
                     this.reportResponse = response.body;
                     this.reportResponseResult = response.body.results;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.body.results?.length) {
                         this.prepareColumnForTable();
                     }
@@ -149,12 +175,24 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public prepareColumnForTable(): void {
         this.columnarTableColumn = [];
         this.tableHeadingColumns = this.getDefaultColumns();
+        /**
+         * Handles if functionality
+         */
         if (this.reportResponseResult && this.reportResponseResult.length > 0) {
             (Array.isArray(this.reportResponseResult) ? this.reportResponseResult : []).forEach((item, index) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item && item.accountNameAndBalanceMap) {
                     let columns = Object.keys(item.accountNameAndBalanceMap);
+                    /**
+                     * Handles if functionality
+                     */
                     if (columns && columns.length > 0) {
                         (Array.isArray(columns) ? columns : []).forEach((element) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (element && this.columnarTableColumn?.indexOf(element) === -1) {
                                 this.columnarTableColumn.push(element);
                                 this.tableHeadingColumns.push(element);
@@ -173,6 +211,9 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      * @memberof LedgerColumnarReportTableComponent
      */
     public getTotalNoOfColumn(): number {
+        /**
+         * Handles return functionality
+         */
         return (this.columnarTableColumn ? this.columnarTableColumn.length : 0) + 16;
     }
 
@@ -190,6 +231,9 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      * @memberof LedgerColumnarReportTableComponent
      */
     public handlePageEvent(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.columnarReportExportRequest) {
             this.columnarReportExportRequest.page = this.columnarReportExportRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
             this.columnarReportExportRequest.count = event.pageSize;

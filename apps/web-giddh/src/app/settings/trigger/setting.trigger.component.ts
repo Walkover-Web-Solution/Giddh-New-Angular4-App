@@ -17,6 +17,9 @@ import { cloneDeep, each } from '../../lodash-optimized';
 import { NgForm } from '@angular/forms';
 import { SettingsTriggersService } from '../../services/settings.triggers.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'setting-trigger',
     templateUrl: './setting.trigger.component.html',
@@ -24,6 +27,10 @@ import { SettingsTriggersService } from '../../services/settings.triggers.servic
     standalone: false
 })
 
+/**
+ * SettingTriggerComponent component
+ * Handles settingtrigger functionality and user interactions
+ */
 export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     @ViewChild('triggerConfirmationTemplate', { static: true }) public triggerConfirmationTemplate: TemplateRef<any>;
@@ -106,6 +113,10 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private groupService: GroupService,
         private store: Store<AppState>,
@@ -117,7 +128,13 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles for functionality
+         */
         for (let i = 1; i <= 31; i++) {
             let day = i?.toString();
             this.days.push({ label: day, value: day });
@@ -132,6 +149,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.loadDefaultGroupsSuggestions();
 
         this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$)).subscribe((groups) => {
+            /**
+             * Handles if functionality
+             */
             if (groups) {
                 let groupsRes: IOption[] = [];
                 groups.map(d => {
@@ -150,13 +170,22 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     public getTriggers(): void {
         this.isLoading = true;
         this.settingsTriggersService.GetTriggers().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if(response?.status === "success") {
                 this.availableTriggers = cloneDeep(response?.body);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.newTriggerObj.entity) {
                     this.resetNewFormModel();
                     this.resetNewFormFields();
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if(this.commonLocaleData?.app_something_went_wrong) {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -166,39 +195,66 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles submit event
+     */
     public onSubmit(data) {
         let dataToSave = cloneDeep(data);
         dataToSave.action = 'webhook';
+        /**
+         * Handles if functionality
+         */
         if (!dataToSave.name) {
             this.toaster.errorToast(this.localeData?.validations?.trigger_name, this.localeData?.validation);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!dataToSave.entity) {
             this.toaster.errorToast(this.localeData?.validations?.entity_type, this.localeData?.validation);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!dataToSave.entityUniqueName) {
             this.toaster.errorToast(this.localeData?.validations?.entity, this.localeData?.validation);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!dataToSave.scope) {
             this.toaster.errorToast(this.localeData?.validations?.scope, this.localeData?.validation);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!dataToSave?.filter) {
             this.toaster.errorToast(this.localeData?.validations?.filter, this.localeData?.validation);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!dataToSave.action) {
             this.toaster.errorToast(this.localeData?.validations?.action, this.localeData?.validation);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!dataToSave?.value && this.newTriggerObj.scope !== 'closing balance') {
             this.toaster.errorToast(this.localeData?.validations?.enter_value, this.localeData?.validation);
             return;
         } else {
             delete dataToSave['value'];
         }
+        /**
+         * Handles if functionality
+         */
         if (!dataToSave.url) {
             this.toaster.errorToast(this.localeData?.validations?.enter_url, this.localeData?.validation);
             return;
@@ -209,6 +265,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Deletes tax
+     */
     public deleteTax(taxToDelete) {
         this.newTriggerObj = taxToDelete;
         this.selectedTax = this.availableTriggers.find((tax) => tax?.uniqueName === taxToDelete?.uniqueName).name;
@@ -222,6 +281,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Updates existing trigger
+     */
     public updateTrigger(taxIndex: number) {
         let selectedTrigger = cloneDeep(this.availableTriggers[taxIndex]);
         this.newTriggerObj = selectedTrigger;
@@ -235,6 +297,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles cancel event
+     */
     public onCancel() {
         this.resetNewFormModel();
     }
@@ -247,12 +312,21 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      */
     public userConfirmation(userResponse: boolean) {
         this.triggerConfirmationDialogRef?.close();
+        /**
+         * Handles if functionality
+         */
         if (userResponse) {
+            /**
+             * Handles if functionality
+             */
             if (this.confirmationFor === 'delete') {
                 this.settingsTriggersService.DeleteTrigger(this.newTriggerObj?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.showToaster(this.commonLocaleData?.app_messages?.trigger_deleted, response);
                 });
             } else if (this.confirmationFor === 'edit') {
+                /**
+                 * Handles each functionality
+                 */
                 each(this.newTriggerObj.taxDetail, (tax) => {
                     tax.date = dayjs(tax.date).format(GIDDH_DATE_FORMAT);
                 });
@@ -267,7 +341,13 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles entitytypeselected event
+     */
     public onEntityTypeSelected(ev) {
+        /**
+         * Handles if functionality
+         */
         if (ev?.value === 'account') {
             this.entityOptions$ = observableOf(this.accounts);
         } else if (ev?.value === 'group') {
@@ -276,6 +356,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.onResetEntityType();
     }
 
+    /**
+     * Handles resetentitytype event
+     */
     public onResetEntityType() {
         this.newTriggerObj.entityUniqueName = null;
         this.forceClearEntityList$ = observableOf({ status: true });
@@ -285,11 +368,20 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      * onSelectScope
      */
     public onSelectScope(event) {
+        /**
+         * Handles if functionality
+         */
         if (!event?.value) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (event?.value === 'closing balance') {
             this.onSelectClosingBalance();
+            /**
+             * Handles if functionality
+             */
             if ((this.newTriggerObj?.filter === 'amountGreaterThan') || (this.newTriggerObj?.filter === 'amountSmallerThan')) {
                 return;
             } else {
@@ -318,6 +410,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         ];
     }
 
+    /**
+     * Handles selectclosingbalance event
+     */
     public onSelectClosingBalance() {
         this.filterList = [
             { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
@@ -336,6 +431,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      */
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.accountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -344,6 +442,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 page
             }
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -351,6 +452,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                             label: `${result.name} - (${result?.uniqueName})`
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.accounts = searchResults;
                     } else {
@@ -362,7 +466,13 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                     this.entityOptions$ = observableOf(this.accounts);
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultAccountPaginationData.page = data.body.page;
@@ -375,6 +485,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
             this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
             this.preventDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
             }, 500);
@@ -392,6 +505,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.groupsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -402,6 +518,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 onlyTop: true
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -409,6 +528,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                             label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.groups = searchResults;
                     } else {
@@ -420,7 +542,13 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                     this.entityOptions$ = observableOf(this.groups);
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
@@ -433,6 +561,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
             this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
             this.preventDefaultGroupScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultGroupScrollApiCall = false;
             }, 500);
@@ -446,11 +577,17 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      * @memberof SettingTriggerComponent
      */
     public handleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
             this.onAccountSearchQueryChanged(
                 this.accountsSearchResultsPaginationData.query,
                 this.accountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -473,11 +610,17 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchModelComponent
      */
     public handleGroupScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
             this.onGroupSearchQueryChanged(
                 this.groupsSearchResultsPaginationData.query,
                 this.groupsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -550,6 +693,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      * @memberof SettingTriggerComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.entityList = [
                 { label: this.localeData?.entity_types?.group, value: 'group' },
@@ -596,6 +742,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
         this.showAllFilters();
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.resetNewFormFields();
         }, 100);
@@ -624,6 +773,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      */
      private showToaster(successMessage: string, response: any): void {
         this.toaster.clearAllToaster();
+        /**
+         * Handles if functionality
+         */
         if (response?.status === "success") {
             this.getTriggers();
             this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);

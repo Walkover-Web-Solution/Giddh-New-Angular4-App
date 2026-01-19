@@ -1,3 +1,7 @@
+/**
+ * TributeConfig interface definition
+ * Defines the structure and contract for TributeConfig objects
+ */
 export interface TributeConfig<T = any> {
     /** Character that triggers mention dropdown (default '@') */
     trigger?: string;

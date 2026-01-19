@@ -4,6 +4,9 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { VerifyEmailComponent } from "./verify-email.component";
 import { VerifyEmailRoutingModule } from "./verify-email.routing.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         VerifyEmailComponent
@@ -14,6 +17,10 @@ import { VerifyEmailRoutingModule } from "./verify-email.routing.module";
         MatSnackBarModule
     ]
 })
+/**
+ * VerifyEmailModule module
+ * Implements VerifyEmailModule functionality
+ */
 export class VerifyEmailModule {
 
 }

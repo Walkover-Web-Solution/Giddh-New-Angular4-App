@@ -10,4 +10,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
     encapsulation: ViewEncapsulation.None,
     standalone: false
 })
+/**
+ * BottomSpaceComponent component
+ * Handles bottomspace functionality and user interactions
+ */
 export class BottomSpaceComponent {}

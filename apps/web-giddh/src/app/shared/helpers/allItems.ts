@@ -1,3 +1,7 @@
+/**
+ * AllItem interface definition
+ * Defines the structure and contract for AllItem objects
+ */
 export interface AllItem {
     label: string;
     link: string;
@@ -9,6 +13,10 @@ export interface AllItem {
     additionalRoutes?: any;
 }
 
+/**
+ * AllItems interface definition
+ * Defines the structure and contract for AllItems objects
+ */
 export interface AllItems {
     label: string;
     icon: string;

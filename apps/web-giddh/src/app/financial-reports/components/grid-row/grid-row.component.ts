@@ -27,6 +27,9 @@ import { GeneralService } from '../../../services/general.service';
 import { Configuration } from '../../../app.constant';
 import { includes, indexOf } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: '[grid-row]',
     styleUrls: ['./grid-row.component.scss'],
@@ -35,6 +38,10 @@ selector: '[grid-row]',
     providers: [FinancialReportsComponentStore],
     standalone: false
 })
+/**
+ * GridRowComponent component
+ * Handles gridrow functionality and user interactions
+ */
 export class GridRowComponent extends FinancialGridRowBase implements OnInit, OnDestroy {
     @Input() public from: string;
     @Input() public to: string;
@@ -57,6 +64,10 @@ export class GridRowComponent extends FinancialGridRowBase implements OnInit, On
     /** Hold current url */
     private currentUrl: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         protected cd: ChangeDetectorRef,
         private searchService: SearchService,
@@ -67,6 +78,9 @@ export class GridRowComponent extends FinancialGridRowBase implements OnInit, On
         protected tlPlService: TlPlService,
         private generalService: GeneralService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(cd, financialReportsComponentStore, tlPlService);
         this.currentUrl = this.router.url;
     }
@@ -80,6 +94,9 @@ export class GridRowComponent extends FinancialGridRowBase implements OnInit, On
       * @memberof GridRowComponent
       */
     public entryClicked(acc: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!acc?.uniqueName) return;
 
         // Construct direct ledger URL with redirectUrl parameter
@@ -87,11 +104,17 @@ export class GridRowComponent extends FinancialGridRowBase implements OnInit, On
         const separator = url.includes('?') ? '&' : '?';
         url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
 
+        /**
+         * Handles if functionality
+         */
         if (Configuration.isElectron) {
             try {
                 let electronIpcAvailable = false;
 
                 // Try electronAPI first (secure context)
+                /**
+                 * Handles if functionality
+                 */
                 if ((window as any).electronAPI && (window as any).electronAPI.send) {
                     try {
                         const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
@@ -103,9 +126,15 @@ export class GridRowComponent extends FinancialGridRowBase implements OnInit, On
                 }
 
                 // Try legacy electron require (fallback)
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable && (window as any).require) {
                     try {
                         const electron = (window as any).require('electron');
+                        /**
+                         * Handles if functionality
+                         */
                         if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
                             const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
                             electron.ipcRenderer.send('open-url', electronUrl);
@@ -117,6 +146,9 @@ export class GridRowComponent extends FinancialGridRowBase implements OnInit, On
                 }
 
                 // Fallback to regular window.open if IPC not available
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable) {
 
                     (window as any).open(url, '_blank');
@@ -130,13 +162,22 @@ export class GridRowComponent extends FinancialGridRowBase implements OnInit, On
         }
     }
 
+    /**
+     * Handles accountInfo functionality
+     */
     public accountInfo(acc, e: Event) {
         this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body) {
                 this.accountDetails = response.body;
                 const parentGroups = response.body?.parentGroups?.join(', ');
                 const creditorsString = 'currentliabilities, sundrycreditors';
                 const debtorsString = 'currentassets, sundrydebtors';
+                /**
+                 * Handles if functionality
+                 */
                 if (parentGroups?.indexOf(creditorsString) > -1 || parentGroups?.indexOf(debtorsString) > -1) {
                     this.modalUniqueName = response.body?.uniqueName;
                 } else {
@@ -148,10 +189,16 @@ export class GridRowComponent extends FinancialGridRowBase implements OnInit, On
         });
     }
 
+    /**
+     * Hides modal element
+     */
     public hideModal() {
         this.modalUniqueName = null;
     }
 
+    /**
+     * Handles trackByFn functionality
+     */
     public trackByFn(index, item: Account) {
         return item?.uniqueName;
     }

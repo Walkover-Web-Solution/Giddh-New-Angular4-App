@@ -7,6 +7,9 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -18,5 +21,9 @@ import { MatButtonModule } from '@angular/material/button';
         MatButtonModule
     ]
 })
+/**
+ * PermissionModule module
+ * Implements PermissionModule functionality
+ */
 export class PermissionModule {
 }

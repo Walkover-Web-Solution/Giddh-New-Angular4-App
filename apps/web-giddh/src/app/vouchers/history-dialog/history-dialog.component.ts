@@ -8,6 +8,9 @@ import { GIDDH_DATE_FORMAT_TIME } from '../../shared/helpers/defaultDateFormat';
 import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-history-dialog',
     templateUrl: './history-dialog.component.html',
@@ -15,6 +18,10 @@ import { PageEvent } from '@angular/material/paginator';
     providers: [VoucherComponentStore],
     standalone: false
 })
+/**
+ * HistoryDialogComponent component
+ * Handles historydialog functionality and user interactions
+ */
 export class HistoryDialogComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -34,6 +41,10 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     /** Holds Date format with time global constant */
     public giddhDateFormatWithTime: string = GIDDH_DATE_FORMAT_TIME;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private componentStore: VoucherComponentStore,
@@ -46,19 +57,34 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     * @memberof HistoryDialogComponent
     */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.inputData.model) {
             this.getVoucherVersions();
             this.voucherVersionsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     let versions = response;
+                    /**
+                     * Handles if functionality
+                     */
                     if (versions.results) {
                         versions.items = versions.results;
                         delete versions.results;
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (versions.items && versions.items.length > 0) {
                         (Array.isArray(versions.items) ? versions.items : []).forEach(result => {
                             result.versionTime = new Date(result.versionTime);
                             result['userName'] =  this.getByUserText(result.user?.name);
+                            /**
+                             * Handles if functionality
+                             */
                             if (result.changes && result.changes.length > 0) {
                                 (Array.isArray(result.changes) ? result.changes : []).forEach(change => {
                                     change.message = this.getVersionMessage(this.inputData.model?.voucherType === VoucherTypeEnum.purchaseOrder, change);
@@ -79,6 +105,9 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     * @memberof HistoryDialogComponent
     */
     public handlePageChange(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.pagination.count = event.pageSize;
@@ -125,7 +154,13 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
         let message = "";
         let revisionField = this.generalService.getRevisionField(change.type);
 
+        /**
+         * Handles if functionality
+         */
         if (change.optType === "CREATE") {
+            /**
+             * Handles if functionality
+             */
             if (isPurchaseOrder) {
                 let poCreated = this.inputData?.localeData?.po_created;
                 poCreated = poCreated?.replace("[VALUE]", change.newValue);

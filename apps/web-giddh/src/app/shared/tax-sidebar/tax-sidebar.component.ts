@@ -15,6 +15,9 @@ import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.a
 import { ServiceConfig } from '../../services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'tax-sidebar',
     templateUrl: './tax-sidebar.component.html',
@@ -23,6 +26,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     standalone: false
 })
 
+/**
+ * TaxSidebarComponent component
+ * Handles taxsidebar functionality and user interactions
+ */
 export class TaxSidebarComponent implements OnInit, OnDestroy {
     /** Returns the enum to be used in template */
     public get GstReport() {
@@ -83,6 +90,10 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public activeCompany: any;
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private router: Router,
         private generalService: GeneralService,
@@ -103,6 +114,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -115,6 +129,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.loadTaxDetails();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.isUKCompany = activeCompany?.country === "United Kingdom";
@@ -125,6 +142,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 this.showGstMenus = false;
                 this.showTaxMenus = false;
                 this.showSalesTaxMenus = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showTaxMenus = true;
                 } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
@@ -134,6 +154,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 } else if (this.trnSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showTaxMenus = true;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.localeData) {
                     this.translationComplete(true);
                 }
@@ -142,11 +165,17 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         });
 
         this.getCurrentPeriod$.subscribe(period => {
+            /**
+             * Handles if functionality
+             */
             if (period && period.from) {
                 let date = {
                     startDate: dayjs(period.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
                     endDate: dayjs(period.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
+                /**
+                 * Handles if functionality
+                 */
                 if (date.startDate === period.from && date.endDate === period.to) {
                     this.isMonthSelected = true;
                 } else {
@@ -175,6 +204,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        /**
+         * Handles if functionality
+         */
         if (!this.router.url.includes('pages/gstfiling') && !this.router.url.includes('pages/invoice/ewaybill') && !this.router.url.includes('pages/reports/reverse-charge') && !this.router.url.includes('pages/settings/taxes') && !this.router.url.includes('pages/settings/addresses')) {
             this.store.dispatch(this.gstAction.SetActiveCompanyGstin(''));
         }
@@ -188,6 +220,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     * @memberof TaxSidebarComponent
     */
     public goToPreviousPage(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
             this.router.navigateByUrl(this.generalService.getSessionStorage("previousPage"));
         } else {
@@ -202,8 +237,14 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      */
     public loadTaxDetails(): void {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body) {
                 let taxes = response.body;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.activeCompanyGstNumber && taxes?.length > 0) {
                     this.activeCompanyGstNumber = taxes[0];
                     this.selectTax();
@@ -232,9 +273,15 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public navigate(type: string): void {
         this.selectedGstModule = type;
 
+        /**
+         * Handles if functionality
+         */
         if (this.isGstModule) {
             this.navigateEvent.emit(type);
         } else {
+            /**
+             * Handles switch functionality
+             */
             switch (type) {
                 case GstReport.Gstr1: case GstReport.Gstr2:
                     this.navigateToOverview(type);
@@ -274,10 +321,16 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      * @memberof TaxSidebarComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event && this.activeCompany) {
             const alpha2CountryCode = this.activeCompany?.countryV2?.alpha2CountryCode;
             let label = '';
 
+            /**
+             * Handles if functionality
+             */
             if (VAT_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
                 label = this.localeData?.add_vat;
             } else if (TRN_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {

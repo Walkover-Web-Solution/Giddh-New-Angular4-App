@@ -10,14 +10,25 @@ import { CommonActions } from '../actions/common.actions';
 import { GeneralService } from './general.service';
 import { find, forEach, includes, isArray, keys } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ThermalService service
+ * Provides thermal related business logic and data operations
+ */
 export class ThermalService {
 
     /** This will use for max length for character according to paper */
     private maxLength: number = 46;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private printerFormat: PrinterFormatService,
         private toaster: ToasterService,
@@ -44,6 +55,9 @@ export class ThermalService {
         // Process items and calculate totals
         const itemsData = this.processItemsAndTaxes(defaultTemplate, request);
 
+        /**
+         * Handles if functionality
+         */
         if (request) {
             // Build print sections
             const header = this.buildPrintHeader(templateFields);
@@ -55,12 +69,24 @@ export class ThermalService {
         }
     }
 
+    /**
+     * Handles findAndPrint functionality
+     */
     private findAndPrint(header: any, table: any, footer: any): void {
         qz.printers.find().then((data) => {
+            /**
+             * Handles if functionality
+             */
             if (data?.length) {
+                /**
+                 * Handles if functionality
+                 */
                 if (localStorage.getItem("defaultPrinter") && data.includes(localStorage.getItem("defaultPrinter"))) {
                     this.printNow(localStorage.getItem("defaultPrinter"), header, table, footer);
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data?.length > 1) {
                         this.store.dispatch(this.commonAction.selectPrinter(data));
                     } else {
@@ -73,6 +99,9 @@ export class ThermalService {
         }).catch((e) => { console.error(e); });
     }
 
+    /**
+     * Handles printNow functionality
+     */
     private printNow(printer: any, header: any, table: any, footer: any): void {
         var config = qz.configs.create(printer, { encoding: 'ISO-8859-1', altPrinting: true }); // Create a default config for the found printer
         let txt = [
@@ -101,6 +130,9 @@ export class ThermalService {
         let textC = +lengthOfA + lengthOfB;
         let noOfSpacesRequired = this.maxLength - textC;
         let spaces = "";
+        /**
+         * Handles for functionality
+         */
         for (let i = 0; i <= noOfSpacesRequired; i++) {
             spaces += " ";
         }
@@ -116,6 +148,9 @@ export class ThermalService {
      */
     public blankDash(): string {
         let dash = "";
+        /**
+         * Handles for functionality
+         */
         for (let i = 0; i <= this.maxLength; i++) {
             dash += "-";
         }
@@ -130,6 +165,9 @@ export class ThermalService {
      */
     public blankRow(): string {
         let dash = "";
+        /**
+         * Handles for functionality
+         */
         for (let i = 0; i <= this.maxLength; i++) {
             dash += " ";
         }
@@ -149,9 +187,15 @@ export class ThermalService {
     private wrapStringByLength(productNameWithVariant: string, desiredStringLength: number): any {
         let trimmedStringArray: any = [];
 
+        /**
+         * Handles if functionality
+         */
         if (productNameWithVariant?.length > desiredStringLength) {
             let remainingString = productNameWithVariant;
 
+            /**
+             * Handles while functionality
+             */
             while (remainingString?.length !== 0) {
 
                 let cutString = remainingString.substr(0, desiredStringLength);
@@ -170,6 +214,9 @@ export class ThermalService {
      * Generate QR code data if QR display is enabled
      */
     private generateQRCodeData(defaultTemplate: any, request: any): any {
+        /**
+         * Handles if functionality
+         */
         if (!defaultTemplate?.sections?.header?.data?.showQrCode?.display) {
             return { qr: "", dots: 0, size1: 0, size0: 0, qrLength: 0 };
         }
@@ -178,9 +225,21 @@ export class ThermalService {
         let entryTaxesQR = [];
 
         // Process entry taxes for QR code
+        /**
+         * Handles for functionality
+         */
         for (let entry of request.entries) {
+            /**
+             * Handles if functionality
+             */
             if (entry?.taxes?.length > 0) {
+                /**
+                 * Handles for functionality
+                 */
                 for (let taxApp of entry.taxes) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (entryTaxesQR[taxApp.accountUniqueName] === undefined) {
                         entryTaxesQR[taxApp.accountUniqueName] = [];
                         entryTaxesQR[taxApp.accountUniqueName]['name'] = taxApp?.accountName;
@@ -195,6 +254,9 @@ export class ThermalService {
         // Build tax data string for QR
         Object.keys(entryTaxesQR)?.forEach(key => {
             let entryTax = entryTaxesQR[key];
+            /**
+             * Handles if functionality
+             */
             if (entryTax?.amount > 0) {
                 let taxAmount = parseFloat(entryTax?.amount).toFixed(2);
                 itemsQrTaxData += entryTax?.name + " - " + taxAmount;
@@ -243,6 +305,9 @@ export class ThermalService {
      * Get header company name
      */
     private getHeaderCompanyName(defaultTemplate: any, request: any): string {
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.header?.data?.companyName?.display) {
             return request?.company?.name ? request?.company?.name : '';
         }
@@ -253,6 +318,9 @@ export class ThermalService {
      * Get header company address
      */
     private getHeaderCompanyAddress(defaultTemplate: any, request: any): string {
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.header?.data?.showCompanyAddress?.display) {
             return request?.company?.billingDetails?.address[0] ? request?.company?.billingDetails?.address[0] : '';
         }
@@ -263,6 +331,9 @@ export class ThermalService {
      * Get company GST information
      */
     private getCompanyGstInfo(defaultTemplate: any, request: any): any {
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
             const companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
             const companyGstin = request?.company?.billingDetails?.taxNumber ? request?.company?.billingDetails?.taxNumber : '';
@@ -275,9 +346,18 @@ export class ThermalService {
      * Get account name with truncation
      */
     private getAccountName(defaultTemplate: any, request: any): string {
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.header?.data?.customerName?.display) {
+            /**
+             * Handles if functionality
+             */
             if (request?.account?.customerName) {
                 let accountName = request?.account?.customerName;
+                /**
+                 * Handles if functionality
+                 */
                 if (accountName.length > 15) {
                     const firstPart: string = accountName.substring(0, 15);
                     const dots: string = '.'.repeat(Math.min(5, accountName.length - 15));
@@ -298,20 +378,35 @@ export class ThermalService {
         let voucherNumber = "";
         let voucherDate = "";
 
+        /**
+         * Handles if functionality
+         */
         if (!(defaultTemplate?.type === "sales")) {
+            /**
+             * Handles if functionality
+             */
             if (defaultTemplate?.sections?.header?.data?.invoiceDate?.display) {
                 dateField = defaultTemplate?.sections?.header?.data?.invoiceDate?.label;
                 voucherDate = request?.date;
             }
+            /**
+             * Handles if functionality
+             */
             if (defaultTemplate?.sections?.header?.data?.invoiceNumber?.display) {
                 numberField = defaultTemplate?.sections?.header?.data?.invoiceNumber?.label;
                 voucherNumber = request?.number;
             }
         } else {
+            /**
+             * Handles if functionality
+             */
             if (defaultTemplate?.sections?.header?.data?.voucherDate?.display) {
                 dateField = defaultTemplate?.sections?.header?.data?.voucherDate?.label;
                 voucherDate = request?.date;
             }
+            /**
+             * Handles if functionality
+             */
             if (defaultTemplate?.sections?.header?.data?.voucherNumber?.display) {
                 numberField = defaultTemplate?.sections?.header?.data?.voucherNumber?.label;
                 voucherNumber = request?.number;
@@ -325,6 +420,9 @@ export class ThermalService {
      * Get total amount information
      */
     private getTotalAmountInfo(defaultTemplate: any, request: any): any {
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.footer?.data?.grandTotal?.display && defaultTemplate?.sections?.footer?.data?.totalInWords?.display) {
             return {
                 totalAmountField: 'Invoice Total',
@@ -340,6 +438,9 @@ export class ThermalService {
      * Get discount information
      */
     private getDiscountInfo(defaultTemplate: any, request: any): any {
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.table?.data?.discount?.display) {
             return {
                 discountAmountField: defaultTemplate?.sections?.table?.data?.discount?.label,
@@ -356,9 +457,21 @@ export class ThermalService {
         let taxAmountField = "";
         let taxableAmount = 0;
 
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.table?.data?.taxableValue?.display) {
+            /**
+             * Handles for functionality
+             */
             for (let entry of request.entries) {
+                /**
+                 * Handles for functionality
+                 */
                 for (let transaction of entry.transactions) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (transaction?.taxableValue?.amountForAccount) {
                         taxableAmount = taxableAmount + transaction?.taxableValue?.amountForAccount;
                     }
@@ -378,21 +491,33 @@ export class ThermalService {
         let ratePadding = 16;
         let amountPadding = 13;
 
+        /**
+         * Handles if functionality
+         */
         if (!defaultTemplate?.sections?.table?.data?.quantity?.display) {
             qtyPadding = 0;
             ratePadding = 16;
             amountPadding = 13;
         }
+        /**
+         * Handles if functionality
+         */
         if (!defaultTemplate?.sections?.table?.data?.rate?.display) {
             qtyPadding = 7;
             ratePadding = 0;
             amountPadding = 16;
         }
+        /**
+         * Handles if functionality
+         */
         if (!defaultTemplate?.sections?.table?.data?.amount?.display) {
             qtyPadding = 7;
             ratePadding = 16;
             amountPadding = 0;
         }
+        /**
+         * Handles if functionality
+         */
         if (!defaultTemplate?.sections?.table?.data?.item?.display) {
             qtyPadding = 2;
             ratePadding = 22;
@@ -420,12 +545,18 @@ export class ThermalService {
         const itemFieldLength = this.maxLength - itemDetailsField?.length;
         let itemFieldName = templateFields.productsField?.substring(0, itemFieldLength);
 
+        /**
+         * Handles if functionality
+         */
         if (itemFieldName?.length < templateFields.productsField?.length) {
             let lastIndex = itemFieldName?.lastIndexOf(" ");
             itemFieldName = itemFieldName?.substring(0, lastIndex);
         }
 
         let itemsField = "";
+        /**
+         * Handles if functionality
+         */
         if (itemFieldName?.length === 0) {
             itemsField = this.printerFormat.formatCenter(templateFields.productsField) +
                         this.printerFormat.formatCenter(this.justifyText("", itemDetailsField));
@@ -434,6 +565,9 @@ export class ThermalService {
         }
 
         // Process each entry
+        /**
+         * Handles for functionality
+         */
         for (let entry of request?.entries) {
             const itemData = this.processIndividualItem(entry, defaultTemplate, templateFields.paddingInfo);
             items += itemData.itemString;
@@ -446,6 +580,9 @@ export class ThermalService {
         // Build tax string
         tax = this.buildTaxString(entryTaxes, defaultTemplate);
 
+        /**
+         * Handles if functionality
+         */
         if (!totalQty) {
             totalQty = '-';
         }
@@ -463,7 +600,13 @@ export class ThermalService {
             : entry?.transactions[0]?.stock?.name ? entry?.transactions[0]?.stock?.name : entry?.transactions[0]?.account?.name;
 
         let quantity = "";
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
+            /**
+             * Handles if functionality
+             */
             if (entry?.transactions[0]?.stock?.quantity) {
                 quantity = parseFloat(entry?.transactions[0]?.stock?.quantity).toFixed(2) + ' ';
             } else {
@@ -472,7 +615,13 @@ export class ThermalService {
         }
 
         let rate = "";
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.table?.data?.rate?.display) {
+            /**
+             * Handles if functionality
+             */
             if (entry?.transactions[0]?.stock?.rate?.rateForAccount) {
                 rate = parseFloat(entry?.transactions[0]?.stock?.rate?.rateForAccount).toFixed(2) + ' ';
             } else {
@@ -481,6 +630,9 @@ export class ThermalService {
         }
 
         let amount = "";
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate?.sections?.table?.data?.total?.display) {
             amount = parseFloat(entry?.transactions[0]?.amount?.amountForAccount).toFixed(2) + " ";
         }
@@ -494,19 +646,31 @@ export class ThermalService {
         let itemName = Array.isArray(completeProductName) ? completeProductName[0] : completeProductName;
 
         let quantityNum = 0;
+        /**
+         * Handles if functionality
+         */
         if (entry?.transactions[0]?.stock?.quantity) {
             quantityNum = Number(quantity);
         }
 
         let itemString = "";
+        /**
+         * Handles if functionality
+         */
         if (itemName?.length === 0) {
             let productNameShow = "";
+            /**
+             * Handles if functionality
+             */
             if (defaultTemplate?.sections?.table?.data?.item?.display) {
                 productNameShow = this.printerFormat.formatCenter(this.justifyText(productName));
             }
             itemString = productNameShow + this.printerFormat.formatCenter(this.justifyText("", itemDetails));
         } else {
             let itemNameShow = "";
+            /**
+             * Handles if functionality
+             */
             if (defaultTemplate?.sections?.table?.data?.item?.display) {
                 itemNameShow = itemName;
             }
@@ -514,7 +678,13 @@ export class ThermalService {
             const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails);
             itemString = this.printerFormat.formatCenter(itemNameShowHide);
 
+            /**
+             * Handles if functionality
+             */
             if ((itemName?.length < productName?.length) && Array.isArray(completeProductName)) {
+                /**
+                 * Handles for functionality
+                 */
                 for (let i = 1; i < completeProductName?.length; i++) {
                     itemString += (this.printerFormat.leftAlign + completeProductName[i] + this.printerFormat.lineBreak);
                 }
@@ -528,10 +698,22 @@ export class ThermalService {
      * Process taxes for entry
      */
     private processTaxesForEntry(entry: any, entryTaxes: any[]): void {
+        /**
+         * Handles for functionality
+         */
         for (let transaction of entry?.transactions) {
+            /**
+             * Handles if functionality
+             */
             if (entry?.taxes && entry?.taxes.length > 0) {
+                /**
+                 * Handles for functionality
+                 */
                 for (let taxApp of entry?.taxes) {
                     const taxKey = taxApp.accountUniqueName + "_" + taxApp?.taxPercent;
+                    /**
+                     * Handles if functionality
+                     */
                     if (entryTaxes[taxKey] === undefined) {
                         entryTaxes[taxKey] = [];
                         entryTaxes[taxKey]['name'] = taxApp?.accountName;
@@ -555,9 +737,15 @@ export class ThermalService {
         let tax = "";
         Object.keys(entryTaxes)?.forEach(key => {
             let entryTax = entryTaxes[key];
+            /**
+             * Handles if functionality
+             */
             if (entryTax?.amount > 0) {
                 let taxAmount = parseFloat(entryTax?.amount).toFixed(2);
                 let taxableValue = parseFloat(entryTax?.taxableValue).toFixed(2);
+                /**
+                 * Handles if functionality
+                 */
                 if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
                     let taxLine = entryTax?.name + entryTax?.percent + "%" + ": " + taxableValue + " " + taxAmount;
                     const paddingSpaces = this.maxLength - taxLine.length;
@@ -640,13 +828,22 @@ export class ThermalService {
      */
     private setupQZTrayAndExecutePrint(header: string, table: string, footer: string): void {
         qz.security.setCertificatePromise((resolve, reject) => {
+            /**
+             * Handles fetch functionality
+             */
             fetch(QZ_CERTIFICATE, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
                 .then(data => resolve(data.text()));
         });
 
         qz.security.setSignatureAlgorithm("SHA512");
         qz.security.setSignaturePromise(hash => {
+            /**
+             * Handles return functionality
+             */
             return (resolve, reject) => {
+                /**
+                 * Handles fetch functionality
+                 */
                 fetch(QZ_PEM, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
                     .then(wrapped => wrapped.text())
                     .then(data => {
@@ -655,12 +852,18 @@ export class ThermalService {
                         sig.init(pk);
                         sig.updateString(hash);
                         let hex = sig.sign();
+                        /**
+                         * Handles resolve functionality
+                         */
                         resolve(stob64(hextorstr(hex)));
                     })
                     .catch(err => console.error(err));
             };
         });
 
+        /**
+         * Handles if functionality
+         */
         if (!qz.websocket.isActive()) {
             qz.websocket
                 .connect()
@@ -671,12 +874,18 @@ export class ThermalService {
                     const operatingSystem = this.generalService.getOperatingSystem();
                     let qzFile = "";
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (operatingSystem === SUPPORTED_OPERATING_SYSTEMS.MacOS) {
                         qzFile = QZ_FILES.MacOS;
                     } else if (operatingSystem === SUPPORTED_OPERATING_SYSTEMS.Windows) {
                         qzFile = QZ_FILES.Windows;
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (qzFile) {
                         qzFile = " Click here to <a href='" + qzFile + "' class='underline'>download</a>";
                     }

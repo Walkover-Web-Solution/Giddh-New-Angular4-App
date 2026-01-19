@@ -21,12 +21,19 @@ import { SalesService } from '../services/sales.service';
 import { StateCode } from '../models/api-models/Sales';
 import { ServiceConfig } from '../services/service.config';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'billing-details',
     templateUrl: 'billing-details.component.html',
     styleUrls: ['billing-details.component.scss'],
     standalone: false
 })
+/**
+ * BillingDetailComponent component
+ * Handles billingdetail functionality and user interactions
+ */
 export class BillingDetailComponent implements OnInit, OnDestroy {
     /** Form instance */
     @ViewChild('billingForm', { static: false }) billingForm: NgForm;
@@ -99,17 +106,27 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     /** Hold plan currency */
     public planCurrency: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig, private store: Store<AppState>, private generalService: GeneralService, private toasty: ToasterService, private route: Router, private companyService: CompanyService, private generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
         private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService, private salesService: SalesService,) {
         this.fromSubscription = this.route.routerState.snapshot.url.includes('buy-plan');
         this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
 
         /** This will use for get active company data */
         this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.getUpdatedStateCodes(response?.body?.countryV2?.alpha3CountryCode, true);
                 this.activeCompany = response?.body;
@@ -124,17 +141,26 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedPlans = res;
+            /**
+             * Handles if functionality
+             */
             if (this.selectedPlans) {
                 this.subscriptionPrice = this.selectedPlans.planDetails.amount;
             }
         });
 
         this.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
+            /**
+             * Handles if functionality
+             */
             if (success) {
                 this.route.navigate(['pages', 'user-details', 'subscription']);
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.fromSubscription && this.selectedPlans) {
             this.prepareSelectedPlanFromSubscriptions(this.selectedPlans);
         } else {
@@ -144,16 +170,34 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
     }
 
+    /**
+     * Retrieves payamountforrazorpay data
+     */
     public getPayAmountForRazorPay(amt: any): number {
         return amt * 100;
     }
 
+    /**
+     * Handles checkGstNumValidation functionality
+     */
     public checkGstNumValidation(ele: HTMLInputElement): void {
         let isValid: boolean = false;
+        /**
+         * Handles if functionality
+         */
         if (ele?.value) {
+            /**
+             * Handles if functionality
+             */
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                /**
+                 * Handles for functionality
+                 */
                 for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    /**
+                     * Handles if functionality
+                     */
                     if (regex.test(ele.value)) {
                         isValid = true;
                     }
@@ -162,6 +206,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
                 isValid = true;
             }
 
+            /**
+             * Handles if functionality
+             */
             if (!isValid) {
                 let text = this.commonLocaleData?.app_invalid_tax_name;
                 text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
@@ -176,17 +223,29 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Retrieves statecode data
+     */
     public getStateCode(gstNo: HTMLInputElement): void {
+        /**
+         * Handles if functionality
+         */
         if (this.createNewCompany.country === "IN") {
             let gstVal: string = gstNo?.value;
             this.billingDetailsObj.gstin = gstVal;
 
+            /**
+             * Handles if functionality
+             */
             if (gstVal?.length >= 2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
                     let s = state.find(st => st?.value === stateCode);
                     this.isStateDisabled = false;
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (s) {
                         this.billingDetailsObj.stateCode = s.value;
                         this.searchBillingStates = s.label;
@@ -194,6 +253,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
                     } else {
                         this.isStateDisabled = false;
                         this.toasty.clearAllToaster();
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.formFields['taxName'] && !this.billingForm.form.get('gstin')?.valid) {
                             this.billingDetailsObj.stateCode = '';
                             let text = this.commonLocaleData?.app_invalid_tax_name;
@@ -210,11 +272,20 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Validates email input
+     */
     public validateEmail(emailStr: any): boolean {
         return EMAIL_VALIDATION_REGEX.test(emailStr);
     }
 
+    /**
+     * Handles autoRenewSelected functionality
+     */
     public autoRenewSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.billingDetailsObj.autorenew = event.target?.checked;
         }
@@ -231,8 +302,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         this.SubscriptionRequestObj.userUniqueName = this.userDetails?.uniqueName;
         this.SubscriptionRequestObj.planUniqueName = plan.planDetails?.uniqueName;
         this.planCurrency = plan.planDetails?.currency?.code;
+        /**
+         * Handles if functionality
+         */
         if (this.subscriptionPrice && this.planCurrency) {
             this.companyService.getRazorPayOrderId(this.subscriptionPrice, this.planCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     this.planAmount = res.body?.amount;
                     this.orderId = res.body?.id;
@@ -245,11 +322,17 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles backToSubscriptions functionality
+     */
     public backToSubscriptions(): void {
         this.route.navigate(['/pages', 'user-details', 'subscription'], {
             queryParams: {
@@ -258,15 +341,30 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles payWithRazor functionality
+     */
     public payWithRazor(billingDetail: NgForm): void {
+        /**
+         * Handles if functionality
+         */
         if (!(this.validateEmail(billingDetail?.value.email))) {
             this.toasty.warningToast(this.localeData?.invalid_email_error, this.commonLocaleData?.app_warning);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (billingDetail.valid && this.createNewCompany) {
             this.createNewCompany.userBillingDetails = billingDetail?.value;
 
+            /**
+             * Handles if functionality
+             */
             if (this.billingDetailsObj) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.billingDetailsObj.stateCode) {
                     this.createNewCompany.userBillingDetails.stateCode = this.billingDetailsObj.stateCode;
                 } else if (this.billingDetailsObj.county) {
@@ -297,6 +395,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      * @memberof BillingDetailComponent
      */
     public onRegionChange(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.billingDetailsObj.county.name = event?.label;
             this.billingDetailsObj.county.code = event?.value;
@@ -311,6 +412,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      * @memberof BillingDetailComponent
      */
     public resetRegion(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!event?.value) {
             this.billingDetailsObj.county.name = '';
             this.billingDetailsObj.county.code = '';
@@ -319,12 +423,24 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
     }
 
+    /**
+     * Handles patchProfile functionality
+     */
     public patchProfile(obj: any): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
     }
 
+    /**
+     * Creates new paidplancompany
+     */
     public createPaidPlanCompany(razorPay_response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (razorPay_response) {
+            /**
+             * Handles if functionality
+             */
             if (!this.fromSubscription) {
                 this.createNewCompany.paymentId = razorPay_response.razorpay_payment_id;
                 this.createNewCompany.razorpaySignature = razorPay_response.razorpay_signature;
@@ -373,16 +489,25 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         };
         try {
             this.razorpay = new window['Razorpay'](options);
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.razorpay?.open();
             }, 100);
         } catch (exception) { }
     }
 
+    /**
+     * Handles reFillForm functionality
+     */
     public reFillForm(): void {
         // if createNewCompany is undefined or null
         // it means user came from user derails => subscription => buy new plan
         // then get current company data and assign it to createNewCompany object
+        /**
+         * Handles if functionality
+         */
         if (!this.createNewCompany) {
             this.createNewCompany = new CompanyCreateRequest();
             this.createNewCompany.name = this.activeCompany.name;
@@ -398,10 +523,16 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
             this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails?.uniqueName : '';
 
             // assign state code to billing details object
+            /**
+             * Handles if functionality
+             */
             if (this.activeCompany.state) {
                 this.billingDetailsObj.stateCode = this.activeCompany.state;
             } else {
                 let selectedState = this.activeCompany.addresses.find((address) => address.isDefault);
+                /**
+                 * Handles if functionality
+                 */
                 if (selectedState) {
                     this.billingDetailsObj.stateCode = selectedState.stateCode;
                 }
@@ -412,8 +543,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         this.billingDetailsObj.contactNo = this.createNewCompany.contactNo;
         this.billingDetailsObj.email = this.createNewCompany.subscriptionRequest.userUniqueName;
 
+        /**
+         * Handles if functionality
+         */
         if (this.createNewCompany.addresses?.length) {
             this.createNewCompany.addresses?.forEach(address => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.billingDetailsObj.gstin && address.taxNumber) {
                     this.billingDetailsObj.gstin = address.taxNumber;
                     this.isStateDisabled = true;
@@ -430,18 +567,33 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      */
     public getStates(): void {
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.states = [];
                 this.countyList = [];
+                /**
+                 * Handles if functionality
+                 */
                 if (res.stateList) {
                     Object.keys(res.stateList)?.forEach(key => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (res.stateList[key].stateGstCode !== null) {
                             this.stateGstCode[res.stateList[key].stateGstCode] = [];
                             this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
                         }
 
                         this.states.push({ label: res.stateList[key].name, value: res.stateList[key].code });
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.createNewCompany !== undefined && this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.stateList[key].code === this.createNewCompany.addresses[0].stateCode) {
                                 this.searchBillingStates = res.stateList[key].name;
                                 this.selectedState = res.stateList[key].name;
@@ -451,7 +603,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
                     });
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (res.countyList) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.createNewCompany !== undefined && this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
                         this.searchRegionStates = this.createNewCompany.addresses[0].county?.name;
                         this.billingDetailsObj.county.name = this.createNewCompany.addresses[0].county?.name;
@@ -477,11 +635,23 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves onboardingform data
+     */
     public getOnboardingForm(): void {
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.fields) {
                     Object.keys(res.fields).forEach(key => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (res.fields[key]) {
                             this.formFields[res.fields[key].name] = [];
                             this.formFields[res.fields[key].name] = res.fields[key];
@@ -517,7 +687,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      * @memberof BillingDetailComponent
      */
     public showGstAndTaxUsingCountryName(name: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompany?.country === name) {
+            /**
+             * Handles if functionality
+             */
             if (name === 'India') {
                 this.showGstinNo = true;
                 this.showTrnNo = false;
@@ -540,27 +716,51 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
       */
     public getUpdatedStateCodes(countryCode: any, isCompanyStates?: boolean): Promise<any> {
         return new Promise((resolve: Function) => {
+            /**
+             * Handles if functionality
+             */
             if (countryCode) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.countryStates[countryCode]) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!isCompanyStates) {
                         this.statesSource = this.countryStates[countryCode];
                     } else {
                         this.companyStatesSource = this.countryStates[countryCode];
                     }
+                    /**
+                     * Handles resolve functionality
+                     */
                     resolve();
                 } else {
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (!isCompanyStates) {
                             this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
                         } else {
                             this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
                         }
+                        /**
+                         * Handles resolve functionality
+                         */
                         resolve();
                     }, () => {
+                        /**
+                         * Handles resolve functionality
+                         */
                         resolve();
                     });
                 }
             } else {
+                /**
+                 * Handles resolve functionality
+                 */
                 resolve();
             }
         });

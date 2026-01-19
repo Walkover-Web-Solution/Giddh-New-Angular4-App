@@ -18,6 +18,9 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'setting-taxes',
     templateUrl: './setting.taxes.component.html',
@@ -25,6 +28,10 @@ import { GeneralService } from '../../services/general.service';
     standalone: false,
     changeDetection: ChangeDetectionStrategy.Default
 })
+/**
+ * SettingTaxesComponent component
+ * Handles settingtaxes functionality and user interactions
+ */
 export class SettingTaxesComponent implements OnInit, OnDestroy {
     /** Holds template reference for create/update tax dialog */
     @ViewChild("createUpdateDialog") public createUpdateDialog: TemplateRef<any>;
@@ -67,6 +74,10 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     /** Voucher API Version */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private _companyActions: CompanyActions,
@@ -78,17 +89,32 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         private changeDetectionService: Angular21ChangeDetectionService
     ) { }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        /**
+         * Handles for functionality
+         */
         for (let i = 1; i <= 31; i++) {
             let day = i?.toString();
             this.days.push({ label: day, value: day });
         }
         this.store.dispatch(this._companyActions.getTax());
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
+            /**
+             * Handles if functionality
+             */
             if (o.taxes) {
                 this.forceClear$ = observableOf({ status: true });
+                /**
+                 * Handles map functionality
+                 */
                 map(o.taxes, (tax) => {
+                    /**
+                     * Handles each functionality
+                     */
                     each(tax.taxDetail, (t) => {
                         t.date = dayjs(t.date, GIDDH_DATE_FORMAT);
                     });
@@ -105,12 +131,18 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             this.isLoading = o.isTaxesLoading;
         });
 
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([
             this.store.pipe(select(state => state.company && state.company.isTaxCreatedSuccessfully)),
             this.store.pipe(select(state => state.company && state.company.isTaxUpdatedSuccessfully))
         ])
             .pipe(takeUntil(this.destroyed$)).subscribe(
                 ([isTaxCreatedSuccessfully, isTaxUpdatedSuccessfully]) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (isTaxCreatedSuccessfully || isTaxUpdatedSuccessfully) {
                         this.createUpdateDialogRef?.close();
                     }
@@ -124,6 +156,9 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
      */
     public deleteTax(taxToDelete: any): void {
         this.selectedTax = this.availableTaxes.find((tax) => tax?.uniqueName === taxToDelete?.uniqueName);
+        /**
+         * Handles if functionality
+         */
         if (!this.selectedTax) {
             return;
         }
@@ -157,13 +192,28 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles cancel event
+     */
     public onCancel() {
         this.newTaxObj = new TaxResponse();
     }
 
+    /**
+     * Handles userConfirmation functionality
+     */
     public userConfirmation(userResponse: boolean) {
+        /**
+         * Handles if functionality
+         */
         if (userResponse) {
+            /**
+             * Handles if functionality
+             */
             if (this.confirmationFor === 'delete' && this.newTaxObj.taxType === 'others') {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.newTaxObj && this.newTaxObj.accounts && this.newTaxObj.accounts.length) {
                     let linkedAccountUniqueName = this.newTaxObj.accounts[0]?.uniqueName;
                     this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName, linkedAccountUniqueName));
@@ -171,6 +221,9 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             } else if (this.confirmationFor === 'delete') {
                 this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj?.uniqueName));
             } else if (this.confirmationFor === 'edit') {
+                /**
+                 * Handles each functionality
+                 */
                 each(this.newTaxObj.taxDetail, (tax) => {
                     tax.date = dayjs(tax.date).format(GIDDH_DATE_FORMAT);
                 });
@@ -179,12 +232,18 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles addMoreDateAndPercentage functionality
+     */
     public addMoreDateAndPercentage(taxIndex: number) {
         let taxes = cloneDeep(this.availableTaxes);
         taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
         this.availableTaxes = taxes;
     }
 
+    /**
+     * Deletes dateandpercentage
+     */
     public removeDateAndPercentage(parentIndex: number, childIndex: number) {
         let taxes = cloneDeep(this.availableTaxes);
         taxes[parentIndex].taxDetail.splice(childIndex, 1);
@@ -192,8 +251,14 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         this.toggleTaxAuthority();
     }
 
+    /**
+     * Handles reloadTaxList functionality
+     */
     public reloadTaxList() {
         this.store.pipe(select(p => p.company), take(1)).subscribe((o) => {
+            /**
+             * Handles if functionality
+             */
             if (o.taxes) {
                 this.onCancel();
                 this.availableTaxes = cloneDeep(o.taxes);
@@ -202,11 +267,23 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles customAccountFilter functionality
+     */
     public customAccountFilter(term: string, item: IOption) {
+        /**
+         * Handles return functionality
+         */
         return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
+    /**
+     * Handles customDateSorting functionality
+     */
     public customDateSorting(a: IOption, b: IOption) {
+        /**
+         * Handles return functionality
+         */
         return (parseInt(a.label) - parseInt(b.label));
     }
 
@@ -241,6 +318,9 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
      * @memberof SettingTaxesComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.taxList = [
                 { label: this.commonLocaleData?.app_tax_types?.gst, value: 'GST' },
@@ -272,6 +352,9 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         const hasTaxAuthority = this.availableTaxes?.length && this.availableTaxes[0]?.taxAuthority;
         const taxAuthorityIndex = this.displayedColumns.indexOf('taxAuthority');
 
+        /**
+         * Handles if functionality
+         */
         if (!hasTaxAuthority && taxAuthorityIndex !== -1) {
             this.displayedColumns = this.displayedColumns?.filter(column => column !== 'taxAuthority');
         } else if (hasTaxAuthority && taxAuthorityIndex === -1) {

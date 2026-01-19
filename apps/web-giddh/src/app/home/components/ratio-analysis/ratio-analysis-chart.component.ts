@@ -9,12 +9,19 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'ratio-analysis-chart',
     templateUrl: 'ratio-analysis-chart.component.html',
     styleUrls: ['ratio-analysis-chart.component.scss', '../../home.component.scss'],
     standalone:false
 })
+/**
+ * RatioAnalysisChartComponent component
+ * Handles ratioanalysischart functionality and user interactions
+ */
 export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     public requestInFlight = true;
@@ -25,26 +32,45 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     public chart:any;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private homeActions: HomeActions) {
         this.rationResponse$ = this.store.pipe(select(p => p.home.RatioAnalysis), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.dispatch(this.homeActions.getRatioAnalysis(dayjs().format(GIDDH_DATE_FORMAT), this.refresh));
     }
 
+    /**
+     * Handles hardRefresh functionality
+     */
     public hardRefresh() {
         this.refresh = true;
         this.fetchChartData();
     }
 
+    /**
+     * Handles fetchChartData functionality
+     */
     public fetchChartData() {
         this.requestInFlight = true;
         this.store.dispatch(this.homeActions.getRatioAnalysis(dayjs().format(GIDDH_DATE_FORMAT), this.refresh));
         this.refresh = false;
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
+        /**
+         * Handles if functionality
+         */
         if (this.chart) {
             this.chart.destroy();
             this.chart = null;
@@ -60,9 +86,15 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
      * @memberof RatioAnalysisChartComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.rationResponse$.pipe(skipWhile(response => (response === null || response === undefined))).subscribe(response => {
                 this.ratioObj = response;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.chart) {
                   this.chart.destroy();
               }
@@ -72,6 +104,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Creates new chart
+     */
     public createChart():void{
 
         /* ==================================CURRENT RATIO CHART CONFIG============================== */
@@ -81,6 +116,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
 
         const currentRatioCenterLabel = {
             id: 'currentRatioCenterLabel',
+            /**
+             * Handles beforeDatasetsDraw functionality
+             */
             beforeDatasetsDraw(chart, args ,pluginOptions) {
               const { ctx, data } = chart;
               ctx.save();
@@ -117,6 +155,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     },
                     tooltip: {
                       callbacks: {
+                        /**
+                         * Handles label functionality
+                         */
                         label: (context) => {
                                 let value  = context.parsed;
                                 return `${value}%`;
@@ -151,6 +192,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
 
         const debitOptionsCenterLabel = {
             id: 'debitOptionsCenterLabel',
+            /**
+             * Handles beforeDatasetsDraw functionality
+             */
             beforeDatasetsDraw(chart, args ,pluginOptions) {
               const { ctx, data } = chart;
               ctx.save();
@@ -187,6 +231,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     },
                     tooltip: {
                       callbacks: {
+                        /**
+                         * Handles label functionality
+                         */
                         label: (context) => {
                                 let value  = context.parsed;
                                 return `${value}%`;
@@ -220,6 +267,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
 
         const proprietaryOptionsCenterLabel = {
             id: 'proprietaryOptionsCenterLabel',
+            /**
+             * Handles beforeDatasetsDraw functionality
+             */
             beforeDatasetsDraw(chart, args ,pluginOptions) {
               const { ctx, data } = chart;
               ctx.save();
@@ -256,6 +306,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     },
                     tooltip: {
                       callbacks: {
+                        /**
+                         * Handles label functionality
+                         */
                         label: (context) => {
                                 let value  = context.parsed;
                                 return `${value}%`;
@@ -289,6 +342,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
 
         const fixedAssetOptionsCenterLabel = {
             id: 'fixedAssetOptionsCenterLabel',
+            /**
+             * Handles beforeDatasetsDraw functionality
+             */
             beforeDatasetsDraw(chart, args ,pluginOptions) {
               const { ctx, data } = chart;
               ctx.save();
@@ -325,6 +381,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     },
                     tooltip: {
                       callbacks: {
+                        /**
+                         * Handles label functionality
+                         */
                         label: (context) => {
                                 let value  = context.parsed;
                                 return `${value}%`;

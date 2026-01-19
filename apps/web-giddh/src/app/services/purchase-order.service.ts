@@ -8,11 +8,22 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { concat, get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * PurchaseOrderService service
+ * Provides purchaseorder related business logic and data operations
+ */
 export class PurchaseOrderService {
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private http: HttpWrapperService, private errorHandler: GiddhErrorHandler, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 
     }
@@ -145,6 +156,9 @@ export class PurchaseOrderService {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.UPDATE;
         url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
         url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        /**
+         * Handles if functionality
+         */
         if (getRequestObject.branchUniqueName) {
             url = url.concat(`?branchUniqueName=${getRequestObject.branchUniqueName}`);
         }
@@ -246,10 +260,16 @@ export class PurchaseOrderService {
     public verifyEmail(params: any): Observable<BaseResponse<any, string>> {
         let url = this.config.apiUrl + PURCHASE_ORDER_API.VERIFY_EMAIL?.replace(':companyUniqueName', params.companyUniqueName)?.replace(':branchUniqueName', params.branchUniqueName)?.replace(':emailAddress', params.emailAddress)?.replace(':scope', params.scope);
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, string> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 }

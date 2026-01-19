@@ -5,6 +5,10 @@ import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWit
 import { IOption } from '../../../app.constant';
 import { set } from '../../../lodash-optimized';
 
+/**
+ * AuditLogsSidebarVM class
+ * Implements AuditLogsSidebarVM functionality
+ */
 export class AuditLogsSidebarVM {
     /** Audit log form's user list Observer */
     public user$: Observable<UserDetails>;
@@ -43,6 +47,10 @@ export class AuditLogsSidebarVM {
     /** Selected account unique name */
     public selectedAccountUniqueName: string = '';
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private localeData, private commonLocaleData) {
         this.dateOptions = [{ label: this.commonLocaleData?.app_date_range, value: '1' }, { label: this.localeData?.entry_log_date, value: '0' }];
     }

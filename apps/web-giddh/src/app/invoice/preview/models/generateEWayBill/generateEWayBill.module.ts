@@ -7,6 +7,9 @@ import { MatBadgeModule } from "@angular/material/badge";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         GenerateEWayBillComponent
@@ -23,4 +26,8 @@ import { MatButtonModule } from "@angular/material/button";
         GenerateEWayBillComponent
     ]
 })
+/**
+ * GenerateEWayBillModule module
+ * Implements GenerateEWayBillModule functionality
+ */
 export class GenerateEWayBillModule { }

@@ -8,10 +8,21 @@ import { Observable } from "rxjs";
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * CashFlowStatementService service
+ * Provides cashflowstatement related business logic and data operations
+ */
 export class CashFlowStatementService {
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 
     }
@@ -29,10 +40,16 @@ export class CashFlowStatementService {
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 }

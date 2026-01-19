@@ -26,6 +26,9 @@ const GST_ROUTES: Routes = [
     { path: 'filing-status', component: FilingStatusComponent }
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
     ],
@@ -42,4 +45,8 @@ const GST_ROUTES: Routes = [
         CommonModule,
     ]
 })
+/**
+ * GstRoutingModule module
+ * Implements GstRoutingModule functionality
+ */
 export class GstRoutingModule { }

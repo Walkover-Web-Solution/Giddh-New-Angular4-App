@@ -29,6 +29,9 @@ import { AmountFieldComponentModule } from '../amount-field/amount-field.module'
 import { LedgerModule } from '../../ledger/ledger.module';
 import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledger-paginator.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [LedgerStatementComponent],
     imports: [
@@ -64,4 +67,8 @@ import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledg
     ],
     exports: [LedgerStatementComponent]
 })
+/**
+ * LedgerStatementModule module
+ * Implements LedgerStatementModule functionality
+ */
 export class LedgerStatementModule {}

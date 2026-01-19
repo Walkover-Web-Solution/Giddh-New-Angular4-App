@@ -28,6 +28,10 @@ export interface ILedgerTransactionItem {
     convertedAmountSymbol?: string;
 }
 
+/**
+ * IInventory interface definition
+ * Defines the structure and contract for IInventory objects
+ */
 export interface IInventory {
     amount: number;
     quantity: number;
@@ -39,6 +43,10 @@ export interface IInventory {
     taxInclusive?: boolean;
 }
 
+/**
+ * IUnit interface definition
+ * Defines the structure and contract for IUnit objects
+ */
 export interface IUnit {
     name?: string;
     code?: string;
@@ -47,6 +55,10 @@ export interface IUnit {
     quantityPerUnit?: number;
 }
 
+/**
+ * ILedger interface definition
+ * Defines the structure and contract for ILedger objects
+ */
 export interface ILedger {
     applyApplicableTaxes?: boolean;
     attachedFile?: string;
@@ -66,6 +78,10 @@ export interface ILedger {
     voucherType?: string;
 }
 
+/**
+ * ITransactions interface definition
+ * Defines the structure and contract for ITransactions objects
+ */
 export interface ITransactions extends IPagination {
     closingBalance: IClosingBalance;
     creditTotal: number;
@@ -77,6 +93,10 @@ export interface ITransactions extends IPagination {
     forwardedBalance: IForwardBalance;
 }
 
+/**
+ * IClosingBalance interface definition
+ * Defines the structure and contract for IClosingBalance objects
+ */
 export interface IClosingBalance {
     amount: number;
     type: string;
@@ -84,10 +104,18 @@ export interface IClosingBalance {
     symbol?: string;
 }
 
+/**
+ * IForwardBalance interface definition
+ * Defines the structure and contract for IForwardBalance objects
+ */
 export interface IForwardBalance extends IClosingBalance {
     description?: string;
 }
 
+/**
+ * ITransactionItem interface definition
+ * Defines the structure and contract for ITransactionItem objects
+ */
 export interface ITransactionItem {
     amount: number;
     adjustmentEntry?: string;

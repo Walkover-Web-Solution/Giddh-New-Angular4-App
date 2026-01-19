@@ -25,12 +25,19 @@ import { GeneralService } from '../../services/general.service';
 import { IOption } from '../../app.constant';
 import { cloneDeep, concat, find, findIndex, forEach, includes, map } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     templateUrl: './mf.edit.component.html',
     styleUrls: [`./mf.edit.component.scss`],
     standalone:false
 })
 
+/**
+ * MfEditComponent component
+ * Handles mfedit functionality and user interactions
+ */
 export class MfEditComponent implements OnInit, OnDestroy {
     @ViewChild('manufacturingConfirmationTemplate', { static: true }) public manufacturingConfirmationTemplate: TemplateRef<any>;
     /** Dialog reference for manufacturing confirmation modal */
@@ -121,6 +128,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
@@ -146,9 +157,15 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.setToday();
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -158,9 +175,15 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
         // Update/Delete condition
         this.store.pipe(select(manufacturingStore => manufacturingStore.manufacturing), takeUntil(this.destroyed$)).subscribe((res: any) => {
+            /**
+             * Handles if functionality
+             */
             if (res.stockToUpdate) {
                 this.isUpdateCase = true;
                 let manufacturingObj = cloneDeep(res.reportData.results.find((stock) => stock?.uniqueName === res.stockToUpdate));
+                /**
+                 * Handles if functionality
+                 */
                 if (manufacturingObj) {
                     this.selectedProductName = `${manufacturingObj.stockName} (${manufacturingObj.stockUniqueName})`;
                     manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
@@ -173,11 +196,17 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         expense.baseAccount.defaultName = `${expense.baseAccount.name} (${expense.baseAccount?.uniqueName})`;
                         expense.transactions[0].account.defaultName = `${expense.transactions[0]?.account?.name} (${expense.transactions[0]?.account?.uniqueName})`;
                     });
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.initialQuantityObj?.length) {
                         this.initialQuantityObj = manufacturingObj.linkedStocks;
                     }
                     manufacturingObj.warehouseUniqueName = manufacturingObj?.warehouse?.uniqueName;
                     this.manufacturingDetails = manufacturingObj;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.manufacturingDetails.date && typeof this.manufacturingDetails.date === 'object') {
                         this.manufacturingDetails.date = String(dayjs(this.manufacturingDetails.date).format(GIDDH_DATE_FORMAT));
                     }
@@ -189,12 +218,18 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.isInventoryPage = this.router.url.includes('/pages/inventory');
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        /**
+         * Handles if functionality
+         */
         if (this.isUpdateCase) {
             let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
             this.store.dispatch(this.inventoryAction.GetStockWithUniqueName(manufacturingDetailsObj.stockUniqueName));
         }
         // dispatch stockList request
         this.store.pipe(select(p => p.inventory), takeUntil(this.destroyed$)).subscribe((o: any) => {
+            /**
+             * Handles if functionality
+             */
             if (this.isUpdateCase && o.activeStock && o.activeStock.manufacturingDetails) {
                 let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
                 manufacturingDetailsObj.multipleOf = o.activeStock.manufacturingDetails.manufacturingMultipleOf;
@@ -204,15 +239,27 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
         // get manufacturing stocks
         this.stockListDropDown$ = this.store.pipe(select(
+            /**
+             * Creates new selector
+             */
             createSelector([(state: AppState) => state.inventory.manufacturingStockListForCreateMF], (manufacturingStockListForCreateMF) => {
                 let data = cloneDeep(manufacturingStockListForCreateMF);
                 let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
+                /**
+                 * Handles if functionality
+                 */
                 if (data) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data.results) {
                         let units = data.results;
 
                         return units.map(unit => {
                             let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit?.uniqueName);
+                            /**
+                             * Handles if functionality
+                             */
                             if (alreadyPushedElementindx > -1) {
                                 return { label: ` ${unit?.name} (${unit?.uniqueName})`, value: unit?.uniqueName, isAlreadyPushed: true };
                             } else {
@@ -224,15 +271,27 @@ export class MfEditComponent implements OnInit, OnDestroy {
             })), takeUntil(this.destroyed$));
         // get All stocks
         this.allStocksDropDown$ = this.store.pipe(select(
+            /**
+             * Creates new selector
+             */
             createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
                 let data = cloneDeep(allStocks);
 
                 let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
+                /**
+                 * Handles if functionality
+                 */
                 if (data) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data.results) {
                         let units = data.results;
                         return units.map(unit => {
                             let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit?.uniqueName);
+                            /**
+                             * Handles if functionality
+                             */
                             if (alreadyPushedElementindx > -1) {
                                 return { label: ` ${unit?.name} (${unit?.uniqueName})`, value: unit?.uniqueName, isAlreadyPushed: true };
                             } else {
@@ -245,7 +304,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
         // get stock with rate details
         this.store.pipe(select(manufacturingStore => manufacturingStore.manufacturing), takeUntil(this.destroyed$)).subscribe((res: any) => {
             let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
+            /**
+             * Handles if functionality
+             */
             if (!this.isUpdateCase) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.stockWithRate && res.stockWithRate.manufacturingDetails) {
                     this.initialQuantityObj = []; // Reset initaila quantity of selected stock
                     // In create only
@@ -270,9 +335,15 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.initializeWarehouse();
     }
 
+    /**
+     * Retrieves stockswithrate data
+     */
     public getStocksWithRate(data) {
         this.selectedProductName = data.label;
         this.manufacturingDetails.manufacturingMultipleOf = 1;
+        /**
+         * Handles if functionality
+         */
         if (data.value) {
             let selectedValue = cloneDeep(data.value);
             this.selectedProduct = selectedValue;
@@ -283,16 +354,28 @@ export class MfEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Initializes ializeotherexpenseobj
+     */
     public initializeOtherExpenseObj() {
         this.otherExpenses.baseAccountUniqueName = '';
         this.otherExpenses.transactionAccountUniqueName = '';
     }
 
+    /**
+     * Handles goBackToListPage functionality
+     */
     public goBackToListPage() {
         this._location.back();
     }
 
+    /**
+     * Handles addConsumption functionality
+     */
     public addConsumption(data, ev?) {
+        /**
+         * Handles if functionality
+         */
         if (data.amount > 0 && data.rate && data.stockUniqueName && data.quantity) {
             let val: any = {
                 amount: data.amount,
@@ -302,6 +385,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 quantity: data.quantity
             };
 
+            /**
+             * Handles if functionality
+             */
             if (this.isUpdateCase) {
                 val.stockUnitCode = data.manufacturingUnit;
                 val.stockUnitUniqueName = data.stockUnitUniqueName;
@@ -312,6 +398,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
             let manufacturingObj = cloneDeep(this.manufacturingDetails);
 
+            /**
+             * Handles if functionality
+             */
             if (manufacturingObj.linkedStocks) {
                 manufacturingObj.linkedStocks.push(val);
             } else {
@@ -326,19 +415,34 @@ export class MfEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Deletes consumptionitem
+     */
     public removeConsumptionItem(indx) {
+        /**
+         * Handles if functionality
+         */
         if (indx > -1) {
             this.manufacturingDetails.linkedStocks.splice(indx, 1);
         }
     }
 
+    /**
+     * Handles addExpense functionality
+     */
     public addExpense(data: any, event?: any, type?: string): void {
+        /**
+         * Handles if functionality
+         */
         if (type === "transaction") {
             this.otherExpenses.transactionAccountDefaultName = event?.label;
         } else if (type === "base") {
             this.otherExpenses.baseAccountDefaultName = event?.label;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (data && data.transactionAccountUniqueName && data.baseAccountUniqueName && data.transactionAmount) {
             let objToPush = {
                 baseAccount: {
@@ -357,6 +461,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
             };
             let manufacturingObj = cloneDeep(this.manufacturingDetails);
 
+            /**
+             * Handles if functionality
+             */
             if (manufacturingObj.otherExpenses) {
                 manufacturingObj.otherExpenses.push(objToPush);
             } else {
@@ -372,15 +479,27 @@ export class MfEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Deletes expenseitem
+     */
     public removeExpenseItem(indx) {
+        /**
+         * Handles if functionality
+         */
         if (indx > -1) {
             this.manufacturingDetails.otherExpenses.splice(indx, 1);
         }
     }
 
+    /**
+     * Creates new entry
+     */
     public createEntry() {
         let dataToSave = cloneDeep(this.manufacturingDetails);
         dataToSave.stockUniqueName = this.selectedProduct;
+        /**
+         * Handles if functionality
+         */
         if (dataToSave.date && typeof dataToSave.date === 'object') {
             dataToSave.date = String(dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
@@ -392,8 +511,14 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.manufacturingActions.CreateMfItem(dataToSave));
     }
 
+    /**
+     * Updates existing entry
+     */
     public updateEntry() {
         let dataToSave = cloneDeep(this.manufacturingDetails);
+        /**
+         * Handles if functionality
+         */
         if (dataToSave.date && typeof dataToSave.date === 'object') {
             dataToSave.date = String(dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
@@ -413,30 +538,57 @@ export class MfEditComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves total data
+     */
     public getTotal(from, field) {
         let total: number = 0;
         let manufacturingDetails = cloneDeep(this.manufacturingDetails);
+        /**
+         * Handles if functionality
+         */
         if (from === 'linkedStocks' && this.manufacturingDetails.linkedStocks) {
+            /**
+             * Handles forEach functionality
+             */
             forEach(manufacturingDetails.linkedStocks, (item) => total = total + Number(item[field]));
         }
+        /**
+         * Handles if functionality
+         */
         if (from === 'otherExpenses' && this.manufacturingDetails.otherExpenses) {
+            /**
+             * Handles forEach functionality
+             */
             forEach(manufacturingDetails.otherExpenses, (item) => total = total + Number(item.transactions[0][field]));
         }
 
         return total;
     }
 
+    /**
+     * Retrieves costperproduct data
+     */
     public getCostPerProduct() {
         let manufacturingDetails = cloneDeep(this.manufacturingDetails);
         let quantity;
+        /**
+         * Handles if functionality
+         */
         if (manufacturingDetails.multipleOf) {
             quantity = manufacturingDetails.manufacturingMultipleOf * manufacturingDetails.multipleOf;
         } else {
             quantity = manufacturingDetails.manufacturingMultipleOf;
         }
+        /**
+         * Handles quantity functionality
+         */
         quantity = (quantity && quantity > 0) ? quantity : 1;
         let amount = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
         let cost = (amount / quantity);
+        /**
+         * Handles if functionality
+         */
         if (!isNaN(cost)) {
             return cost;
         }
@@ -450,6 +602,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
      * @memberof MfEditComponent
      */
     public closeConfirmationPopup(userResponse: boolean) {
+        /**
+         * Handles if functionality
+         */
         if (userResponse) {
             let manufacturingObj = cloneDeep(this.manufacturingDetails);
             this.store.dispatch(this.manufacturingActions.DeleteMfItem({
@@ -460,7 +615,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.manufacturingConfirmationDialogRef?.close();
     }
 
+    /**
+     * Retrieves calculatedamount data
+     */
     public getCalculatedAmount(quantity, rate) {
+        /**
+         * Handles if functionality
+         */
         if (quantity.model && rate.model) {
             let amount = quantity.model * rate.model;
             this.linkedStocks.amount = amount;
@@ -469,10 +630,16 @@ export class MfEditComponent implements OnInit, OnDestroy {
         return 0;
     }
 
+    /**
+     * Handles quantitychange event
+     */
     public onQuantityChange(val: any) {
         let value = val;
         let manufacturingObj = cloneDeep(this.manufacturingDetails);
 
+        /**
+         * Handles if functionality
+         */
         if (!this.initialQuantityObj?.length) {
             this.initialQuantityObj = [];
             (Array.isArray(manufacturingObj.linkedStocks) ? manufacturingObj.linkedStocks : []).forEach((o) => {
@@ -480,16 +647,25 @@ export class MfEditComponent implements OnInit, OnDestroy {
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (value && !isNaN(value)) {
             value = parseFloat(value);
         } else {
             value = 1;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (manufacturingObj && manufacturingObj.linkedStocks) {
             (Array.isArray(manufacturingObj.linkedStocks) ? manufacturingObj.linkedStocks : []).forEach((stock) => {
                 let selectedStock = this.initialQuantityObj.find((obj) => obj.stockUniqueName === stock.stockUniqueName);
 
+                /**
+                 * Handles if functionality
+                 */
                 if (selectedStock) {
                     stock.quantity = selectedStock.quantity * value;
                     stock.amount = stock.quantity * stock.rate;
@@ -499,9 +675,18 @@ export class MfEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Retrieves stockunit data
+     */
     public getStockUnit(selectedItem, itemQuantity) {
+        /**
+         * Handles if functionality
+         */
         if (selectedItem && itemQuantity && Number(itemQuantity) > 0) {
             this._inventoryService.GetStockUniqueNameWithDetail(selectedItem).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     let unitCode = res.body?.stockUnit?.code;
 
@@ -519,8 +704,14 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     this.linkedStocks.stockUnitUniqueName = res.body?.stockUnit?.uniqueName;
 
                     this._inventoryService.GetRateForStoke(selectedItem, data).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response?.status === 'success') {
                             this.linkedStocks.rate = cloneDeep(response.body?.rate);
+                            /**
+                             * Sets timeout value
+                             */
                             setTimeout(() => {
                                 this.addConsumption(this.linkedStocks);
                             }, 10);
@@ -545,6 +736,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.manufacturingDetails.date = String(dayjs(this.bsValue).format(GIDDH_DATE_FORMAT));
     }
 
+    /**
+     * Handles clearDate functionality
+     */
     public clearDate() {
         this.manufacturingDetails.date = '';
     }
@@ -612,6 +806,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
      */
     public onExpenseAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.expenseAccountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventExpenseDefaultScrollApiCall &&
             (query || (this.defaultExpenseAccountSuggestions && this.defaultExpenseAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -621,6 +818,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 group: encodeURIComponent('operatingcost, indirectexpenses')
             };
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -628,6 +828,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
                             label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.expenseAccounts = searchResults;
                     } else {
@@ -639,7 +842,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     this.expenseGroupAccounts$ = observableOf(this.expenseAccounts);
                     this.expenseAccountsSearchResultsPaginationData.page = data.body.page;
                     this.expenseAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultExpenseAccountPaginationData.page = this.expenseAccountsSearchResultsPaginationData.page;
@@ -652,6 +861,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
             this.expenseAccountsSearchResultsPaginationData.page = this.defaultExpenseAccountPaginationData.page;
             this.expenseAccountsSearchResultsPaginationData.totalPages = this.defaultExpenseAccountPaginationData.totalPages;
             this.preventExpenseDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventExpenseDefaultScrollApiCall = false;
             }, 500);
@@ -665,11 +877,17 @@ export class MfEditComponent implements OnInit, OnDestroy {
      * @memberof MfEditComponent
      */
     public handleExpenseAccountScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.expenseAccountsSearchResultsPaginationData.page < this.expenseAccountsSearchResultsPaginationData.totalPages) {
             this.onExpenseAccountSearchQueryChanged(
                 this.expenseAccountsSearchResultsPaginationData.query,
                 this.expenseAccountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.expenseAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -696,6 +914,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
      */
     public onLiabilitiesAssetAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.liabilitiesAssetAccountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventLiabilitiesAssetDefaultScrollApiCall &&
             (query || (this.defaultLiabilitiesAssetAccountSuggestions && this.defaultLiabilitiesAssetAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -705,6 +926,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 group: encodeURIComponent('noncurrentassets, currentassets, fixedassets, currentliabilities, noncurrentliabilities, shareholdersfunds')
             }
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -712,6 +936,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
                             label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.liabilitiesAssetAccounts = searchResults;
                     } else {
@@ -723,7 +950,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     this.liabilityGroupAccounts$ = observableOf(this.liabilitiesAssetAccounts);
                     this.liabilitiesAssetAccountsSearchResultsPaginationData.page = data.body.page;
                     this.liabilitiesAssetAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultLiabilitiesAssetAccountPaginationData.page = this.liabilitiesAssetAccountsSearchResultsPaginationData.page;
@@ -736,6 +969,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
             this.liabilitiesAssetAccountsSearchResultsPaginationData.page = this.defaultLiabilitiesAssetAccountPaginationData.page;
             this.liabilitiesAssetAccountsSearchResultsPaginationData.totalPages = this.defaultLiabilitiesAssetAccountPaginationData.totalPages;
             this.preventLiabilitiesAssetDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventLiabilitiesAssetDefaultScrollApiCall = false;
             }, 500);
@@ -749,11 +985,17 @@ export class MfEditComponent implements OnInit, OnDestroy {
      * @memberof MfEditComponent
      */
     public handleLiabilitiesAssetAccountScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.defaultLiabilitiesAssetAccountPaginationData.page < this.defaultLiabilitiesAssetAccountPaginationData.totalPages) {
             this.onLiabilitiesAssetAccountSearchQueryChanged(
                 this.defaultLiabilitiesAssetAccountPaginationData.query,
                 this.defaultLiabilitiesAssetAccountPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.defaultLiabilitiesAssetAccountPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -778,6 +1020,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
     private initializeWarehouse(): void {
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             this.warehouses = [];
+            /**
+             * Handles if functionality
+             */
             if (warehouses && warehouses.results) {
                 let warehouseResults = cloneDeep(warehouses.results);
                 warehouseResults = warehouseResults?.filter(warehouse => this.manufacturingDetails?.warehouseUniqueName === warehouse?.uniqueName || !warehouse.isArchived);

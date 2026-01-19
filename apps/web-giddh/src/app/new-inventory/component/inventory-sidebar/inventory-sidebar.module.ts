@@ -11,6 +11,9 @@ import { CreateNewInventoryAsideComponent } from "../create-new-inventory-aside-
 import { MatDialogModule } from "@angular/material/dialog";
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         InventorySidebarComponent,
@@ -31,6 +34,10 @@ import { MatDialogModule } from "@angular/material/dialog";
         CreateNewInventoryAsideComponent
     ]
 })
+/**
+ * InventorySidebarModule module
+ * Implements InventorySidebarModule functionality
+ */
 export class InventorySidebarModule {
 
 }

@@ -2,6 +2,9 @@ import { Component, Inject, OnInit, ViewChild, ElementRef, ChangeDetectionStrate
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import * as jsonTreeViewer from 'json-tree-viewer';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'exports-json',
     
@@ -10,6 +13,10 @@ import * as jsonTreeViewer from 'json-tree-viewer';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
+/**
+ * ExportsJsonComponent component
+ * Handles exportsjson functionality and user interactions
+ */
 export class ExportsJsonComponent implements OnInit {
 
     /** Instance of activity logs json */
@@ -19,6 +26,10 @@ export class ExportsJsonComponent implements OnInit {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>) { }
 
@@ -28,6 +39,9 @@ export class ExportsJsonComponent implements OnInit {
      * @memberof ExportsJsonComponent
      */
     public ngOnInit(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             jsonTreeViewer?.create(this.inputData, this.jsonData?.nativeElement);
         }, 100);

@@ -10,9 +10,16 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * InvoiceTemplatesService service
+ * Provides invoicetemplates related business logic and data operations
+ */
 export class InvoiceTemplatesService {
     private companyUniqueName: string;
 

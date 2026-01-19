@@ -9,9 +9,16 @@ import { SearchRequest } from '../models/api-models/Search';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { CustomActions } from '../store/custom-actions';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SearchActions actions
+ * Defines search related action creators for state management
+ */
 export class SearchActions {
     public static readonly SEARCH_REQUEST = 'SEARCH_REQUEST';
     public static readonly SEARCH_RESPONSE = 'SEARCH_RESPONSE';
@@ -19,9 +26,18 @@ export class SearchActions {
 
     private Search$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SearchActions.SEARCH_REQUEST),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._searchService.Search(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map((r) => this.validateResponse<any, SearchRequest>(r, {
                         type: SearchActions.SEARCH_RESPONSE,
                         payload: r
@@ -31,9 +47,16 @@ export class SearchActions {
                     })));
             })));
 
+    /**
+     * Creates an instance of actions
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions, private _toasty: ToasterService, private _searchService: SearchService) {
     }
 
+    /**
+     * Handles GetStocksReport functionality
+     */
     public GetStocksReport(request: SearchRequest, searchReqBody: any): CustomActions {
         return {
             type: SearchActions.SEARCH_REQUEST,
@@ -41,6 +64,9 @@ export class SearchActions {
         };
     }
 
+    /**
+     * Handles ResetSearchState functionality
+     */
     public ResetSearchState(): CustomActions {
         return {
             type: SearchActions.RESET_SEARCH_STATE
@@ -48,12 +74,21 @@ export class SearchActions {
     }
 
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+        /**
+         * Handles if functionality
+         */
         if (response?.status === 'error') {
+            /**
+             * Handles if functionality
+             */
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }
             return errorAction;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (showToast && typeof response?.body === 'string') {
                 this._toasty.successToast(response.message);
             }

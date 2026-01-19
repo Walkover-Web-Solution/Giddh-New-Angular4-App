@@ -7,12 +7,19 @@ import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { AppState } from '../../../store/roots';
 import { cloneDeep } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'audit-logs-table',
     templateUrl: './audit-logs-table.component.html',
     styleUrls: ['audit-logs-table.component.scss'],
     standalone: false
 })
+/**
+ * AuditLogsTableComponent component
+ * Handles auditlogstable functionality and user interactions
+ */
 export class AuditLogsTableComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -37,6 +44,10 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     /** True if api call in progress */
     public isLoading: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private auditLogsActions: AuditLogsActions) {
         this.loadMoreInProcess$ = this.store.pipe(select(state => state.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
         this.totalPages$ = this.store.pipe(select(state => state.auditlog.totalPages), takeUntil(this.destroyed$));

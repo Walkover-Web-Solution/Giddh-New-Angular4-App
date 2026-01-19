@@ -17,6 +17,9 @@ import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-le
 import { AccountArchivedStatusEnum } from "../../../Enums/common.enum";
 import { IOption } from "apps/web-giddh/src/app/app.constant";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "master",
     templateUrl: "./master.component.html",
@@ -24,6 +27,10 @@ import { IOption } from "apps/web-giddh/src/app/app.constant";
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * MasterComponent component
+ * Handles master functionality and user interactions
+ */
 export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of cdk virtual scroller */
     @ViewChildren(CdkVirtualScrollViewport) virtualScroll: QueryList<CdkVirtualScrollViewport>;
@@ -78,6 +85,10 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /** Voucher API Version */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
@@ -105,6 +116,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
 
         this.activeAccount$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.useAccountBreadcrumb && response) {
                 this.breadcrumbPath = [];
                 this.breadcrumbUniqueNamePath = [];
@@ -122,17 +136,29 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1) {
                 this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName : this.currentGroupUniqueName, ((this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName)) ? this.currentGroupColumnIndex + 1 : this.currentGroupColumnIndex, true);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1) {
                 let activeGroup;
                 this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+                /**
+                 * Handles if functionality
+                 */
                 if (activeGroup?.uniqueName) {
                     this.masterColumnsData?.forEach((column, index) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (column?.groupUniqueName === this.currentGroupUniqueName) {
                             this.masterColumnsData[index].groupUniqueName = activeGroup?.uniqueName;
                         }
@@ -143,12 +169,18 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1) {
                 this.onGroupClick({ uniqueName: this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName }, this.currentGroupColumnIndex - 1);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isMoveGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1) {
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1);
                 this.store.dispatch(this.groupWithAccountsAction.moveGroupComplete());
@@ -156,18 +188,27 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1) {
                 this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName : this.currentGroupUniqueName, ((this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName)) ? this.currentGroupColumnIndex + 1 : this.currentGroupColumnIndex, true);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.onGroupClick({ uniqueName: this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName }, this.currentGroupColumnIndex - 1);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteAccSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
                 this.currentGroupColumnIndex = this.currentGroupColumnIndex - 1;
@@ -175,6 +216,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1);
                 this.currentGroupColumnIndex = this.currentGroupColumnIndex - 1;
@@ -183,6 +227,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isMergeAccountSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.onGroupClick({ uniqueName: this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName }, this.currentGroupColumnIndex, false);
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
@@ -190,6 +237,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isUnmergeAccountSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.onGroupClick({ uniqueName: this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName }, this.currentGroupColumnIndex, false);
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
@@ -198,7 +248,13 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             const dataLength = event?.getDataLength ? event.getDataLength() : event?.dataLength || 0;
+            /**
+             * Handles if functionality
+             */
             if (event && typeof event.getRenderedRange === 'function' && dataLength - event.getRenderedRange().end < 50) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.loadMoreInProgress && this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.page < this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.totalPages) {
                     this.loadMoreInProgress = true;
                     this.getMasters(this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.groupUniqueName, event?.elementRef?.nativeElement?.id, false, true);
@@ -207,6 +263,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.generalService.eventHandler.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            /**
+             * Handles if functionality
+             */
             if (event) {
                 let activeGroup: any;
                 this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(grp => activeGroup = grp);
@@ -215,6 +274,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 this.store.pipe(select(state => state.groupwithaccounts.activeAccount), take(1)).subscribe(acc => activeAccount = acc);
 
                 // reset search string when you're in search case for move group || move account || merge account
+                /**
+                 * Handles if functionality
+                 */
                 if (event.name === eventsConst.groupMoved.toString() || event.name === eventsConst.accountMoved.toString() || event.name === eventsConst.accountMerged.toString()) {
                     this.isSearchingGroups = false;
                 }
@@ -222,6 +284,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 this.breadcrumbPath = [];
                 this.breadcrumbUniqueNamePath = [];
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!activeAccount) {
                     this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
                 } else {
@@ -233,9 +298,15 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$)).subscribe(activeAccount => {
+            /**
+             * Handles if functionality
+             */
             if (activeAccount) {
                 let activeGroup;
                 this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+                /**
+                 * Handles if functionality
+                 */
                 if (!activeGroup) {
                     // Active group doesn't exist when search is made in Master
                     this.breadcrumbPath = [];
@@ -247,6 +318,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(activeGroup => {
+            /**
+             * Handles if functionality
+             */
             if (activeGroup) {
                 this.breadcrumbPath = [];
                 this.breadcrumbUniqueNamePath = [];
@@ -256,11 +330,17 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges && !response) {
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             }
 
             this.hasUnsavedChanges = response;
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
@@ -275,16 +355,28 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.isSearchingGroups) {
             this.isSearchingGroups = changes?.isSearchingGroups?.currentValue;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes?.topSharedGroups?.currentValue) {
             this.showTopLevelGroups();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes?.searchedMasterData?.currentValue && this.isSearchingGroups) {
             let masterColumnsData = [];
+            /**
+             * Handles if functionality
+             */
             if (changes?.searchedMasterData?.currentValue?.length > 0) {
                 masterColumnsData = this.mapNestedGroupsAccounts(changes?.searchedMasterData?.currentValue, 0, masterColumnsData);
                 masterColumnsData?.map(columnData => {
@@ -295,6 +387,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
             this.masterColumnsData = cloneDeep(masterColumnsData);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes?.commonLocaleData) {
             this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
         }
@@ -314,13 +409,25 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     private getMasters(groupUniqueName: string, currentIndex: number, isRefresh: boolean = false, isLoadMore: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (!groupUniqueName) {
             return;
         }
         const page = (isLoadMore) ? (Number(this.masterColumnsData[currentIndex]?.page) + 1) : 1;
         this.groupService.getMasters(groupUniqueName, page, this.selectedArchivedOption[groupUniqueName]).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
+                /**
+                 * Handles if functionality
+                 */
                 if (!isLoadMore) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!isRefresh) {
                         let newIndex = Number(currentIndex) + 1;
                         this.masterColumnsData = this.masterColumnsData.slice(0, newIndex);
@@ -351,6 +458,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public onGroupClick(item: any, currentIndex: number, loadMaster: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges) {
             this.confirmPageLeave(() => {
                 this.groupClicked(item, currentIndex, loadMaster);
@@ -379,6 +489,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.useAccountBreadcrumb = false;
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
+        /**
+         * Handles if functionality
+         */
         if (loadMaster) {
             this.getMasters(item?.uniqueName, currentIndex);
         }
@@ -395,6 +508,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public onAccountClick(item: any, currentIndex: number): void {
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges) {
             this.confirmPageLeave(() => {
                 this.accountClick(item, currentIndex);
@@ -450,16 +566,25 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      */
     private mapNestedGroupsAccounts(master: any, index: number, masterColumnsData: any): any {
         master?.forEach(data => {
+            /**
+             * Handles if functionality
+             */
             if (masterColumnsData[index]) {
                 masterColumnsData[index].results.push({ name: data?.name, type: (data?.category) ? "GROUP" : "ACCOUNT", uniqueName: data?.uniqueName });
             } else {
                 masterColumnsData[index] = { results: [{ name: data?.name, type: (data?.category) ? "GROUP" : "ACCOUNT", uniqueName: data?.uniqueName }], page: 1, totalPages: 1, groupUniqueName: '' };
             }
 
+            /**
+             * Handles if functionality
+             */
             if (data?.groups?.length) {
                 masterColumnsData = this.mapNestedGroupsAccounts(data?.groups, (index + 1), masterColumnsData);
             }
 
+            /**
+             * Handles if functionality
+             */
             if (data?.accounts?.length) {
                 masterColumnsData = this.mapNestedGroupsAccounts(data?.accounts, (index + 1), masterColumnsData);
             }
@@ -476,6 +601,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public showAddNewForm(items: any, currentIndex: number): void {
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges) {
             this.confirmPageLeave(() => {
                 this.openAddNewForm(items, currentIndex);
@@ -501,6 +629,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
 
+        /**
+         * Handles if functionality
+         */
         if (items.groupUniqueName) {
             this.currentGroupColumnIndex = currentIndex - 1;
             this.currentGroupUniqueName = items.groupUniqueName;
@@ -521,10 +652,19 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public getBreadCrumbPathFromGroup(activeEntity: any, result: IGroupsWithAccounts, parentPath: string[], parentUniquenamePath: string[]): any {
+        /**
+         * Handles if functionality
+         */
         if (result !== null) {
             return result;
         }
+        /**
+         * Handles if functionality
+         */
         if (activeEntity?.parentGroups) {
+            /**
+             * Handles for functionality
+             */
             for (let group of activeEntity.parentGroups) {
                 parentUniquenamePath.push(group?.uniqueName);
                 parentPath.push(group?.name);
@@ -555,6 +695,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public onRightKey(nodes?: any, navigator?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (nodes.currentVertical) {
             nodes.currentVertical.click();
         } else {
@@ -570,6 +713,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onLeftKey(nodes?: any, navigator?: any): void {
         navigator.remove();
+        /**
+         * Handles if functionality
+         */
         if (navigator.currentVertical && !navigator.currentVertical.attributes.getNamedItem('nav-vr-item')) {
             navigator.nextVertical();
         }
@@ -582,6 +728,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public onColAdd(element?: any, navigation?: any): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             navigation.add(element?.nativeElement);
             navigation.nextVertical();
@@ -617,8 +766,14 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      */
     private confirmPageLeave(callback: Function): void {
         this.pageLeaveUtilityService.confirmPageLeave(action => {
+            /**
+             * Handles if functionality
+             */
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                /**
+                 * Handles callback functionality
+                 */
                 callback();
             }
         });

@@ -26,6 +26,9 @@ import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, find, forEach, keys, map, remove } from '../../../lodash-optimized';
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'imports',
     
@@ -34,6 +37,10 @@ const ELEMENT_DATA: ImportsData[] = [];
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
+/**
+ * ImportsComponent component
+ * Handles imports functionality and user interactions
+ */
 export class ImportsComponent extends DownloadsBaseComponent implements OnInit, OnDestroy {
     /** This will use for table heading */
     public displayedColumns: string[] = ['importDate', 'by', 'module', 'importFile', 'count', 'errorSheet', 'succesSheet', 'expiry'];
@@ -71,7 +78,14 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
     /** Instance of is electron variable */
     public isElectron: any = Configuration.isElectron;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
+        /**
+         * Handles super functionality
+         */
         super();
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -84,6 +98,9 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -94,6 +111,9 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
@@ -101,6 +121,9 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
 
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -116,10 +139,16 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch || !this.currentBranch.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -133,10 +162,16 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
                     }
                 }
                 this.importRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch.uniqueName : "";
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.initialApiCalled) {
                     this.initialApiCalled = true;
                     /** Universal date observer */
                     this.universalDate$.subscribe(dateObj => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (dateObj) {
                             let universalDate = cloneDeep(dateObj);
                             this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -148,6 +183,9 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
                     });
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -163,12 +201,18 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
      * @memberof ImportsComponent
      */
     public getImports(resetPage?: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.importRequest.page = 1;
         }
         this.isLoading = true;
         this.importsService.getImports(this.importRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 response.body?.items?.forEach((result: any) => {
                     let success = 0;
@@ -222,16 +266,25 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
      * @memberof ImportsComponent
      */
     public dateSelectedCallback(value?: any, from?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.showClearFilter = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -269,6 +322,9 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
         this.showClearFilter = false;
         //Reset Date with universal date
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.importRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                 this.importRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
@@ -310,8 +366,14 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
      * @memberof ImportsComponent
      */
     public downloadFile(url: string): void {
+        /**
+         * Handles if functionality
+         */
         if (url) {
             let fileName = url.substring(url.lastIndexOf('/') + 1);
+            /**
+             * Handles download functionality
+             */
             download(fileName, url, "");
         }
     }
@@ -327,8 +389,14 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
         exportRequest.requestId = element.requestId;
         exportRequest.status = "FAILED";
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
+                /**
+                 * Handles download functionality
+                 */
                 download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
@@ -347,8 +415,14 @@ export class ImportsComponent extends DownloadsBaseComponent implements OnInit, 
         exportRequest.requestId = element.requestId;
         exportRequest.status = "SUCCESS";
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
+                /**
+                 * Handles download functionality
+                 */
                 download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);

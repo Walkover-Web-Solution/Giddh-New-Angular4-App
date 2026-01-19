@@ -11,10 +11,16 @@ const matchingFunction = dde.matches ? 'matches' :
                             dde.mozMatchesSelector ? 'mozMatchesSelector' : null;
 
 const closestElement = (el: Node, selector: string): HTMLElement => {
+    /**
+     * Handles while functionality
+     */
     while (el !== document.documentElement && el != null && !el[matchingFunction](selector)) {
         el = el.parentNode;
     }
 
+    /**
+     * Handles if functionality
+     */
     if (el && el[matchingFunction](selector)) {
         return el as HTMLElement;
     } else {
@@ -23,6 +29,9 @@ const closestElement = (el: Node, selector: string): HTMLElement => {
 };
 
 const getWindowScroll = () => {
+    /**
+     * Handles if functionality
+     */
     if ('pageYOffset' in window) {
         return {
             scrollTop: pageYOffset,
@@ -44,6 +53,9 @@ const getWindowScroll = () => {
 };
 
 const getClientSize = (element: Node | Window, sizeProp: string): number => {
+    /**
+     * Handles if functionality
+     */
     if (element === window) {
         return sizeProp === 'clientWidth' ? window.innerWidth : window.innerHeight;
     } else {
@@ -62,6 +74,9 @@ const getScrollOffset = (vsElement: HTMLElement, scrollElement: HTMLElement | Wi
 };
 
 function nextElementSibling(el: any) {
+    /**
+     * Handles if functionality
+     */
     if (el.nextElementSibling) {
         return el.nextElementSibling;
     }
@@ -73,11 +88,18 @@ function nextElementSibling(el: any) {
     return el;
 }
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: '[vsFor]',
     exportAs: 'vsFor'
 })
 
+/**
+ * VsForDirective class
+ * Implements VsForDirective functionality
+ */
 export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     public originalLength: number;
     public before: HTMLElement;
@@ -121,6 +143,10 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     @Input()
     public vsForTagName = 'div';
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _element: ElementRef,
         private _viewContainer: ViewContainerRef,
         private _templateRef: TemplateRef<any>,
@@ -128,11 +154,17 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef) {
         let _prevClientSize: number;
         const reinitOnClientHeightChange = () => {
+            /**
+             * Handles if functionality
+             */
             if (!this.scrollParent) {
                 return;
             }
 
             const ch = getClientSize(this.scrollParent, this.clientSize);
+            /**
+             * Handles if functionality
+             */
             if (ch !== _prevClientSize) {
                 _prevClientSize = ch;
                 this._ngZone.run(() => {
@@ -155,6 +187,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     @Input('vsFor')
     set originalCollection(value: any[]) {
         this._originalCollection = value || [];
+        /**
+         * Handles if functionality
+         */
         if (this.scrollParent) {
             this.refresh();
         } else {
@@ -170,12 +205,21 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
     set slicedCollection(value: any[]) {
         this._slicedCollection = value;
+        /**
+         * Handles if functionality
+         */
         if (this.view) {
             this.view.context.vsCollection = this._slicedCollection;
         }
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges() {
+        /**
+         * Handles if functionality
+         */
         if (this.scrollParent) {
             this.refresh();
         } else {
@@ -183,13 +227,22 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles postDigest functionality
+     */
     public postDigest(fn: any) {
         const subscription: any = this._ngZone.onStable.subscribe(() => {
+            /**
+             * Handles fn functionality
+             */
             fn();
             subscription.unsubscribe();
         });
     }
 
+    /**
+     * Initializes placeholders
+     */
     public initPlaceholders() {
         this.before = document.createElement(this.vsForTagName);
         this.before.className = 'vsFor-before';
@@ -198,6 +251,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         this.parent.insertBefore(this.before, this.parent.childNodes[0]);
         this.parent.appendChild(this.after);
 
+        /**
+         * Handles if functionality
+         */
         if (this.vsForHorizontal) {
             this.before.style.height = '100%';
             this.after.style.height = '100%';
@@ -207,6 +263,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         this.view = this._viewContainer.createEmbeddedView(this._templateRef);
         this.parent = nextElementSibling(this._element.nativeElement);
@@ -225,6 +284,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
         this.totalSize = 0;
 
+        /**
+         * Handles if functionality
+         */
         if (typeof this.vsForSize !== 'undefined') {
             this.sizesCumulative = [];
         }
@@ -237,6 +299,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         });
 
         this.onWindowResize = () => {
+            /**
+             * Handles if functionality
+             */
             if (this.vsForAutoresize) {
                 this.__autoSize = true;
                 this._ngZone.run(() => {
@@ -252,17 +317,32 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         window.addEventListener('resize', this.onWindowResize);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
+        /**
+         * Handles if functionality
+         */
         if (this.onWindowResize) {
             window.removeEventListener('resize', this.onWindowResize);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.onZone) {
             this.onZone.unsubscribe();
         }
     }
 
+    /**
+     * Handles refresh functionality
+     */
     public refresh() {
+        /**
+         * Handles if functionality
+         */
         if (!this.originalCollection || this.originalCollection?.length < 1) {
             this.slicedCollection = [];
             this.originalLength = 0;
@@ -270,8 +350,14 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
             this.sizesCumulative = [0];
         } else {
             this.originalLength = this.originalCollection?.length;
+            /**
+             * Handles if functionality
+             */
             if (typeof this.vsForSize !== 'undefined') {
                 this.sizes = this.originalCollection.map((item, index) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (typeof this.vsForSize === 'function') {
                         return this.vsForSize(item, index);
                     } else {
@@ -294,10 +380,16 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         this.reinitialize();
     }
 
+    /**
+     * Updates existing totalsize
+     */
     public updateTotalSize(size: number) {
         this.totalSize = this.vsForOffsetBefore + size + this.vsForOffsetAfter;
     }
 
+    /**
+     * Handles reinitialize functionality
+     */
     public reinitialize() {
         this._prevStartIndex = void 0;
         this._prevEndIndex = void 0;
@@ -311,22 +403,37 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         this.updateInnerCollection();
     }
 
+    /**
+     * Sets autosize value
+     */
     public setAutoSize() {
+        /**
+         * Handles if functionality
+         */
         if (typeof this.vsForSize !== 'undefined') {
             this._ngZone.run(() => {
                 this.refresh();
             });
         } else if (this.__autoSize) {
             let gotSomething = false;
+            /**
+             * Handles if functionality
+             */
             if (this.parent.offsetHeight || this.parent.offsetWidth) { // element is visible
                 const child = this.parent.children[1];
 
+                /**
+                 * Handles if functionality
+                 */
                 if (child[this.offsetSize]) {
                     gotSomething = true;
                     this.elementSize = child[this.offsetSize];
                 }
             }
 
+            /**
+             * Handles if functionality
+             */
             if (gotSomething) {
                 this.__autoSize = false;
                 this._ngZone.run(() => {
@@ -336,6 +443,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         }
     }
 
+    /**
+     * Updates existing innercollection
+     */
     public updateInnerCollection() {
         const $scrollPosition = getScrollPos(this.scrollParent, this.scrollPos);
         const $clientSize = getClientSize(this.scrollParent, this.clientSize);
@@ -351,11 +461,20 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         // tslint:disable-next-line:variable-name
         let __endIndex = this.endIndex;
 
+        /**
+         * Handles if functionality
+         */
         if (typeof this.vsForSize !== 'undefined') {
             __startIndex = 0;
+            /**
+             * Handles while functionality
+             */
             while (this.sizesCumulative[__startIndex] < $scrollPosition - this.vsForOffsetBefore - scrollOffset) {
                 __startIndex++;
             }
+            /**
+             * Handles if functionality
+             */
             if (__startIndex > 0) {
                 __startIndex--;
             }
@@ -367,6 +486,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
             );
 
             __endIndex = __startIndex;
+            /**
+             * Handles while functionality
+             */
             while (this.sizesCumulative[__endIndex] < $scrollPosition - this.vsForOffsetBefore - scrollOffset + $clientSize) {
                 __endIndex++;
             }
@@ -399,14 +521,26 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         this.endIndex = this.__options.latch ? this._maxEndIndex : __endIndex;
 
         let digestRequired = false;
+        /**
+         * Handles if functionality
+         */
         if (this._prevStartIndex == null) {
             digestRequired = true;
         } else if (this._prevEndIndex == null) {
             digestRequired = true;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!digestRequired) {
+            /**
+             * Handles if functionality
+             */
             if (this.__options.hunked) {
+                /**
+                 * Handles if functionality
+                 */
                 if (Math.abs(this.startIndex - this._prevStartIndex) >= this.vsForExcess / 2 ||
                     (this.startIndex === 0 && this._prevStartIndex !== 0)) {
                     digestRequired = true;
@@ -420,8 +554,14 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (digestRequired) {
             this.slicedCollection = this.originalCollection.slice(this.startIndex, this.endIndex);
+            /**
+             * Handles if functionality
+             */
             if (this.view) {
                 this.view.context.vsStartIndex = this.startIndex;
             }
@@ -442,8 +582,14 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         return digestRequired;
     }
 
+    /**
+     * Handles scrollToElement functionality
+     */
     public scrollToElement(itemIndex: number) {
         this.sizes = this.originalCollection.map((item, index) => {
+            /**
+             * Handles if functionality
+             */
             if (typeof this.vsForSize === 'function') {
                 return this.vsForSize(item, index);
             } else if (this.vsForSize) {
@@ -464,11 +610,20 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         this.updateInnerCollection();
     }
 
+    /**
+     * Handles _getOffset functionality
+     */
     public _getOffset(index: number) {
+        /**
+         * Handles if functionality
+         */
         if (typeof this.vsForSize !== 'undefined') {
             return this.sizesCumulative[index + this.startIndex] + this.vsForOffsetBefore;
         }
 
+        /**
+         * Handles return functionality
+         */
         return (index + this.startIndex) * this.elementSize + this.vsForOffsetBefore;
     }
 }

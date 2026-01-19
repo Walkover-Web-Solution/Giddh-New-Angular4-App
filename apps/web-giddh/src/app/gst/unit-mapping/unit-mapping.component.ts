@@ -13,6 +13,9 @@ import { GeneralService } from "../../services/general.service";
 import { Angular21ChangeDetectionService } from "../../services/angular21-change-detection.service";
 
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'unit-mapping',
     templateUrl: './unit-mapping.component.html',
@@ -21,6 +24,10 @@ import { Angular21ChangeDetectionService } from "../../services/angular21-change
     standalone: false
 })
 
+/**
+ * UnitMappingComponent component
+ * Handles unitmapping functionality and user interactions
+ */
 export class UnitMappingComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
@@ -41,6 +48,10 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
     /** This will use for voucher api version */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private commonService: CommonService,
         private store: Store<AppState>,
@@ -54,6 +65,9 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
     ) {
         this.stockUnit$ = this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
             }
@@ -71,7 +85,13 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.customStockAction.getStockUnit());
         document.querySelector('body').classList.add('gst-sidebar-open');
         document.querySelector('body').classList.add('unit-mapping-page');
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([this.commonService.getGstUnits(), this.stockUnit$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            /**
+             * Handles if functionality
+             */
             if (resp[0] && resp[1]) {
                 this.unitsArray = [];
                 let giddhUnits = resp[1];
@@ -137,6 +157,9 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
             };
         });
         this.commonService.updateStockUnits(unitsArray).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 this.toasty.showSnackBar("success", response?.body);
                 this.changeDetectionService.triggerChangeDetection(this.changeDetection, this.ngZone);

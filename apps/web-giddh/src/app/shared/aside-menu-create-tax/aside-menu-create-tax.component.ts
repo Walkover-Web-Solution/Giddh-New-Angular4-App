@@ -16,6 +16,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IOption } from '../../app.constant';
 import { ReactiveDropdownFieldComponent } from '../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-menu-create-tax-component',
     templateUrl: './aside-menu-create-tax.component.html',
@@ -23,6 +26,10 @@ import { ReactiveDropdownFieldComponent } from '../../theme/form-fields/reactive
     providers: [TaxAuthorityComponentStore],
     standalone: false
 })
+/**
+ * AsideMenuCreateTaxComponent component
+ * Handles asidemenucreatetax functionality and user interactions
+ */
 export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     /** Reference to the reactive dropdown field component for tax authority selection */
     @ViewChild('dropdownRef') public dropdownRef: ReactiveDropdownFieldComponent;
@@ -72,6 +79,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
     /** Holds TDS TCS tax sub type */
     private subType: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private settingsTaxesActions: SettingsTaxesActions,
@@ -89,6 +100,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
      * @memberof AsideMenuCreateTaxComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles for functionality
+         */
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i?.toString(), value: i?.toString() });
         }
@@ -96,9 +110,15 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         this.translateDropdownValues();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany && activeCompany.countryV2) {
                 this.getTaxList(activeCompany.countryV2.alpha2CountryCode);
                 this.isUSCompany = activeCompany.countryV2.alpha2CountryCode === 'US';
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isUSCompany) {
                     this.getTaxAuthorityList();
                     (this.taxForm.get('taxAuthorityRequest') as FormGroup).get('uniqueName').setValidators([Validators.required]);
@@ -111,6 +131,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         this.store
             .pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$))
             .subscribe(taxes => {
+                /**
+                 * Handles if functionality
+                 */
                 if (taxes && taxes.length) {
                     let arr: IOption[] = [];
                     (Array.isArray(taxes) ? taxes : []).forEach(tax => {
@@ -129,6 +152,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         this.store
             .pipe(select(p => p.company && p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
             .subscribe(result => {
+                /**
+                 * Handles if functionality
+                 */
                 if (result && this.otherTax) {
                     this.closeEvent.emit();
                 }
@@ -144,14 +170,26 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
      * @memberof AsideMenuCreateTaxComponent
      */
     public ngAfterViewInit(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.dropdownRef?.openDropdownPanel();
         }, 200);
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ('tax' in changes && changes.tax.currentValue && (changes.tax.currentValue !== changes.tax.previousValue)) {
             this.checkIfTdsOrTcs = this.tax.taxType.includes('tcs') || this.tax.taxType.includes('tds');
+            /**
+             * Handles if functionality
+             */
             if (this.checkIfTdsOrTcs) {
                 this.subType = this.tax.taxType.includes('rc') ? 'rc' : 'pay';
             }
@@ -183,6 +221,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
      */
     private getTaxAuthorityList(): void {
         this.componentStore.taxAuthorityList$.pipe(skip(1),take(1)).subscribe(taxAuthorities => {
+            /**
+             * Handles if functionality
+             */
             if (taxAuthorities?.length) {
                 let arr: IOption[] = [];
                 (Array.isArray(taxAuthorities) ? taxAuthorities : []).forEach(tax => {
@@ -221,13 +262,22 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         });
 
         this.taxForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            /**
+             * Handles if functionality
+             */
             if (value) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.taxForm?.get('taxType')?.value === 'tds' || this.taxForm?.get('taxType')?.value === 'tcs') {
                     this.taxForm.get('tdsTcsTaxSubTypes').setValidators([Validators.required]);
                 } else {
                     this.taxForm.get('tdsTcsTaxSubTypes').removeValidators([Validators.required]);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.taxForm?.get('taxType')?.value === 'others') {
                     this.taxForm.get('account').setValidators([Validators.required]);
                 } else {
@@ -245,8 +295,14 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
     public generateUniqueName(): void {
         let val: string = this.taxForm.get('name').value;
         val = uniqueNameInvalidStringReplace(val);
+        /**
+         * Handles if functionality
+         */
         if (val) {
             let isDuplicate = this.allTaxes.some(s => s?.value?.toLowerCase().includes(val));
+            /**
+             * Handles if functionality
+             */
             if (isDuplicate) {
                 this.taxForm.get('taxNumber').patchValue(val + 1);
             } else {
@@ -265,12 +321,21 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
     public onSubmit(): void {
         this.isValidForm = this.taxForm.valid;
 
+        /**
+         * Handles if functionality
+         */
         if (!this.isValidForm) {
             return;
         }
         let dataToSave = cloneDeep(this.taxForm.value);
 
+        /**
+         * Handles if functionality
+         */
         if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
+            /**
+             * Handles if functionality
+             */
             if (this.tax && this.tax.uniqueName) {
                 dataToSave.taxType = dataToSave.taxType + dataToSave.tdsTcsTaxSubTypes;
             } else {
@@ -283,11 +348,20 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
             date: dataToSave.date
         }];
 
+        /**
+         * Handles if functionality
+         */
         if (dataToSave.taxType === 'others') {
+            /**
+             * Handles if functionality
+             */
             if (!dataToSave.accounts) {
                 dataToSave.accounts = [];
             }
             (Array.isArray(this.linkedAccountsOption) ? this.linkedAccountsOption : []).forEach((obj) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (obj?.value === dataToSave.account) {
                     let accountObj = obj.label.split(' - ');
                     dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj?.value });
@@ -299,11 +373,17 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
 
+        /**
+         * Handles if functionality
+         */
         if (!this.isUSCompany) {
             delete dataToSave.taxAuthorityRequest;
         }
         dataToSave?.taxAuthority && delete dataToSave.taxAuthority;
 
+        /**
+         * Handles if functionality
+         */
         if (this.tax && this.tax.uniqueName) {
             this.store.dispatch(this.settingsTaxesActions.UpdateTax(dataToSave));
         } else {
@@ -311,17 +391,29 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         }
     }
 
+    /**
+     * Retrieves taxlist data
+     */
     public getTaxList(countryCode) {
         this.store.dispatch(this.settingsTaxesActions.resetTaxList());
         this.store.pipe(select(s => s.settings.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 Object.keys(res.taxes).forEach(key => {
                     // CREATED TAX VALUE AND TAX TYPES LIST MAPPING TO SHOW SELECT TYPE DROPDOWN VALUES BASED ON SELECTED TAX
+                    /**
+                     * Handles if functionality
+                     */
                     if (res.taxes[key]?.types?.length > 0) {
                         this.taxNameTypesMapping[res.taxes[key].value] = [];
                         this.taxNameTypesMapping[res.taxes[key].value] = res.taxes[key].types;
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (res.taxes[key].value === this.taxForm.get('taxType').value) {
                         this.selectedTax = res.taxes[key]?.label;
                     }
@@ -341,6 +433,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
      * @memberof AsideMenuCreateTaxComponent
      */
     public selectTax(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.taxForm.get('tdsTcsTaxSubTypes').patchValue('');
         }
@@ -355,11 +450,17 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
     private loadLinkedAccounts(): void {
         const params = {
             group: encodeURIComponent('currentassets, currentliabilities'),
+            /**
+             * Handles exceptGroups functionality
+             */
             exceptGroups: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('cash, bankaccounts, loanandoverdraft, sundrydebtors, sundrycreditors, reversecharge, taxonadvance') : encodeURIComponent('cash, bankaccounts, sundrydebtors, sundrycreditors, reversecharge, taxonadvance'),
             count: 0
         };
         let accounts = [];
         this.salesService.getAccountsWithCurrency(params).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.results) {
                 accounts = response.body.results?.map(account => {
                     return { label: `${account.name} - (${account?.uniqueName})`, value: account?.uniqueName };
@@ -381,12 +482,21 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles translationComplete functionality
+     */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translateDropdownValues();
         }
     }
 
+    /**
+     * Handles translateDropdownValues functionality
+     */
     private translateDropdownValues(): void {
         this.duration = [
             { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
@@ -399,8 +509,14 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
             { label: this.commonLocaleData?.app_tax_subtypes?.receivable, value: 'rc' },
             { label: this.commonLocaleData?.app_tax_subtypes?.payable, value: 'pay' }
         ];
+        /**
+         * Handles if functionality
+         */
         if (this.subType) {
             (Array.isArray(this.tdsTcsTaxSubTypes) ? this.tdsTcsTaxSubTypes : []).forEach(key => {
+                /**
+                 * Handles if functionality
+                 */
                 if (key?.value === this.subType) {
                     this.selectedTaxType = key.label;
                 }
@@ -415,6 +531,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
      * @memberof AsideMenuCreateTaxComponent
      */
     public selectDate(date: any): void {
+        /**
+         * Handles if functionality
+         */
         if (date) {
             this.taxForm.get('date').patchValue(dayjs(date).format(GIDDH_DATE_FORMAT));
         }

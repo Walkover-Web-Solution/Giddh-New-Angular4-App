@@ -11,12 +11,19 @@ import { VatService } from "../services/vat.service";
 import { saveAs } from "file-saver";
 import { SettingsFinancialYearService } from '../services/settings.financial-year.service';
 import { RestrictedModules } from '../app.constant';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
     templateUrl: './vat-report.component.html',
     standalone:false
 })
+/**
+ * VatReportComponent component
+ * Handles vatreport functionality and user interactions
+ */
 export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];
     public activeCompany: any;
@@ -72,6 +79,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private vatService: VatService,
@@ -82,13 +93,22 @@ export class VatReportComponent implements OnInit, OnDestroy {
         public settingsFinancialYearService: SettingsFinancialYearService
     ) { }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany && this.activeCompany?.uniqueName !== activeCompany.uniqueName) {
                 this.activeCompany = activeCompany;
                 this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB';
                 this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
                 this.isKenyaCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'KE';
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isUKCompany && !this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling)) {
                     this.getURLHMRCAuthorization();
                 }
@@ -97,6 +117,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.add('gst-sidebar-open');
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -110,6 +133,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
      * @memberof VatReportComponent
      */
     public getVatReport(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.taxNumber) {
             let countryCode;
             let vatReportRequest = new VatReportRequest();
@@ -118,6 +144,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
             vatReportRequest.taxNumber = this.taxNumber;
             vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
 
+            /**
+             * Handles if functionality
+             */
             if (this.isZimbabweCompany) {
                 vatReportRequest.currencyCode = this.vatReportCurrencyCode;
                 countryCode = 'ZW';
@@ -130,10 +159,19 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.vatReport = [];
             this.isLoading = true;
 
+            /**
+             * Handles if functionality
+             */
             if (!this.isUKCompany && !this.isZimbabweCompany && !this.isKenyaCompany) {
                 this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res) {
                         this.isLoading = false;
+                        /**
+                         * Handles if functionality
+                         */
                         if (res.status === 'success') {
                             this.vatReport = res.body?.sections;
                             this.cdRef.detectChanges();
@@ -144,10 +182,19 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 });
             } else {
                 this.vatService.getCountryWiseVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res) {
                         this.isLoading = false;
+                        /**
+                         * Handles if functionality
+                         */
                         if (res && res?.status === 'success' && res?.body) {
                             this.vatReport = res.body?.sections;
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.isZimbabweCompany) {
                                 this.vatReportCurrencyMap = res.body?.currencyMap;
                                 this.vatReportCurrencySymbol = res.body?.currency?.symbol;
@@ -163,6 +210,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles downloadVatReport functionality
+     */
     public downloadVatReport() {
         let countryCode;
         let vatReportRequest = new VatReportRequest();
@@ -171,6 +221,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.taxNumber = this.taxNumber;
         vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
 
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW') {
             vatReportRequest.currencyCode = this.vatReportCurrencyCode;
             countryCode = 'ZW';
@@ -182,6 +235,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
         }
 
         this.vatService.downloadVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === "success") {
                 let blob = this.generalService.base64ToBlob(res.body.data, 'application/xls', 512);
                 return saveAs(blob, res.body.name);
@@ -218,6 +274,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public getURLHMRCAuthorization(): void {
         this.vatService.getHMRCAuthorization(this.activeCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.body) {
                 this.connectToHMRCUrl = res?.body;
             }

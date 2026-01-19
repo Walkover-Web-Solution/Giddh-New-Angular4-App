@@ -24,6 +24,9 @@ import { MatDividerModule } from "@angular/material/divider";
 import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
 import { TagsModule } from "../../settings/tags/tags.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         HeaderComponent,
@@ -64,6 +67,10 @@ import { TagsModule } from "../../settings/tags/tags.module";
     ]
 })
 
+/**
+ * HeaderModule module
+ * Implements HeaderModule functionality
+ */
 export class HeaderModule {
 
 }

@@ -7,6 +7,9 @@ import { ServiceConfig } from '../services/service.config';
 import { Configuration } from '../app.constant';
 import { environment } from '../../environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'download',
     templateUrl: './download.component.html',
@@ -14,6 +17,10 @@ selector: 'download',
     standalone: false
 })
 
+/**
+ * DownloadComponent component
+ * Handles download functionality and user interactions
+ */
 export class DownloadComponent implements OnInit, OnDestroy {
     /** This holds url to download */
     public downloadUrl: string = '';
@@ -28,6 +35,10 @@ export class DownloadComponent implements OnInit, OnDestroy {
     /* Hold giddh domain url */
     public giddhDomainUrl: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig, private route: ActivatedRoute, private generalService: GeneralService) {
     }
 
@@ -43,6 +54,9 @@ export class DownloadComponent implements OnInit, OnDestroy {
         this.giddhDomainUrl = this.serviceConfig.AppUrl ||  'https://books.giddh.com/';
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.url) {
                 this.downloadUrl = response.url;
             }

@@ -16,12 +16,19 @@ import { cloneDeep, isEmpty } from '../../../lodash-optimized';
 import { NgForm } from '@angular/forms';
 import { IOption } from '../../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'inventory-custom-stock',
     templateUrl: './inventory.customstock.component.html',
     styleUrls: ['./inventory.customstock.component.scss'],
     standalone: false
 })
+/**
+ * InventoryCustomStockComponent component
+ * Handles inventorycustomstock functionality and user interactions
+ */
 export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChanges {
     /** Instance of custom Unit Form */
     @ViewChild('customUnitForm', { static: true }) customUnitForm: NgForm;
@@ -69,6 +76,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     /** Displayed columns for custom stock units mat-table */
     public displayedColumns: string[] = ['unitName', 'mappedUnit', 'actions'];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private customStockActions: CustomStockUnitAction,
@@ -91,6 +102,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.deleteCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.deleteCustomStockSuccess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {
+            /**
+             * Handles if functionality
+             */
             if (p && p.length) {
                 let units = p;
                 let unitArr = units.map(unit => {
@@ -101,17 +115,32 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profileData) => {
+            /**
+             * Handles if functionality
+             */
             if (!isEmpty(profileData)) {
                 this.companyProfile = cloneDeep(profileData);
                 this.inventoryService.getUnitCodeRegex('stockUnit', this.companyProfile.country || '').pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data && data.body) {
                         this.stockUnitCodeRegex = data.body.regex;
                     }
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (this.companyProfile.country) {
                     this.country = this.companyProfile.country.toLocaleLowerCase();
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.country && this.country === 'india') {
                         this.isIndia = true;
                     }
@@ -124,6 +153,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
 
         let activeGroup = null;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroup = a);
+        /**
+         * Handles if functionality
+         */
         if (activeGroup) {
             this.store.dispatch(this.sidebarAction.OpenGroup(activeGroup));
         }
@@ -138,12 +170,18 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         });
 
         this.stockMappedUnitsWithCode$.subscribe((res: any) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.uniqueName) {
                 this.selectedUnitName = res?.name;
                 this.stockUnitUniqueName = res?.uniqueName;
                 this.editMode = true;
                 this.customUnitObj.name = res?.name;
                 this.customUnitObj.code = res?.code;
+                /**
+                 * Handles if functionality
+                 */
                 if (!res?.mappings?.length) {
                     this.addDefaultMapping();
                 } else {
@@ -165,6 +203,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * @memberof InventoryCustomStockComponent
      */
     public handleUnitName(value: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value) {
             this.customUnitObj.code = value.toLowerCase();
             this.addDefaultMapping();
@@ -184,18 +225,33 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         let customMapping = cloneDeep(this.customUnitObj);
         (Array.isArray(customMapping.mappings) ? customMapping.mappings : []).forEach((mapping) => {
             let checkValidation: boolean = false;
+            /**
+             * Handles if functionality
+             */
             if (mapping?.stockUnitY?.code || mapping?.quantity || mapping?.stockUnitX?.code) {
                 checkValidation = true;
             }
+            /**
+             * Handles if functionality
+             */
             if (checkValidation && (!mapping?.stockUnitY?.code || !mapping?.quantity || !mapping?.stockUnitX?.code)) {
                 this.isValidForm = false;
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (!this.isValidForm) {
             return;
         }
         customMapping.mappings = customMapping.mappings.filter(mapping => mapping.quantity || mapping.stockUnitY.code);
+        /**
+         * Handles if functionality
+         */
         if (!this.editMode) {
+            /**
+             * Handles if functionality
+             */
             if (this.isIndia && this.selectedUnitName) {
                 customMapping.name = cloneDeep(this.selectedUnitName);
             }
@@ -206,6 +262,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         }
     }
 
+    /**
+     * Deletes unit
+     */
     public deleteUnit(uniqueName: any): any {
         this.store.dispatch(this.customStockActions.DeleteStockUnit(uniqueName));
     }
@@ -241,6 +300,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      */
     public setUnitName(name) {
         let unit = this.stockUnitsList?.filter((obj) => obj?.value === name || obj.label === name);
+        /**
+         * Handles if functionality
+         */
         if (unit !== undefined && unit?.length > 0) {
             this.customUnitObj.code = unit[0]?.value;
             this.customUnitObj.name = unit[0]?.label;
@@ -250,18 +312,33 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.addDefaultMapping();
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes) {
+        /**
+         * Handles if functionality
+         */
         if (this.isAsideClose) {
             this.clearFields();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.isAsideOpen) {
             this.deleteCustomStockSuccess$.subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res) {
                     this.store.dispatch(this.customStockActions.getStockMappedUnits());
                 }
             });
 
             this.createCustomStockSuccess$.subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res) {
                     this.clearFields();
                     this.selectedUnitName = null;
@@ -270,6 +347,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             });
 
             this.updateCustomStockSuccess$.subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res) {
                     this.clearFields();
                     this.selectedUnitName = null;
@@ -283,6 +363,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * clearUnit
      */
     public clearUnit() {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.customUnitObj.code = '';
         }, 100);
@@ -292,10 +375,16 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * noUnitFound
      */
     public noUnitFound(selectElem) {
+        /**
+         * Handles if functionality
+         */
         if (selectElem) {
             let val: string = selectElem.filter;
             this.customUnitObj.name = cloneDeep(val);
             this.selectedUnitName = '';
+            /**
+             * Handles if functionality
+             */
             if (!this.editMode && val) {
                 val = uniqueNameInvalidStringReplace(val);
                 this.customUnitObj.code = cloneDeep(val);
@@ -319,6 +408,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * @memberof InventoryCustomStockComponent
      */
     public handleUnitCodeValidation(isInvalid: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isInvalid) {
             this.toasterService.errorToast('Only numbers and lower case alphabets without spaces are allowed!', 'Invalid Unit Code');
         } else {
@@ -335,6 +427,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      */
     public addDefaultMapping(mappings?: any): void {
         this.isValidForm = true;
+        /**
+         * Handles if functionality
+         */
         if ((!this.customUnitObj.mappings.length) || (mappings?.quantity && mappings?.stockUnitY.code && mappings?.stockUnitX.code)) {
             this.customUnitObj.mappings.push(
                 {
@@ -361,6 +456,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     */
     public removeMappedUnit(index: number): void {
         this.customUnitObj.mappings?.splice(index, 1);
+        /**
+         * Handles if functionality
+         */
         if (this.customUnitObj.mappings.length === 0) {
             this.addDefaultMapping();
         }
@@ -373,10 +471,16 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * @memberof InventoryCustomStockComponent
      */
     public unitChange(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.customUnitObj.name && this.customUnitObj.code) {
             let uniqueMappedUnit = this.allStockMappedUnits?.filter(val => val?.value === this.customUnitObj.code?.toLowerCase());
             let uniqueUnitList = this.stockUnitsList?.filter(val => val?.value === this.customUnitObj.code?.toLowerCase());
 
+            /**
+             * Handles if functionality
+             */
             if (!uniqueMappedUnit?.length) {
                 this.allStockMappedUnits.push({
                     label: this.customUnitObj.name,
@@ -384,6 +488,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                     uniqueName: this.customUnitObj.uniqueName
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (!uniqueUnitList?.length) {
                 this.stockUnitsList.push({
                     label: this.customUnitObj.name,
@@ -418,6 +525,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             let unitsList = this.stockUnitsList?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
             let mappedUnits = this.allStockMappedUnits?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
 
+            /**
+             * Handles if functionality
+             */
             if (!mappedUnits?.length) {
                 this.allStockMappedUnits?.push({
                     label: mapped?.stockUnitX?.name,
@@ -425,6 +535,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                     uniqueName: mapped?.stockUnitX?.uniqueName
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (!unitsList?.length) {
                 this.stockUnitsList?.push({
                     label: mapped?.stockUnitX?.name,

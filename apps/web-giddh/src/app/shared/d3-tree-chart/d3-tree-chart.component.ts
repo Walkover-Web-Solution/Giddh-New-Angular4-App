@@ -1,12 +1,19 @@
 import { ReplaySubject } from 'rxjs';
 import { Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { OrgChart } from 'd3-org-chart';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'd3-tree-chart',
     styleUrls: [`./d3-tree-chart.component.scss`],
     templateUrl: './d3-tree-chart.component.html',
     standalone: false
 })
+/**
+ * D3TreeChartComponent component
+ * Handles d3treechart functionality and user interactions
+ */
 export class D3TreeChartComponent implements OnDestroy, OnChanges {
     /** Holds Chart Container Reference */
     @ViewChild('chartContainer', { static: false }) public chartContainer: ElementRef;
@@ -26,6 +33,9 @@ export class D3TreeChartComponent implements OnDestroy, OnChanges {
      * @memberof D3TreeChartComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.data?.currentValue?.length) {
             this.treeUpdateChart();
         }
@@ -38,9 +48,15 @@ export class D3TreeChartComponent implements OnDestroy, OnChanges {
      * @memberof D3TreeChartComponent
      */
     public treeUpdateChart(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.data || !this.chartContainer) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.chart) {
             this.chart = new OrgChart();
         }
@@ -64,8 +80,14 @@ export class D3TreeChartComponent implements OnDestroy, OnChanges {
             .compactMarginPair(() => 80)
             .nodeContent((d) => {
                 const nodeId = `node-${d.id}`;
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     const nodeElement = document.getElementById(nodeId);
+                    /**
+                     * Handles if functionality
+                     */
                     if (nodeElement) {
                         nodeElement.addEventListener('click', () => {
                             // Define click logic here

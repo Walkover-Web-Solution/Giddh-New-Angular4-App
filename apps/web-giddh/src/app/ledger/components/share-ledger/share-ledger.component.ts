@@ -12,6 +12,9 @@ import { ReplaySubject } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cloneDeep } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'share-ledger',
     templateUrl: './share-ledger.component.html',
@@ -20,6 +23,10 @@ import { cloneDeep } from '../../../lodash-optimized';
     standalone: false
 })
 
+/**
+ * ShareLedgerComponent component
+ * Handles shareledger functionality and user interactions
+ */
 export class ShareLedgerComponent implements OnInit, OnDestroy {
     public email: string;
     public magicLink: string = '';
@@ -32,6 +39,10 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private ledgerService: LedgerService,
         private store: Store<AppState>,
@@ -54,6 +65,9 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves magiclink data
+     */
     public getMagicLink() {
         let magicLinkRequest = new MagicLinkRequest();
         const data = cloneDeep(this.inputData?.advanceSearchRequest);
@@ -62,6 +76,9 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
         magicLinkRequest.to = dayjs(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? dayjs(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
         magicLinkRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName || '';
         this.ledgerService.GenerateMagicLink(magicLinkRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+            /**
+             * Handles if functionality
+             */
             if (resp?.status === 'success') {
                 this.magicLink = resp.body?.magicLink;
             } else {
@@ -71,13 +88,22 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Toggles iscopied state
+     */
     public toggleIsCopied() {
         this.isCopied = true;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);
     }
 
+    /**
+     * Handles shareAccount functionality
+     */
     public shareAccount() {
         let userRole = {
             emailId: this.email,
@@ -87,13 +113,22 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
         let selectedPermission = 'view';
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
         this.email = '';
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.store.dispatch(this.ledgerActions.sharedAccountWith(this.inputData?.accountUniqueName));
         }, 1000);
     }
 
+    /**
+     * Handles unShareAccount functionality
+     */
     public unShareAccount(entryUniqueName) {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'account', this.inputData?.accountUniqueName));
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.store.dispatch(this.ledgerActions.sharedAccountWith(this.inputData?.accountUniqueName));
         }, 1000);

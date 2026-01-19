@@ -62,6 +62,9 @@ import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/a
 import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         NewInventoryComponent,
@@ -146,4 +149,8 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
         PreviewVariantImageComponent
     ]
 })
+/**
+ * NewInventoryModule module
+ * Implements NewInventoryModule functionality
+ */
 export class NewInventoryModule { }

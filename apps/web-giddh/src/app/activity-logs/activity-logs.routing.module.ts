@@ -3,6 +3,9 @@ import { RouterModule } from '@angular/router';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { ActivityLogsComponent } from './activity-logs.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -13,5 +16,9 @@ import { ActivityLogsComponent } from './activity-logs.component';
     ],
     exports: [RouterModule]
 })
+/**
+ * ActivityLogsRoutingModule module
+ * Implements ActivityLogsRoutingModule functionality
+ */
 export class ActivityLogsRoutingModule {
 }

@@ -6,6 +6,10 @@ import { IClosingBalance, IForwardBalance } from '../interfaces/ledger.interface
  * API: /company/:companyUniqueName/groups/:groupUniqueName/closing-balance?fromDate=:date1&toDate=:date2&refresh=:refresh
 */
 
+/**
+ * ClosingBalanceResponse class
+ * Implements ClosingBalanceResponse functionality
+ */
 export class ClosingBalanceResponse implements IDashboardCbMainItem, IChildGroups {
     public forwardedBalance: IForwardBalance;
     public creditTotal: number;
@@ -18,6 +22,10 @@ export class ClosingBalanceResponse implements IDashboardCbMainItem, IChildGroup
     public groupName: string;
 }
 
+/**
+ * BankAccountsResponse class
+ * Implements BankAccountsResponse functionality
+ */
 export class BankAccountsResponse {
     public yodleeAccounts: IBankAccount[];
     public siteName: string;
@@ -27,11 +35,19 @@ export class BankAccountsResponse {
     public isRefreshWithCredentials: boolean;
 }
 
+/**
+ * GraphTypesResponse class
+ * Implements GraphTypesResponse functionality
+ */
 export class GraphTypesResponse {
     public uniqueName?: any;
     public type: string;
 }
 
+/**
+ * RevenueGraphDataRequest class
+ * Implements RevenueGraphDataRequest functionality
+ */
 export class RevenueGraphDataRequest {
     public currentFrom?: string;
     public currentTo: string;
@@ -43,6 +59,10 @@ export class RevenueGraphDataRequest {
     public refresh: any;
 }
 
+/**
+ * RevenueGraphDataResponse class
+ * Implements RevenueGraphDataResponse functionality
+ */
 export class RevenueGraphDataResponse {
     public currentClosingBalance: {
         amount: any;

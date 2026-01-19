@@ -3,12 +3,19 @@ import { ReplaySubject } from 'rxjs';
 import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'welcome-inventory',
     templateUrl: './welcome-inventory.component.html',
     styleUrls: ['./welcome-inventory.scss'],
     standalone: false
 })
+/**
+ * InventoryWelcomeComponent component
+ * Handles inventorywelcome functionality and user interactions
+ */
 export class InventoryWelcomeComponent implements OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Template reference for aside menu */
@@ -16,6 +23,10 @@ export class InventoryWelcomeComponent implements OnDestroy {
     /** Dialog reference for aside menu */
     public asideMenuDialogRef: MatDialogRef<any>;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private dialog: MatDialog) {
     }
 
@@ -28,6 +39,9 @@ export class InventoryWelcomeComponent implements OnDestroy {
         this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

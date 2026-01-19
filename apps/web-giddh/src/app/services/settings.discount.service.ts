@@ -10,12 +10,23 @@ import { CreateDiscountRequest, IDiscountList } from '../models/api-models/Setti
 import { SETTINGS_DISCOUNT_API } from './apiurls/settings.discount';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsDiscountService service
+ * Provides settingsdiscount related business logic and data operations
+ */
 export class SettingsDiscountService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }

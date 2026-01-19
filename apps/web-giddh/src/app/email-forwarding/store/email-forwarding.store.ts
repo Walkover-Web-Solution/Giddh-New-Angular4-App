@@ -11,6 +11,10 @@ import {
 import { SalesService } from "../../services/sales.service";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 
+/**
+ * BankStatementState interface definition
+ * Defines the structure and contract for BankStatementState objects
+ */
 export interface BankStatementState {
     emailForwardingList: EmailForwardingResponse[] | null;
     emailForwardingDetails: EmailForwardingResponse | null;
@@ -35,16 +39,30 @@ const DEFAULT_STATE: BankStatementState = {
     accountSearch: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * EmailForwardingComponentStore store
+ * Manages emailforwardingcomponent state using NgRx ComponentStore
+ */
 export class EmailForwardingComponentStore extends ComponentStore<BankStatementState> {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private emailForwardingService: EmailForwardingService,
         private salesService: SalesService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -66,11 +84,20 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
      */
     readonly generateEmail = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ isGeneratingEmail: true, generatedEmail: null });
                 return this.emailForwardingService.generateEmail().pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 // res?.body && this.toaster.showSnackBar("success", "Email generated successfully");
                                 return this.patchState({ 
@@ -93,6 +120,9 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -106,11 +136,20 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
      */
     readonly getAllEmailForwarding = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ emailForwardingList: null, isLoading: true });
                 return this.emailForwardingService.getAllEmailForwarding().pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && res?.body) {
                                 return this.patchState({ 
                                     emailForwardingList: res.body, 
@@ -132,6 +171,9 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -145,11 +187,20 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
      */
     readonly getEmailForwardingDetails = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((uniqueName) => {
                 this.patchState({ emailForwardingDetails: null, isEmailForwardingDetailsLoading: true });
                 return this.emailForwardingService.getEmailForwarding(uniqueName).pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && res?.body) {
                                 return this.patchState({ 
                                     emailForwardingDetails: res.body, 
@@ -171,6 +222,9 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -184,11 +238,20 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
      */
     readonly createEmailForwarding = this.effect((data: Observable<EmailForwardingRequest>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((model) => {
                 this.patchState({ createUpdateEmailForwardingIsSuccess: null });
                 return this.emailForwardingService.createEmailForwarding(model).pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 this.toaster.showSnackBar("success", "Email forwarding configuration created successfully");
                                 return this.patchState({ createUpdateEmailForwardingIsSuccess: res.body });
@@ -202,6 +265,9 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
                             return this.patchState({ createUpdateEmailForwardingIsSuccess: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -215,11 +281,20 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
      */
     readonly updateEmailForwarding = this.effect((data: Observable<{model: EmailForwardingRequest, uniqueName: string}>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ createUpdateEmailForwardingIsSuccess: null });
                 return this.emailForwardingService.updateEmailForwarding(req.uniqueName, req.model).pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 this.toaster.showSnackBar("success", "Email forwarding configuration updated successfully");
                                 return this.patchState({ createUpdateEmailForwardingIsSuccess:  { uniqueName: req.uniqueName } });
@@ -233,6 +308,9 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
                             return this.patchState({ createUpdateEmailForwardingIsSuccess: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -246,11 +324,20 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
      */
     readonly deleteEmailForwarding = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((uniqueName) => {
                 this.patchState({ deleteEmailForwardingIsSuccess: null });
                 return this.emailForwardingService.deleteEmailForwarding(uniqueName).pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 this.toaster.showSnackBar("success", "Email forwarding configuration deleted successfully");
                                 return this.patchState({ deleteEmailForwardingIsSuccess: true });
@@ -264,6 +351,9 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
                             return this.patchState({ deleteEmailForwardingIsSuccess: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -277,6 +367,9 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
      */
     readonly clearGeneratedEmail = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ generatedEmail: null });
                 return EMPTY;
@@ -291,11 +384,20 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
      */
     readonly searchAccount = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ accountSearch: null });
                 return this.salesService.getAccountsWithCurrency(req).pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ 
                                     accountSearch: {
@@ -313,6 +415,9 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
                             return this.patchState({ accountSearch: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

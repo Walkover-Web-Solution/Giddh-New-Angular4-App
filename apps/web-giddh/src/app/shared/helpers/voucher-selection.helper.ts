@@ -26,8 +26,17 @@ export class VoucherSelectionHelper {
         });
         adjustVoucherAdjustment = cloneDeep(adjustVoucherFormAdjustments);
 
+        /**
+         * Handles for functionality
+         */
         for (let i = options?.length - 1; i >= 0; i--) {
+            /**
+             * Handles for functionality
+             */
             for (let j = 0; j < adjustVoucherAdjustment?.length; j++) {
+                /**
+                 * Handles if functionality
+                 */
                 if (options[i] && options[i].label && adjustVoucherAdjustment[j] && adjustVoucherAdjustment[j].voucherNumber &&
                     options[i]?.value && adjustVoucherAdjustment[j].uniqueName &&
                     ((options[i].label.trim() !== '-' && options[i].label.trim() !== commonLocaleData?.app_not_available && adjustVoucherAdjustment[j].voucherNumber.trim() !== '-' && adjustVoucherAdjustment[j].voucherNumber.trim() !== commonLocaleData?.app_not_available && options[i].label.trim() === adjustVoucherAdjustment[j].voucherNumber.trim()) ||
@@ -37,12 +46,18 @@ export class VoucherSelectionHelper {
             }
         }
         (Array.isArray(options) ? options : []).forEach(item => {
+            /**
+             * Handles if functionality
+             */
             if (item) {
                 delete item['isHilighted'];
             }
         });
 
         options = uniqBy(options, (item) => {
+            /**
+             * Handles if functionality
+             */
             if (item.label === '-' || item.label === commonLocaleData?.app_not_available) {
                 return item.value;
             } else {

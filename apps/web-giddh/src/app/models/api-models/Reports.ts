@@ -3,6 +3,10 @@ import { PAGINATION_LIMIT } from "../../app.constant";
 /*
 * Report Model to be iterated and displayed in tabular format
 * */
+/**
+ * ReportsModel class
+ * Implements ReportsModel functionality
+ */
 export class ReportsModel {
     public particular: string;
     public sales: number = 0;
@@ -23,6 +27,10 @@ export class ReportsModel {
 /*
 * Report Response Model to be bind with get sales report API
 * */
+/**
+ * ReportsResponseModel class
+ * Implements ReportsResponseModel functionality
+ */
 export class ReportsResponseModel {
     public openingBalance: Balance;
     public creditTotal: number;
@@ -35,12 +43,20 @@ export class ReportsResponseModel {
 /*
 * Report Model to be sent in get sales report API
 * */
+/**
+ * ReportsRequestModel class
+ * Implements ReportsRequestModel functionality
+ */
 export class ReportsRequestModel {
     public interval: string;
     public from: string;
     public to: string;
     public branchUniqueName?: string;
 }
+/**
+ * ReportsDetailedRequestFilter class
+ * Implements ReportsDetailedRequestFilter functionality
+ */
 export class ReportsDetailedRequestFilter {
     public q?: string;
     public from: string;
@@ -53,21 +69,37 @@ export class ReportsDetailedRequestFilter {
     public salesPersonUniqueName?: string;
     public accountUniqueNames?: string[];
 }
+/**
+ * Balance class
+ * Implements Balance functionality
+ */
 export class Balance {
     public amount: number;
     public type: string;
 }
 
+/**
+ * Account interface definition
+ * Defines the structure and contract for Account objects
+ */
 export interface Account {
     name: string;
     uniqueName: string;
 }
 
+/**
+ * Stock interface definition
+ * Defines the structure and contract for Stock objects
+ */
 export interface Stock {
     name: string;
     uniqueName: string;
 }
 
+/**
+ * Unit interface definition
+ * Defines the structure and contract for Unit objects
+ */
 export interface Unit {
     code: string;
     hierarchicalQuantity: number;
@@ -77,6 +109,10 @@ export interface Unit {
     name: string;
 }
 
+/**
+ * Stocks interface definition
+ * Defines the structure and contract for Stocks objects
+ */
 export interface Stocks {
     stock: Stock;
     quantity: number;
@@ -90,6 +126,10 @@ export interface Stocks {
     skuCode?: any;
 }
 
+/**
+ * Item interface definition
+ * Defines the structure and contract for Item objects
+ */
 export interface Item {
     account: Account;
     voucherType: string;
@@ -108,11 +148,19 @@ export interface Item {
     date: string;
 }
 
+/**
+ * NetTotal interface definition
+ * Defines the structure and contract for NetTotal objects
+ */
 export interface NetTotal {
     amount: number;
     type: string;
 }
 
+/**
+ * SalesRegisteDetailedResponse interface definition
+ * Defines the structure and contract for SalesRegisteDetailedResponse objects
+ */
 export interface SalesRegisteDetailedResponse {
     items: Item[];
     creditTotal: number;
@@ -132,6 +180,10 @@ export interface SalesRegisteDetailedResponse {
     rateTotal: number;
 }
 
+/**
+ * PurchaseReportsModel class
+ * Implements PurchaseReportsModel functionality
+ */
 export class PurchaseReportsModel {
     public particular: string;
     public purchase: number = 0;
@@ -150,6 +202,10 @@ export class PurchaseReportsModel {
     public salesPerson?: {name: string, uniqueName: string};
 }
 
+/**
+ * PurchaseRegisteDetailedResponse interface definition
+ * Defines the structure and contract for PurchaseRegisteDetailedResponse objects
+ */
 export interface PurchaseRegisteDetailedResponse {
     items: Item[];
     creditTotal: number;
@@ -170,6 +226,10 @@ export interface PurchaseRegisteDetailedResponse {
 }
 
 /** Request object model for get all advance receipts API */
+/**
+ * GetAllAdvanceReceiptsRequest interface definition
+ * Defines the structure and contract for GetAllAdvanceReceiptsRequest objects
+ */
 export interface GetAllAdvanceReceiptsRequest {
     companyUniqueName: string;
     sortBy?: string;
@@ -191,6 +251,10 @@ export interface GetAllAdvanceReceiptsRequest {
 }
 
 /** Request object model for advance receipts summary API */
+/**
+ * AdvanceReceiptSummaryRequest interface definition
+ * Defines the structure and contract for AdvanceReceiptSummaryRequest objects
+ */
 export interface AdvanceReceiptSummaryRequest {
     companyUniqueName: string;
     from?: string;
@@ -198,6 +262,10 @@ export interface AdvanceReceiptSummaryRequest {
     branchUniqueName?: string;
 }
 
+/**
+ * ColumnarResponseResult class
+ * Implements ColumnarResponseResult functionality
+ */
 export class ColumnarResponseResult {
     entryId: number;
     accountId: number;
@@ -222,6 +290,10 @@ export class ColumnarResponseResult {
 }
 
 /** Request object model for payment summary API */
+/**
+ * PaymentSummaryRequest interface definition
+ * Defines the structure and contract for PaymentSummaryRequest objects
+ */
 export interface PaymentSummaryRequest {
     companyUniqueName: string;
     from?: string;

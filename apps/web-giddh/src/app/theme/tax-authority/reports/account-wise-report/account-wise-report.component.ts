@@ -11,6 +11,9 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.
 import { PageEvent } from '@angular/material/paginator';
 
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'account-wise-report',
     templateUrl: './account-wise-report.component.html',
@@ -18,6 +21,10 @@ import { PageEvent } from '@angular/material/paginator';
     providers: [TaxAuthorityComponentStore],
     standalone: false
 })
+/**
+ * AccountWiseReportComponent component
+ * Handles accountwisereport functionality and user interactions
+ */
 export class AccountWiseReportComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -51,6 +58,10 @@ export class AccountWiseReportComponent implements OnInit {
     /** Holds Active company details */
     public activeCompany: any = null;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: TaxAuthorityComponentStore,
         private formBuilder: FormBuilder,
@@ -67,6 +78,9 @@ export class AccountWiseReportComponent implements OnInit {
         this.initSalesTaxReportForm();
         this.loadTaxDetails();
         this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+            /**
+             * Handles if functionality
+             */
             if (queryParams?.taxAuthorityUniqueName || queryParams?.taxUniqueName) {
                 this.getFormControl('taxAuthorityUniqueName').patchValue(queryParams?.taxAuthorityUniqueName ?? '');
                 this.getFormControl('taxUniqueName').patchValue(queryParams?.taxUniqueName ?? '');
@@ -74,6 +88,9 @@ export class AccountWiseReportComponent implements OnInit {
         });
 
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -81,6 +98,9 @@ export class AccountWiseReportComponent implements OnInit {
 
         // Subscribe Export Report Success Observable
         this.componentStore.exportAccountWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.downloadReport(response.data, response.name);
             }
@@ -88,6 +108,9 @@ export class AccountWiseReportComponent implements OnInit {
 
         // Subscribe Sales Report List Observable
         this.componentStore.accountWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.pagination.page = response.page;
                 this.pagination.totalItems = response.totalItems;
@@ -97,6 +120,9 @@ export class AccountWiseReportComponent implements OnInit {
 
         // Subscribe Tax Number Observable
         this.componentStore.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.length) {
                 this.getFormControl('taxNumber').patchValue(response.body[0]);
             }
@@ -120,6 +146,9 @@ export class AccountWiseReportComponent implements OnInit {
     */
     public getSalesTaxReport(): void {
         const formValue = this.salesTaxReportForm.value;
+        /**
+         * Handles if functionality
+         */
         if (formValue.taxNumber && formValue.from && formValue.to) {
             const model: any = {
                 reportType: SalesTaxReport.AccountWise,
@@ -194,6 +223,9 @@ export class AccountWiseReportComponent implements OnInit {
     * @memberof AccountWiseReportComponent
     */
     public handlePageChange(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;

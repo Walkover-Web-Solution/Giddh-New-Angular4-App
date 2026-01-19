@@ -50,6 +50,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     providers: [VoucherComponentStore],
     standalone:false
 })
+/**
+ * WarehouseComponent component
+ * Handles warehouse functionality and user interactions
+ */
 export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public isBranchElemnt: boolean = true;
@@ -120,6 +124,10 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public voucherApiVersion: number;
 
     /** @ignore */
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private commonActions: CommonActions,
         private companyActions: CompanyActions,
@@ -151,12 +159,18 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.initSubscribers();
 
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
 
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
             }
@@ -171,6 +185,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngAfterViewInit(): void {
+        /**
+         * Handles fromEvent functionality
+         */
         fromEvent(this.searchWarehouse?.textField?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
             this.showLoader = true;
             this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: encodeURIComponent(event.target?.value), count: PAGINATION_LIMIT }));
@@ -196,10 +213,19 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handleFormSubmit(formData: any): void {
         this.resetWelcomeForm();
+        /**
+         * Handles if functionality
+         */
         if (formData && formData.otherData) {
             const { controls: formControls } = formData.welcomeForm;
+            /**
+             * Handles if functionality
+             */
             if (formControls) {
                 const requestParamter = this.settingsUtilityService.getCreateWarehouseRequestObject(formControls);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.isItemUpdateInProgress) {
                     requestParamter['warehouseUniqueName'] = this.selectedWarehouse?.uniqueName;
                     this.store.dispatch(this.warehouseActions.updateWarehouse(requestParamter));
@@ -270,6 +296,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public setAsDefault(warehouse: any, warehouseIndex: number): void {
+        /**
+         * Handles if functionality
+         */
         if (!warehouse.isDefault) {
             this.store.dispatch(this.warehouseActions.setAsDefaultWarehouse({
                 warehouseUniqueName: warehouse?.uniqueName,
@@ -319,6 +348,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             linkAddresses
         };
         this.settingsProfileService.updatWarehouseInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
                 this.toasterService.successToast(this.localeData?.warehouse_updated);
@@ -344,6 +376,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             this.itemOnBoardingDetails = itemOnBoardingDetails;
         });
         this.store.pipe(select(state => state.warehouse), takeUntil(this.destroyed$)).subscribe(async (warehouseState: WarehouseState) => {
+            /**
+             * Handles if functionality
+             */
             if (warehouseState && (warehouseState.warehouseCreated || warehouseState.warehouseUpdated)) {
                 // Warehouse creation or updation is successful
                 this.endOnBoarding();
@@ -352,6 +387,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.showLoader = true;
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
             }
+            /**
+             * Handles if functionality
+             */
             if (warehouseState && warehouseState.defaultWarehouseData) {
                 this.resetDefaultWarehouse();
                 this.setDefaulWarehouse(warehouseState.defaultWarehouseData);
@@ -359,6 +397,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             this.changeDetection.detectChanges();
         });
         this.allWarehouses$.pipe(takeUntil(this.destroyed$)).subscribe((warehouseData: any) => {
+            /**
+             * Handles if functionality
+             */
             if (warehouseData) {
                 this.warehouses = warehouseData.results;
                 this.paginationConfig = {
@@ -400,7 +441,13 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     private resetDefaultWarehouse(): void {
+        /**
+         * Handles for functionality
+         */
         for (let index = 0; index < this.warehouses?.length; index++) {
+            /**
+             * Handles if functionality
+             */
             if (this.warehouses[index].isDefault) {
                 this.warehouses[index].isDefault = false;
                 break;
@@ -417,6 +464,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     private setDefaulWarehouse(defaultWarehouseData: any): void {
+        /**
+         * Handles if functionality
+         */
         if (defaultWarehouseData && defaultWarehouseData.body) {
             const warehouseIndex = defaultWarehouseData.request.warehouseIndex;
             this.warehouses[warehouseIndex].isDefault = true;
@@ -433,6 +483,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private loadAddresses(method: string, successCallback: Function): void {
         this.settingsProfileService.getCompanyAddresses(method, { count: 0 }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {
@@ -441,7 +494,13 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                         label: address?.name,
                         value: address?.uniqueName
                     }));
+                /**
+                 * Handles if functionality
+                 */
                 if (successCallback) {
+                    /**
+                     * Handles successCallback functionality
+                     */
                     successCallback();
                 }
             }
@@ -455,6 +514,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public confirmStatusUpdate(warehouse: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!warehouse?.isDefault || warehouse?.isArchived) {
             this.warehouseStatusToUpdate = warehouse;
             this.statusModalRef = this.dialog.open(this.statusModal, {
@@ -474,6 +536,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public updateWarehouseStatus(): void {
         const isArchived = !this.warehouseStatusToUpdate?.isArchived;
         this.settingsWarehouseService.updateWarehouseStatus({ isArchived: isArchived }, this.warehouseStatusToUpdate?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: this.currentPage, count: PAGINATION_LIMIT }));
                 this.toasterService.successToast((isArchived) ? this.localeData?.warehouse_archived : this.localeData?.warehouse_unarchived);
@@ -493,10 +558,19 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public openAddressInfo(isOpen: boolean, uniqueName: string = ''): void {
         this.isLastAddressInfoOpen = isOpen;
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.isAddressInfoOpen = uniqueName;
         } else {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isLastAddressInfoOpen) {
                     this.isAddressInfoOpen = '';
                 }

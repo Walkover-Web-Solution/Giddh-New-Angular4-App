@@ -15,6 +15,9 @@ import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwit
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'share-account-modal',
     templateUrl: './share-account-modal.component.html',
@@ -22,6 +25,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
     standalone: false
 })
 
+/**
+ * ShareAccountModalComponent component
+ * Handles shareaccountmodal functionality and user interactions
+ */
 export class ShareAccountModalComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -49,6 +56,10 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     public createPermissionSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private accountActions: AccountsAction,
@@ -64,6 +75,9 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.shareAccountForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
@@ -71,6 +85,9 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         });
 
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany.subscription?.planDetails?.restrictedModules && Object.hasOwn(activeCompany.subscription.planDetails.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                 const module = activeCompany.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === this.restrictedModules.Users
@@ -80,12 +97,18 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         });
 
         this.activeAccountSharedWith$.pipe(takeUntil(this.destroyed$)).subscribe((sharedWith) => {
+            /**
+             * Handles if functionality
+             */
             if (sharedWith) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
         this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((permissionSuccess) => {
+            /**
+             * Handles if functionality
+             */
             if (permissionSuccess) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 this.selectedPermission = "";
@@ -94,6 +117,9 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         });
 
         this.allPermissions$.pipe(takeUntil(this.destroyed$)).subscribe((permissions) => {
+            /**
+             * Handles if functionality
+             */
             if (permissions?.length) {
                 this.allPermissions = permissions.map((permission: GetAllPermissionResponse) => ({
                     label: permission.name,
@@ -103,8 +129,14 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves accountsharedwith data
+     */
     public getAccountSharedWith() {
         this.activeAccount$.subscribe((acc) => {
+            /**
+             * Handles if functionality
+             */
             if (acc) {
                 this.store.dispatch(this.accountActions.sharedAccountWith(acc.uniqueName));
             }
@@ -117,6 +149,9 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
      * @memberof  ShareAccountModalComponent
      */
     public buyPlan(subscriptionId: string): void {
+        /**
+         * Handles if functionality
+         */
         if (subscriptionId) {
             this.closeModal();
             this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
@@ -125,6 +160,9 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles shareAccount functionality
+     */
     public async shareAccount() {
         let activeAccount = await this.activeAccount$.pipe(first()).toPromise();
         let userRole = {
@@ -136,10 +174,16 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
     }
 
+    /**
+     * Handles unShareAccount functionality
+     */
     public async unShareAccount(entryUniqueName: string, accountUniqueName: string) {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'account', accountUniqueName));
     }
 
+    /**
+     * Updates existing permission
+     */
     public updatePermission(model: ShareRequestForm, event: any) {
         let data = cloneDeep(model);
         let newPermission = event.value;
@@ -147,11 +191,17 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'account'));
     }
 
+    /**
+     * Closes modal
+     */
     public closeModal() {
         this.shareAccountForm.reset();
         this.closeShareAccountModal.emit();
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

@@ -8,6 +8,9 @@ import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-
 import { MatDialog } from '@angular/material/dialog';
 import { get, set } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'create-unit-group',
 
@@ -15,6 +18,10 @@ import { get, set } from '../../../lodash-optimized';
     standalone: false,
     styleUrls: ['./create-unit-group.component.scss']
 })
+/**
+ * CreateUnitGroupComponent component
+ * Handles createunitgroup functionality and user interactions
+ */
 export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds selected group data */
     @Input() public unitGroupDetails: any = {};
@@ -37,6 +44,10 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: UntypedFormBuilder,
         private inventoryService: InventoryService,
@@ -55,7 +66,13 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
         this.initUnitGroupForm();
 
         this.unitGroupForm.get('name').valueChanges.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.unitGroupDetails?.uniqueName !== "maingroup" && this.generateUniqueName) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     const uniqueName = response.replace(/\s/g, "")?.toLowerCase();
                     this.unitGroupForm.get('uniqueName').patchValue(uniqueName);
@@ -72,11 +89,17 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof CreateUnitGroupComponent
      */
     public ngOnChanges(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.unitGroupForm && this.unitGroupDetails?.uniqueName) {
             this.generateUniqueName = false;
             this.unitGroupForm.get('name').patchValue(this.unitGroupDetails?.name);
             this.unitGroupForm.get('uniqueName').patchValue(this.unitGroupDetails?.uniqueName);
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.generateUniqueName = true;
             }, 1000);
@@ -94,6 +117,9 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
             uniqueName: ['']
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.unitGroupDetails?.uniqueName) {
             this.unitGroupForm.get('name').patchValue(this.unitGroupDetails?.name);
             this.unitGroupForm.get('uniqueName').patchValue(this.unitGroupDetails?.uniqueName);
@@ -118,9 +144,18 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
     public saveUnitGroup(): void {
         this.isValidForm = !this.unitGroupForm.invalid;
 
+        /**
+         * Handles if functionality
+         */
         if (this.isValidForm) {
+            /**
+             * Handles if functionality
+             */
             if (this.unitGroupDetails?.uniqueName) {
                 this.inventoryService.updateStockUnitGroup(this.unitGroupForm.value, this.unitGroupDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.closeAsideEvent.emit({ action: 'update', data: response.body });
                         this.toaster.showSnackBar("success", this.localeData?.unit_group_updated);
@@ -130,6 +165,9 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
                 });
             } else {
                 this.inventoryService.createStockUnitGroup(this.unitGroupForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.resetForm();
                         this.closeAsideEvent.emit({ action: 'create' });
@@ -162,10 +200,16 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isLoading = true;
                 this.inventoryService.deleteStockUnitGroup(this.unitGroupDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isLoading = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.toaster.showSnackBar("success", this.localeData?.unit_group_deleted);
                         this.closeAsideEvent.emit({ action: 'delete' });

@@ -2,6 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges
 import { TRIAL_BALANCE_VIEWPORT_LIMIT } from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: '[balance-sheet-report-grid-row]',
     templateUrl: './balance-sheet-report-grid-row.component.html',
@@ -9,6 +12,10 @@ selector: '[balance-sheet-report-grid-row]',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * BalanceSheetReportGridRowComponent component
+ * Handles balancesheetreportgridrow functionality and user interactions
+ */
 export class BalanceSheetReportGridRowComponent implements OnChanges {
     /** Holds the details of the group */
     @Input() public groupDetail: ChildGroup;
@@ -24,6 +31,10 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
     @Input() public isExpandToggledDuringSearch: boolean;
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private changeDetectionRef: ChangeDetectorRef) {
     }
 
@@ -35,9 +46,15 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
      * @memberof BalanceSheetReportGridRowComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
             this.changeDetectionRef.detectChanges();
         }
+        /**
+         * Handles if functionality
+         */
         if (changes?.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
             this.changeDetectionRef.detectChanges();
         }

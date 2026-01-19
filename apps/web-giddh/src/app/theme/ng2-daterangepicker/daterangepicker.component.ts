@@ -15,10 +15,17 @@ import {
 
 import { DaterangepickerConfig } from './config.service';
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: "[daterangepicker]",
     standalone: false
 })
+/**
+ * DaterangePickerComponent component
+ * Handles daterangepicker functionality and user interactions
+ */
 export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     public datePicker: any;
@@ -39,6 +46,10 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
     private targetOptions: any = {};
     private _differ: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private input: ElementRef,
         private config: DaterangepickerConfig,
@@ -49,6 +60,9 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
         this._differ["settings"] = differs.find(this.config.settings).create();
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         this.config.embedCSS();
         this.render();
@@ -56,7 +70,13 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
     }
 
     @HostListener("keydown.esc", ["$event"])
+    /**
+     * Closes 
+     */
     public close(e) {
+        /**
+         * Handles if functionality
+         */
         if (!this.options.hideOnEsc) {
             return;
         }
@@ -64,6 +84,9 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
         this.datePicker._outsideClickProxy(e.target.ownerDocument);
     }
 
+    /**
+     * Handles render functionality
+     */
     public render() {
         this.targetOptions = Object.assign({}, this.config.settings, this.options);
 
@@ -74,6 +97,9 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
         });
     }
 
+    /**
+     * Handles attachEvents functionality
+     */
     public attachEvents() {
         $(this.input?.nativeElement).on("cancel.daterangepicker",
             (e: any, picker: any) => {
@@ -120,6 +146,9 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
         );
     }
 
+    /**
+     * Handles destroyPicker functionality
+     */
     public destroyPicker() {
         try {
             ($(this.input?.nativeElement) as any).data("daterangepicker").remove();
@@ -128,12 +157,24 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyPicker();
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ('options' in changes && changes.options.currentValue && changes.options.currentValue !== changes.options.previousValue) {
+            /**
+             * Handles if functionality
+             */
             if(!changes.options.firstChange) {
                 this.render();
             }
@@ -141,6 +182,9 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
         }
     }
 
+    /**
+     * Handles callback functionality
+     */
     private callback(start?: any, end?: any, label?: any): void {
         this.activeRange = {
             start,
@@ -160,6 +204,9 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
      */
     private highlightSelectedFilter(picker: any): void {
         const ranges: any = picker.container.find('.ranges li');
+        /**
+         * Handles if functionality
+         */
         if (this.options.chosenLabel) {
             /* Remove active label only if the user has chosen a particular label.
                This is done as the bootstrap-daterangepicker library incorrectly highlights
@@ -171,6 +218,9 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
                and breaks the loop which results in wrong filter being highlighted in range picker
             */
             for (const key in Object.keys(ranges)) {
+                /**
+                 * Handles if functionality
+                 */
                 if (ranges[key] && ranges[key].textContent === this.options.chosenLabel) {
                     // Remove the active class applied by daterangepicker library
                     ranges.removeClass('active');

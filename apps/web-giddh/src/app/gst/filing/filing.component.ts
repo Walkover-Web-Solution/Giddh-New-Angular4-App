@@ -16,6 +16,9 @@ import { RestrictedModules, Configuration } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { environment } from '../../../environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'filing',
@@ -24,6 +27,10 @@ import { environment } from '../../../environments/environment.generated';
     encapsulation: ViewEncapsulation.Emulated,
     standalone:false
 })
+/**
+ * FilingComponent component
+ * Handles filing functionality and user interactions
+ */
 export class FilingComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
@@ -72,6 +79,10 @@ export class FilingComponent implements OnInit, OnDestroy {
     /** Image path for assets */
     public imgPath: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private route: Router,
         private activatedRoute: ActivatedRoute,
@@ -88,14 +99,23 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
             }
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
@@ -105,16 +125,25 @@ export class FilingComponent implements OnInit, OnDestroy {
                 from: params['from'],
                 to: params['to']
             };
+            /**
+             * Handles if functionality
+             */
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
                 this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
+            /**
+             * Handles if functionality
+             */
             if (this.selectedGst !== params['return_type']) {
                 this.selectedGst = params['return_type'];
                 this.loadGstReport(this.activeCompanyGstNumber);
             }
             let tab = Number(params['tab']);
+            /**
+             * Handles if functionality
+             */
             if (tab > -1) {
                 this.selectTabFromUrl(tab);
             }
@@ -122,6 +151,9 @@ export class FilingComponent implements OnInit, OnDestroy {
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -133,11 +165,17 @@ export class FilingComponent implements OnInit, OnDestroy {
         });
         this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
         this.getCurrentPeriod$.subscribe(currentPeriod => {
+            /**
+             * Handles if functionality
+             */
             if (currentPeriod && currentPeriod.from) {
                 let date = {
                     startDate: dayjs(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
                     endDate: dayjs(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
+                /**
+                 * Handles if functionality
+                 */
                 if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
                     this.isMonthSelected = true;
                 } else {
@@ -147,6 +185,9 @@ export class FilingComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles selectTab functionality
+     */
     public selectTab(e, val, tabHeading) {
         this.selectedTab = tabHeading;
         this.isTransactionSummary = this.selectedTab !== this.localeData?.filing?.tabs?.overview;
@@ -164,6 +205,9 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.activeTabIndex = tab;
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
         this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
@@ -218,6 +262,9 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public handleNavigation(type: string): void {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
@@ -237,6 +284,9 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     private loadGstReport(gstNumber: string): void {
+        /**
+         * Handles if functionality
+         */
         if (gstNumber) {
             this.activeCompanyGstNumber = gstNumber;
         }
@@ -246,8 +296,14 @@ export class FilingComponent implements OnInit, OnDestroy {
         request.to = this.currentPeriod.to;
         request.gstin = this.activeCompanyGstNumber;
 
+        /**
+         * Handles if functionality
+         */
         if (this.selectedGst === GstReport.Gstr1) {
             this.gstr1OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!bool) {
                     // it means no gstr1 data available or error occurred or user directly navigated to this tab
                     this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
@@ -255,6 +311,9 @@ export class FilingComponent implements OnInit, OnDestroy {
             });
         } else if (this.selectedGst === GstReport.Gstr2) {
             this.gstr2OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!bool) {
                     // it means no gstr2 data available or error occurred or user directly navigated to this tab
                     this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr2, request));
@@ -273,6 +332,9 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.selectedTab = this.localeData?.filing?.tabs?.overview;
         }
@@ -298,6 +360,9 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public getLoadingGstText(selectedGst: any): string {
+        /**
+         * Handles if functionality
+         */
         if (this.localeData) {
             let text = this.localeData?.filing?.loading_gst_data;
             text = text?.replace("[SELECTED_GST]", selectedGst);
@@ -312,6 +377,9 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public onTabChange(event: MatTabChangeEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;

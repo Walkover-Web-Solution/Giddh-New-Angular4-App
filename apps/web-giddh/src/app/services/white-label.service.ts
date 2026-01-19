@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { EnvironmentService } from './environment.service';
 import { Configuration } from '../app.constant';
 
+/**
+ * WhiteLabelConfig interface definition
+ * Defines the structure and contract for WhiteLabelConfig objects
+ */
 export interface WhiteLabelConfig {
     body?: {
         giddhWhiteLabel?: {
@@ -32,10 +36,18 @@ export interface WhiteLabelConfig {
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * WhiteLabelService service
+ * Provides whitelabel related business logic and data operations
+ */
 export class WhiteLabelService {
 
     private whiteLabelConfig: WhiteLabelConfig | null = null;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private environmentService: EnvironmentService) {}
 
     /**
@@ -59,6 +71,9 @@ export class WhiteLabelService {
     getApiUrl(region?: string): string {
         const whiteLabelApiDomain = this.whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain;
 
+        /**
+         * Handles if functionality
+         */
         if (whiteLabelApiDomain) {
             return `${whiteLabelApiDomain}/`;
         }
@@ -72,6 +87,9 @@ export class WhiteLabelService {
     getAppUrl(): string {
         const whiteLabelDomain = this.whiteLabelConfig?.body?.giddhWhiteLabel?.domainName;
 
+        /**
+         * Handles if functionality
+         */
         if (whiteLabelDomain) {
             return `${whiteLabelDomain}/`;
         }
@@ -85,6 +103,9 @@ export class WhiteLabelService {
     getPortalUrl(): string {
         const whiteLabelPortal = this.whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain;
 
+        /**
+         * Handles if functionality
+         */
         if (whiteLabelPortal) {
             return whiteLabelPortal;
         }
@@ -98,6 +119,9 @@ export class WhiteLabelService {
     getGoogleClientId(): string {
         const whiteLabelGoogleId = this.whiteLabelConfig?.body?.googleClientId;
 
+        /**
+         * Handles if functionality
+         */
         if (whiteLabelGoogleId) {
             return whiteLabelGoogleId;
         }
@@ -111,6 +135,9 @@ export class WhiteLabelService {
     getGoogleClientSecret(): string {
         const whiteLabelGoogleSecret = this.whiteLabelConfig?.body?.googleClientSecret;
 
+        /**
+         * Handles if functionality
+         */
         if (whiteLabelGoogleSecret) {
             return whiteLabelGoogleSecret;
         }
@@ -127,6 +154,9 @@ export class WhiteLabelService {
             ? this.whiteLabelConfig?.body?.otpWidgetIdElectron
             : this.whiteLabelConfig?.body?.otpWidgetIdWeb;
 
+        /**
+         * Handles if functionality
+         */
         if (whiteLabelOtpId) {
             return whiteLabelOtpId;
         }
@@ -143,6 +173,9 @@ export class WhiteLabelService {
             ? this.whiteLabelConfig?.body?.otpWidgetTokenElectron
             : this.whiteLabelConfig?.body?.otpWidgetTokenWeb;
 
+        /**
+         * Handles if functionality
+         */
         if (whiteLabelOtpToken) {
             return whiteLabelOtpToken;
         }
@@ -156,6 +189,9 @@ export class WhiteLabelService {
     getRazorpayKey(): string {
         const whiteLabelRazorpay = this.whiteLabelConfig?.body?.razorpayPaymentDetails?.keyId;
 
+        /**
+         * Handles if functionality
+         */
         if (whiteLabelRazorpay) {
             return whiteLabelRazorpay;
         }
@@ -168,6 +204,9 @@ export class WhiteLabelService {
      */
     getServiceConfig(): any {
         // Apply dynamic theme if white label configuration exists
+        /**
+         * Handles if functionality
+         */
         if (this.whiteLabelConfig?.body?.giddhWhiteLabel?.theme) {
             this.applyWhiteLabelTheme();
         }
@@ -232,6 +271,9 @@ export class WhiteLabelService {
      * Validate white label configuration
      */
     private validateWhiteLabelConfig(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.whiteLabelConfig) {
             return;
         }
@@ -240,30 +282,51 @@ export class WhiteLabelService {
         const warnings: string[] = [];
 
         // Validate API domain format
+        /**
+         * Handles if functionality
+         */
         if (config.body?.giddhWhiteLabel?.apiDomain) {
             const apiDomain = config.body.giddhWhiteLabel.apiDomain;
+            /**
+             * Handles if functionality
+             */
             if (!this.isValidUrl(apiDomain) && !apiDomain.includes('.')) {
                 warnings.push(`Invalid API domain format: ${apiDomain}`);
             }
         }
 
         // Validate app domain format
+        /**
+         * Handles if functionality
+         */
         if (config.body?.giddhWhiteLabel?.domainName) {
             const domainName = config.body.giddhWhiteLabel.domainName;
+            /**
+             * Handles if functionality
+             */
             if (!this.isValidUrl(domainName) && !domainName.includes('.')) {
                 warnings.push(`Invalid domain name format: ${domainName}`);
             }
         }
 
         // Validate Google Client ID format
+        /**
+         * Handles if functionality
+         */
         if (config.body?.googleClientId) {
             const googleId = config.body.googleClientId;
+            /**
+             * Handles if functionality
+             */
             if (!googleId.includes('.apps.googleusercontent.com')) {
                 warnings.push(`Google Client ID format may be incorrect: ${googleId}`);
             }
         }
 
         // Log warnings
+        /**
+         * Handles if functionality
+         */
         if (warnings.length > 0) {
             console.group('⚠️ White Label Configuration Warnings');
             (Array.isArray(warnings) ? warnings : []).forEach(warning => console.warn(`⚠️ ${warning}`));

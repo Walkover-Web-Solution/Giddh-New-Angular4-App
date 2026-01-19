@@ -4,6 +4,10 @@ import { Injectable } from '@angular/core';
 import { CompanyResponse } from '../models/api-models/Company';
 import { find, findIndex } from '../lodash-optimized';
 
+/**
+ * IScope interface definition
+ * Defines the structure and contract for IScope objects
+ */
 export interface IScope {
     name: string;
     permissions: Array<{ code: string }>;
@@ -18,25 +22,48 @@ export interface CompanyData {
     createdBy: any;
 }
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * PermissionDataService service
+ * Provides permissiondata related business logic and data operations
+ */
 export class PermissionDataService {
     private _scopes: IScope[] = [];
     private createdBy: CompanyData;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>) {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies: CompanyResponse[], uniqueName) => {
             let currentCompany = companies.find((company) => company?.uniqueName === uniqueName);
             this.getCompany = currentCompany;
             this.store.pipe(select(state => state.session.companyUser)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.userEntityRoles && response.userEntityRoles.length) {
                     let superAdminIndx = response.userEntityRoles.findIndex((role) => {
+                        /**
+                         * Handles return functionality
+                         */
                         return (role.entity.entity === 'COMPANY' && role.role?.uniqueName === 'super_admin');
                     });
                     let companyEntityIndx = superAdminIndx !== -1 ? superAdminIndx : null;
+                    /**
+                     * Handles if functionality
+                     */
                     if (!companyEntityIndx) {
                         companyEntityIndx = response.userEntityRoles.findIndex((role) => {
+                            /**
+                             * Handles return functionality
+                             */
                             return (role.entity.entity === 'COMPANY');
                         });
                     }

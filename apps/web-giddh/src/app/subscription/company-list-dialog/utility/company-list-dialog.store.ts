@@ -9,6 +9,10 @@ import { SettingsProfileService } from "../../../services/settings.profile.servi
 import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
 
+/**
+ * CompanyListState interface definition
+ * Defines the structure and contract for CompanyListState objects
+ */
 export interface CompanyListState {
     companyListInProgress: boolean;
     companyList: any
@@ -21,15 +25,29 @@ export const DEFAULT_COMPANY_LIST_STATE: CompanyListState = {
     archiveCompanySuccess: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * CompanyListDialogComponentStore store
+ * Manages companylistdialogcomponent state using NgRx ComponentStore
+ */
 export class CompanyListDialogComponentStore extends ComponentStore<CompanyListState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
         private settingsProfile: SettingsProfileService,
         private store: Store<AppState>
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_COMPANY_LIST_STATE);
     }
 
@@ -42,17 +60,29 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
      */
     readonly getCompanyListBySubscriptionId = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ companyListInProgress: true });
                 return this.subscriptionService.getCompaniesListBySubscriptionID(req.model, req.subscriptionId, req?.params).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     companyList: res?.body ?? [],
                                     companyListInProgress: false,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -70,6 +100,9 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -83,16 +116,28 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
    */
         readonly archiveCompany = this.effect((data: Observable<any>) => {
             return data.pipe(
+                /**
+                 * Handles switchMap functionality
+                 */
                 switchMap((req) => {
                     this.patchState({ archiveCompanySuccess: null });
                     return this.subscriptionService.setArchiveUnarchiveCompany(req).pipe(
+                        /**
+                         * Handles tap functionality
+                         */
                         tap(
                             (res: BaseResponse<any, any>) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res?.status === 'success') {
                                     return this.patchState({
                                         archiveCompanySuccess: res?.body ?? []
                                     });
                                 } else {
+                                    /**
+                                     * Handles if functionality
+                                     */
                                     if (res.message) {
                                         this.toasterService.showSnackBar('error', res.message);
                                     }
@@ -108,6 +153,9 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
                                 });
                             }
                         ),
+                        /**
+                         * Handles catchError functionality
+                         */
                         catchError((err) => EMPTY)
                     );
                 })

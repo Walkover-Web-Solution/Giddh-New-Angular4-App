@@ -26,6 +26,9 @@ import { cloneDeep, isEqual } from '../../../lodash-optimized';
 import { TaxSelectionHelper } from '../../helpers/tax-selection.helper';
 import { DataOperationEnum } from "../../../shared/Enums/common.enum";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'create-update-group',
 
@@ -35,6 +38,10 @@ import { DataOperationEnum } from "../../../shared/Enums/common.enum";
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [InventoryComponentStore]
 })
+/**
+ * CreateUpdateGroupComponent component
+ * Handles createupdategroup functionality and user interactions
+ */
 export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Holds group unique name if updating group  */
     @Input() public groupUniqueName: string = "";
@@ -87,6 +94,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Returns true if form has actual unsaved changes else false */
     public get showPageLeaveConfirmation(): boolean {
 
+        /**
+         * Handles if functionality
+         */
         if (!this.groupForm || !this.initialFormValues || this.skipPageLeaveConfirmation) {
             return false;
         }
@@ -102,6 +112,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Store initial form values to compare for actual changes */
     private initialFormValues: any = null;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private inventoryService: InventoryService,
@@ -135,14 +149,23 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.getTaxes();
         this.getAllDiscounts();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params?.type) {
                 this.stockType = params?.type?.toUpperCase();
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.stockType === 'FIXEDASSETS') {
                 this.stockType = 'FIXED_ASSETS';
             }
 
+            /**
+             * Handles if functionality
+             */
             if (params.groupUniqueName) {
                 this.groupUniqueName = params.groupUniqueName;
                 this.getGroupDetails();
@@ -152,6 +175,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.stockGroupUniqueName = "";
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.stockType) {
                 this.getStockGroups();
                 this.changeDetection.detectChanges();
@@ -160,6 +186,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
 
 
         this.groupForm.controls['isSubGroup'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.groupForm.controls['parentStockGroupUniqueName'].enable();
             } else {
@@ -175,8 +204,14 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             // Check if all important form fields are blank/empty
             const isFormBlank = this.isFormCompletelyBlank(formValues);
 
+            /**
+             * Handles if functionality
+             */
             if (isFormBlank) {
                 // Update initial values to current blank state to prevent popup
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.captureInitialFormValues();
                 }, 100);
@@ -184,6 +219,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         });
 
         // Capture initial form values after component is fully initialized
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.captureInitialFormValues();
         }, 1000);
@@ -211,12 +249,18 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             runtimeManufacturing: false
         });
 
+        /**
+         * Handles if functionality
+         */
         if (!this.groupUniqueName && this.activeGroup?.name) {
             this.stockGroupUniqueName = this.activeGroup?.uniqueName;
             this.stockGroupName = this.activeGroup?.name;
         }
 
         this.groupForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
@@ -231,6 +275,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public getTaxes(): void {
         this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.length > 0 && !this.processedTaxes?.length) {
                 this.taxes = response || [];
             }
@@ -246,6 +293,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     */
     private getAllDiscounts(): void {
         this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe( response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.discountsList = response;
             }
@@ -290,6 +340,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public openedSelectTax(event: boolean): void {
         this.isTaxSelectionOpen = event;
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.processedTaxes = [];
         }
@@ -302,6 +355,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public saveGroup(): void {
         this.isFormSubmitted = false;
+        /**
+         * Handles if functionality
+         */
         if (!this.groupForm.get('name')?.value || !this.groupForm.get('uniqueName')?.value) {
             this.isFormSubmitted = true;
             return;
@@ -309,17 +365,29 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
         this.groupForm.controls['type'].setValue(this.stockType);
         const model = this.groupForm?.value;
+        /**
+         * Handles if functionality
+         */
         if (!Array.isArray(model.discounts)) {
             model.discounts = model.discounts?.length ? [model.discounts] : [];
         }
         delete model.discountLabel;
+        /**
+         * Handles if functionality
+         */
         if (this.groupUniqueName) {
             this.toggleLoader(true);
             this.inventoryService.UpdateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.clearPageLeaveConfirmation();
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_update);
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.addGroup) {
                         this.getStockGroups();
                         this.backClicked();
@@ -337,11 +405,17 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         } else {
             this.toggleLoader(true);
             this.inventoryService.CreateStockGroup(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.clearPageLeaveConfirmation();
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_create);
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.addGroup) {
                         this.resetGroupForm();
                         this.getStockGroups();
@@ -367,8 +441,14 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public getStockGroups(): void {
         this.inventoryService.GetGroupsWithStocksFlatten(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 let stockGroups: IOption[] = [];
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body?.results?.length > 0) {
                     this.arrangeStockGroups(response.body?.results, stockGroups);
                 }
@@ -399,6 +479,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         let val: string = this.groupForm.controls['name']?.value;
         val = uniqueNameInvalidStringReplace(val);
 
+        /**
+         * Handles if functionality
+         */
         if (val) {
             this.groupForm?.patchValue({ uniqueName: val });
         } else {
@@ -418,6 +501,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.groupForm?.patchValue({ showCodeType: "hsn" });
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
+        /**
+         * Handles if functionality
+         */
         if (!this.groupUniqueName && this.activeGroup?.name) {
             this.stockGroupUniqueName = this.activeGroup?.uniqueName;
             this.stockGroupName = this.activeGroup?.name;
@@ -427,6 +513,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.processedTaxes = [];
 
         // Capture initial form values for comparison after form is fully initialized
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.captureInitialFormValues();
         }, 500);
@@ -458,7 +547,13 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public onChangeHsnSacType(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.groupForm.get('showCodeType')?.value === 'hsn') {
                 this.groupForm.controls['hsnNumber'].setValue(cloneDeep(this.groupForm.get('sacNumber').value));
                 this.groupForm.controls['sacNumber'].setValue('');
@@ -476,6 +571,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public validateUniqueName(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.groupForm.get('uniqueName')?.value) {
             let value = uniqueNameInvalidStringReplace(this.groupForm.get('uniqueName')?.value);
             this.groupForm?.patchValue({ uniqueName: value });
@@ -491,6 +589,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     private getGroupDetails(): void {
         this.toggleLoader(true);
         this.inventoryService.getStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body) {
                 this.toggleLoader(false);
                 this.stockGroupName = response.body.parentStockGroup?.name;
@@ -502,6 +603,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     hsnNumber: response.body.hsnNumber,
                     sacNumber: response.body.sacNumber,
                     parentStockGroupUniqueName: response.body.parentStockGroup ? response.body.parentStockGroup.uniqueName : '',
+                    /**
+                     * Handles isSubGroup functionality
+                     */
                     isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
                     taxes: response.body.taxes,
                     discounts: response.body.discounts,
@@ -529,6 +633,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public cancelEdit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.addGroup) {
             this.closeAsideEvent.emit(true);
         } else {
@@ -554,13 +661,22 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.toggleLoader(true);
                 this.inventoryService.DeleteStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.clearPageLeaveConfirmation();
                         this.toaster.showSnackBar("success", this.localeData?.group_delete);
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.addGroup) {
                             this.closeAsideEvent.emit(DataOperationEnum.DELETE);
                         } else {
@@ -595,6 +711,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.skipPageLeaveConfirmation = true;
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         // Reset the flag after a short delay to allow normal functionality to resume
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.skipPageLeaveConfirmation = false;
         }, 1000);
@@ -607,6 +726,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
         }
@@ -619,6 +741,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public captureInitialFormValues(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.groupForm) {
             this.initialFormValues = cloneDeep(this.groupForm.value);
         }
@@ -633,6 +758,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     private isFormCompletelyBlank(formValues: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!formValues) return true;
 
         // Check important form fields that indicate user input

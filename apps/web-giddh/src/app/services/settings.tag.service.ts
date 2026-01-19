@@ -10,12 +10,23 @@ import { SETTINGS_TAG_API } from './apiurls/settings.tag.api';
 import { TagRequest } from '../models/api-models/settingsTags';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsTagService service
+ * Provides settingstag related business logic and data operations
+ */
 export class SettingsTagService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -23,6 +34,9 @@ export class SettingsTagService {
     /*
     * Get all branches
     */
+    /**
+     * Handles GetAllTags functionality
+     */
     public GetAllTags(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_TAG_API.GET_ALL_TAGS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {

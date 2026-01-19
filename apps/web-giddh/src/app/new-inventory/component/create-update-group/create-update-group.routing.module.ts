@@ -25,10 +25,17 @@ const routes: Routes = [
     }
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [],
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
+/**
+ * GroupCreateEditRoutingModule module
+ * Implements GroupCreateEditRoutingModule functionality
+ */
 export class GroupCreateEditRoutingModule {
 }

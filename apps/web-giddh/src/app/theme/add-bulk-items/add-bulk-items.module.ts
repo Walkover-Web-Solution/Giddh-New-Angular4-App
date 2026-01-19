@@ -15,6 +15,9 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
 import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 import { KeyboardNavigationModule } from "../../shared/helpers/directives/enter-next/keyboard-navigation.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AddBulkItemsComponent
@@ -42,6 +45,10 @@ import { KeyboardNavigationModule } from "../../shared/helpers/directives/enter-
         GiddhNumberFormatPipe
     ]
 })
+/**
+ * AddBulkItemsModule module
+ * Implements AddBulkItemsModule functionality
+ */
 export class AddBulkItemsModule {
 
 }

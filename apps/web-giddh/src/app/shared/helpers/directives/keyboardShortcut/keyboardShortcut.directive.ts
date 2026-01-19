@@ -17,7 +17,14 @@ const CONTROL_KEYS = {
 } as const;
 
 /** Service to manage dialog priority for nested dialogs */
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({ providedIn: 'root' })
+/**
+ * DialogPriorityService directive
+ * Implements DialogPriorityService functionality
+ */
 export class DialogPriorityService {
     /** Stack of active dialog directives (LIFO - Last In, First Out) */
     private dialogStack: KeyboardShortcutDirective[] = [];
@@ -36,6 +43,9 @@ export class DialogPriorityService {
      */
     unregister(directive: KeyboardShortcutDirective): void {
         const index = this.dialogStack.indexOf(directive);
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             this.dialogStack.splice(index, 1);
         }
@@ -50,10 +60,17 @@ export class DialogPriorityService {
     }
 }
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: '[keyboardShortcut]',
     standalone: false
 })
+/**
+ * KeyboardShortcutDirective directive
+ * Implements KeyboardShortcutDirective functionality
+ */
 export class KeyboardShortcutDirective implements OnInit, OnDestroy {
     @Input() keyboardShortcut: string | string[] | Record<string, boolean> = '';
     @Input() config: {
@@ -64,6 +81,10 @@ export class KeyboardShortcutDirective implements OnInit, OnDestroy {
     @Input() host?: HTMLElement;
     @Output() onShortcutPress = new EventEmitter<string>();
 
+    /**
+     * Creates an instance of directive
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private elementRef: ElementRef<HTMLElement>,
         private dialogPriorityService: DialogPriorityService
@@ -73,6 +94,9 @@ export class KeyboardShortcutDirective implements OnInit, OnDestroy {
      * Initializes the directive and registers for dialog mode if enabled
      */
     ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.config.dialogMode) {
             this.dialogPriorityService.register(this);
         }
@@ -82,21 +106,36 @@ export class KeyboardShortcutDirective implements OnInit, OnDestroy {
      * Cleans up and unregisters from dialog priority service
      */
     ngOnDestroy(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.config.dialogMode) {
             this.dialogPriorityService.unregister(this);
         }
     }
 
     @HostListener('window:keydown', ['$event'])
+    /**
+     * Handles keydown event
+     */
     handleKeyDown(event: KeyboardEvent): void {
         // Check if this directive should handle the event
+        /**
+         * Handles if functionality
+         */
         if (!this.shouldHandleEvent(event)) {
             return;
         }
 
         // Process the keyboard shortcut
         const shortcuts = this.normalizeShortcuts();
+        /**
+         * Handles for functionality
+         */
         for (const shortcut of shortcuts) {
+            /**
+             * Handles if functionality
+             */
             if (this.matchesShortcut(event, shortcut)) {
                 this.emitShortcut(event, shortcut);
                 break;
@@ -109,8 +148,14 @@ export class KeyboardShortcutDirective implements OnInit, OnDestroy {
      */
     private shouldHandleEvent(event: KeyboardEvent): boolean {
         // For dialog mode, only handle if this is the topmost dialog
+        /**
+         * Handles if functionality
+         */
         if (this.config.dialogMode) {
             const topDirective = this.dialogPriorityService.getTopMostDirective();
+            /**
+             * Handles if functionality
+             */
             if (topDirective !== this) {
                 return false;
             }
@@ -120,10 +165,16 @@ export class KeyboardShortcutDirective implements OnInit, OnDestroy {
         const target = event.target as HTMLElement;
         const hostElement = this.host || this.elementRef.nativeElement;
 
+        /**
+         * Handles if functionality
+         */
         if (this.config.hostOnly && !hostElement.contains(target)) {
             return false;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.config.ignoreHost && hostElement.contains(target)) {
             return false;
         }
@@ -135,14 +186,23 @@ export class KeyboardShortcutDirective implements OnInit, OnDestroy {
      * Normalizes shortcuts to array format for consistent processing
      */
     private normalizeShortcuts(): string[] {
+        /**
+         * Handles if functionality
+         */
         if (Array.isArray(this.keyboardShortcut)) {
             return this.keyboardShortcut;
         }
         
+        /**
+         * Handles if functionality
+         */
         if (typeof this.keyboardShortcut === 'string') {
             return [this.keyboardShortcut];
         }
         
+        /**
+         * Handles if functionality
+         */
         if (typeof this.keyboardShortcut === 'object') {
             return Object.keys(this.keyboardShortcut).filter(key => this.keyboardShortcut[key]);
         }
@@ -154,6 +214,9 @@ export class KeyboardShortcutDirective implements OnInit, OnDestroy {
      * Checks if the keyboard event matches the given shortcut
      */
     private matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
+        /**
+         * Handles if functionality
+         */
         if (shortcut.includes('+')) {
             return this.matchesComboShortcut(event, shortcut);
         }
@@ -168,6 +231,9 @@ export class KeyboardShortcutDirective implements OnInit, OnDestroy {
         const keys = shortcut.split('+');
         return keys.every(key => {
             const controlKey = CONTROL_KEYS[key as keyof typeof CONTROL_KEYS];
+            /**
+             * Handles if functionality
+             */
             if (controlKey) {
                 return event[controlKey as keyof KeyboardEvent] === true;
             }

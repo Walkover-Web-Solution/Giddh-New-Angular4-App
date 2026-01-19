@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 import { CommonModule } from '@angular/common';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'call-back-page',
     templateUrl: './call-back-page.component.html',
@@ -11,9 +14,17 @@ import { CommonModule } from '@angular/common';
         GiddhPageLoaderModule
     ]
 })
+/**
+ * CallBackPageComponent component
+ * Handles callbackpage functionality and user interactions
+ */
 export class CallBackPageComponent {
     /** Hold broadcast event */
     public broadcast: any;
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.closePopup();
     }

@@ -8,6 +8,10 @@ import { COMMON_ACTIONS } from '../../actions/common.const';
 import { UNAUTHORISED } from '../../app.constant';
 import { cloneDeep, forEach, map } from '../../lodash-optimized';
 
+/**
+ * LedgerState interface definition
+ * Defines the structure and contract for LedgerState objects
+ */
 export interface LedgerState {
     account?: AccountResponse;
     transcationRequest?: TransactionsRequest;
@@ -61,6 +65,9 @@ export const initialState: LedgerState = {
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
     let data: BaseResponse<AccountResponse, string>;
     let transaction: BaseResponse<TransactionsResponse, TransactionsRequest>;
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
@@ -71,6 +78,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
         case LEDGER.GET_LEDGER_ACCOUNT_RESPONSE:
             data = action.payload as BaseResponse<AccountResponse, string>;
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 return Object.assign({}, state, {
                     accountInprogress: false,
@@ -86,6 +96,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
         case LEDGER.GET_TRANSACTION_RESPONSE:
             transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
+            /**
+             * Handles if functionality
+             */
             if (transaction?.status === 'success') {
                 return Object.assign({}, state, {
                     transactionInprogress: false,
@@ -97,12 +110,18 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             }
             return Object.assign({}, state, {
                 transactionInprogress: false,
+                /**
+                 * Handles hasLedgerPermission functionality
+                 */
                 hasLedgerPermission: (transaction.statusCode !== UNAUTHORISED)
             });
         case LEDGER.ADVANCE_SEARCH:
             return Object.assign({}, state, { transactionInprogress: true });
         case LEDGER.ADVANCE_SEARCH_RESPONSE:
             transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
+            /**
+             * Handles if functionality
+             */
             if (transaction?.status === 'success') {
                 let ledgerTransactionsBalance = {
                     closingBalance: transaction.body?.closingBalance,
@@ -133,6 +152,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             return Object.assign({}, state, { downloadInvoiceInProcess: true });
         case LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
             let downloadData = action.payload as BaseResponse<string, DownloadLedgerRequest>;
+            /**
+             * Handles if functionality
+             */
             if (downloadData?.status === 'success') {
                 return Object.assign({}, state, { downloadInvoiceInProcess: false });
             }
@@ -144,6 +166,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
         case LEDGER.CREATE_BLANK_LEDGER_RESPONSE:
             let ledgerResponse: BaseResponse<LedgerResponse[], BlankLedgerVM> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (ledgerResponse?.status === 'success') {
                 return Object.assign({}, state, {
                     ledgerCreateSuccess: true,
@@ -158,6 +183,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
         case LEDGER.CREATE_BULK_BLANK_LEDGER_RESPONSE:
             let ledgerBulkResponse: BaseResponse<LedgerResponse[], BlankLedgerVM> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (ledgerBulkResponse?.status === 'success') {
                 return Object.assign({}, state, {
                     ledgerCreateSuccess: true,
@@ -204,6 +232,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             };
         case LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE:
             let sharedAccountData: BaseResponse<AccountSharedWithResponse[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (sharedAccountData?.status === 'success') {
                 return {
                     ...state,
@@ -227,6 +258,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             };
         case LEDGER.UPDATE_TXN_ENTRY_RESPONSE:
             let updateResponse: BaseResponse<LedgerResponse, LedgerUpdateRequest> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (updateResponse?.status === 'success') {
                 return {
                     ...state,
@@ -247,6 +281,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 isQuickAccountInProcess: true
             };
         case LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE:
+            /**
+             * Handles if functionality
+             */
             if (action.payload?.status === 'success') {
                 return {
                     ...state,
@@ -261,6 +298,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             };
         case LEDGER.GET_LEDGER_TRX_DETAILS_RESPONSE: {
             let response: BaseResponse<LedgerResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 return {
                     ...state,
@@ -283,6 +323,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             return cloneDeep(initialState);
         case LEDGER.GET_RECONCILIATION_RESPONSE: {
             let res = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 return Object.assign({}, state, {
                     transactionsResponse: prepareTransactions(res.body)
@@ -319,6 +362,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             let debitTrx = state.transactionsResponse.debitTransactions;
             (Array.isArray(debitTrx) ? debitTrx : []).forEach(f => {
                 (Array.isArray(res) ? res : []).forEach(c => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (c === f.entryUniqueName) {
                         f.isChecked = true;
                     }
@@ -328,6 +374,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             let creditTrx = state.transactionsResponse.creditTransactions;
             (Array.isArray(creditTrx) ? creditTrx : []).forEach(f => {
                 (Array.isArray(res) ? res : []).forEach(c => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (c === f.entryUniqueName) {
                         f.isChecked = true;
                     }
@@ -338,6 +387,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             let debitCreditTransactions = state.transactionsResponse.debitCreditTransactions;
             (Array.isArray(debitCreditTransactions) ? debitCreditTransactions : []).forEach(entry => {
                 res?.forEach(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response === entry?.entryUniqueName) {
                         entry.isChecked = true;
                     }
@@ -358,6 +410,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             let debitTrx = newState.transactionsResponse.debitTransactions;
             debitTrx = debitTrx.map(f => {
                 (Array.isArray(res) ? res : []).forEach(c => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (c === f.entryUniqueName) {
                         f.isChecked = false;
                     }
@@ -367,6 +422,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             let creditTrx = newState.transactionsResponse.creditTransactions;
             creditTrx = creditTrx.map(f => {
                 (Array.isArray(res) ? res : []).forEach(c => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (c === f.entryUniqueName) {
                         f.isChecked = false;
                     }
@@ -377,6 +435,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             let debitCreditTransactions = newState.transactionsResponse.debitCreditTransactions;
             debitCreditTransactions = debitCreditTransactions.map(entry => {
                 res?.forEach(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response === entry?.entryUniqueName) {
                         entry.isChecked = false;
                     }
@@ -411,6 +472,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         }
         case LEDGER.GET_LEDGER_BALANCE_RESPONSE: {
             let res = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 return Object.assign({}, state, {
                     ledgerTransactionsBalance: res.body
@@ -455,7 +519,13 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
     let reverse = '';
     const isStatementView = transactionDetails?.debitCreditTransactions?.length > 0;
 
+    /**
+     * Handles if functionality
+     */
     if (mode === 'all') {
+        /**
+         * Handles if functionality
+         */
         if (isStatementView) {
             key = 'debitCreditTransactions'
         } else {
@@ -466,11 +536,23 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
 
         newResponse[key].map(dbt => dbt.isChecked = false);
 
+        /**
+         * Handles if functionality
+         */
         if (isChecked) {
+            /**
+             * Handles if functionality
+             */
             if (isStatementView) {
                 newResponse[key].map( debitTransaction => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (debitTransaction.isCompoundEntry) {
                         newResponse[key].map(debit => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (debitTransaction.entryUniqueName === debit.entryUniqueName) {
                                 return debit.isChecked = true;
                             }
@@ -484,8 +566,14 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
                 });
             } else {
                 newResponse[key].map( debitTransaction => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (debitTransaction.isCompoundEntry) {
                         newResponse[reverse].map(debit => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (debitTransaction.entryUniqueName === debit.entryUniqueName) {
                                 return debit.isChecked = true;
                             }
@@ -500,15 +588,27 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!isStatementView) {
             key = 'creditTransactions';
             reverse = 'debitTransactions';
             
             newResponse[key].map(debitCreditTransaction => debitCreditTransaction.isChecked = false);
+            /**
+             * Handles if functionality
+             */
             if (isChecked) {
                 newResponse[key].map(debitTransaction => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (debitTransaction.isCompoundEntry) {
                         newResponse[reverse].map(d => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (debitTransaction.entryUniqueName === d.entryUniqueName) {
                                 return d.isChecked = true;
                             }
@@ -529,10 +629,19 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
 
         newResponse[key].map(dbt => dbt.isChecked = false);
 
+        /**
+         * Handles if functionality
+         */
         if (isChecked) {
             newResponse[key].map(dt => {
+                /**
+                 * Handles if functionality
+                 */
                 if (dt.isCompoundEntry) {
                     newResponse[reverse].map(d => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (dt.entryUniqueName === d.entryUniqueName) {
                             return d.isChecked = true;
                         }

@@ -9,6 +9,9 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InvViewService } from '../../inv.view.service';
 import { takeUntil } from 'rxjs/operators';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'stock-list',
     standalone: false,
@@ -27,6 +30,10 @@ import { takeUntil } from 'rxjs/operators';
     </ul>
   `
 })
+/**
+ * StockListComponent component
+ * Handles stocklist functionality and user interactions
+ */
 export class StockListComponent implements OnInit, OnDestroy {
     public activeStockUniqueName$: Observable<string>;
     public activeGroup$: Observable<StockGroupResponse>;
@@ -40,6 +47,10 @@ export class StockListComponent implements OnInit, OnDestroy {
     public stockUniqueName: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private route: ActivatedRoute,
@@ -50,19 +61,31 @@ export class StockListComponent implements OnInit, OnDestroy {
         this.activeStockUniqueName$ = this.store.pipe(select(p => p.inventory.activeStockUniqueName), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.sub = this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params) {
                 this.groupUniqueName = params['groupUniqueName'];
             }
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles OpenStock functionality
+     */
     public OpenStock(item, e: Event) {
         this.invViewService.setActiveView('stock', item.name, item?.uniqueName, this.Groups?.uniqueName, true);
         this.invViewService.setActiveGroupUniqueName(this.Groups?.uniqueName);

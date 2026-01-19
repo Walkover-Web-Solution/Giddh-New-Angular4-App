@@ -3,6 +3,9 @@ import { RouterModule } from '@angular/router';
 import { ContactComponent } from './contact.component';
 import { ContactPreviewComponent } from './preview/preview.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -17,5 +20,9 @@ import { ContactPreviewComponent } from './preview/preview.component';
     ],
     exports: [RouterModule]
 })
+/**
+ * ContactRoutingModule module
+ * Implements ContactRoutingModule functionality
+ */
 export class ContactRoutingModule {
 }

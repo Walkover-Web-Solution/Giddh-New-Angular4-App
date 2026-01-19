@@ -8,6 +8,9 @@ import { PaymentMethodDialogComponentStore } from './utility/payment-method-dial
 import { GeneralService } from '../../services/general.service';
 
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'payment-method-dialog',
     templateUrl: './payment-method-dialog.component.html',
@@ -16,6 +19,10 @@ import { GeneralService } from '../../services/general.service';
     providers: [PaymentMethodDialogComponentStore],
     standalone: false
 })
+/**
+ * PaymentMethodDialogComponent component
+ * Handles paymentmethoddialog functionality and user interactions
+ */
 export class PaymentMethodDialogComponent implements OnInit {
     /** Instance of payment method */
     @ViewChild('paymentMethod', { static: false }) public paymentMethod: ElementRef;
@@ -50,6 +57,10 @@ export class PaymentMethodDialogComponent implements OnInit {
     /** True if api is in progress */
     public isLoading: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private changeDetection: ChangeDetectorRef,
@@ -76,18 +87,27 @@ export class PaymentMethodDialogComponent implements OnInit {
         this.initForm();
         this.getPaymentMethods();
         this.saveProviderSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.redirectLink) {
                 this.openWindow(response.redirectLink);
             }
         });
 
         this.deletePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getPaymentMethods();
             }
         });
 
         this.setDetaultPaymentMethodIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getPaymentMethods();
             }
@@ -101,12 +121,21 @@ export class PaymentMethodDialogComponent implements OnInit {
                 window.location.origin
             ];
 
+            /**
+             * Handles if functionality
+             */
             if (!allowedOrigins.includes(event.origin)) {
                 console.warn('Blocked message from untrusted origin:', event.origin);
                 return;
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.router.url === '/pages/user-details/subscription') {
+                /**
+                 * Handles if functionality
+                 */
                 if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
                     this.isLoading = true;
                     this.resetForm();
@@ -117,7 +146,13 @@ export class PaymentMethodDialogComponent implements OnInit {
         });
 
         this.paymentMethodList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.isLoading = false;
                     this.paymentMethodList = response;
@@ -167,6 +202,9 @@ export class PaymentMethodDialogComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.componentStore.deletePaymentMethod(payment?.uniqueName);
             }
@@ -204,6 +242,9 @@ export class PaymentMethodDialogComponent implements OnInit {
     public savePaymentProvider(): void {
         this.isFormSubmitted = false;
         this.paymentMethodForm.get('subscriptionId')?.patchValue(this.inputData.rowData?.subscriptionId);
+        /**
+         * Handles if functionality
+         */
         if (this.paymentMethodForm.invalid) {
             this.isFormSubmitted = true;
             return;

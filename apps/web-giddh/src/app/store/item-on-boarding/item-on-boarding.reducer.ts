@@ -34,6 +34,9 @@ export const initialState: ItemOnBoardingState = {
  * @returns
  */
 export function itemOnBoardingReducer(state: ItemOnBoardingState = initialState, action: CustomActions) {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case ItemOnBoardingActions.SET_ON_BOARDING_STATUS:
             return { ...state, isOnBoardingInProgress: action.payload };

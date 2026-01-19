@@ -9,6 +9,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         FormsModule,
@@ -29,5 +32,9 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
     providers: [],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
+/**
+ * SendEmailInvoiceModule module
+ * Implements SendEmailInvoiceModule functionality
+ */
 export class SendEmailInvoiceModule {
 }

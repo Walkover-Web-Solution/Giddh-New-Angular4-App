@@ -7,6 +7,10 @@ export class TagRequest {
     public description: string;
     public uniqueName?: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.name = '';
         this.description = '';

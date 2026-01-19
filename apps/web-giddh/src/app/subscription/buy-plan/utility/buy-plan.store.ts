@@ -9,6 +9,10 @@ import { Store } from "@ngrx/store";
 import { SettingsProfileService } from "../../../services/settings.profile.service";
 import { LocaleService } from "../../../services/locale.service";
 
+/**
+ * BuyPlanState interface definition
+ * Defines the structure and contract for BuyPlanState objects
+ */
 export interface BuyPlanState {
     planListInProgress: boolean;
     planList: any
@@ -55,14 +59,28 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     razorpaySuccess: false
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * BuyPlanComponentStore store
+ * Manages buyplancomponent state using NgRx ComponentStore
+ */
 export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
         private settingsProfileService: SettingsProfileService,
         private store: Store<AppState>,
         private localeService: LocaleService) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_BUY_PLAN_STATE);
     }
 
@@ -79,17 +97,29 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
      */
     readonly getAllPlans = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ planListInProgress: true });
                 return this.subscriptionService.getAllPlans(req.params).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     planList: res?.body ?? [],
                                     planListInProgress: false,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -107,6 +137,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -120,11 +153,20 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
      */
     readonly createSubscription = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ createSubscriptionInProgress: true });
                 return this.subscriptionService.createSubscription(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     createSubscriptionInProgress: false,
@@ -132,6 +174,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                     createSubscriptionSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -149,6 +194,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -162,11 +210,20 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     */
     readonly updateSubscription = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ updatePlanInProgress: true });
                 return this.subscriptionService.updateSubscription(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Plan update Successfully');
                                 return this.patchState({
@@ -174,6 +231,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                     updatePlanSuccess: res?.body ?? null,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -190,6 +250,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -198,11 +261,20 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
     readonly updateSubscriptionPayment = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ updateSubscriptionPaymentInProgress: true });
                 return this.settingsProfileService.PatchProfile(req.request).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Plan purchased successfully');
                                 return this.patchState({
@@ -210,6 +282,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                     updateSubscriptionPaymentIsSuccess: res?.body ?? null
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -228,6 +303,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -236,11 +314,20 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
     readonly updateNewLoginSubscriptionPayment = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ updateSubscriptionPaymentInProgress: true });
                 return this.settingsProfileService.updateSubscriptionPayment(req.request).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Plan purchased successfully');
                                 return this.patchState({
@@ -248,6 +335,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                     updateSubscriptionPaymentIsSuccess: res?.body ?? null
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -266,6 +356,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -274,17 +367,29 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
     readonly generateOrderBySubscriptionId = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ generateOrderBySubscriptionIdInProgress: true });
                 return this.subscriptionService.generateOrderBySubscriptionId(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     generateOrderBySubscriptionIdInProgress: false,
                                     subscriptionRazorpayOrderDetails: res?.body ?? null
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -303,6 +408,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -311,17 +419,29 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
     readonly getChangePlanDetails = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ getChangePlanDetailsInProgress: true });
                 return this.subscriptionService.getChangePlanDetails(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     getChangePlanDetailsInProgress: false,
                                     changePlanDetails: res?.body ?? null
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -340,6 +460,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -353,16 +476,28 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     */
     readonly saveRazorpayToken = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ razorpaySuccess: null });
                 return this.subscriptionService.saveRazorpayToken(req.subscriptionId, req.paymentId, req.orderId).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     razorpaySuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -378,6 +513,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -386,17 +524,29 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
     readonly changePlan = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ updateSubscriptionPaymentInProgress: true });
                 return this.subscriptionService.updatePlan(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     updateSubscriptionPaymentInProgress: false,
                                     updateSubscriptionPaymentIsSuccess: res?.body ?? null
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -415,6 +565,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -428,17 +581,29 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
    */
     readonly getCountryList = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ countryListInProgress: true });
                 return this.subscriptionService.getCountryList().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     countryList: res?.body ?? [],
                                     countryListInProgress: false,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -456,6 +621,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -469,16 +637,28 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
      */
     readonly activatePlan = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ activatePlanSuccess: false });
                 return this.subscriptionService.activatePlan(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     activatePlanSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     res.message && this.toasterService.showSnackBar("error", res.message);
                                 }
@@ -495,6 +675,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -508,11 +691,20 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
      */
     readonly getCalculationData = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ calculateDataInProgress: true });
                 return this.subscriptionService.getPlanAmountCalculation(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     calculateData: res?.body ?? [],
@@ -534,6 +726,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -547,11 +742,20 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
   */
     readonly paypalCaptureOrderId = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ paypalCaptureOrderIdSuccess: false });
                 return this.subscriptionService.paypalCaptureOrder(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({
                                     paypalCaptureOrderIdSuccess: true
@@ -570,6 +774,9 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

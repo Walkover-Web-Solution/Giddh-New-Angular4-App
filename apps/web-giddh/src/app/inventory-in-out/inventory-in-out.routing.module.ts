@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { InventoryInOutComponent } from './inventory-in-out.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -12,5 +15,9 @@ import { InventoryInOutComponent } from './inventory-in-out.component';
     ],
     exports: [RouterModule]
 })
+/**
+ * InventoryInOutRoutingModule module
+ * Implements InventoryInOutRoutingModule functionality
+ */
 export class InventoryInOutRoutingModule {
 }

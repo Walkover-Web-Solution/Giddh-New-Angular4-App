@@ -21,6 +21,9 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { MatMenuTrigger } from '@angular/material/menu';
 import { cloneDeep, find, map, set } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'adjust-inventory-list',
 
@@ -30,6 +33,10 @@ import { cloneDeep, find, map, set } from '../../../lodash-optimized';
     providers: [AdjustInventoryListComponentStore]
 })
 
+/**
+ * AdjustInventoryListComponent component
+ * Handles adjustinventorylist functionality and user interactions
+ */
 export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     /** Holds Paginator Reference */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -112,6 +119,10 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     /* Selected range label */
     public selectedRangeLabel: any = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private generalService: GeneralService,
         private changeDetection: ChangeDetectorRef,
@@ -136,21 +147,39 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         this.initForm();
 
         // Combine both route params and universal date observables to prevent duplicate API calls
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([this.route.params, this.componentStore.universalDate$]).pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(500),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(([params, dateObj]) => {
             // Skip initial emission with both null values
+            /**
+             * Handles if functionality
+             */
             if (!params && !dateObj) {
                 return;
             }
 
             // Handle route params change
+            /**
+             * Handles if functionality
+             */
             if (params?.type) {
                 this.inventoryType = params.type.toLowerCase();
             }
 
             // Handle universal date change
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -164,15 +193,27 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
 
         this.componentStore.organisationMode$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isCompany) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.displayedColumns.includes('action')) {
                         this.displayedColumns.push('action');
                     }
@@ -186,9 +227,15 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
 
         /** Get Adjust inventory List */
         this.adjustInventoryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.adjustInventoryList = response?.body?.results;
                 this.dataSource = new MatTableDataSource<any>(response?.body?.results);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.dataSource?.filteredData?.length || this.adjustInventoryListForm?.controls['referenceNo']?.value ||
                     this.adjustInventoryListForm?.controls['name']?.value ||
                     this.adjustInventoryListForm?.controls['status']?.value ||
@@ -213,6 +260,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
 
         /** Delete adjust inventory success */
         this.componentStore.deleteAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.adjustInventoryListRequest.page = this.generalService.adjustPageIndex(this.adjustInventoryListRequest.totalItems, this.adjustInventoryListRequest.page, this.adjustInventoryListRequest.count);
                 this.getAllAdjustReports(true);
@@ -221,6 +271,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
 
         /** Get branch list  */
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -236,10 +289,16 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
@@ -253,6 +312,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                     }
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -263,16 +325,31 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         /** Control value changes */
 
         this.adjustInventoryListForm?.controls['referenceNo'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.adjustInventoryListRequest.q = searchedText;
                 this.adjustInventoryListRequest.searchBy = 'refNo';
                 this.getAllAdjustReports(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (searchedText === null || searchedText === "") {
                 this.showClearFilter = false;
                 this.showReferenceNo = false;
@@ -280,16 +357,31 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         this.adjustInventoryListForm?.controls['name'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.adjustInventoryListRequest.q = searchedText;
                 this.adjustInventoryListRequest.searchBy = 'entityName';
                 this.getAllAdjustReports(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (searchedText === null || searchedText === "") {
                 this.showClearFilter = false;
                 this.showName = false;
@@ -297,16 +389,31 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         this.adjustInventoryListForm?.controls['reason'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.adjustInventoryListRequest.q = searchedText;
                 this.adjustInventoryListRequest.searchBy = 'reason';
                 this.getAllAdjustReports(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (searchedText === null || searchedText === "") {
                 this.showClearFilter = false;
                 this.showReason = false;
@@ -314,16 +421,31 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         this.adjustInventoryListForm?.controls['status'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.adjustInventoryListRequest.q = searchedText;
                 this.adjustInventoryListRequest.searchBy = 'requestStatus';
                 this.getAllAdjustReports(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (searchedText === null || searchedText === "") {
                 this.showClearFilter = false;
                 this.showStatus = false;
@@ -331,16 +453,31 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         this.adjustInventoryListForm?.controls['adjustmentMethod'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.adjustInventoryListRequest.q = searchedText;
                 this.adjustInventoryListRequest.searchBy = 'adjustmentMethod';
                 this.getAllAdjustReports(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (searchedText === null || searchedText === "") {
                 this.showClearFilter = false;
                 this.showAdjustmentMethod = false;
@@ -348,16 +485,31 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         this.adjustInventoryListForm?.controls['adjustedBy'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.adjustInventoryListRequest.q = searchedText;
                 this.adjustInventoryListRequest.searchBy = 'adjustedBy';
                 this.getAllAdjustReports(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (searchedText === null || searchedText === "") {
                 this.showClearFilter = false;
                 this.showAdjustedBy = false;
@@ -365,16 +517,31 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         this.adjustInventoryListForm?.controls['entity'].valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.adjustInventoryListRequest.q = searchedText;
                 this.adjustInventoryListRequest.searchBy = 'entity';
                 this.getAllAdjustReports(true);
             }
+            /**
+             * Handles if functionality
+             */
             if (searchedText === null || searchedText === "") {
                 this.showClearFilter = false;
                 this.showType = false;
@@ -427,6 +594,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public getAllAdjustReports(resetPage: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.adjustInventoryListRequest.page = 1;
         }
@@ -454,16 +624,25 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -484,6 +663,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -507,6 +689,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     * @memberof AdjustInventoryListComponent
     */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.changeDetection.detectChanges();
@@ -569,17 +754,29 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         };
 
         const controlName = formControlsMap[searchedFieldName];
+        /**
+         * Handles if functionality
+         */
         if (controlName) {
             const controlValue = this.adjustInventoryListForm?.controls[controlName].value;
+            /**
+             * Handles if functionality
+             */
             if (controlValue !== null && controlValue !== '') {
                 return;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
             const visibilityProp = visibilityMap[searchedFieldName];
+            /**
+             * Handles if functionality
+             */
             if (visibilityProp) {
                 this[visibilityProp] = false;
             }
@@ -594,24 +791,45 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public toggleSearch(fieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Reason') {
             this.showReason = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Reference No') {
             this.showReferenceNo = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Stock Name') {
             this.showName = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Request Status') {
             this.showStatus = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Adjustment Method') {
             this.showAdjustmentMethod = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Adjusted By') {
             this.showAdjustedBy = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'Type') {
             this.showType = true;
         }
@@ -644,6 +862,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.componentStore.deleteInventoryAdjust(item?.refNo);
             }
@@ -657,6 +878,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public handleBranchChange(selectedEntity: any): void {
+        /**
+         * Handles if functionality
+         */
         if (selectedEntity?.value) {
             this.currentBranch.uniqueName = selectedEntity.value;
             this.currentBranch.name = selectedEntity.label;

@@ -8,6 +8,9 @@ import { FormsModule } from '@angular/forms';
 import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepicker.module';
 import { MatButtonModule } from '@angular/material/button';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         PurchaseSettingComponent
@@ -25,4 +28,8 @@ import { MatButtonModule } from '@angular/material/button';
         PurchaseSettingComponent
     ]
 })
+/**
+ * PurchaseSettingModule module
+ * Implements PurchaseSettingModule functionality
+ */
 export class PurchaseSettingModule { }

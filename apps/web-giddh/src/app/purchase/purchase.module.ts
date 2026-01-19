@@ -39,6 +39,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { PurchaseSettingModule } from './purchase-setting/purchase-setting.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         PurchaseComponent
@@ -88,5 +91,9 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         PurchaseSettingModule
     ]
 })
+/**
+ * PurchaseModule module
+ * Implements PurchaseModule functionality
+ */
 export class PurchaseModule {
 }

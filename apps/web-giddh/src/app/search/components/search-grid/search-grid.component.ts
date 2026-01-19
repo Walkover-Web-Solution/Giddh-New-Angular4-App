@@ -15,6 +15,10 @@ import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { forEach, includes, indexOf } from '../../../lodash-optimized';
 
+/**
+ * SearchTable interface definition
+ * Defines the structure and contract for SearchTable objects
+ */
 export interface SearchTable {
     name: string;
     uniqueName: string;
@@ -27,11 +31,18 @@ export interface SearchTable {
 }
 /** Hold information of activity logs */
 const ELEMENT_DATA: SearchTable[] = [];
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'search-grid',
 
     standalone: false,templateUrl: './search-grid.component.html'
 })
+/**
+ * SearchGridComponent component
+ * Handles searchgrid functionality and user interactions
+ */
 export class SearchGridComponent implements OnInit, OnDestroy {
     @Output() public pageChangeEvent: EventEmitter<any> = new EventEmitter(null);
     @Output() public FilterByAPIEvent: EventEmitter<any> = new EventEmitter(null);
@@ -124,6 +135,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     public dataSource = ELEMENT_DATA;
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService, public dialog: MatDialog) {
         this.searchResponse$ = this.store.pipe(select(p => p.search?.value), takeUntil(this.destroyed$));
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
@@ -142,9 +157,18 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.searchRequest$.subscribe((req) => {
+            /**
+             * Handles if functionality
+             */
             if (req && req.groupName) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.checkboxInfo.selectedGroup) {
                     this.checkboxInfo.selectedGroup = req.groupName;
                 } else if (this.checkboxInfo.selectedGroup !== req.groupName) {
@@ -209,6 +233,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         ];
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -235,6 +262,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @memberof SearchGridComponent
      */
     public resetFilters(isFiltered) {
+        /**
+         * Handles if functionality
+         */
         if (!isFiltered) {
             this.searchResponseFiltered$ = this.searchResponse$;
             this.FilterByAPIEvent.emit(null);
@@ -284,6 +314,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         // New logic (download CSV from API)
         this.searchLoader$ = of(true);
         this.searchRequest$.pipe(take(1)).subscribe(p => {
+            /**
+             * Handles if functionality
+             */
             if (!p) {
                 return;
             }
@@ -305,6 +338,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
             this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.searchLoader$ = of(false);
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     let blobData = this.generalService.base64ToBlob(res?.body, 'text/csv', 512);
                     return saveAs(blobData, `${p.groupName}.csv`);
@@ -369,6 +405,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         await this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
             accountsUnqList = [];
             (Array.isArray(p) ? p : []).forEach((item: AccountFlat) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item.isSelected) {
                     accountsUnqList.push(item?.uniqueName);
                 }
@@ -376,6 +415,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         });
 
         this.searchRequest$.pipe(take(1)).subscribe(p => {
+            /**
+             * Handles if functionality
+             */
             if (!p) {
                 return;
             }
@@ -394,6 +436,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
             request.data = Object.assign({}, request.data, this.formattedQuery);
 
+            /**
+             * Handles if functionality
+             */
             if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
                 return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
@@ -442,6 +487,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
 
 
+    /**
+     * Creates new searchqueryreqobj
+     */
     private createSearchQueryReqObj() {
         return {
             openingBalance: null,
@@ -465,8 +513,14 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         };
     }
 
+    /**
+     * Handles formatQuery functionality
+     */
     private formatQuery(queryForApi, searchQuery) {
         (Array.isArray(searchQuery) ? searchQuery : []).forEach((query: SearchDataSet) => {
+            /**
+             * Handles switch functionality
+             */
             switch (query.queryType) {
                 case 'openingBalance':
                     queryForApi['openingBalance'] = query.amount,
@@ -508,8 +562,14 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      */
     public selectAccount(event: MatCheckboxChange, item: any): void {
         this.prepareSelectedCustomerList(item, event?.checked);
+        /**
+         * Handles if functionality
+         */
         if (event) {
             let currentSelectedValues = this.dataSource.every(value => this.selectedItems?.includes(value?.uniqueName));
+            /**
+             * Handles if functionality
+             */
             if (currentSelectedValues) {
                 this.selectAllCustomer = true;
             } else {
@@ -527,6 +587,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      */
     public prepareSelectedCustomerList(element: any, isChecked: boolean): void {
         let indexOfEntrySelected = this.selectedItems?.indexOf(element?.uniqueName);
+        /**
+         * Handles if functionality
+         */
         if (indexOfEntrySelected === -1 && isChecked) {
             this.selectedItems.push(element?.uniqueName);
         } else if (indexOfEntrySelected > -1 && !isChecked) {

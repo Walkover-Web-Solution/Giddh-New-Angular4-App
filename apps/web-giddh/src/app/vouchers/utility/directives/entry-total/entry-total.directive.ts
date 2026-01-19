@@ -5,10 +5,17 @@ import { AppState } from "../../../../store";
 import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
 import { isEqual } from '../../../../lodash-optimized';
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: '[entryTotal]',
     standalone:false
 })
+/**
+ * EntryTotalDirective directive
+ * Implements EntryTotalDirective functionality
+ */
 export class EntryTotalDirective implements OnChanges, OnDestroy {
     /** Entry */
     @Input() public entry: any;
@@ -21,10 +28,17 @@ export class EntryTotalDirective implements OnChanges, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of directive
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>
     ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.balanceDecimalPlaces) {
                 this.balanceDecimalPlaces = response.balanceDecimalPlaces;
             } else {
@@ -39,9 +53,15 @@ export class EntryTotalDirective implements OnChanges, OnDestroy {
      * @memberof EntryAmountDirective
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ((!isEqual(changes?.entry?.currentValue, changes?.entry?.previousValue) || !isEqual(changes?.excludeTax?.currentValue, changes?.excludeTax?.previousValue)) && this.entry?.calculateTotal) {
             let amount = 0;
             
+            /**
+             * Handles if functionality
+             */
             if (this.excludeTax) {
                 amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)), this.balanceDecimalPlaces);
             } else {

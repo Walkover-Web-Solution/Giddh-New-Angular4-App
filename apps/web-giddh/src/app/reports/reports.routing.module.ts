@@ -10,6 +10,9 @@ import { ReverseChargeReport } from './components/reverse-charge-report-componen
 import { ColumnarReportComponent } from './components/columnar-report-component/columnar.report.component';
 import { CashFlowStatementComponent } from './components/cash-flow-statement-component/cash.flow.statement.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -33,6 +36,10 @@ import { CashFlowStatementComponent } from './components/cash-flow-statement-com
     exports: [RouterModule]
 })
 
+/**
+ * ReportsRoutingModule module
+ * Implements ReportsRoutingModule functionality
+ */
 export class ReportsRoutingModule {
 
 }

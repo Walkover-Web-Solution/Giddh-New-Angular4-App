@@ -12,6 +12,9 @@ import { ServiceConfig } from '../../services/service.config';
 import { Configuration } from '../../app.constant';
 import { environment } from '../../../environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'import-type-select',
     templateUrl: './import-type-select.component.html',
@@ -19,6 +22,10 @@ import { environment } from '../../../environments/environment.generated';
     standalone: false
 })
 
+/**
+ * ImportTypeSelectComponent component
+ * Handles importtypeselect functionality and user interactions
+ */
 export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     /** True if current organization is branch */
     public isBranch: boolean;
@@ -35,6 +42,10 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     /** Holds images folder path */
     public imgPath: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private generalService: GeneralService,
@@ -44,9 +55,15 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
         this.isBranch = this.generalService.currentOrganizationType === OrganizationType.Branch;
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.branches = response || [];
             }

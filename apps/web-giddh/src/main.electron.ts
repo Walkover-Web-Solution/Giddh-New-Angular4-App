@@ -40,12 +40,21 @@ try {
 (window as any).errlyticsNeeded = false;
 (window as any).errlyticsKey = '';
 
+/**
+ * Handles if functionality
+ */
 if (environment.production) {
+    /**
+     * Handles enableProdMode functionality
+     */
     enableProdMode();
 }
 
 // Add comprehensive error handling and debugging
 
+/**
+ * Handles platformBrowserDynamic functionality
+ */
 platformBrowserDynamic()
     .bootstrapModule(AppElectronModule)
     .then(moduleRef => {

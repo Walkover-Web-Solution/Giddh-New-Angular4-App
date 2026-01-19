@@ -14,6 +14,9 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 import { DatepickerMethodsHelper } from '../../../shared/helpers/datepicker-methods.helper';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'cash-flow-statement-component',
     templateUrl: './cash.flow.statement.component.html',
@@ -21,6 +24,10 @@ import { DatepickerMethodsHelper } from '../../../shared/helpers/datepicker-meth
     standalone: false
 })
 
+/**
+ * CashFlowStatementComponent component
+ * Handles cashflowstatement functionality and user interactions
+ */
 export class CashFlowStatementComponent implements OnInit, OnDestroy {
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { static: false }) public universalDatepickerTrigger: MatMenuTrigger;
@@ -57,6 +64,10 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private cashFlowStatementService: CashFlowStatementService, private generalService: GeneralService, private toaster: ToasterService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -69,6 +80,9 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         /* Observer to store universal from/to date */
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
 
@@ -82,6 +96,9 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
 
         /* This will get the company details */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.downloadRequest.companyUniqueName = activeCompany.uniqueName;
                 this.activeCompany = activeCompany;
@@ -106,6 +123,9 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      * @memberof CashFlowStatementComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
          } else {
@@ -135,7 +155,13 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
 
         this.cashFlowStatementService.downloadReport(this.downloadRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (res) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.status === "success") {
                     let blob = this.generalService.base64ToBlob(res.body.data, 'application/xls', 512);
                     return saveAs(blob, res.body.name);

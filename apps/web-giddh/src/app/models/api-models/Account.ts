@@ -171,6 +171,10 @@ export class AccountsTaxHierarchyResponse {
     public inheritedTaxes: IInheritedTaxes[];
 }
 
+/**
+ * IAccountAddress class
+ * Implements IAccountAddress functionality
+ */
 export class IAccountAddress {
     public gstNumber: string;
     public address: string;
@@ -185,11 +189,19 @@ export class IAccountAddress {
     public county?: CountyList;
 }
 
+/**
+ * AccountOpeningBalance class
+ * Implements AccountOpeningBalance functionality
+ */
 export class AccountOpeningBalance {
     public branch?: string;
     public openingBalance?: any;
     public openingBalanceType?: string;
 }
+/**
+ * AccountRequestV2 class
+ * Implements AccountRequestV2 functionality
+ */
 export class AccountRequestV2 {
     public addresses?: IAccountAddress[];
     public attentionTo?: string;
@@ -216,6 +228,10 @@ export class AccountRequestV2 {
     public ledgerView?: TLedgerView;
     public salesPerson?: { name: string, uniqueName: string, email: string };
 }
+/**
+ * AccountResponseV2 class
+ * Implements AccountResponseV2 functionality
+ */
 export class AccountResponseV2 {
     public name: string;
     public country: { countryCode: string, countryName: string };
@@ -274,24 +290,40 @@ export class ShareEntityRequest {
     public entityUniqueName: string;
 }
 
+/**
+ * AccountBankDetails class
+ * Implements AccountBankDetails functionality
+ */
 export class AccountBankDetails {
     public bankName?: string;
     public bankAccountNo: string;
     public ifsc: string;
 }
 
+/**
+ * CashFreeVirtualAccount class
+ * Implements CashFreeVirtualAccount functionality
+ */
 export class CashFreeVirtualAccount {
     public name: string;
     public virtualAccountNumber: string;
     public ifscCode: string;
 }
 
+/**
+ * AddAccountRequest class
+ * Implements AddAccountRequest functionality
+ */
 export class AddAccountRequest {
     activeGroupUniqueName: string;
     accountRequest: AccountRequestV2
     salesPersonCreated?: boolean = false;
 }
 
+/**
+ * UpdateAccountRequest class
+ * Implements UpdateAccountRequest functionality
+ */
 export class UpdateAccountRequest {
     accountRequest: AccountRequestV2;
     salesPersonCreated?: boolean = false;
@@ -301,6 +333,10 @@ export class UpdateAccountRequest {
     }
 }
 
+/**
+ * CustomFieldsData class
+ * Implements CustomFieldsData functionality
+ */
 export class CustomFieldsData {
     uniqueName: string;
     value: AccountRequestV2

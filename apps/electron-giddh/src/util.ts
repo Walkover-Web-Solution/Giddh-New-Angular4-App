@@ -7,7 +7,13 @@ export function isDev() {
 
 let _log: (...args: any[]) => void;
 
+/**
+ * Handles if functionality
+ */
 if (isDev()) {
+    /**
+     * Handles _log functionality
+     */
     _log = (...args: any[]): void => {
         console.log(args);
     };
@@ -18,5 +24,8 @@ if (isDev()) {
 }
 
 export function log(...args: any[]): void {
+    /**
+     * Handles _log functionality
+     */
     _log(args);
 }

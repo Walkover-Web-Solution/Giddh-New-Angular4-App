@@ -33,6 +33,10 @@ import * as fromPurchaseRecord from '../store/purchase-record/purchase-record.re
 import * as fromPurchaseOrder from '../store/purchase-order/purchase-order.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
+/**
+ * AppState interface definition
+ * Defines the structure and contract for AppState objects
+ */
 export interface AppState {
     general: fromGeneral.GeneralState;
     home: fromHome.HomeState;

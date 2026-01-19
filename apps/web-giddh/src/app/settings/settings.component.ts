@@ -22,11 +22,18 @@ import { LocaleService } from '../services/locale.service';
 import { GeneralService } from '../services/general.service';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { ServiceConfig } from '../services/service.config';
+/**
+ * Handles Component functionality
+ */
 @Component({
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss'],
     standalone:false
 })
+/**
+ * SettingsComponent component
+ * Handles settings functionality and user interactions
+ */
 export class SettingsComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -68,6 +75,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
         return this.hasUnsavedChanges;
     }
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private _permissionDataService: PermissionDataService,
@@ -91,16 +102,28 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.settings.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasUnsavedChanges = response;
 
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
+                /**
+                 * Handles if functionality
+                 */
                 if (params['type'] === 'integration' && params['referrer']) {
                     this.selectedChildTab = this.assignChildtabForIntegration(params['referrer']);
                 }
@@ -116,32 +139,62 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
             this.tabChanged(this.activeTab);
 
+            /**
+             * Handles if functionality
+             */
             if (this.activeTab === "linked-accounts") {
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.eBankComp) {
                         this.eBankComp.getInitialEbankInfo();
                     }
                 }, 0);
             } else if (this.activeTab === "profile" || this.activeTab === "addresses") {
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.profileComponent) {
                         this.profileComponent.getInitialProfileData();
                         this.profileComponent.getInventorySettingData();
                     }
                 }, 0);
             } else if (this.activeTab === "financial-year") {
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.financialYearComp) {
                         this.financialYearComp.getInitialFinancialYearData();
                     }
                 }, 100);
             } else if (this.activeTab === "permission") {
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.permissionComp) {
                         this.permissionComp.getInitialData();
                     }
                 }, 0);
             }
+            /**
+             * Handles if functionality
+             */
             if (this.activeTab === "taxes" || this.activeTab === "addresses" || this.activeTab === "reports") {
                 this.asideGstSidebarMenuState = true;
                 document.querySelector('body').classList.remove('setting-sidebar-open');
@@ -154,6 +207,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            /**
+             * Handles if functionality
+             */
             if (val.tab === 'integration' && val.code) {
                 this.saveGmailAuthCode(val.code);
                 this.activeTab = val.tab;
@@ -162,12 +218,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
+            /**
+             * Handles if functionality
+             */
             if (yes) {
                 this.isCompanyProfileUpdated = true;
             }
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings', response?.value).subscribe(response => {
                     this.localeData = response;
@@ -177,8 +239,17 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles assignChildtabForIntegration functionality
+     */
     public assignChildtabForIntegration(childTab: string): number {
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
+            /**
+             * Handles switch functionality
+             */
             switch (childTab) {
                 case SETTING_INTEGRATION_TABS.PAYMENT.LABEL:
                     return SETTING_INTEGRATION_TABS.PAYMENT.VALUE;
@@ -196,6 +267,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
                     return SETTING_INTEGRATION_TABS.COMMUNICATION.VALUE;
             }
         } else {
+            /**
+             * Handles switch functionality
+             */
             switch (childTab) {
                 case SETTING_INTEGRATION_TABS_V1.PAYMENT.LABEL:
                     return SETTING_INTEGRATION_TABS_V1.PAYMENT.VALUE;
@@ -213,29 +287,53 @@ export class SettingsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles profileSelected functionality
+     */
     public profileSelected(e) {
+        /**
+         * Handles if functionality
+         */
         if (e.heading === 'Profile') {
             this.profileComponent.getInitialProfileData();
             this.profileComponent.getInventorySettingData();
         }
     }
 
+    /**
+     * Handles financialYearSelected functionality
+     */
     public financialYearSelected(e) {
         this.financialYearComp.getInitialFinancialYearData();
     }
 
+    /**
+     * Handles linkedAccountSelected functionality
+     */
     public linkedAccountSelected(e) {
         this.eBankComp.getInitialEbankInfo();
     }
 
+    /**
+     * Handles permissionTabSelected functionality
+     */
     public permissionTabSelected(e) {
+        /**
+         * Handles if functionality
+         */
         if (!this.permissionTabDataFetched) {
             this.permissionTabDataFetched = true;
             this.permissionComp.getInitialData();
         }
     }
 
+    /**
+     * Handles tabChanged functionality
+     */
     public tabChanged(tab: string) {
+        /**
+         * Handles if functionality
+         */
         if ((tab === 'integration' || tab === 'profile' || tab === 'addresses') && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
@@ -247,10 +345,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Saves gmailauthcode data
+     */
     private saveGmailAuthCode(authCode: string) {
         const getAccessTokenData = {
             code: authCode,
+            /**
+             * Handles client_secret functionality
+             */
             client_secret: (this.serviceConfig.GOOGLE_CLIENT_SECRET || GOOGLE_CLIENT_SECRET),
+            /**
+             * Handles client_id functionality
+             */
             client_id: (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID),
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl))
@@ -269,6 +376,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 "refresh_token": p.refresh_token
             };
             this._authenticationService.saveGmailToken(dataToSave).pipe(take(1)).subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     this._toast.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
                 } else {
@@ -279,6 +389,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
         })
     }
 
+    /**
+     * Retrieves redirecturl data
+     */
     private getRedirectUrl(baseHref: string) {
         const baseUrl = baseHref.endsWith('/') ? baseHref : baseHref + '/';
         return `${baseUrl}pages/settings?tab=integration`;
@@ -293,6 +406,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
      * @memberof SettingsComponent
      */
     private loadModuleData(tabName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (tabName === 'warehouse') {
             this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
         }
@@ -317,6 +433,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
       * @memberof SettingsComponent
       */
     public toggleGstPane(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.asideGstSidebarMenuState) {
             this.asideGstSidebarMenuState = false;
         }

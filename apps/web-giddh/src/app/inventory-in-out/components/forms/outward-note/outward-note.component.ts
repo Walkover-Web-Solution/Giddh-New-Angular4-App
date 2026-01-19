@@ -7,12 +7,19 @@ import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'outward-note',
     templateUrl: './outward-note.component.html',
     standalone: false
 })
 
+/**
+ * OutwardNoteComponent component
+ * Handles outwardnote functionality and user interactions
+ */
 export class OutwardNoteComponent implements OnChanges {
     @Output() public onCancel = new EventEmitter();
     @Output() public onSave = new EventEmitter<InventoryEntry>();
@@ -31,6 +38,10 @@ export class OutwardNoteComponent implements OnChanges {
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _fb: UntypedFormBuilder) {
         this.initializeForm(true);
     }
@@ -55,6 +66,9 @@ export class OutwardNoteComponent implements OnChanges {
         return this.form.get('description') as UntypedFormArray;
     }
 
+    /**
+     * Initializes ializeform
+     */
     public initializeForm(initialRequest: boolean = false) {
         this.form = this._fb.group({
             inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
@@ -63,17 +77,26 @@ export class OutwardNoteComponent implements OnChanges {
             inventoryUser: [''],
             stock: ['', Validators.required]
         });
+        /**
+         * Handles if functionality
+         */
         if (initialRequest) {
             this.addTransactionItem();
         }
     }
 
+    /**
+     * Handles modeChanged functionality
+     */
     public modeChanged(mode: 'receiver' | 'product') {
         this.mode = mode;
         this.form.reset();
         this.inventoryEntryDate?.patchValue(dayjs().format(GIDDH_DATE_FORMAT));
         this.transactions.controls = this.transactions.controls?.filter(trx => false);
 
+        /**
+         * Handles if functionality
+         */
         if (this.mode === 'receiver') {
             this.stock.setValidators(Validators.required);
             this.inventoryUser.clearValidators();
@@ -86,20 +109,38 @@ export class OutwardNoteComponent implements OnChanges {
         this.addTransactionItem();
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes.stockList && this.stockList) {
             this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
+        /**
+         * Handles if functionality
+         */
         if (changes.stockUnits && this.stockUnits) {
             this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
         }
+        /**
+         * Handles if functionality
+         */
         if (changes.userList && this.userList) {
             this.userListOptions = this.userList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
     }
 
+    /**
+     * Handles addTransactionItem functionality
+     */
     public addTransactionItem(control?: AbstractControl) {
 
+        /**
+         * Handles if functionality
+         */
         if (control && (control.invalid || this.stock.invalid || this.inventoryUser.invalid)) {
             return;
         }
@@ -123,15 +164,24 @@ export class OutwardNoteComponent implements OnChanges {
         items.push(transaction);
     }
 
+    /**
+     * Deletes transactionitem
+     */
     public deleteTransactionItem(index: number) {
         const items = this.form.get('transactions') as UntypedFormArray;
         items.removeAt(index);
     }
 
+    /**
+     * Handles userChanged functionality
+     */
     public userChanged(option: IOption, index: number) {
         const items = this.form.get('transactions') as UntypedFormArray;
         const user = this.userList.find(p => p?.uniqueName === option?.value);
         const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
+        /**
+         * Handles if functionality
+         */
         if (index >= 0) {
             const control = items.at(index);
             control?.patchValue({
@@ -143,11 +193,17 @@ export class OutwardNoteComponent implements OnChanges {
         }
     }
 
+    /**
+     * Handles stockChanged functionality
+     */
     public stockChanged(option: IOption, index: number) {
         const items = this.transactions;
         const stockItem = this.stockList.find(p => p?.uniqueName === option?.value);
         const stock = stockItem ? { uniqueName: stockItem?.uniqueName } : null;
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
+        /**
+         * Handles if functionality
+         */
         if (index >= 0) {
             const control = items.at(index);
             control?.patchValue({ ...control?.value, stock, stockUnit });
@@ -156,7 +212,13 @@ export class OutwardNoteComponent implements OnChanges {
         }
     }
 
+    /**
+     * Saves  data
+     */
     public save() {
+        /**
+         * Handles if functionality
+         */
         if (this.form.valid) {
             let rawValues = this.transactions.getRawValue();
 

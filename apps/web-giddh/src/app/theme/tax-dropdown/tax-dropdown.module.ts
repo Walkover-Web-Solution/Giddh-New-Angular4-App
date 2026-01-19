@@ -8,6 +8,9 @@ import { FormFieldsModule } from "../form-fields/form-fields.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { A11yModule } from "@angular/cdk/a11y";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         TaxDropdownComponent
@@ -26,6 +29,10 @@ import { A11yModule } from "@angular/cdk/a11y";
         TaxDropdownComponent
     ]
 })
+/**
+ * TaxDropdownModule module
+ * Implements TaxDropdownModule functionality
+ */
 export class TaxDropdownModule {
 
 }

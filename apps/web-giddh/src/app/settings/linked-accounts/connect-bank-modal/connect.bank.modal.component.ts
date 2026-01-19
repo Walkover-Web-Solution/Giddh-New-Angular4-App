@@ -11,6 +11,9 @@ import { Store, select } from '@ngrx/store';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { Configuration } from '../../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'connect-bank-modal',
     templateUrl: './connect.bank.modal.component.html',
@@ -39,6 +42,10 @@ import { Configuration } from '../../../app.constant';
     standalone: false
 })
 
+/**
+ * ConnectBankModalComponent component
+ * Handles connectbankmodal functionality and user interactions
+ */
 export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
 
     @Input() public sourceOfIframe: string;
@@ -75,6 +82,10 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public click$ = new Subject<string>();
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(public sanitizer: DomSanitizer,
         private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
         private _fb: UntypedFormBuilder,
@@ -87,13 +98,28 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             const inputClick$ = this.click$;
 
             return merge(text$, inputClick$).pipe(
+                /**
+                 * Handles debounceTime functionality
+                 */
                 debounceTime(300),
+                /**
+                 * Handles distinctUntilChanged functionality
+                 */
                 distinctUntilChanged(),
+                /**
+                 * Handles switchMap functionality
+                 */
                 switchMap((term: string) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (term.startsWith(' ', 0)) {
                         return [];
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.selectedProvider.name === undefined || this.selectedProvider.name === null) {
                         this.selectedProvider.name = "";
                     }
@@ -102,19 +128,31 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
                         return [];
                     }));
                 }),
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res?.status === 'success') {
                         let data = res?.body?.provider;
                         this.dataSourceBackup = res;
                         return data;
                     }
                 }),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$));
         };
 
         this.loginForm = this.initLoginForm();
 
         this.needReloadingLinkedAccounts$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a && this.isRefreshWithCredentials) {
                 this.resetBankForm();
             }
@@ -151,6 +189,9 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             this.searchResults = [];
             return [];
         }), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 this.searchResults = response?.body?.provider?.map(result => ({
                     ...result,
@@ -177,7 +218,13 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes) {
+        /**
+         * Handles if functionality
+         */
         if (changes.providerId && changes.providerId.currentValue) {
             this.step = 2;
             this.providerId = cloneDeep(changes.providerId.currentValue);
@@ -185,12 +232,21 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Retrieves iframeurl data
+     */
     public getIframeUrl(path) {
+        /**
+         * Handles if functionality
+         */
         if (!this.url) {
             this.url = this.sanitizer.bypassSecurityTrustResourceUrl(path);
         }
     }
 
+    /**
+     * Handles cancel event
+     */
     public onCancel() {
         this.modalCloseEvent.emit(true);
         this.iframeSrc = undefined;
@@ -215,6 +271,9 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     // initial rowArray controls
+    /**
+     * Handles rowArray functionality
+     */
     public rowArray() {
         // initialize our controls
         return this._fb.group({
@@ -228,6 +287,9 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles fieldArray functionality
+     */
     public fieldArray() {
         // initialize our controls
         return this._fb.group({
@@ -243,29 +305,50 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     // add addInputRow controls
+    /**
+     * Handles addInputRow functionality
+     */
     public addInputRow(i: number, item) {
         const inputRowControls = this.loginForm.controls['row'] as UntypedFormArray;
         const control = this.loginForm.controls['row'] as UntypedFormArray;
 
         // add addInputRow to the list
+        /**
+         * Handles if functionality
+         */
         if (item) {
+            /**
+             * Handles if functionality
+             */
             if (control.controls[i]) {
                 control.controls[i]?.patchValue(item);
             } else {
                 control.push(this.rowArray());
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     control.controls[i]?.patchValue(item);
                 }, 200);
             }
         } else {
+            /**
+             * Handles if functionality
+             */
             if (inputRowControls.controls[i]?.value.rate && inputRowControls.controls[i]?.value.stockUnitCode) {
                 control.push(this.rowArray());
             }
         }
     }
 
+    /**
+     * Handles selectprovider event
+     */
     public onSelectProvider() {
         const inputRowControls = this.loginForm.controls['row'] as UntypedFormArray;
+        /**
+         * Handles if functionality
+         */
         if (inputRowControls?.controls?.length > 1) {
             inputRowControls.controls = inputRowControls.controls.splice(1);
         }
@@ -278,6 +361,9 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public getProviderLoginForm(providerId) {
         this.loginForm.reset();
         this._settingsLinkedAccountsService.GetLoginForm(providerId).pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a && a.status === 'success') {
                 let response = cloneDeep(a.body?.loginForm[0]);
                 this.createLoginForm(response);
@@ -295,9 +381,15 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         };
         objToSend.loginForm.push(this.loginForm?.value);
         this._settingsLinkedAccountsService.AddProvider(cloneDeep(objToSend), this.selectedProvider.id).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this._toaster.successToast(res?.body);
                 let providerId = res?.body?.replace(/[^0-9]+/ig, '');
+                /**
+                 * Handles if functionality
+                 */
                 if (providerId) {
                     this.cancelRequest = false;
                     this.getBankSyncStatus(providerId);
@@ -317,10 +409,19 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public getBankSyncStatus(providerId) {
         let validateProvider;
         this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success' && res?.body?.providerAccount && res?.body?.providerAccount?.length) {
                 this.bankSyncInProgress = true;
                 validateProvider = this.validateProviderResponse(res?.body?.providerAccount[0]);
+                /**
+                 * Handles if functionality
+                 */
                 if (!validateProvider && !this.cancelRequest) {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.getBankSyncStatus(providerId);
                     }, 2000);
@@ -335,7 +436,13 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
      */
     public validateProviderResponse(provider) {
         let status = provider?.status?.toLowerCase();
+        /**
+         * Handles if functionality
+         */
         if (status === 'success' || status === 'failed') {
+            /**
+             * Handles if functionality
+             */
             if (status === 'failed') {
                 this._toaster.errorToast(this.localeData?.authentication_failed);
             }
@@ -345,6 +452,9 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         } else if (status === 'user_input_required' || status === 'addl_authentication_required') {
             let response = cloneDeep(provider.loginForm[0]);
             this.providerId = provider.id;
+            /**
+             * Handles if functionality
+             */
             if (response.formType === 'image') {
                 this.bypassSecurityTrustResourceUrl(response.row[0].field[0]?.value);
             }

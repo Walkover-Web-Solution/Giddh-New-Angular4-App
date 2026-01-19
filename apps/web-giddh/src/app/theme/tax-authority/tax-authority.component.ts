@@ -6,6 +6,9 @@ import { CreateComponent } from './create/create.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'tax-authority',
     templateUrl: './tax-authority.component.html',
@@ -13,6 +16,10 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
     providers: [TaxAuthorityComponentStore],
     standalone: false
 })
+/**
+ * TaxAuthorityComponent component
+ * Handles taxauthority functionality and user interactions
+ */
 export class TaxAuthorityComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -29,6 +36,10 @@ export class TaxAuthorityComponent implements OnInit {
     /** Tax Authority List Observable */
     public taxAuthorityList$: Observable<any> = this.componentStore.taxAuthorityList$;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: TaxAuthorityComponentStore,
         private dialog: MatDialog
@@ -44,6 +55,9 @@ export class TaxAuthorityComponent implements OnInit {
 
         // Subscribe Delete Tax Authority Success
         this.componentStore.deleteTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getSalesTaxReport();
             }
@@ -72,6 +86,9 @@ export class TaxAuthorityComponent implements OnInit {
         const createUpdateTaxAuthorityDialogRef = this.dialog.open(CreateComponent, dialogConfig);
 
         createUpdateTaxAuthorityDialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getSalesTaxReport();
             }
@@ -106,6 +123,9 @@ export class TaxAuthorityComponent implements OnInit {
                     }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.componentStore.deleteTaxAuthority(uniqueName);
             }

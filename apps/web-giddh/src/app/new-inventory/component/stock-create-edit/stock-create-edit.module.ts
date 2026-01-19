@@ -32,6 +32,9 @@ import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confi
 import { A11yModule } from "@angular/cdk/a11y";
 import { KeyboardNavigationModule } from "../../../shared/helpers/directives/enter-next/keyboard-navigation.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         MainComponent,
@@ -76,6 +79,10 @@ import { KeyboardNavigationModule } from "../../../shared/helpers/directives/ent
         PageLeaveConfirmationGuard
     ]
 })
+/**
+ * StockCreateEditModule module
+ * Implements StockCreateEditModule functionality
+ */
 export class StockCreateEditModule {
 
 }

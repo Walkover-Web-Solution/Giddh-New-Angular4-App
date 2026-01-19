@@ -7,12 +7,19 @@ import { ServiceConfig } from '../services/service.config';
 import { environment } from '../../environments/environment.generated';
 import { Configuration } from '../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
   selector: 'app-group-name',
   templateUrl: './group-name.component.html',
     styleUrls: ['./group-name.component.scss'],
   standalone:false
 })
+/**
+ * GroupNameComponent component
+ * Handles groupname functionality and user interactions
+ */
 export class GroupNameComponent implements OnInit {
   /** True if api call in progress */
   public isLoading: boolean = false;
@@ -43,17 +50,27 @@ export class GroupNameComponent implements OnInit {
   /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
   public isCompany: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
     @Inject(ServiceConfig) private serviceConfig,
     private generalService: GeneralService
   ) { }
 
+  /**
+   * Handles ngOnInit functionality
+   */
   public ngOnInit(): void {
       this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
     // get branches
     this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
       let branchesClone = cloneDeep(this.allBranches);
+      /**
+       * Handles if functionality
+       */
       if (search) {
         branchesClone = this.allBranches?.filter(branch => (branch.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
       }
@@ -69,10 +86,16 @@ export class GroupNameComponent implements OnInit {
        * @memberof GroupNameComponent
        */
       public getBranches(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.allBranches) {
           return;
       }
         this.allWarehouses = [];
+        /**
+         * Handles if functionality
+         */
         if (!this.isCompany) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
             this.allWarehouses = currentBranch[0]?.warehouses;
@@ -85,6 +108,9 @@ export class GroupNameComponent implements OnInit {
 
 
 
+  /**
+   * Handles ngOnDestroy functionality
+   */
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

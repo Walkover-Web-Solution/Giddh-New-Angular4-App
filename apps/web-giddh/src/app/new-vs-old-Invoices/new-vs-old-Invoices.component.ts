@@ -16,6 +16,9 @@ import { ASIDE_PANE_CONFIG, GetBifurcationType, IOption } from '../app.constant'
 import { GeneralService } from '../services/general.service';
 import { find, slice } from '../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'new-vs-old-invoices',
     templateUrl: './new-vs-old-Invoices.component.html',
@@ -24,6 +27,10 @@ import { find, slice } from '../lodash-optimized';
     changeDetection: ChangeDetectionStrategy.Default
 })
 
+/**
+ * NewVsOldInvoicesComponent component
+ * Handles newvsoldinvoices functionality and user interactions
+ */
 export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public GetTypeOptions: IOption[] = [];
     public selectedType: string = "month";
@@ -60,6 +67,10 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     /** Selected type enum */
     public selectedTypeEnum: any = GetBifurcationType;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
@@ -74,15 +85,24 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.NewVsOldInvoicesQueryRequest = new NewVsOldInvoicesRequest();
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
 
         this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.startDate && response.endDate) {
                 this.yearOptions = [];
                 let startYear = Number(dayjs(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
                 let endYear = Number(dayjs(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
 
+                /**
+                 * Handles for functionality
+                 */
                 for (startYear; startYear <= endYear; startYear++) {
                     this.yearOptions.push({ label: String(startYear), value: String(startYear) });
                 }
@@ -91,9 +111,15 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let universalEndDate = dayjs(response[1]).format("YYYY");
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dayjs(response[1]).toDate() >= dayjs().toDate()) {
                     this.selectedYear = (new Date()).getFullYear()?.toString();
                     this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2)?.toString();
@@ -154,6 +180,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public getSalesBifurcation(): void {
         this.isLoading = true;
         this.NewVsOldInvoicesQueryRequest.type = this.selectedType;
+        /**
+         * Handles if functionality
+         */
         if (this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.MONTH) {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedmonth + '-' + this.selectedYear;
         } else {
@@ -163,6 +192,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.reportYear = this.selectedYear;
 
         this.newVsOldInvoicesService.GetNewVsOldInvoices(this.NewVsOldInvoicesQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body) {
                 this.newVsOldInvoicesData = response?.body;
                 this.newSalesClientTotal = this.newVsOldInvoicesData?.newSales?.uniqueCount;
@@ -181,16 +213,28 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Shows errortoast element
+     */
     public showErrorToast(msg) {
         this.toaster.errorToast(msg);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles customMonthSorting functionality
+     */
     public customMonthSorting(a: IOption, b: IOption) {
+        /**
+         * Handles return functionality
+         */
         return (parseInt(a?.value) - parseInt(b?.value));
     }
 
@@ -201,6 +245,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.monthOptions = [{ label: this.commonLocaleData?.app_months_full.january, value: '01' }, { label: this.commonLocaleData?.app_months_full.february, value: '02' }, { label: this.commonLocaleData?.app_months_full.march, value: '03' }, { label: this.commonLocaleData?.app_months_full.april, value: '04' }, { label: this.commonLocaleData?.app_months_full.may, value: '05' }, { label: this.commonLocaleData?.app_months_full.june, value: '06' }, { label: this.commonLocaleData?.app_months_full.july, value: '07' }, { label: this.commonLocaleData?.app_months_full.august, value: '08' }, { label: this.commonLocaleData?.app_months_full.september, value: '09' }, { label: this.commonLocaleData?.app_months_full.october, value: '10' }, { label: this.commonLocaleData?.app_months_full.november, value: '11' }, { label: this.commonLocaleData?.app_months_full.december, value: '12' }];
 
@@ -218,12 +265,18 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
      */
     public getBifurcationClientsString(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.MONTH && this.selectedmonth) {
             this.columnName = this.monthOptions.find(f => f?.value === this.selectedmonth)?.label;
         } else if (this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.QUATER && this.selectedQuater) {
             this.columnName = this.quaterOptions.find(f => f?.value === this.selectedQuater)?.label;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.columnName) {
             this.bifurcationClients = this.localeData?.bifurcation_clients?.replace("[COLUMN_NAME]", this.columnName);
         }

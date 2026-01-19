@@ -6,6 +6,10 @@ import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWit
 import { IOption } from '../../../app.constant';
 import { set } from '../../../lodash-optimized';
 
+/**
+ * AuditLogsSidebarVM class
+ * Implements AuditLogsSidebarVM functionality
+ */
 export class AuditLogsSidebarVM {
     public user$: Observable<UserDetails>;
     public accounts$: Observable<IOption[]>;
@@ -33,6 +37,10 @@ export class AuditLogsSidebarVM {
     public logOrEntry: string = 'entryDate';
     public selectedDateOption: string = '0';
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private localeData, private commonLocaleData) {
         this.dateOptions = [{ label: this.commonLocaleData?.app_date_range, value: '1' }, { label: this.localeData?.entry_log_date, value: '0' }];
 
@@ -64,6 +72,9 @@ export class AuditLogsSidebarVM {
         ];
     }
 
+    /**
+     * Resets  to default state
+     */
     public reset() {
         this.showLogDatePicker = false;
         this.canManageCompany = false;

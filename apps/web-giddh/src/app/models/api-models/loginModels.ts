@@ -1,12 +1,24 @@
+/**
+ * VerifyEmailModel class
+ * Implements VerifyEmailModel functionality
+ */
 export class VerifyEmailModel {
     public email: string;
     public verificationCode: string;
 }
+/**
+ * SignupwithEmaillModel class
+ * Implements SignupwithEmaillModel functionality
+ */
 export class SignupwithEmaillModel {
     public email: string;
     public retryCount: number;
 }
 
+/**
+ * VerifyEmailResponseModel class
+ * Implements VerifyEmailResponseModel functionality
+ */
 export class VerifyEmailResponseModel {
     public user: UserDetails;
     public session?: Session;
@@ -18,12 +30,20 @@ export class VerifyEmailResponseModel {
     public text: string;
 }
 
+/**
+ * Session interface definition
+ * Defines the structure and contract for Session objects
+ */
 export interface Session {
     id: string;
     expiresAt: string;
     createdAt: string;
 }
 
+/**
+ * UserDetails class
+ * Implements UserDetails functionality
+ */
 export class UserDetails {
     public name: string;
     public email: string;
@@ -43,21 +63,37 @@ export class UserDetails {
     public updatedBy: CreatedBy;
 }
 
+/**
+ * SignupWithMobile class
+ * Implements SignupWithMobile functionality
+ */
 export class SignupWithMobile {
     public mobileNumber: string;
     public countryCode: number = 91;
 }
 
+/**
+ * SignupWithMobileResponse class
+ * Implements SignupWithMobileResponse functionality
+ */
 export class SignupWithMobileResponse {
     public code: string;
 }
 
+/**
+ * VerifyMobileModel class
+ * Implements VerifyMobileModel functionality
+ */
 export class VerifyMobileModel {
     public mobileNumber: string;
     public countryCode: number = 91;
     public oneTimePassword: string;
 }
 
+/**
+ * VerifyMobileResponseModel class
+ * Implements VerifyMobileResponseModel functionality
+ */
 export class VerifyMobileResponseModel {
     public user: UserDetails;
     public authKey: string;
@@ -69,6 +105,10 @@ export class VerifyMobileResponseModel {
     public session?: Session;
 }
 
+/**
+ * CreatedBy class
+ * Implements CreatedBy functionality
+ */
 export class CreatedBy {
     public email: string;
     public mobileNo: string;
@@ -76,6 +116,10 @@ export class CreatedBy {
     public uniqueName: string;
 }
 
+/**
+ * AuthKeyResponse class
+ * Implements AuthKeyResponse functionality
+ */
 export class AuthKeyResponse {
     public authKey: string;
     public uniqueName: string;

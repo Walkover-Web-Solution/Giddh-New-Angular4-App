@@ -22,6 +22,10 @@ import { SearchService } from '../services/search.service';
 import { cloneDeep, concat, filter, forEach, map, remove, slice } from '../lodash-optimized';
 
 /** This will use for interface */
+/**
+ * GetActivityLogs interface definition
+ * Defines the structure and contract for GetActivityLogs objects
+ */
 export interface GetActivityLogs {
     name: any;
     time: any;
@@ -31,6 +35,9 @@ export interface GetActivityLogs {
 }
 /** Hold information of activity logs */
 const ELEMENT_DATA: GetActivityLogs[] = [];
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'activity-logs',
     templateUrl: './activity-logs.component.html',
@@ -38,6 +45,10 @@ const ELEMENT_DATA: GetActivityLogs[] = [];
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone:false
 })
+/**
+ * ActivityLogsComponent component
+ * Handles activitylogs functionality and user interactions
+ */
 export class ActivityLogsComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -177,6 +188,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         query: ''
     };
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public activityService: ActivityLogsService,
         public dialog: MatDialog,
@@ -198,12 +213,18 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.body?.classList?.add("activity-log-page");
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['/pages/home']);
             return;
         }
         this.getFormFilter();
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 let users: IOption[] = [];
                 data.body?.map((item) => {
@@ -217,6 +238,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
 
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -263,11 +287,17 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     * @memberof ActivityLogsComponent
     */
     public handleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
             this.onAccountSearchQueryChanged(
                 this.accountsSearchResultsPaginationData.query,
                 this.accountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -295,6 +325,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
    */
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.accountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -303,6 +336,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 page
             }
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -310,6 +346,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.accounts = searchResults;
                     } else {
@@ -321,7 +360,13 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     this.accounts = this.accounts;
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
@@ -335,6 +380,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
             this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
             this.preventDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
                 this.changeDetection.detectChanges();
@@ -379,6 +427,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public getActivityLogs(resetPage?: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.activityObj.page = 1;
         }
@@ -396,6 +447,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityFieldsObj.voucherToDate = undefined;
 
         (Array.isArray(this.selectedFields) ? this.selectedFields : []).forEach(field => {
+            /**
+             * Handles if functionality
+             */
             if (field?.value === "LOG_DATE") {
                 this.activityFieldsObj.fromDate = this.activityObj.fromDate;
                 this.activityFieldsObj.toDate = this.activityObj.toDate;
@@ -417,6 +471,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         });
 
 
+        /**
+         * Handles if functionality
+         */
         if (!this.initialApiCalled) {
             this.initialApiCalled = true;
             this.activityFieldsObj.fromDate = this.activityObj.fromDate;
@@ -428,8 +485,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.activityService.getActivityLogs(this.activityFieldsObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 response.body?.results?.forEach((result, index) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (result) {
                         result.index = index;
                         result.timeonly = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
@@ -456,6 +519,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public selecteUserType(event: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value) {
             this.activityObj.userUniqueNames = [];
             this.activityObj.userUniqueNames.push(event.value);
@@ -471,6 +537,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public selecteAccountType(event: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value) {
             this.activityObj.accountUniqueNames = [];
             this.activityObj.accountUniqueNames.push(event.value);
@@ -486,6 +555,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public selecteEntityType(event: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (event && (event.value === 'ENTRY' || event.value === 'VOUCHER')) {
             this.isShowEntryDatepicker = true;
         } else {
@@ -500,6 +572,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public getFormFilter(): void {
         this.ActivityLogsService.getAuditLogFormFilters().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 this.entities = [];
                 response.body?.forEach(res => {
@@ -517,16 +592,25 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.showDateReport = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -543,16 +627,25 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public entryDateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleEntryGiddhDatepicker(false);
             return;
         }
         this.selectedEntryRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedEntryRangeLabel = value.name;
         }
         this.toggleEntryGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.entryShowDateReport = true;
             this.selectedEntryDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -569,16 +662,25 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public voucherDateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleVoucherGiddhDatepicker(false);
             return;
         }
         this.selectedVoucherRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedVoucherRangeLabel = value.name;
         }
         this.toggleVoucherGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.voucherShowDateReport = true;
             this.selectedVoucherDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -595,6 +697,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -609,6 +714,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public toggleEntryGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.entryDatepickerTrigger?.openMenu();
         } else {
@@ -623,6 +731,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public toggleVoucherGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.voucherDatepickerTrigger?.openMenu();
         } else {
@@ -637,14 +748,26 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public getHistory(event: any, row: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!row.hasHistory) {
             let activityObj = { entityId: row.entityId, entity: row.entity, count: API_BULK_FETCH_LIMIT };
             this.activityService.getActivityLogs(activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;
                 row.hasHistory = true;
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.status === 'success') {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.body?.results?.length > 1) {
                         response.body?.results?.forEach((result, index) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (result) {
                                 result.index = index;
                                 result.timeonly = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
@@ -658,6 +781,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         row.history = [];
                         row.isExpanded = false;
                         this.addZindexCdkOverlay();
+                        /**
+                         * Sets timeout value
+                         */
                         setTimeout(() => {
                             this.removeZindexCdkOverlay();
                         }, 3000);
@@ -673,6 +799,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         } else {
             this.toaster.showSnackBar('info', this.localeData?.no_history);
             this.addZindexCdkOverlay();
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.removeZindexCdkOverlay();
             }, 3000);
@@ -688,12 +817,21 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public selectedItems(event: MatCheckboxChange, rowHistory: any, details: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!rowHistory.selectedItems) {
             rowHistory.selectedItems = [];
         }
+        /**
+         * Handles if functionality
+         */
         if (event?.checked) {
             details.isChecked = true;
             rowHistory.selectedItems.push(details);
+            /**
+             * Handles if functionality
+             */
             if (rowHistory.selectedItems?.length > 2) {
                 const firstElement = rowHistory.selectedItems[0];
                 rowHistory.selectedItems = rowHistory.selectedItems.slice(1);
@@ -717,6 +855,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public compareHistoryJson(rowHistory: any, details: any, event: any): void {
 
         let data;
+        /**
+         * Handles if functionality
+         */
         if (rowHistory.selectedItems[0]?.index === details.index) {
             data = [rowHistory.selectedItems[1]?.details, rowHistory.selectedItems[0]?.details];
         } else {
@@ -777,6 +918,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public resetEntity(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!event?.value) {
             this.activityObjLabels.entity = '';
             this.activityObj.entity = '';
@@ -790,6 +934,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public resetUser(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!event?.value) {
             this.activityObjLabels.user = '';
             this.activityObj.userUniqueNames = [];
@@ -803,6 +950,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public resetAccounts(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!event?.value) {
             this.activityObjLabels.account = '';
             this.activityObj.accountUniqueNames = [];
@@ -817,6 +967,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     * @memberof ActivityLogsComponent
     */
     public resetOperation(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!event?.value) {
             this.activityObjLabels.operation = '';
             this.activityObj.operation = '';
@@ -830,6 +983,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public addDefaultFilter(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedFields.length > 0) {
             this.selectedFields.push({
                 label: '',
@@ -848,21 +1004,36 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     * @memberof ActivityLogsComponent
     */
     public removeFilter(event: any, index: number): void {
+        /**
+         * Handles if functionality
+         */
         if (index >= 0) {
             this.selectedFields?.splice(index, 1);
         }
+        /**
+         * Handles if functionality
+         */
         if (event?.value === "ENTITY") {
             this.activityObjLabels.entity = '';
             this.activityObj.entity = '';
         }
+        /**
+         * Handles if functionality
+         */
         if (event?.value === "OPERATION") {
             this.activityObjLabels.operation = '';
             this.activityObj.operation = '';
         }
+        /**
+         * Handles if functionality
+         */
         if (event?.value === "USERS") {
             this.activityObjLabels.user = '';
             this.activityObj.userUniqueNames = [];
         }
+        /**
+         * Handles if functionality
+         */
         if (event?.value === "ACCOUNTS") {
             this.activityObjLabels.account = '';
             this.activityObj.accountUniqueNames = [];
@@ -878,7 +1049,13 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public selectField(index: number, selectedValue: any): void {
         let newValue = this.selectedFields.filter(val => val?.value === selectedValue?.value);
+        /**
+         * Handles if functionality
+         */
         if (this.selectedFields[index]?.value !== selectedValue?.value) {
+            /**
+             * Handles if functionality
+             */
             if (newValue?.length > 0) {
                 this.toaster.showSnackBar('warning', selectedValue.label + ' ' + this.localeData?.duplicate_values);
                 this.selectedFields[index] = {
@@ -899,6 +1076,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.fields = [

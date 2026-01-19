@@ -8,6 +8,9 @@ import { CompanyResponse } from '../models/api-models/Company';
 import { AppState } from '../store';
 import { environment } from '../../environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'financial-reports',
     templateUrl: './financial-reports.component.html',
@@ -15,6 +18,10 @@ import { environment } from '../../environments/environment.generated';
     standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+/**
+ * FinancialReportsComponent component
+ * Handles financialreports functionality and user interactions
+ */
 export class FinancialReportsComponent implements OnInit, OnDestroy {
     public selectedCompany: CompanyResponse;
     public CanTBLoad: boolean = true;
@@ -40,18 +47,31 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private route: ActivatedRoute,
         private router: Router) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
             }
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles if functionality
+         */
         if (!environment.production) {
             this.CanNewTBLoadOnThisEnv = true;
         } else {
@@ -59,6 +79,9 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
         }
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            /**
+             * Handles if functionality
+             */
             if (val && val.tab && val.tabIndex) {
                 this.activeTab = val.tab;
                 this.activeTabIndex = val.tabIndex;
@@ -75,6 +98,9 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsComponent
      */
     public selectTab(id: number) {
+        /**
+         * Handles if functionality
+         */
         if (this.staticTabs) {
             this.staticTabs.selectedIndex = id;
             this.selectedTabIndex = id;
@@ -102,6 +128,9 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsComponent
      */
     public tabChanged(tab: string, tabIndex: number): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.preventTabChangeWithRoute) {
             this.router.navigate(['/pages/trial-balance-and-profit-loss'], { queryParams: { tab, tabIndex } });
         }
@@ -117,6 +146,9 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
         const tabNames = ['trial-balance', 'profit-loss', 'balance-sheet'];
         const tabName = tabNames[event.index];
 
+        /**
+         * Handles if functionality
+         */
         if (tabName) {
             this.preventTabChangeWithRoute = false;
             this.selectedTabIndex = event.index;

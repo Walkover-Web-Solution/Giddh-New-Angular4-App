@@ -9,14 +9,28 @@ import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { concat } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ReverseChargeService service
+ * Provides reversecharge related business logic and data operations
+ */
 export class ReverseChargeService {
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 
     }
 
+    /**
+     * Retrieves reversechargereport data
+     */
     public getReverseChargeReport(companyUniqueName: any, requestGet: ReverseChargeReportGetRequest, requestPost: ReverseChargeReportPostRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + REVERSECHARGE_API.VIEW_REPORT;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
@@ -26,10 +40,16 @@ export class ReverseChargeService {
         url = url?.replace(':sortBy', requestGet.sortBy);
         url = url?.replace(':page', requestGet.page);
         url = url?.replace(':count', requestGet.count);
+        /**
+         * Handles if functionality
+         */
         if (requestGet.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${requestGet.branchUniqueName !== companyUniqueName ? requestGet.branchUniqueName : ''}`);
         }
         return this.http.post(url, requestPost).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;

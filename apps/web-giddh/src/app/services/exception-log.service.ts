@@ -1,8 +1,15 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ExceptionLogService service
+ * Provides exceptionlog related business logic and data operations
+ */
 export class ExceptionLogService {
     /**
      * Legacy ExceptionLogService - All error handling functionality has been

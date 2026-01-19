@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'bulk-stock-advance-filter',
     
@@ -8,6 +11,10 @@ import { EventEmitter } from '@angular/core';
     styleUrls: ['./bulk-stock-advance-filter.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+/**
+ * BulkStockAdvanceFilterComponent component
+ * Handles bulkstockadvancefilter functionality and user interactions
+ */
 export class BulkStockAdvanceFilterComponent implements OnInit {
     /** Holds Common Locale Translate Data */
     @Input() public commonLocaleData: any = {};
@@ -38,6 +45,9 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     public ngOnInit(): void {
         this.initDropdownValues();
         this.initializeForm();
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchData !== null) {
             this.advanceSearchFormObj = this.advanceSearchData;
         }
@@ -48,6 +58,9 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public initDropdownValues(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.inventoryType === "FIXED_ASSETS") {
             this.advanceSearchFilterBy = [
                 {

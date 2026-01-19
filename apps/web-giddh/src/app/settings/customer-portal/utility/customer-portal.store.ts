@@ -7,6 +7,10 @@ import { ToasterService } from "../../../services/toaster.service";
 import { SettingsIntegrationService } from "../../../services/settings.integration.service";
 import { HttpMethod } from "../../../app.constant";
 
+/**
+ * CustomerPortalState interface definition
+ * Defines the structure and contract for CustomerPortalState objects
+ */
 export interface CustomerPortalState {
     payuDetails: any;
     payuDetailsInProgress: boolean;
@@ -17,13 +21,27 @@ export const DEFAULT_CUSTOMER_PORTAL_STATE: CustomerPortalState = {
     payuDetailsInProgress: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * CustomerPortalComponentStore store
+ * Manages customerportalcomponent state using NgRx ComponentStore
+ */
 export class CustomerPortalComponentStore extends ComponentStore<CustomerPortalState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private settingsIntegrationService: SettingsIntegrationService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_CUSTOMER_PORTAL_STATE);
     }
 
@@ -40,12 +58,24 @@ export class CustomerPortalComponentStore extends ComponentStore<CustomerPortalS
         payload?: any
     }>) => {
         return data$.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(({ method, payload }) => {
                 this.patchState({ payuDetailsInProgress: true });
                 return this.settingsIntegrationService.payuCrudOperation(method, payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (method === HttpMethod.POST || method === HttpMethod.DELETE) {
                                     this.toasterService.showSnackBar('success', res?.body);
                                     // After POST or DELETE, fetch the latest PayU details
@@ -57,6 +87,9 @@ export class CustomerPortalComponentStore extends ComponentStore<CustomerPortalS
                                     });
                                 }
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -74,6 +107,9 @@ export class CustomerPortalComponentStore extends ComponentStore<CustomerPortalS
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError(() => {
                         this.patchState({
                             payuDetails: null,

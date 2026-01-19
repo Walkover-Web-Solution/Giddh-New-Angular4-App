@@ -16,7 +16,13 @@ export class StockValidationHelper {
     public static processAccountDetails(
         formObj: any,
         type: 'purchase' | 'sales',
+        /**
+         * Validates fn input
+         */
         validateFn: (unitRates: any[]) => boolean,
+        /**
+         * Handles errorToastFn functionality
+         */
         errorToastFn: (message: string) => void,
         errorMessage: string
     ): { accountUniqueName: string; unitRates: any[] } | null {
@@ -24,7 +30,13 @@ export class StockValidationHelper {
         const unitRatesKey = type === 'purchase' ? 'purchaseUnitRates' : 'saleUnitRates';
         const accountKey = type === 'purchase' ? 'purchaseAccountUniqueName' : 'salesAccountUniqueName';
 
+        /**
+         * Handles if functionality
+         */
         if (formObj[enableKey]) {
+            /**
+             * Handles if functionality
+             */
             if (validateFn(formObj[unitRatesKey])) {
                 formObj[unitRatesKey] = formObj[unitRatesKey]?.filter((pr: any) => {
                     return pr.stockUnitUniqueName || pr.rate;
@@ -34,6 +46,9 @@ export class StockValidationHelper {
                     unitRates: formObj[unitRatesKey]
                 };
             } else {
+                /**
+                 * Handles errorToastFn functionality
+                 */
                 errorToastFn(errorMessage);
                 return null;
             }

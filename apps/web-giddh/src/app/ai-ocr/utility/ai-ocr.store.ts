@@ -7,6 +7,10 @@ import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { AiOcrService } from "../../services/ai-ocr.service";
 
+/**
+ * AiOcrState interface definition
+ * Defines the structure and contract for AiOcrState objects
+ */
 export interface AiOcrState {
     ocrListInProgress: boolean;
     ocrList: any;
@@ -37,15 +41,29 @@ export const DEFAULT_AI_OCR_VOUCHER_STATE: AiOcrState = {
     ocrExtractDocumentsInProgress: null,
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * AiOcrStore store
+ * Manages aiocr state using NgRx ComponentStore
+ */
 export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy {
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private aiOcrService: AiOcrService,
         private store: Store<AppState>
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_AI_OCR_VOUCHER_STATE);
     }
 
@@ -98,11 +116,20 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
      */
     readonly getAllOcrList = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ ocrList: [], ocrListInProgress: true });
                 return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model, req?.ocrType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({
                                     ocrList: res?.body ?? [],
@@ -124,6 +151,9 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -137,11 +167,20 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
      */
     readonly getAllMainPageOcrData = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ ocrMainList: [], ocrMainListInProgress: true });
                 return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model, req?.ocrType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({
                                     ocrMainList: res?.body ?? [],
@@ -163,6 +202,9 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -176,11 +218,20 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
      */
     readonly uploadOcrDocument = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ ocrUploadInProgress: true, ocrUploadSuccess: null });
                 return this.aiOcrService.uploadOcrDocument(req?.fileName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({
                                     ocrUploadInProgress: false,
@@ -202,6 +253,9 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -215,11 +269,20 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
      */
     readonly importOcrDocument = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ ocrImportInProgress: true, ocrImportSuccess: null });
                 return this.aiOcrService.importOcrDocument(req?.signedUrlResponse, req?.ocrType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 this.toasterService.showSnackBar("success", res?.body?.message);
                                 return this.patchState({
@@ -242,6 +305,9 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -255,11 +321,20 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
      */
     readonly getCompletedCount = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((ocrType) => {
                 this.patchState({ ocrCompletedCount: null, ocrCompletedCountInProgress: true });
                 return this.aiOcrService.getCompletedCount(ocrType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({
                                     ocrCompletedCount: res?.body?.completedCount,
@@ -281,6 +356,9 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -294,11 +372,20 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
      */
     readonly getExtractDocuments = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ ocrExtractDocumentsInProgress: true, ocrExtractDocuments: undefined });
                 return this.aiOcrService.getExtractDocuments(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({
                                     ocrExtractDocuments: res?.body,
@@ -320,6 +407,9 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

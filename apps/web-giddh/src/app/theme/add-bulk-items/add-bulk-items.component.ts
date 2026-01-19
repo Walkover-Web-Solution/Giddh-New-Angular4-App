@@ -12,6 +12,9 @@ import { ToasterService } from "../../services/toaster.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "add-bulk-items",
     templateUrl: "./add-bulk-items.component.html",
@@ -20,6 +23,10 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
     changeDetection: ChangeDetectionStrategy.Default,
     standalone: false
 })
+/**
+ * AddBulkItemsComponent component
+ * Handles addbulkitems functionality and user interactions
+ */
 export class AddBulkItemsComponent implements OnInit, OnDestroy {
     /** Stock search request */
     public stockSearchRequest: any;
@@ -42,6 +49,10 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     /** Total number of focusable items */
     private totalFocusableItems: number = 0;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private vouchersUtilityService: VouchersUtilityService,
         private searchService: SearchService,
@@ -68,6 +79,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.stockVariants[response.entryIndex] = of(response.results);
                 this.changeDetectorRef.detectChanges();
@@ -105,12 +119,21 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof AddBulkItemsComponent
      */
     @HostListener('keydown', ['$event'])
+    /**
+     * Handles keyboardnavigation event
+     */
     public handleKeyboardNavigation(event: KeyboardEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
             // Check if the focus is within the list area
             const target = event.target as HTMLElement;
             const listContainer = target.closest('.list-viewport') || target.closest('mat-list-item');
 
+            /**
+             * Handles if functionality
+             */
             if (listContainer) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -129,17 +152,26 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     public navigateList(direction: number): void {
         const listContainer = document.querySelector('.list-viewport');
+        /**
+         * Handles if functionality
+         */
         if (!listContainer) return;
 
         const focusableElements = listContainer.querySelectorAll('mat-list-item[role="button"]');
         this.totalFocusableItems = focusableElements.length;
 
+        /**
+         * Handles if functionality
+         */
         if (this.totalFocusableItems === 0) return;
 
         // Calculate new focus index
         this.currentFocusIndex += direction;
 
         // Handle wrapping
+        /**
+         * Handles if functionality
+         */
         if (this.currentFocusIndex >= this.totalFocusableItems) {
             this.currentFocusIndex = 0; // Wrap to first item
         } else if (this.currentFocusIndex < 0) {
@@ -159,6 +191,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     private updateFocusStates(elements: NodeListOf<Element>): void {
         elements.forEach((element, index) => {
+            /**
+             * Handles if functionality
+             */
             if (index === this.currentFocusIndex) {
                 element.setAttribute('tabindex', '0');
             } else {
@@ -190,11 +225,17 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public onVariantClick(item: SalesAddBulkStockItems, variant: any, index: number): void {
         // Find the actual index of the variant in the flattened list
         const listContainer = document.querySelector('.list-viewport');
+        /**
+         * Handles if functionality
+         */
         if (listContainer) {
             const focusableElements = listContainer.querySelectorAll('mat-list-item[role="button"]');
             const variantElement = Array.from(focusableElements).find(el =>
                 el.textContent?.trim() === variant?.label
             );
+            /**
+             * Handles if functionality
+             */
             if (variantElement) {
                 this.currentFocusIndex = Array.from(focusableElements).indexOf(variantElement);
             }
@@ -221,6 +262,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     public initializeFocusState(): void {
         const listContainer = document.querySelector('.list-viewport');
+        /**
+         * Handles if functionality
+         */
         if (!listContainer) return;
 
         const focusableElements = listContainer.querySelectorAll('mat-list-item[role="button"]');
@@ -238,13 +282,22 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof AddBulkItemsComponent
      */
     public focusNextElement(currentElement: HTMLElement): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             // Find the next focusable element in the list
             const listContainer = currentElement.closest('.list-viewport');
+            /**
+             * Handles if functionality
+             */
             if (listContainer) {
                 const focusableElements = listContainer.querySelectorAll('[tabindex="0"]');
                 const currentIndex = Array.from(focusableElements).indexOf(currentElement);
 
+                /**
+                 * Handles if functionality
+                 */
                 if (currentIndex >= 0 && currentIndex < focusableElements.length - 1) {
                     // Focus next element
                     (focusableElements[currentIndex + 1] as HTMLElement)?.focus();
@@ -310,6 +363,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof AddBulkItemsComponent
      */
     public searchStock(query: string = '', page: number = 1): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stockSearchRequest?.isLoading) {
             return;
         }
@@ -319,9 +375,15 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         this.stockSearchRequest.isLoading = true;
 
         this.searchService.searchAccountV3(stockSearchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.results?.length) {
                 this.stockSearchRequest.loadMore = true;
                 let stockResults = [];
+                /**
+                 * Handles if functionality
+                 */
                 if (page > 1) {
                     stockResults = this.stockResults$.value;
                 }
@@ -338,6 +400,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             } else {
                 this.stockSearchRequest.loadMore = false;
                 // Clear results when no data is found for new search (page 1)
+                /**
+                 * Handles if functionality
+                 */
                 if (page === 1) {
                     this.stockResults$.next([]);
                 }
@@ -359,6 +424,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         const dataArray = this.addBulkForm.get('data') as FormArray;
         const isAlreadySelected = dataArray?.value?.filter(data => data?.additional?.value === item.uniqueName);
 
+        /**
+         * Handles if functionality
+         */
         if ((isAlreadySelected?.length && !isAlreadySelected[0].additional?.hasVariants) || this.itemsInProcess[item.uniqueName]) {
             this.toaster.showSnackBar('warning', this.localeData?.item_selected);
             return;
@@ -369,6 +437,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             customerUniqueName: this.inputData.customerUniqueName
         };
 
+        /**
+         * Handles if functionality
+         */
         if (item?.additional?.hasVariants) {
             this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: index });
         } else {
@@ -386,9 +457,15 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     public loadDetails(item: SalesAddBulkStockItems, requestObject: any, index: number): void {
         this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
                 const taxes = data.body.taxes || [];
+                /**
+                 * Handles if functionality
+                 */
                 if (data.body.stock) {
                     taxes.push(...data.body.stock.taxes);
                 }
@@ -408,6 +485,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 };
 
                 let baseRate: number;
+                /**
+                 * Handles if functionality
+                 */
                 if (data.body.stock?.variant?.unitRates?.length) {
                     baseRate = this.getRateByUnit(data.body.stock.variant.unitRates[0]?.stockUnitUniqueName, data.body.stock.variant.unitRates) || 0;
                 } else {
@@ -439,6 +519,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         const dataArray = this.addBulkForm.get('data') as FormArray;
         const isAlreadySelected = dataArray?.value?.filter(data => data?.variantUniqueName === variant.value);
 
+        /**
+         * Handles if functionality
+         */
         if (isAlreadySelected?.length || this.itemsInProcess[item.uniqueName]) {
             this.toaster.showSnackBar('warning', this.localeData?.item_selected);
             return;
@@ -480,6 +563,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         const quantityControl = item.get('quantity');
         let currentQuantity = quantityControl.value;
 
+        /**
+         * Handles if functionality
+         */
         if (action === 'add') {
             currentQuantity++;
         } else if (action === 'minus' && currentQuantity > 1) {

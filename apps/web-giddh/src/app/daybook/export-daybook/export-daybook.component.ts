@@ -3,12 +3,19 @@ import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permis
 import { ReplaySubject } from 'rxjs';
 import { forEach, some } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'export-daybook',
     templateUrl: './export-daybook.component.html',
     styleUrls: ['./export-daybook.component.scss'],
     standalone:false
 })
+/**
+ * ExportDaybookComponent component
+ * Handles exportdaybook functionality and user interactions
+ */
 export class ExportDaybookComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -34,12 +41,22 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private permissionDataService: PermissionDataService) {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         (Array.isArray(this.permissionDataService.getData) ? this.permissionDataService.getData : []).forEach(f => {
+            /**
+             * Handles if functionality
+             */
             if (f.name === 'LEDGER') {
                 let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
                 this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
@@ -49,10 +66,16 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles exportLedger functionality
+     */
     public exportLedger() {
         this.closeExportDaybookModal.emit({ type: this.emailTypeSelected, fileType: this.fileType, order: this.order, showVoucherNumber: this.showVoucherNumber, showEntryVoucher: this.showEntryVoucher });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

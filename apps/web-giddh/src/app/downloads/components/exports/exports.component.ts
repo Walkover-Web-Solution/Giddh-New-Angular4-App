@@ -27,6 +27,9 @@ import { cloneDeep } from '../../../lodash-optimized';
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'exports',
     templateUrl: './exports.component.html',
@@ -35,6 +38,10 @@ const ELEMENT_DATA: DownloadData[] = [];
     standalone: false
 })
 
+/**
+ * ExportsComponent component
+ * Handles exports functionality and user interactions
+ */
 export class ExportsComponent extends DownloadsBaseComponent implements OnInit, OnDestroy {
     /** This will use for table heading */
     public displayedColumns: string[] = ['requestedDate', 'user', 'services', 'filter', 'download', 'expiry'];
@@ -64,7 +71,14 @@ export class ExportsComponent extends DownloadsBaseComponent implements OnInit, 
         exportTypeEnum.TransactionWise
     ];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private store: Store<AppState>) {
+        /**
+         * Handles super functionality
+         */
         super();
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -79,6 +93,9 @@ export class ExportsComponent extends DownloadsBaseComponent implements OnInit, 
         document.querySelector('body')?.classList?.add('download-page');
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -98,6 +115,9 @@ export class ExportsComponent extends DownloadsBaseComponent implements OnInit, 
      */
     public openDialog(row: any): void {
         let dataReq;
+        /**
+         * Handles if functionality
+         */
         if (this.exportType.includes(row?.type)) {
             dataReq = row?.inventoryReportsExportFilter;
         } else {
@@ -119,12 +139,18 @@ export class ExportsComponent extends DownloadsBaseComponent implements OnInit, 
      * @memberof ExportsComponent
      */
     public getDownloads(resetPage?: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.downloadRequest.page = 1;
         }
         this.isLoading = true;
         this.downloadsService.getDownloads(this.downloadRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 response.body?.items?.forEach((result: any) => {
                     result.date = dayjs(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
@@ -163,16 +189,25 @@ export class ExportsComponent extends DownloadsBaseComponent implements OnInit, 
      * @memberof ExportsComponent
      */
     public dateSelectedCallback(value?: any, from?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.showClearFilter = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -210,6 +245,9 @@ export class ExportsComponent extends DownloadsBaseComponent implements OnInit, 
         this.showClearFilter = false;
         //Reset Date with universal date
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.downloadRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                 this.downloadRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
@@ -240,6 +278,9 @@ export class ExportsComponent extends DownloadsBaseComponent implements OnInit, 
      * @memberof ExportsComponent
      */
     public downloadFile(url: any): void {
+        /**
+         * Handles if functionality
+         */
         if (url) {
             let fileName = url.substring(url.lastIndexOf('/') + 1);
             return download(fileName, url, "");

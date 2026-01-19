@@ -5,6 +5,9 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'stock-group-list',
     templateUrl: './stock-group-list.component.html',
@@ -12,6 +15,10 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
     standalone: false
 })
 
+/**
+ * StockGroupListComponent component
+ * Handles stockgrouplist functionality and user interactions
+ */
 export class StockGroupListComponent implements OnInit {
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -53,6 +60,10 @@ export class StockGroupListComponent implements OnInit {
         }
     ];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() { }
 
     /**
@@ -62,6 +73,9 @@ export class StockGroupListComponent implements OnInit {
      * @memberof StockGroupListComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -69,10 +83,16 @@ export class StockGroupListComponent implements OnInit {
         }
     }
 
+    /**
+     * Handles dateSelectedCallback functionality
+     */
     public dateSelectedCallback(value?: any): void {
         DatepickerMethodsHelper.dateSelectedCallback(value, this, this.universalDatepickerTrigger);
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
 
     }

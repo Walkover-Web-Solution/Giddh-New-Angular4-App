@@ -9,6 +9,9 @@ import { LedgerDiscountComponent } from "./ledger-discount.component";
 import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
 import { MatMenuModule } from "@angular/material/menu";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [LedgerDiscountComponent],
     imports: [
@@ -23,4 +26,8 @@ import { MatMenuModule } from "@angular/material/menu";
     ],
     exports: [LedgerDiscountComponent]
 })
+/**
+ * LedgerDiscountModule module
+ * Implements LedgerDiscountModule functionality
+ */
 export class LedgerDiscountModule {}

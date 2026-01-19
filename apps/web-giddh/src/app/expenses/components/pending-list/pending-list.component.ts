@@ -19,12 +19,19 @@ import { GeneralService } from '../../../services/general.service';
 import { ServiceConfig } from '../../../services/service.config';
 import { cloneDeep, forEach, isArray, map, some } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-pending-list',
 
       standalone: false,templateUrl: './pending-list.component.html',
     styleUrls: ['./pending-list.component.scss'],
 })
+/**
+ * PendingListComponent component
+ * Handles pendinglist functionality and user interactions
+ */
 export class PendingListComponent implements OnInit, OnChanges {
     /** Instance of approve confirm dialog */
     @ViewChild("approveConfirm") public approveConfirm;
@@ -85,6 +92,10 @@ export class PendingListComponent implements OnInit, OnChanges {
     /** Holds company uniquename */
     public companyUniqueName: string;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private expenseService: ExpenseService,
@@ -98,16 +109,28 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
 
+        /**
+         * Handles observableCombineLatest functionality
+         */
         observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            /**
+             * Handles if functionality
+             */
             if (!Array.isArray(resp[0])) {
                 return;
             }
             let dateObj = resp[0];
             this.todaySelected = resp[1];
+            /**
+             * Handles if functionality
+             */
             if (dateObj && !this.todaySelected) {
                 let universalDate = cloneDeep(dateObj);
                 let from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 let to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                /**
+                 * Handles if functionality
+                 */
                 if (from && to) {
                     this.pettycashRequest.from = from;
                     this.pettycashRequest.to = to;
@@ -155,6 +178,9 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     public hideApproveConfirmPopup(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (typeof event === "boolean") {
             this.getPettyCashPendingReports(this.pettycashRequest);
             this.approveEntryModalRef.close();
@@ -172,6 +198,9 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     public async approveEntry(event: any) {
+        /**
+         * Handles if functionality
+         */
         if (!event?.baseAccount?.uniqueName) {
             this.toaster.showSnackBar("error", this.localeData?.approve_entry_error);
             this.hideApproveConfirmPopup(false);
@@ -195,12 +224,18 @@ export class PendingListComponent implements OnInit, OnChanges {
         }
 
         let model = ledgerRequest.body;
+        /**
+         * Handles if functionality
+         */
         if (model.attachedFileUniqueNames?.length > 0) {
             model.attachedFile = model.attachedFileUniqueNames[0];
         }
 
         this.expenseService.actionPettycashReports(actionType, { ledgerRequest: model }).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", res?.body);
                 this.pettycashRequest.page = this.generalService.adjustPageIndex(this.pettyCashPendingReportResponse?.totalItems, this.pettyCashPendingReportResponse?.page, this.pettyCashPendingReportResponse?.count);
@@ -245,12 +280,21 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes['isClearFilter']) {
+            /**
+             * Handles if functionality
+             */
             if (changes['isClearFilter'].currentValue) {
                 this.clearFilter();
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes['pettyCashPendingReportResponse'] && changes['pettyCashPendingReportResponse'].currentValue) {
             this.getReportResponse();
         }
@@ -293,6 +337,9 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     private detectChanges(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.cdRef['destroyed']) {
             this.cdRef.detectChanges();
         }
@@ -305,6 +352,9 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     private getReportResponse(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.pettyCashPendingReportResponse) {
             this.expensesItems = this.pettyCashPendingReportResponse.results?.map((expense, index) => {
                 expense.index = index;
@@ -312,6 +362,9 @@ export class PendingListComponent implements OnInit, OnChanges {
             });
             this.reportDates.emit([this.pettyCashPendingReportResponse.fromDate, this.pettyCashPendingReportResponse.toDate]);
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.detectChanges();
             }, 500);
@@ -327,6 +380,9 @@ export class PendingListComponent implements OnInit, OnChanges {
      */
     private prepareEntryAgainstObject(res: ExpenseResults): void {
         let cashOrBankEntry = res?.baseAccount ? this.isCashBankAccount(res.baseAccount) : false;
+        /**
+         * Handles if functionality
+         */
         if (res?.entryType === 'sales') {
             this.entryAgainstObject.base = cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
             this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
@@ -351,6 +407,9 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     private isCashBankAccount(particular: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (particular) {
             return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && parent?.uniqueName === 'loanandoverdraft'));
         }
@@ -410,6 +469,9 @@ export class PendingListComponent implements OnInit, OnChanges {
     public hideRejectConfirmPopup(isRejected: boolean): void {
         this.approveEntryModalRef.close();
 
+        /**
+         * Handles if functionality
+         */
         if (isRejected) {
             this.pettycashRequest.page = this.generalService.adjustPageIndex(this.pettyCashPendingReportResponse?.totalItems, this.pettyCashPendingReportResponse?.page, this.pettyCashPendingReportResponse?.count);
             this.getPettyCashPendingReports(this.pettycashRequest);

@@ -8,6 +8,10 @@ import { ClipboardService } from 'ngx-clipboard';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { EMAIL_VALIDATION_REGEX, IOption } from '../../app.constant';
+/**
+ * GetDomainList interface definition
+ * Defines the structure and contract for GetDomainList objects
+ */
 export interface GetDomainList {
     type: any;
     hostName: any;
@@ -18,12 +22,19 @@ export interface GetDomainList {
 }
 /** Hold information of activity logs */
 const ELEMENT_DATA: GetDomainList[] = [];
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'portal-white-label',
     templateUrl: './portal-white-label.component.html',
     styleUrls: ['./portal-white-label.component.scss'],
     standalone: false
 })
+/**
+ * PortalWhiteLabelComponent component
+ * Handles portalwhitelabel functionality and user interactions
+ */
 export class PortalWhiteLabelComponent implements OnInit {
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -60,6 +71,10 @@ export class PortalWhiteLabelComponent implements OnInit {
     /** Hide if all domains are verified  */
     public allVerifiedDomain: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private fb: UntypedFormBuilder,
         private settingsProfileService: SettingsProfileService,
         private toaster: ToasterService,
@@ -79,7 +94,13 @@ export class PortalWhiteLabelComponent implements OnInit {
     }
 
     @HostListener('paste', ['$event'])
+    /**
+     * Handles paste event
+     */
     public onPaste(event): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.subscribeToFormChanges();
         }
@@ -93,9 +114,18 @@ export class PortalWhiteLabelComponent implements OnInit {
     public subscribeToFormChanges(): void {
         this.portalWhilteLabelForm.get('url').valueChanges
             .pipe(debounceTime(700),
+                /**
+                 * Handles distinctUntilChanged functionality
+                 */
                 distinctUntilChanged(),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$))
             .subscribe((value) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (value) {
                     const urlWithoutProtocol = this.removeProtocol(value);
                     this.generatedString = new Date().getTime() + '.' + urlWithoutProtocol;
@@ -136,6 +166,9 @@ export class PortalWhiteLabelComponent implements OnInit {
     public verifyDomain(): void {
         this.shouldShowLoader = true;
         this.settingsProfileService.verifyPortalWhilteLabel(this.domain.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 this.toaster.showSnackBar("success", response.body);
                 this.shouldShowLoader = false;
@@ -161,6 +194,9 @@ export class PortalWhiteLabelComponent implements OnInit {
      * @memberof PortalWhiteLabelComponent
      */
     public selectDomain(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.domain.name = event.label;
             this.domain.uniqueName = event.value;
@@ -177,12 +213,21 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public sendEmail(): void {
         let validRecipients: boolean = true;
+        /**
+         * Handles if functionality
+         */
         if (this.shareEmailForm.get('recipients')?.value) {
             let recipients = this.shareEmailForm.get('recipients')?.value.split(",");
             let validEmails = [];
             let uniqueArray = [];
+            /**
+             * Handles if functionality
+             */
             if (recipients && recipients.length > 0) {
                 (Array.isArray(recipients) ? recipients : []).forEach(email => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
                         let invalidEmail = this.localeData?.invalid_email;
@@ -191,15 +236,24 @@ export class PortalWhiteLabelComponent implements OnInit {
                         validRecipients = false;
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         validEmails.push(email.trim());
                         uniqueArray = [...new Set(validEmails)];
                     }
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (!validRecipients) {
                     return;
                 }
                 this.settingsProfileService.sharedDomainEmail(uniqueArray, this.domain.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.status === 'success') {
                         this.toaster.showSnackBar("success", response?.body);
                         this.dialog?.closeAll();
@@ -222,8 +276,14 @@ export class PortalWhiteLabelComponent implements OnInit {
     public getDomainListData(uniqueName: string): void {
         this.shouldShowLoader = true;
         this.settingsProfileService.getDomainListTableData(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 this.shouldShowLoader = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.body?.length) {
                     this.dataSource = response.body?.map(portal => {
                         return { type: 'CNAME', hostName: portal.domainName, value: 'portal.giddh.com', status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
@@ -249,18 +309,33 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public setPrimaryAndDeleteDomain(operation: string, uniqueName?: string): void {
         this.settingsProfileService.setPrimaryDeleteDomain(uniqueName, operation).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
+                /**
+                 * Handles if functionality
+                 */
                 if (operation === 'set-primary') {
                     this.toaster.showSnackBar("success", this.localeData?.primary_domain_set);
                 } else {
                     this.toaster.showSnackBar("success", this.localeData?.delete_domain);
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (operation === 'delete') {
                     this.getDomainList(true);
                     this.portalWhilteLabelForm.reset();
                     this.dialog.closeAll();
                 }
+                /**
+                 * Handles for functionality
+                 */
                 for (const item of this.domainList as any) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (item.value === uniqueName) {
                         item.status = true;
                     } else {
@@ -281,8 +356,17 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public getDomainList(apiCall: boolean): void {
         this.settingsProfileService.getDomainList().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.body?.length) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (apiCall) {
                         let event = {
                             label: response.body[0].domainName,
@@ -325,6 +409,9 @@ export class PortalWhiteLabelComponent implements OnInit {
         const urlWithoutProtocol = this.removeProtocol(this.portalWhilteLabelForm.get('url')?.value);
         let requestData = [urlWithoutProtocol, this.generatedString];
         this.settingsProfileService.addPortalDomain(requestData).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 this.toaster.showSnackBar("success", this.localeData?.add_domain_successfully);
                 this.portalWhilteLabelForm.reset();
@@ -351,11 +438,17 @@ export class PortalWhiteLabelComponent implements OnInit {
     public copyUrl(value: any, host: any, type: any): void {
         const urlToCopy = value;
         this.clipboardService.copyFromContent(urlToCopy);
+        /**
+         * Handles if functionality
+         */
         if (type === 'host') {
             host.isCopiedHostName = true;
         } else {
             host.isCopiedValue = true;
         }
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             host.isCopiedHostName = false;
             host.isCopiedValue = false;
@@ -380,6 +473,9 @@ export class PortalWhiteLabelComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.setPrimaryAndDeleteDomain('delete', this.domain.uniqueName);
             } else {

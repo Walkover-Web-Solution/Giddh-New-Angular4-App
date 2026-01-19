@@ -7,6 +7,9 @@ import { BuyPlanComponent } from './buy-plan/buy-plan.component';
 import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -39,6 +42,10 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
     exports: [RouterModule]
 })
 
+/**
+ * SubscriptionRoutingModule module
+ * Implements SubscriptionRoutingModule functionality
+ */
 export class SubscriptionRoutingModule {
 
 }

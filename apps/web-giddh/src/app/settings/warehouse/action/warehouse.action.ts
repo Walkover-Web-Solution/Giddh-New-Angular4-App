@@ -16,6 +16,10 @@ import { CustomActions } from '../../../store/custom-actions';
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * WarehouseActions class
+ * Implements WarehouseActions functionality
+ */
 export class WarehouseActions {
 
     /** Action to create warehouse */
@@ -50,9 +54,21 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public createWarehouse$ = createEffect(() => this.action$.pipe(
+        /**
+         * Handles ofType functionality
+         */
         ofType(WarehouseActions.CREATE_WAREHOUSE),
+        /**
+         * Handles switchMap functionality
+         */
         switchMap((action: CustomActions) => this.settingsWarehouseService.createWarehouse(action.payload)),
+        /**
+         * Handles map functionality
+         */
         map((response: BaseResponse<any, any>) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return this.createWarehouseResponse(response);
@@ -69,9 +85,21 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public getAllWarehouse$ = createEffect(() => this.action$.pipe(
+        /**
+         * Handles ofType functionality
+         */
         ofType(WarehouseActions.GET_ALL_WAREHOUSE),
+        /**
+         * Handles switchMap functionality
+         */
         switchMap((action: CustomActions) => this.settingsWarehouseService.fetchAllWarehouse(action.payload)),
+        /**
+         * Handles map functionality
+         */
         map((response: BaseResponse<any, any>) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
@@ -88,9 +116,21 @@ export class WarehouseActions {
      */
 
     public updateWarehouse$ = createEffect(() => this.action$.pipe(
+        /**
+         * Handles ofType functionality
+         */
         ofType(WarehouseActions.UPDATE_WAREHOUSE),
+        /**
+         * Handles switchMap functionality
+         */
         switchMap((action: CustomActions) => this.settingsWarehouseService.updateWarehouse(action.payload)),
+        /**
+         * Handles map functionality
+         */
         map((response: BaseResponse<any, any>) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
@@ -108,9 +148,21 @@ export class WarehouseActions {
      */
 
     public setDefaultWarehouse$ = createEffect(() => this.action$.pipe(
+        /**
+         * Handles ofType functionality
+         */
         ofType(WarehouseActions.SET_AS_DEFAULT_WAREHOUSE),
+        /**
+         * Handles switchMap functionality
+         */
         switchMap((action: CustomActions) => this.settingsWarehouseService.setAsDefaultWarehouse(action.payload)),
+        /**
+         * Handles map functionality
+         */
         map((response: BaseResponse<any, any>) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
@@ -121,6 +173,10 @@ export class WarehouseActions {
     ));
 
     /** @ignore */
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private action$: Actions,
         private settingsWarehouseService: SettingsWarehouseService,

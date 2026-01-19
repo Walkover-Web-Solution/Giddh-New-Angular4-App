@@ -9,10 +9,21 @@ import { API_BULK_FETCH_LIMIT, HttpMethod, HttpMethodType } from "../../../app.c
 import { SALES_PERSON_API, SALES_PERSON_ARCHIVE_API } from "./sales.person.api";
 import { SalesPersonDeleteArchivedModel } from "./sales-person.constant";
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SalesPersonService service
+ * Provides salesperson related business logic and data operations
+ */
 export class SalesPersonService {
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private http: HttpWrapperService,
         private errorHandler: GiddhErrorHandler,
@@ -31,9 +42,15 @@ export class SalesPersonService {
     public salesPerson(httpMethod: HttpMethodType = HttpMethod.GET, model: any = {}, uniqueName: string = null, params: any = {}): Observable<BaseResponse<any, any>> {
         let url = this.config?.apiUrl +
         SALES_PERSON_API?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        /**
+         * Handles if functionality
+         */
         if (uniqueName) {
             url += `/${encodeURIComponent(uniqueName)}`;
         }
+        /**
+         * Handles if functionality
+         */
         if (httpMethod === HttpMethod.GET) {
             url += `?page=${params?.page || 1}&count=${params?.count || API_BULK_FETCH_LIMIT}&archive=${params?.archive ?? false}`; // archive is false by default means only active sales person will be fetched
         }

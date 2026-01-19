@@ -4,6 +4,10 @@ import { PURCHASE_INVOICE_ACTIONS } from '../../actions/purchase-invoice/purchas
 import { CustomActions } from '../custom-actions';
 import { cloneDeep } from '../../lodash-optimized';
 
+/**
+ * InvoicePurchaseState interface definition
+ * Defines the structure and contract for InvoicePurchaseState objects
+ */
 export interface InvoicePurchaseState {
     taxes: ITaxResponse[];
 }
@@ -13,9 +17,15 @@ export const initialState: InvoicePurchaseState = {
 };
 
 export function InvoicePurchaseReducer(state = initialState, action: CustomActions): InvoicePurchaseState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY: {
             let response: BaseResponse<ITaxResponse[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 let newState = cloneDeep(state);
                 newState.taxes = response.body;

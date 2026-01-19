@@ -12,12 +12,19 @@ import { TemplateModeEnum, TemplateTypeEnum } from '../../models/api-models/Sale
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { CountryNames } from '../../shared/Enums/common.enum';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
   selector: 'app-template-edit-dialog',
   templateUrl: './template-edit-dialog.component.html',
   styleUrls: ['./template-edit-dialog.component.scss'],
   standalone:false
 })
+/**
+ * TemplateEditDialogComponent component
+ * Handles templateeditdialog functionality and user interactions
+ */
 export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   /** This will hold local JSON data */
   public localeData: any = {};
@@ -36,6 +43,10 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   /* This will hold the value if Gst Composition will show/hide */
   public showGstComposition: boolean = false;
 
+  /**
+   * Creates an instance of component
+   * Initializes component dependencies and sets up initial state
+   */
   constructor(
     public dialog: MatDialog,
     private invoiceUiDataService: InvoiceUiDataService,
@@ -83,6 +94,9 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
       }
     });
     dialogRef.afterClosed().subscribe((result) => {
+      /**
+       * Handles if functionality
+       */
       if (result) {
         this.dialogRef.close(false);
       }
@@ -98,11 +112,17 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     let data = cloneDeep(this.invoiceUiDataService.customTemplate.getValue());
     data.type = this.inputData.templateType;
     let copiedTemplate = cloneDeep(data);
+    /**
+     * Handles if functionality
+     */
     if (!data.name) {
       this.toasty.errorToast(this.localeData?.please_enter_template_name);
       return;
     }
 
+    /**
+     * Handles if functionality
+     */
     if (data?.sections?.footer?.data?.['grandTotal']) {
       data.sections['footer'].data['grandTotal'].field = 'grandTotal';
     }
@@ -115,18 +135,33 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
 
     this.store.pipe(select(state => state.session), take(1)).subscribe(session => {
       const companyName = session?.companies?.find((company) => company?.uniqueName === session?.companyUniqueName)?.name;
+      /**
+       * Handles if functionality
+       */
       if (!data?.sections?.header?.data?.['companyName']?.label) {
+        /**
+         * Handles if functionality
+         */
         if (data?.sections?.header?.data?.['companyName']) {
           data.sections['header'].data['companyName'].label = companyName;
         }
       }
+      /**
+       * Handles if functionality
+       */
       if (!data?.sections?.footer?.data?.['companyName']?.label) {
+        /**
+         * Handles if functionality
+         */
         if (data?.sections?.footer?.data?.['companyName']) {
           data.sections['footer'].data['companyName'].label = companyName;
         }
       }
     });
     this.invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+      /**
+       * Handles if functionality
+       */
       if (res?.status === 'success') {
         this.toasty.successToast(this.localeData?.template_saved_successfully);
         this.dialogRef.close(true);
@@ -145,7 +180,13 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    */
   private ensureTextUnderSlogan(data: any): void {
     const textUnderSlogan = data?.sections?.['footer']?.data?.['textUnderSlogan'];
+    /**
+     * Handles if functionality
+     */
     if (!textUnderSlogan?.display || !textUnderSlogan?.label) {
+      /**
+       * Handles if functionality
+       */
       if (!textUnderSlogan && data?.sections?.['footer']?.data) {
         data.sections['footer'].data['textUnderSlogan'] = { label: '', display: false };
       } else if (textUnderSlogan) {
@@ -164,6 +205,9 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    */
   private cleanTemplateFields(data: any): void {
     const specialTypes = [TemplateTypeEnum.GstTemplateA, TemplateTypeEnum.ThermalTemplate, TemplateTypeEnum.TallyTemplate];
+    /**
+     * Handles if functionality
+     */
     if (!specialTypes.includes((data?.templateType || '').toLowerCase())) {
       delete data?.sections?.header?.data?.showCompanyAddress;
       delete data?.sections?.header?.data?.showQrCode;
@@ -183,17 +227,32 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   private syncVoucherLabels(data: any): void {
+    /**
+     * Handles if functionality
+     */
     if (this.inputData?.templateType === 'voucher') {
+      /**
+       * Handles if functionality
+       */
       if (data?.sections?.header?.data?.['invoiceDate'] && data?.sections?.header?.data?.['voucherDate']) {
         data.sections['header'].data['invoiceDate'].label = data.sections['header'].data['voucherDate'].label;
       }
+      /**
+       * Handles if functionality
+       */
       if (data?.sections?.header?.data?.['invoiceNumber'] && data?.sections?.header?.data?.['voucherNumber']) {
         data.sections['header'].data['invoiceNumber'].label = data.sections['header'].data['voucherNumber'].label;
       }
     } else {
+      /**
+       * Handles if functionality
+       */
       if (data?.sections?.header?.data?.['voucherDate'] && data?.sections?.header?.data?.['invoiceDate']) {
         data.sections['header'].data['voucherDate'].label = data.sections['header'].data['invoiceDate'].label;
       }
+      /**
+       * Handles if functionality
+       */
       if (data?.sections?.header?.data?.['voucherNumber'] && data?.sections?.header?.data?.['invoiceNumber']) {
         data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
       }
@@ -207,18 +266,30 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    */
   public updateTemplate(): void {
     let data = cloneDeep(this.invoiceUiDataService.customTemplate.getValue());
+    /**
+     * Handles if functionality
+     */
     if (!data.name) {
       this.toasty.errorToast(this.localeData?.please_enter_template_name);
       return;
     }
     data.updatedAt = null;
     data.updatedBy = null;
+    /**
+     * Handles if functionality
+     */
     if (data?.sections?.header?.data?.['address']) {
       data.sections['header'].data['address'].label = '';
     }
+    /**
+     * Handles if functionality
+     */
     if (data?.sections?.table?.data?.['taxes']) {
       data.sections['table'].data['taxes'].field = 'taxes';
     }
+    /**
+     * Handles if functionality
+     */
     if (data?.sections?.footer?.data?.['grandTotal']) {
       data.sections['footer'].data['grandTotal'].field = 'grandTotal';
     }
@@ -226,6 +297,9 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     this.ensureMessage1(data);
     this.ensureTextUnderSlogan(data);
     this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+      /**
+       * Handles if functionality
+       */
       if (res?.status === 'success') {
         this.toasty.successToast(this.localeData?.template_updated_successfully);
         this.invoiceUiDataService.setLogoPath('');
@@ -246,6 +320,9 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   private setFontSizesUpdate(data: any): void {
+    /**
+     * Handles if functionality
+     */
     if (data?.fontSize) {
       data.fontSize = Number(data.fontSize);
       data.fontSmall = data.fontSize - 4;
@@ -263,6 +340,9 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    */
   private ensureMessage1(data: any): void {
     const msg1 = data?.sections?.['footer']?.data?.['message1'];
+    /**
+     * Handles if functionality
+     */
     if (msg1 && (!msg1?.display || !msg1?.label)) {
       msg1.display = false;
       msg1.label = '';

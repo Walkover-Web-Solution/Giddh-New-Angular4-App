@@ -31,6 +31,9 @@ import { Router } from "@angular/router";
 import { cloneDeep, isEmpty } from '../../../lodash-optimized';
 import { MatMenuTrigger } from "@angular/material/menu";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "new-branch-transfer-list",
     templateUrl: "./new.branch.transfer.list.component.html",
@@ -38,6 +41,10 @@ import { MatMenuTrigger } from "@angular/material/menu";
     standalone: false
 })
 
+/**
+ * NewBranchTransferListComponent component
+ * Handles newbranchtransferlist functionality and user interactions
+ */
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
@@ -126,6 +133,10 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private _generalService: GeneralService,
         private dialog: MatDialog,
@@ -136,6 +147,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         private router: Router
     ) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
+            /**
+             * Handles if functionality
+             */
             if (o && !isEmpty(o)) {
                 let companyInfo = cloneDeep(o);
                 this.activeCompany = companyInfo;
@@ -145,9 +159,15 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -163,6 +183,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.datePicker = [dayjs(universalDate[0], GIDDH_DATE_FORMAT).toDate(), dayjs(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
@@ -176,12 +199,18 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -197,10 +226,16 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this._generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
@@ -215,6 +250,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                 }
                 this.branchTransferGetRequestParams.branchUniqueName = this.currentBranch?.uniqueName;
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this._generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -223,6 +261,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         document.querySelector("body")?.classList?.remove("new-branch-list-page");
         this.destroyed$.next(true);
@@ -242,7 +283,13 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.clearFilter) {
                 this.forceClear$ = observableOf({ status: true });
                 this.clearFilter = false;
@@ -259,6 +306,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.dialog.closeAll();
     }
 
+    /**
+     * Initializes branchtransferlistresponse
+     */
     public initBranchTransferListResponse(): void {
         this.branchTransferResponse = {
             items: null,
@@ -271,14 +321,23 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         };
     }
 
+    /**
+     * Retrieves branchtransferlist data
+     */
     public getBranchTransferList(resetPage: boolean): void {
         this.isLoading = true;
 
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.branchTransferGetRequestParams.page = 1;
         }
 
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferPostRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.branchTransferResponse = response?.body;
             } else {
@@ -301,7 +360,13 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.getBranchTransferList(false);
     }
 
+    /**
+     * Handles changeFilterDate functionality
+     */
     public changeFilterDate(date): void {
+        /**
+         * Handles if functionality
+         */
         if (date) {
             this.branchTransferGetRequestParams.from = dayjs(date[0]).format(GIDDH_DATE_FORMAT);
             this.branchTransferGetRequestParams.to = dayjs(date[1]).format(GIDDH_DATE_FORMAT);
@@ -355,6 +420,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
      */
     public hideModal(refreshList: boolean): void {
         this.router.navigate(['/pages/inventory/report']);
+        /**
+         * Handles if functionality
+         */
         if (refreshList) {
             this.getBranchTransferList(true);
         }
@@ -362,8 +430,17 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.dialog.closeAll();
     }
 
+    /**
+     * Handles columnSearch functionality
+     */
     public columnSearch(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.timeout) {
+            /**
+             * Handles clearTimeout functionality
+             */
             clearTimeout(this.timeout);
         }
 
@@ -372,9 +449,15 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }, 700);
     }
 
+    /**
+     * Deletes newbranchtransfer
+     */
     public deleteNewBranchTransfer(): void {
         this.hideBranchTransferModal();
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this._toasty.successToast(response?.body);
                 this.getBranchTransferList(false);
@@ -410,10 +493,19 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.deleteBranchTransferDialogRef?.close();
     }
 
+    /**
+     * Handles sortBranchTransferList functionality
+     */
     public sortBranchTransferList(sortBy): void {
         let sort = "asc";
 
+        /**
+         * Handles if functionality
+         */
         if (this.branchTransferGetRequestParams.sortBy === sortBy) {
+            /**
+             * Handles sort functionality
+             */
             sort = (this.branchTransferGetRequestParams.sort === "asc") ? "desc" : "asc";
         } else {
             sort = "asc";
@@ -425,12 +517,18 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.getBranchTransferList(true);
     }
 
+    /**
+     * Shows editbranchtransferpopup element
+     */
     public showEditBranchTransferPopup(item): void {
         this.branchTransferMode = item.voucherType;
         this.editBranchTransferUniqueName = item?.uniqueName;
         this.openModal();
     }
 
+    /**
+     * Handles clearFilters functionality
+     */
     public clearFilters(): void {
         this.branchTransferPostRequestParams.senderReceiver = null;
         this.branchTransferPostRequestParams.warehouseName = null;
@@ -451,7 +549,13 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.getBranchTransferList(true);
     }
 
+    /**
+     * Handles checkIfFiltersApplied functionality
+     */
     public checkIfFiltersApplied(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (
             this.branchTransferPostRequestParams.senderReceiver ||
             this.branchTransferPostRequestParams.fromWarehouse ||
@@ -467,29 +571,47 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles checkIfAmountEmpty functionality
+     */
     public checkIfAmountEmpty(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.branchTransferPostRequestParams.amountOperator && !this.branchTransferPostRequestParams.amount) {
             this.branchTransferPostRequestParams.amount = 0;
         }
     }
 
+    /**
+     * Opens branchtransferpopup
+     */
     public openBranchTransferPopup(event): void {
         this.branchTransferMode = event;
         this.openTransferAsidePaneDialog();
         this.openModal();
     }
 
+    /**
+     * Handles refreshTempPostParams functionality
+     */
     public refreshTempPostParams(): void {
         this.branchTransferTempPostRequestParams.voucherType = this.branchTransferPostRequestParams.voucherType;
         this.branchTransferTempPostRequestParams.amountOperator = this.branchTransferPostRequestParams.amountOperator;
         this.branchTransferTempPostRequestParams.amount = this.branchTransferPostRequestParams.amount;
     }
 
+    /**
+     * Handles downloadBranchTransfer functionality
+     */
     public downloadBranchTransfer(item): void {
         let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
         downloadBranchTransferRequest.uniqueName = item?.uniqueName;
 
         this.inventoryService.downloadBranchTransfer(this.activeCompany?.uniqueName, downloadBranchTransferRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === "success") {
                 let blob = this._generalService.base64ToBlob(res?.body, 'application/pdf', 512);
                 return saveAs(blob, item.voucherNo + `.pdf`);
@@ -512,28 +634,52 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     @HostListener('document:keyup', ['$event'])
+    /**
+     * Handles keyboardevent event
+     */
     public handleKeyboardEvent(event: KeyboardEvent) {
+        /**
+         * Handles if functionality
+         */
         if (event.altKey && event.which === 78) { // Alt + N
             event.preventDefault();
             event.stopPropagation();
             this.openTransferAsidePaneDialog();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (event.which === ESCAPE) {
             this.editBranchTransferUniqueName = '';
             this.asideTransferPaneDialogRef?.close();
         }
     }
 
+    /**
+     * Handles focusOnColumnSearch functionality
+     */
     public focusOnColumnSearch(inlineSearch) {
         this.inlineSearch = inlineSearch;
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.inlineSearch === 'senderReceiver') {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.senderReceiverField && this.senderReceiverField.nativeElement) {
                     this.senderReceiverField.nativeElement.focus();
                 }
             } else if (this.inlineSearch === 'warehouseName') {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.warehouseNameField && this.warehouseNameField.nativeElement) {
                     this.warehouseNameField.nativeElement.focus();
                 }
@@ -548,6 +694,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     * @memberof NewBranchTransferListComponent
     */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -562,16 +711,25 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
      * @memberof NewBranchTransferListComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

@@ -1,8 +1,16 @@
+/**
+ * BranchTransferVoucherTypes interface definition
+ * Defines the structure and contract for BranchTransferVoucherTypes objects
+ */
 export interface BranchTransferVoucherTypes {
     value: string;
     label: string;
 }
 
+/**
+ * BranchTransferAmountOperators interface definition
+ * Defines the structure and contract for BranchTransferAmountOperators objects
+ */
 export interface BranchTransferAmountOperators {
     value: string;
     label: string;

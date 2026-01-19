@@ -8,6 +8,9 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'inventory-header',
     standalone: false,
@@ -22,6 +25,10 @@ import { ASIDE_PANE_CONFIG } from '../../../app.constant';
     </ng-template>
   `
 })
+/**
+ * InventoryHearderComponent class
+ * Implements InventoryHearderComponent functionality
+ */
 export class InventoryHearderComponent implements OnDestroy, OnInit {
     public activeGroupName$: Observable<string>;
     /** Reference to aside custom stock template */
@@ -36,6 +43,10 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
     public openCustomUnitAsidePane$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private router: Router,
         private store: Store<AppState>,
         private inventoryAction: InventoryAction,
@@ -45,17 +56,26 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
         this.openCustomUnitAsidePane$ = this.store.pipe(select(s => s.inventory.showNewCustomUnitAsidePane), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         // get activeGroup
         this.activeGroupName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
 
         this.openGroupStockAsidePane$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.toggleGroupStockAsidePane();
             }
         });
 
         this.openCustomUnitAsidePane$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.toggleCustomUnitAsidePane();
             }
@@ -80,10 +100,16 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
         this.asideInventoryStockGroupDialogRef = this.dialog.open(this.asideInventoryStockGroupTemplate, ASIDE_PANE_CONFIG);
     }
 
+    /**
+     * Handles goToAddGroup functionality
+     */
     public goToAddGroup() {
         this.router.navigate(['/pages', 'inventory', 'add-group']);
     }
 
+    /**
+     * Handles goToAddStock functionality
+     */
     public goToAddStock() {
         this.store.dispatch(this.inventoryAction.resetActiveStock());
         let groupName = null;
@@ -116,6 +142,9 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
         this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

@@ -7,11 +7,18 @@ import { SettingsDiscountService } from '../../../services/settings.discount.ser
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { DiscountProcessingHelper } from '../../helpers/discount-processing.helper';
 
+/**
+ * UpdateLedgerDiscountData component
+ * Handles updateledgerdiscountdata functionality and user interactions
+ */
 export class UpdateLedgerDiscountData {
     public particular: INameUniqueName = { name: '', uniqueName: '' };
     public amount: number = 0;
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'update-ledger-discount',
     templateUrl: 'update-ledger-discount.component.html',
@@ -19,6 +26,10 @@ export class UpdateLedgerDiscountData {
     standalone: false
 })
 
+/**
+ * UpdateLedgerDiscountComponent component
+ * Handles updateledgerdiscount functionality and user interactions
+ */
 export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     /** True if field is readonly */
     @Input() public readonly: boolean = false;
@@ -56,25 +67,44 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     /** Emitter for component init */
     @Output() public viewInitEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private settingsDiscountService: SettingsDiscountService
     ) {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.prepareDiscountList();
         this.change();
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ('discountAccountsDetails' in changes && !changes.discountAccountsDetails.firstChange && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
             this.prepareDiscountList();
 
             /* check if !this.defaultDiscount.discountUniqueName so it's means
               that this is default discount and we have added it manually not
              from server side */
+            /**
+             * Handles if functionality
+             */
             if (this.defaultDiscount && !this.defaultDiscount.discountUniqueName) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
                     this.discountFixedValueModal = this.defaultDiscount.discountValue;
                     this.discountFromPer = false;
@@ -84,6 +114,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
                     this.discountFromVal = false;
                     this.discountFromPer = true;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!Number(this.defaultDiscount.discountValue)) {
                     this.discountFromVal = true;
                     this.discountFromPer = true;
@@ -92,6 +125,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
             this.change();
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('discountsList' in changes && changes.discountsList.currentValue !== changes.discountsList.previousValue) {
             this.prepareDiscountList();
         }
@@ -101,14 +137,23 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
      * prepare discount obj
      */
     public prepareDiscountList() {
+        /**
+         * Handles if functionality
+         */
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.getDiscountsLoading) {
                 return;
             }
             this.getDiscountsLoading = true;
             this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success" && response?.body?.length > 0) {
                     this.discountsList = response?.body;
                     this.processDiscountList();
@@ -131,6 +176,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
         );
     }
 
+    /**
+     * Handles discountFromInput functionality
+     */
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
         this.defaultDiscount.amount = parseFloat(String(val)?.replace(/,/g, ''));
         this.defaultDiscount.discountValue = parseFloat(String(val)?.replace(/,/g, ''));
@@ -138,6 +186,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 
         this.change();
 
+        /**
+         * Handles if functionality
+         */
         if (type === 'PERCENTAGE') {
             this.discountFromPer = true;
             this.discountFromVal = false;
@@ -145,6 +196,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
             this.discountFromPer = false;
             this.discountFromVal = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (!val) {
             this.discountFromVal = true;
             this.discountFromPer = true;
@@ -182,17 +236,29 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
         return giddhRoundOff((perFromAmount + (fixedListTotal * 100) / 100), this.giddhBalanceDecimalPlaces);
     }
 
+    /**
+     * Handles trackByFn functionality
+     */
     public trackByFn(index) {
         return index;
     }
 
+    /**
+     * Hides discountmenu element
+     */
     public hideDiscountMenu() {
         this.discountMenu = false;
     }
 
+    /**
+     * Handles focuslastdiv event
+     */
     public onFocusLastDiv(el) {
         el.stopPropagation();
         el.preventDefault();
+        /**
+         * Handles if functionality
+         */
         if (!this.discountMenu) {
             this.discountMenu = true;
             this.hideOtherPopups.emit(true);
@@ -205,6 +271,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
             });
         let index = focussable?.indexOf(document.activeElement);
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
@@ -213,6 +282,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
         return false;
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

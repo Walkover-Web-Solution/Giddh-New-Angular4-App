@@ -5,6 +5,9 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } 
 import { isEqual } from '../../lodash-optimized';
 import { VOUCHERS } from '../constants/accounting.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'accounting-sidebar',
     templateUrl: './accounting-sidebar.component.html',
@@ -12,6 +15,10 @@ import { VOUCHERS } from '../constants/accounting.constant';
     standalone:false
 })
 
+/**
+ * AccountingSidebarComponent component
+ * Handles accountingsidebar functionality and user interactions
+ */
 export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public AccountListOpen: boolean;
@@ -35,12 +42,22 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     /** Hold show discount and tax event  */
     @Input() public showDiscountAndTax: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _tallyModuleService: TallyModuleService) {
         this.setSelectedPage('Contra', 'voucher', 'purchases');
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this._tallyModuleService.flattenAccounts.pipe(take(1)).subscribe((accounts) => {
+            /**
+             * Handles if functionality
+             */
             if (accounts) {
                 this.setSelectedPage('Contra', 'voucher', 'purchases');
             }
@@ -48,14 +65,26 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
         this.selectedVoucher = 'contra';
 
         this._tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
+            /**
+             * Handles if functionality
+             */
             if (p && q) {
+                /**
+                 * Handles return functionality
+                 */
                 return (isEqual(p, q));
             }
+            /**
+             * Handles if functionality
+             */
             if ((p && !q) || (!p && q)) {
                 return false;
             }
             return true;
         }), takeUntil(this.destroyed$)).subscribe((pageInfo: IPageInfo) => {
+            /**
+             * Handles if functionality
+             */
             if (pageInfo) {
                 this.selectedVoucher = pageInfo.page;
                 this.selectedGrid = pageInfo.gridType;
@@ -63,12 +92,21 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
         });
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(s) {
+        /**
+         * Handles if functionality
+         */
         if (s.AccountListOpen) {
             this.showAccountList = !this.showAccountList;
         }
     }
 
+    /**
+     * Sets selectedpage value
+     */
     public setSelectedPage(pageName: string, grid: string, grpUnqName: string) {
         this._tallyModuleService.setVoucher({
             page: pageName,
@@ -79,6 +117,9 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
         this.selectedGrid = grid;
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -91,6 +132,9 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
      * @memberof AccountingSidebarComponent
      */
     public showDiscountSidebar(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.showDiscountEvent.emit(true);
         }
@@ -103,6 +147,9 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
      * @memberof AccountingSidebarComponent
      */
     public showTaxSidebar(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.showTaxEvent.emit(true);
         }

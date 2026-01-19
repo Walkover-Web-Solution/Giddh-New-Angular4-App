@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'send-email',
     templateUrl: './send-email.component.html',
@@ -8,6 +11,10 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * SendEmailComponent component
+ * Handles sendemail functionality and user interactions
+ */
 export class SendEmailComponent implements OnInit {
     /** Holds voucher type */
     @Input() voucherType: VoucherTypeEnum;
@@ -28,6 +35,10 @@ export class SendEmailComponent implements OnInit {
     /** Holds payment voucher type */
     public paymentVoucherType: string = VoucherTypeEnum.payment;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
     }
 
@@ -37,6 +48,9 @@ export class SendEmailComponent implements OnInit {
      * @memberof SendEmailComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.email) {
             this.emailAddresses = this.email;
         }
@@ -49,8 +63,14 @@ export class SendEmailComponent implements OnInit {
      * @memberof SendEmailComponent
      */
     public selectDownloadOptions(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             let value = event.source?.value;
+            /**
+             * Handles if functionality
+             */
             if (event.checked) {
                 this.downloadCopy.push(value);
             } else {

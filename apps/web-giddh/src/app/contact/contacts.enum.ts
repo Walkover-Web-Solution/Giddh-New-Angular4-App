@@ -1,3 +1,7 @@
+/**
+ * ContactsTab enumeration
+ * Defines constant values for ContactsTab
+ */
 export enum ContactsTab {
     customer = 'CUSTOMER',
     vendor = 'VENDOR'
@@ -29,6 +33,10 @@ export const CONTACTS_COMMON_COLUMNS = [
         "checked": true
     }
 ];
+/**
+ * ContactsColumn enumeration
+ * Defines constant values for ContactsColumn
+ */
 export enum ContactsColumn {
     CUSTOMER_NAME = 'customer_name',
     PARENT_GROUP = 'parent_group',

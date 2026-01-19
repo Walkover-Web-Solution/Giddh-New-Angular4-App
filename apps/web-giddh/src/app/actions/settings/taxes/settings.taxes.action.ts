@@ -12,25 +12,53 @@ import { AppState } from '../../../store/roots';
 import { GeneralActions } from '../../general/general.actions';
 import { SETTINGS_TAXES_ACTIONS } from './settings.taxes.const';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsTaxesActions class
+ * Implements SettingsTaxesActions functionality
+ */
 export class SettingsTaxesActions {
 
     public CreateTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.CreateTax(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.CreateTaxResponse(response)));
             })));
 
     public CreateTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data?.status === 'error') {
                         this.toasty.errorToast(data.message, data.code);
                     } else {
@@ -42,17 +70,35 @@ export class SettingsTaxesActions {
 
     public UpdateTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.UpdateTax(action.payload, action.payload?.uniqueName).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.UpdateTaxResponse(response)));
             })));
 
     public UpdateTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
@@ -63,22 +109,46 @@ export class SettingsTaxesActions {
 
     public DeleteTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.DeleteTax(action.payload?.value).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(resp => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (action.payload.linkedAccount) {
                             this.store.dispatch(this.generalActions.updateCurrentLiabilities(action.payload.linkedAccount));
                         }
                     }),
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.DeleteTaxResponse(response)));
             })));
 
     public DeleteTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
@@ -89,12 +159,25 @@ export class SettingsTaxesActions {
 
     public getTaxList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_TAXES_ACTIONS.GET_TAX),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.getTaxList(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.GetTaxListResponse(response)));
             })));
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions,
         private toasty: ToasterService,
         private localeService: LocaleService,
@@ -103,6 +186,9 @@ export class SettingsTaxesActions {
         private settingsTaxesService: SettingsTaxesService) {
     }
 
+    /**
+     * Handles CreateTax functionality
+     */
     public CreateTax(value): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.CREATE_TAX,
@@ -110,6 +196,9 @@ export class SettingsTaxesActions {
         };
     }
 
+    /**
+     * Handles CreateTaxResponse functionality
+     */
     public CreateTaxResponse(value): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE,
@@ -117,6 +206,9 @@ export class SettingsTaxesActions {
         };
     }
 
+    /**
+     * Handles UpdateTax functionality
+     */
     public UpdateTax(value): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.UPDATE_TAX,
@@ -124,6 +216,9 @@ export class SettingsTaxesActions {
         };
     }
 
+    /**
+     * Handles UpdateTaxResponse functionality
+     */
     public UpdateTaxResponse(value): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE,
@@ -131,6 +226,9 @@ export class SettingsTaxesActions {
         };
     }
 
+    /**
+     * Handles DeleteTax functionality
+     */
     public DeleteTax(value: string, linkedAccountUniqueName: string = null): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.DELETE_TAX,
@@ -141,6 +239,9 @@ export class SettingsTaxesActions {
         };
     }
 
+    /**
+     * Handles DeleteTaxResponse functionality
+     */
     public DeleteTaxResponse(value): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE,
@@ -149,12 +250,21 @@ export class SettingsTaxesActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+        /**
+         * Handles if functionality
+         */
         if (response?.status === 'error') {
+            /**
+             * Handles if functionality
+             */
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }
             return errorAction;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (showToast && typeof response.body === 'string') {
                 this.toasty.successToast(response.body);
             }
@@ -162,6 +272,9 @@ export class SettingsTaxesActions {
         return successAction;
     }
 
+    /**
+     * Retrieves taxlist data
+     */
     public getTaxList(value: any): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX,
@@ -169,12 +282,18 @@ export class SettingsTaxesActions {
         };
     }
 
+    /**
+     * Resets taxlist to default state
+     */
     public resetTaxList(): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE
         };
     }
 
+    /**
+     * Handles GetTaxListResponse functionality
+     */
     public GetTaxListResponse(value) {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE,

@@ -1,11 +1,19 @@
 import { TaxResponse } from '../api-models/Company';
 import { INameUniqueName } from '../api-models/Inventory';
 
+/**
+ * ITaxDetail interface definition
+ * Defines the structure and contract for ITaxDetail objects
+ */
 export interface ITaxDetail {
     taxValue: number;
     date: string;
 }
 
+/**
+ * ITax interface definition
+ * Defines the structure and contract for ITax objects
+ */
 export interface ITax extends INameUniqueName {
     account?: INameUniqueName;
     duration: string;
@@ -13,6 +21,10 @@ export interface ITax extends INameUniqueName {
     taxFileDate: number | string;
     taxNumber: string;
 }
+/**
+ * ITaxControlData class
+ * Implements ITaxControlData functionality
+ */
 export class ITaxControlData {
     public name?: string;
     public uniqueName: string;
@@ -22,6 +34,10 @@ export class ITaxControlData {
     public type?: string;
     public calculationMethod?: string;
 }
+/**
+ * ITaxUtilRequest interface definition
+ * Defines the structure and contract for ITaxUtilRequest objects
+ */
 export interface ITaxUtilRequest {
     customTaxTypesForTaxFilter?: Array<string>;
     taxes?: Array<TaxResponse>;
@@ -31,6 +47,10 @@ export interface ITaxUtilRequest {
     applicableTaxes?: Array<string>;
 }
 
+/**
+ * ITaxAuthority interface definition
+ * Defines the structure and contract for ITaxAuthority objects
+ */
 export interface ITaxAuthority {
     name?: string;
     uniqueName: string;

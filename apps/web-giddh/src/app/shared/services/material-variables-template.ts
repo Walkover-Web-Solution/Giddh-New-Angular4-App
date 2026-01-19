@@ -1047,7 +1047,13 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mat-full-pseudo-checkbox-disabled-selected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--theme-primary-color);
         --mat-minimal-pseudo-checkbox-disabled-selected-checkmark-color: rgba(
+            /**
+             * Handles var functionality
+             */
             var(--mat-text-color),
+            /**
+             * Handles var functionality
+             */
             var(--mat-disabled-opacity)
         );
     }
@@ -1061,7 +1067,13 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mat-full-pseudo-checkbox-disabled-selected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--theme-accent-color);
         --mat-minimal-pseudo-checkbox-disabled-selected-checkmark-color: rgba(
+            /**
+             * Handles var functionality
+             */
             var(--mat-text-color),
+            /**
+             * Handles var functionality
+             */
             var(--mat-disabled-opacity)
         );
     }
@@ -1075,7 +1087,13 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mat-full-pseudo-checkbox-disabled-selected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--theme-warn-color);
         --mat-minimal-pseudo-checkbox-disabled-selected-checkmark-color: rgba(
+            /**
+             * Handles var functionality
+             */
             var(--mat-text-color),
+            /**
+             * Handles var functionality
+             */
             var(--mat-disabled-opacity)
         );
     }

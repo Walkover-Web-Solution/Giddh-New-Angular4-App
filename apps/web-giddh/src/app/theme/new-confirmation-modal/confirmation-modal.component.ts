@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'new-confirmation-modal',
     templateUrl: './confirmation-modal.component.html',
@@ -8,7 +11,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * NewConfirmationModalComponent component
+ * Handles newconfirmationmodal functionality and user interactions
+ */
 export class NewConfirmationModalComponent {
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>) {

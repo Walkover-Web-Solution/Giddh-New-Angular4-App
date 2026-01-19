@@ -1,9 +1,17 @@
+/**
+ * AdjustmentTypesEnum enumeration
+ * Defines constant values for AdjustmentTypesEnum
+ */
 export enum AdjustmentTypesEnum {
     'receipt' = 'receipt',
     'advanceReceipt' = 'advanceReceipt',
     'againstReference' = 'againstReference'
 }
 
+/**
+ * AdjustmentTypes interface definition
+ * Defines the structure and contract for AdjustmentTypes objects
+ */
 export interface AdjustmentTypes {
     value: string;
     label: string;

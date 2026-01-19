@@ -14,12 +14,19 @@ import { PageLeaveUtilityService } from '../../services/page-leave-utility.servi
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'setting-permission',
     templateUrl: './setting.permission.component.html',
     styleUrls: ['./setting.permission.component.scss'],
     standalone: false
 })
+/**
+ * SettingPermissionComponent component
+ * Handles settingpermission functionality and user interactions
+ */
 export class SettingPermissionComponent implements OnInit, OnDestroy {
     /** Edit User Dialog Reference */
     @ViewChild('editUserModal', { static: true }) public editUserModal: TemplateRef<any>;
@@ -40,6 +47,10 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     /** Instance of advance search modal dialog */
     public editDialogRef: any;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private settingsPermissionActions: SettingsPermissionActions,
         private permissionActions: PermissionActions,
@@ -51,6 +62,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         private settingsProfileActions: SettingsProfileActions
     ) {
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result && result.user) {
                 this.generalService.user = result.user;
                 this.loggedInUserEmail = result.user.email;
@@ -58,13 +72,25 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let data = cloneDeep(response);
                 let sortedArr = groupBy(this.prepareDataForUI(data), 'emailId');
                 let arr = [];
+                /**
+                 * Handles forIn functionality
+                 */
                 forIn(sortedArr, (value) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (value[0].emailId === this.loggedInUserEmail) {
                         value[0].isLoggedInUser = true;
                     }
@@ -75,24 +101,39 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves initialdata data
+     */
     public getInitialData() {
         this.store.dispatch(this.permissionActions.GetRoles());
         this.store.pipe(take(1)).subscribe(s => {
             this.selectedCompanyUniqueName = s.session.companyUniqueName;
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+            /**
+             * Handles if functionality
+             */
             if (s.session.user) {
                 this.currentUser = s.session.user.user;
             }
         });
     }
 
+    /**
+     * Handles prepareDataForUI functionality
+     */
     public prepareDataForUI(data: ShareRequestForm[]) {
         return data.map((o) => {
+            /**
+             * Handles if functionality
+             */
             if (o.allowedCidrs && o.allowedCidrs.length > 0) {
                 o.cidrsStr = o.allowedCidrs?.toString();
             } else {
                 o.cidrsStr = null;
             }
+            /**
+             * Handles if functionality
+             */
             if (o.allowedIps && o.allowedIps.length > 0) {
                 o.ipsStr = o.allowedIps?.toString();
             } else {
@@ -102,14 +143,26 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles submitPermissionForm functionality
+     */
     public submitPermissionForm(e: { action: string, data: ShareRequestForm }) {
+        /**
+         * Handles if functionality
+         */
         if (e.action === 'update') {
             this.closeEditUserModal();
         }
         this.waitAndReloadCompany();
     }
 
+    /**
+     * Handles revokepermission event
+     */
     public onRevokePermission(assignRoleEntryUniqueName: string) {
+        /**
+         * Handles if functionality
+         */
         if (assignRoleEntryUniqueName) {
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                 panelClass: ['mat-dialog-md'],
@@ -118,9 +171,15 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
                 }
             });
             dialogRef.afterClosed().subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response === this.commonLocaleData?.app_yes) {
                     this.store.dispatch(this.accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
                     this.waitAndReloadCompany();
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                     }, 500);
@@ -130,15 +189,27 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     }
 
 
+    /**
+     * Shows modalforedit element
+     */
     public showModalForEdit(user?: any): void {
         this.selectedUser = user ? user : '';
         this.editDialogRef = this.dialog.open(this.editUserModal, {
                     width: '1200px',
                 });
     }
+    /**
+     * Closes editusermodal
+     */
     public closeEditUserModal(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action) {
                     this.hasUnsavedChanges = false;
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
@@ -152,15 +223,27 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles waitAndReloadCompany functionality
+     */
     public waitAndReloadCompany() {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }, 500);
         }, 2000);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.resetUnsavedChanges();
         this.destroyed$.next(true);
@@ -201,6 +284,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
      */
     public updateUnsavedChanges(event: any): void {
         this.hasUnsavedChanges = event;
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.pageLeaveUtilityService.addBrowserConfirmationDialog();
         } else {

@@ -8,28 +8,66 @@ import { ROUTES } from '../routes-array';
 import { ReplaySubject } from 'rxjs';
 import { findIndex, forEach, get, includes, startsWith } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * UserAuthenticated class
+ * Implements UserAuthenticated functionality
+ */
 export class UserAuthenticated  {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(public router: Router, private store: Store<AppState>, private zone: NgZone) {
     }
 
+    /**
+     * Handles canActivate functionality
+     */
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(state => state.session),
+            /**
+             * Handles map functionality
+             */
             map(s => ({ userLoginState: s.userLoginState, lastState: s.lastState })),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged((a, b) => a.userLoginState === b.userLoginState && a.lastState === b.lastState),
+            /**
+             * Handles take functionality
+             */
             take(1),
+            /**
+             * Handles map functionality
+             */
             map(p => {
+                /**
+                 * Handles if functionality
+                 */
                 if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
                     // If navigating to login/token-verify with a returnUrl, prioritize it
                     const qpMap = (route as any)?.queryParamMap;
                     const rawReturnUrl: string = qpMap?.get ? (qpMap.get('returnUrl') || qpMap.get('returnurl')) : ((route as any)?.queryParams ? ((route as any).queryParams['returnUrl'] || (route as any).queryParams['returnurl']) : null);
+                    /**
+                     * Handles if functionality
+                     */
                     if (rawReturnUrl) {
                         try {
                             let decoded = decodeURIComponent(rawReturnUrl);
+                            /**
+                             * Handles if functionality
+                             */
                             if (decoded.startsWith('/')) { decoded = decoded.substring(1); }
                             const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded}`;
                             this.router.navigateByUrl(`/${target}`);
@@ -38,8 +76,14 @@ export class UserAuthenticated  {
                             // fallback to existing flow if decode fails
                         }
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (ROUTES.findIndex(q => q.path.split('/')[0] === p.lastState.split('/')[0]) > -1) {
                         let lastStateHaveParams: boolean = p.lastState.includes('?');
+                        /**
+                         * Handles if functionality
+                         */
                         if (lastStateHaveParams) {
                             let tempParams = p.lastState.substr(p.lastState.lastIndexOf('?'));
                             let urlParams = new URLSearchParams(tempParams);
@@ -49,6 +93,9 @@ export class UserAuthenticated  {
                             });
                             this.router.navigate([p.lastState?.replace(tempParams, '')], { queryParams });
                         } else {
+                            /**
+                             * Handles if functionality
+                             */
                             if (p.lastState) {
                                 this.router.navigate([p.lastState]);
                             } else {
@@ -61,19 +108,37 @@ export class UserAuthenticated  {
                 } else {
                    const qpMap = (route as any)?.queryParamMap;
                    const rawReturnUrl: string = qpMap?.get ? (qpMap.get('returnUrl') || qpMap.get('returnurl')) : ((route as any)?.queryParams ? ((route as any).queryParams['returnUrl'] || (route as any).queryParams['returnurl']) : null);
+                   /**
+                    * Handles if functionality
+                    */
                    if (rawReturnUrl) {
                        try {
                            sessionStorage.setItem('returnUrl', rawReturnUrl);
                        } catch (_) {}
                    }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
                     this.zone.run(() => {
                         this.store.pipe(
+                            /**
+                             * Handles select functionality
+                             */
                             select(state => state.session.user),
+                            /**
+                             * Handles take functionality
+                             */
                             take(1), // take only the first emission
+                            /**
+                             * Handles tap functionality
+                             */
                             tap(response => {
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (hasSubscriptionPermission) {
                                     this.router.navigate(['/pages/user-details/subscription']);
                                 } else {

@@ -3,6 +3,10 @@ import { INameUniqueName } from './Inventory';
 import { OrganizationType } from '../user-login-state';
 import { DROPDOWN_ITEMS_COUNT_LIMIT } from '../../app.constant';
 
+/**
+ * CompanyRequest class
+ * Implements CompanyRequest functionality
+ */
 export class CompanyRequest {
     public name: string;
     public uniqueName: string;
@@ -18,6 +22,10 @@ export class CompanyRequest {
     public currency?: string;
 }
 
+/**
+ * SocketNewCompanyRequest class
+ * Implements SocketNewCompanyRequest functionality
+ */
 export class SocketNewCompanyRequest {
     public CompanyName: string;
     public MobileNo: string;
@@ -32,12 +40,20 @@ export class SocketNewCompanyRequest {
     public BusinessNature: string;
 }
 
+/**
+ * StateDetailsRequest class
+ * Implements StateDetailsRequest functionality
+ */
 export class StateDetailsRequest {
     public lastState: string;
     public companyUniqueName: string;
     public currentBranchUniqueName?: string;
 }
 
+/**
+ * StateDetailsResponse class
+ * Implements StateDetailsResponse functionality
+ */
 export class StateDetailsResponse {
     public lastState: string;
     public companyUniqueName: string;
@@ -45,6 +61,10 @@ export class StateDetailsResponse {
     public voucherVersion?: 1 | 2;
 }
 
+/**
+ * AddressList class
+ * Implements AddressList functionality
+ */
 export class AddressList {
     public stateCode: string;
     public address: string;
@@ -52,6 +72,10 @@ export class AddressList {
     public stateName: string;
 }
 
+/**
+ * Addresses class
+ * Implements Addresses functionality
+ */
 export class Addresses {
     public stateCode: string;
     public address: string;
@@ -64,6 +88,10 @@ export class Addresses {
     public county?: { code: string; name?: string };
 }
 
+/**
+ * CompanyTotals class
+ * Implements CompanyTotals functionality
+ */
 export class CompanyTotals {
     public sales: {
         amount: any;
@@ -79,6 +107,10 @@ export class CompanyTotals {
     };
 }
 
+/**
+ * ParentBranch interface definition
+ * Defines the structure and contract for ParentBranch objects
+ */
 export interface ParentBranch {
     addresses: Addresses[];
     alias: string;
@@ -90,6 +122,10 @@ export interface ParentBranch {
     uniqueName: string;
 }
 
+/**
+ * SearchCompanyRequest class
+ * Implements SearchCompanyRequest functionality
+ */
 export class SearchCompanyRequest {
     public q: any;
     public count: number;
@@ -98,11 +134,19 @@ export class SearchCompanyRequest {
     public totalPages?: number;
     public loadMore?: boolean;
     public subscriptionId: string;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.count = DROPDOWN_ITEMS_COUNT_LIMIT;
         this.page = 1;
     }
 }
+/**
+ * CompanyResponse class
+ * Implements CompanyResponse functionality
+ */
 export class CompanyResponse {
     public canUserSwitch: boolean;
     public companyIdentity: any[];
@@ -145,6 +189,10 @@ export class CompanyResponse {
     public subscription?: any;
 }
 
+/**
+ * UserEntityRole interface definition
+ * Defines the structure and contract for UserEntityRole objects
+ */
 export interface UserEntityRole {
     sharedWith: ICommonItem;
     uniqueName: string;
@@ -159,16 +207,28 @@ export interface UserEntityRole {
     role: Role;
 }
 
+/**
+ * IEntityItem interface definition
+ * Defines the structure and contract for IEntityItem objects
+ */
 interface IEntityItem extends ICommonItem {
     entity: string;
 }
 
+/**
+ * Role interface definition
+ * Defines the structure and contract for Role objects
+ */
 export interface Role {
     uniqueName: string;
     name: string;
     scopes?: any[];
 }
 
+/**
+ * CompanySubscription interface definition
+ * Defines the structure and contract for CompanySubscription objects
+ */
 export interface CompanySubscription {
     discount: number;
     subscriptionDate: string;
@@ -185,17 +245,29 @@ export interface CompanySubscription {
     createdBy: ICommonItem;
 }
 
+/**
+ * ServicePlan interface definition
+ * Defines the structure and contract for ServicePlan objects
+ */
 export interface ServicePlan {
     planName: string;
     servicePeriod: number;
     amount: number;
 }
 
+/**
+ * ICommonItem interface definition
+ * Defines the structure and contract for ICommonItem objects
+ */
 export interface ICommonItem extends INameUniqueName {
     email: string;
     mobileNo: string;
 }
 
+/**
+ * ActiveFinancialYear interface definition
+ * Defines the structure and contract for ActiveFinancialYear objects
+ */
 export interface ActiveFinancialYear {
     financialYearStarts: string;
     financialYearEnds: string;
@@ -203,10 +275,18 @@ export interface ActiveFinancialYear {
     uniqueName: string;
 }
 
+/**
+ * ValidateInvoice interface definition
+ * Defines the structure and contract for ValidateInvoice objects
+ */
 export interface ValidateInvoice {
     invoiceNumber: string;
 }
 
+/**
+ * ExportInvoice interface definition
+ * Defines the structure and contract for ExportInvoice objects
+ */
 export interface ExportInvoice {
     accountUniqueName: string;
 }
@@ -217,6 +297,10 @@ export interface ExportInvoice {
 * API:: (taxes) company/:companyUniqueName/tax
 * response will be array of TaxResponse
 */
+/**
+ * TaxResponse class
+ * Implements TaxResponse functionality
+ */
 export class TaxResponse implements ITax {
     public account?: INameUniqueName;
     public accounts?: INameUniqueName[];
@@ -236,10 +320,18 @@ export class TaxResponse implements ITax {
     public taxAuthority?: ITaxAuthority;
 }
 
+/**
+ * StatesRequest class
+ * Implements StatesRequest functionality
+ */
 export class StatesRequest {
     country: string;
 }
 
+/**
+ * States class
+ * Implements States functionality
+ */
 export class States {
     public country: {
         alpha2CountryCode: string;
@@ -262,11 +354,19 @@ export class States {
     }]
 }
 
+/**
+ * ICurrencyResponse interface definition
+ * Defines the structure and contract for ICurrencyResponse objects
+ */
 export interface ICurrencyResponse {
     code: string;
     symbol: string;
 }
 
+/**
+ * BankTransferRequest class
+ * Implements BankTransferRequest functionality
+ */
 export class BankTransferRequest {
     public bankUserId: string;
     public transferAccountUniqueName: string;
@@ -276,6 +376,10 @@ export class BankTransferRequest {
     public remarks: string;
 }
 
+/**
+ * SubscriptionRequest class
+ * Implements SubscriptionRequest functionality
+ */
 export class SubscriptionRequest {
     planUniqueName: string;
     subscriptionId: string;
@@ -283,6 +387,10 @@ export class SubscriptionRequest {
     licenceKey: string;
 }
 
+/**
+ * AddressList interface definition
+ * Defines the structure and contract for AddressList objects
+ */
 export interface AddressList {
     stateCode: string;
     address: string;
@@ -290,6 +398,10 @@ export interface AddressList {
     stateName: string;
 }
 
+/**
+ * BillingDetails class
+ * Implements BillingDetails functionality
+ */
 export class BillingDetails {
     name: string;
     email: string;
@@ -301,6 +413,10 @@ export class BillingDetails {
     autorenew: any;
 }
 
+/**
+ * CompanyCreateRequest class
+ * Implements CompanyCreateRequest functionality
+ */
 export class CompanyCreateRequest {
     name: string;
     country: string;
@@ -335,6 +451,10 @@ export class CompanyCreateRequest {
     }]
 }
 
+/**
+ * CreateCompanyUsersPlan class
+ * Implements CreateCompanyUsersPlan functionality
+ */
 export class CreateCompanyUsersPlan {
     companies: string[];
     totalCompanies: number;
@@ -353,6 +473,10 @@ export class CreateCompanyUsersPlan {
     totalTransactions?: number;
 }
 
+/**
+ * PlanDetails class
+ * Implements PlanDetails functionality
+ */
 export class PlanDetails {
     countries: any[];
     name: string;
@@ -368,6 +492,10 @@ export class PlanDetails {
     currency?: any;
 }
 
+/**
+ * UserDetail class
+ * Implements UserDetail functionality
+ */
 export class UserDetail {
     name: string;
     uniqueName: string;
@@ -376,11 +504,19 @@ export class UserDetail {
     mobileno?: any;
 }
 
+/**
+ * CompanyCountry class
+ * Implements CompanyCountry functionality
+ */
 export class CompanyCountry {
     baseCurrency: string;
     country: string;
 }
 
+/**
+ * CountryResponse class
+ * Implements CountryResponse functionality
+ */
 export class CountryResponse {
     alpha2CountryCode: string;
     alpha3CountryCode: string;
@@ -391,17 +527,29 @@ export class CountryResponse {
         symbol: string;
     };
 }
+/**
+ * StateList class
+ * Implements StateList functionality
+ */
 export class StateList {
     code: string;
     name: string;
     stateGstCode: string
 }
 
+/**
+ * CountyList class
+ * Implements CountyList functionality
+ */
 export class CountyList {
     code: string;
     name: string;
 }
 
+/**
+ * BranchFilterRequest class
+ * Implements BranchFilterRequest functionality
+ */
 export class BranchFilterRequest {
     from: string;
     to: string;
@@ -411,12 +559,20 @@ export class BranchFilterRequest {
     hierarchyType?: string;
 }
 
+/**
+ * OrganizationDetails interface definition
+ * Defines the structure and contract for OrganizationDetails objects
+ */
 export interface OrganizationDetails {
     branchDetails: {
         uniqueName: string;
     };
 }
 
+/**
+ * Organization interface definition
+ * Defines the structure and contract for Organization objects
+ */
 export interface Organization {
     type: OrganizationType;
     uniqueName: string;

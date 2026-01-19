@@ -74,10 +74,17 @@ import { CountryCodeService } from './country-code.service';
 import { AiOcrService } from "./ai-ocr.service";
 import { CompanyAuthKeyService } from "./settings.company-auth-key.service";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [CommonModule, RouterModule],
     exports: [CommonModule, FormsModule, RouterModule]
 })
+/**
+ * ServiceModule module
+ * Implements ServiceModule functionality
+ */
 export class ServiceModule {
     public static forRoot(): ModuleWithProviders<ServiceModule> {
         return {

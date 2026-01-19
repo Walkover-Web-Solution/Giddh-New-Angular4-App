@@ -11,6 +11,9 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/he
 
 const noop = () => { };
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'giddh-datepicker',
     styleUrls: ['./giddh-datepicker.component.scss'],
@@ -25,6 +28,10 @@ const noop = () => { };
     standalone:false
 })
 
+/**
+ * GiddhDatepickerComponent component
+ * Handles giddhdatepicker functionality and user interactions
+ */
 export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnDestroy {
     /** Instance of picker from datepicker */
     @ViewChild('picker') picker!: MatDatepicker<any>;
@@ -67,8 +74,14 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
+    /**
+     * Handles touchedcallback event
+     */
     private onTouchedCallback: () => void = noop;
     /** Callback function to notify parent component of value changes */
+    /**
+     * Handles changecallback event
+     */
     private onChangeCallback: (_: any) => void = noop;
     /** This is used to show change date */
     public inputChange: any = '';
@@ -83,6 +96,10 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     /** Emitting month and year selection */
     @Output() public monthYearSelected: EventEmitter<any> = new EventEmitter<any>();
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private adapter: DateAdapter<any>,
         private store: Store<AppState>,
@@ -98,6 +115,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.value) {
                 this.adapter.setLocale(response?.value);
             }
@@ -134,6 +154,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public setMonthAndYear(normalizedMonth: any, datepicker: MatDatepicker<any>): void {
+        /**
+         * Handles if functionality
+         */
         if (this.monthYearMode) {
             const selectedDate = dayjs(normalizedMonth).toDate();
             this.calendarDate = dayjs(selectedDate).format(GIDDH_DATE_FORMAT_MONTH_YEAR);
@@ -152,6 +175,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public setYear(normalizedYear: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.monthYearMode) {
             // Don't close datepicker, just update the view to show months for selected year
             // The datepicker will automatically navigate to month view
@@ -165,6 +191,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public emitDatepickerState(state: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (state) {
             this.isDatepickerOpen = true;
         }
@@ -189,6 +218,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     set value(value: any) {
+        /**
+         * Handles if functionality
+         */
         if (value !== this.innerValue) {
             this.innerValue = value;
             this.onChangeCallback(value);
@@ -211,6 +243,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public writeValue(value: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value) {
             this.innerValue = value;
             this.calendarDate = (typeof (value) === "object") ? dayjs(value).toDate() : dayjs(value, GIDDH_DATE_FORMAT).toDate();
@@ -248,6 +283,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     * @param event
     */
     public dateInputChange(event: Event): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             const inputElement = event.target as HTMLInputElement;
             const inputValue = inputElement.value;
@@ -261,6 +299,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public toggleDatepicker(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.showToggleIcon) {
             this.emitDatepickerState(false);
             this.picker?.close();
@@ -276,6 +317,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public focus(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.dateInput?.nativeElement) {
             this.dateInput.nativeElement.focus();
         }

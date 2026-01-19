@@ -7,6 +7,9 @@ import { PurchaseOrderService } from "../services/purchase-order.service";
 import { ToasterService } from "../services/toaster.service";
 import { GeneralService } from "../services/general.service";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "verify-email",
     templateUrl: "./verify-email.component.html",
@@ -14,10 +17,18 @@ import { GeneralService } from "../services/general.service";
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone:false
 })
+/**
+ * VerifyEmailComponent component
+ * Handles verifyemail functionality and user interactions
+ */
 export class VerifyEmailComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private invoiceService: InvoiceService,
         private purchaseOrderService: PurchaseOrderService,
@@ -36,6 +47,9 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.verifyEmail(response);
             }
@@ -51,6 +65,9 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
     public verifyEmail(params: any): void {
         let apiObservable;
 
+        /**
+         * Handles if functionality
+         */
         if (params?.module === "invoice") {
             apiObservable = this.invoiceService.verifyEmail(params);
         } else if (params?.module === "purchase") {
@@ -58,6 +75,9 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
         }
 
         apiObservable?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", response?.body);
             } else {
@@ -86,7 +106,13 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
      */
     private emailVerificationCompleted(params: any): void {
         let redirect = "/pages/home";
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
+            /**
+             * Handles if functionality
+             */
             if (params?.module === "invoice") {
                 // redirect = this.generalService.voucherApiVersion === 1 ? "/pages/invoice/preview/settings/sales" : "/pages/vouchers/preview/sales/settings";
                 redirect = "/pages/vouchers/preview/sales/settings";

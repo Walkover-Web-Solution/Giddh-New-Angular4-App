@@ -34,6 +34,10 @@ export interface ILogsItem {
     groupName: string;
 }
 
+/**
+ * ILogConcise interface definition
+ * Defines the structure and contract for ILogConcise objects
+ */
 export interface ILogConcise {
     logo?: ILogo;
     company?: ICompany;
@@ -50,15 +54,27 @@ export interface ILogConcise {
     updated: IOld;
 }
 
+/**
+ * ILogo interface definition
+ * Defines the structure and contract for ILogo objects
+ */
 interface ILogo {
     path: string;
 }
 
+/**
+ * ICompany interface definition
+ * Defines the structure and contract for ICompany objects
+ */
 interface ICompany {
     name: string;
     data: any[];
 }
 
+/**
+ * IAccount interface definition
+ * Defines the structure and contract for IAccount objects
+ */
 interface IAccount {
     name: string;
     uniqueName: string;
@@ -68,12 +84,20 @@ interface IAccount {
     mobileNumber: string;
 }
 
+/**
+ * IUser interface definition
+ * Defines the structure and contract for IUser objects
+ */
 interface IUser {
     name: string;
     email: string;
     uniqueName: string;
 }
 
+/**
+ * IOld interface definition
+ * Defines the structure and contract for IOld objects
+ */
 interface IOld {
     openingBalance: string;
     openingBalanceDate: string;
@@ -95,10 +119,18 @@ interface IOld {
     state?: string;
 }
 
+/**
+ * ICurrency interface definition
+ * Defines the structure and contract for ICurrency objects
+ */
 interface ICurrency {
     code: string;
 }
 
+/**
+ * ITransaction interface definition
+ * Defines the structure and contract for ITransaction objects
+ */
 interface ITransaction {
     particular: IParticular;
     amount: number;
@@ -108,6 +140,10 @@ interface ITransaction {
     isBaseAccount: boolean;
 }
 
+/**
+ * IInventory interface definition
+ * Defines the structure and contract for IInventory objects
+ */
 interface IInventory {
     stock: IParticular;
     quantity: number;
@@ -116,11 +152,19 @@ interface IInventory {
     unit: IUnit;
 }
 
+/**
+ * IUnit interface definition
+ * Defines the structure and contract for IUnit objects
+ */
 interface IUnit {
     code: string;
     name: string;
 }
 
+/**
+ * IParticular interface definition
+ * Defines the structure and contract for IParticular objects
+ */
 interface IParticular {
     name: string;
     uniqueName: string;

@@ -2,6 +2,10 @@ import { INameUniqueName } from "./Inventory";
 import { ReceiptItem } from "./recipt";
 
 /** Voucher form modal to toogle fields and make the form dynamic */
+/**
+ * VoucherForm class
+ * Implements VoucherForm functionality
+ */
 export class VoucherForm {
     /** Stores the type of voucher */
     public type: string;
@@ -29,6 +33,10 @@ export class VoucherForm {
     public attachmentAllowed: boolean;
 }
 
+/**
+ * OptionInterface interface definition
+ * Defines the structure and contract for OptionInterface objects
+ */
 export interface OptionInterface {
     value: string;
     label: string;
@@ -36,6 +44,10 @@ export interface OptionInterface {
     additional?: any;
 }
 
+/**
+ * LastInvoices class
+ * Implements LastInvoices functionality
+ */
 export class LastInvoices {
     voucherNumber: string;
     account: INameUniqueName;
@@ -44,6 +56,10 @@ export class LastInvoices {
     uniqueName?: string;
 }
 
+/**
+ * LastVouchersResponse interface definition
+ * Defines the structure and contract for LastVouchersResponse objects
+ */
 export interface LastVouchersResponse {
     items?: any[];
     page?: number;

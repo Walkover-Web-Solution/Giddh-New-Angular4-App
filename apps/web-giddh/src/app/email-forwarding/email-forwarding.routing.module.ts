@@ -12,9 +12,16 @@ const routes: Routes = [
   { path: 'edit/:uniqueName', component: CreateComponent }
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
+/**
+ * BankStatementRoutingModule module
+ * Implements BankStatementRoutingModule functionality
+ */
 export class BankStatementRoutingModule {
 }

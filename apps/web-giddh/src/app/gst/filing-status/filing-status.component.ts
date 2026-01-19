@@ -10,12 +10,19 @@ import * as dayjs from 'dayjs';
 import { FormControl } from "@angular/forms";
 import { PageEvent } from "@angular/material/paginator";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'filing-status',
     templateUrl: './filing-status.component.html',
     styleUrls: ['./filing-status.component.scss'],
     standalone: false
 })
+/**
+ * FilingStatusComponent component
+ * Handles filingstatus functionality and user interactions
+ */
 export class FilingStatusComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
@@ -57,6 +64,10 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         "totalItems": 1
     }
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private gstReconcileService: GstReconcileService,
         private toasty: ToasterService,
@@ -82,6 +93,9 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public getGstrReferences(): void {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
             this.activeCompanyGstNumber = res?.body[0];
+            /**
+             * Handles if functionality
+             */
             if (this.activeCompanyGstNumber !== '') {
                 this.gstReconcileService.getFilingStatusReferenceIdList({
                     "from": this.from,
@@ -91,7 +105,13 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
                     "gstin": this.activeCompanyGstNumber,
                     "gsp": 'TAXPRO'
                 }).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res?.status === "success") {
+                        /**
+                         * Handles if functionality
+                         */
                         if (res?.body?.results?.length) {
                             this.dataSource = res.body?.results;
                         } else {
@@ -141,6 +161,9 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      * @memberof FilingStatusComponent
      */
      public pageChanged(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
@@ -156,6 +179,9 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      * @memberof FilingStatusComponent
      */
     public getGstFilingStatus(referenceId: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isLoading) {
             return;
         }
@@ -166,14 +192,29 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
             this.isLoading = false;
             this.changeDetectionRef.detectChanges();
 
+            /**
+             * Handles if functionality
+             */
             if (res?.status === "success") {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.body) {
                     const toasterMsg = this.generateToasterMessage(res?.body);
+                    /**
+                     * Handles if functionality
+                     */
                     if (toasterMsg !== "INVALID_CODE") {
                         this.toasty.showSnackBar("success", toasterMsg);
                     }
                     var blob = new Blob([res?.body], { type: "application/json;charset=utf-8" });
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
+                        /**
+                         * Saves as data
+                         */
                         saveAs(blob, `${referenceId}.json`);
                     }, 500);
                 } else {
@@ -195,6 +236,9 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      */
     private generateToasterMessage(data: any): string {
         let json = JSON.parse(data);
+        /**
+         * Handles if functionality
+         */
         if (json.status_cd === "PE") {
             return this.localeData?.filing?.processed_with_error;
         } else if (json.status_cd === "P") {

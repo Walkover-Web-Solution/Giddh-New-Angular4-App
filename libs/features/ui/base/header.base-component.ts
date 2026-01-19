@@ -3,6 +3,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 // libs
 import { BaseComponent } from '@giddh-workspaces/core/base';
 
+/**
+ * HeaderBaseComponent class
+ * Implements HeaderBaseComponent functionality
+ */
 export abstract class HeaderBaseComponent extends BaseComponent {
     /**
      * These are just samples to give you an idea of what can be done.

@@ -4,6 +4,9 @@ import { RouterModule } from '@angular/router';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { FinancialReportsComponent } from './financial-reports.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -14,5 +17,9 @@ import { FinancialReportsComponent } from './financial-reports.component';
     ],
     exports: [RouterModule]
 })
+/**
+ * FinancialReportsRoutingModule module
+ * Implements FinancialReportsRoutingModule functionality
+ */
 export class FinancialReportsRoutingModule {
 }

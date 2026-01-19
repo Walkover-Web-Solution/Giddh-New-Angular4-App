@@ -6,11 +6,18 @@ import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults } from "..
 import { ExpenseService } from "../../../services/expences.service";
 import { ToasterService } from "../../../services/toaster.service";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "petty-cash-reject-confirm-dialog",
     
       standalone: false,templateUrl: "./reject-petty-cash-entry-confirm-dialog.component.html"
 })
+/**
+ * RejectPettyCashEntryConfirmDialogComponent component
+ * Handles rejectpettycashentryconfirmdialog functionality and user interactions
+ */
 export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDestroy {
     @Input() public selectedItem: ExpenseResults;
     /* This will hold local JSON data */
@@ -30,6 +37,10 @@ export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDes
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private expenseService: ExpenseService,
         private toaster: ToasterService
@@ -69,6 +80,9 @@ export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDes
         this.actionPettyCashRequest.accountUniqueName = this.selectedItem.particularAccount?.uniqueName
 
         this.expenseService.actionPettycashReports(this.actionPettyCashRequest, this.actionPettyCashRequestBody).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", res?.body);
                 this.rejectEntry.emit(true);
@@ -85,6 +99,9 @@ export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDes
      * @memberof RejectPettyCashEntryConfirmDialogComponent
      */
     public buildCreatorString(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedItem && this.selectedItem.createdBy) {
             this.byCreator = this.localeData?.by_creator;
             this.byCreator = this.byCreator?.replace("[CREATOR_NAME]", this.selectedItem.createdBy.name);

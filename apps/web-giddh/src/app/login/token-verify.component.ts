@@ -8,11 +8,18 @@ import { AuthenticationService } from '../services/authentication.service';
 import { GeneralService } from '../services/general.service';
 import { AppState } from '../store';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'token-verify',
 standalone: false,
     templateUrl: "./token-verify.component.html"
 })
+/**
+ * TokenVerifyComponent component
+ * Handles tokenverify functionality and user interactions
+ */
 export class TokenVerifyComponent implements OnInit, OnDestroy {
     /** Holds the token param from the url */
     public token: string;
@@ -23,6 +30,10 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     /** True if user is connected with internet */
     public isConnected: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private route: ActivatedRoute,
         private store: Store<AppState>,
@@ -42,6 +53,9 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.generalService.removeLocalStorageParameter("session");
         window.addEventListener("online", (event) => {
+            /**
+             * Handles if functionality
+             */
             if (!this.isConnected) {
                 this.isConnected = true;
                 this.refreshPage();
@@ -52,8 +66,14 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
             this.isConnected = false;
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.user) {
             this.authService.ClearSession().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'success') {
                     this.store.dispatch(this.loginAction.socialLogoutAttempt());
                     this.processLogin();
@@ -82,16 +102,28 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      */
     public processLogin(): void {
         this.generalService.storeUtmParameters(this.route.snapshot.queryParams);
+        /**
+         * Handles if functionality
+         */
         if (this.route.snapshot.queryParams['token']) {
             this.token = this.route.snapshot.queryParams['token'];
             this.verifyToken();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.route.snapshot.queryParams['request']) {
             const sessionId = decodeURIComponent(this.route.snapshot.queryParams['request']);
+            /**
+             * Handles if functionality
+             */
             if (sessionId) {
                 this.authenticationService.getUserDetails(sessionId).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
                     this.request = data;
+                    /**
+                     * Handles if functionality
+                     */
                     if (data?.status === "success" && data?.body && data?.body?.session && data?.body?.session?.id) {
                         this.generalService.setCookie("giddh_session_id", data.body.session.id, 30);
                     }
@@ -125,11 +157,17 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      * @memberof TokenVerifyComponent
      */
     public refreshPage(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.route.snapshot.queryParams['token']) {
             this.token = this.route.snapshot.queryParams['token'];
             window.location.href = "/token-verify?token=" + this.token;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.route.snapshot.queryParams['request']) {
             const sessionId = decodeURIComponent(this.route.snapshot.queryParams['request']);
             window.location.href = "/token-verify?request=" + sessionId;

@@ -14,6 +14,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DiscountListComponent } from './discount-list/discountList.component';
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         DiscountListComponent
@@ -41,5 +44,9 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     ],
     providers: []
 })
+/**
+ * SalesModule module
+ * Implements SalesModule functionality
+ */
 export class SalesModule {
 }

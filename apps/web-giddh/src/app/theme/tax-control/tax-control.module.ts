@@ -11,6 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormFieldsModule } from '../form-fields/form-fields.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -28,4 +31,8 @@ import { FormFieldsModule } from '../form-fields/form-fields.module';
     exports: [TaxControlComponent]
 })
 
+/**
+ * TaxControlModule module
+ * Implements TaxControlModule functionality
+ */
 export class TaxControlModule { }

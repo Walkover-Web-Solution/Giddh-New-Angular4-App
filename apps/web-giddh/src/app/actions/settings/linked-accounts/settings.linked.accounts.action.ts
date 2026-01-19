@@ -11,15 +11,31 @@ import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from './settings.linked.accounts.con
 import { IGetAllEbankAccountResponse } from '../../../models/api-models/SettingsLinkedAccounts';
 import { CustomActions } from '../../../store/custom-actions';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsLinkedAccountsActions class
+ * Implements SettingsLinkedAccountsActions functionality
+ */
 export class SettingsLinkedAccountsActions {
 
     public GetEbankAccounts$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.GetYodleeAccounts()),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<any[], string>(res, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE,
                 payload: res
@@ -30,8 +46,17 @@ export class SettingsLinkedAccountsActions {
 
     public RefreshEbankAccounts$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.RefreshAllEbankAccounts()),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<any[], string>(res, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE,
                 payload: res
@@ -42,8 +67,17 @@ export class SettingsLinkedAccountsActions {
 
     public ReconnectEbankAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.ReconnectAccount(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE,
                 payload: res
@@ -54,8 +88,17 @@ export class SettingsLinkedAccountsActions {
 
     public DeleteAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.DeleteBankAccount(action.payload.loginId, action.payload.deleteWithAccountId)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE,
                 payload: res
@@ -66,8 +109,17 @@ export class SettingsLinkedAccountsActions {
 
     public RefreshAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.RefreshBankAccount(action.payload.ebankItemId, action.payload.requestObj)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT_RESPONSE,
                 payload: res
@@ -78,8 +130,17 @@ export class SettingsLinkedAccountsActions {
 
     public LinkAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.LinkBankAccount(action.payload.data, action.payload.loginId)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE,
                 payload: res
@@ -90,8 +151,17 @@ export class SettingsLinkedAccountsActions {
 
     public UnlinkAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.UnlinkBankAccount(action.payload.loginId, action.payload.accountUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE,
                 payload: res
@@ -102,8 +172,17 @@ export class SettingsLinkedAccountsActions {
 
     public UpdateDate$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.UpdateDate(action.payload.date, action.payload.loginId)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE_RESPONSE,
                 payload: res
@@ -112,17 +191,27 @@ export class SettingsLinkedAccountsActions {
                 payload: res
             }))));
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions,
         private toasty: ToasterService,
         private _settingsLinkedAccountsService: SettingsLinkedAccountsService) {
     }
 
+    /**
+     * Handles GetAllAccounts functionality
+     */
     public GetAllAccounts() {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS
         };
     }
 
+    /**
+     * Handles GetAllAccountsResponse functionality
+     */
     public GetAllAccountsResponse(response: IGetAllEbankAccountResponse[]) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE,
@@ -130,12 +219,18 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles RefreshAllAccounts functionality
+     */
     public RefreshAllAccounts() {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS
         };
     }
 
+    /**
+     * Handles RefreshAllAccountsResponse functionality
+     */
     public RefreshAllAccountsResponse(response: IGetAllEbankAccountResponse[]) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE,
@@ -143,6 +238,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles ReconnectAccount functionality
+     */
     public ReconnectAccount(loginId: string) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT,
@@ -150,6 +248,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles ReconnectAccountResponse functionality
+     */
     public ReconnectAccountResponse(response: any) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE,
@@ -157,6 +258,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles DeleteBankAccount functionality
+     */
     public DeleteBankAccount(loginId: number, deleteWithAccountId) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT,
@@ -164,6 +268,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles DeleteBankAccountResponse functionality
+     */
     public DeleteBankAccountResponse(response: any) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE,
@@ -171,6 +278,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles RefreshBankAccount functionality
+     */
     public RefreshBankAccount(ebankItemId: string, requestObj?) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT,
@@ -178,6 +288,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles RefreshBankAccountResponse functionality
+     */
     public RefreshBankAccountResponse(response: any) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT_RESPONSE,
@@ -185,6 +298,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles LinkBankAccount functionality
+     */
     public LinkBankAccount(data: object, loginId: number) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT,
@@ -192,6 +308,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles LinkBankAccountResponse functionality
+     */
     public LinkBankAccountResponse(response: any) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE,
@@ -199,6 +318,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles UnlinkBankAccount functionality
+     */
     public UnlinkBankAccount(loginId: number, accountUniqueName: string) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT,
@@ -206,6 +328,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles UnlinkBankAccountResponse functionality
+     */
     public UnlinkBankAccountResponse(response: any) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE,
@@ -213,6 +338,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles UpdateDate functionality
+     */
     public UpdateDate(date: string, loginId: number) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE,
@@ -220,6 +348,9 @@ export class SettingsLinkedAccountsActions {
         };
     }
 
+    /**
+     * Handles UpdateDateResponse functionality
+     */
     public UpdateDateResponse(response: any) {
         return {
             type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE_RESPONSE,

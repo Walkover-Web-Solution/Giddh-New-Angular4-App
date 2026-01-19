@@ -1,3 +1,7 @@
+/**
+ * ReverseChargeReportGetRequest class
+ * Implements ReverseChargeReportGetRequest functionality
+ */
 export class ReverseChargeReportGetRequest {
     from: string;
     to: string;
@@ -8,6 +12,10 @@ export class ReverseChargeReportGetRequest {
     branchUniqueName?: string;
 }
 
+/**
+ * ReverseChargeReportPostRequest class
+ * Implements ReverseChargeReportPostRequest functionality
+ */
 export class ReverseChargeReportPostRequest {
     supplierName: any;
     invoiceNumber: any;

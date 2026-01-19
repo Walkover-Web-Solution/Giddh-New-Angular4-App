@@ -10,12 +10,23 @@ import { CreateCompanyAuthKeyRequest, UpdateCompanyAuthKeyRequest, ICompanyAuthK
 import { SETTINGS_COMPANY_AUTH_KEY_API } from './apiurls/settings.company-auth-key';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * CompanyAuthKeyService service
+ * Provides companyauthkey related business logic and data operations
+ */
 export class CompanyAuthKeyService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }

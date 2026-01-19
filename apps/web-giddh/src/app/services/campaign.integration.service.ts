@@ -10,12 +10,23 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * CampaignIntegrationService service
+ * Provides campaignintegration related business logic and data operations
+ */
 export class CampaignIntegrationService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -45,11 +56,17 @@ export class CampaignIntegrationService {
     public verifyCommunicationPlatform(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.VERIFY_PLATFORM.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
@@ -220,6 +237,9 @@ export class CampaignIntegrationService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.patch(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.UPDATE_TRIGGER_STATUS
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', triggerUniqueName), request).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.queryString = {};

@@ -54,6 +54,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         FinancialReportsComponent,
@@ -123,5 +126,9 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
+/**
+ * FinancialReportsModule module
+ * Implements FinancialReportsModule functionality
+ */
 export class FinancialReportsModule {
 }

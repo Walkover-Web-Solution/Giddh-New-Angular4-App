@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'with-held-setting-component',
     templateUrl: './with-held-setting.component.html',
@@ -16,6 +19,10 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
     standalone:false
 })
 
+/**
+ * WithHeldSettingComponent component
+ * Handles withheldsetting functionality and user interactions
+ */
 export class WithHeldSettingComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -30,6 +37,10 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
     /** True if api call in progress */
     public isLoading: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private settingsProfileService: SettingsProfileService,
         private toaster: ToasterService,
@@ -58,6 +69,9 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
     private getWithHeldValue(): void {
         this.isLoading = true;
         this.settingsProfileService.getCompanyDetails(null).pipe(take(1)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.withHeldTax) {
                 this.taxPercentage.patchValue(response.body.withHeldTax);
             } else if (response?.message) {

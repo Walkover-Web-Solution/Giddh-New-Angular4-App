@@ -12,6 +12,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
   imports: [
     CommonModule,
@@ -30,4 +33,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   ],
   declarations: [GroupNameComponent]
 })
+/**
+ * GroupNameModule module
+ * Implements GroupNameModule functionality
+ */
 export class GroupNameModule { }

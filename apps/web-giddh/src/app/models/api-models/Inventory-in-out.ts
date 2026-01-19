@@ -1,25 +1,45 @@
 import { INameUniqueName } from './Inventory';
 import { IManufacturingDetails } from '../interfaces/stocks-item.interface';
 
+/**
+ * Stock interface definition
+ * Defines the structure and contract for Stock objects
+ */
 export interface Stock {
     uniqueName: string;
 }
 
+/**
+ * StockUnit interface definition
+ * Defines the structure and contract for StockUnit objects
+ */
 export interface StockUnit {
     code: string;
 }
 
+/**
+ * InventoryUser interface definition
+ * Defines the structure and contract for InventoryUser objects
+ */
 export interface InventoryUser {
     name: string;
     uniqueName: string;
 }
 
+/**
+ * EntityDetails interface definition
+ * Defines the structure and contract for EntityDetails objects
+ */
 export interface EntityDetails {
     entity: string;
     uniqueName: string;
 }
 
 
+/**
+ * Transaction interface definition
+ * Defines the structure and contract for Transaction objects
+ */
 export interface Transaction {
     type: string;
     quantity: number;
@@ -30,6 +50,10 @@ export interface Transaction {
     manufacturingDetails?: IManufacturingDetails;
 }
 
+/**
+ * InventoryEntry interface definition
+ * Defines the structure and contract for InventoryEntry objects
+ */
 export interface InventoryEntry {
     inventoryEntryDate?: string;
     transferProducts?: boolean;
@@ -52,6 +76,10 @@ export interface InventoryEntry {
     isManufactured?: boolean;
 }
 
+/**
+ * InventoryFilter interface definition
+ * Defines the structure and contract for InventoryFilter objects
+ */
 export interface InventoryFilter {
     page?: number,
     quantity?: number;
@@ -73,6 +101,10 @@ export interface InventoryFilter {
     senderName?: string; // for search
     receiverName?: string; // for search
 }
+/**
+ * AdvanceFilterOptions class
+ * Implements AdvanceFilterOptions functionality
+ */
 export class AdvanceFilterOptions {
     public filterCategory?: string;
     public filterCategoryType?: string;
@@ -80,6 +112,10 @@ export class AdvanceFilterOptions {
     public filterAmount?: string;
 }
 
+/**
+ * InventoryReportTransactions interface definition
+ * Defines the structure and contract for InventoryReportTransactions objects
+ */
 export interface InventoryReportTransactions {
     uniqueName: string;
     date: string;
@@ -95,6 +131,10 @@ export interface InventoryReportTransactions {
     stock: INameUniqueName;
 }
 
+/**
+ * InventoryReport interface definition
+ * Defines the structure and contract for InventoryReport objects
+ */
 export interface InventoryReport {
     page: number;
     count: number;

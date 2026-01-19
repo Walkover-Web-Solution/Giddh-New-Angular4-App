@@ -13,6 +13,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         EWayBillCreateComponent
@@ -36,4 +39,8 @@ import { MatButtonModule } from '@angular/material/button';
         EWayBillCreateComponent
     ]
 })
+/**
+ * EWayBillModule module
+ * Implements EWayBillModule functionality
+ */
 export class EWayBillModule { }

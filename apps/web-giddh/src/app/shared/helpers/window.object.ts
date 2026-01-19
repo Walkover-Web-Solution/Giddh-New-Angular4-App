@@ -5,7 +5,14 @@ function _window(): any {
     return window;
 }
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * WindowRef class
+ * Implements WindowRef functionality
+ */
 export class WindowRef {
 
     get nativeWindow(): any {

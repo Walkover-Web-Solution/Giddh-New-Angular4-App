@@ -11,6 +11,9 @@ import { cloneDeep } from '../../lodash-optimized';
 import { IOption, PAGINATION_LIMIT } from '../../app.constant';
 import { FormControl } from '@angular/forms';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'voucher-add-bulk-items-component',
     templateUrl: './voucher-add-bulk-items.component.html',
@@ -19,6 +22,10 @@ import { FormControl } from '@angular/forms';
     standalone: false
 })
 
+/**
+ * VoucherAddBulkItemsComponent component
+ * Handles voucheraddbulkitems functionality and user interactions
+ */
 export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
     @Input() public invoiceType: string;
     @Input() public accountUniqueName?: string;
@@ -49,6 +56,10 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
     /** Form Control of bulk stock searching  */
     public stock: FormControl = new FormControl('');
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private toaster: ToasterService,
@@ -58,10 +69,22 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
     ) {
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.stock.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((res) => {
             this.isAccountSearchData = true;
@@ -80,11 +103,20 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
     public onSearchQueryChanged(query: string, page: number = 1): void {
         this.searchResultsPaginationData.query = query;
         const requestObject = this.getSearchRequestObject(query, page);
+        /**
+         * Handles if functionality
+         */
         if (this.isAccountSearchData) {
             this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.body?.results?.length && this.searchResultsPaginationData.count !== data?.body?.count) {
                     this.isAccountSearchData = false;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     this.prepareSearchLists(data.body.results, page);
                     this.searchResultsPaginationData.page = data.body.page;
@@ -122,6 +154,9 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
                 additional: result
             };
         }) || [];
+        /**
+         * Handles if functionality
+         */
         if (currentPage === 1) {
             this.filteredData = searchResults;
         } else {
@@ -152,12 +187,21 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
         return requestObject;
     }
 
+    /**
+     * Handles addItemToSelectedArr functionality
+     */
     public addItemToSelectedArr(item: SalesAddBulkStockItems) {
         let index;
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2 && item.variants?.length === 1) {
             const variant = item.variants[0];
             index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
         }
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
             return;
@@ -166,6 +210,9 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
             stockUniqueName: item.additional?.stock?.uniqueName ?? '',
             customerUniqueName: this.accountUniqueName
         };
+        /**
+         * Handles if functionality
+         */
         if (item.additional.stock) {
             this.loadStockVariants(item);
         } else {
@@ -173,14 +220,26 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Deletes selecteditem
+     */
     public removeSelectedItem(uniqueName: string) {
         this.selectedItems = this.selectedItems?.filter(f => f?.uniqueName !== uniqueName && f?.additional.combinedUniqueName !== uniqueName);
     }
 
+    /**
+     * Handles alterQuantity functionality
+     */
     public alterQuantity(item: SalesAddBulkStockItems, mode: 'plus' | 'minus' = 'plus') {
+        /**
+         * Handles if functionality
+         */
         if (mode === 'plus') {
             item.quantity++;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (item.quantity === 1) {
                 return;
             }
@@ -197,6 +256,9 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
         this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -209,11 +271,23 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof VoucherAddBulkItemsComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.onSearchQueryChanged('');
             this.stock.valueChanges.pipe(
+                /**
+                 * Handles debounceTime functionality
+                 */
                 debounceTime(700),
+                /**
+                 * Handles distinctUntilChanged functionality
+                 */
                 distinctUntilChanged(),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)
             ).subscribe((res) => {
                 this.isAccountSearchData = true;
@@ -231,12 +305,21 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof VoucherAddBulkItemsComponent
      */
     private loadDetails(item: SalesAddBulkStockItems, requestObject: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isLoading) {
             this.isLoading = true;
             this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body) {
                     // Take taxes of parent group and stock's own taxes
                     const taxes = data.body.taxes || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (data.body.stock) {
                         taxes.push(...data.body.stock.taxes);
                     }
@@ -262,6 +345,9 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
                     const unitRates = data.body?.stock?.variant?.unitRates ?? [];
                     item.rate = unitRates[0]?.rate ?? 0;
                     item.quantity = 1;
+                    /**
+                     * Handles if functionality
+                     */
                     if (!data.body.stock || item.variants?.length === 1 || item.variant?.uniqueName) {
                         this.selectedItems = [...this.selectedItems, item];
                     }
@@ -283,8 +369,14 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
      */
     private loadStockVariants(item: SalesAddBulkStockItems): void {
         this.ledgerService.loadStockVariants(item.additional?.stock?.uniqueName).pipe(
+            /**
+             * Handles map functionality
+             */
             map((variants: IVariant[]) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName })))).subscribe(res => {
                 item.variants = res;
+                /**
+                 * Handles if functionality
+                 */
                 if (res.length === 1) {
                     // Single variant stock, add to list after loading details
                     const defaultVariant: IVariant = { name: res[0].label, uniqueName: res[0].value };
@@ -294,9 +386,15 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
                         variantUniqueName: defaultVariant.uniqueName,
                         customerUniqueName: this.accountUniqueName
                     };
+                    /**
+                     * Handles if functionality
+                     */
                     if (item.variants?.length === 1) {
                         const variant = item.variants[0];
                         const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
+                        /**
+                         * Handles if functionality
+                         */
                         if (index > -1) {
                             this.toaster.warningToast(this.localeData?.item_selected);
                             return;
@@ -319,6 +417,9 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
         let selectedItem = cloneDeep(item);
         selectedItem.variant = { name: event.label, uniqueName: event.value };
         const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${selectedItem.uniqueName}#${event.value}`);
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
             return;

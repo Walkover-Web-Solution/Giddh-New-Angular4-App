@@ -22,6 +22,9 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         MainComponent,
@@ -51,6 +54,10 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         ReactiveFormsModule
     ]
 })
+/**
+ * CustomFieldsModule module
+ * Implements CustomFieldsModule functionality
+ */
 export class CustomFieldsModule {
 
 }

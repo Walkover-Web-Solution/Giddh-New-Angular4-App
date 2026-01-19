@@ -12,6 +12,10 @@ import { Injectable } from '@angular/core';
 @Injectable({ 
     providedIn: 'root' 
 })
+/**
+ * FroalaLoaderService service
+ * Provides froalaloader related business logic and data operations
+ */
 export class FroalaLoaderService {
     private froalaLoaded = false;
     private froalaPromise: Promise<any> | null = null;
@@ -20,9 +24,15 @@ export class FroalaLoaderService {
      * @returns Promise that resolves when Froala is loaded
      */
     async loadFroala(): Promise<any> {
+        /**
+         * Handles if functionality
+         */
         if (this.froalaLoaded) {
             return Promise.resolve();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.froalaPromise) {
             return this.froalaPromise;
         }
@@ -37,7 +47,13 @@ export class FroalaLoaderService {
         try {
             // Load Froala core and plugins in parallel
             const [froalaCore, froalaPlugins] = await Promise.all([
+                /**
+                 * Handles import functionality
+                 */
                 import('froala-editor/js/froala_editor.pkgd.min.js'),
+                /**
+                 * Handles import functionality
+                 */
                 import('froala-editor/js/plugins.pkgd.min.js')
             ]);
             this.froalaLoaded = true;

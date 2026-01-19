@@ -17,6 +17,9 @@ import { KeyboardShortutModule } from '../helpers/directives/keyboardShortcut/ke
 import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module';
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule, 
@@ -40,5 +43,9 @@ import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keybo
     declarations: [AsideMenuCreateTaxComponent],
     providers: [],
 })
+/**
+ * AsideMenuCreateTaxModule module
+ * Implements AsideMenuCreateTaxModule functionality
+ */
 export class AsideMenuCreateTaxModule {
 }

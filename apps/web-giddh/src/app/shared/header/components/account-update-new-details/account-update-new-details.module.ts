@@ -19,6 +19,9 @@ import { MobileNumberInputComponent } from "../../../mobile-number-input";
 import { A11yModule } from "@angular/cdk/a11y";
 import { KeyboardNavigationModule } from "../../../helpers/directives/enter-next/keyboard-navigation.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AccountUpdateNewDetailsComponent
@@ -51,6 +54,10 @@ import { KeyboardNavigationModule } from "../../../helpers/directives/enter-next
     providers: [SalesPersonService]
 })
 
+/**
+ * AccountUpdateNewDetailsModule module
+ * Implements AccountUpdateNewDetailsModule functionality
+ */
 export class AccountUpdateNewDetailsModule {
 
 }

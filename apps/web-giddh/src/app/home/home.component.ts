@@ -12,12 +12,19 @@ import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.
 import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { GeneralService } from "../services/general.service";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'home',
     styleUrls: ['./home.component.scss'],
     templateUrl: './home.component.html',
     standalone: false
 })
+/**
+ * HomeComponent component
+ * Handles home functionality and user interactions
+ */
 export class HomeComponent implements OnInit, OnDestroy {
     public needsToRedirectToLedger$: Observable<boolean>;
     @ViewChild('revenue', { static: true }) public revenue: RevenueChartComponent;
@@ -31,6 +38,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     /** Holds company unique name */
     public companyUniqueName: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private homeActions: HomeActions,
@@ -41,12 +52,21 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.needsToRedirectToLedger$ = this.store.pipe(select(p => p.login.needsToRedirectToLedger), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result) {
                 this.accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data?.status === 'success' && data?.body?.results?.length > 0) {
                         this.router.navigate([`ledger/${data?.body?.results[0]?.uniqueName}`]);
                     }
@@ -55,22 +75,37 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
 
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            /**
+             * Handles if functionality
+             */
             if (value === 'hideallcharts') {
                 this.hideallcharts = true;
             }
+            /**
+             * Handles if functionality
+             */
             if (value === 'showallcharts') {
                 this.hideallcharts = false;
             }
         });
         // Scroll to top when dashboard loads
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             const dashboardElement = document.getElementById('dashboard');
+            /**
+             * Handles if functionality
+             */
             if (dashboardElement) {
                 dashboardElement.scrollIntoView({ behavior: 'instant', block: 'start' });
             }
         }, 100);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.store.dispatch(this.homeActions.ResetHomeState());
         this.destroyed$.next(true);

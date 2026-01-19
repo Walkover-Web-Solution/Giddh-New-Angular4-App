@@ -13,6 +13,9 @@ import { CreateDiscountComponent } from '../../theme/create-discount/create-disc
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'setting-discount',
     templateUrl: './discount.component.html',
@@ -20,6 +23,10 @@ import { GeneralService } from '../../services/general.service';
     standalone: false
 })
 
+/**
+ * DiscountComponent component
+ * Handles discount functionality and user interactions
+ */
 export class DiscountComponent implements OnInit, OnDestroy {
     /** Holds Delete Discount Confirmation Dialog Template Ref */
     @ViewChild('discountConfirmationDialog', { static: true }) public discountConfirmationDialog: TemplateRef<any>;
@@ -56,6 +63,10 @@ export class DiscountComponent implements OnInit, OnDestroy {
     /** Voucher API Version */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private salesService: SalesService,
         private store: Store<AppState>,
@@ -79,6 +90,9 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.getDiscounts();
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: boolean) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.createNewAccountDialogRef?.close();
                 this.getDiscountAccounts();
@@ -92,6 +106,9 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public openAccountAsidePane(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.createNewAccountDialogRef = this.dialog.open(this.createNew, ASIDE_PANE_CONFIG);
         }
@@ -109,6 +126,9 @@ export class DiscountComponent implements OnInit, OnDestroy {
         });
 
         this.createUpdateDiscountRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getDiscounts();
             }
@@ -175,6 +195,9 @@ export class DiscountComponent implements OnInit, OnDestroy {
      */
     public getDiscountAccounts(): void {
         this.salesService.getAccountsWithCurrency('discount').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.results) {
                 this.accounts = response.body.results.map(discount => {
                     return { label: discount.name, value: discount?.uniqueName };
@@ -192,6 +215,9 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.discountTypeList = [
                 { label: this.localeData?.discount_types?.as_per_value, value: 'FIX_AMOUNT' },
@@ -209,6 +235,9 @@ export class DiscountComponent implements OnInit, OnDestroy {
     private getDiscounts(): void {
         this.isLoading.set(true);
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.discountList = response?.body;     
             }
@@ -227,6 +256,9 @@ export class DiscountComponent implements OnInit, OnDestroy {
      */
     private showToaster(successMessage: string, response: any): void {
         this.toaster.clearAllToaster();
+        /**
+         * Handles if functionality
+         */
         if (response?.status === "success") {
             this.createRequest = new CreateDiscountRequest();
             this.deleteRequest = null;
@@ -246,6 +278,9 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public getDropdownLabelByValue(source: any, value: string): string {
+        /**
+         * Handles if functionality
+         */
         if (value?.length && source?.length) {
             let filteredArray = source?.filter(item => item.value === value);
             return filteredArray?.length ? filteredArray[0].label : "";

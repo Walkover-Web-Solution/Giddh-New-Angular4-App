@@ -13,6 +13,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-action-menu',
     standalone: true,
@@ -20,6 +23,10 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
     templateUrl: './action-menu.component.html',
     styleUrls: ['./action-menu.component.scss']
 })
+/**
+ * ActionMenuComponent component
+ * Handles actionmenu functionality and user interactions
+ */
 export class ActionMenuComponent {
     /** Template for the aside menu */
     @ViewChild('asideMenuTemplate') public asideMenuTemplate: TemplateRef<any>;
@@ -72,9 +79,16 @@ export class ActionMenuComponent {
     /** True if action menu is open */
     public isActionMenu: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private generalService: GeneralService, private dialog: MatDialog, private store: Store<AppState>) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
             }
@@ -90,8 +104,14 @@ export class ActionMenuComponent {
        * @memberof ActionMenuComponent
        */
     public performActions(type: number, account: any, event?: Event): void {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case 1: // go to ledger
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherApiVersion === 2) {
                     const additionalParams = this.fromDate && this.toDate ? `/${account?.uniqueName}/${this.fromDate}/${this.toDate}` : `/${account?.uniqueName}`;
                     this.goToRoute("ledger", additionalParams, account?.uniqueName);
@@ -102,7 +122,13 @@ export class ActionMenuComponent {
 
             case 2: // go to sales or purchase
                 this.purchaseOrSales = this.account?.voucherGeneratedType;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.purchaseOrSales === "purchase") {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.voucherApiVersion === 2) {
                         this.goToRoute("vouchers/purchase/" + account?.uniqueName + "/create", "", "");
                     } else {
@@ -110,7 +136,13 @@ export class ActionMenuComponent {
                     }
                 } else {
                     let isCashInvoice = account?.uniqueName === "cash";
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.voucherApiVersion === 2) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (isCashInvoice) {
                             this.goToRoute("vouchers/cash/create", "", "");
                         } else {
@@ -122,12 +154,18 @@ export class ActionMenuComponent {
                 }
                 break;
             case 3: // send email
+                /**
+                 * Handles if functionality
+                 */
                 if (event) {
                     event.stopPropagation();
                 }
                 this.openCustomEmailDialog(account, this.account?.voucherGeneratedType === 'sales' ? 'customer' : 'vendor', false);
                 break;
             case 4: // edit account
+                /**
+                 * Handles if functionality
+                 */
                 if (event) {
                     event.stopPropagation();
                 }
@@ -149,13 +187,22 @@ export class ActionMenuComponent {
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string): void {
         let url: string;
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             // Construct direct page URL
             url = `/pages/${part}`;
+            /**
+             * Handles if functionality
+             */
             if (additionalParams) {
                 url = `${url}${additionalParams}`;
             }
             // Add redirectUrl parameter for ledger pages
+            /**
+             * Handles if functionality
+             */
             if (part === 'ledger') {
                 const separator = url.includes('?') ? '&' : '?';
                 url = `${url}${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
@@ -163,16 +210,25 @@ export class ActionMenuComponent {
         } else {
             // Legacy URL construction
             url = location.href + `?returnUrl=${part}/${accUniqueName}`;
+            /**
+             * Handles if functionality
+             */
             if (additionalParams) {
                 url = `${url}${additionalParams}`;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (isElectron) {
             try {
                 let electronIpcAvailable = false;
 
                 // Try electronAPI first (secure context)
+                /**
+                 * Handles if functionality
+                 */
                 if ((window as any).electronAPI && (window as any).electronAPI.send) {
                     try {
                         const electronUrl = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
@@ -184,9 +240,15 @@ export class ActionMenuComponent {
                 }
 
                 // Try legacy electron require (fallback)
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable && (window as any).require) {
                     try {
                         const electron = (window as any).require('electron');
+                        /**
+                         * Handles if functionality
+                         */
                         if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
                             const electronUrl = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
                             electron.ipcRenderer.send('open-url', electronUrl);
@@ -198,6 +260,9 @@ export class ActionMenuComponent {
                 }
 
                 // Fallback to regular window.open if IPC not available
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable) {
 
                     (window as any).open(url);
@@ -250,6 +315,9 @@ export class ActionMenuComponent {
                 accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
             }
         });dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.sendEmail.emit(true);
             }
@@ -263,6 +331,9 @@ export class ActionMenuComponent {
      * @memberof ActionMenuComponent
      */
     public getUpdatedList(grpName?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (grpName) {
             this.editAccount.emit();
             this.asideMenuDialogRef?.close();

@@ -10,9 +10,16 @@ import { GeneralService } from "./general.service";
 import { AI_OCR_API } from "./apiurls/ai-ocr.api";
 import { forEach, get, keys } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * AiOcrService service
+ * Provides aiocr related business logic and data operations
+ */
 export class AiOcrService {
     /** Provides date manipulation utilities using the dayjs library. */
     public dayjs = dayjs;
@@ -45,6 +52,10 @@ export class AiOcrService {
     /** Indicates whether the OCR data retrieval process is active. */
     public ocrListToCreate$: BehaviorSubject<any> = new BehaviorSubject(null);
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
@@ -63,6 +74,9 @@ export class AiOcrService {
     public getAllOcrDocuments(query: any, model: any, ocrType: string): Observable<BaseResponse<any, any>> {
         const branchUniqueName = query?.branchUniqueName ? query?.branchUniqueName : this.generalService.currentBranchUniqueName ?? "";
         Object.keys(model).forEach(key => {
+            /**
+             * Handles if functionality
+             */
             if (typeof model[key] === "string") {
                 model[key] = model[key].trim();
             }
@@ -82,12 +96,18 @@ export class AiOcrService {
                 model
             )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = "";
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, "", {}))
             );
     }
@@ -109,12 +129,18 @@ export class AiOcrService {
                     ?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))
             )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = "";
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, "", {}))
             );
     }
@@ -133,17 +159,26 @@ export class AiOcrService {
                 this.config.apiUrl +
                 AI_OCR_API.IMPORT?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))?.replace(
                     ":companyUniqueName",
+                    /**
+                     * Handles encodeURIComponent functionality
+                     */
                     encodeURIComponent(this.generalService.companyUniqueName)
                 )?.replace(":ocrType", encodeURIComponent(ocrType)),
                 payload
             )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = "";
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, "", {}))
             );
     }
@@ -161,16 +196,25 @@ export class AiOcrService {
                 this.config.apiUrl +
                 AI_OCR_API.COMPLETED_COUNT?.replace(
                     ":branchUniqueName",
+                    /**
+                     * Handles encodeURIComponent functionality
+                     */
                     encodeURIComponent(branchUniqueName)
                 )?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))?.replace(":ocrType", encodeURIComponent(ocrType))
             )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = "";
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, "", {}))
             );
     }
@@ -196,12 +240,18 @@ export class AiOcrService {
                     ?.replace(":ocrType", encodeURIComponent(req?.ocrType)),
             )
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = "";
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, "", {}))
             );
     }

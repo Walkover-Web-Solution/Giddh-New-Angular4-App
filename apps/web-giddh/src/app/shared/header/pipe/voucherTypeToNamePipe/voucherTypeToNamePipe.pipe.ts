@@ -1,14 +1,27 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
 
+/**
+ * Handles Pipe functionality
+ */
 @Pipe({
     name: 'voucherTypeToNamePipe',
     pure: true,
     standalone: false
 })
 
+/**
+ * VoucherTypeToNamePipe pipe
+ * Implements VoucherTypeToNamePipe functionality
+ */
 export class VoucherTypeToNamePipe implements PipeTransform {
+    /**
+     * Handles transform functionality
+     */
     transform(value: VoucherTypeEnum, ...args: any[]): string {
+        /**
+         * Handles switch functionality
+         */
         switch (value) {
             case VoucherTypeEnum.cash:
                 return 'Cash';

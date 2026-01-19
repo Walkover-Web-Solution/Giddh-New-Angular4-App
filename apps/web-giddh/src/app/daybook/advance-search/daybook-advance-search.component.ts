@@ -20,6 +20,9 @@ import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sal
 import { cloneDeep } from '../../lodash-optimized';
 import { AdvanceSearchRangeHelper } from '../../shared/helpers/advance-search-range.helper';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'daybook-advance-search-model',
     templateUrl: './daybook-advance-search.component.html',
@@ -28,6 +31,10 @@ import { AdvanceSearchRangeHelper } from '../../shared/helpers/advance-search-ra
     standalone:false
 
 })
+/**
+ * DaybookAdvanceSearchModelComponent component
+ * Handles daybookadvancesearchmodel functionality and user interactions
+ */
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of mat accordion */
     @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -113,6 +120,10 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /** Filtered Sales Person List */
     public filteredSalesPersonList: IOption[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private inventoryService: InventoryService,
         private store: Store<AppState>,
@@ -126,6 +137,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.setVoucherTypes();
         this.loadDefaultAccountsSuggestions();
@@ -133,6 +147,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.getSalesPersonList();
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length > 0) {
                 let tags = response?.body?.map(tag => {
                     return { label: tag?.name, value: tag?.name };
@@ -160,7 +177,13 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         });
 
         this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)).subscribe((search: string) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!search) {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
                         this.filteredSalesPersonList = res as IOption[];
@@ -183,11 +206,20 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges) {
+        /**
+         * Handles if functionality
+         */
         if (!this.advanceSearchForm) {
             this.initializeDaybookAdvanceSearchForm();
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('startDate' in changes && changes.startDate.currentValue && 'endDate' in changes && changes.endDate.currentValue) {
             let dateRange = { fromDate: '', toDate: '' };
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(changes.startDate.currentValue, changes.endDate.currentValue);
@@ -195,36 +227,63 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('searchFilterData' in changes && changes.searchFilterData.currentValue) {
             let dataToSend = changes.searchFilterData.currentValue;
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend?.accountUniqueNames) {
                     this.advanceSearchForm.get('accountUniqueNames')?.patchValue(dataToSend?.accountUniqueNames);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend?.groupUniqueNames) {
                     this.advanceSearchForm.get('groupUniqueNames')?.patchValue(dataToSend?.groupUniqueNames);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend?.vouchers) {
                     this.advanceSearchForm.get('vouchers')?.patchValue(dataToSend?.vouchers);
                     this.advanceSearchForm.get('defaultVouchersLabel')?.patchValue(dataToSend?.defaultVouchersLabel);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend?.particulars) {
                     this.advanceSearchForm.get('particulars')?.patchValue(dataToSend?.particulars);
                     this.advanceSearchForm.get('defaultParticularsLabel')?.patchValue(dataToSend?.defaultParticularsLabel);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend?.inventory) {
                     this.advanceSearchForm.get('inventory')?.patchValue(dataToSend?.inventory);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend?.inventory?.defaultInventoriesLabel) {
                     this.advanceSearchForm.get('inventory.defaultInventoriesLabel')?.patchValue(dataToSend?.inventory.defaultInventoriesLabel);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend?.tags) {
                     this.advanceSearchForm.get('tags')?.patchValue(dataToSend?.tags);
                     this.advanceSearchForm.get('defaultTagsLabel')?.patchValue(dataToSend?.defaultTagsLabel);
@@ -233,6 +292,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         }
     }
 
+    /**
+     * Sets vouchertypes value
+     */
     public setVoucherTypes(): void {
         this.voucherTypeList = observableOf([{
             label: this.commonLocaleData?.app_voucher_types?.sales,
@@ -261,6 +323,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         }]);
     }
 
+    /**
+     * Handles cancel event
+     */
     public onCancel() {
         this.fromDate = this.startDate;
         this.toDate = this.endDate;
@@ -276,7 +341,13 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      */
     public emitAdvanceSearchParams(): void {
         let dataToSend = cloneDeep(this.advanceSearchForm?.value) as DayBookRequestModel;
+        /**
+         * Handles if functionality
+         */
         if (dataToSend.dateOnCheque) {
+            /**
+             * Handles if functionality
+             */
             if (typeof dataToSend.dateOnCheque === "object") {
                 dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
             } else {
@@ -303,6 +374,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         (Array.isArray(data) ? data : []).forEach(element => {
             values.push(element?.value);
         });
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case 'particulars':
                 this.advanceSearchForm.get('particulars')?.patchValue(values);
@@ -345,11 +419,17 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public toggleOtherDetails() {
         let val: boolean = !this.advanceSearchForm.get('includeDescription')?.value;
         this.advanceSearchForm.get('includeDescription')?.patchValue(val);
+        /**
+         * Handles if functionality
+         */
         if (!val) {
             this.advanceSearchForm.get('description')?.patchValue(null);
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -405,9 +485,15 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             salesPersonUniqueNames: [[]],
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.searchFilterData) {
             this.advanceSearchForm?.patchValue(this.searchFilterData);
 
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchForm.get("includeDescription")?.value) {
                 this.isExpanded = true;
             } else {
@@ -429,6 +515,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -443,15 +532,24 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -471,6 +569,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      */
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.accountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -479,6 +580,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 page
             }
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -486,6 +590,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.accounts = searchResults;
                     } else {
@@ -497,7 +604,13 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                     this.accounts$ = observableOf(this.accounts);
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
@@ -510,6 +623,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
             this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
             this.preventDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
             }, 500);
@@ -527,6 +643,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      */
     public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.stocksSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultStockScrollApiCall &&
             (typeof query === "string" || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -536,6 +655,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
             this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -543,6 +665,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                             label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.stocks = searchResults;
                     } else {
@@ -554,7 +679,13 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                     this.stockListDropDown$ = observableOf(this.stocks);
                     this.stocksSearchResultsPaginationData.page = data.body.page;
                     this.stocksSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     }
                     this.changeDetectionRef.detectChanges();
@@ -565,6 +696,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             this.stocksSearchResultsPaginationData.page = this.defaultStockPaginationData.page;
             this.stocksSearchResultsPaginationData.totalPages = this.defaultStockPaginationData.totalPages;
             this.preventDefaultStockScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultStockScrollApiCall = false;
             }, 500);
@@ -578,11 +712,17 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public handleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
             this.onAccountSearchQueryChanged(
                 this.accountsSearchResultsPaginationData.query,
                 this.accountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -605,11 +745,17 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public handleStockScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stocksSearchResultsPaginationData.page < this.stocksSearchResultsPaginationData.totalPages) {
             this.onStockSearchQueryChanged(
                 this.stocksSearchResultsPaginationData.query,
                 this.stocksSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.stocksSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {

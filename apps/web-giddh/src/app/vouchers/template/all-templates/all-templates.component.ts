@@ -10,12 +10,19 @@ import { IFRAME_ZOOM_CONFIG } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { ToasterService } from '../../../services/toaster.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'all-templates',
     templateUrl: './all-templates.component.html',
     styleUrls: ['./all-templates.component.scss'],
     standalone: false
 })
+/**
+ * AllTemplatesComponent component
+ * Handles alltemplates functionality and user interactions
+ */
 export class AllTemplatesComponent implements OnInit {
     /** Input template */
     public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
@@ -27,6 +34,10 @@ export class AllTemplatesComponent implements OnInit {
     public isFileUploading: boolean = true;
     /** Holds PDF file value */
     public pdfFileURL: string = '';
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private invoiceUiDataService: InvoiceUiDataService,
         private generalService: GeneralService,
@@ -44,9 +55,15 @@ export class AllTemplatesComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.invoiceUiDataService.customTemplate.pipe(debounceTime(1500), takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+            /**
+             * Handles if functionality
+             */
             if (template?.uniqueName) {
                 this.inputTemplate = cloneDeep(template);
                 this.invoiceTemplatesService.saveTemplateSettings(this.inputTemplate).subscribe((response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response?.status === 'success') {
                         const setting = this.generalService.base64ToBlob(response?.body?.data || response, 'application/pdf', 512);
                         const file = new Blob([setting], { type: 'application/pdf' });

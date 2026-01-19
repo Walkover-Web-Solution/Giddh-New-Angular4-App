@@ -64,6 +64,9 @@ const initialState: CurrentCompanyState = {
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
 
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case 'CATCH_ERROR':
             return;
@@ -74,6 +77,9 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
             });
         case CompanyActions.GET_TAX_RESPONSE:
             let taxes: BaseResponse<TaxResponse[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (taxes?.status === 'success') {
                 return Object.assign({}, state, {
                     taxes: taxes.body,
@@ -103,6 +109,9 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
 
         case SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE: {
             let res: BaseResponse<TaxResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {                
                 return {
                     ...state,
@@ -128,12 +137,18 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
 
         case SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE: {
             let res: BaseResponse<TaxResponse, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 return {
                     ...state,
                     isTaxUpdatingInProcess: false,
                     isTaxUpdatedSuccessfully: true,
                     taxes: state.taxes.map(tax => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (tax?.uniqueName === res.body?.uniqueName) {
                             tax = res.body;
                         }
@@ -150,9 +165,15 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
 
         case SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE: {
             let res: BaseResponse<TaxResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let newState = cloneDeep(state);
                 let taxIndx = newState.taxes?.findIndex((tax) => tax.uniqueName === res.request);
+                /**
+                 * Handles if functionality
+                 */
                 if (taxIndx > -1) {
                     newState.taxes.splice(taxIndx, 1);
                 }
@@ -166,6 +187,9 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
             });
         case CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE: {
             let account: BaseResponse<IRegistration, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (account?.status === 'success') {
                 return Object.assign({}, state, {
                     account: account.body,
@@ -189,6 +213,9 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
             });
         case CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE:
             let response: BaseResponse<IntegratedBankList[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 return Object.assign({}, state, {
                     integratedBankList: response.body,

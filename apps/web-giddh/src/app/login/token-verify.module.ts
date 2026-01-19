@@ -3,6 +3,9 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { TokenVerifyComponent } from "./token-verify.component";
 import { TokenVerifyRoutingModule } from "./token-verify.routing.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         TokenVerifyComponent
@@ -13,6 +16,10 @@ import { TokenVerifyRoutingModule } from "./token-verify.routing.module";
     ]
 })
 
+/**
+ * TokenVerifyModule module
+ * Implements TokenVerifyModule functionality
+ */
 export class TokenVerifyModule {
 
 }

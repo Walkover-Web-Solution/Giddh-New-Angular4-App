@@ -1,9 +1,17 @@
+/**
+ * InventoryReportType enumeration
+ * Defines constant values for InventoryReportType
+ */
 export enum InventoryReportType {
     group = 'GROUP',
     stock = 'STOCK',
     variant = 'VARIANT',
     transaction = 'TRANSACTION'
 }
+/**
+ * InventoryModuleName enumeration
+ * Defines constant values for InventoryModuleName
+ */
 export enum InventoryModuleName {
     group = 'GROUP_WISE_REPORT',
     stock = 'ITEM_WISE_REPORT',
@@ -56,6 +64,10 @@ export const INVENTORY_COMMON_COLUMNS = [
 ];
 
 // Enum for export dialog information
+/**
+ * exportTypeEnum enumeration
+ * Defines constant values for exportTypeEnum
+ */
 export enum exportTypeEnum {
     ItemWise = 'INVENTORY_ITEM_WISE_EXPORT',
     VariantWise = 'INVENTORY_VARIANT_WISE_EXPORT',

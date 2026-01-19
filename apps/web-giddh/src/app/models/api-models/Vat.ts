@@ -1,3 +1,7 @@
+/**
+ * VatReportRequest class
+ * Implements VatReportRequest functionality
+ */
 export class VatReportRequest {
     from: string;
     to: string;
@@ -6,6 +10,10 @@ export class VatReportRequest {
     currencyCode?: string;
 }
 
+/**
+ * VatReportSectionData class
+ * Implements VatReportSectionData functionality
+ */
 export class VatReportSectionData {
     order: number;
     section: any;
@@ -19,6 +27,10 @@ export class VatReportSectionData {
     totalAmount: any;
 }
 
+/**
+ * VatReportSections class
+ * Implements VatReportSections functionality
+ */
 export class VatReportSections {
     order: number;
     section: string;
@@ -30,10 +42,18 @@ export class VatReportSections {
     sections: VatReportSectionData[]
 }
 
+/**
+ * VatReportResponse class
+ * Implements VatReportResponse functionality
+ */
 export class VatReportResponse {
     sections: VatReportSections[];
 }
 
+/**
+ * VatReportTransactionsRequest class
+ * Implements VatReportTransactionsRequest functionality
+ */
 export class VatReportTransactionsRequest {
     from: string;
     to: string;
@@ -44,6 +64,10 @@ export class VatReportTransactionsRequest {
     country?: string;
 }
 
+/**
+ * VatDetailedReportRequest class
+ * Implements VatDetailedReportRequest functionality
+ */
 export class VatDetailedReportRequest extends VatReportTransactionsRequest {
     currencyCode?: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR';
     branchUniqueName?: string;

@@ -17,6 +17,9 @@ import { ImportExcelService } from '../../services/import-excel.service';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { map } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'import-report',
     
@@ -24,6 +27,10 @@ import { map } from '../../lodash-optimized';
     styleUrls: [`./import-report.component.scss`]
 })
 
+/**
+ * ImportReportComponent component
+ * Handles importreport functionality and user interactions
+ */
 export class ImportReportComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
@@ -39,6 +46,10 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     /** True if api call in progress */
     public isLoading: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -49,16 +60,25 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         this.importPaginatedRequest.count = PAGINATION_LIMIT;
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.getStatus();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
     }
 
+    /**
+     * Handles importFiles functionality
+     */
     public importFiles() {
         this.router.navigate(['pages', 'import']);
     }
@@ -83,6 +103,9 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     public getStatus(): void {
         this.isLoading = true;
         this.importExcelService.importStatus(this.importPaginatedRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if(response?.status === "success" && response?.body) {
                 response.body.results = response?.body?.results?.map(res => {
                     res.processDate = dayjs.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format(GIDDH_DATE_FORMAT + ' hh:mm:ss a');
@@ -95,11 +118,17 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles downloadItem functionality
+     */
     public downloadItem(item: ImportExcelStatusResponse) {
         let blob = this.generalService.base64ToBlob(item.fileBase64, 'application/vnd.ms-excel', 512);
         return saveAs(blob, item.fileName);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

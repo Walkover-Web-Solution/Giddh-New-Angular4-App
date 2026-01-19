@@ -20,6 +20,9 @@ import { BankIntegrationDialogComponent } from '../../../shared/bank-integration
 import { Router } from '@angular/router';
 import { cloneDeep, filter, forEach, keys, map, some } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'bank-accounts',
     templateUrl: 'bank-accounts.component.html',
@@ -27,6 +30,10 @@ import { cloneDeep, filter, forEach, keys, map, some } from '../../../lodash-opt
     styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss'],
     providers: [BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore]
 })
+/**
+ * BankAccountsComponent component
+ * Handles bankaccounts functionality and user interactions
+ */
 export class BankAccountsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -75,6 +82,10 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     /** True if active account is bank account */
     public isBankAccountConnected: boolean = null;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private contactService: ContactService,
@@ -90,8 +101,14 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.datePickerOptions = {
@@ -106,6 +123,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -113,19 +133,31 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         const broadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
         broadcast.onmessage = (event) => {
+            /**
+             * Handles if functionality
+             */
             if (event?.data) {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', API_BULK_FETCH_LIMIT, '', 'closingBalance', 'desc');
             }
         };
 
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response?.body) {
                 this.bankList = response.body;
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body.some(item => item.account?.uniqueName === this.selectedBankUniqueName)) {
                     this.isBankAccountConnected = true;
                 }
                 this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
                 const referNo = localStorage.getItem('refNo');
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isDirectlyIntegrated && referNo !== null && referNo !== undefined) {
                     this.getLinkBankAccount();
                 } else {
@@ -135,26 +167,44 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         });
 
         this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', API_BULK_FETCH_LIMIT, '', 'closingBalance', 'desc');
             }
         });
 
         this.homeComponentStore.profile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile?.userEntityRoles) {
                 (Array.isArray(profile.userEntityRoles) ? profile.userEntityRoles : []).forEach(role => {
                     const scopes = role.role.scopes;
+                    /**
+                     * Handles if functionality
+                     */
                     if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
                         this.hasIntegrationScope = true;
                     }
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         })
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.router.url === '/pages/home') {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.selectedBankUniqueName) {
                     this.router.navigate(['/pages/settings/integration/payment']);
                 } else {
@@ -170,6 +220,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         });
 
         this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', API_BULK_FETCH_LIMIT, '', 'closingBalance', 'desc');
                 this.changeDetectionRef.detectChanges();
@@ -178,9 +231,18 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
+            /**
+             * Handles if functionality
+             */
             if (event?.data?.success) {
                 const referNo = localStorage.getItem('refNo');
+                /**
+                 * Handles if functionality
+                 */
                 if (referNo !== null && referNo !== undefined) {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.componentStore.getRequisition(referNo);
                     }, 100);
@@ -195,6 +257,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @memberof BankAccountsComponent
      */
     public getBank(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.unlinkBankList?.length) {
             this.openInstitutionsDialog();
         } else if (this.unlinkBankList?.length === 1 && !this.isBankAccountConnected) {
@@ -209,7 +274,13 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
             this.bankIntegrationDialogRef.afterClosed().subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response === 'integrate') {
                         this.openInstitutionsDialog();
                     } else if (response === 'link') {
@@ -242,8 +313,14 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
         this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.bankAccounts = res?.body?.results?.map(bank => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (bank?.accountBankTransactionTotal?.bankName) {
                         bank.accountBankTransactionTotal['translatedBankName'] = this.getBankTranslateName(bank.accountBankTransactionTotal.bankName);
                     }
@@ -286,7 +363,13 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         this.homeComponentStore.refreshGoCardlessBankTransactions('');
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
+        /**
+         * Handles if functionality
+         */
         if (window.localStorage) {
             localStorage.removeItem('refNo');
         }
@@ -313,6 +396,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);
@@ -361,6 +447,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @memberof BankAccountsComponent
      */
     public getLinkBankAccount(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
         } else {
@@ -374,6 +463,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
             dialogRef.afterClosed().pipe(take(1), tap(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response !== 'closeDialog') {
                     this.isBankAccountConnected = true; this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
                 }

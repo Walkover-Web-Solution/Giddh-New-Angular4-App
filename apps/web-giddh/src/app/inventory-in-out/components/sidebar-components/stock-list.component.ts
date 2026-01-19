@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { IStocksItem } from '../../../models/interfaces/stocks-item.interface';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'inout-stock-list',
     standalone: false,
@@ -15,6 +18,10 @@ import { IStocksItem } from '../../../models/interfaces/stocks-item.interface';
     </ul>
   `
 })
+/**
+ * InOutStockListComponent component
+ * Handles inoutstocklist functionality and user interactions
+ */
 export class InOutStockListComponent {
     @Input() public stockList: IStocksItem[];
 }

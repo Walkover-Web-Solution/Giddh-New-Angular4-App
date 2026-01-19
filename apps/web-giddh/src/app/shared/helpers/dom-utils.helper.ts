@@ -13,6 +13,9 @@ export class DomUtilsHelper {
      * @memberof DomUtilsHelper
      */
     public static childOf(child: any, parent: any): boolean {
+        /**
+         * Handles while functionality
+         */
         while ((child = child.parentNode) && child !== parent) {
         }
         return !!child;

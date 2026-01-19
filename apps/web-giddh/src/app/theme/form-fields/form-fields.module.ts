@@ -28,6 +28,9 @@ import { OptionsScrollDirective } from "./reactive-dropdown-field/reactive-dropd
 import { MatDividerModule } from "@angular/material/divider";
 import { A11yModule } from "@angular/cdk/a11y";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         TextFieldComponent,
@@ -72,6 +75,10 @@ import { A11yModule } from "@angular/cdk/a11y";
     ]
 })
 
+/**
+ * FormFieldsModule module
+ * Implements FormFieldsModule functionality
+ */
 export class FormFieldsModule {
 
 }

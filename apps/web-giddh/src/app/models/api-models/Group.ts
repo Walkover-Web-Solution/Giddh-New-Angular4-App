@@ -81,6 +81,10 @@ export class MoveGroupRequest {
     public parentGroupUniqueName: string;
 }
 
+/**
+ * MoveGroupResponse class
+ * Implements MoveGroupResponse functionality
+ */
 export class MoveGroupResponse {
     public applicableTaxes: INameUniqueName[];
     public uniqueName: string;

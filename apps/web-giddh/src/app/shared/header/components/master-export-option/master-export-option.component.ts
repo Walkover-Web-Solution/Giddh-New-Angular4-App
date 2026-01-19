@@ -3,6 +3,9 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { Angular21ChangeDetectionService } from '../../../../services/angular21-change-detection.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'master-export-option',
     templateUrl: './master-export-option.component.html',
@@ -10,6 +13,10 @@ import { Angular21ChangeDetectionService } from '../../../../services/angular21-
     standalone: false,
     changeDetection: ChangeDetectionStrategy.Default
 })
+/**
+ * MasterExportOptionComponent component
+ * Handles masterexportoption functionality and user interactions
+ */
 export class MasterExportOptionComponent implements OnInit {
   /** Form Group for export  form */
   public exportForm: FormGroup;
@@ -21,6 +28,10 @@ export class MasterExportOptionComponent implements OnInit {
   public localeData: any = {};
   /* This will hold common JSON data */
   public commonLocaleData: any = {};
+  /**
+   * Creates an instance of component
+   * Initializes component dependencies and sets up initial state
+   */
   constructor(
     private formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
@@ -37,6 +48,9 @@ export class MasterExportOptionComponent implements OnInit {
     this.initExportForm();
     this.exportFormMaster.emit(this.exportForm.value);
     this.exportForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+      /**
+       * Handles if functionality
+       */
       if (value) {
         this.exportFormMaster.emit(this.exportForm.value);
         this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);

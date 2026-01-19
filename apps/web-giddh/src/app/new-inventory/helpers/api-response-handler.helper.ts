@@ -21,7 +21,13 @@ export class ApiResponseHandlerHelper {
         searchedItems: any[],
         apiRequestParams: any,
         changeDetection: ChangeDetectorRef,
+        /**
+         * Handles refreshCallback functionality
+         */
         refreshCallback: (preservePosition: boolean) => void,
+        /**
+         * Initializes widthcallback
+         */
         initWidthCallback: () => void
     ): { searchedItems: any[]; noResultsFound: boolean; allowLoadMore: boolean; highlightedItem: number } {
         let result = {
@@ -31,10 +37,16 @@ export class ApiResponseHandlerHelper {
             highlightedItem: 0
         };
 
+        /**
+         * Handles if functionality
+         */
         if (response && response.body && response.body.results && response.body.results.length > 0) {
             // Create new array reference for proper change detection
             result.searchedItems = [...(searchedItems || []), ...response.body.results];
             
+            /**
+             * Handles if functionality
+             */
             if (apiRequestParams.page === 1) {
                 result.highlightedItem = 0;
             }
@@ -47,13 +59,22 @@ export class ApiResponseHandlerHelper {
             changeDetection.detectChanges();
             
             // Refresh virtual scroll viewport if available
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 // Preserve scroll position when loading more data (not initial search)
                 const preservePosition = apiRequestParams.page > 1;
+                /**
+                 * Handles refreshCallback functionality
+                 */
                 refreshCallback(preservePosition);
                 changeDetection.detectChanges();
             }, 0);
         } else {
+            /**
+             * Handles if functionality
+             */
             if (result.searchedItems?.length === 0) {
                 result.noResultsFound = true;
                 result.allowLoadMore = false;
@@ -61,6 +82,9 @@ export class ApiResponseHandlerHelper {
             changeDetection.detectChanges();
         }
 
+        /**
+         * Initializes widthcallback
+         */
         initWidthCallback();
         return result;
     }

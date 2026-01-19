@@ -8,6 +8,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'giddh-daterangepicker',
     styleUrls: ['./giddh-daterangepicker.component.scss'],
@@ -16,6 +19,10 @@ import { SettingsFinancialYearActions } from '../../actions/settings/financial-y
     standalone: false
 })
 
+/**
+ * GiddhDaterangepickerComponent component
+ * Handles giddhdaterangepicker functionality and user interactions
+ */
 export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestroy {
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
@@ -37,6 +44,10 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
     /** Subject to unsubscribe from all listeners */
     private destroyed$: ReplaySubject<void> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
 
     }
@@ -49,22 +60,40 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
     public ngOnInit(): void {
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
 
+        /**
+         * Handles if functionality
+         */
         if (this.inputStartDate) {
             this.startDate = dayjs(this.inputStartDate, GIDDH_DATE_FORMAT).toDate();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.inputEndDate) {
             this.endDate = dayjs(this.inputEndDate, GIDDH_DATE_FORMAT).toDate();
         }
 
         this.store.pipe(select(state => state.settings.financialYears), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let financialYears = response.financialYears;
+                /**
+                 * Handles if functionality
+                 */
                 if (financialYears && financialYears.length) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (financialYears[0].financialYearStarts) {
                         let minDate = new Date(financialYears[0].financialYearStarts.split("-").reverse().join("-"));
                         this.minDate = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (financialYears[financialYears.length - 1].financialYearEnds) {
                         let maxDate = new Date(financialYears[financialYears.length - 1].financialYearEnds.split("-").reverse().join("-"));
                         this.maxDate = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
@@ -81,9 +110,15 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
      * @memberof GiddhDaterangepickerComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes.inputStartDate && changes.inputStartDate.currentValue) {
             this.startDate = changes.inputStartDate.currentValue.toDate();
         }
+        /**
+         * Handles if functionality
+         */
         if (changes.inputEndDate && changes.inputEndDate.currentValue) {
             this.endDate = changes.inputEndDate.currentValue.toDate();
             this.dateSelected.emit({ startDate: this.startDate, endDate: this.endDate });
@@ -107,9 +142,15 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
      * @memberof GiddhDaterangepickerComponent
      */
     public dateChange(type: string, event: MatDatepickerInputEvent<Date>): void {
+        /**
+         * Handles if functionality
+         */
         if (type === "start") {
             this.startDate = dayjs(event?.value, GIDDH_DATE_FORMAT).toDate();
         }
+        /**
+         * Handles if functionality
+         */
         if (type === "end") {
             this.endDate = dayjs(event?.value, GIDDH_DATE_FORMAT).toDate();
         }
@@ -121,6 +162,9 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
      * @memberof GiddhDaterangepickerComponent
      */
     public openDatepicker(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.picker) {
             this.picker?.open();
         }

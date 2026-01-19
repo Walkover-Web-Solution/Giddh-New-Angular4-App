@@ -6,6 +6,9 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ProjectDialogData } from '../../project-wise-accounting';
 import { get } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'create-project',
     templateUrl: './create-project.component.html',
@@ -13,6 +16,10 @@ import { get } from '../../../lodash-optimized';
     providers: [ProjectWiseAccountingComponentStore],
     standalone: false
 })
+/**
+ * CreateProjectComponent component
+ * Handles createproject functionality and user interactions
+ */
 export class CreateProjectComponent implements OnInit, OnDestroy {
     /** Indicates if the form is loading */
     public isLoading: boolean = false;
@@ -31,6 +38,10 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
         return this.createProjectForm.get('projectName') as FormControl;
     }
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private dialogRef: MatDialogRef<CreateProjectComponent>,
         private componentStore: ProjectWiseAccountingComponentStore,
@@ -46,6 +57,9 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.initCreateProjectForm();
         this.componentStore.saveProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((project) => {
+            /**
+             * Handles if functionality
+             */
             if (project) {
                 this.sendResponse(project);
             }
@@ -74,6 +88,9 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
      * @memberof CreateProjectComponent
      */
     public createProject(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isLoading) {
             const projectName = this.createProjectForm.get('projectName').value;
             this.componentStore.createNewProject({

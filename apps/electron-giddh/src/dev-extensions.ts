@@ -5,6 +5,9 @@ import { app, session } from 'electron';
 
 declare const ENV: string;
 
+/**
+ * Handles if functionality
+ */
 if (ENV === 'development') {
     const extensions = [
         { name: 'Redux DevTools', id: 'lmhkpmbekcpmknklioeibfkpmmfibljd' },
@@ -13,6 +16,9 @@ if (ENV === 'development') {
     app.whenReady().then(async () => {
         try {
             // Use modern extension installation for Electron v39
+            /**
+             * Handles for functionality
+             */
             for (const ext of extensions) {
                 try {
                     await session.defaultSession.loadExtension(`./extensions/${ext.id}`);

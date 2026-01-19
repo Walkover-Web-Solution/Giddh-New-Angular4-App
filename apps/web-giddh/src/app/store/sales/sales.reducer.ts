@@ -4,6 +4,10 @@ import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 
+/**
+ * SalesState interface definition
+ * Defines the structure and contract for SalesState objects
+ */
 export interface SalesState {
     acDtl: AccountResponseV2;
     newlyCreatedStockAc: any;
@@ -27,12 +31,18 @@ const initialState: SalesState = {
 };
 
 export function salesReducer(state = initialState, action: CustomActions): SalesState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
         }
         case SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE: {
             let res: BaseResponse<AccountResponseV2, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 return Object.assign({}, state, {
                     acDtl: action.payload.body
@@ -53,6 +63,9 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
 
         case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
             let res: BaseResponse<AccountResponseV2, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 return {
                     ...state,
@@ -76,6 +89,9 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
 
         case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
             let res: BaseResponse<AccountResponseV2, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 return {
                     ...state,

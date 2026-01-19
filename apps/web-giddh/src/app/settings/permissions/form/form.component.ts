@@ -23,12 +23,19 @@ const PAST_PERIOD = 'pastperiod';
 const IP_ADDR = 'ip_address';
 const CIDR_RANGE = 'cidr_range';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'setting-permission-form',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss'],
     standalone: false
 })
+/**
+ * SettingPermissionFormComponent component
+ * Handles settingpermissionform functionality and user interactions
+ */
 export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     @Input() public userdata: ShareRequestForm;
@@ -85,6 +92,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     /** To check form is invalid */
     public isFormInvalid: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private _settingsPermissionService: SettingsPermissionService,
         private _permissionActions: PermissionActions,
@@ -99,17 +110,29 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         this.activeCompany$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         this.selectedIPRange = this.localeData?.cidr_range;
         this._accountsAction.resetShareEntity();
 
+        /**
+         * Handles if functionality
+         */
         if (this.userdata) {
+            /**
+             * Handles if functionality
+             */
             if (this.userdata.from && this.userdata.to) {
                 let from: any = dayjs(this.userdata.from, GIDDH_DATE_FORMAT);
                 let to: any = dayjs(this.userdata.to, GIDDH_DATE_FORMAT);
@@ -121,6 +144,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
         // reset form
         this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
+            /**
+             * Handles if functionality
+             */
             if (value && !this.isOpenedInModal) {
                 this.permissionForm.reset();
                 this.initAcForm();
@@ -129,6 +155,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
         // get roles
         this.store.pipe(select(s => s.permission), takeUntil(this.destroyed$)).subscribe(p => {
+            /**
+             * Handles if functionality
+             */
             if (p && p.roles) {
                 let roles = cloneDeep(p.roles);
                 let allRoleArray = [];
@@ -146,16 +175,25 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany && activeCompany.userEntityRoles && activeCompany.userEntityRoles.length && activeCompany.userEntityRoles[0] && activeCompany.userEntityRoles[0].role && activeCompany.userEntityRoles[0].role.uniqueName === 'super_admin') {
                 this.isSuperAdminCompany = true;
             } else {
                 this.isSuperAdminCompany = false;
             }
+            /**
+             * Handles if functionality
+             */
             if (activeCompany.subscription?.planDetails?.restrictedModules && Object.hasOwn(activeCompany.subscription.planDetails.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                 const module = activeCompany.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === this.restrictedModules.Users
                 );
                 this.isUserRestricted = !module?.remainingUsers;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isUserRestricted) {
                     this.permissionForm.get('roleUniqueName').patchValue('');
                 }
@@ -176,7 +214,13 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Toggles ipoptval state
+     */
     public toggleIpOptVal(val: string) {
+        /**
+         * Handles if functionality
+         */
         if (val === IP_ADDR) {
             this.selectedIPRange = this.localeData?.ip_address;
         } else if (val === CIDR_RANGE) {
@@ -185,24 +229,45 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
 
+    /**
+     * Toggles periodoptionsval state
+     */
     public togglePeriodOptionsVal(val: string) {
+        /**
+         * Handles if functionality
+         */
         if (val === DATE_RANGE) {
             this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         } else if (val === PAST_PERIOD) {
             this.selectedTimeSpan = this.localeData?.past_period;
             this.dateRangePickerValue = [];
+            /**
+             * Handles if functionality
+             */
             if (this.permissionForm) {
                 this.permissionForm?.patchValue({ from: null, to: null });
             }
         }
     }
 
+    /**
+     * Retrieves periodfromdata data
+     */
     public getPeriodFromData(data: ShareRequestForm) {
+        /**
+         * Handles if functionality
+         */
         if (data) {
+            /**
+             * Handles if functionality
+             */
             if (data.from && data.to) {
                 this.togglePeriodOptionsVal(DATE_RANGE);
                 return [DATE_RANGE];
             }
+            /**
+             * Handles if functionality
+             */
             if (data.duration && data.period) {
                 this.togglePeriodOptionsVal(PAST_PERIOD);
                 return [PAST_PERIOD];
@@ -211,11 +276,20 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         return [DATE_RANGE];
     }
 
+    /**
+     * Retrieves ipoptsfromdata data
+     */
     public getIPOptsFromData(data: ShareRequestForm) {
+        /**
+         * Handles if functionality
+         */
         if (data?.allowedIps?.length > 0) {
             this.toggleIpOptVal(IP_ADDR);
             return [IP_ADDR];
         }
+        /**
+         * Handles if functionality
+         */
         if (data?.allowedCidrs?.length > 0) {
             this.toggleIpOptVal(CIDR_RANGE);
             return [CIDR_RANGE];
@@ -223,10 +297,19 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         return [IP_ADDR];
     }
 
+    /**
+     * Initializes acform
+     */
     public initAcForm(data?: ShareRequestForm): void {
+        /**
+         * Handles if functionality
+         */
         if (data) {
             let fromDate = null;
             let toDate = null;
+            /**
+             * Handles if functionality
+             */
             if (data.to && data.from) {
                 fromDate = dayjs(data?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
                 toDate = dayjs(data?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
@@ -249,7 +332,13 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             let allowedIps = this.permissionForm.get('allowedIps') as UntypedFormArray;
             let allowedCidrs = this.permissionForm.get('allowedCidrs') as UntypedFormArray;
 
+            /**
+             * Handles if functionality
+             */
             if (data?.allowedIps?.length > 0) {
+                /**
+                 * Handles forEach functionality
+                 */
                 forEach(data.allowedIps, (val) => {
                     allowedIps.push(this.initRangeForm(val));
                 });
@@ -257,7 +346,13 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 allowedIps.push(this.initRangeForm());
             }
 
+            /**
+             * Handles if functionality
+             */
             if (data?.allowedCidrs?.length > 0) {
+                /**
+                 * Handles forEach functionality
+                 */
                 forEach(data.allowedCidrs, (val) => {
                     allowedCidrs.push(this.initRangeForm(val));
                 });
@@ -289,45 +384,81 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Initializes rangeform
+     */
     public initRangeForm(val?: any): UntypedFormGroup {
         return this._fb.group({
+            /**
+             * Handles range functionality
+             */
             range: (val) ? [val] : [null]
         });
     }
 
+    /**
+     * Validates ipaddress input
+     */
     public validateIPaddress(ipaddress: string) {
+        /**
+         * Handles if functionality
+         */
         if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
             return true;
         }
         return false;
     }
 
+    /**
+     * Handles addNewRow functionality
+     */
     public addNewRow(type: string, item: any, e: any) {
         e.stopPropagation();
         let errFound: boolean = false;
         let msg: string;
         let arow = this.permissionForm.get(type) as UntypedFormArray;
+        /**
+         * Handles for functionality
+         */
         for (let control of arow.controls) {
             let val = control.get('range')?.value;
+            /**
+             * Handles if functionality
+             */
             if (isNull(val) || isEmpty(val)) {
                 errFound = true;
                 msg = undefined;
             }
             // match with regex
+            /**
+             * Handles if functionality
+             */
             if (type === 'allowedIps') {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.validateIPaddress(val)) {
                     errFound = true;
                     msg = this.localeData?.invalid_ip_error;
                 }
             }
             // match cidr
+            /**
+             * Handles if functionality
+             */
             if (type === 'allowedCidrs') {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.generalService.isCidr(val)) {
                     errFound = true;
                     msg = this.localeData?.invalid_cidr_range;
                 }
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (errFound) {
             this._toasty.warningToast(msg || this.localeData?.field_required_error);
         } else {
@@ -335,14 +466,23 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles delRow functionality
+     */
     public delRow(type: string, i: number, e: any) {
         e.stopPropagation();
         const arow = this.permissionForm.get(type) as UntypedFormArray;
         arow.removeAt(i);
     }
 
+    /**
+     * Handles submitPermissionForm functionality
+     */
     public submitPermissionForm() {
         this.isFormInvalid = this.permissionForm.invalid;
+        /**
+         * Handles if functionality
+         */
         if (this.isFormInvalid) {
             return;
         }
@@ -351,31 +491,58 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         let CidrArr = [];
         let IpArr = [];
 
+        /**
+         * Handles if functionality
+         */
         if (form?.from && form?.to) {
             form.from = dayjs(this.permissionForm.get('from').value).format(GIDDH_DATE_FORMAT);
             form.to = dayjs(this.permissionForm.get('to').value).format(GIDDH_DATE_FORMAT);
         }
+        /**
+         * Handles forEach functionality
+         */
         forEach(form.allowedCidrs, (n) => {
+            /**
+             * Handles if functionality
+             */
             if (n.range) {
                 CidrArr.push(n.range);
             }
         });
 
+        /**
+         * Handles forEach functionality
+         */
         forEach(form.allowedIps, (n) => {
+            /**
+             * Handles if functionality
+             */
             if (n.range) {
                 IpArr.push(n.range);
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (CidrArr?.length > 0) {
             IpArr = [];
         }
+        /**
+         * Handles if functionality
+         */
         if (IpArr?.length > 0) {
             CidrArr = [];
         }
         form.allowedCidrs = CidrArr;
         form.allowedIps = IpArr;
 
+        /**
+         * Handles if functionality
+         */
         if (this.selectedTimeSpan === this.localeData?.past_period) {
+            /**
+             * Handles if functionality
+             */
             if (form.duration) {
                 form.period = 'day';
             } else {
@@ -391,16 +558,25 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         obj.action = (this.isUpdtCase) ? 'update' : 'create';
         this.dateRangePickerValue = [];
         obj.data = form;
+        /**
+         * Handles if functionality
+         */
         if (obj.action === 'create') {
             this.store.dispatch(this._accountsAction.shareEntity(form, form.roleUniqueName));
             this.onSubmitForm.emit(obj);
         } else if (obj.action === 'update') {
+            /**
+             * Handles if functionality
+             */
             if ((obj.data.from && obj.data.from) === this.localeData?.invalid_date || (obj.data.to && obj.data.to) === this.localeData?.invalid_date) {
                 delete obj.data.from;
                 delete obj.data.to;
                 obj.data.periodOptions = null;
             }
             this._settingsPermissionService.UpdatePermission(form).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     this.hasUnsavedChanges.emit(false);
                     this._toasty.successToast(this.localeData?.permission_updated_success);
@@ -412,13 +588,28 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles methodForToggleSection functionality
+     */
     public methodForToggleSection(id: string) {
+        /**
+         * Handles if functionality
+         */
         if (id === 'timeSpanSection') {
+            /**
+             * Handles if functionality
+             */
             if (this.showTimeSpan) {
                 this.showTimeSpan = false;
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (id === 'rangeSpanSection') {
+            /**
+             * Handles if functionality
+             */
             if (this.showIPWrap) {
                 this.showIPWrap = false;
             }

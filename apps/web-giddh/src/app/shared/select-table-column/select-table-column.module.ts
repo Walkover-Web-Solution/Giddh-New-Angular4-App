@@ -8,6 +8,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SelectTableColumnComponent } from './select-table-column.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [SelectTableColumnComponent],
     imports: [
@@ -21,4 +24,8 @@ import { SelectTableColumnComponent } from './select-table-column.component';
     ],
     exports: [SelectTableColumnComponent]
 })
+/**
+ * SelectTableColumnModule module
+ * Implements SelectTableColumnModule functionality
+ */
 export class SelectTableColumnModule { }

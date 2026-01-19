@@ -21,6 +21,9 @@ import {CdkTreeModule} from '@angular/cdk/tree';
 import { MatInputModule } from "@angular/material/input";
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         PrimarySidebarComponent,
@@ -51,6 +54,9 @@ import { MatInputModule } from "@angular/material/input";
     providers: [
         {
             provide: AuthServiceConfig,
+            /**
+             * Handles useFactory functionality
+             */
             useFactory: (injector: Injector) => {
                 const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
                 return new AuthServiceConfig(
@@ -68,6 +74,10 @@ import { MatInputModule } from "@angular/material/input";
     ]
 })
 
+/**
+ * PrimarySidebarModule module
+ * Implements PrimarySidebarModule functionality
+ */
 export class PrimarySidebarModule {
 
 }

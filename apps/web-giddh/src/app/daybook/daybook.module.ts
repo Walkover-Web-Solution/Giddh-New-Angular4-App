@@ -32,6 +32,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
@@ -68,5 +71,9 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         FormFieldsModule
     ]
 })
+/**
+ * DaybookModule module
+ * Implements DaybookModule functionality
+ */
 export class DaybookModule {
 }

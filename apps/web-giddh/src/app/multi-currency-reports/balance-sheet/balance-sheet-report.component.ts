@@ -17,6 +17,9 @@ import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.st
 import { prepareBalanceSheetData } from '../../store/tl-pl/tl-pl.reducer';
 import { cloneDeep, forEach } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'balance-sheet-report',
     templateUrl: './balance-sheet-report.component.html',
@@ -24,6 +27,10 @@ selector: 'balance-sheet-report',
     providers: [MultiCurrencyReportsComponentStore],
     standalone: false
 })
+/**
+ * BalanceSheetReportComponent component
+ * Handles balancesheetreport functionality and user interactions
+ */
 export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /** Reference to the balance sheet grid component */
     @ViewChild('bsGrid', { static: true }) public bsGrid: BalanceSheetReportGridComponent;
@@ -48,10 +55,20 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /** Subject to handle component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private changeDetectionRef: ChangeDetectorRef, private componentStore: MultiCurrencyReportsComponentStore) {
         this.componentStore.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let data = prepareBalanceSheetData(cloneDeep(response));
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.liabilities) {
                     this.initData(data.liabilities);
                     (Array.isArray(data.liabilities) ? data.liabilities : []).forEach(childGroup => {
@@ -60,6 +77,9 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
                         childGroup['isIncludedInSearch'] = true;
                     });
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.assets) {
                     this.initData(data.assets);
                     (Array.isArray(data.assets) ? data.assets : []).forEach(childGroup => {
@@ -92,6 +112,9 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
                 account['isCreated'] = false;
                 account['isVisible'] = false;
             });
+            /**
+             * Handles if functionality
+             */
             if (childGroup.childGroups) {
                 this.initData(childGroup.childGroups);
             }
@@ -156,6 +179,9 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
      * @memberof BalanceSheetReportComponent
      */
     public expandAllEvent(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.changeDetectionRef.detectChanges();
         }, 1);
@@ -170,6 +196,9 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
      */
     public searchChanged(event: string): void {
         this.search = event;
+        /**
+         * Handles if functionality
+         */
         if (!this.search) {
             this.expandAll = false;
         }

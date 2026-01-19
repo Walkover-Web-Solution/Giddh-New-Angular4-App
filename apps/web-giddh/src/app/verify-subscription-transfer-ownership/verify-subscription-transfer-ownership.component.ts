@@ -9,6 +9,9 @@ import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
 import { environment } from '../../environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'verify-subscription-transfer-ownership',
     templateUrl: './verify-subscription-transfer-ownership.component.html',
@@ -16,6 +19,10 @@ import { environment } from '../../environments/environment.generated';
     providers: [SubscriptionComponentStore],
     standalone: false
 })
+/**
+ * VerifySubscriptionTransferOwnershipComponent component
+ * Handles verifysubscriptiontransferownership functionality and user interactions
+ */
 export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     /** Transfer confirmation reference */
     @ViewChild('transferConfirmation', { static: true }) public dialogBox: TemplateRef<any>;
@@ -48,6 +55,10 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private route: ActivatedRoute,
         public dialog: MatDialog,
@@ -69,6 +80,9 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.requestId) {
                 this.requestId = response.requestId;
             }
@@ -79,10 +93,16 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
             reason: ['']
         });
 
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([
             this.verifyOwnershipSuccess$.pipe(takeUntil(this.destroyed$)),
             this.rejectReason$.pipe(takeUntil(this.destroyed$))
         ]).subscribe(([verified, reject]) => {
+            /**
+             * Handles if functionality
+             */
             if (verified && !reject?.reqId) {
                 this.acceptedSubscription = true;
                 this.modalDialogRef.close();
@@ -112,6 +132,9 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
      * @memberof VerifySubscriptionTransferOwnershipComponent
      */
     public onSubmit(event: any, isReject: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (!isReject) {
             this.componentStore.verifyOwnership(this.requestId);
         } else {

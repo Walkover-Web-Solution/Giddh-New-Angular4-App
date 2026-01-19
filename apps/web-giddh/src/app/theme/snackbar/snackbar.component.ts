@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from "@angular/core";
 import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from "@angular/material/snack-bar";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'snackbar',
     templateUrl: './snackbar.component.html',
@@ -8,6 +11,10 @@ import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from "@angular/material/snack-bar"
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * SnackBarComponent component
+ * Handles snackbar functionality and user interactions
+ */
 export class SnackBarComponent implements OnInit {
     /** Instance of set timeout method */
     public timeout: any;
@@ -20,6 +27,10 @@ export class SnackBarComponent implements OnInit {
     /** Mat snackbar element */
     public matSnackbarElement: any;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_SNACK_BAR_DATA) public data: any,
         private matSnackBarRef: MatSnackBarRef<any>,
@@ -47,7 +58,13 @@ export class SnackBarComponent implements OnInit {
         this.showProgressBar = true;
         this.interval = setInterval(() => {
             this.snackProgressBarWidthPercentage--;
+            /**
+             * Handles if functionality
+             */
             if(this.snackProgressBarWidthPercentage === 0) {
+                /**
+                 * Handles clearInterval functionality
+                 */
                 clearInterval(this.interval);
             }
             this.changeDetection.detectChanges();
@@ -68,7 +85,13 @@ export class SnackBarComponent implements OnInit {
     public resetTimeout(): void {
         this.showProgressBar = false;
         this.snackProgressBarWidthPercentage = 100;
+        /**
+         * Handles clearInterval functionality
+         */
         clearInterval(this.interval);
+        /**
+         * Handles clearTimeout functionality
+         */
         clearTimeout(this.timeout);
         this.changeDetection.detectChanges();
     }

@@ -33,6 +33,9 @@ import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, m
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -117,6 +120,10 @@ export class GeneralService {
 
     private _sessionId: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -126,12 +133,21 @@ export class GeneralService {
         private toasterService: ToasterService
     ) { }
 
+    /**
+     * Handles SetIAmLoaded functionality
+     */
     public SetIAmLoaded(iAmLoaded: boolean) {
         this.IAmLoaded.next(iAmLoaded);
     }
 
+    /**
+     * Creates new querystring
+     */
     public createQueryString(url: string, params: any) {
         Object.keys(params).forEach((key, index) => {
+            /**
+             * Handles if functionality
+             */
             if (params[key] !== undefined) {
                 const delimiter = url.indexOf('?') === -1 ? '?' : (index === 0 ? '' : '&');
                 url += `${delimiter}${key}=${params[key]}`
@@ -140,21 +156,36 @@ export class GeneralService {
         return url;
     }
 
+    /**
+     * Sets ismobileview value
+     */
     public setIsMobileView(isMobileView: boolean) {
         this.isMobileSite.next(isMobileView);
     }
 
+    /**
+     * Handles base64ToBlob functionality
+     */
     public base64ToBlob(b64Data, contentType, sliceSize) {
         contentType = contentType || '';
         sliceSize = sliceSize || 512;
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
+        /**
+         * Handles if functionality
+         */
         if (byteCharacters && byteCharacters.length > 0) {
+            /**
+             * Handles while functionality
+             */
             while (offset < byteCharacters?.length) {
                 let slice = byteCharacters.slice(offset, offset + sliceSize);
                 let byteNumbers = new Array(slice?.length);
                 let i = 0;
+                /**
+                 * Handles while functionality
+                 */
                 while (i < slice?.length) {
                     byteNumbers[i] = slice.charCodeAt(i);
                     i++;
@@ -167,8 +198,14 @@ export class GeneralService {
         return new Blob(byteArrays, { type: contentType });
     }
 
+    /**
+     * Handles convertExponentialToNumber functionality
+     */
     convertExponentialToNumber(n) {
         var [lead, decimal, pow] = n?.toString()?.split(/e|\./);
+        /**
+         * Handles if functionality
+         */
         if (decimal) {
             return +pow <= 0
                 ? "0." + "0".repeat(Math.abs(pow) - 1) + lead + decimal
@@ -178,28 +215,55 @@ export class GeneralService {
         }
     }
 
+    /**
+     * Handles storeUtmParameters functionality
+     */
     storeUtmParameters(routerParams: any): void {
+        /**
+         * Handles if functionality
+         */
         if (routerParams['utm_source']) {
             localStorage.setItem('utm_source', routerParams['utm_source']);
         }
+        /**
+         * Handles if functionality
+         */
         if (routerParams['utm_medium']) {
             localStorage.setItem('utm_medium', routerParams['utm_medium']);
         }
+        /**
+         * Handles if functionality
+         */
         if (routerParams['utm_campaign']) {
             localStorage.setItem('utm_campaign', routerParams['utm_campaign']);
         }
+        /**
+         * Handles if functionality
+         */
         if (routerParams['utm_term']) {
             localStorage.setItem('utm_term', routerParams['utm_term']);
         }
+        /**
+         * Handles if functionality
+         */
         if (routerParams['utm_content']) {
             localStorage.setItem('utm_content', routerParams['utm_content']);
         }
+        /**
+         * Handles if functionality
+         */
         if (routerParams['region']) {
             localStorage.setItem('region', routerParams['region']);
         }
     }
 
+    /**
+     * Retrieves utmparameter data
+     */
     getUtmParameter(param: string): string {
+        /**
+         * Handles if functionality
+         */
         if (localStorage.getItem(param)) {
             return localStorage.getItem(param);
         } else {
@@ -207,6 +271,9 @@ export class GeneralService {
         }
     }
 
+    /**
+     * Deletes utmparameters
+     */
     removeUtmParameters(): void {
         localStorage.removeItem("utm_source");
         localStorage.removeItem("utm_medium");
@@ -216,6 +283,9 @@ export class GeneralService {
         localStorage.removeItem("region");
     }
 
+    /**
+     * Retrieves lastelement data
+     */
     getLastElement(array) {
         return array[array?.length - 1];
     };
@@ -229,33 +299,54 @@ export class GeneralService {
      */
     public getRcmConfiguration(isRcmSelected: boolean, commonLocaleData?: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
+            /**
+             * Handles text functionality
+             */
             text: (commonLocaleData) ? commonLocaleData?.app_yes : 'Yes',
             color: 'primary'
         },
         {
+            /**
+             * Handles text functionality
+             */
             text: (commonLocaleData) ? commonLocaleData?.app_no : 'No'
         }];
         const headerText: string = (commonLocaleData) ? commonLocaleData?.app_rc_heading : 'Reverse Charge Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mb-2 text-light';
         const footerCssClass: string = 'mb-2';
+        /**
+         * Handles return functionality
+         */
         return (isRcmSelected) ? {
             headerText,
             headerCssClass,
+            /**
+             * Handles messageText functionality
+             */
             messageText: (commonLocaleData) ? commonLocaleData?.app_rc_selected_note : `Note: If you check this transaction for Reverse Charge,
             applied taxes will be considered under Reverse Charge taxes and
             will be added in tax report.`,
             messageCssClass,
+            /**
+             * Handles footerText functionality
+             */
             footerText: (commonLocaleData) ? commonLocaleData?.app_rc_selected_footer_note : 'Are you sure you want to check this transaction for Reverse Charge?',
             footerCssClass,
             buttons
         } : {
             headerText,
             headerCssClass,
+            /**
+             * Handles messageText functionality
+             */
             messageText: (commonLocaleData) ? commonLocaleData?.app_rc_unselected_note : `Note: If you uncheck this transaction from Reverse Charge, applied
                 taxes will be considered as normal taxes and reverse
                 charge effect will be removed from tax report.`,
             messageCssClass,
+            /**
+             * Handles footerText functionality
+             */
             footerText: (commonLocaleData) ? commonLocaleData?.app_rs_unselected_footer_note : 'Are you sure you want to uncheck this transaction from Reverse Charge?',
             footerCssClass,
             buttons
@@ -273,7 +364,13 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any, activeCompany?: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (currentLedgerAccountDetails && selectedAccountDetails) {
+            /**
+             * Handles if functionality
+             */
             if (![currentLedgerAccountDetails?.uniqueName, selectedAccountDetails?.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
                 const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2 && (activeCompany?.country === "India" || activeCompany?.country === 'United Kingdom')) ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
@@ -286,6 +383,9 @@ export class GeneralService {
                 // Both accounts (current ledger and selected account) in order to satisfy RCM MUST have first
                 // level parent group unique name in allowed unique names and MUST NOT have their second level parent
                 // in disallowed unique names
+                /**
+                 * Handles return functionality
+                 */
                 return (allowedFirstLevelUniqueNames.some((firstLevelUniqueName: string) => [currentLedgerFirstParent, selectedAccountFirstParent].includes(firstLevelUniqueName)) &&
                     !disallowedSecondLevelUniqueNames.some((secondLevelUniqueName: string) => [currentLedgerSecondParent, selectedAccountSecondParent].includes(secondLevelUniqueName)));
             }
@@ -316,6 +416,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public allowAlphanumericChar(value: any): string {
+        /**
+         * Handles if functionality
+         */
         if (value) {
             return value?.replace(/[^a-zA-Z0-9]/g, '');
         } else {
@@ -334,11 +437,20 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public calculateInclusiveOrExclusiveTaxes(inclusive = false, amount: number, totalTaxPercentage: number, totalDiscount: number): number {
+        /**
+         * Handles if functionality
+         */
         if (inclusive) {
             // Inclusive tax rate
+            /**
+             * Handles return functionality
+             */
             return (totalTaxPercentage * (Number(amount) - totalDiscount)) / (100 + totalTaxPercentage);
         } else {
             // Exclusive tax rate
+            /**
+             * Handles return functionality
+             */
             return ((totalTaxPercentage * (Number(amount) - totalDiscount)) / 100);
         }
     }
@@ -369,17 +481,29 @@ export class GeneralService {
         var xPosition = 0;
         var yPosition = 40;
 
+        /**
+         * Handles while functionality
+         */
         while (elementTarget) {
             xPosition += (elementTarget.offsetLeft - elementTarget.scrollLeft + elementTarget.clientLeft);
+            /**
+             * Handles if functionality
+             */
             if (!element) {
                 yPosition += (elementTarget.offsetTop - elementTarget.scrollTop + elementTarget.clientTop);
             }
             elementTarget = elementTarget.offsetParent;
         }
+        /**
+         * Handles if functionality
+         */
         if (element) {
             yPosition = element.clientY + 20;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (window && window.innerHeight - yPosition < 450) { // 450 is approx height of datepicker
             yPosition -= (window.innerHeight - yPosition) / 2;
         }
@@ -397,8 +521,14 @@ export class GeneralService {
     public checkIfEmailDomainAllowed(email: string): boolean {
         let isAllowed = false;
         const whiteLabelDomainsAllowed = this.getDecodedWhiteLabel();
+        /**
+         * Handles if functionality
+         */
         if (email) {
             let emailSplit = email.split("@");
+            /**
+             * Handles if functionality
+             */
             if ((whiteLabelDomainsAllowed?.emailDomains || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
@@ -415,6 +545,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public allowOnlyNumbersAndDot(event: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (event.keyCode === 46 || (event.keyCode >= 48 && event.keyCode <= 57)) {
             return true;
         } else {
@@ -431,6 +564,9 @@ export class GeneralService {
     * @memberof GeneralService
     */
     public allowOnlyNumbers(event: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (event.keyCode >= 48 && event.keyCode <= 57) {
             return true;
         } else {
@@ -448,13 +584,22 @@ export class GeneralService {
     public dateConversionToSetComponentDatePicker(fromDateValue: string, toDateValue: string): any {
         let fromDateInMmDdYy;
         let toDateInMmDdYy;
+        /**
+         * Handles if functionality
+         */
         if (fromDateValue && toDateValue) {
             let fromDate = fromDateValue.split('-');
             let toDate = toDateValue.split('-');
 
+            /**
+             * Handles if functionality
+             */
             if (fromDate && fromDate.length) {
                 fromDateInMmDdYy = fromDate[1] + '-' + fromDate[0] + '-' + fromDate[2];
             }
+            /**
+             * Handles if functionality
+             */
             if (toDate && toDate.length) {
                 toDateInMmDdYy = toDate[1] + '-' + toDate[0] + '-' + toDate[2]
             }
@@ -483,7 +628,13 @@ export class GeneralService {
      */
     public getAccountCategory(account: any, accountName: string): string {
         let parent = account?.parentGroups ? account.parentGroups[0] : '';
+        /**
+         * Handles if functionality
+         */
         if (parent) {
+            /**
+             * Handles if functionality
+             */
             if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent?.uniqueName)) {
                 return 'liabilities';
             } else if (find(['fixedassets'], p => p === parent?.uniqueName)) {
@@ -493,10 +644,16 @@ export class GeneralService {
             } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent?.uniqueName)) {
                 return 'income';
             } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent?.uniqueName)) {
+                /**
+                 * Handles if functionality
+                 */
                 if (accountName === 'roundoff') {
                     return 'roundoff';
                 }
                 let subParent = account?.parentGroups[1];
+                /**
+                 * Handles if functionality
+                 */
                 if (subParent && subParent?.uniqueName === 'discount') {
                     return 'discount';
                 }
@@ -517,6 +674,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public allowCharactersNumbersSpecialCharacters(event: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 186 && event.keyCode <= 192) || (event.keyCode >= 219 && event.keyCode <= 222)) {
             return true;
         } else {
@@ -568,14 +728,23 @@ export class GeneralService {
      */
     public addValueInArray(array: Array<string>, value: any): Array<string> {
         let exists = false;
+        /**
+         * Handles if functionality
+         */
         if (array && array.length > 0) {
             (Array.isArray(array) ? array : []).forEach(item => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item === value) {
                     exists = true;
                 }
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!exists) {
             array.push(value);
         }
@@ -594,8 +763,14 @@ export class GeneralService {
     public checkIfValueExistsInArray(array: Array<string>, value: any): boolean {
         let exists = false;
 
+        /**
+         * Handles if functionality
+         */
         if (array && array.length > 0) {
             (Array.isArray(array) ? array : []).forEach(item => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item === value) {
                     exists = true;
                 }
@@ -615,9 +790,15 @@ export class GeneralService {
      */
     public removeValueFromArray(array: Array<string>, value: any): Array<string> {
         let index = -1;
+        /**
+         * Handles if functionality
+         */
         if (array && array.length > 0) {
             let loop = 0;
             (Array.isArray(array) ? array : []).forEach(item => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item === value) {
                     index = loop;
                 }
@@ -625,6 +806,9 @@ export class GeneralService {
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             array.splice(index, 1);
         }
@@ -657,6 +841,9 @@ export class GeneralService {
     public getCookieValue(name: any): any {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
+        /**
+         * Handles if functionality
+         */
         if (parts.length === 2) {
             const cookieValue = parts.pop().split(';').shift();
             return cookieValue.toUpperCase();
@@ -694,6 +881,9 @@ export class GeneralService {
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mb-2';
         const footerCssClass: string = 'mb-2';
+        /**
+         * Handles return functionality
+         */
         return (isVoucherDateSelected) ? {
             headerText,
             headerCssClass,
@@ -713,6 +903,9 @@ export class GeneralService {
         };
     }
 
+    /**
+     * Retrieves deletebranchtransferconfiguration data
+     */
     public getDeleteBranchTransferConfiguration(localeData: any, commonLocaleData: any, selectedBranchTransferType: string): ConfirmationModalConfiguration {
 
         const buttons: Array<ConfirmationModalButton> = [{
@@ -809,6 +1002,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getFileExtension(path: string): string {
+        /**
+         * Handles return functionality
+         */
         return (path && path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop() : 'null';
     }
 
@@ -821,6 +1017,9 @@ export class GeneralService {
     public isRtlCurrency(currencyCode: string): boolean {
         const rtlCurrencyCodes = ['AED'];
 
+        /**
+         * Handles if functionality
+         */
         if (rtlCurrencyCodes?.indexOf(currencyCode) > -1) {
             return true;
         } else {
@@ -854,6 +1053,9 @@ export class GeneralService {
      */
     public fetchTaxesOnPriority(stockTaxes?: Array<string>, stockGroupTaxes?: Array<string>,
         accountTaxes?: Array<string>, accountGroupTaxes?: Array<string>): Array<string> {
+        /**
+         * Handles if functionality
+         */
         if (stockTaxes?.length) {
             return stockTaxes;
         } else if (stockGroupTaxes?.length) {
@@ -876,13 +1078,22 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getInitialsFromString(name: string, delimiter?: string): string {
+        /**
+         * Handles if functionality
+         */
         if (name) {
             let nameArray = name.split(delimiter || " ");
+            /**
+             * Handles if functionality
+             */
             if (nameArray?.length > 1) {
                 // Check if "" is not present at 0th and 1st index
                 let count = 0;
                 let initials = '';
                 (Array.isArray(nameArray) ? nameArray : []).forEach(word => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (word && count < 2) {
                         initials += ` ${word[0]}`;
                         count++;
@@ -912,6 +1123,9 @@ export class GeneralService {
         let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
+            /**
+             * Handles if functionality
+             */
             if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== voucherApiVersion) {
                 visibleMenuItems[menuIndex].hide = true;
             } else {
@@ -921,6 +1135,9 @@ export class GeneralService {
 
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
+                /**
+                 * Handles if functionality
+                 */
                 if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
@@ -946,6 +1163,9 @@ export class GeneralService {
             ['beneficiaryName', 'bankName', 'branchName', 'bankAccountNo', 'swiftCode'] :
             ['bankName', 'bankAccountNo', 'ifsc'];
         let isValid = true;
+        /**
+         * Handles if functionality
+         */
         if (fieldsWithValue) {
             isValid = keys.every(key => Boolean(fieldsWithValue[key])) || keys.every(key => !Boolean(fieldsWithValue[key]));
             return isValid;
@@ -964,6 +1184,9 @@ export class GeneralService {
      */
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         let isQueryParams: boolean;
+        /**
+         * Handles if functionality
+         */
         if (route.includes('?')) {
             parameter = parameter || {};
             isQueryParams = true;
@@ -976,12 +1199,21 @@ export class GeneralService {
                 parameter[key] = value;
             });
         }
+        /**
+         * Handles if functionality
+         */
         if (isQueryParams) {
             this.router.navigate([route], { queryParams: parameter });
         } else {
             this.router.navigate([route], parameter);
         }
+        /**
+         * Handles if functionality
+         */
         if (Configuration.isElectron && isSocialLogin) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 window.location.reload();
             }, 200);
@@ -997,6 +1229,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
+        /**
+         * Handles switch functionality
+         */
         switch (voucherCode) {
             case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
             case AdjustedVoucherType.Purchase: case AdjustedVoucherType.PurchaseInvoice: return commonLocaleData?.app_voucher_types.purchase;
@@ -1032,6 +1267,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public childOf(child: any, parent: any): boolean {
+        /**
+         * Handles while functionality
+         */
         while ((child = child.parentNode) && child !== parent) {
         }
         return !!child;
@@ -1052,9 +1290,15 @@ export class GeneralService {
         let branchAInt = parseInt(branchA?.alias, 10);
         let branchBInt = parseInt(branchB?.alias, 10);
 
+        /**
+         * Handles if functionality
+         */
         if (isNaN(branchAInt) && isNaN(branchBInt)) {
             let branchAOutput = branchA?.alias?.toLowerCase()?.replace(regexA, "");
             let branchBOutput = branchB?.alias?.toLowerCase()?.replace(regexA, "");
+            /**
+             * Handles if functionality
+             */
             if (branchAOutput === branchBOutput) {
                 let branchANumeric = parseInt(branchA?.alias?.toLowerCase()?.replace(regexN, ""), 10);
                 let branchBNumeric = parseInt(branchB?.alias?.toLowerCase()?.replace(regexN, ""), 10);
@@ -1078,6 +1322,9 @@ export class GeneralService {
      */
     public expandSidebar(): void {
         const isAccountModalOpened = document.querySelector('.create-acc-form');
+        /**
+         * Handles if functionality
+         */
         if (!isAccountModalOpened) {
             document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
             document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
@@ -1158,31 +1405,55 @@ export class GeneralService {
             let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
                 grandTotalAmountForAccount;
 
+            /**
+             * Handles if functionality
+             */
             if (item && item.totalBalance && item.totalBalance.amountForCompany !== undefined && item.totalBalance.amountForAccount !== undefined) {
                 balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
                 balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
+            /**
+             * Handles if functionality
+             */
             if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment, VoucherTypeEnum.purchaseOrder]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
 
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
+            /**
+             * Handles if functionality
+             */
             if (this.voucherApiVersion === 2) {
                 grandTotalConversionRate = item.exchangeRate ?? 1;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
+            /**
+             * Handles if functionality
+             */
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
             let balanceDueTooltipText;
+            /**
+             * Handles if functionality
+             */
             if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
                 const gainLossText = localeData?.exchange_gain_loss_label?.
+                    /**
+                     * Handles replace functionality
+                     */
                     replace("[BASE_CURRENCY]", baseCurrency)?.
+                    /**
+                     * Handles replace functionality
+                     */
                     replace("[AMOUNT]", balanceDueAmountForCompany)?.
+                    /**
+                     * Handles replace functionality
+                     */
                     replace('[PROFIT_TYPE]', item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss);
                 balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
             } else {
@@ -1205,6 +1476,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getVoucherNumberLabel(voucherType: string, voucherNumber: any, commonLocaleData: any): any {
+        /**
+         * Handles if functionality
+         */
         if ((voucherType === "pur" || voucherType === VoucherTypeEnum.purchase) && (!voucherNumber || voucherNumber === "-")) {
             voucherNumber = commonLocaleData?.app_not_available;
         } else if (!voucherNumber) {
@@ -1221,6 +1495,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public convertV1ResponseInV2(data: any): any {
+        /**
+         * Handles if functionality
+         */
         if (data?.company?.billingDetails?.taxNumber) {
         }
         return data;
@@ -1236,6 +1513,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public isReceiptPaymentEntry(ledgerAccount: any, entryAccount: any, voucherType?: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (entryAccount?.parentGroups?.length > 0 && !entryAccount?.parentGroups[0]?.uniqueName) {
             entryAccount.parentGroups = entryAccount?.parentGroups?.map(group => {
                 return {
@@ -1243,6 +1523,9 @@ export class GeneralService {
                 }
             });
         }
+        /**
+         * Handles if functionality
+         */
         if (
             this.voucherApiVersion === 2
             && entryAccount?.parentGroups?.length > 1 && ledgerAccount?.parentGroups?.length > 1 &&
@@ -1272,7 +1555,13 @@ export class GeneralService {
     public getReceiptPaymentOtherTaxAmount(tcsCalculationMethod: string, totalAmount: number, mainTaxPercentage: any, tdsTaxPercentage: any, tcsTaxPercentage: any): number {
         let taxableValue = 0;
 
+        /**
+         * Handles if functionality
+         */
         if (tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+            /**
+             * Handles if functionality
+             */
             if (tdsTaxPercentage) {
                 //Advance Received/1+{(Rate of GST - Rate of TDS)/100}
                 taxableValue = totalAmount / (1 + ((mainTaxPercentage - tdsTaxPercentage) / 100));
@@ -1281,11 +1570,20 @@ export class GeneralService {
                 taxableValue = totalAmount / (1 + ((mainTaxPercentage + tcsTaxPercentage) / 100));
             }
         } else if (tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+            /**
+             * Handles if functionality
+             */
             if (tdsTaxPercentage) {
                 //{[{Advance received/(100-TDS Rate)}*100]/(100+GST rate)}*100
+                /**
+                 * Handles taxableValue functionality
+                 */
                 taxableValue = (((totalAmount / (100 - tdsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
             } else if (tcsTaxPercentage) {
                 //{[{Advance received/(100+TCS Rate)}*100]/(100+GST rate)}*100
+                /**
+                 * Handles taxableValue functionality
+                 */
                 taxableValue = (((totalAmount / (100 + tcsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
             }
         } else if (mainTaxPercentage) {
@@ -1339,7 +1637,13 @@ export class GeneralService {
      */
     public checkIfCssExists(path: string): boolean {
         let found = false;
+        /**
+         * Handles for functionality
+         */
         for (let i = 0; i < document.styleSheets?.length; i++) {
+            /**
+             * Handles if functionality
+             */
             if (document.styleSheets[i]?.href == path) {
                 found = true;
                 break;
@@ -1358,14 +1662,23 @@ export class GeneralService {
      */
     public addObjectInArray(array: any[], value: any): Array<string> {
         let exists = false;
+        /**
+         * Handles if functionality
+         */
         if (array && array.length > 0) {
             (Array.isArray(array) ? array : []).forEach(item => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!exists) {
             array.push(value);
         }
@@ -1384,8 +1697,14 @@ export class GeneralService {
     public checkIfObjectExistsInArray(array: any[], value: any): boolean {
         let exists = false;
 
+        /**
+         * Handles if functionality
+         */
         if (array && array.length > 0) {
             (Array.isArray(array) ? array : []).forEach(item => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1405,9 +1724,15 @@ export class GeneralService {
      */
     public removeObjectFromArray(array: any[], value: any): Array<string> {
         let index = -1;
+        /**
+         * Handles if functionality
+         */
         if (array && array.length > 0) {
             let loop = 0;
             (Array.isArray(array) ? array : []).forEach(item => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item?.poUniqueName === value?.poUniqueName) {
                     index = loop;
                 }
@@ -1415,6 +1740,9 @@ export class GeneralService {
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             array.splice(index, 1);
         }
@@ -1456,9 +1784,15 @@ export class GeneralService {
             sParameterName,
             i;
 
+        /**
+         * Handles for functionality
+         */
         for (i = 0; i < sURLVariables.length; i++) {
             sParameterName = sURLVariables[i].split('=');
 
+            /**
+             * Handles if functionality
+             */
             if (sParameterName[0] === sParam) {
                 return sParameterName[1] === undefined ? true : this.removeProtocol(decodeURIComponent(sParameterName[1]));
             }
@@ -1499,19 +1833,31 @@ export class GeneralService {
             applicableTaxes,
             date
         } = requestObj;
+        /**
+         * Handles if functionality
+         */
         if (customTaxTypesForTaxFilter && customTaxTypesForTaxFilter.length) {
             taxes = taxes?.filter(f => customTaxTypesForTaxFilter.includes(f.taxType));
         }
+        /**
+         * Handles if functionality
+         */
         if (exceptTaxTypes && exceptTaxTypes.length) {
             taxes = taxes?.filter(f => !exceptTaxTypes.includes(f.taxType));
         }
         taxes.map(tax => {
             let index = taxRenderData?.findIndex(f => f?.uniqueName === tax?.uniqueName);
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
+            /**
+             * Handles if functionality
+             */
             if (index > -1) {
                 taxRenderData[index].isChecked =
                     applicableTaxes && applicableTaxes.length ? applicableTaxes.some(item => item === tax?.uniqueName) :
                         taxRenderData[index].isChecked ? taxRenderData[index].isChecked : false;
+                /**
+                 * Handles if functionality
+                 */
                 if (date && tax.taxDetail && tax.taxDetail.length) {
                     taxRenderData[index].amount =
                         (dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(date, GIDDH_DATE_FORMAT)) || dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(date, GIDDH_DATE_FORMAT)) ?
@@ -1523,16 +1869,28 @@ export class GeneralService {
                 taxObj.uniqueName = tax?.uniqueName;
                 taxObj.type = tax.taxType;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (date) {
+                    /**
+                     * Handles date functionality
+                     */
                     date = (typeof date === "object") ? dayjs(date).format(GIDDH_DATE_FORMAT) : date;
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
                     let exactDate = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(date, GIDDH_DATE_FORMAT)));
+                    /**
+                     * Handles if functionality
+                     */
                     if (exactDate?.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
                         let filteredTaxObject = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(date, GIDDH_DATE_FORMAT));
+                        /**
+                         * Handles if functionality
+                         */
                         if (filteredTaxObject?.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
@@ -1548,6 +1906,9 @@ export class GeneralService {
                 taxRenderData.push(taxObj);
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (taxRenderData?.length) {
             taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
         }
@@ -1571,8 +1932,14 @@ export class GeneralService {
             discountAccountsDetails
         } = requestObj;
         (Array.isArray(discountsList) ? discountsList : []).forEach(acc => {
+            /**
+             * Handles if functionality
+             */
             if (discountAccountsDetails) {
                 let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName || s.uniqueName === acc?.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
@@ -1615,11 +1982,17 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public generatePermutations(arr: any, start = 0, result = []): any {
+        /**
+         * Handles if functionality
+         */
         if (start === arr.length - 1) {
             result.push([...arr]);
             return;
         }
 
+        /**
+         * Handles for functionality
+         */
         for (let i = start; i < arr.length; i++) {
             this.swap(arr, start, i);
             this.generatePermutations(arr, start + 1, result);
@@ -1641,6 +2014,9 @@ export class GeneralService {
         reader.readAsArrayBuffer(file);
         reader.onload = () => {
             const blob = new Blob([reader.result], { type: file.type });
+            /**
+             * Handles callback functionality
+             */
             callback(blob, file);
         };
     }
@@ -1656,6 +2032,9 @@ export class GeneralService {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
+            /**
+             * Handles callback functionality
+             */
             callback(reader.result);
         };
     }
@@ -1668,6 +2047,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public isCidr(cidr: string): boolean {
+        /**
+         * Handles return functionality
+         */
         return (/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))?$/g).test(cidr);
     };
 
@@ -1713,6 +2095,9 @@ export class GeneralService {
         const randomLength = 8; // Adjust the length of the random string as needed
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let result = '';
+        /**
+         * Handles for functionality
+         */
         for (let i = 0; i < randomLength; i++) {
             const randomIndex = Math.floor(Math.random() * characters.length);
             result += characters.charAt(randomIndex);
@@ -1767,6 +2152,9 @@ export class GeneralService {
             windowsPlatforms = /(win32|win64|windows|wince)/i;
         let operatingSystem = null;
 
+        /**
+         * Handles if functionality
+         */
         if (macosPlatforms.test(platform)) {
             operatingSystem = SUPPORTED_OPERATING_SYSTEMS.MacOS;
         } else if (windowsPlatforms.test(platform)) {
@@ -1811,6 +2199,9 @@ export class GeneralService {
      */
     public getUserTimeZone(): any {
         let offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
+        /**
+         * Handles return functionality
+         */
         return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
     }
 
@@ -1824,6 +2215,9 @@ export class GeneralService {
         const userAgent = window.navigator.userAgent;
         let osName;
 
+        /**
+         * Handles if functionality
+         */
         if (userAgent.indexOf("Win") !== -1) {
             osName = "Windows";
         } else if (userAgent.indexOf("Mac") !== -1) {
@@ -1851,6 +2245,9 @@ export class GeneralService {
         const userAgent = window.navigator.userAgent;
         let deviceManufacture = 'Unknown';
 
+        /**
+         * Handles if functionality
+         */
         if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
             deviceManufacture = 'Apple';
         } else if (userAgent.indexOf('Android') !== -1) {
@@ -1881,15 +2278,24 @@ export class GeneralService {
         const userAgent = window.navigator.userAgent;
         let deviceModel = 'Unknown';
 
+        /**
+         * Handles if functionality
+         */
         if (userAgent.indexOf('iPhone') !== -1) {
             // Extracting iPhone model from user agent string (Example: "iPhone12,1")
             const match = userAgent.match(/iPhone([\d,_]+)/);
+            /**
+             * Handles if functionality
+             */
             if (match && match.length > 1) {
                 deviceModel = match[1].replace(/_/g, '.'); // Replacing underscores with dots
             }
         } else if (userAgent.indexOf('iPad') !== -1) {
             // Extracting iPad model from user agent string (Example: "iPad11,1")
             const match = userAgent.match(/iPad([\d,_]+)/);
+            /**
+             * Handles if functionality
+             */
             if (match && match.length > 1) {
                 deviceModel = match[1].replace(/_/g, '.'); // Replacing underscores with dots
             }
@@ -1911,6 +2317,9 @@ export class GeneralService {
         const userAgent = window.navigator.userAgent;
         let osFamily = 'Unknown';
 
+        /**
+         * Handles if functionality
+         */
         if (userAgent.indexOf('Windows') !== -1) {
             osFamily = 'Windows';
         } else if (userAgent.indexOf('Macintosh') !== -1) {
@@ -1936,6 +2345,9 @@ export class GeneralService {
         const userAgent = window.navigator.userAgent;
         let osVersion = 'Unknown';
 
+        /**
+         * Handles if functionality
+         */
         if (userAgent.indexOf('Windows NT') !== -1) {
             osVersion = this.extractWindowsVersion(userAgent);
         } else if (userAgent.indexOf('Mac OS X') !== -1) {
@@ -1959,6 +2371,9 @@ export class GeneralService {
     public extractWindowsVersion(userAgent: string): string {
         // Example: "Windows NT 10.0"
         const startIndex = userAgent.indexOf('Windows NT');
+        /**
+         * Handles if functionality
+         */
         if (startIndex !== -1) {
             return userAgent.substring(startIndex + 11, userAgent.indexOf(';', startIndex));
         } else {
@@ -1976,6 +2391,9 @@ export class GeneralService {
     public extractMacOSVersion(userAgent: string): string {
         // Example: "Mac OS X 10_15_7"
         const startIndex = userAgent.indexOf('Mac OS X');
+        /**
+         * Handles if functionality
+         */
         if (startIndex !== -1) {
             return userAgent.substring(startIndex + 9, userAgent.indexOf(')', startIndex)).replace(/_/g, '.');
         } else {
@@ -1993,6 +2411,9 @@ export class GeneralService {
     public extractAndroidVersion(userAgent: string): string {
         // Example: "Android 10"
         const startIndex = userAgent.indexOf('Android');
+        /**
+         * Handles if functionality
+         */
         if (startIndex !== -1) {
             return userAgent.substring(startIndex + 8, userAgent.indexOf(';', startIndex));
         } else {
@@ -2010,6 +2431,9 @@ export class GeneralService {
     public extractiOSVersion(userAgent: string): string {
         // Example: "iPhone OS 14_4"
         const startIndex = userAgent.indexOf('iPhone OS');
+        /**
+         * Handles if functionality
+         */
         if (startIndex !== -1) {
             return userAgent.substring(startIndex + 10, userAgent.indexOf(';', startIndex)).replace(/_/g, '.');
         } else {
@@ -2279,6 +2703,9 @@ export class GeneralService {
      * @memberof GeneralService
     */
     public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
+        /**
+         * Handles if functionality
+         */
         if (!url) return url;
         const updatedModel = {
             ...model,
@@ -2383,6 +2810,9 @@ export class GeneralService {
             { label: commonLocaleData?.app_weekdays.friday, value: WeekdaysEnum.FRIDAY },
             { label: commonLocaleData?.app_weekdays.saturday, value: WeekdaysEnum.SATURDAY }
         ];
+        /**
+         * Handles if functionality
+         */
         if (isDaily) {
             days = [{ label: commonLocaleData?.app_weekdays.daily, value: WeekdaysEnum.DAILY }, ...days];
         }
@@ -2397,7 +2827,13 @@ export class GeneralService {
      */
     public getDaysOfMonth(): IOption[] {
         return Array.from({ length: 31 }, (_, i) => ({
+            /**
+             * Handles label functionality
+             */
             label: (i + 1).toString(),
+            /**
+             * Handles value functionality
+             */
             value: (i + 1).toString()
         }));
     }
@@ -2410,7 +2846,13 @@ export class GeneralService {
      */
     public getStartAndEndDateOfMonthOrQuater(type: 'month' | 'quarter', value: string): { fromDate: string, toDate: string } {
         const pad = (n: number) => n < 10 ? '0' + n : n.toString();
+        /**
+         * Handles if functionality
+         */
         if (type === 'month') {
+            /**
+             * Handles if functionality
+             */
             if (!value || !/^\d{2}-\d{4}$/.test(value)) {
                 return { fromDate: '', toDate: '' };
             }
@@ -2420,6 +2862,9 @@ export class GeneralService {
             const toDate = `${pad(lastDay)}-${pad(month)}-${year}`;
             return { fromDate, toDate };
         } else if (type === 'quarter') {
+            /**
+             * Handles if functionality
+             */
             if (!value || !/^\d{2}-\d{4}$/.test(value)) {
                 return { fromDate: '', toDate: '' };
             }
@@ -2427,6 +2872,9 @@ export class GeneralService {
             const quarter = Number(quarterStr);
             const year = Number(yearStr);
             let fromMonth = 1, toMonth = 3;
+            /**
+             * Handles switch functionality
+             */
             switch (quarter) {
                 case 1:
                     fromMonth = 1; toMonth = 3; break;
@@ -2459,6 +2907,9 @@ export class GeneralService {
      * @returns The adjusted page index.
      */
     public adjustPageIndex(totalItems: number, page: number, count: number, removeCount: number = 1) {
+        /**
+         * Handles if functionality
+         */
         if (((totalItems - removeCount) % count === 0) && page > 1) {
             page = page - 1;
         }
@@ -2482,7 +2933,13 @@ export class GeneralService {
         router: Router,
         pageLeaveUtilityService: PageLeaveUtilityService,
         destroyed$: Subject<boolean>,
+        /**
+         * Handles hasUnsavedChangesCallback functionality
+         */
         hasUnsavedChangesCallback: () => boolean,
+        /**
+         * Handles cleanupCallback functionality
+         */
         cleanupCallback: () => void,
         isNavigatingRef: { value: boolean }
     ): void {
@@ -2490,14 +2947,26 @@ export class GeneralService {
 
         // Listen for navigation attempts
         router.events.pipe(
+            /**
+             * Handles filter functionality
+             */
             filter(event => event instanceof NavigationStart),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(destroyed$)
         ).subscribe((event: NavigationStart) => {
             // Only intercept if we have unsaved changes and this is a different route
+            /**
+             * Handles if functionality
+             */
             if (hasUnsavedChangesCallback() && event.url !== router.url) {
                 // Always update the pending navigation URL to the most recent attempt
                 pendingNavigationUrl = event.url;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!isNavigatingRef.value) {
                     // Set flag to prevent multiple dialogs
                     isNavigatingRef.value = true;
@@ -2513,13 +2982,22 @@ export class GeneralService {
                         // Remove body CSS class that was added when dialog opened
                         document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (action === true) {
                         // User confirmed to leave - clean up and navigate
 
                             pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                            /**
+                             * Handles cleanupCallback functionality
+                             */
                             cleanupCallback();
 
                             // Use setTimeout to ensure navigation happens after all cleanup
+                            /**
+                             * Sets timeout value
+                             */
                             setTimeout(() => {
                                 // Reset navigation flag after cleanup but before navigation
                                 isNavigatingRef.value = false;
@@ -2527,6 +3005,9 @@ export class GeneralService {
                                 // Try Angular navigation first (smooth SPA navigation)
                                 router.navigateByUrl(pendingNavigationUrl, { replaceUrl: false }).then(
                                     (success) => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (!success) {
                                             // Try with different navigation options
                                             return router.navigateByUrl(pendingNavigationUrl, {
@@ -2574,6 +3055,9 @@ export class GeneralService {
      * Components can register their hasUnsavedChanges callback here
      */
     private unsavedChangesCallbacks: (() => boolean)[] = [];
+    /**
+     * Handles markFormsAsPristineCallbacks functionality
+     */
     private markFormsAsPristineCallbacks: (() => void)[] = [];
 
     /**
@@ -2587,8 +3071,14 @@ export class GeneralService {
         this.unsavedChangesCallbacks.push(callback);
 
         // Return unregister function
+        /**
+         * Handles return functionality
+         */
         return () => {
             const index = this.unsavedChangesCallbacks.indexOf(callback);
+            /**
+             * Handles if functionality
+             */
             if (index > -1) {
                 this.unsavedChangesCallbacks.splice(index, 1);
             }
@@ -2606,8 +3096,14 @@ export class GeneralService {
         this.markFormsAsPristineCallbacks.push(callback);
 
         // Return unregister function
+        /**
+         * Handles return functionality
+         */
         return () => {
             const index = this.markFormsAsPristineCallbacks.indexOf(callback);
+            /**
+             * Handles if functionality
+             */
             if (index > -1) {
                 this.markFormsAsPristineCallbacks.splice(index, 1);
             }
@@ -2639,6 +3135,9 @@ export class GeneralService {
     public markAllFormsAsPristine(): void {
         (Array.isArray(this.markFormsAsPristineCallbacks) ? this.markFormsAsPristineCallbacks : []).forEach(callback => {
             try {
+                /**
+                 * Handles callback functionality
+                 */
                 callback();
             } catch (error) {
 
@@ -2666,6 +3165,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public formatAmount(amount: number, decimalPlaces: number): string {
+        /**
+         * Handles if functionality
+         */
         if (amount == null || amount === undefined) {
             return '0.' + '0'.repeat(decimalPlaces);
         }
@@ -2680,6 +3182,9 @@ export class GeneralService {
      */
     public logAllGlobalVariables(): void {
         // Early exit if debug mode is disabled
+        /**
+         * Handles if functionality
+         */
         if (!this.debugMode) {
             return;
         }
@@ -2692,7 +3197,13 @@ export class GeneralService {
             const excludedKeys = ['parent', 'top', 'self', 'frames', 'frameElement']; // Avoid circular references
 
             // Collect all enumerable properties from window
+            /**
+             * Handles for functionality
+             */
             for (const key in window) {
+                /**
+                 * Handles if functionality
+                 */
                 if (window.hasOwnProperty(key) && !excludedKeys.includes(key)) {
                     try {
                         const value = (window as any)[key];
@@ -2745,11 +3256,20 @@ export class GeneralService {
      * @memberof GeneralService
      */
     private getSafeValue(value: any): any {
+        /**
+         * Handles if functionality
+         */
         if (value === null) return null;
+        /**
+         * Handles if functionality
+         */
         if (value === undefined) return undefined;
 
         const type = typeof value;
 
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case 'string':
             case 'number':
@@ -2758,15 +3278,27 @@ export class GeneralService {
             case 'function':
                 return `[Function: ${value.name || 'anonymous'}]`;
             case 'object':
+                /**
+                 * Handles if functionality
+                 */
                 if (Array.isArray(value)) {
                     return `[Array(${value.length})]`;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (value instanceof Date) {
                     return value.toISOString();
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (value instanceof Error) {
                     return `[Error: ${value.message}]`;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (value.constructor && value.constructor.name) {
                     return `[Object: ${value.constructor.name}]`;
                 }
@@ -2794,11 +3326,17 @@ export class GeneralService {
 
         Object.keys(globalVars).forEach(key => {
             const item = globalVars[key];
+            /**
+             * Handles switch functionality
+             */
             switch (item.type) {
                 case 'function':
                     categories.functions.push(key);
                     break;
                 case 'object':
+                    /**
+                     * Handles if functionality
+                     */
                     if (item.value && typeof item.value === 'string' && item.value.includes('Array')) {
                         categories.arrays.push(key);
                     } else if (item.constructor !== 'Object') {
@@ -2848,12 +3386,18 @@ export class GeneralService {
         ];
 
         angularGlobals.forEach(key => {
+            /**
+             * Handles if functionality
+             */
             if ((window as any)[key] !== undefined) {
                 console.log(`${key}:`, this.getSafeValue((window as any)[key]));
             }
         });
 
         // Log Angular version if available
+        /**
+         * Handles if functionality
+         */
         if ((window as any).ng && (window as any).ng.version) {
             console.log('Angular Version:', (window as any).ng.version);
         }
@@ -2876,6 +3420,9 @@ export class GeneralService {
         ];
 
         giddhGlobals.forEach(key => {
+            /**
+             * Handles if functionality
+             */
             if ((window as any)[key] !== undefined) {
                 console.log(`${key}:`, this.getSafeValue((window as any)[key]));
             }
@@ -2886,6 +3433,9 @@ export class GeneralService {
         const giddhStorageKeys = ['session', 'permission', 'branchConsolidated', 'whiteLabel', 'Country-Region'];
         giddhStorageKeys.forEach(key => {
             const value = localStorage.getItem(key);
+            /**
+             * Handles if functionality
+             */
             if (value) {
                 try {
                     const parsed = JSON.parse(value);
@@ -2901,6 +3451,9 @@ export class GeneralService {
         console.group('🗂️ GIDDH SESSIONSTORAGE');
         giddhStorageKeys.forEach(key => {
             const value = sessionStorage.getItem(key);
+            /**
+             * Handles if functionality
+             */
             if (value) {
                 try {
                     const parsed = JSON.parse(value);
@@ -2957,6 +3510,9 @@ export class GeneralService {
         ];
 
         browserAPIs.forEach(api => {
+            /**
+             * Handles if functionality
+             */
             if ((window as any)[api] !== undefined) {
                 console.log(`${api}:`, this.getSafeValue((window as any)[api]));
             }
@@ -2980,6 +3536,9 @@ export class GeneralService {
         ];
 
         thirdPartyLibs.forEach(lib => {
+            /**
+             * Handles if functionality
+             */
             if ((window as any)[lib] !== undefined) {
                 const value = (window as any)[lib];
                 console.log(`${lib}:`, {
@@ -3017,16 +3576,25 @@ export class GeneralService {
         toasterType: 'error' | 'warning' | 'success' | 'info' = 'warning'
     ): boolean {
         // Only validate if control is dirty (user has interacted with it)
+        /**
+         * Handles if functionality
+         */
         if (!control || !control.dirty || control.valid) {
             return true;
         }
 
         const errors = control.errors;
+        /**
+         * Handles if functionality
+         */
         if (!errors) {
             return true;
         }
 
         // Check required validation
+        /**
+         * Handles if functionality
+         */
         if (validationConfig.required?.enabled && errors['required']) {
             const message = validationConfig.required.message || `${fieldName} can not be blank`;
             this.toasterService.showSnackBar(toasterType, message);
@@ -3034,6 +3602,9 @@ export class GeneralService {
         }
 
         // Check maxlength validation
+        /**
+         * Handles if functionality
+         */
         if (validationConfig.maxlength?.enabled && errors['maxlength']) {
             const message = validationConfig.maxlength.message ||
                 `${fieldName} can not be more than ${validationConfig.maxlength.maxLength} characters`;
@@ -3042,6 +3613,9 @@ export class GeneralService {
         }
 
         // Check minlength validation
+        /**
+         * Handles if functionality
+         */
         if (validationConfig.minlength?.enabled && errors['minlength']) {
             const message = validationConfig.minlength.message ||
                 `${fieldName} must be at least ${validationConfig.minlength.minLength} characters`;
@@ -3050,6 +3624,9 @@ export class GeneralService {
         }
 
         // Check pattern validation
+        /**
+         * Handles if functionality
+         */
         if (validationConfig.pattern?.enabled && errors['pattern']) {
             const message = validationConfig.pattern.message || `${fieldName} format is invalid`;
             this.toasterService.showSnackBar(toasterType, message);
@@ -3057,6 +3634,9 @@ export class GeneralService {
         }
 
         // Check email validation
+        /**
+         * Handles if functionality
+         */
         if (validationConfig.email?.enabled && errors['email']) {
             const message = validationConfig.email.message || `${fieldName} must be a valid email address`;
             this.toasterService.showSnackBar(toasterType, message);
@@ -3064,6 +3644,9 @@ export class GeneralService {
         }
 
         // Check custom validation
+        /**
+         * Handles if functionality
+         */
         if (validationConfig.custom?.enabled && control.value && !validationConfig.custom.validator(control.value)) {
             const message = validationConfig.custom.message || `${fieldName} is invalid`;
             this.toasterService.showSnackBar(toasterType, message);
@@ -3097,6 +3680,9 @@ export class GeneralService {
         };
 
         // Use custom message if provided, otherwise use default pattern
+        /**
+         * Handles if functionality
+         */
         if (customMessage) {
             // Replace dynamic placeholders in the message
             const processedMessage = this.replaceDynamicPlaceholders(customMessage, {
@@ -3105,6 +3691,9 @@ export class GeneralService {
             });
 
             config.required.message = processedMessage;
+            /**
+             * Handles if functionality
+             */
             if (maxLength) {
                 config.maxlength.message = processedMessage;
             }

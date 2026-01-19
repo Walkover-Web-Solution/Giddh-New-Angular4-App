@@ -8,6 +8,9 @@ import { GeneralActions } from '../../../actions/general/general.actions';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToasterService } from '../../../services/toaster.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'create-tax-authority',
     templateUrl: './create.component.html',
@@ -15,6 +18,10 @@ import { ToasterService } from '../../../services/toaster.service';
     providers: [TaxAuthorityComponentStore],
     standalone: false
 })
+/**
+ * CreateComponent component
+ * Handles create functionality and user interactions
+ */
 export class CreateComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -29,6 +36,10 @@ export class CreateComponent implements OnInit {
     /** Holds true if form is submitted */
     public isFormSubmit: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: TaxAuthorityComponentStore,
         private formBuilder: FormBuilder,
@@ -49,9 +60,15 @@ export class CreateComponent implements OnInit {
     public ngOnInit(): void {
         this.getStates();
 
+        /**
+         * Handles if functionality
+         */
         if (this.taxAuthorityInfo) {
             this.initializeForm(this.taxAuthorityInfo);
             this.componentStore.updateTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.dialogRef.close(true);
                 }
@@ -59,6 +76,9 @@ export class CreateComponent implements OnInit {
         } else {
             this.initializeForm();
             this.componentStore.createTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.dialogRef.close(true);
                 }
@@ -88,13 +108,22 @@ export class CreateComponent implements OnInit {
      */
     public createUpdateTaxAuthority(): null {
         this.isFormSubmit = false;
+        /**
+         * Handles if functionality
+         */
         if (this.taxAuthorityForm.invalid) {
             this.isFormSubmit = true;
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.taxAuthorityInfo?.uniqueName) {
             const model: any = this.getChangedProperties();
+            /**
+             * Handles if functionality
+             */
             if (Object.keys(model).length !== 0) {
                 this.componentStore.updateTaxAuthority({ model, uniqueName: this.taxAuthorityInfo?.uniqueName });
             } else {
@@ -115,10 +144,19 @@ export class CreateComponent implements OnInit {
      */
     public getStates(): void {
         this.componentStore.stateList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 const states = [];
+                /**
+                 * Handles if functionality
+                 */
                 if (response.stateList) {
                     Object.keys(response.stateList).forEach(key => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (key) {
                             states.push({
                                 label: response.stateList[key].code + ' - ' + response.stateList[key].name,
@@ -144,6 +182,9 @@ export class CreateComponent implements OnInit {
         let model = {};
         Object.keys(this.taxAuthorityForm.controls).forEach((key) => {
             const currentControl = this.taxAuthorityForm.controls[key];
+            /**
+             * Handles if functionality
+             */
             if (currentControl.dirty) {
                 model = { ...model, [key]: this.taxAuthorityForm.get(key).value };
             }

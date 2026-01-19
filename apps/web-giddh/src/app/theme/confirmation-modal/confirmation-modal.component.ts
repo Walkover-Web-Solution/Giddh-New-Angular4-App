@@ -1,12 +1,19 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ConfirmationModalConfiguration } from './confirmation-modal.interface';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'confirmation-modal',
     styleUrls: ['./confirmation-modal.component.scss'],
     templateUrl: './confirmation-modal.component.html',
     standalone: false
 })
+/**
+ * ConfirmationModalComponent component
+ * Handles confirmationmodal functionality and user interactions
+ */
 export class ConfirmationModalComponent {
 
     /** Confirmation modal configuration */

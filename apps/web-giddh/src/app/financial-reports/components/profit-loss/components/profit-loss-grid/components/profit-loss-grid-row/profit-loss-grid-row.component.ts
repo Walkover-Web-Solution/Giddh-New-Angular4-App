@@ -14,6 +14,9 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { Configuration } from '../../../../../../../app.constant';
 import { LedgerNavigationHelper } from '../../../../../../helpers/ledger-navigation.helper';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: '[profit-loss-grid-row]',
     templateUrl: './profit-loss-grid-row.component.html',
@@ -22,6 +25,10 @@ import { LedgerNavigationHelper } from '../../../../../../helpers/ledger-navigat
     providers: [FinancialReportsComponentStore],
     standalone: false
 })
+/**
+ * ProfitLossGridRowComponent component
+ * Handles profitlossgridrow functionality and user interactions
+ */
 export class ProfitLossGridRowComponent extends FinancialGridRowBase implements OnInit, OnDestroy {
     @Input() public padding: string;
     @Input() public incomeStatement: any;
@@ -38,7 +45,14 @@ export class ProfitLossGridRowComponent extends FinancialGridRowBase implements 
     /** Hold current url */
     private currentUrl: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(protected cd: ChangeDetectorRef, private router: Router, protected financialReportsComponentStore: FinancialReportsComponentStore, protected tlPlService: TlPlService, private generalService: GeneralService) {
+        /**
+         * Handles super functionality
+         */
         super(cd, financialReportsComponentStore, tlPlService);
         this.currentUrl = this.router.url;
     }
@@ -74,6 +88,9 @@ export class ProfitLossGridRowComponent extends FinancialGridRowBase implements 
      * @memberof ProfitLossGridRowComponent
      */
     public getKeys(obj: Record<string, any> | null | undefined): string[] | [] {
+        /**
+         * Handles if functionality
+         */
         if (obj) {
             return Object.keys(obj);
         } else {

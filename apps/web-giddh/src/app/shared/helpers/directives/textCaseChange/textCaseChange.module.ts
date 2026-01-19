@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { TextCaseChangeDirective } from './textCaseChange.directive';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [],
     declarations: [
@@ -10,6 +13,10 @@ import { TextCaseChangeDirective } from './textCaseChange.directive';
         TextCaseChangeDirective
     ]
 })
+/**
+ * TextCaseChangeModule module
+ * Implements TextCaseChangeModule functionality
+ */
 export class TextCaseChangeModule {
     //
 }

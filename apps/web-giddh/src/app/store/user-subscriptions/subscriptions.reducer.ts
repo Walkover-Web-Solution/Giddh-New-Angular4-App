@@ -3,6 +3,10 @@ import { CustomActions } from '../custom-actions';
 import { SubscriptionsActions } from '../../actions/user-subscriptions/subscriptions.action';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 
+/**
+ * SubscriptionState interface definition
+ * Defines the structure and contract for SubscriptionState objects
+ */
 export interface SubscriptionState {
     subscriptions: SubscriptionsUser[];
     companies: any;
@@ -18,9 +22,15 @@ const initialState = {
 };
 
 export function SubscriptionReducer(state: SubscriptionState = initialState, action: CustomActions): SubscriptionState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case SubscriptionsActions.SubscribedCompaniesResponse: {
             let data: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 return { ...state, subscriptions: data.body };
             }
@@ -28,6 +38,9 @@ export function SubscriptionReducer(state: SubscriptionState = initialState, act
         }
         case SubscriptionsActions.SubscribedUserTransactionsResponse: {
             let data: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 return { ...state, transactions: data.body };
             }
@@ -35,6 +48,9 @@ export function SubscriptionReducer(state: SubscriptionState = initialState, act
         }
         case SubscriptionsActions.SubscribedCompanyTransactionsResponse: {
             let data: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 return { ...state, companyTransactions: data.body };
             }
@@ -42,6 +58,9 @@ export function SubscriptionReducer(state: SubscriptionState = initialState, act
         }
         case SubscriptionsActions.SubscribedCompaniesListResponse: {
             let data: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 return { ...state, companies: data.body };
             }

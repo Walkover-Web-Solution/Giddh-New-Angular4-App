@@ -32,6 +32,9 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         ExpensesComponent,
@@ -75,5 +78,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         GiddhNumberFormatModule
     ]
 })
+/**
+ * ExpensesModule module
+ * Implements ExpensesModule functionality
+ */
 export class ExpensesModule {
 }

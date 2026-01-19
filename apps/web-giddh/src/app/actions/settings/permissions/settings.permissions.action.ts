@@ -10,35 +10,67 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { CustomActions } from '../../../store/custom-actions';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsPermissionActions class
+ * Implements SettingsPermissionActions functionality
+ */
 export class SettingsPermissionActions {
 
     public GetUsersWithPermissions$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this.settingsPermissionService.GetUsersWithCompanyPermissions(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.GetUsersWithPermissionsResponse(response)));
             })));
 
     public GetUsersWithPermissionsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 }
                 return { type: 'EmptyAction' };
             })));
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions,
         private toasty: ToasterService,
         private settingsPermissionService: SettingsPermissionService) {
     }
 
+    /**
+     * Handles GetUsersWithPermissions functionality
+     */
     public GetUsersWithPermissions(companyUniqueName: string): CustomActions {
         return {
             type: SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS,
@@ -46,6 +78,9 @@ export class SettingsPermissionActions {
         };
     }
 
+    /**
+     * Handles GetUsersWithPermissionsResponse functionality
+     */
     public GetUsersWithPermissionsResponse(response): CustomActions {
         return {
             type: SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE,

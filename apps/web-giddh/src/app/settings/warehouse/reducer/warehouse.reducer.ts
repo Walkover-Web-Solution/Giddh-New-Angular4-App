@@ -32,8 +32,14 @@ export const initialState: WarehouseState = {
  * @returns {WarehouseState} New warehouse state
  */
 export function warehouseReducer(state: WarehouseState = initialState, action: CustomActions): WarehouseState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case WarehouseActions.CREATE_WAREHOUSE_RESPONSE:
+            /**
+             * Handles if functionality
+             */
             if (action.payload && action.payload.status === 'success') {
                 return { ...state, warehouseCreated: true };
             } else {
@@ -42,6 +48,9 @@ export function warehouseReducer(state: WarehouseState = initialState, action: C
         case WarehouseActions.RESET_CREATE_WAREHOUSE:
             return { ...state, warehouseCreated: false };
         case WarehouseActions.GET_ALL_WAREHOUSE_RESPONSE:
+            /**
+             * Handles if functionality
+             */
             if (action.payload) {
                 return { ...state, warehouses: cloneDeep(action.payload.body) };
             }

@@ -1,4 +1,8 @@
     /** Interface for country data - simplified for use with Google libphonenumber */
+/**
+ * Country interface definition
+ * Defines the structure and contract for Country objects
+ */
 export interface Country {
     /** Country name in English */
     name: string;

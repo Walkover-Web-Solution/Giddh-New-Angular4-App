@@ -21,6 +21,9 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { ServiceConfig } from "../../services/service.config";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'bank-integration',
     templateUrl: './bank-integration.component.html',
@@ -29,6 +32,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * BankIntegrationComponent component
+ * Handles bankintegration functionality and user interactions
+ */
 export class BankIntegrationComponent implements OnInit, OnDestroy {
     public isIciciBankSupportedCountry: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
@@ -103,6 +110,10 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     public bankStatementHelpDocUrl = BANK_STATEMENT_HELP_DOC_URL;
 
     /** @ignore */
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private _companyActions: CompanyActions,
         private router: Router,
@@ -141,6 +152,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);
@@ -169,15 +183,27 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         this.loadPaymentData();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res && !isEmpty(res)) {
                 (Array.isArray(res.userEntityRoles) ? res.userEntityRoles : []).forEach(role => {
                     const scopes = role.role.scopes;
+                    /**
+                     * Handles if functionality
+                     */
                     if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
                         this.hasIntegrationScope = true;
                     }
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
                     (Array.isArray(res.ecommerceDetails) ? res.ecommerceDetails : []).forEach(item => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
                             // this.getShopifyVerifyStatus(item.uniqueName);
                         }
@@ -187,6 +213,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         });
 
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.openWindow(response.link);
                 localStorage.setItem('refNo', response.reference);
@@ -196,8 +225,14 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            /**
+             * Handles if functionality
+             */
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
                     this.isIciciBankSupportedCountry = true;
                 } else {
@@ -207,19 +242,31 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.selectedCompanyUniqueName) {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
         }
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
 
         this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (!response && this.isAddAndManageOpenedFromOutside) {
                 this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (resp?.referrer === 'payment') {
                         this.loadDefaultBankAccountsSuggestions();
                     }
@@ -230,6 +277,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
 
         const broadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
         broadcast.onmessage = (event) => {
+            /**
+             * Handles if functionality
+             */
             if (event?.data) {
                 this.loadPaymentData();
             }
@@ -237,9 +287,18 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
 
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
+            /**
+             * Handles if functionality
+             */
             if (event?.data?.success) {
                 const referNo = localStorage.getItem('refNo');
+                /**
+                 * Handles if functionality
+                 */
                 if (referNo !== null && referNo !== undefined) {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.componentStore.getRequisition(referNo);
                     }, 100);
@@ -248,12 +307,18 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         };
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.loadPaymentData();
             }
         });
 
         this.deleteEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.toasty.showSnackBar('success', this.localeData?.account_deleted_successfully);
                 this.loadPaymentData();
@@ -261,8 +326,14 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         });
 
     }
+    /**
+     * Loads defaultbankaccountssuggestions data
+     */
     private loadDefaultBankAccountsSuggestions(): void {
         this.salesService.getAccountsWithCurrency('bankaccounts,loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
                     label: account?.name,
@@ -273,6 +344,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Loads paymentdata data
+     */
     public loadPaymentData(): void {
         this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
             this.isAddAndManageOpenedFromOutside = result;
@@ -298,9 +372,15 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
 
         this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response?.body) {
                 this.connectedBankAccounts = response.body;
                 (Array.isArray(this.connectedBankAccounts) ? this.connectedBankAccounts : []).forEach(bankAccount => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (bankAccount?.bankResource?.payor?.length > 0) {
                         (Array.isArray(bankAccount?.bankResource?.payor) ? bankAccount?.bankResource?.payor : []).forEach(payor => {
                             this.getPayorRegistrationStatus(bankAccount, payor);
@@ -321,9 +401,15 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      * @memberof BankIntegrationComponent
      */
     public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
+        /**
+         * Handles if functionality
+         */
         if (bankAccount?.bankResource?.uniqueName?.length && payor?.urn?.length) {
             let request;
 
+            /**
+             * Handles if functionality
+             */
             if (this.isPlaidSupportedCountry) {
                 request = { bankAccountUniqueName: bankAccount.bankResource.uniqueName, urn: payor.urn };
             } else {
@@ -333,6 +419,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
                 payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!payor.isConnected && response?.body?.message) {
                     this.toasty.errorToast(response?.body?.message);
                 }
@@ -391,6 +480,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     * @memberof BankIntegrationComponent
     */
     public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isPlaidSupportedCountry) {
             this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.bankUserId, loginId: payor?.loginId };
         } else {
@@ -409,12 +501,18 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public deleteBankAccountLogin(): void {
         let model;
+        /**
+         * Handles if functionality
+         */
         if (this.isPlaidSupportedCountry) {
             model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.bankUserId }
         } else {
             model = { uniqueName: this.activeBankAccount?.uniqueName, bankUserId: this.activeBankAccount?.bankUserId }
         }
         this.settingsIntegrationService.deleteBankAccountLogin(model).pipe(take(1)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.getAllBankAccounts();
             } else {
@@ -431,6 +529,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      * @memberof BankIntegrationComponent
      */
     public selectBankAccount(event: any, bank: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
             let accountForm = {
@@ -439,7 +540,13 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
                 paymentAlerts: []
             };
             this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success") {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.body?.message) {
                         this.toasty.clearAllToaster();
                         this.toasty.successToast(response?.body?.message);
@@ -469,6 +576,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
             }
@@ -483,6 +593,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
  */
     public reconnectBank(bank: any): void {
         this.reconnectBankResponse = bank;
+        /**
+         * Handles if functionality
+         */
         if (bank && bank.institutionId) {
             this.componentStore.createEndUserAgreementByInstitutionId(bank.institutionId);
         }
@@ -507,6 +620,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      * @memberof BankIntegrationComponent
      */
     public ngOnDestroy(): void {
+        /**
+         * Handles if functionality
+         */
         if (window.localStorage) {
             localStorage.removeItem('refNo');
         }

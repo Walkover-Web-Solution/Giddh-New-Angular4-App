@@ -3,6 +3,9 @@ import { RouterModule } from '@angular/router';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { JournalVoucherComponent } from './journal-voucher/journal-voucher.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -13,5 +16,9 @@ import { JournalVoucherComponent } from './journal-voucher/journal-voucher.compo
     ],
     exports: [RouterModule]
 })
+/**
+ * AccountingRoutingModule module
+ * Implements AccountingRoutingModule functionality
+ */
 export class AccountingRoutingModule {
 }

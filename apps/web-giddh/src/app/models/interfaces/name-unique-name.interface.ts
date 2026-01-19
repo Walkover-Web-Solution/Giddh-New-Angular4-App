@@ -1,3 +1,7 @@
+/**
+ * INameUniqueName interface definition
+ * Defines the structure and contract for INameUniqueName objects
+ */
 export interface INameUniqueName {
     uniqueName: string;
     name: string;

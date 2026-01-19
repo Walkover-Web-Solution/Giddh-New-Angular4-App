@@ -6,6 +6,10 @@ import { LedgerService } from "../../../services/ledger.service";
 import { IVariant } from "../../../models/api-models/Ledger";
 import { SearchService } from "../../../services/search.service";
 
+/**
+ * AddBulkItemsState interface definition
+ * Defines the structure and contract for AddBulkItemsState objects
+ */
 export interface AddBulkItemsState {
     voucherStockResults: any[];
     stockVariants: { results: { label: string; value: string }[]; entryIndex: number } | null;
@@ -20,13 +24,27 @@ const DEFAULT_STATE: AddBulkItemsState = {
     addBulkItemsSuccess: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * AddBulkItemsComponentStore store
+ * Manages addbulkitemscomponent state using NgRx ComponentStore
+ */
 export class AddBulkItemsComponentStore extends ComponentStore<AddBulkItemsState> {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private ledgerService: LedgerService,
         private toaster : ToasterService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -37,8 +55,14 @@ export class AddBulkItemsComponentStore extends ComponentStore<AddBulkItemsState
 
     readonly getStockVariants = this.effect((data: Observable<{ q: any, index: number }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.ledgerService.loadStockVariants(req.q).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: Array<IVariant>) => {
                             return this.patchState({
@@ -52,6 +76,9 @@ export class AddBulkItemsComponentStore extends ComponentStore<AddBulkItemsState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

@@ -15,6 +15,9 @@ import { Configuration } from '../../../../../../../app.constant';
 import { includes } from '../../../../../../../lodash-optimized';
 import { LedgerNavigationHelper } from '../../../../../../helpers/ledger-navigation.helper';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: '[balance-sheet-grid-row]',
     templateUrl: './balance-sheet-grid-row.component.html',
@@ -23,6 +26,10 @@ import { LedgerNavigationHelper } from '../../../../../../helpers/ledger-navigat
     providers: [FinancialReportsComponentStore],
     standalone: false
 })
+/**
+ * BalanceSheetGridRowComponent component
+ * Handles balancesheetgridrow functionality and user interactions
+ */
 export class BalanceSheetGridRowComponent extends FinancialGridRowBase implements OnInit, OnDestroy {
     @Input() public padding: string;
     @Input() public from: string = '';
@@ -36,7 +43,14 @@ export class BalanceSheetGridRowComponent extends FinancialGridRowBase implement
     /** Hold current url */
     private currentUrl: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(protected cd: ChangeDetectorRef, private router: Router, protected financialReportsComponentStore: FinancialReportsComponentStore, protected tlPlService: TlPlService, private generalService: GeneralService) {
+        /**
+         * Handles super functionality
+         */
         super(cd, financialReportsComponentStore, tlPlService);
         this.currentUrl = this.router.url;
     }

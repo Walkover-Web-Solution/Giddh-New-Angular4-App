@@ -10,6 +10,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
 import { Router } from '@angular/router';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'liability-report-component',
     templateUrl: './liability-report.component.html',
@@ -17,6 +20,10 @@ import { Router } from '@angular/router';
     standalone:false
 })
 
+/**
+ * LiabilityReportComponent component
+ * Handles liabilityreport functionality and user interactions
+ */
 export class LiabilityReportComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -45,6 +52,10 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
@@ -64,6 +75,9 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.initLiabilityReport();
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -76,11 +90,17 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * @memberof LiabilityReportComponent
     */
     public getVatLiabilityReport(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.getFormControl('taxNumber')?.value) {
             this.isLoading = true;
             this.vatService.getVatLiabilityReport(this.liabilityReportForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
 
                 this.isLoading = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.status === "success" && response.body?.sections) {
                     this.vatLiabilityOverviewReport = response.body.sections;
                     this.vatReportCurrencySymbol = response.body?.currency?.symbol;
@@ -98,6 +118,9 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
      * @memberof LiabilityReportComponent
      */
     public viewDetailedReport(report: any): void {
+        /**
+         * Handles if functionality
+         */
         if (report) {
             let formValue = this.liabilityReportForm.value;
             let section = report?.section === "Input VAT Total" ? 'inputVat' : 'outputVat';
@@ -113,6 +136,9 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * @memberof LiabilityReportComponent
     */
     public taxNumberSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.getFormControl('taxNumber').setValue(event.value);
             this.getVatLiabilityReport();
@@ -126,6 +152,9 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * @memberof LiabilityReportComponent
     */
     public branchSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.getFormControl('branchUniqueName').setValue(event.value);
         }
@@ -174,6 +203,9 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
      * @memberof LiabilityReportComponent
      */
     public onCurrencyChange(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.getFormControl('currencyCode').patchValue(event.value);
             this.getVatLiabilityReport();
@@ -193,6 +225,9 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
         delete vatReportRequest.count;
 
         this.vatService.downloadVatLiabilityReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === "success") {
                 let blob = this.generalService.base64ToBlob(res.body.data, 'application/xls', 512);
                 return saveAs(blob, res.body.name);

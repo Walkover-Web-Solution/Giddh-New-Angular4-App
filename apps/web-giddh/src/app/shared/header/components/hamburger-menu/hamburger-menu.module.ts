@@ -17,4 +17,8 @@ import { HamburgerMenuComponent } from "./hamburger-menu.component";
     ],
     exports: [HamburgerMenuComponent]
 })
+/**
+ * HamburgerMenuModule module
+ * Implements HamburgerMenuModule functionality
+ */
 export class HamburgerMenuModule {}

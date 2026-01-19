@@ -14,6 +14,9 @@ import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-mod
 import { MatDialog } from "@angular/material/dialog";
 import { IOption } from "../../app.constant";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'gst-setting',
     templateUrl: './gst-setting.component.html',
@@ -22,6 +25,10 @@ import { IOption } from "../../app.constant";
     standalone: false
 })
 
+/**
+ * GstSettingComponent component
+ * Handles gstsetting functionality and user interactions
+ */
 export class GstSettingComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -60,6 +67,10 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     /** True false according to active company withPay value*/
     public showHideLutForm: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
@@ -84,6 +95,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         this.getLutList();
 
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.fromDate = universalDate[0];
@@ -96,6 +110,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         });
 
         this.deleteLutNumberIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result) {
                 this.getLutList();
             }
@@ -103,6 +120,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
 
         this.componentStore.lutNumberList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.lutItemList = [];
+            /**
+             * Handles if functionality
+             */
             if (response?.length) {
                 let mappings = this.gstSettingForm.get('gstData') as FormArray;
                 mappings.clear();
@@ -114,8 +134,14 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.lutNumberResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.responseArray[response.lutIndex] = response;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.responseArray[response.lutIndex]?.successMessage) {
                     this.toaster.showSnackBar('success', this.responseArray[response.lutIndex].successMessage);
                     this.getLutList();
@@ -162,8 +188,14 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      * @memberof GstSettingComponent
      */
     public getExportTypeLabel(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompany) {
             let value = this.activeCompany.withPay ? 'yes' : 'no';
+            /**
+             * Handles if functionality
+             */
             if (this.exportTypes?.length) {
                 const exportType = this.exportTypes.filter(item => item?.value === value);
                 this.exportTypeLabel = exportType ? exportType[0]?.label : '';
@@ -178,6 +210,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     * @memberof GstSettingComponent
     */
     public setExportType(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value && this.exportTypeLabel !== event.value) {
             this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === 'yes' ? 'yes' : 'no');
             this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === 'yes' }));
@@ -201,6 +236,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      */
     public addNewLutItem(user?: any): void {
         let mappings = this.gstSettingForm.get('gstData') as FormArray;
+        /**
+         * Handles if functionality
+         */
         if (user) {
             mappings.push(this.initLutForm({
                 fromDate: this.fromDate,
@@ -208,9 +246,15 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             }));
             let lastIndex = mappings.controls.findIndex(control => !control.get('lutNumber')?.value);
             let lastFormArray = mappings.at(lastIndex);
+            /**
+             * Handles if functionality
+             */
             if (!lastFormArray?.get('lutNumber')?.value) {
                 let fromDate = null;
                 let toDate = null;
+                /**
+                 * Handles if functionality
+                 */
                 if (user.fromDate && user.toDate) {
                     fromDate = dayjs(user?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
                     toDate = dayjs(user.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
@@ -237,6 +281,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      * @memberof GstSettingComponent
      */
     public removeLutItem(index: number): void {
+        /**
+         * Handles if functionality
+         */
         if (typeof index === 'number') {
             this.openConfirmationDialog(index);
         }
@@ -252,10 +299,16 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     private openConfirmationDialog(index: number): void {
         let mappings = this.gstSettingForm.get('gstData') as FormArray;
         let mappingForm = mappings.at(index);
+        /**
+         * Handles if functionality
+         */
         if ( !mappingForm.get('lutNumber')?.value) {
             mappingForm.get('lutNumber')?.patchValue(null);
             mappingForm.get('fromDate')?.patchValue(this.fromDate);
             mappingForm.get('toDate')?.patchValue(this.toDate);
+            /**
+             * Handles if functionality
+             */
             if (this.responseArray?.length) {
                 this.responseArray[index]['message'] = null;
             }
@@ -273,8 +326,17 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             });
 
             dialogRef.afterClosed().subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (index === 0) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (mappingForm.get('uniqueName')?.value) {
                             this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
                             mappings.removeAt(index);
@@ -282,6 +344,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                                 fromDate: this.fromDate,
                                 toDate: this.toDate
                             }));
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.responseArray?.length && this.responseArray[index] && this.responseArray[index]['message']) {
                                 this.responseArray[index]['message'] = null;
                             }
@@ -289,12 +354,21 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                             mappingForm.get('lutNumber')?.patchValue(null);
                             mappingForm.get('fromDate')?.patchValue(this.fromDate);
                             mappingForm.get('toDate')?.patchValue(this.toDate);
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.responseArray?.length && this.responseArray[index]  && this.responseArray[index]['message']) {
                                 this.responseArray[index]['message'] = null;
                             }
                         }
                     } else {
+                        /**
+                         * Handles if functionality
+                         */
                         if (mappingForm.get('uniqueName')?.value) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.responseArray?.length) {
                                 this.responseArray[index] = [];
                             }
@@ -314,12 +388,18 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     * @memberof GstSettingComponent
     */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.exportTypes = [
                 { label: this.localeData?.with_pay, value: 'yes' },
                 { label: this.localeData?.without_pay, value: 'no' }
             ];
             this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                /**
+                 * Handles if functionality
+                 */
                 if (activeCompany) {
                     this.activeCompany = activeCompany;
                     this.paymentIntegrateForm.get('withPay').patchValue(activeCompany.withPay);
@@ -335,6 +415,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      * @memberof GstSettingComponent
      */
     public saveLutNumbers(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.gstSettingForm.dirty) {
             return;
         }
@@ -348,12 +431,21 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         }));
 
         itemsWithOriginalIndex?.forEach((obj1, index) => {
+            /**
+             * Handles if functionality
+             */
             if (obj1.lutNumber) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.lutItemList[index] || this.lutItemList[index].fromDate !== obj1.fromDate || this.lutItemList[index].lutNumber !== obj1.lutNumber || this.lutItemList[index].toDate !== obj1.toDate) {
                     const req = {
                         q: obj1,
                         index: index
                     };
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.lutItemList[index]) {
                         this.componentStore.createLutNumber(req);
                     } else {

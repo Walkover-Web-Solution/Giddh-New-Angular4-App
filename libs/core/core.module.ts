@@ -26,11 +26,21 @@ export const BASE_PROVIDERS: any[] = [
     // APP_BASE_HREF removed - handled by main app.module.ts
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [CommonModule]
 })
+/**
+ * CoreModule module
+ * Implements CoreModule functionality
+ */
 export class CoreModule {
     // configuredProviders: *required to configure WindowService and others per platform
+    /**
+     * Handles forRoot functionality
+     */
     static forRoot(configuredProviders: Array<any>): ModuleWithProviders<any> {
         return {
             ngModule: CoreModule,
@@ -38,6 +48,10 @@ export class CoreModule {
         };
     }
 
+    /**
+     * Creates an instance of module
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Optional()
         @SkipSelf()
@@ -45,6 +59,9 @@ export class CoreModule {
         @Inject(PlatformLanguageToken) lang: string,
         translate: TranslateService
     ) {
+        /**
+         * Handles throwIfAlreadyLoaded functionality
+         */
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
 
         // ensure default platform language is set

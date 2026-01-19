@@ -11,12 +11,19 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { ExportColumnsHelper } from '../../../helpers/export-columns.helper';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-export-master-dialog',
     templateUrl: './export-master-dialog.component.html',
     styleUrls: ['./export-master-dialog.component.scss'],
     standalone: false
 })
+/**
+ * ExportMasterDialogComponent component
+ * Handles exportmasterdialog functionality and user interactions
+ */
 export class ExportMasterDialogComponent {
   /** Form Group for export  form */
   public exportFormValue: any;
@@ -29,6 +36,10 @@ export class ExportMasterDialogComponent {
   /* This will hold common JSON data */
   public commonLocaleData: any = {};
 
+  /**
+   * Creates an instance of component
+   * Initializes component dependencies and sets up initial state
+   */
   constructor(
     @Inject(MAT_DIALOG_DATA) public inputData,
     private ledgerService: LedgerService,
@@ -50,6 +61,9 @@ export class ExportMasterDialogComponent {
     this.isLoading = true;
     this.ledgerService.exportData(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
       this.isLoading = false;
+      /**
+       * Handles if functionality
+       */
       if (response?.status === "success") {
         this.toaster.showSnackBar("success", response?.body);
         this.dialogRef?.close();

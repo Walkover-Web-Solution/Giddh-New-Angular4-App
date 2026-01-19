@@ -14,6 +14,9 @@ import { StockCreateEditComponent } from "../stock-create-edit/stock-create-edit
 import { cloneDeep} from '../../../lodash-optimized';
 import { DataOperationEnum } from "../../../shared/Enums/common.enum";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "inventory-master",
 
@@ -21,6 +24,10 @@ import { DataOperationEnum } from "../../../shared/Enums/common.enum";
     standalone: false,
     styleUrls: ["./inventory-master.component.scss"]
 })
+/**
+ * InventoryMasterComponent component
+ * Handles inventorymaster functionality and user interactions
+ */
 export class InventoryMasterComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -67,9 +74,19 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     /** Flag to track if navigation is in progress to avoid infinite loops */
     private isNavigatingRef = { value: false };
     /** Unregister functions for GeneralService callbacks */
+    /**
+     * Handles unregisterUnsavedChangesCallback functionality
+     */
     private unregisterUnsavedChangesCallback: () => void;
+    /**
+     * Handles unregisterMarkFormsAsPristineCallback functionality
+     */
     private unregisterMarkFormsAsPristineCallback: () => void;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private inventoryService: InventoryService,
         private route: ActivatedRoute,
@@ -91,11 +108,17 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      */
     private hasUnsavedChanges(): boolean {
         // Check if create-update-group component has unsaved changes
+        /**
+         * Handles if functionality
+         */
         if (this.createUpdateGroupComponent && this.createUpdateGroupComponent.showPageLeaveConfirmation) {
             return true;
         }
 
         // Add checks for other child components if needed (like stock-create-edit)
+        /**
+         * Handles if functionality
+         */
         if (this.createUpdateStockComponent && this.createUpdateStockComponent.showPageLeaveConfirmation) {
             return true;
         }
@@ -110,6 +133,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     private markFormsAsPristine(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.createUpdateGroupComponent && this.createUpdateGroupComponent.groupForm) {
             this.createUpdateGroupComponent.groupForm.markAsPristine();
             // Update initial form values to current values to prevent false positive unsaved changes
@@ -117,6 +143,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         }
 
         // Add similar logic for other child components if needed
+        /**
+         * Handles if functionality
+         */
         if (this.createUpdateStockComponent && this.createUpdateStockComponent.stockCreateEditForm) {
             this.createUpdateStockComponent.stockCreateEditForm.form.markAsPristine();
             // Update initial form values to current values to prevent false positive unsaved changes
@@ -135,8 +164,14 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.unregisterUnsavedChangesCallback = this.generalService.registerUnsavedChangesCallback(() => this.hasUnsavedChanges());
         this.unregisterMarkFormsAsPristineCallback = this.generalService.registerMarkFormsAsPristineCallback(() => this.markFormsAsPristine());
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (this.inventoryType !== params.type) {
                 this.inventoryType = params.type?.toUpperCase();
+                /**
+                 * Handles if functionality
+                 */
                 if (this.inventoryType === 'FIXEDASSETS') {
                     this.inventoryType = 'FIXED_ASSETS';
                 }
@@ -151,11 +186,23 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             const dataLength = event?.getDataLength ? event.getDataLength() : event?.dataLength || 0;
+            /**
+             * Handles if functionality
+             */
             if (!this.isSearching && event && typeof event.getRenderedRange === 'function' && dataLength - event.getRenderedRange().end < 50) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.loadMoreInProgress) {
                     let elementId = event?.elementRef?.nativeElement?.id;
+                    /**
+                     * Handles if functionality
+                     */
                     if (elementId > 0) {
                         elementId = elementId - 1; // since 2nd level of inventory start from 0, so we are decreasing count by 1
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.masterColumnsData[elementId]?.page < this.masterColumnsData[elementId]?.totalPages) {
                             this.loadMoreInProgress = true;
                             this.getMasters(this.masterColumnsData[elementId]?.stockGroup, elementId, false, true);
@@ -172,9 +219,15 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const wasSearching = cloneDeep(this.isSearching);
             this.isSearching = (String(search)?.trim()) ? true : false;
+            /**
+             * Handles if functionality
+             */
             if (this.isSearching) {
                 this.searchInventory(search);
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (wasSearching) {
                     this.breadcrumbs = [];
                     this.resetCurrentStockAndGroup();
@@ -192,9 +245,15 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         // Unregister callbacks from GeneralService
+        /**
+         * Handles if functionality
+         */
         if (this.unregisterUnsavedChangesCallback) {
             this.unregisterUnsavedChangesCallback();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.unregisterMarkFormsAsPristineCallback) {
             this.unregisterMarkFormsAsPristineCallback();
         }
@@ -210,11 +269,17 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public getTopLevelGroups(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.topLevelGroups?.page === 1) {
             this.topLevelGroups = { page: 1, results: [] };
             this.resetCurrentStockAndGroup();
         }
         this.inventoryService.getTopLevelGroups(this.inventoryType, String(this.topLevelGroups?.page)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.topLevelGroups.totalPages = response?.body?.totalPages;
                 this.topLevelGroups.results = this.topLevelGroups.results.concat(response.body?.results);
@@ -235,10 +300,16 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      */
     public getMasters(stockGroup: any, currentIndex: number, isRefresh: boolean = false, isLoadMore: boolean = false): void {
         // Check for unsaved changes before proceeding
+        /**
+         * Handles if functionality
+         */
         if (!isLoadMore && this.hasUnsavedChanges()) {
             let dialogRef = this.pageLeaveUtilityService.openDialog();
 
             dialogRef.afterClosed().subscribe((action) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action) {
                     // User confirmed to proceed - clean up and continue
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
@@ -264,19 +335,37 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     private proceedWithGetMasters(stockGroup: any, currentIndex: number, isRefresh: boolean, isLoadMore: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if(stockGroup.entity === 'STOCK_GROUP') {
             this.showExportButton = true;
         }
+        /**
+         * Handles if functionality
+         */
         if (!stockGroup?.uniqueName) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!isLoadMore) {
             this.resetCurrentStockAndGroup();
         }
         const page = (isLoadMore) ? (Number(this.masterColumnsData[currentIndex]?.page) + 1) : 1;
         this.inventoryService.getMasters(stockGroup?.uniqueName, String(page)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
+                /**
+                 * Handles if functionality
+                 */
                 if (!isLoadMore) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!isRefresh) {
                         let newIndex = Number(currentIndex) + 1;
                         this.masterColumnsData = this.masterColumnsData.slice(0, newIndex);
@@ -290,6 +379,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                         this.masterColumnsData[currentIndex].parentUniqueName = stockGroup?.uniqueName;
                     }
 
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.scrollToRight();
                     });
@@ -300,13 +392,22 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
             }
             this.loadMoreInProgress = false;
+            /**
+             * Handles if functionality
+             */
             if (!this.isSearching) {
                 this.createBreadcrumbs();
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (!isLoadMore) {
             this.createUpdateGroup = false;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.editGroup(stockGroup, currentIndex);
             }, 50);
@@ -326,8 +427,14 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.showCreateButtons = false;
 
         this.inventoryService.searchInventory(this.inventoryType, search).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 let masterColumnsData = [];
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.body?.length > 0) {
                     masterColumnsData = this.mapNestedGroupsStocks(response?.body, 0, masterColumnsData);
                     masterColumnsData?.map(columnData => {
@@ -336,7 +443,13 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     });
                 }
                 this.masterColumnsData = cloneDeep(masterColumnsData);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.masterColumnsData?.length && this.masterColumnsData[this.masterColumnsData.length - 1] && this.masterColumnsData[this.masterColumnsData.length - 1]?.results?.length) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0]?.entity === "STOCK") {
                         this.editStock(this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0], this.masterColumnsData.length - 1);
                     } else {
@@ -344,6 +457,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     }
                 }
 
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.scrollToRight();
                 });
@@ -360,6 +476,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      */
     private scrollToRight(): void {
         let element = document.querySelector('#horizontal-scroll');
+        /**
+         * Handles if functionality
+         */
         if (element) {
             element.scrollLeft = element.scrollWidth;
         }
@@ -386,6 +505,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 parentUniqueName: parentUniqueName
             };
 
+            /**
+             * Handles if functionality
+             */
             if (masterColumnsData[index]) {
                 masterColumnsData[index].results.push(item);
             } else {
@@ -397,6 +519,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 };
             }
 
+            /**
+             * Handles if functionality
+             */
             if (data?.stockGroups?.length) {
                 this.mapNestedGroupsStocks(
                     data?.stockGroups,
@@ -407,6 +532,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 );
             }
 
+            /**
+             * Handles if functionality
+             */
             if (data?.stocks?.length) {
                 this.mapNestedGroupsStocks(
                     data?.stocks,
@@ -430,19 +558,31 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.breadcrumbs = [];
 
         this.masterColumnsData?.forEach(data => {
+            /**
+             * Handles if functionality
+             */
             if (data?.stockGroup?.name) {
                 this.breadcrumbs.push(data?.stockGroup?.name);
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.currentStock?.name) {
             this.breadcrumbs.push(this.currentStock?.name);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.createUpdateGroup && !this.currentGroup?.uniqueName) {
             this.breadcrumbs.push(this.commonLocaleData?.app_create_group);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.createUpdateStock && !this.currentStock?.uniqueName) {
             this.breadcrumbs.push(this.commonLocaleData?.app_create_stock);
         }
@@ -469,10 +609,16 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      */
     public editStock(masterData: any, index: number): void {
         // Check for unsaved changes before proceeding
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges()) {
             let dialogRef = this.pageLeaveUtilityService.openDialog();
 
             dialogRef.afterClosed().subscribe((action) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action) {
                     // User confirmed to proceed - clean up and continue
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
@@ -496,6 +642,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     private proceedWithEditStock(masterData: any, index: number): void {
+        /**
+         * Handles if functionality
+         */
         if(masterData.entity === 'STOCK') {
             this.showExportButton = false;
         }
@@ -505,11 +654,17 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.currentStock = masterData;
         this.showCreateButtons = false;
         this.createUpdateStock = false;
+        /**
+         * Handles if functionality
+         */
         if (this.isSearching) {
             this.createBreadcrumbFromParentGroups(masterData, index);
         } else {
             this.createBreadcrumbs();
         }
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.createUpdateStock = true;
         });
@@ -523,10 +678,16 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      */
     public editGroup(masterData: any, index): void {
         // Check for unsaved changes before proceeding
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges()) {
             let dialogRef = this.pageLeaveUtilityService.openDialog();
 
             dialogRef.afterClosed().subscribe((action) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action) {
                     // User confirmed to proceed - clean up and continue
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
@@ -550,6 +711,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     private proceedWithEditGroup(masterData: any, index): void {
+        /**
+         * Handles if functionality
+         */
         if (index === -1) {
             this.isTopLevel = true;
         } else {
@@ -559,6 +723,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.currentGroup = masterData;
         this.showCreateButtons = false;
         this.createUpdateGroup = true;
+        /**
+         * Handles if functionality
+         */
         if (this.isSearching) {
             this.createBreadcrumbFromParentGroups(masterData, index);
         } else {
@@ -576,12 +743,18 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.showCreateButtons = false;
         this.createUpdateStock = false;
 
+        /**
+         * Handles if functionality
+         */
         if (!event || event == DataOperationEnum.CREATE) {
             this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
         } else {
             this.resetCurrentStockAndGroup();
             this.createBreadcrumbs();
         }
+        /**
+         * Handles if functionality
+         */
         if (event == DataOperationEnum.CREATE || event == DataOperationEnum.DELETE) {
             this.activeIndex = Math.max(this.activeIndex - 1, 0);
         }
@@ -594,15 +767,24 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public closeGroup(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isSearching) {
             this.searchInventory(this.searchFormControl.value);
         } else {
             this.showCreateButtons = false;
 
+            /**
+             * Handles if functionality
+             */
             if (this.isTopLevel) {
                 this.breadcrumbs = [];
                 this.getTopLevelGroups();
 
+                /**
+                 * Handles if functionality
+                 */
                 if (event) {
                     this.createUpdateGroup = true;
                 } else {
@@ -610,6 +792,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 }
             } else {
                 let createUpdateGroup = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentGroup?.uniqueName) {
                     createUpdateGroup = false;
                 } else {
@@ -620,10 +805,16 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
 
                 this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
 
+                /**
+                 * Handles if functionality
+                 */
                 if (event == DataOperationEnum.CREATE || event == DataOperationEnum.DELETE) {
                     this.activeIndex = Math.max(this.activeIndex - 1, 0);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.activeIndex <= 1) {
                     this.getTopLevelGroups();
                 }
@@ -645,6 +836,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.createUpdateStock = false;
         this.createUpdateGroup = true;
 
+        /**
+         * Handles if functionality
+         */
         if (this.isTopLevel) {
             this.parentGroup = {};
             this.breadcrumbs = [];
@@ -669,6 +863,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.createUpdateGroup = false;
         this.createUpdateStock = true;
 
+        /**
+         * Handles if functionality
+         */
         if (this.isSearching && this.masterColumnsData[this.activeIndex - 1] && this.masterColumnsData[this.activeIndex - 1]?.results?.length === 1) {
             this.createBreadcrumbFromParentGroups(this.masterColumnsData[this.activeIndex - 1]?.results[0], this.activeIndex - 1);
             this.breadcrumbs.push(this.commonLocaleData?.app_create_stock);
@@ -687,16 +884,28 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public createBreadcrumbFromParentGroups(masterData: any, index: number): void {
+        /**
+         * Handles if functionality
+         */
         if (!masterData?.parentUniqueName && index >= 0) {
             masterData.parentName = this.masterColumnsData[index].parentName;
             masterData.parentUniqueName = this.masterColumnsData[index].parentUniqueName;
         }
+        /**
+         * Handles if functionality
+         */
         if (masterData?.parentUniqueName) {
             let breadcrumbs = [];
             breadcrumbs.push(masterData?.name);
 
+            /**
+             * Handles for functionality
+             */
             for (let i = index - 1; i >= 0; i--) {
                 let parentGroup = this.masterColumnsData[i]?.results?.filter(parent => parent.uniqueName === masterData?.parentUniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (parentGroup?.length) {
                     breadcrumbs.push(parentGroup[0]?.name);
                     masterData = parentGroup[0];

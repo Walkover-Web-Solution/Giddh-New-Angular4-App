@@ -11,6 +11,9 @@ import { GeneralService } from '../../services/general.service';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
 import { cloneDeep, forEach, get, has, map, orderBy } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'filter-multi-currency',
     templateUrl: './filter-multi-currency.component.html',
@@ -18,6 +21,10 @@ selector: 'filter-multi-currency',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * FilterMultiCurrencyComponent component
+ * Handles filtermulticurrency functionality and user interactions
+ */
 export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
@@ -80,6 +87,10 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /* Will check if form is valid */
     public isValidForm: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private formBuilder: FormBuilder,
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -92,8 +103,14 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             selectCurrency: [null, Validators.required]
         });
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((activeCompany) => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.getForm('selectCurrency') && !this.getForm('selectCurrency').value) {
                     this.getForm('selectCurrency').patchValue(this.activeCompany.baseCurrency);
                 }
@@ -109,8 +126,14 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.accountSearchControl.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (newValue) {
                     this.search = newValue;
                     this.searchChange.emit(this.search);
@@ -119,12 +142,18 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             });
 
         this.componentStore.universalDate$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.universalDateICurrent = false;
                 this.filterForm?.patchValue({
                     from: dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT),
                     to: dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT)
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.changeDetectionRef['destroyed']) {
                     this.changeDetectionRef.detectChanges();
                 }
@@ -139,6 +168,9 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.currencyList$.pipe(takeUntil(this.destroyed$)).subscribe(currency => {
+            /**
+             * Handles if functionality
+             */
             if (currency) {
                 this.currencyList = currency.map(res => ({
                     label: res.code,
@@ -149,15 +181,24 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.companyList$.pipe(takeUntil(this.destroyed$)).subscribe(companies => {
+            /**
+             * Handles if functionality
+             */
             if (companies) {
                 let orderedCompanies = orderBy(companies, 'name');
                 this.companyList = orderedCompanies;
             }
         });
         this.componentStore.filterRequestData$.pipe(takeUntil(this.destroyed$)).subscribe(filterRequestData => {
+            /**
+             * Handles if functionality
+             */
             if (filterRequestData) {
                 this.getForm('selectCurrency').patchValue(filterRequestData.request.reportCurrency);
                 this.getForm('shareCompanyList').patchValue(filterRequestData.request.companiesList.map(company => company.uniqueName));
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.sortSelectedCompaniesFirst();
                 }, 0);
@@ -230,12 +271,18 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      */
     public onSubmit(): void {
         this.isValidForm = this.filterForm.valid;
+        /**
+         * Handles if functionality
+         */
         if (this.getForm('shareCompanyList').value.length) {
             const data = {
                 companiesList: [],
                 reportCurrency: ''
             };
             this.getForm('shareCompanyList').value?.forEach((control: any) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (control) {
                     data.companiesList.push({
                         from: this.getForm('from').value,
@@ -257,6 +304,9 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * @memberof FilterMultiCurrencyComponent
      */
     public emitExpand(event: boolean): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.expandAllChange.emit(event);
         }, 10);
@@ -269,6 +319,9 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     * @memberof FilterMultiCurrencyComponent
     */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {            
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -284,17 +337,26 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * @memberof FilterMultiCurrencyComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.universalDatepickerTrigger?.closeMenu();
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.universalDatepickerTrigger?.closeMenu();
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

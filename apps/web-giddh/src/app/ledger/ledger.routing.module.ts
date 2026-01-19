@@ -3,6 +3,9 @@ import { RouterModule } from '@angular/router';
 import { LedgerComponent } from './ledger.component';
 import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmation-guard';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -19,5 +22,9 @@ import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmatio
     ],
     exports: [RouterModule]
 })
+/**
+ * LedgerRoutingModule module
+ * Implements LedgerRoutingModule functionality
+ */
 export class LedgerRoutingModule {
 }

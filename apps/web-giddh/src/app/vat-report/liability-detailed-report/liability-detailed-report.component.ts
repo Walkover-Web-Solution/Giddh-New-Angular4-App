@@ -7,12 +7,19 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'liability-detailed-report',
     templateUrl: './liability-detailed-report.component.html',
     styleUrls: ['./liability-detailed-report.component.scss'],
     standalone:false
 })
+/**
+ * LiabilityDetailedReportComponent component
+ * Handles liabilitydetailedreport functionality and user interactions
+ */
 export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -53,6 +60,10 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     /** Holds Current Currency Symbol for Zimbabwe report */
     public vatReportCurrencySymbol: string = this.vatReportCurrencyList[0].symbol;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private vatService: VatService,
         private toaster: ToasterService,
@@ -69,6 +80,9 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.add('gst-sidebar-open');
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params) {
                 this.vatLiabilityReportRequest.from = params.from;
                 this.vatLiabilityReportRequest.to = params.to;
@@ -90,6 +104,9 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.vatService.getVatLiabilityReport(this.vatLiabilityReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "success" && response.body?.sections) {
                 this.vatLiabilityDetailedReport = response.body;
                 this.vatLiabilityReportRequest.currencyCode = response.body?.currency?.code;

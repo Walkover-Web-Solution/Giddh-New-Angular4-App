@@ -1,5 +1,9 @@
 import { PAGINATION_LIMIT } from '../../app.constant';
 
+/**
+ * DaybookQueryRequest class
+ * Implements DaybookQueryRequest functionality
+ */
 export class DaybookQueryRequest {
     public q: string = '';
     public page: number = 0;
@@ -12,6 +16,10 @@ export class DaybookQueryRequest {
     public branchUniqueName: string;
 }
 
+/**
+ * ExportBodyRequest class
+ * Implements ExportBodyRequest functionality
+ */
 export class ExportBodyRequest {
     from?: string;
     to?: string;
@@ -44,6 +52,10 @@ export class ExportBodyRequest {
     showInAccountCurrency?: boolean;
 }
 
+/**
+ * DayBookRequestModel interface definition
+ * Defines the structure and contract for DayBookRequestModel objects
+ */
 export interface DayBookRequestModel {
     amountLessThan: boolean;
     includeAmount: boolean;
@@ -63,6 +75,10 @@ export interface DayBookRequestModel {
     defaultParticularsLabel?: string;
 }
 
+/**
+ * Inventory interface definition
+ * Defines the structure and contract for Inventory objects
+ */
 export interface Inventory {
     includeInventory: boolean;
     inventories: any[];

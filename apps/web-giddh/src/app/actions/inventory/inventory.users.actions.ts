@@ -11,22 +11,47 @@ import { InventoryUser } from '../../models/api-models/Inventory-in-out';
 import { Observable } from 'rxjs';
 import { IPaginatedResponse } from '../../models/interfaces/paginated-response.interface';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * InventoryUsersActions actions
+ * Defines inventoryusers related action creators for state management
+ */
 export class InventoryUsersActions {
 
     public addNewUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVENTORY_USER_ACTIONS.CREATE_USER),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.CreateInventoryUser(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.addNewUserResponse(response))));
 
     public addNewUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<InventoryUser, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
@@ -38,9 +63,21 @@ export class InventoryUsersActions {
 
     public getAllUsers$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVENTORY_USER_ACTIONS.GET_ALL_USERS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.GetAllInventoryUser()),
+            /**
+             * Handles map functionality
+             */
             map(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
@@ -50,16 +87,26 @@ export class InventoryUsersActions {
                 return { type: 'EmptyAction' };
             })));
 
+    /**
+     * Creates an instance of actions
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _inventoryService: InventoryService, private action$: Actions,
         private _toasty: ToasterService) {
     }
 
+    /**
+     * Retrieves allusers data
+     */
     public getAllUsers(): CustomActions {
         return {
             type: INVENTORY_USER_ACTIONS.GET_ALL_USERS,
         };
     }
 
+    /**
+     * Retrieves allusersresponse data
+     */
     public getAllUsersResponse(value: BaseResponse<IPaginatedResponse<InventoryUser>, string>): CustomActions {
         return {
             type: INVENTORY_USER_ACTIONS.GET_ALL_USERS_RESPONSE,
@@ -67,6 +114,9 @@ export class InventoryUsersActions {
         };
     }
 
+    /**
+     * Handles addNewUser functionality
+     */
     public addNewUser(name: string): CustomActions {
         return {
             type: INVENTORY_USER_ACTIONS.CREATE_USER,
@@ -74,6 +124,9 @@ export class InventoryUsersActions {
         };
     }
 
+    /**
+     * Handles addNewUserResponse functionality
+     */
     public addNewUserResponse(value: BaseResponse<InventoryUser, string>): CustomActions {
         return {
             type: INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE,

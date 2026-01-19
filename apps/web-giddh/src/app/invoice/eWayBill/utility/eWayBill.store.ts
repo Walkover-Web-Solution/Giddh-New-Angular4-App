@@ -5,6 +5,10 @@ import { ToasterService } from "../../../services/toaster.service";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { InvoiceService } from "../../../services/invoice.service";
 
+/**
+ * EwayBillListState interface definition
+ * Defines the structure and contract for EwayBillListState objects
+ */
 export interface EwayBillListState {
     fromPlace: string | null;
 }
@@ -13,13 +17,27 @@ export const INITIAL_EWAY_BILL_STATE: EwayBillListState = {
     fromPlace: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * EwayBillComponentStore store
+ * Manages ewaybillcomponent state using NgRx ComponentStore
+ */
 export class EwayBillComponentStore extends ComponentStore<EwayBillListState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private readonly toasterService: ToasterService,
         private readonly invoiceService: InvoiceService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(INITIAL_EWAY_BILL_STATE);
     }
 
@@ -31,10 +49,19 @@ export class EwayBillComponentStore extends ComponentStore<EwayBillListState> im
      */
     readonly getEwayBillFromPlace = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((request) => {
                 return this.invoiceService.getEwayBillFromPlace(request).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (response: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status === 'success') {
                                 return this.patchState({
                                     fromPlace: response.body ?? ''
@@ -47,6 +74,9 @@ export class EwayBillComponentStore extends ComponentStore<EwayBillListState> im
                             this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

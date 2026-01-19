@@ -9,12 +9,20 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { get } from '../lodash-optimized';
 
+/**
+ * Account interface definition
+ * Defines the structure and contract for Account objects
+ */
 export interface Account {
     name: string;
     gstIn: string;
     uniqueName: string;
 }
 
+/**
+ * IInvoicePurchaseItem service
+ * Provides iinvoicepurchaseitem related business logic and data operations
+ */
 export class IInvoicePurchaseItem {
     public account: Account;
     public entryUniqueName: string;
@@ -37,6 +45,10 @@ export class IInvoicePurchaseItem {
     public availItc: boolean;
 }
 
+/**
+ * IInvoicePurchaseResponse service
+ * Provides iinvoicepurchaseresponse related business logic and data operations
+ */
 export class IInvoicePurchaseResponse {
     public count: number;
     public page: number;
@@ -47,16 +59,28 @@ export class IInvoicePurchaseResponse {
 }
 
 /**** TAX MODEL ****/
+/**
+ * TaxAccount interface definition
+ * Defines the structure and contract for TaxAccount objects
+ */
 export interface TaxAccount {
     uniqueName: string;
     name: string;
 }
 
+/**
+ * TaxDetail interface definition
+ * Defines the structure and contract for TaxDetail objects
+ */
 export interface TaxDetail {
     taxValue: number;
     date: string;
 }
 
+/**
+ * ITaxResponse service
+ * Provides itaxresponse related business logic and data operations
+ */
 export class ITaxResponse {
     public uniqueName: string;
     public taxType: string;
@@ -73,17 +97,32 @@ export class ITaxResponse {
 
 /**** GENERATE PURCHASE INVOICE REQUEST ****/
 
+/**
+ * GeneratePurchaseInvoiceRequest service
+ * Provides generatepurchaseinvoicerequest related business logic and data operations
+ */
 export class GeneratePurchaseInvoiceRequest {
     public entryUniqueName: string[];
     public taxes: ITaxResponse[];
 }
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * PurchaseInvoiceService service
+ * Provides purchaseinvoice related business logic and data operations
+ */
 export class PurchaseInvoiceService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -102,9 +141,15 @@ export class PurchaseInvoiceService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
+    /**
+     * Handles FileGstReturn functionality
+     */
     public FileGstReturn(reqObj): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url;
+        /**
+         * Handles if functionality
+         */
         if (reqObj.via && reqObj.via === 'JIO_GST') {
             url = GST_RETURN_API.FILE_JIO_GST_RETURN?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':from', reqObj.period.from)?.replace(':to', reqObj.period.to)?.replace(':company_gstin', reqObj.gstNumber);
         }
@@ -120,6 +165,9 @@ export class PurchaseInvoiceService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
+    /**
+     * Handles FileGstr3B functionality
+     */
     public FileGstr3B(reqObj: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + GST_RETURN_API.FILE_GSTR3B

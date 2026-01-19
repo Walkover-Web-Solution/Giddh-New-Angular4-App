@@ -252,6 +252,9 @@ export let DEFAULT_GROUPS = [];
 export let DEFAULT_GROUPS_RESPONSIVE = [];
 
 export function reassignNavigationalArray(toAssign, isCompany, menuItems: Array<any>) {
+    /**
+     * Handles if functionality
+     */
     if (toAssign) {
         NAVIGATION_ITEM_LIST = menuItems.slice(0, 7);
         DEFAULT_MENUS = menuItems.slice(0, 7);

@@ -1,3 +1,7 @@
+/**
+ * IContriesWithCodes interface definition
+ * Defines the structure and contract for IContriesWithCodes objects
+ */
 export interface IContriesWithCodes {
     value: string;
     countryName: string;

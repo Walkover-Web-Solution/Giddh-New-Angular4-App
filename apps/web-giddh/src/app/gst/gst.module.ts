@@ -52,6 +52,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [FileGstR3Component,
         GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent,
@@ -99,5 +102,9 @@ import { MatListModule } from '@angular/material/list';
     providers: [],
     exports: [ViewTransactionsComponent]
 })
+/**
+ * GstModule module
+ * Implements GstModule functionality
+ */
 export class GstModule {
 }

@@ -3,12 +3,19 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } 
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-cdk-scroll',
     templateUrl: './cdk-scroll.component.html',
     styleUrls: ['./cdk-scroll.component.css'],
     standalone: false
 })
+/**
+ * CdkScrollComponent component
+ * Handles cdkscroll functionality and user interactions
+ */
 export class CdkScrollComponent implements OnInit, OnDestroy {
 
     /** This will use for instance of cdk scrollable */
@@ -24,6 +31,10 @@ export class CdkScrollComponent implements OnInit, OnDestroy {
     /** This will hold for destory observable */
     private destroy$: Subject<any> = new Subject();
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private scroll: ScrollDispatcher) { }
 
     /**
@@ -36,10 +47,19 @@ export class CdkScrollComponent implements OnInit, OnDestroy {
             .scrolled()
             .pipe(debounceTime(500), takeUntil(this.destroy$))
             .subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res && (res.getElementRef().nativeElement.id === 'scrollableWrapper' || res.getElementRef().nativeElement.id === this.scrollableElementId)) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res.measureScrollOffset('bottom') <= this.scrollTriggerDistance) {
                         this.fetchNextPage.emit(res.getElementRef().nativeElement.id);
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (res.measureScrollOffset('top') <= this.scrollTriggerDistance) {
                         this.fetchPreviousPage.emit(res.getElementRef().nativeElement.id);
                     }
@@ -52,6 +72,9 @@ export class CdkScrollComponent implements OnInit, OnDestroy {
      * @memberof CdkScrollComponent
      */
     public ngOnDestroy(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.destroy$) {
             this.destroy$.next(true);
             this.destroy$.complete();

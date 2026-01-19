@@ -6,6 +6,10 @@ import { ToasterService } from '../../services/toaster.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IOption } from '../../app.constant';
 
+/**
+ * ExportSettingType interface definition
+ * Defines the structure and contract for ExportSettingType objects
+ */
 interface ExportSettingType {
     exportName: string;
     format: string;
@@ -15,6 +19,9 @@ interface ExportSettingType {
     supportedVariableList?: IOption[];
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'export-file-name',
     templateUrl: './export-file-name.component.html',
@@ -22,6 +29,10 @@ interface ExportSettingType {
     standalone: false
 })
 
+/**
+ * ExportFileNameComponent component
+ * Handles exportfilename functionality and user interactions
+ */
 export class ExportFileNameComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -45,6 +56,10 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
 
     /** Export module setting form */
     public exportModuleSettingForm: FormGroup;
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private settingsProfileService: SettingsProfileService,
         private toastService: ToasterService,
@@ -92,6 +107,9 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
     public getAllModuleExportSetting(): void {
         this.isLoading = true;
         this.settingsProfileService.getModuleExportSetting().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response.status === 'success') {
                 this.moduleExportSettingArray.clear();
                 (Array.isArray(response.body) ? response.body : []).forEach((item: ExportSettingType) => {
@@ -121,6 +139,9 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
     public getFileFormat(module: FormGroup): string {
         let fileNameFormat = module.get('format')?.value;
         Object.keys(module.get('supportedVariableMap')?.value).forEach((key) => {
+            /**
+             * Handles if functionality
+             */
             if (fileNameFormat.includes(`{${key}}`)) {
                 fileNameFormat = fileNameFormat.replaceAll(`{${key}}`, module.get('supportedVariableMap')?.value[key]);
             }
@@ -144,8 +165,14 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
                 format: control.get('format')?.value
             };
         });
+        /**
+         * Handles if functionality
+         */
         if (updateRequest.length > 0) {
             this.settingsProfileService.updateModuleExportSetting({ exportFormatList: updateRequest }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.status === 'success') {
                     this.toastService.showSnackBar("success", response.body);
                     this.moduleExportSettingArray.controls.filter((control: FormGroup) => {

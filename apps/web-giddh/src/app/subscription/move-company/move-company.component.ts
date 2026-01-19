@@ -11,6 +11,9 @@ import { cloneDeep } from '../../lodash-optimized';
 import { SearchSubscriptionRequest } from '../../models/api-models/Subscriptions';
 import { IOption } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'move-company',
     styleUrls: ['./move-company.component.scss'],
@@ -20,6 +23,10 @@ import { IOption } from '../../app.constant';
     standalone: false
 })
 
+/**
+ * MoveCompanyComponent component
+ * Handles movecompany functionality and user interactions
+ */
 export class MoveCompanyComponent implements OnInit, OnDestroy {
     /* Emit move company response */
     @Output() public moveCompany = new EventEmitter<boolean>();
@@ -78,6 +85,10 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     };
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
@@ -93,11 +104,20 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.companyList$ = observableOf([]);
         this.subscriptions$ = observableOf([]);
+        /**
+         * Handles if functionality
+         */
         if (this.subscriptionMove) {
             this.isLoading = true;
             this.searchSubscription(this.searchSubscriptionRequest.q, false);
             this.subscriptionList$.pipe(
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response) {
                         this.isLoading = false;
                         let filteredData = response?.body?.results?.filter(result => (result?.totalCompanies - result?.companyCount) > 0);
@@ -114,7 +134,13 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             this.isLoading = true;
             this.searchCompany(false);
             this.componentStore.companyList$.pipe(
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.results?.length) {
                         const mappedCompanyWise = response.results.map(item => ({
                             value: item.uniqueName,
@@ -138,18 +164,30 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public searchCompany(searchedText: any, loadMore: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (this.searchRequest.loadMore) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (typeof searchedText === 'string' && searchedText) {
             this.searchRequest.q = searchedText;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (loadMore) {
             this.searchRequest.page++;
         } else {
             this.searchRequest.page = 1;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.searchRequest.page === 1 || (this.searchRequest.page <= this.searchRequest.totalPages)) {
             delete this.searchRequest.totalItems;
             delete this.searchRequest.totalPages;
@@ -158,11 +196,23 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             this.searchRequest.loadMore = true;
             let initialData = cloneDeep(this.fieldFilteredOptions);
             this.componentStore.companyList$.pipe(debounceTime(700),
+                /**
+                 * Handles distinctUntilChanged functionality
+                 */
                 distinctUntilChanged(),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)).subscribe(response => {
                     this.isLoading = false;
                     this.searchRequest.loadMore = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.results?.length) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (loadMore) {
                             let nextPaginatedData = response.results.map(item => ({
                                 value: item.uniqueName,
@@ -197,6 +247,9 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public selectCompany(company: any): void {
+        /**
+         * Handles if functionality
+         */
         if (company) {
             this.companyDetails = company.additional;
             this.getMovePlanText();
@@ -224,6 +277,9 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             userUniqueName: this.moveSelectedCompany?.createdBy?.uniqueName,
             licenceKey: ''
         };
+        /**
+         * Handles if functionality
+         */
         if (this.subscriptionMove) {
             this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany?.uniqueName });
         } else {
@@ -260,6 +316,9 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      */
     public getMovePlanText(): string {
         let text = '';
+        /**
+         * Handles if functionality
+         */
         if (this.subscriptionMove) {
             text = this.localeData?.move_plan_note;
             const companyName = this.moveSelectedCompany?.name ||
@@ -284,15 +343,24 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public searchSubscription(searchedText: string, loadMore: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (this.searchSubscriptionRequest.loadMore) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (loadMore) {
             this.searchSubscriptionRequest.page++;
         } else {
             this.searchSubscriptionRequest.page = 1;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.searchSubscriptionRequest.page === 1 || (this.searchSubscriptionRequest.page <= this.searchSubscriptionRequest.totalPages)) {
             delete this.searchSubscriptionRequest.totalItems;
             delete this.searchSubscriptionRequest.totalPages;
@@ -307,12 +375,24 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             this.searchSubscriptionRequest.loadMore = true;
             let initialData = cloneDeep(this.fieldSubscriptionFilteredOptions);
             this.subscriptionList$.pipe(debounceTime(700),
+                /**
+                 * Handles distinctUntilChanged functionality
+                 */
                 distinctUntilChanged(),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)).subscribe(response => {
                     this.isLoading = false;
                     this.searchSubscriptionRequest.loadMore = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response) {
                         let filteredData = response?.body?.results?.filter(result => (result?.totalCompanies - result?.companyCount) > 0);
+                        /**
+                         * Handles if functionality
+                         */
                         if (loadMore) {
                             const nextPaginatedData = filteredData?.map(subscription => ({
                                 value: `${subscription.subscriptionId}`,

@@ -6,18 +6,36 @@ import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { AppState } from "../../../store";
 
+/**
+ * LedgerStatementState interface definition
+ * Defines the structure and contract for LedgerStatementState objects
+ */
 export interface LedgerStatementState {
 }
 
 export const DEFAULT_LEDGER_STATEMENT_STATE: LedgerStatementState = {
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * LedgerStatementComponentStore store
+ * Manages ledgerstatementcomponent state using NgRx ComponentStore
+ */
 export class LedgerStatementComponentStore extends ComponentStore<LedgerStatementState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_LEDGER_STATEMENT_STATE);
     }
     

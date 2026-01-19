@@ -7,6 +7,9 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [AsideMenuSalesOtherTaxes],
     imports: [
@@ -19,4 +22,8 @@ import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardS
     ],
     exports: [AsideMenuSalesOtherTaxes]
 })
+/**
+ * AsideMenuSalesOtherTaxesModule module
+ * Implements AsideMenuSalesOtherTaxesModule functionality
+ */
 export class AsideMenuSalesOtherTaxesModule {}

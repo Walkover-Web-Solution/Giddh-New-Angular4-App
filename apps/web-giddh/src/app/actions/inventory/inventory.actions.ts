@@ -15,25 +15,50 @@ import { BranchTransferResponse, LinkedStocksResponse, TransferDestinationReques
 import { SalesActions } from '../sales/sales.action';
 import { forEach } from '../../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * InventoryAction actions
+ * Defines inventoryaction related action creators for state management
+ */
 export class InventoryAction {
     /** Holds Get bulk list stock key name  */
     public static GET_BULK_STOCK_LIST = 'GetBulkStockList';
 
     public addNewGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.AddNewGroup),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.CreateStockGroup(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.addNewGroupResponse(response))));
 
 
     public addNewGroupResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.AddNewGroupResponse),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
@@ -46,16 +71,34 @@ export class InventoryAction {
 
     public updateGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.UpdateGroup),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.UpdateStockGroup(action.payload?.body, action.payload.stockGroupUniquename)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.updateGroupResponse(response))));
 
 
     public updateGroupResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.UpdateGroupResponse),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
@@ -68,16 +111,34 @@ export class InventoryAction {
 
     public removeGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.RemoveGroup),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.DeleteStockGroup(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.removeGroupResponse(response))));
 
 
     public removeGroupResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.RemoveGroupResponse),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -90,8 +151,17 @@ export class InventoryAction {
 
     public GetStockUniqueName$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetStockUniqueName),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.GetStockDetails(action.payload.stockGroupUniqueName, action.payload.stockUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetStockUniqueNameResponse(response);
             })));
@@ -99,7 +169,13 @@ export class InventoryAction {
 
     public GetStockUniqueNameResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetStockUniqueNameResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
             })));
@@ -107,8 +183,17 @@ export class InventoryAction {
 
     public GetStock$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetStock),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.GetStocks(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetStockResponse(response);
             })));
@@ -116,7 +201,13 @@ export class InventoryAction {
 
     public GetStockResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetStockResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
             })));
@@ -125,8 +216,17 @@ export class InventoryAction {
 
     public GetManufacturingStock$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetManufacturingStock),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.GetManufacturingStocks()),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetManufacturingStockResponse(response);
             })));
@@ -134,7 +234,13 @@ export class InventoryAction {
 
     public GetManufacturingStockResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetManufacturingStockResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
             })));
@@ -143,8 +249,17 @@ export class InventoryAction {
 
     public GetManufacturingStockForCreate$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetManufacturingStockForCreate),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.GetManufacturingStocksForCreateMF()),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetManufacturingCreateStockResponse(response);
             })));
@@ -152,7 +267,13 @@ export class InventoryAction {
 
     public GetManufacturingStockForCreateResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetManufacturingStockForCreateResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
             })));
@@ -160,16 +281,34 @@ export class InventoryAction {
 
     public createStock$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.CreateStock),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.CreateStock(action.payload.stock, action.payload.stockGroupUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.createStockResponse(response))));
 
 
     public createStockResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.CreateStockResponse),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
@@ -189,16 +328,34 @@ export class InventoryAction {
 
     public updateStock$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.UpdateStock),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.UpdateStock(action.payload.stock, action.payload.stockGroupUniqueName, action.payload.stockUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.updateStockResponse(response))));
 
 
     public updateStockResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.UpdateStockResponse),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
@@ -211,16 +368,34 @@ export class InventoryAction {
 
     public removeStock$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.RemoveStock),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.DeleteStock(action.payload.stockGroupUniqueName, action.payload.stockUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.removeStockResponse(response))));
 
 
     public removeStockResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.RemoveStockResponse),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -235,8 +410,17 @@ export class InventoryAction {
 
     public GetStockWithUniqueName$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetStockWithUniqueName),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.GetStockUniqueNameWithDetail(action.payload.stockUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetStockWithUniqueNameResponse(response);
             })));
@@ -244,7 +428,13 @@ export class InventoryAction {
 
     public GetStockWithUniqueNameResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetStockWithUniqueNameResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
             })));
@@ -252,9 +442,21 @@ export class InventoryAction {
 
     public CreateBranchTransfer$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.BranchTransfer(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map((res: BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'error') {
                     this._toasty.errorToast(res.message);
                 } else {
@@ -268,9 +470,21 @@ export class InventoryAction {
 
     public GetLinkedStocks$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => this._inventoryService.getLinkedStocks()),
+            /**
+             * Handles map functionality
+             */
             map((res: BaseResponse<LinkedStocksResponse, string>) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'error') {
                     this._toasty.errorToast(res.message);
                 }
@@ -284,8 +498,17 @@ export class InventoryAction {
 
     public MoveStock$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.MoveStock),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.MoveStock(action.payload.activeGroup, action.payload.stockUniqueName, action.payload.groupUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.MoveStockResponse(response);
             })));
@@ -293,9 +516,18 @@ export class InventoryAction {
 
     public MoveStockResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.MoveStockResponse),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -320,15 +552,31 @@ export class InventoryAction {
      */
     public getBulkStockList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryAction.GET_BULK_STOCK_LIST),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.getBulkStockList(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.getBulkStockListResponse(response))));
 
+    /**
+     * Creates an instance of actions
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
         private _toasty: ToasterService, private router: Router, private _salesActions: SalesActions) {
 
     }
 
+    /**
+     * Handles addNewGroup functionality
+     */
     public addNewGroup(value: StockGroupRequest): CustomActions {
         return {
             type: InventoryActionsConst.AddNewGroup,
@@ -336,6 +584,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles addNewGroupResponse functionality
+     */
     public addNewGroupResponse(value: BaseResponse<StockGroupResponse, StockGroupRequest>): CustomActions {
         return {
             type: InventoryActionsConst.AddNewGroupResponse,
@@ -343,6 +594,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Creates new stock
+     */
     public createStock(value: CreateStockRequest, stockGroupUniqueName: string): CustomActions {
         return {
             type: InventoryActionsConst.CreateStock,
@@ -350,12 +604,18 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Resets createstockflags to default state
+     */
     public resetCreateStockFlags(): CustomActions {
         return {
             type: InventoryActionsConst.ResetCreateStockFlags
         }
     }
 
+    /**
+     * Creates new stockresponse
+     */
     public createStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): CustomActions {
         return {
             type: InventoryActionsConst.CreateStockResponse,
@@ -363,6 +623,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Updates existing stock
+     */
     public updateStock(value: CreateStockRequest, stockGroupUniqueName: string, stockUniqueName: string): CustomActions {
         return {
             type: InventoryActionsConst.UpdateStock,
@@ -370,6 +633,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Updates existing stockresponse
+     */
     public updateStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): CustomActions {
         return {
             type: InventoryActionsConst.UpdateStockResponse,
@@ -377,6 +643,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Updates existing group
+     */
     public updateGroup(value: StockGroupRequest, stockGroupUniquename: string): CustomActions {
         return {
             type: InventoryActionsConst.UpdateGroup,
@@ -384,6 +653,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Updates existing groupresponse
+     */
     public updateGroupResponse(value: BaseResponse<StockGroupResponse, StockGroupRequest>): CustomActions {
         return {
             type: InventoryActionsConst.UpdateGroupResponse,
@@ -391,6 +663,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Deletes group
+     */
     public removeGroup(value: string): CustomActions {
         return {
             type: InventoryActionsConst.RemoveGroup,
@@ -398,6 +673,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Deletes groupresponse
+     */
     public removeGroupResponse(value: BaseResponse<string, string>): CustomActions {
         return {
             type: InventoryActionsConst.RemoveGroupResponse,
@@ -405,6 +683,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Deletes stock
+     */
     public removeStock(stockGroupUniqueName: string, stockUniqueName: string): CustomActions {
         return {
             type: InventoryActionsConst.RemoveStock,
@@ -412,6 +693,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Deletes stockresponse
+     */
     public removeStockResponse(value: BaseResponse<string, string>): CustomActions {
         return {
             type: InventoryActionsConst.RemoveStockResponse,
@@ -419,12 +703,18 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Resets activegroup to default state
+     */
     public resetActiveGroup(): CustomActions {
         return {
             type: InventoryActionsConst.ResetActiveGroup
         };
     }
 
+    /**
+     * Handles GetStockUniqueName functionality
+     */
     public GetStockUniqueName(stockGroupUniqueName: string, stockUniqueName: string): CustomActions {
         return {
             type: InventoryActionsConst.GetStockUniqueName,
@@ -432,6 +722,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles GetStockUniqueNameResponse functionality
+     */
     public GetStockUniqueNameResponse(value: BaseResponse<StockDetailResponse, string>): CustomActions {
         return {
             type: InventoryActionsConst.GetStockUniqueNameResponse,
@@ -439,6 +732,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles GetStock functionality
+     */
     public GetStock(companyUniqueName: string = '', branchUniqueName?: string): CustomActions {
         return {
             type: InventoryActionsConst.GetStock,
@@ -446,6 +742,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles GetStockResponse functionality
+     */
     public GetStockResponse(value: BaseResponse<StocksResponse, string>): CustomActions {
         return {
             type: InventoryActionsConst.GetStockResponse,
@@ -454,12 +753,18 @@ export class InventoryAction {
     }
 
     // Get Stock for manufacturing
+    /**
+     * Handles GetManufacturingStock functionality
+     */
     public GetManufacturingStock(): CustomActions {
         return {
             type: InventoryActionsConst.GetManufacturingStock
         };
     }
 
+    /**
+     * Handles GetManufacturingStockResponse functionality
+     */
     public GetManufacturingStockResponse(value: BaseResponse<StocksResponse, string>): CustomActions {
         return {
             type: InventoryActionsConst.GetManufacturingStockResponse,
@@ -468,12 +773,18 @@ export class InventoryAction {
     }
 
     // Get Stock for create manufacturing
+    /**
+     * Handles GetManufacturingCreateStock functionality
+     */
     public GetManufacturingCreateStock(): CustomActions {
         return {
             type: InventoryActionsConst.GetManufacturingStockForCreate
         };
     }
 
+    /**
+     * Handles GetManufacturingCreateStockResponse functionality
+     */
     public GetManufacturingCreateStockResponse(value: BaseResponse<StocksResponse, string>): CustomActions {
         return {
             type: InventoryActionsConst.GetManufacturingStockForCreateResponse,
@@ -481,30 +792,45 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Resets activestock to default state
+     */
     public resetActiveStock(): CustomActions {
         return {
             type: InventoryActionsConst.ResetActiveStock
         };
     }
 
+    /**
+     * Shows loaderforstock element
+     */
     public showLoaderForStock(): CustomActions {
         return {
             type: InventoryActionsConst.ShowLoadingForStockEditInProcess
         };
     }
 
+    /**
+     * Hides loaderforstock element
+     */
     public hideLoaderForStock(): CustomActions {
         return {
             type: InventoryActionsConst.HideLoadingForStockEditInProcess
         };
     }
 
+    /**
+     * Handles ResetInventoryState functionality
+     */
     public ResetInventoryState(): CustomActions {
         return {
             type: InventoryActionsConst.ResetInventoryState
         };
     }
 
+    /**
+     * Handles OpenInventoryAsidePane functionality
+     */
     public OpenInventoryAsidePane(value: boolean) {
         return {
             type: InventoryActionsConst.NewGroupAsidePane,
@@ -512,6 +838,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles OpenCustomUnitPane functionality
+     */
     public OpenCustomUnitPane(value: boolean) {
         return {
             type: InventoryActionsConst.NewCustomUnitAsidePane,
@@ -519,6 +848,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles GetStockWithUniqueName functionality
+     */
     public GetStockWithUniqueName(stockUniqueName: string): CustomActions {
         return {
             type: InventoryActionsConst.GetStockWithUniqueName,
@@ -526,6 +858,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles GetStockWithUniqueNameResponse functionality
+     */
     public GetStockWithUniqueNameResponse(value: BaseResponse<StockDetailResponse, string>): CustomActions {
         return {
             type: InventoryActionsConst.GetStockWithUniqueNameResponse,
@@ -533,6 +868,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles ManageInventoryAside functionality
+     */
     public ManageInventoryAside(value: object) {
         return {
             type: InventoryActionsConst.ManageInventoryAside,
@@ -540,6 +878,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles CreateBranchTransfer functionality
+     */
     public CreateBranchTransfer(modal: TransferDestinationRequest | TransferProductsRequest): CustomActions {
         return {
             type: INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER,
@@ -547,18 +888,27 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles GetAllLinkedStocks functionality
+     */
     public GetAllLinkedStocks(): CustomActions {
         return {
             type: INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS
         };
     }
 
+    /**
+     * Handles ResetBranchTransferState functionality
+     */
     public ResetBranchTransferState(): CustomActions {
         return {
             type: INVENTORY_BRANCH_TRANSFER.RESET_BRANCH_TRANSFER_STATE
         };
     }
 
+    /**
+     * Handles MoveStock functionality
+     */
     public MoveStock(activeGroup, stockUniqueName, groupUniqueName): CustomActions {
         return {
             type: InventoryActionsConst.MoveStock,
@@ -566,6 +916,9 @@ export class InventoryAction {
         };
     }
 
+    /**
+     * Handles MoveStockResponse functionality
+     */
     public MoveStockResponse(response): CustomActions {
         return {
             type: InventoryActionsConst.MoveStockResponse,
@@ -594,6 +947,9 @@ export class InventoryAction {
      */
     public getBulkStockListResponse(value: BaseResponse<any, any>): CustomActions {
         const data = value.status === 'error' ? value : value.body;
+        /**
+         * Handles if functionality
+         */
         if (data?.results && data?.results.length > 0) {
             (Array.isArray(data.results) ? data.results : []).forEach((result: any) => {
                 result.variantName = result?.variantName ? result.variantName : null,

@@ -1,3 +1,7 @@
+/**
+ * IRegistration interface definition
+ * Defines the structure and contract for IRegistration objects
+ */
 export interface IRegistration {
     iciciCorporateDetails: {
         corpId: string,
@@ -12,6 +16,10 @@ export interface IRegistration {
 }
 
 /** Integrated list of bank object */
+/**
+ * IntegratedBankList class
+ * Implements IntegratedBankList functionality
+ */
 export class IntegratedBankList {
     uniqueName: string;
     bankName: string;
@@ -21,6 +29,10 @@ export class IntegratedBankList {
 }
 
 /** Get bank request object */
+/**
+ * GetOTPRequest class
+ * Implements GetOTPRequest functionality
+ */
 export class GetOTPRequest {
     bankName: string;
     urn: string;
@@ -30,6 +42,10 @@ export class GetOTPRequest {
 }
 
 /** Transaction object for OTP */
+/**
+ * BankTransactionForOTP class
+ * Implements BankTransactionForOTP functionality
+ */
 export class BankTransactionForOTP {
     remarks: string;
     amount: string;
@@ -37,6 +53,10 @@ export class BankTransactionForOTP {
 }
 
 /** Bulk payment response object */
+/**
+ * BulkPaymentResponse class
+ * Implements BulkPaymentResponse functionality
+ */
 export class BulkPaymentResponse {
     message: string;
     otp: any;
@@ -46,6 +66,10 @@ export class BulkPaymentResponse {
 }
 
 /** Bulk payment confirmation request object */
+/**
+ * BulkPaymentConfirmRequest class
+ * Implements BulkPaymentConfirmRequest functionality
+ */
 export class BulkPaymentConfirmRequest {
     otp: any;
     requestId: string;

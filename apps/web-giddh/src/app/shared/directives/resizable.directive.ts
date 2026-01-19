@@ -29,6 +29,10 @@ import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@ang
   selector: '[appResizable]',
   standalone: true
 })
+/**
+ * ResizableDirective directive
+ * Implements ResizableDirective functionality
+ */
 export class ResizableDirective implements OnInit, OnDestroy {
   /** CSS selector for the target element to resize. If empty, uses first child element */
   @Input() resizableTarget: string = '';
@@ -61,6 +65,10 @@ export class ResizableDirective implements OnInit, OnDestroy {
   private dragStarted = false;
   private dragThreshold = 3; // pixels to move before considering it a drag
 
+  /**
+   * Creates an instance of directive
+   * Initializes component dependencies and sets up initial state
+   */
   constructor(
     private el: ElementRef,
     private renderer: Renderer2
@@ -85,7 +93,13 @@ export class ResizableDirective implements OnInit, OnDestroy {
     this.removeEventListeners();
 
     // Clean up resize timeout
+    /**
+     * Handles if functionality
+     */
     if (this.resizeTimeout) {
+      /**
+       * Handles clearTimeout functionality
+       */
       clearTimeout(this.resizeTimeout);
     }
   }
@@ -96,12 +110,18 @@ export class ResizableDirective implements OnInit, OnDestroy {
    */
   private createResizer(): void {
     // Find target element
+    /**
+     * Handles if functionality
+     */
     if (this.resizableTarget) {
       this.targetElement = this.el.nativeElement.querySelector(this.resizableTarget);
     } else {
       this.targetElement = this.el.nativeElement.firstElementChild as HTMLElement;
     }
 
+    /**
+     * Handles if functionality
+     */
     if (!this.targetElement) {
       return;
     }
@@ -163,6 +183,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
    * @private
    */
   private setInitialWidth(): void {
+    /**
+     * Handles if functionality
+     */
     if (!this.targetElement) {
       return;
     }
@@ -187,6 +210,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
     event.preventDefault();
     event.stopPropagation();
 
+    /**
+     * Handles if functionality
+     */
     if (!this.targetElement) return;
 
     this.isResizing = true;
@@ -204,6 +230,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
    * @param event - Mouse move event
    */
   private onMouseMove = (event: MouseEvent): void => {
+    /**
+     * Handles if functionality
+     */
     if (!this.isResizing || !this.targetElement) return;
 
     event.preventDefault();
@@ -212,6 +241,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
     const delta = event.clientX - this.startX;
 
     // Check if we've moved enough to consider this a drag (not just a click)
+    /**
+     * Handles if functionality
+     */
     if (!this.dragStarted && Math.abs(delta) > this.dragThreshold) {
       this.dragStarted = true;
 
@@ -220,6 +252,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
       document.body.style.pointerEvents = 'none';
 
       // Enable pointer capture for better tracking
+      /**
+       * Handles if functionality
+       */
       if (this.resizerElement && this.resizerElement.setPointerCapture) {
         try {
           this.resizerElement.setPointerCapture((event as any).pointerId);
@@ -230,13 +265,22 @@ export class ResizableDirective implements OnInit, OnDestroy {
     }
 
     // Only update width if we've started dragging
+    /**
+     * Handles if functionality
+     */
     if (this.dragStarted) {
       let newWidth = this.startWidth + delta;
       const maxWidth = window.innerWidth * this.maxWidthRatio;
       this.newWidth = Math.max(this.minWidth, Math.min(newWidth, maxWidth));
 
       // Use requestAnimationFrame for smoother updates during fast dragging
+      /**
+       * Handles requestAnimationFrame functionality
+       */
       requestAnimationFrame(() => {
+        /**
+         * Handles if functionality
+         */
         if (this.targetElement && this.isResizing) {
           this.renderer.setStyle(this.targetElement, 'width', `${this.newWidth}px`);
           this.renderer.setStyle(this.targetElement, 'flex-shrink', '0');
@@ -250,16 +294,25 @@ export class ResizableDirective implements OnInit, OnDestroy {
    * @private
    */
   private stopResize = (): void => {
+    /**
+     * Handles if functionality
+     */
     if (this.isResizing) {
       this.isResizing = false;
 
       // Only save width if we actually dragged (not just clicked)
+      /**
+       * Handles if functionality
+       */
       if (this.dragStarted) {
         const widthRatio = this.newWidth / window.innerWidth;
         this.saveWidthRatio(widthRatio);
 
         // Set flag to prevent click event from firing after drag
         this.justFinishedDrag = true;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
           this.justFinishedDrag = false;
         }, 100);
@@ -271,6 +324,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
       document.body.style.pointerEvents = ''; // Restore pointer events
 
       // Release pointer capture if it was set
+      /**
+       * Handles if functionality
+       */
       if (this.resizerElement && this.resizerElement.releasePointerCapture) {
         try {
           // We need to release all pointer captures, but we don't have the pointerId
@@ -293,16 +349,28 @@ export class ResizableDirective implements OnInit, OnDestroy {
    * @private
    */
   private onWindowResize = (): void => {
+    /**
+     * Handles if functionality
+     */
     if (!this.targetElement) return;
 
     // Only process if window width actually changed significantly
     const currentWindowWidth = window.innerWidth;
+    /**
+     * Handles if functionality
+     */
     if (Math.abs(currentWindowWidth - this.lastWindowWidth) < 10) {
       return; // Ignore small changes
     }
 
     // Debounce resize events
+    /**
+     * Handles if functionality
+     */
     if (this.resizeTimeout) {
+      /**
+       * Handles clearTimeout functionality
+       */
       clearTimeout(this.resizeTimeout);
     }
 
@@ -319,6 +387,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
       let targetWidth: number;
 
       // Check if current ratio is too small for new window size
+      /**
+       * Handles if functionality
+       */
       if (currentRatio < newMinRatio) {
         targetWidth = currentWindowWidth * newMinRatio;
       } else if (currentRatio > this.maxWidthRatio) {
@@ -333,6 +404,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
       this.newWidth = targetWidth;
 
       // If we had to adjust the ratio due to window constraints, save the new ratio
+      /**
+       * Handles if functionality
+       */
       if (currentRatio < newMinRatio || currentRatio > this.maxWidthRatio) {
         const finalRatio = targetWidth / currentWindowWidth;
         this.saveWidthRatio(finalRatio);
@@ -347,7 +421,13 @@ export class ResizableDirective implements OnInit, OnDestroy {
    */
   private toggleResize(event: MouseEvent): void {
     // Add a small delay to prevent click after drag
+    /**
+     * Sets timeout value
+     */
     setTimeout(() => {
+      /**
+       * Handles if functionality
+       */
       if (this.isResizing || !this.targetElement || this.justFinishedDrag) {
         return;
       }
@@ -378,6 +458,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
       // Get existing UI preferences or create new one
       let uiPreferences: any = {};
       const existingData = localStorage.getItem(this.storageKey);
+      /**
+       * Handles if functionality
+       */
       if (existingData) {
         try {
           uiPreferences = JSON.parse(existingData);
@@ -388,6 +471,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
       }
 
       // Ensure resizable-width section exists
+      /**
+       * Handles if functionality
+       */
       if (!uiPreferences['resizable-width']) {
         uiPreferences['resizable-width'] = {};
       }
@@ -409,6 +495,9 @@ export class ResizableDirective implements OnInit, OnDestroy {
     try {
       const savedData = localStorage.getItem(this.storageKey);
 
+      /**
+       * Handles if functionality
+       */
       if (savedData) {
         let uiPreferences: any = {};
         try {
@@ -419,12 +508,21 @@ export class ResizableDirective implements OnInit, OnDestroy {
         }
 
         // Check if resizable-width section exists
+        /**
+         * Handles if functionality
+         */
         if (uiPreferences['resizable-width']) {
           const ratio = uiPreferences['resizable-width'][this.moduleName];
+          /**
+           * Handles if functionality
+           */
           if (ratio !== undefined) {
             // Validate the saved ratio is within acceptable bounds
             const minRatio = this.minWidth / window.innerWidth;
 
+            /**
+             * Handles if functionality
+             */
             if (ratio >= minRatio && ratio <= this.maxWidthRatio) {
               return ratio;
             }

@@ -24,6 +24,9 @@ import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { forEach } from '../../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'trial-balance-report-grid',
     templateUrl: './trial-balance-report-grid.component.html',
@@ -31,6 +34,10 @@ selector: 'trial-balance-report-grid',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * TrialBalanceReportGridComponent component
+ * Handles trialbalancereportgrid functionality and user interactions
+ */
 export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Reference to the search input element */
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
@@ -71,6 +78,10 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private changeDetectionRef: ChangeDetectorRef,
         private zone: NgZone,
         public dialog: MatDialog,
@@ -86,16 +97,28 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      */
     public ngOnInit(): void {
         this.accountSearchControl.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (newValue) {
                     this.searchInput = newValue;
                     this.hideData = true;
                     this.searchChange.emit(this.searchInput);
                     this.isExpandToggledDuringSearch = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (newValue === '') {
                         this.showClearSearch = false;
                     }
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.hideData = false;
                         this.changeDetectionRef.detectChanges();
@@ -104,20 +127,38 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
             });
     }
     //ankit
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
+            /**
+             * Handles if functionality
+             */
             if (this.data$) {
                 this.zone.runOutsideAngular(() => {
                     this.toggleGroupVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.data$) {
                         // always make first level visible ....
                         (Array.isArray(this.data$) ? this.data$ : []).forEach((group: ChildGroup) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (group.isIncludedInSearch) {
                                 group.isVisible = true;
                                 group.isCreated = true;
                                 group.isOpen = false;
                                 (Array.isArray(group.accounts) ? group.accounts : []).forEach((account: Account) => {
+                                    /**
+                                     * Handles if functionality
+                                     */
                                     if (account.isIncludedInSearch) {
                                         account.isVisible = false;
                                         account.isCreated = false;
@@ -170,7 +211,13 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      */
     public toggleSearch(): void {
         this.showClearSearch = true;
+        /**
+         * Handles if functionality
+         */
         if (this.searchInputEl && this.searchInputEl.nativeElement) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.searchInputEl.nativeElement.focus();
             }, 200);
@@ -186,6 +233,9 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof TrialBalanceReportComponent
      */
     public clickedOutside(event: any, element: ElementRef): void {
+        /**
+         * Handles if functionality
+         */
         if ((this.accountSearchControl?.value !== null && this.accountSearchControl?.value !== '') || this.generalService.childOf(event.target, element)) {
             return;
         } else {
@@ -202,19 +252,34 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof TrialBalanceGridComponent
      */
     public toggleGroupVisibility(group: Array<ChildGroup>, isVisible: boolean): void {
+        /**
+         * Handles for functionality
+         */
         for (let groupIndex = 0; groupIndex < group?.length; groupIndex++) {
             const currentGroup: ChildGroup = group[groupIndex];
+            /**
+             * Handles if functionality
+             */
             if (currentGroup.isIncludedInSearch) {
                 currentGroup.isCreated = isVisible;
                 currentGroup.isVisible = isVisible;
                 currentGroup.isOpen = isVisible;
+                /**
+                 * Handles for functionality
+                 */
                 for (let accountIndex = 0; accountIndex < currentGroup.accounts?.length; accountIndex++) {
                     const currentAccount: Account = currentGroup.accounts[accountIndex];
+                    /**
+                     * Handles if functionality
+                     */
                     if (currentAccount.isIncludedInSearch) {
                         currentAccount.isCreated = isVisible;
                         currentAccount.isVisible = isVisible;
                     }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (currentGroup.childGroups?.length) {
                     this.toggleGroupVisibility(currentGroup.childGroups, isVisible);
                 }
@@ -230,6 +295,9 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof TrialBalanceGridComponent
      */
     public openAccountModal(account: any): void {
+        /**
+         * Handles if functionality
+         */
         if (account) {
             this.accountDetails = account;
             this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;

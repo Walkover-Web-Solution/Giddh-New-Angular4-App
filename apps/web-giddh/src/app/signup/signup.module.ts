@@ -8,6 +8,9 @@ import { SignupRoutingModule } from './signup.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         MatButtonModule,
@@ -23,4 +26,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         SignupComponent
     ]
 })
+/**
+ * SignupModule module
+ * Implements SignupModule functionality
+ */
 export class SignupModule {}

@@ -31,10 +31,17 @@ const routes: Routes = [
     }
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [],
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
+/**
+ * CustomFieldsRoutingModule module
+ * Implements CustomFieldsRoutingModule functionality
+ */
 export class CustomFieldsRoutingModule {
 }

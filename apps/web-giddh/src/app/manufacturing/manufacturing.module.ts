@@ -10,6 +10,9 @@ import { SharedModule } from '../shared/shared.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatDialogModule } from '@angular/material/dialog';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         ManufacturingComponent,
@@ -28,5 +31,9 @@ import { MatDialogModule } from '@angular/material/dialog';
         FormFieldsModule
     ],
 })
+/**
+ * ManufacturingModule module
+ * Implements ManufacturingModule functionality
+ */
 export class ManufacturingModule {
 }

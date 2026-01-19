@@ -24,6 +24,9 @@ import { GstComponentStore } from '../gst.store';
 import { ServiceConfig } from '../../services/service.config';
 import { environment } from '../../../environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'file-gstr3',
     templateUrl: './gstR3.component.html',
@@ -31,6 +34,10 @@ import { environment } from '../../../environments/environment.generated';
     providers: [GstComponentStore],
     standalone: false
 })
+/**
+ * FileGstR3Component component
+ * Handles filegstr3 functionality and user interactions
+ */
 export class FileGstR3Component implements OnInit, OnDestroy {
     /** Aside authentication dialog open */
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
@@ -111,6 +118,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     /** Holds GST return type */
     public returnType: string = GstReport.Gstr3b;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private router: Router,
@@ -129,6 +140,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
             }
@@ -136,8 +150,14 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
@@ -147,11 +167,17 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 from: params['from'],
                 to: params['to']
             };
+            /**
+             * Handles if functionality
+             */
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
                 this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
             this.isCompany = params['isCompany'] === 'true';
+            /**
+             * Handles if functionality
+             */
             if (!this.selectedMonth) {
                 const fromDate = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT);
                 this.selectedMonth = fromDate.isValid() ? fromDate.toISOString() : dayjs().startOf('month').toISOString();
@@ -163,6 +189,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result) {
                 this.activeCompanyGstNumber = result;
                 // get session details
@@ -175,6 +204,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             request.gstin = this.activeCompanyGstNumber;
 
             this.gstr3BOverviewDataFetchedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(bool => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!bool && !this.dateSelected) {
                     this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr3b, request));
                 }
@@ -182,17 +214,26 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$)).subscribe((response: Gstr3bOverviewResult2) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.processGstr3BOverviewData(response);
             }
         });
         this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
         this.getCurrentPeriod$.subscribe(currentPeriod => {
+            /**
+             * Handles if functionality
+             */
             if (currentPeriod && currentPeriod.from) {
                 let date = {
                     startDate: dayjs(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
                     endDate: dayjs(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
+                /**
+                 * Handles if functionality
+                 */
                 if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
                     this.isMonthSelected = true;
                 } else {
@@ -207,6 +248,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
 
         this.componentStore.fileGstr3BSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.asideAuthenticationDialogRef?.close();
             }
@@ -309,6 +353,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof GstR3Component
      */
     public setExemptValuesTableData(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData?.inward_sup?.isup_details) {
             this.exemptValuesTableData = this.gstr3BData.inward_sup.isup_details.map(item => ({
                 supplyNature: item.ty === 'GST' ? this.localeData?.gstr3b?.composition_schema : this.localeData?.gstr3b?.nongst_supply,
@@ -329,6 +376,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         const tableData = [];
 
         // ITC Available Section
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData?.itc_elg?.itc_avl) {
             tableData.push({
                 type: 'header',
@@ -336,6 +386,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             });
 
             (Array.isArray(this.gstr3BData.itc_elg.itc_avl) ? this.gstr3BData.itc_elg.itc_avl : []).forEach(item => {
+                /**
+                 * Handles switch functionality
+                 */
                 switch (item.ty) {
                     case 'IMPG':
                         tableData.push({
@@ -409,6 +462,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         }
 
         // ITC Reversed Section
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData?.itc_elg?.itc_rev) {
             tableData.push({
                 type: 'header',
@@ -416,6 +472,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             });
 
             (Array.isArray(this.gstr3BData.itc_elg.itc_rev) ? this.gstr3BData.itc_elg.itc_rev : []).forEach(item => {
+                /**
+                 * Handles switch functionality
+                 */
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({
@@ -450,6 +509,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         }
 
         // Net ITC Available
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData?.itc_elg?.itc_net) {
             tableData.push({
                 type: 'header',
@@ -466,6 +528,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         }
 
         // Ineligible ITC Section
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData?.itc_elg?.itc_inelg) {
             tableData.push({
                 type: 'header',
@@ -473,6 +538,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             });
 
             (Array.isArray(this.gstr3BData.itc_elg.itc_inelg) ? this.gstr3BData.itc_elg.itc_inelg : []).forEach(item => {
+                /**
+                 * Handles switch functionality
+                 */
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({
@@ -524,6 +592,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
 
         // Add unregistered details
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData?.inter_sup?.unreg_details) {
             this.suppliesTableData.push(...this.gstr3BData.inter_sup.unreg_details.map(item => ({
                 ...item,
@@ -538,6 +609,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
 
         // Add composition details
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData?.inter_sup?.comp_details) {
             this.suppliesTableData.push(...this.gstr3BData.inter_sup.comp_details.map(item => ({
                 ...item,
@@ -552,6 +626,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
 
         // Add UIN details
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData?.inter_sup?.uin_details) {
             this.suppliesTableData.push(...this.gstr3BData.inter_sup.uin_details.map(item => ({
                 ...item,
@@ -567,6 +644,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof GstR3Component
      */
     public periodChanged(date:  any): void {
+        /**
+         * Handles if functionality
+         */
         if (date) {
             this.selectedMonth = date;
             this.currentPeriod = {
@@ -584,6 +664,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles selectedTab functionality
+     */
     public selectedTab(tabType) {
         this.selectedGstr3BTab = tabType;
     }
@@ -597,12 +680,18 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      */
     public emailGSTR3bSheet(isDownloadDetailSheet: boolean) {
 
+        /**
+         * Handles if functionality
+         */
         if (!this.userEmail) {
             return this.toasty.showSnackBar('error', this.localeData?.email_required_error);
         }
         // Note:- appended ",1" with selectedMonth (July 2020) because "July 2020" format does not support for firefox browser and ("July 2020, 1") is valid format for chrome and firefox browser
         let convertValidDateFormat = this.date.value + ',1';
         let monthToSend = dayjs(convertValidDateFormat).format("MM") + "-" + dayjs(convertValidDateFormat).format("YYYY");
+        /**
+         * Handles if functionality
+         */
         if (!monthToSend) {
             this.toasty.showSnackBar('error', this.localeData?.month_required_error);
         } else if (!this.activeCompanyGstNumber) {
@@ -632,6 +721,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FileGstR3Component
      */
     public handleNavigation(type: string): void {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
@@ -707,6 +799,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     * @memberof FilingHeaderComponent
     */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.setGstrUserTableData();
             this.setGstr3bTableData();
@@ -761,6 +856,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FileGstR3Component
      */
     public checkAuthenticationAndFileGstr3B(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.gstAuthenticated) {
             this.fileGstr3B();
         } else {
@@ -784,10 +882,16 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     private processGstr3BOverviewData(response: Gstr3bOverviewResult2): void {
         this.gstr3BData = response;
 
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData.ret_period) {
             this.selectedMMYYYY = this.gstr3BData.ret_period;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.gstr3BData && this.gstr3BData.sup_details) {
             this.calculateSupplyDetailsSummary();
         }

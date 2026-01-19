@@ -25,6 +25,9 @@ import { AllItem } from '../shared/helpers/allItems';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'all-giddh-item',
     templateUrl: './all-item.component.html',
@@ -33,6 +36,10 @@ import { AppState } from '../store';
     standalone:false
 })
 
+/**
+ * AllGiddhItemComponent component
+ * Handles allgiddhitem functionality and user interactions
+ */
 export class AllGiddhItemComponent implements OnInit, OnDestroy {
     /** Instance of search field */
     @ViewChild('searchField', { static: true }) public searchField: ElementRef;
@@ -65,6 +72,10 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     /** This will hold all items dialog title*/
     public createNewModalTitle: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -86,21 +97,42 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     @HostListener('document:keydown', ['$event'])
+    /**
+     * Handles keyboardupevent event
+     */
     public handleKeyboardUpEvent(event: KeyboardEvent) {
         let items = [];
         this.filteredItems$.pipe(take(1)).subscribe(filteredItems => {
+            /**
+             * Handles if functionality
+             */
             if (filteredItems) {
                 items = filteredItems;
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (event.key === 'Tab') {
+            /**
+             * Handles if functionality
+             */
             if (this.menuIndex === -1 || this.itemIndex === -1) {
                 this.menuIndex = 0;
                 this.itemIndex = 0;
                 return;
             }
+            /**
+             * Handles if functionality
+             */
             if (event.shiftKey) {
+                /**
+                 * Handles if functionality
+                 */
                 if (items?.length) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (items[this.menuIndex]?.items[this.itemIndex - 1]) {
                         this.itemIndex -= 1;
                     } else {
@@ -112,7 +144,13 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                     this.itemIndex = 0;
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (items?.length) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (items[this.menuIndex]?.items[this.itemIndex + 1]) {
                         this.itemIndex += 1;
                     } else {
@@ -127,8 +165,14 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
             event.preventDefault();
             event.stopPropagation();
         }
+        /**
+         * Handles if functionality
+         */
         if (event.key === 'Enter' && this.menuIndex !== -1 && this.itemIndex !== -1) {
             const currentFocusedItem = items[this.menuIndex]?.items[this.itemIndex];
+            /**
+             * Handles if functionality
+             */
             if (currentFocusedItem?.link) {
                 this.router.navigate([currentFocusedItem.link], { queryParams: currentFocusedItem.additional });
             } else {
@@ -174,13 +218,22 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         this.filteredItems$ = of([]);
         let allItems = [];
         this.allItems$.pipe(take(1)).subscribe(items => allItems = items);
+        /**
+         * Handles if functionality
+         */
         if (search && search.trim()) {
             let loop = 0;
             let found = false;
             let filteredItems = [];
             allItems?.forEach((items) => {
                 found = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (items?.label?.toLowerCase().includes(search?.trim()?.toLowerCase())) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (filteredItems[loop] === undefined) {
                         filteredItems[loop] = [];
                     }
@@ -190,7 +243,13 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                 } else {
                     let itemsFound = [];
                     items?.items?.forEach(item => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (item?.label?.toLowerCase().includes(search?.trim()?.toLowerCase())) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (filteredItems[loop] === undefined) {
                                 filteredItems[loop] = [];
                             }
@@ -200,10 +259,16 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                         }
                     });
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (itemsFound?.length > 0) {
                         filteredItems[loop] = { label: items.label, items: itemsFound };
                     }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (found) {
                     loop++;
                 }
@@ -221,6 +286,9 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     public handleItemClick(item: AllItem): void {
+        /**
+         * Handles if functionality
+         */
         if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         } else if (item?.additional?.queryParams?.isGstMenu === true) {
@@ -235,7 +303,13 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     public redirectSubItemLink(subitem: any): void {
+        /**
+         * Handles if functionality
+         */
         if (subitem) {
+            /**
+             * Handles if functionality
+             */
             if (subitem.submenu) {
                 this.createNewModalTitle = subitem.label
                 this.subMenuItems = subitem.submenu;
@@ -244,6 +318,9 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                     autoFocus: false
                 });
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if ((subitem?.additional?.queryParams?.tabIndex >= 0) && subitem?.additional?.queryParams?.tab) {
                     this.router.navigate([subitem.link], { queryParams: subitem?.additional?.queryParams });
                 } else {
@@ -269,8 +346,14 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
+                /**
+                 * Handles if functionality
+                 */
                 if (items) {
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(response => {
                         const allItems = this.generalService.getVisibleMenuItems("all-items", items, this.localeData?.items, response?.countryV2?.alpha2CountryCode);
@@ -291,8 +374,14 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public loadTaxDetails(): void {
         this.activeCompanyGstNumber = "";
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body) {
                 let taxes = response.body;
+                /**
+                 * Handles if functionality
+                 */
                 if (taxes?.length >= 1) {
                     this.activeCompanyGstNumber = taxes[0];
                 }
@@ -307,7 +396,13 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     * @memberof AllGiddhItemComponent
     */
     public navigate(type: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompanyGstNumber) {
+            /**
+             * Handles switch functionality
+             */
             switch (type) {
                 case GstReport.Gstr1: case GstReport.Gstr2:
                     this.navigateToOverview(type);

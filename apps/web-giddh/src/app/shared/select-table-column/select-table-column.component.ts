@@ -6,6 +6,9 @@ import { ToasterService } from "../../services/toaster.service";
 import { InventoryModuleName } from "../../new-inventory/inventory.enum";
 import { ContactsTab } from "../../contact/contacts.enum";
 import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.const";
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "select-table-column",
     styleUrls: ["./select-table-column.component.scss"],
@@ -13,6 +16,10 @@ import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.c
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * SelectTableColumnComponent component
+ * Handles selecttablecolumn functionality and user interactions
+ */
 export class SelectTableColumnComponent implements OnInit, OnChanges {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -79,6 +86,10 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         return this.dynamicModuleTypes.has(this.moduleType);
     }
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetection: ChangeDetectorRef,
         private commonService: CommonService,
@@ -103,6 +114,9 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue || changes?.moduleName?.currentValue !== changes?.moduleName?.previousValue) {
             this.getSelectedColumns();
         }
@@ -114,6 +128,9 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public saveSelectedColumns(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.filteredDisplayColumns();
             const saveColumnReq = {
@@ -127,6 +144,9 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe(response => {
                     this.isLoading.emit(false);
+                    /**
+                     * Handles if functionality
+                     */
                     if (!(response?.status === 'success' && response.body)) {
                         this.toaster.errorToast(response?.message);
                     }
@@ -142,6 +162,9 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public onKeydownEnter(item: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!(item?.checked && this.displayedColumns.length <= 2)) {
             item.checked = !item.checked;
             this.saveSelectedColumns();
@@ -175,6 +198,9 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 const { status, body } = response || {};
+                /**
+                 * Handles if functionality
+                 */
                 if (isDynamic && status === 'success' && body?.reportFilterColumns) {
                     this.dynamicCustomColumns = body.reportFilterColumns || [];
                 } else if (!isDynamic && body?.columns) {

@@ -42,6 +42,9 @@ const PERMISSION_ROUTES: Routes = [
     }
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         PermissionComponent,
@@ -73,5 +76,9 @@ const PERMISSION_ROUTES: Routes = [
     ],
     providers: []
 })
+/**
+ * PermissionRoutingModule class
+ * Implements PermissionRoutingModule functionality
+ */
 export class PermissionRoutingModule {
 }

@@ -1,3 +1,7 @@
+/**
+ * VoucherAdjustments class
+ * Implements VoucherAdjustments functionality
+ */
 export class VoucherAdjustments {
     tdsTaxUniqueName?: string;
     tdsAmount?: TdsAmount;
@@ -8,15 +12,27 @@ export class VoucherAdjustments {
 }
 
 /** Due amount class used in voucher adjustment */
+/**
+ * DueAmount class
+ * Implements DueAmount functionality
+ */
 export class DueAmount {
     amountForAccount: number;
     amountForCompany: number;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.amountForAccount = 0;
         this.amountForCompany = 0;
     }
 }
 
+/**
+ * Adjustment class
+ * Implements Adjustment functionality
+ */
 export class Adjustment {
     voucherNumber: string;
     balanceDue: DueAmount;
@@ -36,6 +52,10 @@ export class Adjustment {
     currency?: { symbol: string; code: string; };
     voucherBalanceType?: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.voucherNumber = '';
         this.voucherDate = '';
@@ -50,10 +70,18 @@ export class Adjustment {
     }
 }
 
+/**
+ * TdsAmount interface definition
+ * Defines the structure and contract for TdsAmount objects
+ */
 export interface TdsAmount {
     amountForAccount?: number;
 }
 
+/**
+ * AdjustAdvancePaymentModal class
+ * Implements AdjustAdvancePaymentModal functionality
+ */
 export class AdjustAdvancePaymentModal {
     customerName: string;
     customerUniquename: string;
@@ -71,6 +99,10 @@ export class AdjustAdvancePaymentModal {
     tdsTotal?: number = 0;
 }
 
+/**
+ * AdvanceReceiptRequest class
+ * Implements AdvanceReceiptRequest functionality
+ */
 export class AdvanceReceiptRequest {
     invoiceDate: string;
     accountUniqueName: string;

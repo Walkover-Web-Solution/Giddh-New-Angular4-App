@@ -11,69 +11,139 @@ import { CreateNewRoleRequest, CreateNewRoleResponse, IRoleCommonResponseAndRequ
 import { CustomActions } from '../../store/custom-actions';
 import { LocaleService } from '../../services/locale.service';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * PermissionActions class
+ * Implements PermissionActions functionality
+ */
 export class PermissionActions {
 
     public GetAllPages$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.GET_ALL_PAGES),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._permissionService.GetAllPageNames()),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetAllPagesResponse(response);
             })));
 
     public GetAllPagesResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return { type: 'EmptyAction' };
             })));
 
     public GetAllPermissions$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._permissionService.GetAllRoles()),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetAllPermissionsResponse(response);
             })));
 
     public GetAllPermissionsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return { type: 'EmptyAction' };
             })));
 
     public GetRoles$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.GET_ROLES),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._permissionService.GetAllRoles()),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetRolesResponse(response);
             })));
 
     public GetRolesResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.GET_ROLES_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return { type: 'EmptyAction' };
             })));
 
     public CreateRole$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.CREATE_ROLE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._permissionService.CreateNewRole(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.CreateRoleResponse(response)));
             })));
 
     public CreateRoleResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -85,17 +155,35 @@ export class PermissionActions {
 
     public UpdateRole$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.UPDATE_ROLE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._permissionService.UpdateRole(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.UpdateRoleResponse(response);
             })));
 
     public UpdateRoleResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -107,17 +195,35 @@ export class PermissionActions {
 
     public DeleteRole$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.DELETE_ROLE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._permissionService.DeleteRole(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.DeleteRoleResponse(response);
             })));
 
     public DeleteRoleResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -126,18 +232,28 @@ export class PermissionActions {
                 return { type: 'EmptyAction' };
             })));
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions,
         private _toasty: ToasterService,
         private localeService: LocaleService,
         private _permissionService: PermissionService) {
     }
 
+    /**
+     * Handles GetAllPages functionality
+     */
     public GetAllPages(): CustomActions {
         return {
             type: PERMISSION_ACTIONS.GET_ALL_PAGES,
         };
     }
 
+    /**
+     * Handles GetAllPagesResponse functionality
+     */
     public GetAllPagesResponse(value: any): CustomActions {
         return {
             type: PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE,
@@ -145,12 +261,18 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles GetAllPermissions functionality
+     */
     public GetAllPermissions(): CustomActions {
         return {
             type: PERMISSION_ACTIONS.GET_ALL_PERMISSIONS,
         };
     }
 
+    /**
+     * Handles GetAllPermissionsResponse functionality
+     */
     public GetAllPermissionsResponse(value: any): CustomActions {
         return {
             type: PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE,
@@ -158,10 +280,16 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles GetRoles functionality
+     */
     public GetRoles(): CustomActions {
         return { type: PERMISSION_ACTIONS.GET_ROLES };
     }
 
+    /**
+     * Handles GetRolesResponse functionality
+     */
     public GetRolesResponse(value: BaseResponse<IRoleCommonResponseAndRequest[], string>) {
         return {
             type: PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
@@ -169,6 +297,9 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles CreateRole functionality
+     */
     public CreateRole(value: CreateNewRoleRequest): CustomActions {
         return {
             type: PERMISSION_ACTIONS.CREATE_ROLE,
@@ -176,6 +307,9 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles CreateRoleResponse functionality
+     */
     public CreateRoleResponse(value: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest>): CustomActions {
         return {
             type: PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE,
@@ -183,6 +317,9 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles UpdateRole functionality
+     */
     public UpdateRole(value: IRoleCommonResponseAndRequest): CustomActions {
         return {
             type: PERMISSION_ACTIONS.UPDATE_ROLE,
@@ -190,6 +327,9 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles UpdateRoleResponse functionality
+     */
     public UpdateRoleResponse(value: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>): CustomActions {
         return {
             type: PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE,
@@ -197,6 +337,9 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles DeleteRole functionality
+     */
     public DeleteRole(value: string): CustomActions {
         return {
             type: PERMISSION_ACTIONS.DELETE_ROLE,
@@ -204,6 +347,9 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles DeleteRoleResponse functionality
+     */
     public DeleteRoleResponse(value: BaseResponse<string, string>): CustomActions {
         return {
             type: PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE,
@@ -211,6 +357,9 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles PushTempRoleInStore functionality
+     */
     public PushTempRoleInStore(value): CustomActions {
         return {
             type: PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE,
@@ -218,6 +367,9 @@ export class PermissionActions {
         };
     }
 
+    /**
+     * Handles RemoveNewlyCreatedRoleFromStore functionality
+     */
     public RemoveNewlyCreatedRoleFromStore(): CustomActions {
         return {
             type: PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE

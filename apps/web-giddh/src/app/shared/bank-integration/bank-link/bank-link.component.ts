@@ -5,6 +5,9 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { IOption } from '../../../app.constant';
 import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'bank-link',
     styleUrls: ['./bank-link.component.scss'],
@@ -13,6 +16,10 @@ import { SettingIntegrationComponentStore } from '../../../settings/integration/
     standalone: false
 })
 
+/**
+ * BankLinkComponent component
+ * Handles banklink functionality and user interactions
+ */
 export class BankLinkComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -35,6 +42,10 @@ export class BankLinkComponent implements OnInit, OnDestroy {
     /** True if relogin required in any bank account */
     public reLoginRequired: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: SettingIntegrationComponentStore,
         public dialog: MatDialog,
@@ -49,6 +60,9 @@ export class BankLinkComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.componentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.dialogRef?.close(true);
             }
@@ -63,6 +77,9 @@ export class BankLinkComponent implements OnInit, OnDestroy {
      * @memberof BankLinkComponent
      */
     public selectedOption(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.additional) {
             this.selectedBank = event.additional;
         }

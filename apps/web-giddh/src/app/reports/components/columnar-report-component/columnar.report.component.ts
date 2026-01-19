@@ -18,6 +18,9 @@ import { GroupService } from '../../../services/group.service';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'columnar-report-component',
     templateUrl: './columnar.report.component.html',
@@ -26,6 +29,10 @@ import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
     changeDetection: ChangeDetectionStrategy.Default
 })
 
+/**
+ * ColumnarReportComponent component
+ * Handles columnarreport functionality and user interactions
+ */
 export class ColumnarReportComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
@@ -75,6 +82,10 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,
         private store: Store<AppState>,
@@ -98,8 +109,14 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany && !this.activeFinancialYear) {
                 this.companyUniqueName = activeCompany.uniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if(activeCompany.activeFinancialYear) {
                     this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
                     this.selectActiveFinancialYear();
@@ -123,6 +140,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public getFinancialYears(): void {
         this.settingsFinancialYearService.GetAllFinancialYears().pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res && res.body && res.body.financialYears) {
                 let selectYear = [];
                 (Array.isArray(res.body.financialYears) ? res.body.financialYears : []).forEach(key => {
@@ -153,9 +173,15 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public exportReport(isShowReport: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isLoading) {
             this.isLoading = true;
             this.isShowColumnarReport = isShowReport;
+            /**
+             * Handles if functionality
+             */
             if (this.fromMonth && this.toMonth) {
                 let monthYear = [];
                 let startDate = dayjs(new Date(this.fromMonth));
@@ -163,6 +189,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
                 monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
 
+                /**
+                 * Handles for functionality
+                 */
                 for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                     startDate = startDate.add(1, 'month');
                     monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
@@ -182,6 +211,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             } else {
                 this.exportRequest.monthYear = [];
             }
+            /**
+             * Handles if functionality
+             */
             if (isShowReport) {
                 this.columnarReportResponse = null;
                 this.exportRequest.page = this.getColumnarRequestModel.page;
@@ -190,7 +222,13 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
                 this.isShowColumnarReport = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === "success") {
+                    /**
+                     * Handles if functionality
+                     */
                     if (isShowReport) {
                         this.columnarReportResponse = res?.body;
                         this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
@@ -235,6 +273,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectFinancialYear(event): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value) {
             this.financialYearSelected = event.value;
             
@@ -257,6 +298,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
 
+            /**
+             * Handles for functionality
+             */
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
                 this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
@@ -273,6 +317,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public isFormValid(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (this.exportRequest.financialYear && this.groupUniqueName) {
             return true;
         } else {
@@ -287,6 +334,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectFromMonth(event): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             let fromMonth = dayjs(new Date(this.financialYearSelected?.financialYearStarts?.split("-")?.reverse()?.join("-")));
             let toMonth = dayjs(new Date(this.financialYearSelected?.financialYearEnds?.split("-")?.reverse()?.join("-")));
@@ -296,6 +346,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
             this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
 
+            /**
+             * Handles for functionality
+             */
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
                 this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
@@ -311,6 +364,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
             this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
 
+            /**
+             * Handles for functionality
+             */
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
                 this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
@@ -325,6 +381,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectToMonth(event): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             let fromMonth = dayjs(new Date(this.financialYearSelected?.financialYearStarts?.split("-")?.reverse()?.join("-")));
             let toMonth = dayjs(new Date(this.financialYearSelected?.financialYearEnds?.split("-")?.reverse()?.join("-")));
@@ -334,6 +393,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
             this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
 
+            /**
+             * Handles for functionality
+             */
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
                 this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
@@ -349,6 +411,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
             this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
 
+            /**
+             * Handles for functionality
+             */
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
                 this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
@@ -362,8 +427,14 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectActiveFinancialYear(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
             (Array.isArray(this.selectYear) ? this.selectYear : []).forEach(key => {
+                /**
+                 * Handles if functionality
+                 */
                 if (key?.value?.uniqueName === this.activeFinancialYear) {
                     this.selectFinancialYear(key);
                 }
@@ -378,6 +449,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public handlePageEvent(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.getColumnarRequestModel) {
             this.getColumnarRequestModel.page = this.getColumnarRequestModel.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.getColumnarRequestModel.count = event.pageSize;
@@ -417,6 +491,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.groupsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -426,6 +503,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 count: DROPDOWN_ITEMS_COUNT_LIMIT,
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -434,6 +514,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                             additional: result?.parentGroups
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.flatGroupsOptions = searchResults;
                     } else {
@@ -444,7 +527,13 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     }
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
@@ -458,6 +547,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
             this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
             this.preventDefaultGroupScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultGroupScrollApiCall = false;
             }, 500);
@@ -471,11 +563,17 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public handleGroupScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
             this.onGroupSearchQueryChanged(
                 this.groupsSearchResultsPaginationData.query,
                 this.groupsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {

@@ -16,12 +16,18 @@ export class StockGroupHelper {
      */
     public static arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
         groups.map(group => {
+            /**
+             * Handles if functionality
+             */
             if (group) {
                 let newOption: IOption = { label: '', value: '', additional: {} };
                 newOption.label = group?.name;
                 newOption.value = group?.uniqueName;
                 newOption.additional = group;
                 parents.push(newOption);
+                /**
+                 * Handles if functionality
+                 */
                 if (group?.childStockGroups?.length > 0) {
                     this.arrangeStockGroups(group?.childStockGroups, parents);
                 }

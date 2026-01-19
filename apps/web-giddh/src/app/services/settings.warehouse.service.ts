@@ -19,9 +19,17 @@ import { concat, get } from '../lodash-optimized';
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsWarehouseService service
+ * Provides settingswarehouse related business logic and data operations
+ */
 export class SettingsWarehouseService {
 
     /** @ignore */
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private errorHandler: GiddhErrorHandler,
@@ -39,6 +47,9 @@ export class SettingsWarehouseService {
     public createWarehouse(params: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + WAREHOUSE_API.CREATE?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), params).pipe(
+            /**
+             * Handles map functionality
+             */
             map((response) => {
                 let data: BaseResponse<any, any> = response;
                 data.request = params;
@@ -60,16 +71,28 @@ export class SettingsWarehouseService {
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':page', params.page)
             }`;
+        /**
+         * Handles if functionality
+         */
         if (branchUniqueName) {
             contextPath = contextPath.concat(`&&branchUniqueName=${branchUniqueName}`);
         }
+        /**
+         * Handles if functionality
+         */
         if (Number.isInteger(params.count)) {
             contextPath = contextPath.concat(`&count=${params.count}`);
         }
+        /**
+         * Handles if functionality
+         */
         if (params.query) {
             contextPath = contextPath.concat(`&q=${params.query}`);
         }
         return this.http.get(contextPath).pipe(
+            /**
+             * Handles map functionality
+             */
             map((response) => {
                 let data: BaseResponse<any, any> = response;
                 return data;
@@ -88,6 +111,9 @@ export class SettingsWarehouseService {
         const contextPath = WAREHOUSE_API.UPDATE?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':warehouseUniqueName', params.warehouseUniqueName);
         return this.http.put(this.config.apiUrl + contextPath, params).pipe(
+            /**
+             * Handles map functionality
+             */
             map((response) => {
                 let data: BaseResponse<any, any> = response;
                 data.request = params;
@@ -107,6 +133,9 @@ export class SettingsWarehouseService {
         const contextPath = WAREHOUSE_API.SET_DEFAULT_WAREHOUSE?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':warehouseUniqueName', params.warehouseUniqueName);
         return this.http.patch(this.config.apiUrl + contextPath, params).pipe(
+            /**
+             * Handles map functionality
+             */
             map((response) => {
                 let data: BaseResponse<any, any> = response;
                 data.request = params;
@@ -144,6 +173,9 @@ export class SettingsWarehouseService {
         return this.http.patch(this.config.apiUrl + WAREHOUSE_API.UPDATE_WAREHOUSE_STATUS
             ?.replace(':companyUniqueName', companyUniqueName)
             ?.replace(':warehouseUniqueName', warehouseUniqueName), model).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, string> = res;
                     data.queryString = {};

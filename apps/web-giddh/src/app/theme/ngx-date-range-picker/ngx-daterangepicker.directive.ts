@@ -1,6 +1,10 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, Directive, DoCheck, ElementRef, EventEmitter, forwardRef, HostListener, Input, KeyValueDiffer, KeyValueDiffers, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as dayjs from 'dayjs';
+/**
+ * Dayjs interface definition
+ * Defines the structure and contract for Dayjs objects
+ */
 type Dayjs = any;
 import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { LocaleConfig } from './ngx-daterangepicker.config';
@@ -8,6 +12,9 @@ import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.se
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: 'input[ngxDaterangepickerMd]',
     providers: [
@@ -19,6 +26,10 @@ import { ReplaySubject } from 'rxjs';
     standalone: false
 })
 
+/**
+ * NgxDaterangepickerDirective directive
+ * Implements NgxDaterangepickerDirective functionality
+ */
 export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     public picker: NgxDaterangepickerComponent;
     private _onChange = Function.prototype;
@@ -98,6 +109,9 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     private _endKey: string = 'endDate';
     private _startKey: string = 'startDate';
     @Input() set startKey(value) {
+        /**
+         * Handles if functionality
+         */
         if (value !== null) {
             this._startKey = value;
         } else {
@@ -106,6 +120,9 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     };
 
     @Input() set endKey(value) {
+        /**
+         * Handles if functionality
+         */
         if (value !== null) {
             this._endKey = value;
         } else {
@@ -136,6 +153,10 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of directive
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public viewContainerRef: ViewContainerRef,
         public _changeDetectorRef: ChangeDetectorRef,
@@ -154,6 +175,9 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         this.picker.inline = false; // set inline to false for all directive usage
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     ngOnInit() {
         this.picker.rangeClicked.asObservable().pipe(takeUntil(this.destroyed$)).subscribe((range: any) => {
             this.rangeClicked.emit(range);
@@ -162,12 +186,18 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
             this.datesUpdated.emit(range);
         });
         this.picker.choosedDate.asObservable().pipe(takeUntil(this.destroyed$)).subscribe((change: any) => {
+            /**
+             * Handles if functionality
+             */
             if (change) {
                 const value = {};
                 value[this._startKey] = change.startDate;
                 value[this._endKey] = change.endDate;
                 this.value = value;
                 this.onChange.emit(value);
+                /**
+                 * Handles if functionality
+                 */
                 if (typeof change.name === 'string') {
                     this._el.nativeElement.value = change.name;
                 }
@@ -183,22 +213,46 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         this.picker.opens = this.opens;
         this.localeDiffer = this.differs.find(this.locale).create();
 
+        /**
+         * Handles if functionality
+         */
         if (this.inputStartDate) {
             this.picker.startDate = this.inputStartDate;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.inputEndDate) {
             this.picker.endDate = this.inputEndDate;
         }
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles for functionality
+         */
         for (let change in changes) {
+            /**
+             * Handles if functionality
+             */
             if (changes.hasOwnProperty(change)) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.notForChangesProperty?.indexOf(change) === -1) {
                     this.picker[change] = changes[change].currentValue;
+                    /**
+                     * Handles if functionality
+                     */
                     if (change === "inputStartDate" && changes[change].currentValue) {
                         this.picker.startDate = changes[change].currentValue;
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (change === "inputEndDate" && changes[change].currentValue) {
                         this.picker.endDate = changes[change].currentValue;
                     }
@@ -207,9 +261,18 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         }
     }
 
+    /**
+     * Handles ngDoCheck functionality
+     */
     ngDoCheck() {
+        /**
+         * Handles if functionality
+         */
         if (this.localeDiffer) {
             const changes = this.localeDiffer.diff(this.locale);
+            /**
+             * Handles if functionality
+             */
             if (changes) {
                 this.picker.updateLocale(this.locale);
             }
@@ -217,13 +280,22 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     }
 
     @HostListener('blur')
+    /**
+     * Handles blur event
+     */
     onBlur() {
         this._onTouched();
     }
 
     @HostListener('click', ['$event'])
+    /**
+     * Opens 
+     */
     open(event?: any) {
         this.picker.show(event);
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.picker.removeDuplicateDatepickers();
             this.picker.appendDatepickerToBody();
@@ -232,28 +304,49 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     }
 
     @HostListener("document:keyup.esc", ['$event'])
+    /**
+     * Hides  element
+     */
     hide(e?) {
         this.picker.hide(e);
     }
 
     @HostListener('document:keyup', ['$event'])
+    /**
+     * Handles inputChanged functionality
+     */
     inputChanged(e) {
+        /**
+         * Handles if functionality
+         */
         if (e.target.tagName?.toLowerCase() !== 'input') {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!e.target?.value?.length) {
             return;
         }
         const dateString = e.target?.value.split(this.picker.locale.separator);
         let start = null, end = null;
+        /**
+         * Handles if functionality
+         */
         if (dateString?.length === 2) {
             start = dayjs(dateString[0], this.picker.locale.format);
             end = dayjs(dateString[1], this.picker.locale.format);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.singleDatePicker || start === null || end === null) {
             start = dayjs(e.target?.value, this.picker.locale.format);
             end = start;
         }
+        /**
+         * Handles if functionality
+         */
         if (!start.isValid() || !end.isValid()) {
             return;
         }
@@ -262,7 +355,13 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         this.picker.updateView();
     }
 
+    /**
+     * Toggles  state
+     */
     toggle(e?) {
+        /**
+         * Handles if functionality
+         */
         if (this.picker.isShown) {
             this.hide(e);
         } else {
@@ -270,32 +369,59 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         }
     }
 
+    /**
+     * Handles clear functionality
+     */
     clear() {
         this.picker.clear();
     }
 
+    /**
+     * Handles writeValue functionality
+     */
     writeValue(value) {
         this.value = value;
         this.setValue(value);
     }
 
+    /**
+     * Handles registerOnChange functionality
+     */
     registerOnChange(fn) {
         this._onChange = fn;
     }
 
+    /**
+     * Handles registerOnTouched functionality
+     */
     registerOnTouched(fn) {
         this._onTouched = fn;
     }
 
+    /**
+     * Sets value value
+     */
     private setValue(val: any) {
+        /**
+         * Handles if functionality
+         */
         if (val) {
+            /**
+             * Handles if functionality
+             */
             if (val[this._startKey]) {
                 this.picker.setStartDate(val[this._startKey]);
             }
+            /**
+             * Handles if functionality
+             */
             if (val[this._endKey]) {
                 this.picker.setEndDate(val[this._endKey]);
             }
             this.picker.calculateChosenLabel();
+            /**
+             * Handles if functionality
+             */
             if (this.picker.chosenLabel) {
                 this._el.nativeElement.value = this.picker.chosenLabel;
             }
@@ -304,10 +430,16 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         }
     }
 
+    /**
+     * Retrieves position data
+     */
     getPosition(element) {
         var xPosition = 0;
         var yPosition = 40;
 
+        /**
+         * Handles while functionality
+         */
         while (element) {
             xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
             yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
@@ -322,6 +454,9 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
      */
     setPosition() {
         const container = document.getElementsByTagName("ngx-daterangepicker-material")[0] as HTMLElement;
+        /**
+         * Handles if functionality
+         */
         if (container) {
             const element = this._el?.nativeElement;
             let position = this.getPosition(element);
@@ -329,6 +464,9 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
             let totalWidth = container.offsetWidth + position.x;
             let positionX = position.x;
 
+            /**
+             * Handles if functionality
+             */
             if (totalWidth > screenWidth) {
                 positionX = positionX - (totalWidth - screenWidth);
             }
@@ -345,20 +483,35 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
      * @param targetElement target element object
      */
     @HostListener('document:click', ['$event', '$event.target'])
+    /**
+     * Handles outsideClick functionality
+     */
     outsideClick(event, targetElement: HTMLElement): void {
+        /**
+         * Handles if functionality
+         */
         if (!targetElement) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (targetElement.classList.contains('ngx-daterangepicker-action')) {
             return;
         }
         const clickedInside = this._el?.nativeElement.contains(targetElement);
+        /**
+         * Handles if functionality
+         */
         if (!clickedInside) {
             this.hide();
         }
     }
 
     @HostListener('window:resize', ['$event'])
+    /**
+     * Handles windowResize functionality
+     */
     windowResize(event) {
         this.hide();
     }

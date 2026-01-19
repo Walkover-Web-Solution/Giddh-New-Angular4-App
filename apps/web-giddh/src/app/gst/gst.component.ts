@@ -19,11 +19,18 @@ import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../services/service.config';
 import { environment } from '../../environments/environment.generated';
+/**
+ * Handles Component functionality
+ */
 @Component({
     templateUrl: './gst.component.html',
     styleUrls: ['./gst.component.scss'],
     standalone:false
 })
+/**
+ * GstComponent component
+ * Handles gst functionality and user interactions
+ */
 export class GstComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
@@ -83,6 +90,10 @@ export class GstComponent implements OnInit, OnDestroy {
     /** Holds  "DD MMM YYYY"  date format string*/
     public giddhDateFormatWithSpace: string = GIDDH_DATE_FORMAT_WITH_SPACE;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private route: Router,
@@ -111,23 +122,35 @@ export class GstComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.loadTaxDetails();
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
 
         this.getCurrentPeriod$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a && a.from) {
                 let date = {
                     startDate: dayjs(a.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
                     endDate: dayjs(a.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
+                /**
+                 * Handles if functionality
+                 */
                 if (date.startDate === a.from && date.endDate === a.to) {
                     const fromDate = dayjs(a.from, GIDDH_DATE_FORMAT);
                     this.selectedMonth = fromDate.isValid() ? fromDate.toISOString() : dayjs().startOf('month').toISOString();
@@ -179,12 +202,18 @@ export class GstComponent implements OnInit, OnDestroy {
         this.isMonthSelected = true;
         this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
 
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompanyGstNumber) {
             let request: GstOverViewRequest = new GstOverViewRequest();
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
             request.gstin = this.activeCompanyGstNumber;
 
+            /**
+             * Handles if functionality
+             */
             if (this.isMonthSelected) {
                 // get gstr1 and gstr2 summary
                 this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
@@ -220,15 +249,27 @@ export class GstComponent implements OnInit, OnDestroy {
         this.route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
     }
 
+    /**
+     * Handles emailSheet functionality
+     */
     public emailSheet(isDownloadDetailSheet: boolean) {
+        /**
+         * Handles if functionality
+         */
         if (!this.isMonthSelected) {
             return this.toasty.showSnackBar('error', this.localeData?.monthonly_required_error);
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.userEmail) {
             return this.toasty.showSnackBar('error', this.localeData?.email_required_error);
         }
         let check = dayjs(this.selectedMonth, 'MM-YYYY');
         let monthToSend = check.format('MM') + '-' + check.format('YYYY');
+        /**
+         * Handles if functionality
+         */
         if (!monthToSend) {
             this.toasty.showSnackBar('error', this.localeData?.month_required_error);
         } else if (!this.activeCompanyGstNumber) {
@@ -239,6 +280,9 @@ export class GstComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles navigateToTab functionality
+     */
     public navigateToTab(tab, returnType) {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab, selectedGst: this.activeCompanyGstNumber } });
     }
@@ -250,6 +294,9 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public selectTax(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value) {
             this.activeCompanyGstNumber = event.value;
         }
@@ -265,6 +312,9 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public handleNavigation(type: string): void {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
@@ -286,12 +336,18 @@ export class GstComponent implements OnInit, OnDestroy {
         this.isTaxApiInProgress = true;
         this.activeCompanyGstNumber = "";
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body) {
                 this.taxes = response.body?.map(tax => ({
                     label: tax,
                     value: tax
                 }));
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.activeCompanyGstNumber && this.taxes?.length > 0) {
                     this.activeCompanyGstNumber = this.taxes[0]?.value;
                 }
@@ -308,6 +364,9 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     private loadTaxReport(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompanyGstNumber) {
             let request: GstOverViewRequest = new GstOverViewRequest();
             request.from = this.currentPeriod.from;

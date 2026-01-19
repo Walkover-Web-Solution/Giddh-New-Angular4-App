@@ -14,19 +14,35 @@ import { GstReport } from '../../gst/constants/gst.constant';
 import { LocaleService } from '../../services/locale.service';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * GstReconcileActions actions
+ * Defines gstreconcile related action creators for state management
+ */
 export class GstReconcileActions {
 
     public GstReconcileOtpRequest$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_OTP_REQUEST)
             , switchMap((action: CustomActions) => {
 
                 return this._reconcileService.GstReconcileGenerateOtp(action.payload.userName)
                     .pipe(
+                        /**
+                         * Handles map functionality
+                         */
                         map((response: BaseResponse<string, string>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status === 'success') {
                                 this._toasty.successToast(response?.body);
                             } else {
@@ -38,12 +54,21 @@ export class GstReconcileActions {
 
     public GstReconcileVerifyOtpRequest$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_VERIFY_OTP_REQUEST)
             , switchMap((action: CustomActions) => {
 
                 return this._reconcileService.GstReconcileVerifyOtp(action.payload.model)
                     .pipe(
+                        /**
+                         * Handles map functionality
+                         */
                         map((response: BaseResponse<string, VerifyOtpRequest>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status === 'success') {
                                 this._toasty.successToast(response?.body);
                             } else {
@@ -55,12 +80,21 @@ export class GstReconcileActions {
 
     public GstReconcileInvoicePeriodRequest$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST)
             , switchMap((action: CustomActions) => {
 
                 return this._reconcileService.GstReconcileGetInvoices(action.payload)
                     .pipe(
+                        /**
+                         * Handles map functionality
+                         */
                         map((response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
@@ -70,12 +104,21 @@ export class GstReconcileActions {
 
     public GetGstr1OverView$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GET_GSTR1_OVERVIEW)
             , switchMap((action: CustomActions) => {
 
                 return this._reconcileService.GetGstrOverview(action.payload.type, action.payload.model)
                     .pipe(
+                        /**
+                         * Handles map functionality
+                         */
                         map((response: BaseResponse<GstOverViewResult, GstOverViewRequest>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
@@ -85,12 +128,21 @@ export class GstReconcileActions {
 
     public GetGstr2OverView$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GET_GSTR2_OVERVIEW)
             , switchMap((action: CustomActions) => {
 
                 return this._reconcileService.GetGstrOverview(action.payload.type, action.payload.model)
                     .pipe(
+                        /**
+                         * Handles map functionality
+                         */
                         map((response: BaseResponse<GstOverViewResult, GstOverViewRequest>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
@@ -99,11 +151,17 @@ export class GstReconcileActions {
             })));
     public GetGstr3BOverView$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GET_GSTR3B_OVERVIEW)
             , switchMap((action: CustomActions) => {
 
                 return this._reconcileService.GetGstr3BOverview(action.payload.type, action.payload.model)
                     .pipe(
+                        /**
+                         * Handles map functionality
+                         */
                         map((response: BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>) => {
                             return this.GetGstr3BOverViewResponse(response);
                         }));
@@ -111,9 +169,18 @@ export class GstReconcileActions {
 
     public GetGstr3BOverViewResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GET_GSTR3B_OVERVIEW_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstOverViewRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
@@ -122,12 +189,21 @@ export class GstReconcileActions {
 
     public GetSummaryTransaction$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS)
             , switchMap((action: CustomActions) => {
 
                 return this._reconcileService.GetSummaryTransaction(action.payload.type, action.payload.model)
                     .pipe(
+                        /**
+                         * Handles map functionality
+                         */
                         map((response: BaseResponse<GstTransactionResult, GStTransactionRequest>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
@@ -137,12 +213,21 @@ export class GstReconcileActions {
 
     public GetGSTR1SummaryDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS)
             , switchMap((action: CustomActions) => {
 
                 return this._reconcileService.GetGstr1SummaryDetails(action.payload)
                     .pipe(
+                        /**
+                         * Handles map functionality
+                         */
                         map((response: BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
@@ -153,18 +238,36 @@ export class GstReconcileActions {
 
     public DownloadGSTRSheet$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._reconcileService.DownloadGSTRSheet(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.DownloadGstrSheetResponse(response)));
             })));
 
 
     public DownloadGSTRSheetResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstrSheetDownloadRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -177,9 +280,18 @@ export class GstReconcileActions {
 
     public GstSaveGSPSession$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._reconcileService.SaveGSPSession(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.SaveGSPSessionResponse(response)));
             })));
 
@@ -189,9 +301,18 @@ export class GstReconcileActions {
 
     public GstSaveGSPSessionResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -203,18 +324,36 @@ export class GstReconcileActions {
 
     public GstSaveGSPSessionWithOTP$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._reconcileService.SaveGSPSessionWithOTP(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.SaveGSPSessionWithOTPResponse(response)));
             })));
 
 
     public GstSaveGSPSessionWithOTPResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -225,12 +364,21 @@ export class GstReconcileActions {
 
     public FileGstr1$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.FILE_GSTR1)
             , switchMap((action: CustomActions) => {
 
                 return this._reconcileService.FileGstr1(action.payload)
                     .pipe(
+                        /**
+                         * Handles map functionality
+                         */
                         map((response: BaseResponse<string, FileGstr1Request>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status === 'success') {
                                 this._toasty.successToast(response?.body);
                             } else {
@@ -243,12 +391,25 @@ export class GstReconcileActions {
 
     public GetGSPSession$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(GSTR_ACTIONS.GST_GET_GSP_SESSION),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._reconcileService.GetGSPSession(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.GetGSPSessionResponse(response)));
             })));
 
+    /**
+     * Creates an instance of actions
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions,
         private _toasty: ToasterService,
         private localeService: LocaleService,
@@ -257,6 +418,9 @@ export class GstReconcileActions {
 
     }
 
+    /**
+     * Handles GstReconcileOtpRequest functionality
+     */
     public GstReconcileOtpRequest(userName: string): CustomActions {
         return {
             type: GST_RECONCILE_ACTIONS.GST_RECONCILE_OTP_REQUEST,
@@ -264,6 +428,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles GstReconcileOtpResponse functionality
+     */
     public GstReconcileOtpResponse(response: BaseResponse<string, string>): CustomActions {
         return {
             type: GST_RECONCILE_ACTIONS.GST_RECONCILE_OTP_RESPONSE,
@@ -271,6 +438,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles GstReconcileInvoiceRequest functionality
+     */
     public GstReconcileInvoiceRequest(model: GstReconcileInvoiceRequest): CustomActions {
         return {
             type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST,
@@ -278,6 +448,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles GstReconcileInvoiceResponse functionality
+     */
     public GstReconcileInvoiceResponse(response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest>): CustomActions {
         return {
             type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_RESPONSE,
@@ -285,6 +458,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles GstReconcileVerifyOtpRequest functionality
+     */
     public GstReconcileVerifyOtpRequest(model: VerifyOtpRequest): CustomActions {
         return {
             type: GST_RECONCILE_ACTIONS.GST_RECONCILE_VERIFY_OTP_REQUEST,
@@ -292,6 +468,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles GstReconcileVerifyOtpResponse functionality
+     */
     public GstReconcileVerifyOtpResponse(response: BaseResponse<string, VerifyOtpRequest>): CustomActions {
         return {
             type: GST_RECONCILE_ACTIONS.GST_RECONCILE_VERIFY_OTP_RESPONSE,
@@ -304,12 +483,18 @@ export class GstReconcileActions {
      */
     public GetOverView(type, model: GstOverViewRequest) {
 
+        /**
+         * Handles if functionality
+         */
         if (type === GstReport.Gstr1 || type === GstReport.Gstr2) {
             return {
                 type: type === GstReport.Gstr1 ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW : GSTR_ACTIONS.GET_GSTR2_OVERVIEW,
                 payload: { type, model }
             };
         }
+        /**
+         * Handles if functionality
+         */
         if (type === GstReport.Gstr3b) {
             return {
                 type: GSTR_ACTIONS.GET_GSTR3B_OVERVIEW,
@@ -319,6 +504,9 @@ export class GstReconcileActions {
 
     }
 
+    /**
+     * Handles GetOverViewResponse functionality
+     */
     public GetOverViewResponse(res: BaseResponse<GstOverViewResult, GstOverViewRequest>) {
         let type = res.queryString?.type;
         return {
@@ -326,6 +514,9 @@ export class GstReconcileActions {
             payload: res
         };
     }
+    /**
+     * Handles GetGstr3BOverViewResponse functionality
+     */
     public GetGstr3BOverViewResponse(res: BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>) {
         return {
             type: GSTR_ACTIONS.GET_GSTR3B_OVERVIEW_RESPONSE,
@@ -353,6 +544,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles SetActiveCompanyGstin functionality
+     */
     public SetActiveCompanyGstin(gstIn) {
         return {
             type: GSTR_ACTIONS.SET_ACTIVE_COMPANY_GSTIN,
@@ -370,6 +564,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles GetGSTR1SummaryDetailsResponse functionality
+     */
     public GetGSTR1SummaryDetailsResponse(result: BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>): CustomActions {
         return {
             type: GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS_RESPONSE,
@@ -387,6 +584,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles DownloadGstrSheetResponse functionality
+     */
     public DownloadGstrSheetResponse(result: BaseResponse<any, GstrSheetDownloadRequest>): CustomActions {
         return {
             type: GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET_RESPONSE,
@@ -394,11 +594,17 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles downloadFile functionality
+     */
     public downloadFile(data: BaseResponse<any, GstrSheetDownloadRequest>) {
         let blob = this.generalService.base64ToBlob(data?.body.data, 'application/xls', 512);
         return saveAs(blob, data?.body.name);
     }
 
+    /**
+     * Handles SetSelectedPeriod functionality
+     */
     public SetSelectedPeriod(period) {
         return {
             type: GSTR_ACTIONS.CURRENT_PERIOD,
@@ -416,6 +622,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles SaveGSPSessionResponse functionality
+     */
     public SaveGSPSessionResponse(response: BaseResponse<any, GstSaveGspSessionRequest>): CustomActions {
         return {
             type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE,
@@ -433,12 +642,18 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles ResetGstAsideFlags functionality
+     */
     public ResetGstAsideFlags() {
         return {
             type: GSTR_ACTIONS.GST_RESET_ASIDE_FLAGS
         };
     }
 
+    /**
+     * Handles SaveGSPSessionWithOTPResponse functionality
+     */
     public SaveGSPSessionWithOTPResponse(response: BaseResponse<any, GstSaveGspSessionRequest>): CustomActions {
         return {
             type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE,
@@ -447,6 +662,9 @@ export class GstReconcileActions {
     }
 
     // File Gstr 1
+    /**
+     * Handles FileGstr1 functionality
+     */
     public FileGstr1(model: FileGstr1Request): CustomActions {
         return {
             type: GSTR_ACTIONS.FILE_GSTR1,
@@ -454,6 +672,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles FileGstr1Response functionality
+     */
     public FileGstr1Response(result: BaseResponse<string, FileGstr1Request>): CustomActions {
         return {
             type: GSTR_ACTIONS.FILE_GSTR1_RESPONSE,
@@ -462,6 +683,9 @@ export class GstReconcileActions {
     }
 
     // Get Gst Gsp Session
+    /**
+     * Handles GetGSPSession functionality
+     */
     public GetGSPSession(gstIn: string): CustomActions {
         return {
             type: GSTR_ACTIONS.GST_GET_GSP_SESSION,
@@ -469,6 +693,9 @@ export class GstReconcileActions {
         };
     }
 
+    /**
+     * Handles GetGSPSessionResponse functionality
+     */
     public GetGSPSessionResponse(response: BaseResponse<GetGspSessionResponse, string>): CustomActions {
         return {
             type: GSTR_ACTIONS.GST_GET_GSP_SESSION_RESPONSE,

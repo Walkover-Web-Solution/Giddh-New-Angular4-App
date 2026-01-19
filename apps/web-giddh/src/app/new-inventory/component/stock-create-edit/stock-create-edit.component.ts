@@ -36,6 +36,9 @@ import { PageLeaveUtilityService } from "../../../services/page-leave-utility.se
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { DataOperationEnum } from "../../../shared/Enums/common.enum";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
@@ -43,6 +46,10 @@ import { DataOperationEnum } from "../../../shared/Enums/common.enum";
     providers: [InventoryComponentStore, VoucherComponentStore],
     standalone:false
 })
+/**
+ * StockCreateEditComponent component
+ * Handles stockcreateedit functionality and user interactions
+ */
 export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Instance of stock create/edit form */
     @ViewChild('stockCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
@@ -276,6 +283,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public downloadAttachmentInProgress$: Observable<boolean> = this.componentStore.downloadAttachmentInProgress$;
     /** Returns true if form has actual unsaved changes else false */
     public get showPageLeaveConfirmation(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!this.stockCreateEditForm || !this.stockCreateEditForm.form || !this.initialFormValues || this.skipPageLeaveConfirmation) {
             return false;
         }
@@ -289,11 +299,21 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     /** Flag to temporarily disable page leave confirmation after successful operations */
     private skipPageLeaveConfirmation: boolean = false;
     /** Unregister functions for GeneralService callbacks */
+    /**
+     * Handles unregisterUnsavedChangesCallback functionality
+     */
     private unregisterUnsavedChangesCallback: () => void;
+    /**
+     * Handles unregisterMarkFormsAsPristineCallback functionality
+     */
     private unregisterMarkFormsAsPristineCallback: () => void;
     /** Holds discount value */
     public discountValue: any;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private inventoryService: InventoryService,
         private salesService: SalesService,
@@ -325,10 +345,16 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public ngOnInit(): void {
         // Only register with GeneralService if this is a standalone component (not embedded in InventoryMasterComponent)
         // Check if we're in a routed context vs embedded context
+        /**
+         * Handles if functionality
+         */
         if (!this.addStock) {
             // This is a standalone routed component, register with GeneralService
             this.unregisterUnsavedChangesCallback = this.generalService.registerUnsavedChangesCallback(() => this.showPageLeaveConfirmation);
             this.unregisterMarkFormsAsPristineCallback = this.generalService.registerMarkFormsAsPristineCallback(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
                     this.stockCreateEditForm.form.markAsPristine();
                     this.captureInitialFormValues();
@@ -348,6 +374,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.getWarehouses();
         this.getVariantCustomFields();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params?.type || this.addStock) {
                 this.stockForm.type = this.addStock ? this.stockType.toUpperCase() : params?.type?.toUpperCase();
                 this.resetForm(this.stockCreateEditForm);
@@ -355,25 +384,43 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.getUnitGroups();
                 this.changeDetection.detectChanges();
             }
+            /**
+             * Handles if functionality
+             */
             if (params?.stockUniqueName) {
                 this.queryParams = params;
                 this.getStockDetails();
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.addStock) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!["PRODUCT", "SERVICE", "FIXEDASSETS"].includes(params?.type?.toUpperCase())) {
                         this.router.navigate(['/pages/inventory/v2']);
                     }
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.stockUniqueName) {
                         this.queryParams = { stockUniqueName: this.stockUniqueName };
                         this.getStockDetails();
                     }
                 }
             }
+            /**
+             * Handles if functionality
+             */
             if (this.stockForm.type === 'PRODUCT' || this.stockForm.type === 'SERVICE') {
                 this.getPurchaseAccounts();
                 this.getSalesAccounts();
             }
+            /**
+             * Handles if functionality
+             */
             if (this.stockForm.type === 'FIXED_ASSETS') {
                 this.getFixedAssetsAccounts();
             }
@@ -381,6 +428,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params?.tab && this.activeTabIndex !== params?.tab) {
                 this.activeTabIndex = params?.tab;
                 this.changeDetection.detectChanges();
@@ -388,6 +438,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         });
 
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile) {
                 this.companyCurrencySymbol = profile.baseCurrencySymbol;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
@@ -397,6 +450,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.componentStore.uploadAttachmentIsSuccess$
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.variantIndex >= 0) {
                     this.updateAttachmentState(response);
                 }
@@ -405,6 +461,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.componentStore.previewAttachmentIsSuccess$
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.openPreviewDialog(response);
                 }
@@ -413,6 +472,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.voucherComponentStore.deleteAttachmentIsSuccess$
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.variantIndex >= 0) {
                     this.handleAttachmentDeletion(response);
                 }
@@ -427,19 +489,34 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public ngAfterViewInit(): void {
         // Capture initial form values after view is initialized
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.captureInitialFormValues();
         }, 500);
 
         // Set up form value change listener after view is initialized
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
                 this.stockCreateEditForm.form.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(formValues => {
                     // Check if all important form fields are blank/empty
                     const isFormBlank = this.isStockFormCompletelyBlank(formValues);
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (isFormBlank) {
                         // Update initial values to current blank state to prevent popup
+                        /**
+                         * Sets timeout value
+                         */
                         setTimeout(() => {
                             this.captureInitialFormValues();
                         }, 100);
@@ -460,9 +537,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public addNewOptionValue(optionIndex: number, optionValueIndex: number): void {
         const value = this.stockForm.options[optionIndex]?.values[optionValueIndex].value;
+        /**
+         * Handles if functionality
+         */
         if (value?.trim()) {
             const valueIndex = this.stockForm.options[optionIndex]?.values?.filter((optionValue, index) => { return optionValue?.value === value && optionValueIndex !== index });
 
+            /**
+             * Handles if functionality
+             */
             if (valueIndex?.length) {
                 this.stockForm.options[optionIndex].values[optionValueIndex].value = "";
                 const message = this.localeData?.duplicate_option_value?.replace("[VALUE]", value);
@@ -472,6 +555,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
 
             this.stockForm.options[optionIndex].values[optionValueIndex].value = String(value);
 
+            /**
+             * Handles if functionality
+             */
             if (!this.stockForm.options[optionIndex]?.values[optionValueIndex + 1] && value?.trim()) {
                 this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
             }
@@ -488,6 +574,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public getStockUnits(): void {
         let groups = ["maingroup"];
 
+        /**
+         * Handles if functionality
+         */
         if (this.stockForm.stockUnitGroup?.uniqueName) {
             groups = [this.stockForm.stockUnitGroup?.uniqueName];
         }
@@ -495,9 +584,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.stockMainUnits = [];
 
         this.inventoryService.getStockMappedUnit(groups).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 let usedMappedUnit = [];
                 response.body?.forEach(unit => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!usedMappedUnit[unit?.stockUnitX?.uniqueName]) {
                         usedMappedUnit[unit?.stockUnitX?.uniqueName] = unit;
 
@@ -516,11 +611,17 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public getStockLinkedUnits(): void {
         this.stockUnits = [];
 
+        /**
+         * Handles if functionality
+         */
         if (!this.stockForm.stockUnitUniqueName) {
             return;
         }
 
         this.manufacturingService.loadStockUnits(this.stockForm.stockUnitUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(units => {
+            /**
+             * Handles if functionality
+             */
             if (units?.length) {
                 units?.forEach(unit => {
                     this.stockUnits.push({ label: unit?.code, value: unit?.uniqueName });
@@ -537,10 +638,16 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public getStockGroups(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stockForm.type === 'FIXEDASSETS') {
             this.stockForm.type = 'FIXED_ASSETS';
         }
         this.inventoryService.GetGroupsWithStocksFlatten(this.stockForm.type).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 let stockGroups: IOption[] = [];
                 this.arrangeStockGroups(response.body?.results, stockGroups);
@@ -571,6 +678,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public getPurchaseAccounts(): void {
         this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
                 data.body?.results.map(account => {
@@ -579,6 +689,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
 
                 this.purchaseAccounts = purchaseAccounts;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.queryParams?.stockUniqueName) {
                     this.findPurchaseAccountName();
                 }
@@ -593,6 +706,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public getFixedAssetsAccounts(): void {
         this.salesService.getAccountsWithCurrency('fixedassets').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 let fixedAssetsAccounts: IOption[] = [];
                 data.body?.results.map(account => {
@@ -601,6 +717,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
 
                 this.fixedAssetsAccounts = fixedAssetsAccounts;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.queryParams?.stockUniqueName) {
                     this.findFixedAssetsAccountName();
                 }
@@ -615,6 +734,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public getSalesAccounts(): void {
         this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 let salesAccounts: IOption[] = [];
                 data.body?.results?.map(account => {
@@ -623,6 +745,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
 
                 this.salesAccounts = salesAccounts;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.queryParams?.stockUniqueName) {
                     this.findSalesAccountName();
                 }
@@ -636,7 +761,13 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public addVariantOption(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.checkOptionValidity()) {
+            /**
+             * Handles if functionality
+             */
             if (!this.stockForm.options?.length) {
                 this.stockForm.options = [];
             }
@@ -655,6 +786,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public checkOptionValidity(): boolean {
         let isValid = true;
         this.stockForm.options?.forEach(option => {
+            /**
+             * Handles if functionality
+             */
             if (!option?.name || !option?.values?.length) {
                 isValid = false;
                 return isValid;
@@ -682,6 +816,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.stockForm.options = this.stockForm.options?.filter((data, optionIndex) => optionIndex !== index).map((data, optionIndex) => {
                     return {
@@ -690,6 +827,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                         order: optionIndex + 1
                     }
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.stockForm.options?.length) {
                     this.isVariantAvailable = false;
                 }
@@ -725,16 +865,25 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         let attributes = [];
 
         this.stockForm.options?.forEach((option, index) => {
+            /**
+             * Handles if functionality
+             */
             if (option?.values?.length > 0) {
                 attributes[index] = [];
                 let optionName = option?.name;
                 option?.values?.forEach(value => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (value?.value?.trim()) {
                         attributes[index].push({ [optionName]: value?.value })
                     }
                 });
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (attributes?.length > 0) {
             attributes = attributes.reduce((previous, current) => previous.flatMap(currentValue => current.map(finalValue => ({ ...currentValue, ...finalValue }))));
         }
@@ -756,6 +905,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         });
 
         let defaultWarehouse = null;
+        /**
+         * Handles if functionality
+         */
         if (this.warehouses?.length > 0) {
             defaultWarehouse = this.warehouses?.filter(warehouse => warehouse.isDefault);
         }
@@ -765,13 +917,22 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             let variantExists = [];
 
             existingVariants?.forEach(existingVariant => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!variantExists?.length && variant?.combinations?.length) {
                     let variantFound = variant?.combinations?.filter(combination => combination === existingVariant?.name);
+                    /**
+                     * Handles if functionality
+                     */
                     if (variantFound?.length) {
                         variantExists[0] = existingVariant;
                     }
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!variantExists?.length && !variant?.combinations?.length) {
                     variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant.current);
                 }
@@ -816,7 +977,13 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 warehouseBalance: [
                     {
                         warehouse: {
+                            /**
+                             * Handles name functionality
+                             */
                             name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
+                            /**
+                             * Handles uniqueName functionality
+                             */
                             uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
                         },
                         stockUnit: {
@@ -833,6 +1000,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.checkUnitRateValidation.push(Object.assign({}, checkUnitRateObject));
         });
 
+        /**
+         * Handles if functionality
+         */
         if (!stockVariants?.length) {
             stockVariants.push({
                 name: "",
@@ -928,6 +1098,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         let unitRates = this.stockForm.fixedAssetAccountDetails?.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
         this.stockForm.fixedAssetAccountDetails.unitRates = unitRates;
 
+        /**
+         * Handles if functionality
+         */
         if (unitRates?.length === 0) {
             this.addNewFixedAssetsUnitPrice();
         }
@@ -943,6 +1116,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         let unitRates = this.stockForm.purchaseAccountDetails.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
         this.stockForm.purchaseAccountDetails.unitRates = unitRates;
 
+        /**
+         * Handles if functionality
+         */
         if (unitRates?.length === 0) {
             this.addNewPurchaseUnitPrice();
         }
@@ -971,6 +1147,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         let unitRates = this.stockForm.salesAccountDetails.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
         this.stockForm.salesAccountDetails.unitRates = unitRates;
 
+        /**
+         * Handles if functionality
+         */
         if (unitRates?.length === 0) {
             this.addNewSalesUnitPrice();
         }
@@ -995,6 +1174,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public getTaxes(): void {
         this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.length > 0 && !this.processedTaxes?.length) {
                 this.taxes = response || [];
             }
@@ -1010,6 +1192,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     private getAllDiscounts(): void {
         this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.discountsList = response;
             }
@@ -1066,6 +1251,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public createStock(openEditAfterSave: boolean = false): void {
         this.isFormSubmitted = false;
+        /**
+         * Handles if functionality
+         */
         if (!this.stockForm.name || !this.stockForm.stockUnitUniqueName) {
             this.isFormSubmitted = true;
             return;
@@ -1081,6 +1269,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 }
             });
             (Array.isArray(updatedCustomFieldArray) ? updatedCustomFieldArray : []).forEach(field => {
+                /**
+                 * Handles if functionality
+                 */
                 if (field.isMandatory && (field.value === undefined || field.value === null)) {
                     this.isFormSubmitted = true;
                 }
@@ -1093,9 +1284,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             variant.customFields = updatedCustomFieldArray;
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.isFormSubmitted) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
             this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
                 return unitRate.stockUnitUniqueName || unitRate.rate;
@@ -1104,6 +1301,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.validateStock(this.stockForm.salesAccountDetails?.unitRates)) {
             this.stockForm.salesAccountDetails.unitRates = this.stockForm.salesAccountDetails.unitRates?.filter((unitRate) => {
                 return unitRate.stockUnitUniqueName || unitRate.rate;
@@ -1112,6 +1312,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.validateStock(this.stockForm.fixedAssetAccountDetails?.unitRates)) {
             this.stockForm.fixedAssetAccountDetails.unitRates = this.stockForm.fixedAssetAccountDetails.unitRates.filter((unitRate) => {
                 return unitRate.stockUnitUniqueName || unitRate.rate;
@@ -1120,10 +1323,16 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.stockGroupUniqueName) {
             let mainGroupExists = this.stockGroups?.filter(group => {
                 return group?.additional?.name === "Main Group"
             });
+            /**
+             * Handles if functionality
+             */
             if (mainGroupExists?.length > 0) {
                 this.stockGroupUniqueName = mainGroupExists[0]?.value;
                 this.saveStock(openEditAfterSave);
@@ -1136,6 +1345,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     type: this.stockForm.type
                 };
                 this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.clearPageLeaveConfirmation();
                         this.stockGroupUniqueName = response?.body?.uniqueName;
@@ -1162,18 +1374,33 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         const request = this.formatRequest();
         this.inventoryService.createStock(request, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.resetForm(this.stockCreateEditForm);
                 this.clearPageLeaveConfirmation();
+                /**
+                 * Handles if functionality
+                 */
                 if (!openEditAfterSave) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.stockGroups?.length) {
                         this.getStockGroups();
                     }
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_successfully);
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.addStock) {
                         this.closeAsideEvent.emit(DataOperationEnum.CREATE);
                     } else {
                         this.getVariantCustomFields();
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.groupList?.length) {
                             this.stockForm.stockUnitGroup.uniqueName = this.groupList[0]?.value;
                             this.stockForm.stockUnitGroup.name = this.groupList[0].label;
@@ -1181,6 +1408,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     }
                 } else {
                     this.getVariantCustomFields();
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.addStock) {
                         this.clearPageLeaveConfirmation();
                         this.queryParams = { stockUniqueName: response.body?.uniqueName };
@@ -1228,6 +1458,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             variant.customFields = updatedCustomFieldArray;
         });
         let defaultWarehouse = null;
+        /**
+         * Handles if functionality
+         */
         if (this.warehouses?.length > 0) {
             defaultWarehouse = this.warehouses?.filter(warehouse => warehouse?.isDefault);
         }
@@ -1236,6 +1469,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         const variantSalesAccountUniqueName = stockForm?.salesAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.salesAccountDetails?.accountUniqueName;
 
 
+        /**
+         * Handles if functionality
+         */
         if (this.isVariantAvailable) {
             stockForm.options = stockForm.options?.map(option => {
                 option.values = option?.values?.filter(optionValue => optionValue.value?.trim())?.map(optionValue => {
@@ -1261,9 +1497,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 unitRate.accountUniqueName = variantfixedAssetAccountUniqueName;
                 return unitRate;
             });
+            /**
+             * Handles if functionality
+             */
             if (!variant.name) {
                 variant.name = stockForm.name;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.stockForm.type === 'FIXED_ASSETS') {
                 variant['unitRates'] = fixedAssetsUnitRate;
             } else {
@@ -1272,7 +1514,13 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             variant.warehouseBalance = [
                 {
                     warehouse: {
+                        /**
+                         * Handles name functionality
+                         */
                         name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
+                        /**
+                         * Handles uniqueName functionality
+                         */
                         uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
                     },
                     stockUnit: {
@@ -1296,6 +1544,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             return variant;
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.stockForm.type === 'FIXED_ASSETS') {
             stockForm['fixedAssetsAccountUniqueNames'] = variantfixedAssetAccountUniqueName ? [variantfixedAssetAccountUniqueName] : [];
 
@@ -1306,6 +1557,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         delete stockForm.fixedAssetAccountDetails;
         delete stockForm.purchaseAccountDetails;
         delete stockForm.salesAccountDetails;
+        /**
+         * Handles if functionality
+         */
         if (this.stockForm.type === 'FIXED_ASSETS') {
             delete stockForm.purchaseAccountUniqueNames;
             delete stockForm.salesAccountUniqueNames;
@@ -1313,6 +1567,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             delete stockForm.fixedAssetsAccountUniqueNames;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.hsnSac === "HSN") {
             stockForm.sacNumber = "";
         } else {
@@ -1330,6 +1587,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public getStockDetails(callback?: Function): void {
         this.toggleLoader(true);
         this.inventoryService.getStockV2(this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response.body) {
                 this.stockForm.name = response.body.name;
                 this.stockForm.uniqueName = response.body.uniqueName;
@@ -1366,12 +1626,21 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.isVariantAvailable = hasUserGeneratedVariants?.length > 0;
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body.purchaseAccountUniqueNames?.length) {
                     this.stockForm.purchaseAccountDetails = { accountUniqueName: response.body.purchaseAccountUniqueNames[0] };
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body.salesAccountUniqueNames?.length) {
                     this.stockForm.salesAccountDetails = { accountUniqueName: response.body.salesAccountUniqueNames[0] };
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body.fixedAssetsAccountUniqueNames?.length) {
                     this.stockForm.fixedAssetAccountDetails = { accountUniqueName: response.body.fixedAssetsAccountUniqueNames[0] };
                 }
@@ -1383,6 +1652,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 }
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
                     ['purchaseAccountDetails', 'salesAccountDetails', 'fixedAssetAccountDetails'].forEach(accountDetailsKey => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (!variant[accountDetailsKey]) {
                             variant[accountDetailsKey] = {
                                 accountUniqueName: null,
@@ -1425,13 +1697,22 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.prefillUnits();
 
                 // Capture initial form values for comparison after stock details are loaded
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.captureInitialFormValues();
                 }, 100);
 
                 this.changeDetection.detectChanges();
 
+                /**
+                 * Handles if functionality
+                 */
                 if (callback) {
+                    /**
+                     * Handles callback functionality
+                     */
                     callback();
                 }
             } else {
@@ -1449,6 +1730,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     private findPurchaseAccountName(): void {
         let purchaseAccountName = this.purchaseAccounts?.filter(purchaseAccount => purchaseAccount?.value === this.stockForm?.variants[0]?.purchaseAccountDetails?.accountUniqueName);
+        /**
+         * Handles if functionality
+         */
         if (purchaseAccountName?.length > 0) {
             this.purchaseAccountName = purchaseAccountName[0]?.label;
         }
@@ -1463,6 +1747,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     private findFixedAssetsAccountName(): void {
         let fixedAssetsAccountName = this.fixedAssetsAccounts?.filter(fixedAssetsAccount => fixedAssetsAccount?.value === this.stockForm?.variants[0]?.fixedAssetAccountDetails?.accountUniqueName);
+        /**
+         * Handles if functionality
+         */
         if (fixedAssetsAccountName?.length > 0) {
             this.fixedAssetsAccountName = fixedAssetsAccountName[0]?.label;
         }
@@ -1477,6 +1764,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     private findSalesAccountName(): void {
         let salesAccountName = this.salesAccounts?.filter(salesAccount => salesAccount?.value === this.stockForm?.variants[0]?.salesAccountDetails?.accountUniqueName);
+        /**
+         * Handles if functionality
+         */
         if (salesAccountName?.length > 0) {
             this.salesAccountName = salesAccountName[0]?.label;
         }
@@ -1491,6 +1781,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public updateStock(stockCreateEditForm: NgForm): void {
+        /**
+         * Handles if functionality
+         */
         if (stockCreateEditForm.invalid) {
             return;
         }
@@ -1499,9 +1792,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         const request = this.formatRequest();
         this.inventoryService.updateStockV2(request, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.clearPageLeaveConfirmation();
                 this.toaster.showSnackBar("success", this.localeData?.stock_update_successfully);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.createRecipe && this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
                 }
@@ -1509,6 +1808,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.getVariantCustomFields();
                 this.updateCustomFieldObjectInVariant();
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.createRecipe && this.createRecipe.newVariants?.length) {
                     this.createRecipe.newVariants = [];
                     this.createRecipe.refreshVariantsList();
@@ -1534,8 +1836,14 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     private validateStock(unitRates: Array<any>): boolean {
+        /**
+         * Handles if functionality
+         */
         if (unitRates) {
             const formEntries = unitRates.filter((unitRate) => {
+                /**
+                 * Handles return functionality
+                 */
                 return (unitRate.stockUnitUniqueName && !unitRate.rate) || (!unitRate.stockUnitUniqueName && unitRate.rate);
             });
             return formEntries?.length === 0;
@@ -1551,6 +1859,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public openedSelectTax(event: boolean): void {
         this.isTaxSelectionOpen = event;
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.processedTaxes = [];
         }
@@ -1584,10 +1895,19 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public getVariantCustomFields(): void {
         this.companyCustomFields = [];
         this.customFieldsService.list(this.customFieldsVariantRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body?.results;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.queryParams?.stockUniqueName) {
                     (Array.isArray(this.stockForm.variants) ? this.stockForm.variants : []).forEach(variant => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.companyCustomFields?.length > 0) {
                             variant.customFields = cloneDeep(this.companyCustomFields);
                         }
@@ -1607,15 +1927,24 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public updateCustomFieldObjectInVariant(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stockForm?.variants?.length && this.companyCustomFields?.length) {
             this.companyCustomFields?.forEach(customField => {
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (variant?.customFields?.length) {
                         let customFieldFound = false;
                         let variantMapped = variant?.customFields?.map(variantCustomField => {
                             const customFieldValue = variantCustomField.value;
                             let mergedObject = { ...variantCustomField, ...customField };
                             mergedObject.value = customFieldValue;
+                            /**
+                             * Handles if functionality
+                             */
                             if (variantCustomField.uniqueName === customField.uniqueName) {
                                 customFieldFound = true;
                                 variantCustomField = mergedObject;
@@ -1623,6 +1952,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                             return variantCustomField;
                         });
                         variant.customFields = variantMapped;
+                        /**
+                         * Handles if functionality
+                         */
                         if (!customFieldFound) {
                             variant.customFields.push(cloneDeep(customField));
                         }
@@ -1645,6 +1977,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public getCustomFields(): void {
         this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 this.stockForm.customFields = response.body?.results;
                 this.mapCustomFieldsData();
@@ -1662,9 +1997,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public mapCustomFieldsData(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stockForm.customFields?.length > 0 && this.customFieldsData?.length > 0) {
             this.stockForm.customFields?.forEach(customField => {
                 const customFieldData = this.customFieldsData?.filter(cfData => cfData?.uniqueName === customField?.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (customFieldData?.length > 0) {
                     customField.value = customFieldData[0]?.value;
                 }
@@ -1827,6 +2168,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.activeTabIndex = 0;
         this.resetTaxes();
         this.updateCustomFieldObjectInVariant();
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.stockForm.name = "";
             this.stockForm.customField1Value = "";
@@ -1836,6 +2180,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.stockForm.variants[0].skuCode = "";
 
             // Capture initial form values for comparison after form is fully reset
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.captureInitialFormValues();
             }, 100);
@@ -1862,13 +2209,22 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.toggleLoader(true);
                 this.inventoryService.deleteStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.clearPageLeaveConfirmation();
                         this.toaster.showSnackBar("success", this.localeData?.stock_delete_successfully);
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.addStock) {
                             this.closeAsideEvent.emit(DataOperationEnum.DELETE);
                         } else {
@@ -1891,6 +2247,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.toggleLoader(true);
         this.inventoryService.MoveStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             this.toggleLoader(false);
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.clearPageLeaveConfirmation();
                 this.defaultStockGroupUniqueName = cloneDeep(this.stockGroupUniqueName);
@@ -1934,6 +2293,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public addNewVariantFixedAssetsUnitPrice(variant: any, index = 0): void {
+        /**
+         * Handles if functionality
+         */
         if (this.checkUnitRateValidations(variant, 'fixedAssetsInformation')) {
             this.checkUnitRateValidation[index].fixedAssets = false;
             variant.fixedAssetsInformation.push({
@@ -1958,6 +2320,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         let unitRates = variant.fixedAssetsInformation?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
         variant.fixedAssetsInformation = unitRates;
 
+        /**
+         * Handles if functionality
+         */
         if (unitRates?.length === 0) {
             this.addNewVariantFixedAssetsUnitPrice(variant);
         }
@@ -1969,6 +2334,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public addNewVariantPurchaseUnitPrice(variant: any, index = 0): void {
+        /**
+         * Handles if functionality
+         */
         if (this.checkUnitRateValidations(variant, 'purchaseInformation')) {
             this.checkUnitRateValidation[index].purchase = false;
             variant.purchaseInformation.push({
@@ -1994,6 +2362,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public checkUnitRateValidations(variant: any, key: string): boolean {
         let isValid = true;
         variant[key].forEach(value => {
+            /**
+             * Handles if functionality
+             */
             if (!value.rate || !value.stockUnitName) {
                 isValid = false;
                 return false;
@@ -2012,6 +2383,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         let unitRates = variant.purchaseInformation?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
         variant.purchaseInformation = unitRates;
 
+        /**
+         * Handles if functionality
+         */
         if (unitRates?.length === 0) {
             this.addNewVariantPurchaseUnitPrice(variant);
         }
@@ -2023,6 +2397,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public addNewVariantSalesUnitPrice(variant: any, index = 0): void {
+        /**
+         * Handles if functionality
+         */
         if (this.checkUnitRateValidations(variant, 'salesInformation')) {
             this.checkUnitRateValidation[index].sales = false;
             variant.salesInformation.push({
@@ -2047,6 +2424,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         let unitRates = variant.salesInformation?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
         variant.salesInformation = unitRates;
 
+        /**
+         * Handles if functionality
+         */
         if (unitRates?.length === 0) {
             this.addNewVariantSalesUnitPrice(variant);
         }
@@ -2058,6 +2438,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public backClicked(isClose: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (this.addStock) {
             this.closeAsideEvent.emit(isClose);
         } else {
@@ -2072,6 +2455,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     * @memberof StockCreateEditComponent
     */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
         }
@@ -2104,9 +2490,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public ngOnDestroy(): void {
         // Unregister callbacks from GeneralService
+        /**
+         * Handles if functionality
+         */
         if (this.unregisterUnsavedChangesCallback) {
             this.unregisterUnsavedChangesCallback();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.unregisterMarkFormsAsPristineCallback) {
             this.unregisterMarkFormsAsPristineCallback();
         }
@@ -2135,6 +2527,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public dropOptions(event: CdkDragDrop<string[]>): void {
+        /**
+         * Handles moveItemInArray functionality
+         */
         moveItemInArray(this.stockForm.options, event.previousIndex, event.currentIndex);
         this.generateVariants();
     }
@@ -2157,6 +2552,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public updateOptionValues(option: any, optionIndex: number): void {
+        /**
+         * Handles if functionality
+         */
         if (!option?.name) {
             this.toaster.showSnackBar("warning", this.localeData?.option_name_required);
             return;
@@ -2167,14 +2565,23 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
 
         option.isEdit = false;
 
+        /**
+         * Handles if functionality
+         */
         if (this.optionEditing) {
             this.stockForm.options[optionIndex]?.values?.forEach((value, index) => {
                 const currentValue = value?.value?.trim();
                 const previousValue = this.optionEditing?.values[value?.index]?.value?.trim();
+                /**
+                 * Handles if functionality
+                 */
                 if (currentValue) {
                     this.stockForm.variants = this.stockForm.variants?.map(variant => {
                         let variantNames = variant?.name?.split("/");
                         variantNames?.forEach(name => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (name?.trim() === previousValue) {
                                 variant.name = variant.name?.replace(previousValue, currentValue);
                             }
@@ -2197,6 +2604,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public updateTaxInclusiveStatus(moduleType: string, status: boolean): void {
         this.stockForm.variants?.forEach(variant => {
+            /**
+             * Handles if functionality
+             */
             if (moduleType === "fixedassets") {
                 variant.fixedAssetTaxInclusive = status;
             } else if (moduleType === "sales") {
@@ -2215,11 +2625,20 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public validateOptionValue(optionIndex: number, optionValueIndex: number): void {
+        /**
+         * Handles if functionality
+         */
         if (this.optionValueTimeout) {
+            /**
+             * Handles clearTimeout functionality
+             */
             clearTimeout(this.optionValueTimeout);
         }
 
         this.optionValueTimeout = setTimeout(() => {
+            /**
+             * Handles clearTimeout functionality
+             */
             clearTimeout(this.optionValueTimeout);
             this.addNewOptionValue(optionIndex, optionValueIndex);
         }, 300);
@@ -2231,27 +2650,42 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public prefillUnits(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stockForm.stockUnitUniqueName && this.stockUnitName) {
             this.stockForm?.variants?.forEach(variant => {
                 variant.salesInformation?.forEach(variantSalesInformation => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!variantSalesInformation.stockUnitUniqueName) {
                         variantSalesInformation.stockUnitUniqueName = this.stockForm.stockUnitUniqueName;
                         variantSalesInformation.stockUnitName = this.stockUnitName;
                     }
                 });
                 variant.purchaseInformation?.forEach(variantPurchaseInformation => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!variantPurchaseInformation.stockUnitUniqueName) {
                         variantPurchaseInformation.stockUnitUniqueName = this.stockForm.stockUnitUniqueName;
                         variantPurchaseInformation.stockUnitName = this.stockUnitName;
                     }
                 });
                 variant.fixedAssetsInformation?.forEach(variantFixedAssetsInformation => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!variantFixedAssetsInformation.stockUnitUniqueName) {
                         variantFixedAssetsInformation.stockUnitUniqueName = this.stockForm.stockUnitUniqueName;
                         variantFixedAssetsInformation.stockUnitName = this.stockUnitName;
                     }
                 });
                 variant.warehouseBalance?.forEach(variantWarehouseBalance => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!variantWarehouseBalance.stockUnit?.uniqueName || !this.isVariantAvailable) {
                         variantWarehouseBalance.stockUnit.uniqueName = this.stockForm.stockUnitUniqueName;
                         variantWarehouseBalance.stockUnit.name = this.stockUnitName;
@@ -2270,11 +2704,17 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public getUnitGroups(): void {
         this.inventoryService.getStockUnitGroups().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length) {
                 this.groupList = response.body?.map(group => {
                     return { label: group.name, value: group.uniqueName };
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.groupList?.length && !this.queryParams?.stockUniqueName) {
                     this.stockForm.stockUnitGroup.uniqueName = this.groupList[0]?.value;
                     this.stockForm.stockUnitGroup.name = this.groupList[0].label;
@@ -2294,6 +2734,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public uploadFile(event: Event, index: number): void {
         const input = event.target as HTMLInputElement;
+        /**
+         * Handles if functionality
+         */
         if (input?.files?.length) {
             this.variantIndex = index;
             const file = input.files[0];
@@ -2316,6 +2759,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public deleteAttachment(index: number): void {
+        /**
+         * Handles if functionality
+         */
         if (index >= 0) {
             this.variantIndex = index;
             const variant = this.stockForm.variants[index];
@@ -2329,6 +2775,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 .pipe(take(1))
                 .subscribe(response => {
                     variant.isUploading = response === this.commonLocaleData?.app_yes;
+                    /**
+                     * Handles if functionality
+                     */
                     if (variant.isUploading) {
                         this.voucherComponentStore.deleteAttachment(variant.attachmentUniqueName);
                     } else {
@@ -2345,6 +2794,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public previewVariantImage(uniqueName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (uniqueName) {
             this.componentStore.previewVariantImage({ uniqueName: uniqueName, type: 'variant' });
         }
@@ -2359,6 +2811,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     private updateAttachmentState(response: any): void {
         const variant = this.stockForm.variants[this.variantIndex];
 
+        /**
+         * Handles if functionality
+         */
         if (response?.uniqueName) {
             variant.attachmentUniqueName = response.uniqueName;
             variant.attachmentName = `data:image/${response.fileType};base64,${response.uploadedFile}`;
@@ -2391,6 +2846,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @returns void
      */
     private openPreviewDialog(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (response) {
             const variantData = {
                 variant: response,
@@ -2413,6 +2871,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     private handleAttachmentDeletion(response: any): void {
         const variant = this.stockForm.variants[this.variantIndex];
 
+        /**
+         * Handles if functionality
+         */
         if (response) {
             this.toaster.showSnackBar("success", this.localeData?.attachment_deleted);
             this.selectedFileName = "";
@@ -2446,6 +2907,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public captureInitialFormValues(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
             this.initialFormValues = cloneDeep(this.stockCreateEditForm.form.value);
         }
@@ -2461,6 +2925,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     private clearPageLeaveConfirmation(): void {
         this.skipPageLeaveConfirmation = true;
         // Reset the flag after a short delay to allow normal functionality to resume
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.skipPageLeaveConfirmation = false;
         }, 1000);
@@ -2475,6 +2942,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     private isStockFormCompletelyBlank(formValues: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!formValues) return true;
         this.changeDetection.detectChanges();
         return this.stockCreateEditForm.form.pristine;

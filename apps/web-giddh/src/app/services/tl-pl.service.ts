@@ -12,13 +12,24 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ReportType } from '../multi-currency-reports/multi-currency.const';
 import { filter, get, keys } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * TlPlService service
+ * Provides tlpl related business logic and data operations
+ */
 export class TlPlService {
     private companyUniqueName: string;
     public isReportTailed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -29,9 +40,15 @@ export class TlPlService {
     public GetTrailBalance(request: TrialBalanceRequest): Observable<BaseResponse<AccountDetails, TrialBalanceRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let params: any = { from: request.from, to: request.to, refresh: request.refresh };
+        /**
+         * Handles if functionality
+         */
         if (request.tagName) {
             params.tagName = request.tagName;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
             params.branchUniqueName = encodeURIComponent(request.branchUniqueName);
         } else {
@@ -39,11 +56,17 @@ export class TlPlService {
         }
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
                     data.request = request;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<AccountDetails, TrialBalanceRequest>(e, request)));
     }
 
@@ -53,9 +76,15 @@ export class TlPlService {
     public GetV2TrailBalance(request: TrialBalanceRequest): Observable<BaseResponse<AccountDetails, TrialBalanceRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let params: any = { from: request.from, to: request.to, refresh: request.refresh };
+        /**
+         * Handles if functionality
+         */
         if (request.tagName) {
             params.tagName = request.tagName;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
             params.branchUniqueName = encodeURIComponent(request.branchUniqueName);
         } else {
@@ -63,11 +92,17 @@ export class TlPlService {
         }
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_V2_TRIAL_BALANCE
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
                     data.request = request;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<AccountDetails, TrialBalanceRequest>(e, request)));
     }
 
@@ -76,6 +111,9 @@ export class TlPlService {
      */
     public GetProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
         }
@@ -85,11 +123,17 @@ export class TlPlService {
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_PROFIT_LOSS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
                     data.request = request;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<AccountDetails, ProfitLossRequest>(e, request)));
     }
 
@@ -102,6 +146,9 @@ export class TlPlService {
      */
     public getComparedProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
         }
@@ -111,11 +158,17 @@ export class TlPlService {
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_COMPARED_PROFIT_LOSS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
                     data.request = request;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<AccountDetails, ProfitLossRequest>(e, request)));
     }
 
@@ -130,11 +183,17 @@ export class TlPlService {
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_COGS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<GetCogsResponse, GetCogsRequest> = res;
                     data.request = request;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<GetCogsResponse, { from: string; to: string }>(e, request)));
     }
 
@@ -143,6 +202,9 @@ export class TlPlService {
      */
     public GetBalanceSheet(request: BalanceSheetRequest): Observable<BaseResponse<AccountDetails, BalanceSheetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
         }
@@ -152,29 +214,53 @@ export class TlPlService {
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_BALANCE_SHEET
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<AccountDetails, BalanceSheetRequest> = res;
                     data.request = request;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * Handles DownloadTrialBalanceExcel functionality
+     */
     public DownloadTrialBalanceExcel(request: TrialBalanceExportExcelRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data = this.generalService.base64ToBlob(res.body.data, 'application/xml', 512);
+                    /**
+                     * Saves as data
+                     */
                     saveAs(data, res.body.name);
                     return res;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * Handles DownloadBalanceSheetExcel functionality
+     */
     public DownloadBalanceSheetExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
         }
@@ -184,16 +270,31 @@ export class TlPlService {
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data = this.generalService.base64ToBlob(res.body.data, 'application/xml', 512);
+                    /**
+                     * Saves as data
+                     */
                     saveAs(data, res.body.name);
                     return res;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * Handles DownloadProfitLossExcel functionality
+     */
     public DownloadProfitLossExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
         }
@@ -203,11 +304,20 @@ export class TlPlService {
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data = this.generalService.base64ToBlob(res.body.data, 'application/xml', 512);
+                    /**
+                     * Saves as data
+                     */
                     saveAs(data, res.body.name);
                     return res;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
@@ -223,11 +333,17 @@ export class TlPlService {
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':reportType', reportType)).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -245,11 +361,17 @@ export class TlPlService {
         return this.http.post(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':reportType', reportType), payload).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -268,17 +390,26 @@ export class TlPlService {
        ?.replace(':reportType', request?.reportType?.toString())
        ?.replace(':from', request?.from)
        ?.replace(':to', request?.to);
+       /**
+        * Handles if functionality
+        */
        if (request?.branchUniqueName) {
            url += `&branchUniqueName=${request?.branchUniqueName}`;
        }
         return this.http.post(
             url
             , payload).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = payload;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -294,17 +425,26 @@ export class TlPlService {
         let url = this.config.apiUrl + TB_PL_BS_API.TAILED_REPORT_DATE_RANGE
         ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
         ?.replace(':reportType', reportType?.toString());
+        /**
+         * Handles if functionality
+         */
         if (branchUniqueName) {
             url += `&branchUniqueName=${branchUniqueName}`;
         }
         return this.http.post(
             url
             , {}).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = { reportType };
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 }

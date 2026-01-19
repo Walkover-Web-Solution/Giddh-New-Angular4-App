@@ -4,15 +4,29 @@ import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from '../theme/snackbar/snackbar.component';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ToasterService service
+ * Provides toaster related business logic and data operations
+ */
 export class ToasterService {
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private toaster: ToastrService, private snackBar: MatSnackBar) {
 
     }
 
+    /**
+     * Handles successToast functionality
+     */
     public successToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
         this.toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
@@ -28,7 +42,13 @@ export class ToasterService {
         this.toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS_WITH_HTML));
     }
 
+    /**
+     * Handles errorToast functionality
+     */
     public errorToast(msg: string, title: string = APP_DEFAULT_TITLE, params?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (params) {
             params = { timeOut: params };
             this.toaster.error(msg, title, Object.assign({}, { ...DEFAULT_TOASTER_OPTIONS, ...params }));
@@ -37,20 +57,32 @@ export class ToasterService {
         }
     }
 
+    /**
+     * Handles warningToast functionality
+     */
     public warningToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
         this.toaster.warning(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
 
+    /**
+     * Handles warningToastWithTime functionality
+     */
     public warningToastWithTime(timeout: number, msg: string, title: string = APP_DEFAULT_TITLE): void {
         let defaultToasterOptions = DEFAULT_TOASTER_OPTIONS_WITH_HTML;
         defaultToasterOptions.timeOut = timeout;
         this.toaster.warning(msg, title, Object.assign({}, defaultToasterOptions));
     }
 
+    /**
+     * Handles infoToast functionality
+     */
     public infoToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
         this.toaster.info(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
 
+    /**
+     * Handles clearAllToaster functionality
+     */
     public clearAllToaster(): void {
         this.toaster.clear();
     }

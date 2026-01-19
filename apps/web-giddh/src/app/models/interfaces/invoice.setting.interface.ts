@@ -1,5 +1,9 @@
 import { PaypalDetailsResponse, RazorPayDetailsResponse } from '../api-models/SettingsIntegraion';
 
+/**
+ * InvoiceWebhooks interface definition
+ * Defines the structure and contract for InvoiceWebhooks objects
+ */
 export interface InvoiceWebhooks {
     entity: string;
     operation?: string;
@@ -8,6 +12,10 @@ export interface InvoiceWebhooks {
     url: string;
 }
 
+/**
+ * InvoiceSetting interface definition
+ * Defines the structure and contract for InvoiceSetting objects
+ */
 export interface InvoiceSetting {
     purchaseBillSettings?: any;
     invoiceSettings: InvoiceSettings;
@@ -21,17 +29,33 @@ export interface InvoiceSetting {
     companyInventorySettings: CompanyInventorySettings;
 }
 
+/**
+ * CompanyInventorySettings class
+ * Implements CompanyInventorySettings functionality
+ */
 export class CompanyInventorySettings {
     manageInventory: boolean;
 }
 
+/**
+ * CompanyCashFreeSettings class
+ * Implements CompanyCashFreeSettings functionality
+ */
 export class CompanyCashFreeSettings {
     autoCreateVirtualAccountsForDebtors: boolean;
     noOfEntriesToEnableAutoCreateVirtualAccountForDebtors?: any;
     enableCronForVAccCreation?: any;
 }
 
+/**
+ * CompanyEmailSettings class
+ * Implements CompanyEmailSettings functionality
+ */
 export class CompanyEmailSettings {
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.sendThroughGmail = false;
     }
@@ -39,7 +63,15 @@ export class CompanyEmailSettings {
     sendThroughGmail: boolean;
 }
 
+/**
+ * EstimateSettings class
+ * Implements EstimateSettings functionality
+ */
 export class EstimateSettings {
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.autoMail = false;
         this.autoChangeStatusOnExp = false;
@@ -56,7 +88,15 @@ export class EstimateSettings {
     estimateRoundOff: boolean;
 }
 
+/**
+ * ProformaSettings class
+ * Implements ProformaSettings functionality
+ */
 export class ProformaSettings {
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.autoMail = false;
         this.autoChangeStatusOnExp = false;
@@ -78,7 +118,15 @@ export class ProformaSettings {
     proformaRoundOff?: boolean;
 }
 
+/**
+ * InvoiceSettings class
+ * Implements InvoiceSettings functionality
+ */
 export class InvoiceSettings {
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.showSeal = false;
         this.autoMail = false;

@@ -1,6 +1,9 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-create-new-inventory',
     
@@ -8,6 +11,10 @@ import { Router } from '@angular/router';
     standalone: false,
     styleUrls: ['./create-new-inventory-aside.component.scss']
 })
+/**
+ * CreateNewInventoryAsideComponent component
+ * Handles createnewinventoryaside functionality and user interactions
+ */
 export class CreateNewInventoryAsideComponent implements OnInit {
     /* Close aside menu panel*/
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -20,6 +27,10 @@ export class CreateNewInventoryAsideComponent implements OnInit {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private router: Router) { }
 
     /**
@@ -47,6 +58,9 @@ export class CreateNewInventoryAsideComponent implements OnInit {
      * @memberof CreateNewInventoryAsideComponent
      */
     public createNewByAsidePanel(type?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (type) {
             this.router.navigate(['/pages', 'inventory', 'v2', type, this.moduleType, 'create']);
         }
@@ -60,6 +74,9 @@ export class CreateNewInventoryAsideComponent implements OnInit {
      * @memberof CreateNewInventoryAsideComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
         }
@@ -72,6 +89,9 @@ export class CreateNewInventoryAsideComponent implements OnInit {
      * @memberof CreateNewInventoryAsideComponent
      */
     public openCreateBranchTransfer(type: string): void {
+        /**
+         * Handles if functionality
+         */
         if (type) {
             this.router.navigate(['/pages', 'inventory', 'v2', this.moduleType, type, 'create']);
         }

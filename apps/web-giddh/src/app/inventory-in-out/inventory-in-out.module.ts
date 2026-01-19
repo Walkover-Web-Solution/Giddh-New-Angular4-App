@@ -24,6 +24,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         InventoryInOutComponent,
@@ -60,7 +63,15 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         FormFieldsModule
     ],
 })
+/**
+ * InventoryInOutModule module
+ * Implements InventoryInOutModule functionality
+ */
 export class InventoryInOutModule {
+    /**
+     * Creates an instance of module
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
     }
 

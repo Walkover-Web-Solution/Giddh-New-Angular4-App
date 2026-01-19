@@ -5,6 +5,9 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { MfEditComponent } from './edit/mf.edit.component';
 import { MfReportComponent } from './report/mf.report.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -20,5 +23,9 @@ import { MfReportComponent } from './report/mf.report.component';
     ],
     exports: [RouterModule]
 })
+/**
+ * ManufacturingRoutingModule module
+ * Implements ManufacturingRoutingModule functionality
+ */
 export class ManufacturingRoutingModule {
 }

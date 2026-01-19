@@ -4,10 +4,17 @@ import { SalesOtherTaxesCalculationMethodEnum } from "apps/web-giddh/src/app/mod
 import { giddhRoundOff } from "apps/web-giddh/src/app/shared/helpers/helperFunctions";
 import { VoucherTypeEnum } from "../../vouchers.const";
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: '[entryOtherTax]',
     standalone:false
 })
+/**
+ * EntryOtherTaxDirective directive
+ * Implements EntryOtherTaxDirective functionality
+ */
 export class EntryOtherTaxDirective implements OnChanges {
     /** Entry */
     @Input() public entry: any;
@@ -20,12 +27,21 @@ export class EntryOtherTaxDirective implements OnChanges {
      * @memberof EntryOtherTaxDirective
      */
     public ngOnChanges(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.entry.voucherType === VoucherTypeEnum.receipt || this.entry.voucherType === VoucherTypeEnum.payment) {
             return;
         }
         let taxableValue = 0;
 
+        /**
+         * Handles if functionality
+         */
         if (this.entry.otherTax) {
+            /**
+             * Handles if functionality
+             */
             if (this.entry.otherTax?.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                 taxableValue = Number(this.entry.transactions[0].amount.amountForAccount) - this.entry.totalDiscount;
             } else {

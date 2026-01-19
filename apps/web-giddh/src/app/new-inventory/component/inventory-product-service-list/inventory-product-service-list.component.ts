@@ -6,6 +6,10 @@ import { ServiceConfig } from "../../../services/service.config";
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
 
+/**
+ * PeriodicElement interface definition
+ * Defines the structure and contract for PeriodicElement objects
+ */
 export interface PeriodicElement {
     name: string;
     type: string;
@@ -96,6 +100,9 @@ const ELEMENT_DATA: PeriodicElement[] = [
 ];
 
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "inventory-product-service-list",
     
@@ -105,6 +112,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 })
 
+/**
+ * ProductServiceListComponent component
+ * Handles productservicelist functionality and user interactions
+ */
 export class ProductServiceListComponent implements OnInit {
     /* this will store image path*/
     public imgPath: string = "";
@@ -112,10 +123,17 @@ export class ProductServiceListComponent implements OnInit {
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     selection = new SelectionModel<PeriodicElement>(true, []);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig,  private _router: Router) {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         /* added image path */
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
@@ -123,6 +141,9 @@ export class ProductServiceListComponent implements OnInit {
 
 
     /** Whether the number of selected elements matches the total number of rows. */
+    /**
+     * Handles isAllSelected functionality
+     */
     isAllSelected() {
         const numSelected = this.selection.selected?.length;
         const numRows = this.dataSource.data?.length;
@@ -130,7 +151,13 @@ export class ProductServiceListComponent implements OnInit {
     }
 
     /** Selects all rows if they are not all selected; otherwise clear selection. */
+    /**
+     * Handles masterToggle functionality
+     */
     masterToggle() {
+        /**
+         * Handles if functionality
+         */
         if (this.isAllSelected()) {
             this.selection.clear();
             return;
@@ -140,7 +167,13 @@ export class ProductServiceListComponent implements OnInit {
     }
 
     /** The label for the checkbox on the passed row */
+    /**
+     * Handles checkboxLabel functionality
+     */
     checkboxLabel(row?: PeriodicElement): string {
+        /**
+         * Handles if functionality
+         */
         if (!row) {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }

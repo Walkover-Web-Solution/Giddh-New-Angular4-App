@@ -7,12 +7,19 @@ import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'view-return',
     styleUrls: ['./view-return.component.scss'],
     templateUrl: './view-return.component.html',
     standalone:false
 })
+/**
+ * ViewReturnComponent component
+ * Handles viewreturn functionality and user interactions
+ */
 export class ViewReturnComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -30,6 +37,10 @@ export class ViewReturnComponent implements OnInit {
     public activeCompany: any;
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,
         public dialogRef: MatDialogRef<any>,
@@ -41,6 +52,9 @@ export class ViewReturnComponent implements OnInit {
         this.localeData = inputData.localeData;
         this.commonLocaleData = inputData.commonLocaleData;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany && !this.activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -73,10 +87,16 @@ export class ViewReturnComponent implements OnInit {
         this.isLoading = true;
         this.vatService.viewVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;
             }
             else {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.message) {
                     this.toaster.showSnackBar('error', res.message);
                 }

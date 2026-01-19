@@ -11,6 +11,10 @@ import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
 import { GstReconcileService } from "../../../services/gst-reconcile.service";
 
+/**
+ * TaxAuthorityState interface definition
+ * Defines the structure and contract for TaxAuthorityState objects
+ */
 export interface TaxAuthorityState {
     isLoading: boolean;
     taxAuthorityList: ITaxAuthority[];
@@ -41,9 +45,20 @@ const DEFAULT_STATE: TaxAuthorityState = {
     taxNumber: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * TaxAuthorityComponentStore store
+ * Manages taxauthoritycomponent state using NgRx ComponentStore
+ */
 export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState> {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private settingsTaxesService: SettingsTaxesService,
@@ -51,6 +66,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         private localeService: LocaleService,
         private store: Store<AppState>
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -77,9 +95,15 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
      */
     readonly getTaxAuthorityList = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ isLoading: true });
                 return this.settingsTaxesService.getTaxAuthorityList().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -95,6 +119,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -108,9 +135,15 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
      */
     readonly getStateList = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ isLoading: true });
                 return this.settingsTaxesService.getTaxAuthorityList().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -126,6 +159,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -139,11 +175,20 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
      */
     readonly createTaxAuthority = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ createTaxAuthorityIsSuccess: null });
                 return this.settingsTaxesService.createTaxAuthority(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === 'success') {
                                 this.toaster.showSnackBar("success", this.localeService.translate("app_messages.tax_authority_created"));
                                 return this.patchState({
@@ -163,6 +208,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -176,11 +224,20 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
      */
     readonly updateTaxAuthority = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ updateTaxAuthorityIsSuccess: null });
                 return this.settingsTaxesService.updateTaxAuthority(req.model, req.uniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === 'success') {
                                 res?.body && this.toaster.showSnackBar("success", res?.body);
                                 return this.patchState({
@@ -200,6 +257,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -213,11 +273,20 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
      */
     readonly deleteTaxAuthority = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ deleteTaxAuthorityIsSuccess: null });
                 return this.settingsTaxesService.deleteTaxAuthority(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === 'success') {
                                 res?.body && this.toaster.showSnackBar("success", res?.body);
                                 return this.patchState({
@@ -237,6 +306,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -250,6 +322,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
      */
     readonly getSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: SalesTaxReportRequest, isExport: boolean }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     isLoading: true,
@@ -258,9 +333,18 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                     accountWiseReport: null
                 });
                 return this.settingsTaxesService.getExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
+                                /**
+                                 * Handles switch functionality
+                                 */
                                 switch (req.reportType) {
                                     case SalesTaxReport.TaxAuthorityWise:
                                         return this.patchState({
@@ -298,6 +382,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -311,6 +398,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
      */
     readonly exportSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: SalesTaxReportRequest, isExport: boolean }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     isLoading: true,
@@ -319,9 +409,18 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                     exportAccountWiseReport: null
                 });
                 return this.settingsTaxesService.getExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
+                                /**
+                                 * Handles switch functionality
+                                 */
                                 switch (req.reportType) {
                                     case SalesTaxReport.TaxAuthorityWise:
                                         return this.patchState({
@@ -359,6 +458,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -372,11 +474,20 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     */
     readonly getTaxNumber = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ taxNumber: null, isLoading: true });
                 return this.gstReconcileService.getTaxDetails().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({ taxNumber: res, isLoading: false });
                             } else {
@@ -389,6 +500,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                             return this.patchState({ taxNumber: null, isLoading: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

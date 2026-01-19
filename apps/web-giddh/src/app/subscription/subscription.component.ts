@@ -22,6 +22,9 @@ import { GeneralService } from '../services/general.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
 dayjs.extend(duration)
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-subscription',
     templateUrl: './subscription.component.html',
@@ -29,6 +32,10 @@ dayjs.extend(duration)
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone:false
 })
+/**
+ * SubscriptionComponent component
+ * Handles subscription functionality and user interactions
+ */
 export class SubscriptionComponent implements OnInit, OnDestroy {
     /** True If Auth key copied and used toggle Copy text */
     public isCopied: boolean = false;
@@ -87,6 +94,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public profileData: any = null;
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,
         private loginService: AuthenticationService,
@@ -101,11 +112,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private clipboardService: ClipboardService
     ) {
         this.contactNo$ = this.store.pipe(select(appState => {
+            /**
+             * Handles if functionality
+             */
             if (appState.session.user) {
                 return appState.session.user.user.contactNo;
             }
         }), takeUntil(this.destroyed$));
         this.countryCode$ = this.store.pipe(select(appState => {
+            /**
+             * Handles if functionality
+             */
             if (appState.session.user) {
                 return appState.session.user.countryCode;
             }
@@ -119,6 +136,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(appState => appState.settings.getProfileInProgress), takeUntil(this.destroyed$));
 
         this.authenticateTwoWay$ = this.store.pipe(select(appState => {
+            /**
+             * Handles if functionality
+             */
             if (appState.session.user) {
                 return appState.session.user.user.authenticateTwoWay;
             }
@@ -133,15 +153,24 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public toggleIsCopied(): void {
         this.isCopied = true;
         this.clipboardService.copyFromContent(this.userAuthKey);
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         document.querySelector('body').classList.add('setting-sidebar-open');
 
 
+        /**
+         * Handles if functionality
+         */
         if (!this.isCreateAndSwitchCompanyInProcess) {
             document.querySelector('body').classList.add('tabs-page');
         } else {
@@ -149,6 +178,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         }
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params['type'] && this.tabName[this.activeTabIndex] !== params['type']) {
                 this.activeTabIndex = this.tabName.indexOf(params['type']);
             } else if (!params['type'] && !this.activeTabIndex) {
@@ -157,7 +189,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params && params.tabIndex) {
+                /**
+                 * Handles if functionality
+                 */
                 if (params && params.tabIndex == "0") {
                     this.activeTabIndex = 0;
                 } else if (params && params.tabIndex == "1") {
@@ -175,6 +213,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.countryCode$.subscribe(appState => this.countryCode = appState);
         this.isAddNewMobileNoSuccess$.subscribe(appState => this.showVerificationBox = appState);
         this.isVerifyAddNewMobileNoSuccess$.subscribe(appState => {
+            /**
+             * Handles if functionality
+             */
             if (appState) {
                 this.oneTimePassword = '';
                 this.showVerificationBox = false;
@@ -185,6 +226,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
         this.store.dispatch(this.loginAction.FetchUserDetails());
         this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a?.status === 'success') {
                 this.userAuthKey = a?.body?.authKey;
             } else {
@@ -197,6 +241,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             .subscribe(appState => this.companyTransactions = appState);
 
         this.store.pipe(select(appState => appState.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
+            /**
+             * Handles if functionality
+             */
             if (user) {
                 this.user = cloneDeep(user.user);
                 this.userSessionId = cloneDeep(user.session?.id);
@@ -204,6 +251,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.profileData = response;
             }
@@ -213,6 +263,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.sessionAction.getAllSession());
 
         this.userSessionResponse$.subscribe(appState => {
+            /**
+             * Handles if functionality
+             */
             if (appState && appState.length) {
                 this.userSessionList = appState.map(session => {
                     // Calculate sign in date
@@ -242,6 +295,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      */
     public ngAfterViewInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            /**
+             * Handles if functionality
+             */
             if (val && val.tab && val.tabIndex) {
                 this.activeTabIndex = val.tabIndex;
                 this.onTabChanged();
@@ -249,9 +305,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles addNumber functionality
+     */
     public addNumber(no: string) {
         this.oneTimePassword = '';
         const mobileRegex = /^[0-9]{1,10}$/;
+        /**
+         * Handles if functionality
+         */
         if (mobileRegex.test(no) && (no?.length === 10)) {
             const request: SignupWithMobile = new SignupWithMobile();
             request.countryCode = Number(this.countryCode) || 91;
@@ -262,6 +324,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles verifyNumber functionality
+     */
     public verifyNumber() {
         const request: VerifyMobileModel = new VerifyMobileModel();
         request.countryCode = Number(this.countryCode) || 91;
@@ -270,8 +335,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.VerifyAddNewMobileNo(request));
     }
 
+    /**
+     * Handles changeTwoWayAuth functionality
+     */
     public changeTwoWayAuth() {
         this.loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.toasty.successToast(res.body);
             } else {
@@ -280,8 +351,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles regenerateKey functionality
+     */
     public regenerateKey() {
         this.loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a?.status === 'success') {
                 this.userAuthKey = a.body?.authKey;
             } else {
@@ -292,6 +369,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
 
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -318,6 +398,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
                 this.store.dispatch(this.sessionAction.getAllSession());
@@ -338,6 +421,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.store.dispatch(this.sessionAction.deleteAllSession());
                 this.router.navigate(['/login']);

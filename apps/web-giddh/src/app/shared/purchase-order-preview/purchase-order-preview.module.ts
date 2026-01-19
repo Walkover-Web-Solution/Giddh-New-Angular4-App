@@ -6,6 +6,9 @@ import { PurchaseOrderPreviewModalComponent } from "./purchase-order-preview.com
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         PurchaseOrderPreviewModalComponent
@@ -21,6 +24,10 @@ import { MatButtonModule } from "@angular/material/button";
         PurchaseOrderPreviewModalComponent
     ]
 })
+/**
+ * PurchaseOrderPreviewModule module
+ * Implements PurchaseOrderPreviewModule functionality
+ */
 export class PurchaseOrderPreviewModule {
 
 }

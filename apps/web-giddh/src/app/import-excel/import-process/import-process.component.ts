@@ -3,12 +3,19 @@ import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/ap
 import { IOption } from '../../app.constant';
 import { cloneDeep, filter, forEach, includes, map } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'import-process',
     
     standalone: false,styleUrls: ['./import-process.component.scss'],
     templateUrl: './import-process.component.html'
 })
+/**
+ * ImportProcessComponent component
+ * Handles importprocess functionality and user interactions
+ */
 export class ImportProcessComponent {
     public rawImportData: ImportExcelResponseData;
     public get importData(): ImportExcelResponseData {
@@ -37,7 +44,13 @@ export class ImportProcessComponent {
         this.mappings = this.doMapping();
 
         clonedValues.data.items = clonedValues.data.items?.filter(item => {
+            /**
+             * Handles if functionality
+             */
             if (item.row?.length < this.sheetHeaders?.length) {
+                /**
+                 * Handles for functionality
+                 */
                 for (let i = item.row.length; i < this.sheetHeaders.length; i++) {
                     item.row.push({ columnValue: '', columnNumber: String(i), valid: true });
                 }
@@ -64,8 +77,14 @@ export class ImportProcessComponent {
     public mappings: any[] = [];
     public unmapHeader: string = "Don't Map";
 
+    /**
+     * Saves  data
+     */
     public save() {
         let mappings = this.mappings.map(mapping => {
+            /**
+             * Handles if functionality
+             */
             if (!mapping.mappedColumn || mapping.mappedColumn === this.unmapHeader) {
                 mapping.mappedColumn = "";
             }
@@ -88,6 +107,9 @@ export class ImportProcessComponent {
         let mappedColumns = [];
         this.sheetHeaders?.forEach((header, index) => {
             const headerMatched = this.giddhHeaders?.filter(giddhHeader => !mappedColumns.includes(header?.trim()?.toLowerCase()) && giddhHeader?.label?.trim()?.toLowerCase() === header?.trim()?.toLowerCase());
+            /**
+             * Handles if functionality
+             */
             if (headerMatched?.length) {
                 mappedColumns.push(headerMatched[0]?.label?.toLowerCase());
                 mappings.push({

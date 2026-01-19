@@ -68,6 +68,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         LedgerComponent,
@@ -154,5 +157,9 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
         KeyboardShortutModule
     ]
 })
+/**
+ * LedgerModule module
+ * Implements LedgerModule functionality
+ */
 export class LedgerModule {
 }

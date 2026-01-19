@@ -10,6 +10,9 @@ import { filter, ReplaySubject, takeUntil } from 'rxjs';
 import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
 import { KeyboardNavigationModule } from '../../helpers/directives/enter-next/keyboard-navigation.module';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'archive',
     templateUrl: './archive.component.html',
@@ -24,6 +27,10 @@ import { KeyboardNavigationModule } from '../../helpers/directives/enter-next/ke
         KeyboardNavigationModule
     ]
 })
+/**
+ * ArchiveSalesPersonComponent component
+ * Handles archivesalesperson functionality and user interactions
+ */
 export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -36,6 +43,10 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
     /** Sales Person List */
     public salesPersonList: IOption[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<ArchiveSalesPersonComponent>,
@@ -65,6 +76,9 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
     public submit(): void {
         const form = this.archiveForm.value;
         form.archiveOnly = Boolean(this.inputData?.archiveOnly);
+        /**
+         * Handles if functionality
+         */
         if (form.uniqueName === ActionTypeEnum.UNASSIGNED) {
             form.action = ActionTypeEnum.UNASSIGNED;
             delete form.uniqueName;
@@ -100,8 +114,14 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
      */
     public onOptionSelected(selectedOption: any): void {
         // Focus the submit button after option selection
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             const submitButton = document.querySelector('button[type="submit"]') as HTMLElement;
+            /**
+             * Handles if functionality
+             */
             if (submitButton) {
                 submitButton.focus();
             }

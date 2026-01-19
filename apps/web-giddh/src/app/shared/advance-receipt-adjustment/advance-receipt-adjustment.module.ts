@@ -14,6 +14,9 @@ import { ReplacePipeModule } from '../helpers/pipes/replace/replace.module';
 import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.component';
 import { GiddhNumberFormatModule } from '../helpers/pipes/number-format/number-format.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [AdvanceReceiptAdjustmentComponent],
     imports: [
@@ -37,6 +40,10 @@ import { GiddhNumberFormatModule } from '../helpers/pipes/number-format/number-f
     ],
     exports: [AdvanceReceiptAdjustmentComponent]
 })
+/**
+ * AdvanceReceiptAdjustmentModule module
+ * Implements AdvanceReceiptAdjustmentModule functionality
+ */
 export class AdvanceReceiptAdjustmentModule {
 
 }

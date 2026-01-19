@@ -25,6 +25,9 @@ import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, filter, forEach, includes, set } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "inventory-transaction-list",
 
@@ -33,6 +36,10 @@ import { cloneDeep, filter, forEach, includes, set } from '../../../lodash-optim
     styleUrls: ["./inventory-transaction-list.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+/**
+ * InventoryTransactionListComponent component
+ * Handles inventorytransactionlist functionality and user interactions
+ */
 export class InventoryTransactionListComponent implements OnInit, OnDestroy {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
     /** Instance of  account name searching column */
@@ -124,6 +131,10 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
     /** Holds inventory type module  */
     public moduleType: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private generalService: GeneralService,
         public dialog: MatDialog,
@@ -135,6 +146,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private store: Store<AppState>) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
@@ -142,8 +156,14 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         this.currentUrl = this.router.url;
 
         this.store.pipe(select(state => state.session?.filters), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.storeFilters = response;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.storeFilters[this.currentUrl]) {
                     this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
                     this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
@@ -176,10 +196,16 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         this.stockReportRequest.count = PAGINATION_LIMIT;
 
         this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            /**
+             * Handles if functionality
+             */
             if (this.showAccountSearchInput) {
                 this.stockReportRequest.accountName = search;
                 this.balanceStockReportRequest.accountName = search;
                 this.stockReportRequest.page = 1;
+                /**
+                 * Handles if functionality
+                 */
                 if (search === '') {
                     this.showAccountSearchInput = false;
                 }
@@ -190,19 +216,31 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.reportUniqueName = response?.uniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.type?.toUpperCase() === 'FIXEDASSETS') {
                     this.moduleType = 'FIXED_ASSETS';
                 } else {
                     this.moduleType = response?.type?.toUpperCase();
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isReportLoaded) {
                     this.getStockTransactionalReport(true);
                 }
@@ -223,8 +261,14 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.isReportLoaded = true;
         this.cancelApi$.next(false);
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.cancelApi$ = new ReplaySubject(1);
+            /**
+             * Handles if functionality
+             */
             if (!this.isCompany) {
                 this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
@@ -236,6 +280,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
             stockReportRequest.inventoryType = this.moduleType;
             this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 this.isLoading = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.transactions?.length) ? true : false;
                     this.dataSource = response.body.transactions;
@@ -250,6 +297,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
                     this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
                     this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.todaySelected) {
                         this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
                     } else {
@@ -259,6 +309,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
                     this.toaster.errorToast(response?.message);
                     this.dataSource = [];
                     this.stockReportRequest.totalItems = 0;
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.isCompany) {
                         this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                         this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
@@ -266,6 +319,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
                 }
                 this.changeDetection.detectChanges();
             });
+            /**
+             * Handles if functionality
+             */
             if (fetchBalance) {
                 let balanceReportRequest = cloneDeep(this.balanceStockReportRequest);
                 let queryParams = {
@@ -278,6 +334,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
                 balanceReportRequest.to = undefined;
                 balanceReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.body && response.status === 'success') {
                         this.stockTransactionReportBalance = response.body;
                     } else {
@@ -302,6 +361,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      * @memberof InventoryTransactionListComponent
      */
     public handlePageEvent(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.count !== event.pageSize) {
             this.stockReportRequest.page = 1;
         } else {
@@ -333,6 +395,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      * @memberof InventoryTransactionListComponent
      */
     public toggleSearch(fieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === "name") {
             this.showAccountSearchInput = true;
         }
@@ -346,6 +411,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      * @memberof InventoryTransactionListComponent
      */
     public getSearchFieldText(fieldName: string): string {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === "name") {
             return this.localeData?.reports?.account_name;
         }
@@ -362,10 +430,19 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      * @memberof InventoryTransactionListComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (searchedFieldName === "name") {
+            /**
+             * Handles if functionality
+             */
             if (this.searchAccountName?.value) {
                 return;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.generalService.childOf(event?.target, element)) {
                 return;
             } else {
@@ -397,6 +474,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
     public filterByVoucherTypes(): void {
         let checkedValues = this.voucherTypes?.filter(value => value?.checked === true);
         const currentVoucherTypes = cloneDeep(this.stockReportRequest.voucherTypes);
+        /**
+         * Handles if functionality
+         */
         if (checkedValues?.length) {
             this.stockReportRequest.voucherTypes = [];
             checkedValues?.forEach(type => {
@@ -408,6 +488,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         let difference = currentVoucherTypes?.filter(x => !this.stockReportRequest.voucherTypes?.includes(x));
         let hasDifference = (difference?.length || currentVoucherTypes?.length !== this.stockReportRequest.voucherTypes?.length)
         this.balanceStockReportRequest.voucherTypes = this.stockReportRequest.voucherTypes;
+        /**
+         * Handles if functionality
+         */
         if (hasDifference) {
             this.stockReportRequest.page = 1;
             this.getStockTransactionalReport();
@@ -450,6 +533,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      * @memberof InventoryTransactionListComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.voucherTypes = [

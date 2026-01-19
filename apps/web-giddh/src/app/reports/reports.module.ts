@@ -44,6 +44,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         ReportsComponent,
@@ -101,6 +104,10 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
     ]
 })
 
+/**
+ * ReportsModule module
+ * Implements ReportsModule functionality
+ */
 export class ReportsModule {
 
 }

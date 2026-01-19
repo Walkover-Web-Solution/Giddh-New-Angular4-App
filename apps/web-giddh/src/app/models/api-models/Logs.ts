@@ -35,6 +35,10 @@ export class LogsResponse {
     public totalElements: number;
 }
 // Get audit log filter form
+/**
+ * AuditLogFilterForm class
+ * Implements AuditLogFilterForm functionality
+ */
 export class AuditLogFilterForm {
     public entity: string;
     public operations: string[];
@@ -42,6 +46,10 @@ export class AuditLogFilterForm {
 
 
 /** Audit log request */
+/**
+ * GetAuditLogsRequest class
+ * Implements GetAuditLogsRequest functionality
+ */
 export class GetAuditLogsRequest {
     public fromDate: string;
     public toDate: string;
@@ -54,6 +62,10 @@ export class GetAuditLogsRequest {
 }
 
 /** Audit log response*/
+/**
+ * AuditLogsResponse class
+ * Implements AuditLogsResponse functionality
+ */
 export class AuditLogsResponse {
     page: number;
     count: number;
@@ -70,12 +82,20 @@ export class AuditLogsResponse {
 }
 
 /** Opening balance */
+/**
+ * OpeningBalance interface definition
+ * Defines the structure and contract for OpeningBalance objects
+ */
 export interface OpeningBalance {
     amount: number;
     type: string;
 }
 
 /** Closing balance */
+/**
+ * ClosingBalance interface definition
+ * Defines the structure and contract for ClosingBalance objects
+ */
 export interface ClosingBalance {
     amount: number;
     type: string;

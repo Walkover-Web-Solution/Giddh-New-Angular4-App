@@ -20,12 +20,19 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Configuration, IOption } from '../../app.constant';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'payment-aside',
     templateUrl: './payment-aside.component.html',
     styleUrls: [`./payment-aside.component.scss`],
     standalone:false
 })
+/**
+ * PaymentAsideComponent component
+ * Handles paymentaside functionality and user interactions
+ */
 export class PaymentAsideComponent implements OnInit, OnChanges {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -137,6 +144,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** True if show bank balance  */
     public showBankBalance: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
@@ -158,6 +169,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isGetAllIntegratedBankInProgress$ = this.store.pipe(select(storeBank => storeBank.company && storeBank.company.isGetAllIntegratedBankInProgress), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
@@ -167,8 +181,14 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         //get current registered account on the user
         this.store.pipe(select(selectStore => selectStore.company), takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.account) {
                 this.registeredAccounts = response.account;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.registeredAccounts?.length === 1) {
                     this.mode = this.registeredAccounts[0];
                 }
@@ -182,12 +202,21 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });
         //get selecetd vendors account details
+        /**
+         * Handles if functionality
+         */
         if (this.selectedAccForPayment && this.selectedAccForPayment.uniqueName) {
             this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedAccForPayment.uniqueName));
         }
         this.activeAccount$.subscribe(acc => {
+            /**
+             * Handles if functionality
+             */
             if (acc && acc.accountBankDetails) {
                 this.accountDetails = acc;
+                /**
+                 * Handles if functionality
+                 */
                 if (acc.country && acc.country.countryCode) {
                     this.countryCode = this.accountDetails.country.countryCode
                 }
@@ -196,14 +225,23 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         this.integratedBankList$.pipe(takeUntil(this.destroyed$)).subscribe((bankList: IntegratedBankList[]) => {
             this.selectIntegratedBankList = [];
+            /**
+             * Handles if functionality
+             */
             if (bankList && bankList.length) {
                 (Array.isArray(bankList) ? bankList : []).forEach(item => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (item && !item.errorMessage) {
                         item.bankName = item.bankName ? item.bankName : "";
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.uniqueName, additional: item });
                     }
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.selectIntegratedBankList?.length === 1) {
                     this.selectBank(this.selectIntegratedBankList[0]);
                 }
@@ -219,12 +257,21 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.selectedAccForBulkPayment.map(item => {
             let modifiedRemark;
             let companyFirstName;
+            /**
+             * Handles if functionality
+             */
             if (this.companyFirstName) {
                 companyFirstName = this.companyFirstName.split(' ');
             }
+            /**
+             * Handles if functionality
+             */
             if (item && item.name) {
                 modifiedRemark = item.name.split(' ');
             }
+            /**
+             * Handles if functionality
+             */
             if (modifiedRemark && modifiedRemark.length && companyFirstName) {
                 item.remarks = modifiedRemark[0] + ' - ' + companyFirstName[0];
             } else {
@@ -244,11 +291,20 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes) {
+            /**
+             * Handles if functionality
+             */
             if (changes.selectedAccForPayment && changes.selectedAccForPayment.currentValue) {
                 this.selectedAccForBulkPayment = [];
                 this.selectedAccForBulkPayment.push(changes.selectedAccForPayment.currentValue);
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
                     this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
                     this.selectedAccForBulkPayment = cloneDeep(this.selectedAccountsForBulkPayment);
@@ -258,6 +314,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 }
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.selectedAccForBulkPayment && !this.selectedAccForBulkPayment.length) {
             this.closePaymentModel(false);
         }
@@ -268,6 +327,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     * Close Aside panel view
     *
     * */
+    /**
+     * Closes asidepane
+     */
     public closeAsidePane(event?) {
         this.closeAsideEvent.emit(event);
     }
@@ -276,6 +338,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     * API call to send OTP to user
     *
     * */
+    /**
+     * Handles sendOTP functionality
+     */
     public sendOTP() {
         let request = {
             params: {
@@ -283,9 +348,15 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }
         };
         this.companyService.getOTP(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.OTPsent = true;
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'error' && res?.code === 'BANK_ERROR') {
                     this.toaster.showSnackBar("warning", res?.message);
                 } else {
@@ -305,8 +376,14 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.startTimer(40);
         this.receivedOtp = null;
         this.companyService.resendOtp(this.companyUniqueName, this.selectedBankUserId, this.paymentRequestId, this.selectedBankUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 this.isPayClicked = true;
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body && response.body.message) {
                     this.toaster.showSnackBar("success", response.body.message);
                     this.otpReceiverNameMessage = response.body.message;
@@ -329,10 +406,16 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
         this.companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUserId, this.selectedBankUniqueName, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res && res.status === 'success') {
                 this.paymentSuccessfulMessage = res.body?.Message;
                 this.closePaymentModel(true, this.paymentSuccessfulMessage);
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'error' && res?.code === 'BANK_ERROR') {
                     this.toaster.showSnackBar("warning", res?.message);
                 } else {
@@ -350,6 +433,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public removeSelectedAccount(item: any): void {
+        /**
+         * Handles if functionality
+         */
         if (item && this.selectedAccForBulkPayment) {
             let itemIndx = this.selectedAccForBulkPayment.findIndex((element) => element === item);
             this.selectedAccForBulkPayment.splice(itemIndx, 1);
@@ -402,7 +488,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public selectBank(event: IOption): void {
         let loadPayorList = false;
+        /**
+         * Handles if functionality
+         */
         if (event) {
+            /**
+             * Loads payorlist data
+             */
             loadPayorList = (this.requestObjectToGetOTP?.uniqueName !== event.value);
             this.selectedBankUniqueName = event.value;
             this.isBankSelectedForBulkPayment = true;
@@ -416,6 +508,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         }
         this.getTotalAmount();
 
+        /**
+         * Handles if functionality
+         */
         if(loadPayorList) {
             this.selectedBankUserId = '';
             this.requestObjectToGetOTP.urn = '';
@@ -430,6 +525,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public selectPayor(event: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.selectedBankUserId = event.value;
             this.requestObjectToGetOTP.urn = event.value;
@@ -448,8 +546,14 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isRequestInProcess = true;
         this.companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isRequestInProcess = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 this.isPayClicked = true;
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body && response.body.message) {
                     this.toaster.showSnackBar("success", response.body.message);
                     this.otpReceiverNameMessage = response.body.message;
@@ -483,6 +587,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public getTotalAmount(): void {
         let selectedAccount = cloneDeep(this.selectedAccForBulkPayment);
         this.totalSelectedAccountAmount = 0;
+        /**
+         * Handles if functionality
+         */
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
                 const closingBalanceAmount = Number(String(cur.closingBalanceAmount)?.replace(/,/g, ''));
@@ -490,6 +597,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }, 0);
         }
         this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
+        /**
+         * Handles if functionality
+         */
         if (selectedAccount && selectedAccount.length) {
             this.isValidData = selectedAccount.every(item => {
                 return item.closingBalanceAmount && item.remarks ? true : false;
@@ -507,6 +617,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public preventZero(amount: number, index: number): void {
+        /**
+         * Handles if functionality
+         */
         if (Number(amount) <= 0) {
             this.selectedAccForBulkPayment[index].closingBalanceAmount = '';
         }
@@ -521,6 +634,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public payClicked(): void {
         this.paymentRequestId = '';
         this.prepareRequestObject();
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.bulkPayVendor();
         }, 50);
@@ -558,6 +674,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.receivedOtp = null;
         this.timerOn = false;
         this.otpReceiverNameMessage = '';
+        /**
+         * Handles clearTimeout functionality
+         */
         clearTimeout(this.countDownTimerRef);
     }
 
@@ -576,6 +695,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.timerCountDown$ = of(min + ':' + sec);
         remaining -= 1;
         this.changeDetectorRef.detectChanges();
+        /**
+         * Handles if functionality
+         */
         if (remaining >= 0 && this.timerOn) {
             this.countDownTimerRef = setTimeout(() => {
                 this.startTimer(remaining);
@@ -583,6 +705,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.timerOn) {
             this.timerOn = false;
             return;
@@ -635,6 +760,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             amount: [''],
             vendorUniqueName: [''],
         });
+        /**
+         * Handles if functionality
+         */
         if (val) {
             transactionsFields.get('remarks')?.patchValue('');
             transactionsFields.get('amount')?.patchValue(val.closingBalanceAmount);
@@ -681,6 +809,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     private getBankAccountPayorsList(): void {
+        /**
+         * Handles if functionality
+         */
         if(!this.selectedBankUniqueName || !this.totalSelectedAccountAmount) {
             return;
         }
@@ -690,6 +821,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.forceClear$ = of({ status: true });
         this.isPayorListInProgress = true;
         this.settingsIntegrationService.getBankAccountPayorsList(this.selectedBankUniqueName, this.totalSelectedAccountAmount).pipe(take(1)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if(response?.status === "success") {
                 this.payorsList = [];
 
@@ -697,6 +831,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                     this.payorsList.push({label: payor?.user?.name, value: payor?.bankUserId});
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if(this.payorsList?.length === 1) {
                     this.selectPayor(this.payorsList[0]);
                 }
@@ -704,6 +841,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 this.isPayorRequired = true;
             } else {
                 this.payorsList = [];
+                /**
+                 * Handles if functionality
+                 */
                 if(response?.message) {
                     this.toaster.showSnackBar("error", response?.message);
                 }

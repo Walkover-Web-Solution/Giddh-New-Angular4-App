@@ -1,3 +1,7 @@
+/**
+ * FileTypeEnum enumeration
+ * Defines constant values for FileTypeEnum
+ */
 export enum FileTypeEnum {
     PDF = "pdf",
     CSV = "csv",
@@ -5,6 +9,10 @@ export enum FileTypeEnum {
     XLSX = "xlsx"
 }
 
+/**
+ * CopyType enumeration
+ * Defines constant values for CopyType
+ */
 export enum CopyType {
     ORIGINAL = "ORIGINAL",
     CUSTOMER = "CUSTOMER",
@@ -12,11 +20,19 @@ export enum CopyType {
 }
 
 // Enum representing country names.
+/**
+ * CountryNames enumeration
+ * Defines constant values for CountryNames
+ */
 export enum CountryNames {
     INDIA = "India",
     UNITED_KINGDOM = "United Kingdom"
 }
 
+/**
+ * AccountArchivedStatusEnum enumeration
+ * Defines constant values for AccountArchivedStatusEnum
+ */
 export enum AccountArchivedStatusEnum {
     UNARCHIVED = 'UNARCHIVED',
     ARCHIVED = 'ARCHIVED',
@@ -24,6 +40,10 @@ export enum AccountArchivedStatusEnum {
 }
 
 /** Enum representing standard accounting group unique names used for categorizing accounts. */
+/**
+ * AccountingGroupEnum enumeration
+ * Defines constant values for AccountingGroupEnum
+ */
 export enum AccountingGroupEnum {
     BankAccounts = 'bankaccounts',
     CapitalAccount = 'capitalaccount',
@@ -45,6 +65,10 @@ export enum AccountingGroupEnum {
 }
 
 /** Enum representing data operations for database manipulation, including CRUD and extended operations. */
+/**
+ * DataOperationEnum enumeration
+ * Defines constant values for DataOperationEnum
+ */
 export enum DataOperationEnum {
     /** Create a new record in the database */
     CREATE = 'CREATE',

@@ -7,6 +7,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AllGiddhItemComponent
@@ -23,5 +26,9 @@ import { MatButtonModule } from '@angular/material/button';
         AllGiddhItemComponent
     ]
 })
+/**
+ * AllItemModule module
+ * Implements AllItemModule functionality
+ */
 export class AllItemModule {
 }

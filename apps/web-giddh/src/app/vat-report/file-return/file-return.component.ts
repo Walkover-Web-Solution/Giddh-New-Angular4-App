@@ -10,12 +10,19 @@ import { NewConfirmationModalComponent } from '../../theme/new-confirmation-moda
 import { ConfirmationModalConfiguration } from '../../theme/confirmation-modal/confirmation-modal.interface';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'file-return',
     styleUrls: ['./file-return.component.scss'],
     templateUrl: './file-return.component.html',
     standalone:false
 })
+/**
+ * FileReturnComponent component
+ * Handles filereturn functionality and user interactions
+ */
 export class FileReturnComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -34,6 +41,10 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     /** File Return confirmation popup configuration */
     public fileReturnConfirmationConfiguration: ConfirmationModalConfiguration;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,
         public dialogRef: MatDialogRef<any>,
@@ -44,6 +55,9 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         private generalService: GeneralService
     ) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany && !this.activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -77,9 +91,15 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.vatService.getCountryWiseVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (res.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.message) {
                     this.toaster.showSnackBar('error', res.message);
                 }
@@ -112,13 +132,25 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         });
 
         confirnationDialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.localeData?.submit_file_return) {
                 this.vatService.fileVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res.status === 'success') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (res?.body) {
                             this.toaster.showSnackBar('success', res.body);
                         }
                     } else {
+                        /**
+                         * Handles if functionality
+                         */
                         if (res?.errors) {
                             let errorMessage = '';
                             (Array.isArray(res.errors) ? res.errors : []).forEach(error => errorMessage += error.message + '\n');

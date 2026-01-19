@@ -2,6 +2,10 @@ import { ReferenceVoucher } from '../../ledger/ledger.vm';
 import { InvoiceFilterClassForInvoicePreview } from './Invoice';
 import { AmountClassMulticurrency, IInvoiceLinkingRequest } from "./Sales";
 
+/**
+ * InvoiceReceiptFilter class
+ * Implements InvoiceReceiptFilter functionality
+ */
 export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
     public q: any;
     public sort: any;
@@ -13,18 +17,30 @@ export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
     public source?: string;
 }
 
+/**
+ * ReciptDeleteRequest interface definition
+ * Defines the structure and contract for ReciptDeleteRequest objects
+ */
 export interface ReciptDeleteRequest {
     invoiceNumber?: string;
     voucherType: string;
     uniqueName?: string;
 }
 
+/**
+ * ReceiptVoucherDetailsRequest class
+ * Implements ReceiptVoucherDetailsRequest functionality
+ */
 export class ReceiptVoucherDetailsRequest {
     public invoiceNumber?: string;
     public voucherType: string;
     public uniqueName?: string;
 }
 
+/**
+ * ReceiptAccount interface definition
+ * Defines the structure and contract for ReceiptAccount objects
+ */
 export interface ReceiptAccount {
     uniqueName: string;
     accountType?: any;
@@ -33,6 +49,10 @@ export interface ReceiptAccount {
     customerName?: string;
 }
 
+/**
+ * ReceiptItem interface definition
+ * Defines the structure and contract for ReceiptItem objects
+ */
 export interface ReceiptItem {
     dueDays: number;
     voucherNumber: string;
@@ -60,6 +80,10 @@ export interface ReceiptItem {
     adjustments?: any;
 }
 
+/**
+ * ReciptResponse interface definition
+ * Defines the structure and contract for ReciptResponse objects
+ */
 export interface ReciptResponse {
     items: ReceiptItem[];
     page: number;
@@ -68,6 +92,10 @@ export interface ReciptResponse {
     totalItems: number;
 }
 
+/**
+ * VoucherDetails interface definition
+ * Defines the structure and contract for VoucherDetails objects
+ */
 export interface VoucherDetails {
     voucherNumber: string;
     voucherDate: string;
@@ -85,6 +113,10 @@ export interface VoucherDetails {
     customerName?: string;
 }
 
+/**
+ * CompanyDetails interface definition
+ * Defines the structure and contract for CompanyDetails objects
+ */
 export interface CompanyDetails {
     name: string;
     gstNumber: string;
@@ -93,6 +125,10 @@ export interface CompanyDetails {
     panNumber?: string;
 }
 
+/**
+ * BillingDetails interface definition
+ * Defines the structure and contract for BillingDetails objects
+ */
 export interface BillingDetails {
     gstNumber?: string;
     address: string[];
@@ -101,6 +137,10 @@ export interface BillingDetails {
     panNumber?: string;
 }
 
+/**
+ * ShippingDetails interface definition
+ * Defines the structure and contract for ShippingDetails objects
+ */
 export interface ShippingDetails {
     gstNumber?: string;
     address: string[];
@@ -109,6 +149,10 @@ export interface ShippingDetails {
     panNumber?: string;
 }
 
+/**
+ * AccountDetails interface definition
+ * Defines the structure and contract for AccountDetails objects
+ */
 export interface AccountDetails {
     name: string;
     uniqueName: string;
@@ -120,6 +164,10 @@ export interface AccountDetails {
     shippingDetails: ShippingDetails;
 }
 
+/**
+ * Other interface definition
+ * Defines the structure and contract for Other objects
+ */
 export interface Other {
     message1: string;
     message2: string;
@@ -132,12 +180,20 @@ export interface Other {
     slogan?: string;
 }
 
+/**
+ * TemplateDetails interface definition
+ * Defines the structure and contract for TemplateDetails objects
+ */
 export interface TemplateDetails {
     logoPath: string;
     other: Other;
     templateUniqueName: string;
 }
 
+/**
+ * Transaction interface definition
+ * Defines the structure and contract for Transaction objects
+ */
 export interface Transaction {
     accountName: string;
     accountUniqueName: string;
@@ -155,6 +211,10 @@ export interface Transaction {
     rate?: number;
 }
 
+/**
+ * Entry interface definition
+ * Defines the structure and contract for Entry objects
+ */
 export interface Entry {
     uniqueName: string;
     discounts: number[];
@@ -170,6 +230,10 @@ export interface Entry {
     entryTotal: number;
 }
 
+/**
+ * Voucher interface definition
+ * Defines the structure and contract for Voucher objects
+ */
 export interface Voucher {
     voucherDetails: VoucherDetails;
     companyDetails: CompanyDetails;
@@ -179,12 +243,20 @@ export interface Voucher {
     deposit?: any;
 }
 
+/**
+ * ReciptRequest interface definition
+ * Defines the structure and contract for ReciptRequest objects
+ */
 export interface ReciptRequest {
     entryUniqueNames: string[];
     updateAccountDetails: boolean;
     voucher: Voucher;
 }
 
+/**
+ * DownloadVoucherRequest interface definition
+ * Defines the structure and contract for DownloadVoucherRequest objects
+ */
 export interface DownloadVoucherRequest {
     voucherNumber?: string[];
     voucherType: string;
@@ -192,16 +264,28 @@ export interface DownloadVoucherRequest {
     typeOfInvoice?: string[];
     copyTypes?: string[];
 }
+/**
+ * CurrencyClass class
+ * Implements CurrencyClass functionality
+ */
 class CurrencyClass {
     public code: string;
     public symbol?: string;
 }
 
 /** Voucher request modal */
+/**
+ * VoucherRequest class
+ * Implements VoucherRequest functionality
+ */
 export class VoucherRequest {
     public number: string;
     public type: string;
     public uniqueName: string;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(voucherNumber: string, type: string, uniqueName?: string) {
         this.number = voucherNumber ?? '';
         this.type = type ?? '';

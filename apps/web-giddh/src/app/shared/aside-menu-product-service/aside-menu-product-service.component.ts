@@ -13,12 +13,19 @@ import { GeneralService } from '../../services/general.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-menu-product-service',
     styleUrls: ['./aside-menu-product-service.component.scss'],
     templateUrl: './aside-menu-product-service.component.html',
     standalone: false
 })
+/**
+ * AsideMenuProductServiceComponent component
+ * Handles asidemenuproductservice functionality and user interactions
+ */
 export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Input() public selectedVoucherType: string;
@@ -45,6 +52,10 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     public stockType: string = '';
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private accountService: AccountService,
         private toasterService: ToasterService,
@@ -79,6 +90,9 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
      */
     public addNewServiceAccount(item: AddAccountRequest): void {
         this.accountService.CreateAccountV2(item.accountRequest, item.activeGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.toasterService.successToast(this.commonLocaleData?.app_account_created);
                 this.accountTemplateRef?.close();
@@ -101,6 +115,9 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         document.querySelector('body')?.classList?.remove('aside-menu-product-service-page');
     }
 
+    /**
+     * Toggles stockpane state
+     */
     public toggleStockPane(type?: string): void {
         this.hideFirstStep = true;
         this.isAddServiceOpen = false;
@@ -127,8 +144,14 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
      * @memberof AsideMenuProductServiceComponent
      */
     public closeAsidePane(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isAddServiceOpen && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action) {
                     this.accountTemplateRef?.close();
                     this.stockType = '';
@@ -154,8 +177,14 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
      * @memberof AsideMenuProductServiceComponent
      */
     public backButtonPressed(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isAddServiceOpen && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action) {
                     this.accountTemplateRef?.close();
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
@@ -202,8 +231,14 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
      * @memberof AsideMenuProductServiceComponent
      */
     private focusButton(): void {
+         /**
+          * Sets timeout value
+          */
          setTimeout(() => {
                 const visibleButton = document.querySelector('.aside-panel-ledger button[matButton="filled"]:not([hidden])') as HTMLButtonElement;
+                /**
+                 * Handles if functionality
+                 */
                 if (visibleButton) {
                     visibleButton.focus();
                 }

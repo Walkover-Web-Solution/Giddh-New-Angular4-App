@@ -19,17 +19,28 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { cloneDeep, forEach } from '../lodash-optimized';
 
 /** Enum for expense tab names */
+/**
+ * EExpenseTabName enumeration
+ * Defines constant values for EExpenseTabName
+ */
 export enum EExpenseTabName {
     PENDING = 'pending',
     REJECTED = 'rejected'
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-expenses',
     standalone: false,
     templateUrl: './expenses.component.html',
     styleUrls: ['./expenses.component.scss']
 })
+/**
+ * ExpensesComponent component
+ * Handles expenses functionality and user interactions
+ */
 export class ExpensesComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     public todaySelected: boolean = false;
@@ -95,6 +106,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     /** The index of the active tab. */
     public selectedTabIndex: number = 0;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private route: ActivatedRoute,
@@ -108,30 +123,48 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.pettycashRequest.count = PAGINATION_LIMIT;
         this.getActiveTab();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params['type'] && this.activeTab !== params['type']) {
                 this.activeTab = params['type'];
             }
         });
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            /**
+             * Handles if functionality
+             */
             if (event instanceof NavigationEnd) {
                 this.getActiveTab();
             }
         });
 
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
 
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (universalDate && !this.todaySelected) {
                             this.universalFrom = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                             this.universalTo = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
@@ -149,16 +182,25 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                         }
 
                         this.pettycashRequest.page = 1;
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.pendingListComponent) {
                             this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
                             this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
                         }
 
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.rejectedListComponent) {
                             this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
                             this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.selectedTabIndex === 0) {
                             this.getPettyCashPendingReports(this.pettycashRequest);
                         } else {
@@ -172,11 +214,20 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles selectedRowToggle functionality
+     */
     public selectedRowToggle(e) {
         this.isSelectedRow = e;
     }
 
+    /**
+     * Handles selectedRowInput functionality
+     */
     public selectedRowInput(item: ExpenseResults) {
+        /**
+         * Handles if functionality
+         */
         if (this.currentSelectedTab === EExpenseTabName.REJECTED && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
             this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
             this.rejectedTabSortOptions.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
@@ -187,18 +238,33 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         this.selectedRowItem = item;
     }
 
+    /**
+     * Handles selectedDetailedRowInput functionality
+     */
     public selectedDetailedRowInput(item: ExpenseResults) {
         this.selectedRowItem = item;
     }
 
+    /**
+     * Handles isFilteredSelected functionality
+     */
     public isFilteredSelected(isSelect: boolean) {
         this.isFilterSelected = isSelect;
     }
 
+    /**
+     * Closes detailedmode
+     */
     public closeDetailedMode(e) {
         this.isSelectedRow = !e;
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.currentSelectedTab === EExpenseTabName.PENDING && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                 this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                 this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
@@ -216,22 +282,40 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      * @memberof ExpensesComponent
      */
     public refreshPendingItem(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
+            /**
+             * Handles if functionality
+             */
             if (this.pendingTabSortOptions) {
                 this.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                 this.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.rejectedTabSortOptions) {
                 this.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
                 this.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.currentSelectedTab === EExpenseTabName.PENDING) {
                 this.getPettyCashPendingReports(this.pettycashRequest);
             } else {
                 this.getPettyCashRejectedReports(this.pettycashRequest);
             }
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.currentSelectedTab === EExpenseTabName.PENDING && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                     this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                     this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
@@ -245,12 +329,18 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Retrieves pettycashpendingreports data
+     */
     public getPettyCashPendingReports(request: CommonPaginatedRequest) {
         request.status = EExpenseTabName.PENDING;
         request.from = this.pettycashRequest.from;
         request.to = this.pettycashRequest.to;
         this.isPettyCashPendingReportLoading = true;
         this.expenseService.getPettycashReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.pettyCashPendingReportResponse = response?.body;
             } else {
@@ -262,12 +352,18 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves pettycashrejectedreports data
+     */
     public getPettyCashRejectedReports(request: CommonPaginatedRequest) {
         request.status = EExpenseTabName.REJECTED;
         request.from = this.pettycashRequest.from;
         request.to = this.pettycashRequest.to;
         this.isPettyCashRejectedReportLoading = true;
         this.expenseService.getPettycashRejectedReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.pettyCashRejectedReportResponse = response?.body;
             } else {
@@ -279,13 +375,22 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles clearFilter functionality
+     */
     public clearFilter() {
         this.universalDate$.subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.universalFrom = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
                 this.universalTo = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = cloneDeep(res);
 
+                /**
+                 * Handles if functionality
+                 */
                 if (universalDate && !this.todaySelected) {
                     this.selectedDateRange = { startDate: dayjs(res[0]), endDate: dayjs(res[1]) };
                     this.selectedDateRangeUi = dayjs(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -321,6 +426,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
         this.router.navigate(['pages', 'expenses-manager'], { queryParams: { tab: tab, tabIndex: tabIndex } });
 
+        /**
+         * Handles if functionality
+         */
         if (tab === EExpenseTabName.PENDING && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
             this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
             this.rejectedTabSortOptions.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
@@ -330,7 +438,13 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         }
         this.currentSelectedTab = tab;
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (tab === EExpenseTabName.PENDING && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
                 this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                 this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
@@ -343,20 +457,38 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         }, 20);
     }
 
+    /**
+     * Handles detectChanges functionality
+     */
     detectChanges() {
+        /**
+         * Handles if functionality
+         */
         if (!this.cdRf['destroyed']) {
             this.cdRf.detectChanges();
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Retrieves activetab data
+     */
     public getActiveTab() {
+        /**
+         * Handles if functionality
+         */
         if (this.route.snapshot.queryParams.tab) {
             this.currentSelectedTab = this.route.snapshot.queryParams.tab;
+            /**
+             * Handles if functionality
+             */
             if (this.currentSelectedTab === EExpenseTabName.PENDING) {
                 this.selectedTabIndex = 0;
             } else {
@@ -372,6 +504,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      * @memberof ExpensesComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -386,16 +521,25 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      * @memberof ExpensesComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -405,12 +549,18 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.pettycashRequest.to = this.toDate;
             this.isFilterSelected = true;
 
+            /**
+             * Handles if functionality
+             */
             if (this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
                 this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
                 this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
             }
             this.getPettyCashPendingReports(this.pettycashRequest);
 
+            /**
+             * Handles if functionality
+             */
             if (this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
                 this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
                 this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
@@ -426,6 +576,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      * @memberof ExpensesComponent
      */
     public reportDates(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.todaySelected && event) {
             this.selectedDateRange = { startDate: dayjs(event[0], GIDDH_DATE_FORMAT), endDate: dayjs(event[1], GIDDH_DATE_FORMAT) };
             this.selectedDateRangeUi = dayjs(event[0], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event[1], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -440,15 +593,27 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      * @memberof ExpensesComponent
      */
     public previewNextItem(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             let nextItemIndex;
             this.pettyCashPendingReportResponse?.results?.forEach((item, index) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item?.uniqueName === this.selectedRowItem?.uniqueName) {
                     nextItemIndex = index + 1;
                 }
             });
 
+            /**
+             * Handles if functionality
+             */
             if (this.pettyCashPendingReportResponse?.results?.length > 1) {
+                /**
+                 * Handles if functionality
+                 */
                 if (nextItemIndex && this.pettyCashPendingReportResponse?.results[nextItemIndex]) {
                     this.selectedRowItem = this.pettyCashPendingReportResponse?.results[nextItemIndex];
                 } else {

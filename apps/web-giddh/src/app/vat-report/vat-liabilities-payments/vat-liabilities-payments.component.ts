@@ -15,6 +15,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Angular21ChangeDetectionService } from '../../services/angular21-change-detection.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'vat-liabilities-payments',
     templateUrl: './vat-liabilities-payments.component.html',
@@ -23,6 +26,10 @@ import { Angular21ChangeDetectionService } from '../../services/angular21-change
     standalone:false
 })
 
+/**
+ * VatLiabilitiesPayments component
+ * Handles vatliabilitiespayments functionality and user interactions
+ */
 export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** Directive to get reference of datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
@@ -89,6 +96,10 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** True if tax modules is restricted */
     public isTaxRestrictedModule: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
@@ -100,6 +111,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     ) {
         this.initVatLiabilityPaymentForm();
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.isTaxRestrictedModule = activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling);
@@ -116,6 +130,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -127,6 +144,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             this.displayColumns = this.isPaymentMode ? this.paymentColumns : this.liabilityColumns;
         });
         this.liabilityPaymentList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if ((this.isPaymentMode && response?.body?.payments) || ((!this.isPaymentMode) && response?.body?.liabilities)) {
                 this.dataSource = this.isPaymentMode ? response.body.payments : response.body.liabilities;
             } else if (response?.body?.message) {
@@ -137,10 +157,19 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         });
 
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
+        /**
+         * Handles if functionality
+         */
         if (this.isCompanyMode || this.isConsolidatedBranch) {
             this.loadTaxDetails();
             this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.length > 1) {
                         this.isMultipleBranch = true;
                         let unarchivedBranches = response.filter(branch => branch.isArchived === false);
@@ -153,6 +182,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                         });
                     } else {
                         this.isMultipleBranch = false;
+                        /**
+                         * Handles if functionality
+                         */
                         if (response.uniqueName) {
                             this.getFormControl('branchUniqueName').patchValue(response.uniqueName);
                         }
@@ -164,17 +196,29 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             this.getCurrentCompanyBranchTaxNumber();
         }
         this.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.length) {
                 this.taxesList = response.body.map(tax => ({
                     label: tax,
                     value: tax
                 }));
+                /**
+                 * Handles if functionality
+                 */
                 if (this.taxesList.length === 1) {
                     this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isCompanyMode || this.isConsolidatedBranch) {
                     this.hasTaxNumber = true;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isTaxRestrictedModule) {
                     this.getURLHMRCAuthorization();
                 }
@@ -182,7 +226,13 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         });
 
         this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.body) {
                     this.connectToHMRCUrl = response.body;
                 } else {
@@ -191,6 +241,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             }
         });
 
+        /**
+         * Handles merge functionality
+         */
         merge(this.componentStore.liabilityPaymentListInProgress$, this.componentStore.getTaxNumberInProgress$, this.componentStore.getHMRCInProgress$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading.set(response);
@@ -203,6 +256,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
      * @memberof  VatLiabilitiesPayments
      */
     public buyPlan(subscriptionId: string): void {
+        /**
+         * Handles if functionality
+         */
         if (subscriptionId) {
             this.router.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
         }
@@ -215,10 +271,16 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     private getCurrentCompanyBranchTaxNumber(): void {
         this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 const currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                 this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                 this.hasTaxNumber = this.currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.hasTaxNumber) {
                     this.loadTaxDetails();
                 }
@@ -233,6 +295,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public getLiabilitiesPayment(): void {
         let payload = this.generalService.getUserAgentData();
+        /**
+         * Handles if functionality
+         */
         if (!this.isProdMode) {
             payload["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19";
         }
@@ -262,6 +327,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @memberof VatLiabilitiesPayments
     */
     public taxNumberSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.getFormControl('taxNumber').patchValue(event.value);
         }
@@ -274,6 +342,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @memberof VatLiabilitiesPayments
     */
     public branchSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.getFormControl('branchUniqueName').patchValue(event.value);
         }
@@ -287,11 +358,17 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     private getUniversalDatePickerDate(): void {
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.getFormControl('from').patchValue(dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT));
                 this.getFormControl('to').patchValue(dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT));
+                /**
+                 * Handles if functionality
+                 */
                 if (this.getFormControl('taxNumber').value) {
                     this.getLiabilitiesPayment();
                 }
@@ -316,7 +393,13 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
      * @memberof VatLiabilitiesPayments
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -332,16 +415,25 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
      * @memberof VatLiabilitiesPayments
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

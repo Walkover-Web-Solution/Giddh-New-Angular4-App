@@ -1,16 +1,28 @@
 import { SalesEntryClass, VoucherDetailsClass, AccountDetailsClass } from './Sales';
 
+/**
+ * StateCode class
+ * Implements StateCode functionality
+ */
 export class StateCode {
     name: string;
     code: string;
     stateGstCode?: string;
 }
 
+/**
+ * NameUniqueName class
+ * Implements NameUniqueName functionality
+ */
 export class NameUniqueName {
     name: string;
     uniqueName: string;
 }
 
+/**
+ * Address class
+ * Implements Address functionality
+ */
 export class Address {
     public gstNumber: string;
     public address: string[];
@@ -20,14 +32,26 @@ export class Address {
     public panNumber: string;
     public pincode?: string;
     public county?: CountyCode;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.county = new CountyCode();
     }
 }
+/**
+ * CountyCode class
+ * Implements CountyCode functionality
+ */
 export class CountyCode {
     name: string;
     code: string;
 }
+/**
+ * Transaction class
+ * Implements Transaction functionality
+ */
 export class Transaction {
     public account: {
         name: string;
@@ -40,19 +64,35 @@ export class Transaction {
     }
 }
 
+/**
+ * Tax class
+ * Implements Tax functionality
+ */
 export class Tax {
     uniqueName: string;
 }
 
+/**
+ * Company class
+ * Implements Company functionality
+ */
 export class Company {
     public billingDetails: Address;
     public shippingDetails: Address;
 }
 
+/**
+ * Currency class
+ * Implements Currency functionality
+ */
 export class Currency {
     code: string;
 }
 
+/**
+ * Account class
+ * Implements Account functionality
+ */
 export class Account {
     public name: string;
     public uniqueName: string;
@@ -64,6 +104,10 @@ export class Account {
     public currency: Currency;
 }
 
+/**
+ * OtherSalesItemClass class
+ * Implements OtherSalesItemClass functionality
+ */
 export class OtherSalesItemClass {
     public shippingDate: any;
     public shippedVia: string;
@@ -75,6 +119,10 @@ export class OtherSalesItemClass {
     public message2?: string;
     public slogan?: any;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.shippingDate = null;
         this.shippedVia = null;
@@ -85,14 +133,26 @@ export class OtherSalesItemClass {
     }
 }
 
+/**
+ * TemplateDetails class
+ * Implements TemplateDetails functionality
+ */
 export class TemplateDetails {
     public other: OtherSalesItemClass;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.other = new OtherSalesItemClass();
     }
 }
 
+/**
+ * PurchaseOrder class
+ * Implements PurchaseOrder functionality
+ */
 export class PurchaseOrder {
     public type: string;
     public date: string;
@@ -107,6 +167,10 @@ export class PurchaseOrder {
     public voucherDetails: VoucherDetailsClass;
     public accountDetails: AccountDetailsClass;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.account = new Account();
         this.account.billingDetails = new Address();

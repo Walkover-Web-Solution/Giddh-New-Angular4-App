@@ -9,6 +9,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         DecimalDigitsModule,
@@ -26,5 +29,9 @@ import { MatInputModule } from '@angular/material/input';
     declarations: [DiscountControlComponent],
     providers: [],
 })
+/**
+ * DiscountControlModule module
+ * Implements DiscountControlModule functionality
+ */
 export class DiscountControlModule {
 }

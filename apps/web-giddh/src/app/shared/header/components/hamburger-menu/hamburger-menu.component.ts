@@ -5,6 +5,9 @@ import { ReplaySubject } from 'rxjs';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { takeUntil, take } from 'rxjs/operators';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'hamburger-menu',
     templateUrl: './hamburger-menu.component.html',
@@ -12,6 +15,10 @@ import { takeUntil, take } from 'rxjs/operators';
     standalone: false
 })
 
+/**
+ * HamburgerMenuComponent component
+ * Handles hamburgermenu functionality and user interactions
+ */
 export class HamburgerMenuComponent implements OnInit, OnDestroy {
     @Input() public pageHeading: string = '';
 
@@ -21,6 +28,10 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private generalActions: GeneralActions) {
 
     }
@@ -57,19 +68,31 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
      * @memberof HamburgerMenuComponent
      */
     public sideBarStateChange(openSideMenu: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.sideMenu) {
             this.sideMenu.isopen = openSideMenu;
         }
 
         let openMenu = false;
 
+        /**
+         * Handles if functionality
+         */
         if(!openSideMenu && document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             openMenu = true;
         }
 
         this.store.dispatch(this.generalActions.openSideMenu(openSideMenu));
 
+        /**
+         * Handles if functionality
+         */
         if(openMenu) {
+            /**
+             * Handles if functionality
+             */
             if (this.sideMenu) {
                 this.sideMenu.isopen = true;
             }

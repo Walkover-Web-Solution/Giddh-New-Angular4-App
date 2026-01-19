@@ -7,12 +7,19 @@ import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'transfer-note',
     templateUrl: './transfer-note.component.html',
     standalone: false
 })
 
+/**
+ * TransferNoteComponent component
+ * Handles transfernote functionality and user interactions
+ */
 export class TransferNoteComponent implements OnChanges {
     @Output() public onCancel = new EventEmitter();
     @Output() public onSave = new EventEmitter<{ entry: InventoryEntry, user: Partial<InventoryUser> }>();
@@ -31,6 +38,10 @@ export class TransferNoteComponent implements OnChanges {
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _fb: UntypedFormBuilder) {
         this.form = this._fb.group({
             inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
@@ -76,25 +87,46 @@ export class TransferNoteComponent implements OnChanges {
         return this.form.get('transactions') as UntypedFormArray;
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes.stockList && this.stockList) {
             this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
+        /**
+         * Handles if functionality
+         */
         if (changes.stockUnits && this.stockUnits) {
             this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
         }
+        /**
+         * Handles if functionality
+         */
         if (changes.userList && this.userList) {
             this.userListOptions = this.userList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
     }
 
+    /**
+     * Handles stockChanged functionality
+     */
     public stockChanged(option: IOption) {
         const stockItem = this.stockList.find(p => p?.uniqueName === option?.value);
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
         this.form?.patchValue({ ...this.form?.value, stockUnit });
     }
 
+    /**
+     * Saves  data
+     */
     public save() {
+        /**
+         * Handles if functionality
+         */
         if (this.form.valid) {
 
             let value: any = {

@@ -6,6 +6,10 @@ import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
 import { TlPlService } from "../services/tl-pl.service";
 
+/**
+ * FinancialReportsState interface definition
+ * Defines the structure and contract for FinancialReportsState objects
+ */
 export interface FinancialReportsState {
     tailedReportIsSuccess: boolean;
     reconcileDateRange: { mode: boolean, fromDate: string, toDate: string } | null;
@@ -16,15 +20,29 @@ export const DEFAULT_LEDGER_STATE: FinancialReportsState = {
     reconcileDateRange: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * FinancialReportsComponentStore store
+ * Manages financialreportscomponent state using NgRx ComponentStore
+ */
 export class FinancialReportsComponentStore extends ComponentStore<FinancialReportsState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private tlPlService: TlPlService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_LEDGER_STATE);
     }
     public tailedReportIsSuccess$ = this.select((state) => state.tailedReportIsSuccess);
@@ -39,16 +57,28 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
      */
     readonly tailedReportAccountGroup = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ tailedReportIsSuccess: null });
                 return this.tlPlService.tailedReportAccountGroup(req.request, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     tailedReportIsSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -65,6 +95,9 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -78,16 +111,28 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
      */
     readonly getReconcileDateRange = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ reconcileDateRange: undefined });
                 return this.tlPlService.getReconcileDateRange(req.reportType, req.branchUniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     reconcileDateRange: res?.body
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -104,6 +149,9 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

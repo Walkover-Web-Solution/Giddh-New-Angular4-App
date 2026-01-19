@@ -1,3 +1,7 @@
+/**
+ * InventoryActionsConst class
+ * Implements InventoryActionsConst functionality
+ */
 export class InventoryActionsConst {
     public static GetGroupsWithStocksHierarchyMin = 'GetGroupsWithStocksHierarchyMin';
     public static GetGroupsWithStocksHierarchyMinResponse = 'GetGroupsWithStocksHierarchyMinResponse';

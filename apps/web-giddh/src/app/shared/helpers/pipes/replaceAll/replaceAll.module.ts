@@ -11,4 +11,8 @@ import { ReplaceAllPipe } from "./replaceAll.pipe";
     declarations: [ReplaceAllPipe],
     exports: [ReplaceAllPipe]
 })
+/**
+ * ReplaceAllPipeModule module
+ * Implements ReplaceAllPipeModule functionality
+ */
 export class ReplaceAllPipeModule {}

@@ -4,12 +4,19 @@ import { GeneralService } from '../../services/general.service';
 import { ReplaySubject } from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'tally-integration',
     templateUrl: './tally.intergation.component.html',
     styleUrls: ['./tally.intergation.component.scss'],
     standalone: false,
 })
+/**
+ * TallyIntegrationComponent component
+ * Handles tallyintegration functionality and user interactions
+ */
 export class TallyIntegrationComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -24,6 +31,10 @@ export class TallyIntegrationComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private generalService: GeneralService, private clipboardService: ClipboardService) {
     }
 
@@ -46,6 +57,9 @@ export class TallyIntegrationComponent implements OnInit, OnDestroy {
         const urlToCopy = this.apiUrl;
         this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);

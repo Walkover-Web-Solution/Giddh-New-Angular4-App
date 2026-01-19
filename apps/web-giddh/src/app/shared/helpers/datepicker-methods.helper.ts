@@ -14,6 +14,9 @@ export class DatepickerMethodsHelper {
      * @param isOpen Whether to open or close the menu
      */
     public static toggleGiddhDatepicker(trigger: MatMenuTrigger, isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             trigger?.openMenu();
         } else {
@@ -40,16 +43,25 @@ export class DatepickerMethodsHelper {
         },
         trigger: MatMenuTrigger
     ): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             DatepickerMethodsHelper.toggleGiddhDatepicker(trigger, false);
             return;
         }
         component.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             component.selectedRangeLabel = value.name;
         }
         DatepickerMethodsHelper.toggleGiddhDatepicker(trigger, false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             component.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             component.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

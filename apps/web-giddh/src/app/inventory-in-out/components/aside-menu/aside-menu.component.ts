@@ -12,6 +12,9 @@ import { GeneralService } from '../../../services/general.service';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-menu',
     templateUrl: './aside-menu.component.html',
@@ -19,6 +22,10 @@ import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-u
     standalone: false
 })
 
+/**
+ * AsideMenuComponent component
+ * Handles asidemenu functionality and user interactions
+ */
 export class AsideMenuComponent implements OnInit, OnDestroy {
     public stockList$: Observable<IStocksItem[]>;
     public stockUnits$: Observable<StockUnitRequest[]>;
@@ -30,6 +37,10 @@ export class AsideMenuComponent implements OnInit, OnDestroy {
     public createStockSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _store: Store<AppState>,
         private _inventoryAction: InventoryAction,
         private _inventoryEntryAction: InventoryEntryActions,
@@ -40,6 +51,9 @@ export class AsideMenuComponent implements OnInit, OnDestroy {
         this.createStockSuccess$ = this._store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this._store.dispatch(this._inventoryAction.GetStock());
         // dispatch stockunit request
@@ -53,6 +67,9 @@ export class AsideMenuComponent implements OnInit, OnDestroy {
         this._store.pipe(select(p => p.inventoryInOutState.userSuccess), takeUntil(this.destroyed$)).subscribe(p => p && this.closeAsidePane(p));
 
         this.createStockSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.closeAsidePane(s);
                 let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
@@ -61,20 +78,32 @@ export class AsideMenuComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles cancel event
+     */
     public onCancel() {
         this.view = '';
         this.closeAsidePane();
     }
 
+    /**
+     * Closes asidepane
+     */
     public closeAsidePane(event?) {
         this.closeAsideEvent.emit();
         this.view = '';
     }
 
+    /**
+     * Handles save event
+     */
     public onSave(entry: InventoryEntry, reciever?: InventoryUser) {
         this._store.dispatch(this._inventoryEntryAction.addNewEntry(entry, reciever));
     }
 
+    /**
+     * Creates new account
+     */
     public createAccount(value) {
         this._store.dispatch(this._inventoryUserAction.addNewUser(value.name));
     }

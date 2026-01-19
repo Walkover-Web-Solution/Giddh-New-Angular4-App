@@ -5,6 +5,9 @@ import { ReplaySubject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'purchase-order-preview-modal',
     templateUrl: './purchase-order-preview.component.html',
@@ -12,6 +15,10 @@ import { GeneralService } from '../../services/general.service';
     standalone:false
 })
 
+/**
+ * PurchaseOrderPreviewModalComponent component
+ * Handles purchaseorderpreviewmodal functionality and user interactions
+ */
 export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
     /* Taking input po unique name */
     @Input() public purchaseOrderUniqueName: any;
@@ -40,6 +47,10 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public purchaseOrderService: PurchaseOrderService,
         private domSanitizer: DomSanitizer,
@@ -78,6 +89,9 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
         let getRequest = { companyUniqueName: this.purchaseOrderCompanyUniqueName, accountUniqueName: this.purchaseOrderAccountUniqueName, poUniqueName: this.purchaseOrderUniqueName };
 
         this.purchaseOrderService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let blob: Blob = this.generalService.base64ToBlob(response.body, 'application/pdf', 512);
                 const file = new Blob([blob], { type: 'application/pdf' });

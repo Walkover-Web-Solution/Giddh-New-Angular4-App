@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AiOcrComponent } from './ai-ocr.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -13,6 +16,10 @@ import { AiOcrComponent } from './ai-ocr.component';
     exports: [RouterModule]
 })
 
+/**
+ * AiOcrRoutingModule module
+ * Implements AiOcrRoutingModule functionality
+ */
 export class AiOcrRoutingModule {
 
 }

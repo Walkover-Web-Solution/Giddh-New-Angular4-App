@@ -1,17 +1,37 @@
 import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 
+/**
+ * BranchTransfersArray class
+ * Implements BranchTransfersArray functionality
+ */
 export class BranchTransfersArray {
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(public entityDetails: BranchTransferEntity, public quantity: number, public stockUnit: string, public rate: number) {
         //
     }
 }
 
+/**
+ * BranchTransferEntity class
+ * Implements BranchTransferEntity functionality
+ */
 export class BranchTransferEntity {
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(public uniqueName: string, public entity: 'warehouse' | 'stock' | 'company') {
         //
     }
 }
 
+/**
+ * TransferDestinationRequest class
+ * Implements TransferDestinationRequest functionality
+ */
 export class TransferDestinationRequest {
     public transferProducts: boolean = false;
     public source: BranchTransferEntity;
@@ -21,6 +41,10 @@ export class TransferDestinationRequest {
     public transfers: BranchTransfersArray[];
 }
 
+/**
+ * TransferProductsRequest class
+ * Implements TransferProductsRequest functionality
+ */
 export class TransferProductsRequest {
     public transferProducts: boolean = true;
     public source: BranchTransferEntity;
@@ -30,6 +54,10 @@ export class TransferProductsRequest {
     public transfers: BranchTransfersArray[];
 }
 
+/**
+ * BranchTransferResponse class
+ * Implements BranchTransferResponse functionality
+ */
 export class BranchTransferResponse {
     public uniqueName: string;
     public amount: number;
@@ -53,12 +81,20 @@ export class BranchTransferResponse {
     };
 }
 
+/**
+ * ILinkedStocksResult interface definition
+ * Defines the structure and contract for ILinkedStocksResult objects
+ */
 export interface ILinkedStocksResult extends INameUniqueName {
     warehouses: INameUniqueName[];
     isCompany?: boolean;
     isConsolidatedBranch?: boolean;
 }
 
+/**
+ * LinkedStocksResponse class
+ * Implements LinkedStocksResponse functionality
+ */
 export class LinkedStocksResponse {
     public page: number;
     public count: number;
@@ -67,7 +103,15 @@ export class LinkedStocksResponse {
     public results: ILinkedStocksResult[];
 }
 
+/**
+ * LinkedStocksVM class
+ * Implements LinkedStocksVM functionality
+ */
 export class LinkedStocksVM implements INameUniqueName {
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public name: string,
         public uniqueName: string,
@@ -78,6 +122,10 @@ export class LinkedStocksVM implements INameUniqueName {
     }
 }
 
+/**
+ * NewBranchTransferWarehouse class
+ * Implements NewBranchTransferWarehouse functionality
+ */
 export class NewBranchTransferWarehouse {
     public name: string;
     public uniqueName: string;
@@ -87,12 +135,20 @@ export class NewBranchTransferWarehouse {
     public pincode?: string;
 }
 
+/**
+ * NewBranchTransferSourceDestination class
+ * Implements NewBranchTransferSourceDestination functionality
+ */
 export class NewBranchTransferSourceDestination {
     public name: string;
     public uniqueName: string;
     public warehouse: NewBranchTransferWarehouse;
 }
 
+/**
+ * NewBranchTransferProductStockDetails class
+ * Implements NewBranchTransferProductStockDetails functionality
+ */
 export class NewBranchTransferProductStockDetails {
     public stockUnit?: any;
     public amount: any;
@@ -101,6 +157,10 @@ export class NewBranchTransferProductStockDetails {
     public stockUnitUniqueName?: any;
 }
 
+/**
+ * NewBranchTransferProduct class
+ * Implements NewBranchTransferProduct functionality
+ */
 export class NewBranchTransferProduct {
     public name: string;
     public hsnNumber: any;
@@ -113,6 +173,10 @@ export class NewBranchTransferProduct {
     public variant?: any;
 }
 
+/**
+ * NewBranchTransferTransportationDetails class
+ * Implements NewBranchTransferTransportationDetails functionality
+ */
 export class NewBranchTransferTransportationDetails {
     public dispatchedDate: any;
     public transporterName: string;
@@ -121,6 +185,10 @@ export class NewBranchTransferTransportationDetails {
     public vehicleNumber: any;
 }
 
+/**
+ * NewBranchTransferResponse class
+ * Implements NewBranchTransferResponse functionality
+ */
 export class NewBranchTransferResponse {
     public dateOfSupply: any;
     public challanNo: any;
@@ -134,6 +202,10 @@ export class NewBranchTransferResponse {
     public transferType: string;
 }
 
+/**
+ * NewBranchTransferRequest class
+ * Implements NewBranchTransferRequest functionality
+ */
 export class NewBranchTransferRequest {
     public dateOfSupply: any;
     public challanNo: string;
@@ -147,6 +219,10 @@ export class NewBranchTransferRequest {
     public transferType: string;
 }
 
+/**
+ * NewBranchTransferListGetRequestParams class
+ * Implements NewBranchTransferListGetRequestParams functionality
+ */
 export class NewBranchTransferListGetRequestParams {
     public from: string;
     public to: string;
@@ -157,6 +233,10 @@ export class NewBranchTransferListGetRequestParams {
     public branchUniqueName: string;
 }
 
+/**
+ * NewBranchTransferListPostRequestParams class
+ * Implements NewBranchTransferListPostRequestParams functionality
+ */
 export class NewBranchTransferListPostRequestParams {
     public amountOperator: string;
     public amount: any;
@@ -171,6 +251,10 @@ export class NewBranchTransferListPostRequestParams {
     public toWarehouse?: string;
 }
 
+/**
+ * NewBranchTransferListItems class
+ * Implements NewBranchTransferListItems functionality
+ */
 export class NewBranchTransferListItems {
     public dateOfSupply: string;
     public voucherType: string;
@@ -185,6 +269,10 @@ export class NewBranchTransferListItems {
     public toWarehouse?: string;
 }
 
+/**
+ * NewBranchTransferListResponse class
+ * Implements NewBranchTransferListResponse functionality
+ */
 export class NewBranchTransferListResponse {
     public items: NewBranchTransferListItems[];
     public fromDate: string;
@@ -195,6 +283,10 @@ export class NewBranchTransferListResponse {
     public totalItems: number;
 }
 
+/**
+ * NewBranchTransferDownloadRequest class
+ * Implements NewBranchTransferDownloadRequest functionality
+ */
 export class NewBranchTransferDownloadRequest {
     public uniqueName: string;
 }

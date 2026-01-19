@@ -4,6 +4,9 @@ import { MainComponent } from './main.component';
 import { ProjectWiseAccountingListComponent } from './list/project-wise-accounting.component';
 import { RevenueExpenseListComponent } from './revenue-expense-list/revenue-expense-list.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -30,4 +33,8 @@ import { RevenueExpenseListComponent } from './revenue-expense-list/revenue-expe
     ],
     exports: [RouterModule]
 })
+/**
+ * ProjectWiseAccountingRoutingModule module
+ * Implements ProjectWiseAccountingRoutingModule functionality
+ */
 export class ProjectWiseAccountingRoutingModule { }

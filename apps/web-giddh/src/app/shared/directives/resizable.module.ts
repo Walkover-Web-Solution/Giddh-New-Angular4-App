@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResizableDirective } from './resizable.directive';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
   imports: [
     CommonModule,
@@ -11,4 +14,8 @@ import { ResizableDirective } from './resizable.directive';
     ResizableDirective
   ]
 })
+/**
+ * ResizableModule module
+ * Implements ResizableModule functionality
+ */
 export class ResizableModule { }

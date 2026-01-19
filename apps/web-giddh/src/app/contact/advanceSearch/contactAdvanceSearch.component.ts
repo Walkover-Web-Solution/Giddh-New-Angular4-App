@@ -3,6 +3,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { IOption } from '../../app.constant';
 import { ContactAdvanceSearchCommonModal } from '../../models/api-models/Contact';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-contact-advance-search-component',
     templateUrl: './contactAdvanceSearch.component.html',
@@ -10,6 +13,10 @@ import { ContactAdvanceSearchCommonModal } from '../../models/api-models/Contact
     standalone:false
 })
 
+/**
+ * ContactAdvanceSearchComponent component
+ * Handles contactadvancesearch functionality and user interactions
+ */
 export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -26,12 +33,19 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
     /** Category options based on search type */
     public categoryOptions: IOption[];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private dialogRef: MatDialogRef<ContactAdvanceSearchComponent>
     ) {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.filtersForEntryTotal = [
             { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'Equals' },
@@ -47,6 +61,9 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
      * @memberof ContactAdvanceSearchComponent
      */
     public ngOnChanges() {
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearch4 === 'customer') {
             this.categoryOptions = [
                 { label: this.localeData?.customer_category_options.opening_balance, value: 'openingBalance' },

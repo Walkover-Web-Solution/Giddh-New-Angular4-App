@@ -10,6 +10,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-section-permission/validate-section-permission.module';
 import { SubscriptionUpgradeButtonModule } from '../../shared/subscription-upgrade-button/subscription-upgrade-button.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         InvoiceSettingComponent
@@ -29,4 +32,8 @@ import { SubscriptionUpgradeButtonModule } from '../../shared/subscription-upgra
         InvoiceSettingComponent
     ]
 })
+/**
+ * InvoiceSettingModule module
+ * Implements InvoiceSettingModule functionality
+ */
 export class InvoiceSettingModule { }

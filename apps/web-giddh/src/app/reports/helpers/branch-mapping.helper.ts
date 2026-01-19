@@ -22,6 +22,9 @@ export class BranchMappingHelper {
         callback?: (branches: IOption[], currentBranchUniqueName?: string) => void
     ): void {
         currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 const mappedBranches = response.map(branch => ({
                     label: branch?.name,
@@ -42,7 +45,13 @@ export class BranchMappingHelper {
                 currentCompanyBranches.length = 0;
                 currentCompanyBranches.push(...mappedBranches);
 
+                /**
+                 * Handles if functionality
+                 */
                 if (callback) {
+                    /**
+                     * Handles callback functionality
+                     */
                     callback(mappedBranches);
                 }
             }

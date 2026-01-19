@@ -3,6 +3,10 @@ import { ILedgerTransactionItem, IVoucherItem } from '../interfaces/ledger.inter
 import { INameUniqueName } from './Inventory';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 
+/**
+ * PettyCashReportResponse class
+ * Implements PettyCashReportResponse functionality
+ */
 export class PettyCashReportResponse {
     page: number;
     count: number;
@@ -18,11 +22,19 @@ export class PettyCashReportResponse {
     creditTotal: number;
 }
 
+/**
+ * OpeningBalance class
+ * Implements OpeningBalance functionality
+ */
 export class OpeningBalance {
     amount: number;
     type: string;
 }
 
+/**
+ * ExpenseResults class
+ * Implements ExpenseResults functionality
+ */
 export class ExpenseResults {
     entryDate: string;
     uniqueName: string;
@@ -40,22 +52,38 @@ export class ExpenseResults {
     index?: number;
 }
 
+/**
+ * CreatedBy class
+ * Implements CreatedBy functionality
+ */
 export class CreatedBy {
     name: string;
     uniqueName: string;
 }
 
+/**
+ * ActionPettycashRequest class
+ * Implements ActionPettycashRequest functionality
+ */
 export class ActionPettycashRequest {
     actionType: string;
     uniqueName: string;
     accountUniqueName: string;
 }
 
+/**
+ * ExpenseActionRequest class
+ * Implements ExpenseActionRequest functionality
+ */
 export class ExpenseActionRequest {
     ledgerRequest?: LedgerRequest;
     message?: string;
 }
 
+/**
+ * LedgerRequest class
+ * Implements LedgerRequest functionality
+ */
 export class LedgerRequest {
     transactions: Transaction[];
     entryDate: string;
@@ -66,6 +94,10 @@ export class LedgerRequest {
     chequeNumber: string;
 }
 
+/**
+ * Transaction class
+ * Implements Transaction functionality
+ */
 export class Transaction {
     amount: number;
     particular: string;
@@ -76,6 +108,10 @@ export class Transaction {
     convertedAmount?: any;
 }
 
+/**
+ * PettyCashResonse class
+ * Implements PettyCashResonse functionality
+ */
 export class PettyCashResonse {
     public attachedFile?: string;
     public description?: string;
@@ -128,6 +164,10 @@ export class PettyCashResonse {
     public discountResources?: any[];
 }
 
+/**
+ * PettyCashEntryStatus class
+ * Implements PettyCashEntryStatus functionality
+ */
 export class PettyCashEntryStatus {
     status: string;
     message?: any;
@@ -136,6 +176,10 @@ export class PettyCashEntryStatus {
     entryType: string;
 }
 
+/**
+ * UpdatedBy class
+ * Implements UpdatedBy functionality
+ */
 export class UpdatedBy {
     name: string;
     uniqueName: string;

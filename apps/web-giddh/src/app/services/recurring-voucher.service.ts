@@ -10,19 +10,36 @@ import { RECURRING_VOUCHER_API } from './apiurls/recurring-voucher.api';
 import { get } from '../lodash-optimized';
 
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * RecurringVoucherService service
+ * Provides recurringvoucher related business logic and data operations
+ */
 export class RecurringVoucherService {
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler,
         private http: HttpWrapperService,
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
+    /**
+     * Retrieves recurringvouchers data
+     */
     public getRecurringVouchers({ filter, page, count }) {
         const companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (filter) {
             return this.http.post(this.config.apiUrl + RECURRING_VOUCHER_API.GET
                 ?.replace('{{companyname}}', companyUniqueName)
@@ -48,6 +65,9 @@ export class RecurringVoucherService {
             }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)));
     }
 
+    /**
+     * Creates new recurringvouchers
+     */
     public createRecurringVouchers(model: RecurringInvoice) {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + RECURRING_VOUCHER_API.CREATE
@@ -58,6 +78,9 @@ export class RecurringVoucherService {
             }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e)));
     }
 
+    /**
+     * Updates existing recurringvouchers
+     */
     public updateRecurringVouchers(model: RecurringInvoice) {
         const companyUniqueName = this.generalService.companyUniqueName;
         const req = {
@@ -68,6 +91,9 @@ export class RecurringVoucherService {
         return this.http.patch(this.config.apiUrl + RECURRING_VOUCHER_API.UPDATE
             ?.replace('{{companyname}}', companyUniqueName)
             ?.replace('{{uniqueName}}', model?.uniqueName), req).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<RecurringInvoice, string> = res;
                     data.queryString = {};
@@ -75,6 +101,9 @@ export class RecurringVoucherService {
                 }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e)));
     }
 
+    /**
+     * Deletes recurringvouchers
+     */
     public deleteRecurringVouchers(id: string) {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + RECURRING_VOUCHER_API.DELETE

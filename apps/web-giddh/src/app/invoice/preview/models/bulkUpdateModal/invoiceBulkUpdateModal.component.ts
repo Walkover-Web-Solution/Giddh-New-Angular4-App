@@ -19,6 +19,9 @@ import { CustomTemplateState } from 'apps/web-giddh/src/app/store/invoice/invoic
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'invoice-bulk-update-modal-component',
     templateUrl: './invoiceBulkUpdateModal.component.html',
@@ -26,6 +29,10 @@ import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
     standalone:false
 })
 
+/**
+ * InvoiceBulkUpdateModalComponent component
+ * Handles invoicebulkupdatemodal functionality and user interactions
+ */
 export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public voucherType: string = '';
     @Input() public selectedInvoices;
@@ -68,6 +75,10 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     private bulkUpdateImageSloganDialogRef: MatDialogRef<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
@@ -89,9 +100,15 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getTemplates();
         this.store.pipe(select(appState => appState.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((templateData: CustomTemplateState) => {
+            /**
+             * Handles if functionality
+             */
             if (templateData && templateData.customCreatedTemplates) {
                 const defaultTemplate = templateData.customCreatedTemplates.find(template => (template.isDefault || template.isDefaultForVoucher));
                 const sections = defaultTemplate.sections;
+                /**
+                 * Handles if functionality
+                 */
                 if (sections?.footer?.data) {
                     this.showNotesAtLastPage = sections.footer.data.showNotesAtLastPage?.display;
                 }
@@ -106,6 +123,9 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      */
     public uploadImage(): void {
         const selectedFile: any = document.getElementById("bulkUploadfileInput");
+        /**
+         * Handles if functionality
+         */
         if (selectedFile?.files?.length) {
             const file = selectedFile?.files[0];
 
@@ -115,10 +135,16 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                 this.commonService.uploadImageBase64({ base64: base64, format: file.type, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.loaderService.hide();
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'success') {
                         this.updateInProcess = false;
                         this.isSignatureAttached = true;
                         this.updateImageSignatureRequest.imageSignatureUniqueName = '';
+                        /**
+                         * Handles if functionality
+                         */
                         if (response.body && response.body?.uniqueName) {
                             this.signatureSrc = response.body?.path;
                             this.updateImageSignatureRequest.imageSignatureUniqueName = response.body?.uniqueName;
@@ -166,6 +192,9 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onSelectEntryField(option: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (option && option.value) {
             this.selectedField = option.value;
             this.bulkUpdateForm.reset();
@@ -181,15 +210,27 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
         let templateType = this.voucherType === 'debit note' || this.voucherType === 'credit note' ? 'voucher' : 'invoice';
         this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(templateType));
         this.allTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(templates => {
+            /**
+             * Handles if functionality
+             */
             if (templates && templates.length) {
                 let customDefault = templates.filter(custom => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (templateType === 'invoice') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (custom.isDefault) {
                             return custom;
                         } else {
                             return;
                         }
                     } else {
+                        /**
+                         * Handles if functionality
+                         */
                         if (custom.isDefaultForVoucher) {
                             return custom;
                         } else {
@@ -198,6 +239,9 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                     }
 
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (customDefault) {
                     this.defaultTemplates = customDefault[0];
                 }
@@ -234,14 +278,26 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             { label: this.localeData?.slogan, value: 'slogan' },
         ];
 
+        /**
+         * Handles if functionality
+         */
         if (simpleChanges) {
+            /**
+             * Handles if functionality
+             */
             if (simpleChanges.voucherType && simpleChanges.voucherType.currentValue) {
 
                 this.voucherType = simpleChanges.voucherType.currentValue;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherType === "credit note" || this.voucherType === "debit note") {
                     this.fieldOptions = this.fieldOptions?.filter(item => item?.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
                 }
             }
+            /**
+             * Handles if functionality
+             */
             if (simpleChanges.selectedInvoices && simpleChanges.selectedInvoices.currentValue) {
                 this.selectedInvoicesLists = simpleChanges.selectedInvoices.currentValue;
             }
@@ -259,8 +315,14 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public updateBulkInvoice(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedField && this.voucherType && this.selectedInvoicesLists) {
 
+            /**
+             * Handles switch functionality
+             */
             switch (this.selectedField) {
                 case 'pdfTemplate':
                     this.bulkUpdateRequest(this.updateTemplatesRequest, 'templates');
@@ -271,13 +333,22 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                     break;
 
                 case 'signature':
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.signatureOptions === 'image') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.isDefaultTemplateSignatureImage) {
                             this.openBulkUpdateImageSloganDialog();
                         } else {
                             this.onConfirmationUpdateImageSlogan();
                         }
                     } else {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isDefaultTemplateSignatureImage) {
                             this.openBulkUpdateImageSloganDialog();
                         } else {
@@ -287,6 +358,9 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                     break;
 
                 case 'dueDate':
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.updateDueDatesRequest.dueDate) {
                         this.updateDueDatesRequest.dueDate = (typeof this.updateDueDatesRequest.dueDate === "object") ? dayjs(this.updateDueDatesRequest.dueDate).format(this.giddhDateFormat) : dayjs(this.updateDueDatesRequest.dueDate, this.giddhDateFormat).format(this.giddhDateFormat);
                     }
@@ -326,12 +400,21 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onConfirmationUpdateImageSlogan(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.bulkUpdateImageSloganDialogRef) {
             this.bulkUpdateImageSloganDialogRef.close();
             this.bulkUpdateImageSloganDialogRef = null;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.signatureOptions === 'image') {
 
+            /**
+             * Handles if functionality
+             */
             if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
                 this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
             } else {
@@ -350,6 +433,9 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onCancelBulkUpdateImageSloganModal(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.bulkUpdateImageSloganDialogRef) {
             this.bulkUpdateImageSloganDialogRef.close();
             this.bulkUpdateImageSloganDialogRef = null;
@@ -367,9 +453,15 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public bulkUpdateRequest(requestModel, actionType): void {
+        /**
+         * Handles if functionality
+         */
         if (requestModel && actionType) {
             let selectedVouchers = [];
 
+            /**
+             * Handles if functionality
+             */
             if (this.voucherApiVersion === 2) {
                 (Array.isArray(this.selectedInvoicesLists) ? this.selectedInvoicesLists : []).forEach(item => {
                     selectedVouchers.push(item?.uniqueName);
@@ -383,8 +475,14 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             }
 
             let invoiceUniqueName = [];
+            /**
+             * Handles if functionality
+             */
             if (this.selectedInvoicesLists?.length) {
                 (Array.isArray(this.selectedInvoicesLists) ? this.selectedInvoicesLists : []).forEach(invoice => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (invoice.voucherNumber) {
                         invoiceUniqueName.push(invoice.voucherNumber)
                     }
@@ -392,9 +490,15 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             }
             requestModel.voucherType = this.voucherType;
 
+            /**
+             * Handles if functionality
+             */
             if (selectedVouchers?.length && requestModel.voucherType) {
                 this.updateInProcess = true;
                 this.invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.toaster.successToast(response?.body);
                         this.onCancel(true);
@@ -415,7 +519,13 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public checkDefaultTemplateSignature(defaultTemplate: CustomTemplateResponse, voucherType: string) {
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data) {
+            /**
+             * Handles if functionality
+             */
             if (defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.imageSignature.display && defaultTemplate.sections.footer.data.slogan && !defaultTemplate.sections.footer.data.slogan.display) {
                 this.isDefaultTemplateSignatureImage = true;
             } else if (defaultTemplate && defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.slogan && defaultTemplate.sections.footer.data.slogan.display && !defaultTemplate.sections.footer.data.imageSignature.display) {

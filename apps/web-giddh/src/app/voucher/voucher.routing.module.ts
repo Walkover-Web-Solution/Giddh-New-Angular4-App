@@ -29,10 +29,17 @@ const routes: Routes = [
     }
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
     declarations: [],
 })
+/**
+ * VoucherRoutingModule module
+ * Implements VoucherRoutingModule functionality
+ */
 export class VoucherRoutingModule {
 }

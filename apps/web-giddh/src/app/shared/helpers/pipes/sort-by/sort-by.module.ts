@@ -1,6 +1,9 @@
 import { NgModule } from "@angular/core";
 import { SortByPipe } from "./sort-by.pipe";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         SortByPipe
@@ -12,6 +15,10 @@ import { SortByPipe } from "./sort-by.pipe";
         SortByPipe
     ]
 })
+/**
+ * SortByModule module
+ * Implements SortByModule functionality
+ */
 export class SortByModule {
     
 }

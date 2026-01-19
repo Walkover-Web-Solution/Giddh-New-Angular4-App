@@ -8,11 +8,22 @@ import { ACCOUNTING_API } from './project-wise-accounting.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ProjectAccountingService service
+ * Provides projectaccounting related business logic and data operations
+ */
 export class ProjectAccountingService {
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private http: HttpWrapperService,
         private errorHandler: GiddhErrorHandler,
@@ -28,23 +39,38 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public createNewProject(model: any, payload: any): Observable<BaseResponse<any, any>> {
+        /**
+         * Handles if functionality
+         */
         if (model.isCreateFlow) {
             return this.http.post(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_PROJECT, model.data), payload)
                 .pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map((res) => {
                         let data: BaseResponse<any, any> = res;
                         data.request = '';
                         return data;
                     }),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
         } else {
             return this.http.patch(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model.data), payload)
                 .pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map((res) => {
                         let data: BaseResponse<any, any> = res;
                         data.request = '';
                         return data;
                     }),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
         }
     }
@@ -60,11 +86,17 @@ export class ProjectAccountingService {
     public editProjectDetails(model: any): Observable<BaseResponse<any, any>> {
         return this.http.patch(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model), model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -78,11 +110,17 @@ export class ProjectAccountingService {
     public getAllProjects(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_PROJECTS, model))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -96,11 +134,17 @@ export class ProjectAccountingService {
     public getProjectById(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT, model))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -114,11 +158,17 @@ export class ProjectAccountingService {
     public removeProject(model: any): Observable<BaseResponse<any, any>> {
         return this.http.delete(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.DELETE_PROJECT, model))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -132,11 +182,17 @@ export class ProjectAccountingService {
     public getProjectProfit(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_NET_PROFIT, model))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -151,11 +207,17 @@ export class ProjectAccountingService {
     public createEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -171,11 +233,17 @@ export class ProjectAccountingService {
     public removeEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
         return this.http.deleteWithBody(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -190,11 +258,17 @@ export class ProjectAccountingService {
     public updateEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
         return this.http.put(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_ENTRY, model), payload)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -208,11 +282,17 @@ export class ProjectAccountingService {
     public searchEntry(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.ENTRY_SEARCH, model))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -226,11 +306,17 @@ export class ProjectAccountingService {
     public getAllEntryList(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_ENTRY, model))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
@@ -244,11 +330,17 @@ export class ProjectAccountingService {
     public getProjectProfitAndLoss(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT_PROFIT_LOSS, model))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
     
@@ -261,11 +353,17 @@ export class ProjectAccountingService {
     public getTotalRevenueAndExpense(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_TOTAL_REVENUE_EXPENSES, model))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 }

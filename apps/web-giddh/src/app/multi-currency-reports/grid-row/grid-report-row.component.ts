@@ -20,6 +20,9 @@ import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../financial-reports/constants/
 import { SearchService } from '../../services/search.service';
 import { indexOf } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: '[grid-report-row]',
     styleUrls: ['./grid-report-row.component.scss'],
@@ -27,6 +30,10 @@ selector: '[grid-report-row]',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * GridReportRowComponent component
+ * Handles gridreportrow functionality and user interactions
+ */
 export class GridReportRowComponent implements OnChanges, OnDestroy {
     /** Child group details */
     @Input() public groupDetail: ChildGroup;
@@ -49,6 +56,10 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
     /** Subject to release memory when destroying subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
         private searchService: SearchService,
@@ -57,10 +68,19 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
     ) {
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges) {
+        /**
+         * Handles if functionality
+         */
         if (changes?.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
             this.changeDetectionRef.detectChanges();
         }
+        /**
+         * Handles if functionality
+         */
         if (changes?.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
             this.changeDetectionRef.detectChanges();
         }
@@ -76,11 +96,17 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
      */
     public accountInfo(account: any, event: Event): void {
         this.searchService.loadDetails(account?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body) {
                 this.accountDetails = response.body;
                 const parentGroups = response.body?.parentGroups?.join(', ');
                 const creditorsString = 'currentliabilities, sundrycreditors';
                 const debtorsString = 'currentassets, sundrydebtors';
+                /**
+                 * Handles if functionality
+                 */
                 if (parentGroups?.indexOf(creditorsString) > -1 || parentGroups?.indexOf(debtorsString) > -1) {
                     this.modalUniqueName = response.body?.uniqueName;
                 } else {

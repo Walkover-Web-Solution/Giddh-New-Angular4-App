@@ -11,16 +11,30 @@ import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DAYBOOK_SEARCH_API } from './apiurls/daybook.api';
 import { concat, get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * DaybookService service
+ * Provides daybook related business logic and data operations
+ */
 export class DaybookService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
+    /**
+     * Handles GetDaybook functionality
+     */
     public GetDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.SEARCH
@@ -31,15 +45,24 @@ export class DaybookService {
             ?.replace(':to', encodeURIComponent(queryRequest.to));
         url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(queryRequest.branchUniqueName) : ''}`);
         return this.http.post(url, request).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
                 data.request = request;
                 data.queryString = queryRequest;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request, queryRequest)));
     }
 
+    /**
+     * Handles ExportDaybook functionality
+     */
     public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
@@ -51,20 +74,32 @@ export class DaybookService {
             ?.replace(':format', queryRequest.format?.toString())
             ?.replace(':type', queryRequest.type?.toString())
             ?.replace(':sort', queryRequest.sort?.toString());
+        /**
+         * Handles if functionality
+         */
         if (queryRequest.branchUniqueName) {
             queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
         }
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
                 data.queryString = queryRequest;
                 data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
     }
 
+    /**
+     * Handles ExportDaybookPost functionality
+     */
     public ExportDaybookPost(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
@@ -76,6 +111,9 @@ export class DaybookService {
             ?.replace(':format', queryRequest.format?.toString())
             ?.replace(':type', queryRequest.type?.toString())
             ?.replace(':sort', queryRequest.sort?.toString());
+        /**
+         * Handles if functionality
+         */
         if (queryRequest.branchUniqueName) {
             queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
@@ -87,6 +125,9 @@ export class DaybookService {
             data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
             return data;
         }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
     }
 
@@ -101,6 +142,9 @@ export class DaybookService {
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.ENTRIES_EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':output', request.fileType?.toString());
+        /**
+         * Handles if functionality
+         */
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
@@ -113,6 +157,9 @@ export class DaybookService {
             data.request = reqObj;
             return data;
         }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 }

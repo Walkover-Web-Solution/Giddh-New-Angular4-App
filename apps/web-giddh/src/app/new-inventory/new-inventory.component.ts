@@ -2,6 +2,9 @@ import { Component, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import * as dayjs from 'dayjs';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'new-inventory',
     templateUrl: './new-inventory.component.html',
@@ -9,6 +12,10 @@ import * as dayjs from 'dayjs';
     standalone: false
 })
 
+/**
+ * NewInventoryComponent component
+ * Handles newinventory functionality and user interactions
+ */
 export class NewInventoryComponent implements OnDestroy {
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideInventorySidebarMenuState: boolean = true;
@@ -33,19 +40,35 @@ export class NewInventoryComponent implements OnDestroy {
     public selectedRangeLabel: any = "";
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() { }
 
     /* show/hide funcation search input field */
+    /**
+     * Handles searhcGroup functionality
+     */
     public searhcGroup() {
         this.inputFullWidth = !this.inputFullWidth
     }
+    /**
+     * Handles focusOnInput functionality
+     */
     public focusOnInput() {
 
     }
+    /**
+     * Handles expandDateRang functionality
+     */
     public expandDateRang() {
         this.dateRangFullWidth = !this.dateRangFullWidth
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

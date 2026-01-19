@@ -15,6 +15,9 @@ import { CompanyResponse } from "../../../models/api-models/Company";
 import { createSelector } from "reselect";
 import { each, find, orderBy } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-branch-transfer-pane',
     templateUrl: './aside-branch-transfer-pane.component.html',
@@ -22,6 +25,10 @@ import { each, find, orderBy } from '../../../lodash-optimized';
     standalone:false
 })
 
+/**
+ * AsideBranchTransferPaneComponent component
+ * Handles asidebranchtransferpane functionality and user interactions
+ */
 export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
     public stockList$: Observable<IStocksItem[]>;
     public stockUnits$: Observable<StockUnitRequest[]>;
@@ -38,6 +45,10 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
     /** Hold branch transfer report type */
     @Input() public reportType: string;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _store: Store<AppState>,
         private _inventoryAction: InventoryAction,
         private _inventoryEntryAction: InventoryEntryActions,
@@ -48,6 +59,9 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
         this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this._store.dispatch(this._inventoryAction.GetStock());
         // dispatch stockunit request
@@ -60,12 +74,21 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
         this._store.pipe(select(p => p.inventoryInOutState.entryInProcess), takeUntil(this.destroyed$)).subscribe(p => this.isLoading = p);
 
         this.entrySuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s && this.isSaveClicked) {
                 this.closeAsidePane(s);
                 this.isSaveClicked = false;
             }
         });
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.reportType) {
                 this.openBranchTransferPopup(this.reportType);
             }
@@ -73,8 +96,17 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
 
         // tslint:disable-next-line:no-shadowed-variable
         this._store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
+            /**
+             * Handles if functionality
+             */
             if (branches && branches.length > 0) {
+                /**
+                 * Handles each functionality
+                 */
                 each(branches, (branch) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (branch.addresses && branch.addresses.length) {
                         branch.addresses = [find(branch.addresses, (gst) => gst && gst.isDefault)];
                     }
@@ -86,23 +118,38 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe();
     }
 
+    /**
+     * Handles cancel event
+     */
     public onCancel() {
         this.closeAsidePane();
     }
 
+    /**
+     * Closes asidepane
+     */
     public closeAsidePane(event?) {
         this.closeAsideEvent.emit();
     }
 
+    /**
+     * Handles save event
+     */
     public onSave(entry: InventoryEntry, reciever?: InventoryUser) {
         this.isSaveClicked = true;
         this._store.dispatch(this._inventoryEntryAction.addNewTransferEntry(entry, reciever));
     }
 
+    /**
+     * Creates new account
+     */
     public createAccount(value) {
         this._store.dispatch(this._inventoryUserAction.addNewUser(value.name));
     }
 
+    /**
+     * Opens branchtransferpopup
+     */
     public openBranchTransferPopup(transferType) {
         this.transferType.emit(transferType);
     }

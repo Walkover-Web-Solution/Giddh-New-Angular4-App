@@ -28,7 +28,13 @@ export const DEFAULT_URL = url.format({
 
 function defaultWindows() {
 
+    /**
+     * Handles if functionality
+     */
     if (serve) {
+        /**
+         * Handles require functionality
+         */
         require('electron-reload')(__dirname, {
             electron: require(`${__dirname}/../../../node_modules/electron`)
         });
@@ -61,20 +67,37 @@ function defaultWindows() {
 
 }
 
+/**
+ * StateManager class
+ * Implements StateManager functionality
+ */
 export class StateManager {
     private store = new Configstore('Gidhh-unofficial', { windows: defaultWindows() });
 
     private data: Config;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
+        /**
+         * Handles if functionality
+         */
         if (os.platform() === 'darwin') {
             this.store.path = path.join(os.homedir(), 'Library', 'Preferences', 'org.walkover.giddh' + (isDev() ? '-dev' : '') + '.json');
         }
     }
 
+    /**
+     * Handles restoreWindows functionality
+     */
     public restoreWindows(): void {
         const data = this.getOrLoadData();
         data.windows = defaultWindows();
+        /**
+         * Handles if functionality
+         */
         if (debugMode) {
 
             process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
@@ -82,19 +105,34 @@ export class StateManager {
         this.store.all = data;
     }
 
+    /**
+     * Retrieves windows data
+     */
     public getWindows(): WindowItem[] {
         return this.getOrLoadData().windows;
     }
 
+    /**
+     * Saves  data
+     */
     public save(): void {
         const data = this.data;
+        /**
+         * Handles if functionality
+         */
         if (data != null) {
             this.store.all = data;
         }
     }
 
+    /**
+     * Retrieves orloaddata data
+     */
     private getOrLoadData(): Config {
         let data = this.data;
+        /**
+         * Handles if functionality
+         */
         if (data == null) {
             data = this.store.all;
             this.data = data;
@@ -103,10 +141,18 @@ export class StateManager {
     }
 }
 
+/**
+ * Config interface definition
+ * Defines the structure and contract for Config objects
+ */
 interface Config {
     windows: WindowItem[];
 }
 
+/**
+ * WindowItem interface definition
+ * Defines the structure and contract for WindowItem objects
+ */
 export interface WindowItem {
     url: string;
     width?: number;

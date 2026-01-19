@@ -1,3 +1,7 @@
+/**
+ * DownloadsRequest class
+ * Implements DownloadsRequest functionality
+ */
 export class DownloadsRequest {
     public from?: string;
     public to?: string;
@@ -6,6 +10,10 @@ export class DownloadsRequest {
     public totalPages?: number;
     public totalItems?: number;
 }
+/**
+ * DownloadsResponse class
+ * Implements DownloadsResponse functionality
+ */
 export class DownloadsResponse {
     public page?: any;
     public count: number;
@@ -14,6 +22,10 @@ export class DownloadsResponse {
     public items?: [];
 }
 
+/**
+ * DownloadData interface definition
+ * Defines the structure and contract for DownloadData objects
+ */
 export interface DownloadData {
     date?: any;
     requestedDate?: any;

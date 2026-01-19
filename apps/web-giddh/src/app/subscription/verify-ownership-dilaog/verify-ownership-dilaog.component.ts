@@ -4,6 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'verify-ownership-dilaog',
     templateUrl: './verify-ownership-dilaog.component.html',
@@ -11,6 +14,10 @@ import { SubscriptionComponentStore } from '../utility/subscription.store';
     providers: [SubscriptionComponentStore],
     standalone: false
 })
+/**
+ * VerifyOwnershipDialogComponent component
+ * Handles verifyownershipdialog functionality and user interactions
+ */
 export class VerifyOwnershipDialogComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -21,6 +28,10 @@ export class VerifyOwnershipDialogComponent implements OnInit {
     /** HoldsVeirfy Ownership  API success state as observable*/
     public verifyOwnershipSuccess$ = this.componentStore.select(state => state.verifyOwnershipSuccess);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public dialog: MatDialog,
         private router: Router,
@@ -36,12 +47,18 @@ export class VerifyOwnershipDialogComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+            /**
+             * Handles if functionality
+             */
             if (params) {
                 this.verifyOwnership(params.requestId);
             }
         });
 
         this.verifyOwnershipSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.router.navigate(['/pages/user-details/subscription']);
             }

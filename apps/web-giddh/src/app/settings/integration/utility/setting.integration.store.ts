@@ -8,6 +8,10 @@ import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsIntegrationService } from "../../../services/settings.integration.service";
 
+/**
+ * SettingIntegrationState interface definition
+ * Defines the structure and contract for SettingIntegrationState objects
+ */
 export interface SettingIntegrationState {
     institutionList: any;
     requisitionList: any;
@@ -30,15 +34,29 @@ export const DEFAULT_SETTING_INTEGRATION_STATE: SettingIntegrationState = {
     getAllBankAccountsList: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingIntegrationComponentStore store
+ * Manages settingintegrationcomponent state using NgRx ComponentStore
+ */
 export class SettingIntegrationComponentStore extends ComponentStore<SettingIntegrationState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private settingsIntegrationService: SettingsIntegrationService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_SETTING_INTEGRATION_STATE);
     }
 
@@ -51,11 +69,20 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
      */
     readonly getAllInstitutions = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ institutionsListInProgress: true });
                 return this.settingsIntegrationService.getAllInstitutions(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     institutionList: res?.body ?? [],
@@ -77,6 +104,9 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -90,11 +120,20 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
      */
     readonly getRequisition = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ requistionListInProgress: true });
                 return this.settingsIntegrationService.getRequisition(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     requisitionList: res?.body ?? [],
@@ -116,6 +155,9 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -129,15 +171,27 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
    */
     readonly createEndUserAgreementByInstitutionId = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.settingsIntegrationService.createEndUserAgreementByInstitutionId(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     createEndUserAgreementSuccess: res?.body ?? [],
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -153,6 +207,9 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -166,16 +223,28 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
      */
     readonly deleteEndUserAgreementByInstitutionId = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ deleteAccountSuccess: false });
                 return this.settingsIntegrationService.deleteEndUserAgreementDetails(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     deleteAccountSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -191,6 +260,9 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -204,11 +276,20 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
      */
     readonly updateAccount = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ updateAccount: false });
                 return this.settingsIntegrationService.updateAccount(req.accountForm, req.request).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success' && res?.body?.message) {
                                 this.toasterService.clearAllToaster();
                                 this.toasterService.showSnackBar('success', res?.body.message);
@@ -216,6 +297,9 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                                     updateAccount: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -231,6 +315,9 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -244,11 +331,20 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
      */
     readonly getAllBankAccounts = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ getAllBankAccountsList: null });
                 return this.settingsIntegrationService.getAllBankAccounts().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success' && res?.body) {
                                 return this.patchState({
                                     getAllBankAccountsList: res
@@ -267,6 +363,9 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

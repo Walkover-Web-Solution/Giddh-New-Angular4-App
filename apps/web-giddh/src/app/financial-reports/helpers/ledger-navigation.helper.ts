@@ -14,6 +14,9 @@ export class LedgerNavigationHelper {
      * @param currentUrl Current URL for redirect parameter
      */
     public static openLedger(acc: any, from: string, to: string, currentUrl: string): void {
+        /**
+         * Handles if functionality
+         */
         if (!acc?.uniqueName) return;
 
         // Construct direct ledger URL with redirectUrl parameter
@@ -21,11 +24,17 @@ export class LedgerNavigationHelper {
         const separator = url.includes('?') ? '&' : '?';
         url = url + `${separator}redirectUrl=${encodeURIComponent(currentUrl)}`;
 
+        /**
+         * Handles if functionality
+         */
         if (Configuration.isElectron) {
             try {
                 let electronIpcAvailable = false;
 
                 // Try electronAPI first (secure context)
+                /**
+                 * Handles if functionality
+                 */
                 if ((window as any).electronAPI && (window as any).electronAPI.send) {
                     try {
                         const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${from}/${to}`;
@@ -37,9 +46,15 @@ export class LedgerNavigationHelper {
                 }
 
                 // Try legacy electron require (fallback)
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable && (window as any).require) {
                     try {
                         const electron = (window as any).require('electron');
+                        /**
+                         * Handles if functionality
+                         */
                         if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
                             const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${from}/${to}`;
                             electron.ipcRenderer.send('open-url', electronUrl);
@@ -51,6 +66,9 @@ export class LedgerNavigationHelper {
                 }
 
                 // Fallback to regular window.open if IPC not available
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable) {
 
                     (window as any).open(url, '_blank');

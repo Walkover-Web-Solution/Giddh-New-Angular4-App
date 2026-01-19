@@ -5,6 +5,9 @@ import { DiscountProcessingHelper } from '../../ledger/helpers/discount-processi
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'discount-list',
     templateUrl: 'discountList.component.html',
@@ -12,6 +15,10 @@ import { SettingsDiscountService } from '../../services/settings.discount.servic
     standalone:false
 })
 
+/**
+ * DiscountListComponent component
+ * Handles discountlist functionality and user interactions
+ */
 export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public isMenuOpen: boolean = false;
@@ -39,15 +46,25 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
     /** True if get discounts list api call in progress */
     private getDiscountsLoading: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private settingsDiscountService: SettingsDiscountService
     ) {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.prepareDiscountList();
 
+        /**
+         * Handles if functionality
+         */
         if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
             this.discountFixedValueModal = this.defaultDiscount.amount;
         } else {
@@ -55,10 +72,19 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
             this.prepareDiscountList();
 
+            /**
+             * Handles if functionality
+             */
             if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
                 this.discountFixedValueModal = this.defaultDiscount.amount;
             } else {
@@ -66,12 +92,21 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
             this.change();
         }
     }
 
+    /**
+     * Handles discountInputBlur functionality
+     */
     public discountInputBlur(event) {
+        /**
+         * Handles if functionality
+         */
         if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
             this.hideDiscountMenu();
         }
@@ -81,14 +116,23 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
      * prepare discount obj
      */
     public prepareDiscountList() {
+        /**
+         * Handles if functionality
+         */
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.getDiscountsLoading) {
                 return;
             }
             this.getDiscountsLoading = true;
             this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success" && response?.body?.length > 0) {
                     this.discountsList = response?.body;
                     this.processDiscountList();
@@ -98,6 +142,9 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles processDiscountList functionality
+     */
     private processDiscountList(): void {
         this.discountAccountsDetails = DiscountProcessingHelper.processDiscountList(
             this.discountsList,
@@ -105,6 +152,9 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
         );
     }
 
+    /**
+     * Handles discountFromInput functionality
+     */
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
         this.defaultDiscount.amount = parseFloat(val);
         this.defaultDiscount.discountValue = parseFloat(val);
@@ -112,11 +162,17 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
 
         this.change();
 
+        /**
+         * Handles if functionality
+         */
         if (!val) {
             this.discountFromVal = true;
             this.discountFromPer = true;
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (type === 'PERCENTAGE') {
             this.discountFromPer = true;
             this.discountFromVal = false;
@@ -154,18 +210,30 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
         return perFromAmount + fixedListTotal;
     }
 
+    /**
+     * Handles trackByFn functionality
+     */
     public trackByFn(index) {
         return index;
     }
 
+    /**
+     * Hides discountmenu element
+     */
     public hideDiscountMenu() {
         this.isMenuOpen = false;
     }
 
+    /**
+     * Toggles discountmenu state
+     */
     public toggleDiscountMenu() {
         this.isMenuOpen = (!this.isMenuOpen);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

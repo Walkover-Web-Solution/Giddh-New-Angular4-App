@@ -9,12 +9,19 @@ import { ReportType } from '../multi-currency.const';
 import { prepareProfitLossData } from '../../store/tl-pl/tl-pl.reducer';
 import { cloneDeep, filter, forEach, includes, keys } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'profit-loss-report',
     templateUrl: './profit-loss-report.component.html',
     providers: [MultiCurrencyReportsComponentStore],
     standalone: false
 })
+/**
+ * ProfitLossReportComponent component
+ * Handles profitlossreport functionality and user interactions
+ */
 export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Reference to the ProfitLossGridComponent */
     @ViewChild('plGrid', { static: true }) public plGrid: ProfitLossGridComponent;
@@ -39,6 +46,10 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
     /** Last synchronization date */
     public lastSyncDate: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private changeDetectionRef: ChangeDetectorRef, private componentStore: MultiCurrencyReportsComponentStore) {
 
     }
@@ -51,15 +62,24 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
      */
     public ngOnInit(): void {
         this.componentStore.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {                
                 let data = prepareProfitLossData(cloneDeep(response)) as ProfitLossData;
                 let cogs;
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.incomeStatement && data.incomeStatement.costOfGoodsSold) {
                     cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as ProfitLossDateRangeResponse<GetCogsResponse>;
                 } else {
                     cogs = null;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (cogs) {
                     let cogsGrp: ChildGroup = new ChildGroup();
                     cogsGrp.isCreated = true;
@@ -80,6 +100,9 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                     cogsGrp.childGroups = [];
 
                     Object.keys(cogs).forEach((cogsKey, i) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (i === 0) {
                             Object.keys(cogs[cogsKey])?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(item => {
                                 let childGroup = new ChildGroup();
@@ -100,6 +123,9 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                                 }, {});
                                 childGroup.accounts = [];
                                 childGroup.childGroups = [];
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (['purchasesStockAmount', 'manufacturingExpenses'].includes(item)) {
                                 childGroup.groupName = `+ ${childGroup.groupName}`;
                                 } else if (['closingInventory', 'debitNoteStockAmount'].includes(item)) {
@@ -113,6 +139,9 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                     this.cogsData = cogsGrp;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.expArr) {
                     this.initData(data.expArr, "expenses");
                     (Array.isArray(data.expArr) ? data.expArr : []).forEach(group => {
@@ -129,6 +158,9 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                         });
                     });
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.incArr) {
                     this.initData(data.incArr, "income");
                     (Array.isArray(data.incArr) ? data.incArr : []).forEach(group => {
@@ -146,10 +178,16 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                     });
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.incomeStatement?.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]]?.type === "DEBIT" && data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount) {
                     data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount = "-" + data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.incomeStatement?.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]]?.type === "DEBIT" && data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount) {
                     data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount = "-" + data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount;
                 }
@@ -182,6 +220,9 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                 account.isVisible = false;
                 account.category = category;
             });
+            /**
+             * Handles if functionality
+             */
             if (childGroup.childGroups) {
                 this.initData(childGroup.childGroups, category);
             }
@@ -247,6 +288,9 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
      * @memberof ProfitLossReportComponent
      */
     public expandAllEvent(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.changeDetectionRef.detectChanges();
         }, 1);
@@ -261,6 +305,9 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
      */
     public searchChanged(event: string): void {
         this.search = event;
+        /**
+         * Handles if functionality
+         */
         if (!this.search) {
             this.expandAll = false;
         }

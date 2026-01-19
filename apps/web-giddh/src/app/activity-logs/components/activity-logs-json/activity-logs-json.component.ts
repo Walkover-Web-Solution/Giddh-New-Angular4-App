@@ -2,6 +2,9 @@ import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrate
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as jsonTreeViewer from 'json-tree-viewer';
 import { remove } from '../../../lodash-optimized';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'activity-logs-json',
     templateUrl: './activity-logs-json.component.html',
@@ -9,12 +12,20 @@ import { remove } from '../../../lodash-optimized';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone:false
 })
+/**
+ * ActivityLogsJsonComponent component
+ * Handles activitylogsjson functionality and user interactions
+ */
 export class ActivityLogsJsonComponent implements OnInit, OnDestroy {
     /** Instance of activity logs json */
     @ViewChild('activityLogs', { static: false }) public activityLogs: ElementRef;
     /** This will hold local JSON data */
     public localeData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(MAT_DIALOG_DATA) public inputData, private changeDetection: ChangeDetectorRef,
         public dialogRef: MatDialogRef<any>) {
     }
@@ -26,6 +37,9 @@ export class ActivityLogsJsonComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             jsonTreeViewer?.create(this.inputData, this.activityLogs?.nativeElement);
         }, 100);

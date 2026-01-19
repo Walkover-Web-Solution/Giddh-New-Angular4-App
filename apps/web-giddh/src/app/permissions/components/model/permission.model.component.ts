@@ -11,6 +11,9 @@ import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api
 import { IOption } from '../../../app.constant';
 import { filter, find, forEach, omit } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'permission-model',
     templateUrl: './permission.model.component.html',
@@ -18,6 +21,10 @@ import { filter, find, forEach, omit } from '../../../lodash-optimized';
     standalone: false
 })
 
+/**
+ * PermissionModelComponent component
+ * Handles permissionmodel functionality and user interactions
+ */
 export class PermissionModelComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -36,10 +43,17 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     /** Role options for reactive-dropdown-field */
     public roleOptions: IOption[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
     }
 
     get isFormValid() {
+        /**
+         * Handles if functionality
+         */
         if (this.newRoleObj?.name && this.newRoleObj?.isFresh && this.getSelectedPagesCount() > 0) {
             return true;
         } else if (this.newRoleObj?.name && !this.newRoleObj?.isFresh && this.newRoleObj?.uniqueName) {
@@ -49,8 +63,17 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.localeData) {
                 this.isFreshOptions = [{
                     label: this.localeData?.fresh_start,
@@ -64,9 +87,15 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             }
         }, 400);
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
+            /**
+             * Handles if functionality
+             */
             if (p.roles && p.roles.length) {
                 this.allRoles = [];
                 this.roleOptions = [];
+                /**
+                 * Handles forEach functionality
+                 */
                 forEach(p.roles, (role: IRoleCommonResponseAndRequest) => {
                     this.allRoles.push({ name: role?.name, uniqueName: role?.uniqueName });
                     this.roleOptions.push({
@@ -77,6 +106,9 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             }
             this.newRoleObj.isSelectedAllPages = false;
             this.newRoleObj.pageList = [];
+            /**
+             * Handles if functionality
+             */
             if (p.pages && p.pages.length) {
                 (Array.isArray(p.pages) ? p.pages : []).forEach((page: IPageStr) => {
                     this.newRoleObj.pageList.push({ name: page, isSelected: false });
@@ -88,19 +120,31 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         this.newRoleObj.isFresh = true;
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Closes popupevent
+     */
     public closePopupEvent() {
         this.closeEvent.emit('close');
     }
 
+    /**
+     * Handles ddshown event
+     */
     public onDDShown() {
         this.dropdownHeading = this.localeData?.close_list;
     }
 
+    /**
+     * Handles ddhidden event
+     */
     public onDDHidden() {
         this.dropdownHeading = this.localeData?.select_pages;
     }
@@ -109,8 +153,14 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
      * addNewRole
      */
     public addNewRole() {
+        /**
+         * Handles if functionality
+         */
         if (this.isFormValid) {
             let data;
+            /**
+             * Handles if functionality
+             */
             if (this.newRoleObj.isFresh) {
                 data = omit(this.newRoleObj, 'uniqueName');
             } else {
@@ -128,6 +178,9 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
      * @memberof PermissionModelComponent
      */
     public selectAllPages(event): void {
+        /**
+         * Handles if functionality
+         */
         if (event.checked) {
             this.selectedValues = [];
             (Array.isArray(this.newRoleObj.pageList) ? this.newRoleObj.pageList : []).forEach((item: IPage) => {
@@ -169,10 +222,16 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
      * @memberof PermissionModelComponent
      */
     public onRoleSelect(selectedRole: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (selectedRole) {
             this.newRoleObj.uniqueName = selectedRole.value;
             // Find the corresponding role and update isSelected property
             const role = this.allRoles.find(r => r.uniqueName === selectedRole.value);
+            /**
+             * Handles if functionality
+             */
             if (role) {
                 // Reset all roles selection state
                 (Array.isArray(this.allRoles) ? this.allRoles : []).forEach(r => (r as any).isSelected = false);

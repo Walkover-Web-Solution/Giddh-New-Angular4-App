@@ -6,6 +6,10 @@ import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { InvoiceService } from "../../../services/invoice.service";
 import { CampaignIntegrationService } from "../../../services/campaign.integration.service";
 
+/**
+ * TriggerState interface definition
+ * Defines the structure and contract for TriggerState objects
+ */
 export interface TriggerState {
     triggerList: any;
     triggerAdvanceList: any;
@@ -24,14 +28,28 @@ const DEFAULT_STATE: TriggerState = {
     isTriggerDetailsLoading: false
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * TriggerComponentStore store
+ * Manages triggercomponent state using NgRx ComponentStore
+ */
 export class TriggerComponentStore extends ComponentStore<TriggerState> {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private invoiceService: InvoiceService,
         private campaignIntegrationService: CampaignIntegrationService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -49,11 +67,20 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
      */
     readonly createTrigger = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((model) => {
                 this.patchState({ createUpdateTriggerIsSuccess: false });
                 return this.invoiceService.createTrigger(model).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 res?.body && this.toaster.showSnackBar("success", res.body);
                                 this.patchState({ createUpdateTriggerIsSuccess: true });
@@ -63,6 +90,9 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
                             }
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -77,11 +107,20 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
      */
     readonly updateTrigger = this.effect((data: Observable<{model: any, uniqueName: string}>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ createUpdateTriggerIsSuccess: false });
                 return this.invoiceService.updateTrigger(req.model, req.uniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 res?.body && this.toaster.showSnackBar("success", res.body);
                                 this.patchState({ createUpdateTriggerIsSuccess: true });
@@ -91,6 +130,9 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
                             }
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -104,11 +146,20 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
     */
     readonly getTriggerList = this.effect((data: Observable<{page: number, count: number}>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((request) => {
                 this.patchState({ triggerList: null, isLoading: true });
                 return this.invoiceService.getTriggerList(request).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && res?.body) {
                                 this.patchState({ triggerList: res.body, isLoading: false });
                             } else {
@@ -117,6 +168,9 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
                             }
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -130,11 +184,20 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
     */
     readonly getTriggerAdvanceList = this.effect((data: Observable<{page: number, count: number}>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((request) => {
                 this.patchState({ triggerAdvanceList: null, isLoading: true });
                 return this.campaignIntegrationService.getTriggersList(request).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && res?.body) {
                                 this.patchState({ triggerAdvanceList: res.body, isLoading: false });
                             } else {
@@ -143,6 +206,9 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
                             }
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -158,11 +224,20 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
      */
     readonly getTriggerDetails = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((uniqueName) => {
                 this.patchState({ triggerDetails: null, isTriggerDetailsLoading: true });
                 return this.invoiceService.getTriggerDetails(uniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && res?.body) {
                                 this.patchState({ triggerDetails: res.body, isTriggerDetailsLoading: false });
                             } else {
@@ -171,6 +246,9 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
                             }
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -184,10 +262,19 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
      */
     readonly deleteTrigger = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((uniqueName) => {
                 return this.invoiceService.deleteTrigger(uniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && res?.body) {
                                 this.getTriggerList({page: 1, count: this.get().triggerList?.count});
                                 this.toaster.showSnackBar("success", res.body);
@@ -199,6 +286,9 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
                             this.toaster.showSnackBar("error", error);
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

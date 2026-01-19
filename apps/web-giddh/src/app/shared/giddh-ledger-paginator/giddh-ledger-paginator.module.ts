@@ -4,6 +4,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { GiddhLedgerPaginatorComponent } from './giddh-ledger-paginator.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -15,4 +18,8 @@ import { GiddhLedgerPaginatorComponent } from './giddh-ledger-paginator.componen
     ],
     declarations: [GiddhLedgerPaginatorComponent]
 })
+/**
+ * GiddhLedgerPaginatorModule module
+ * Implements GiddhLedgerPaginatorModule functionality
+ */
 export class GiddhLedgerPaginatorModule { }

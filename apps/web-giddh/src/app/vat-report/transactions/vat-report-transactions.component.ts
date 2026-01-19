@@ -18,6 +18,9 @@ import { ReceiptService } from '../../services/receipt.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-vat-report-transactions',
     styleUrls: ['./vat-report-transactions.component.scss'],
@@ -25,6 +28,10 @@ import { PageEvent } from '@angular/material/paginator';
     standalone:false
 })
 
+/**
+ * VatReportTransactionsComponent component
+ * Handles vatreporttransactions functionality and user interactions
+ */
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: TemplateRef<any>;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
@@ -57,6 +64,10 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     /*-- mat-table --*/
     displayedColumns: string[] = ['date', 'number', 'name', 'taxamt', 'vat_amt', 'reverse_charge', 'trn_number', 'place_supply'];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private vatService: VatService,
@@ -90,6 +101,9 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params.section) {
                 this.vatReportTransactionsRequest.section = params.section;
                 this.getVatReportTransactions(true);
@@ -99,6 +113,9 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -124,10 +141,16 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public getVatReportTransactions(resetPage: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompany && this.vatReportTransactionsRequest.section && !this.isLoading()) {
             this.isLoading.set(true);
             this.vatReportTransactionsRequest.country = this.activeCompany.countryV2?.alpha2CountryCode;
 
+            /**
+             * Handles if functionality
+             */
             if (resetPage) {
                 this.vatReportTransactionsRequest.page = 1;
             }
@@ -135,6 +158,9 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             this.vatReportTransactions = [];
 
             this.vatService.getVatReportTransactions(this.activeCompany.uniqueName, this.vatReportTransactionsRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     this.vatReportTransactions = res.body;
                     this.cdRef.detectChanges();
@@ -156,6 +182,9 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public onSelectInvoice(invoice: any): void {
         const uniqueName = invoice.voucherUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (invoice.voucherNumber) {
             this.selectedInvoice = invoice;
             this.selectedInvoice.uniqueName = uniqueName;
@@ -175,6 +204,9 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public closeDownloadOrSendMailPopup(userResponse: any): void {
+        /**
+         * Handles if functionality
+         */
         if (userResponse.action === 'closed') {
             this.dialog.closeAll();
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
@@ -188,6 +220,9 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public closeInvoiceModel(e): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }, 2000);
@@ -200,9 +235,15 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public onDownloadOrSendMailEvent(userResponse: any): void {
+        /**
+         * Handles if functionality
+         */
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
+            /**
+             * Handles if functionality
+             */
             if (this.voucherApiVersion === 2) {
                 this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice?.accountUniqueName, {
                     email: { to: userResponse.emails },
@@ -230,6 +271,9 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public ondownloadInvoiceEvent(invoiceCopy: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             let dataToSend = {
                 voucherType: this.selectedInvoice?.voucherType,
@@ -240,7 +284,13 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
 
             let accountUniqueName: string = this.selectedInvoice?.account?.uniqueName;
             this.receiptService.DownloadVoucher(dataToSend, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (dataToSend.typeOfInvoice?.length > 1) {
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
                     }
@@ -258,7 +308,13 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
 
             this.invoiceService.DownloadInvoice(this.selectedInvoice?.accountUniqueName, dataToSend)
                 .subscribe(res => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (dataToSend.typeOfInvoice?.length > 1) {
                             return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
                         }

@@ -4,6 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from './confirmation-modal.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [NewConfirmationModalComponent],
     imports: [
@@ -15,5 +18,9 @@ import { NewConfirmationModalComponent } from './confirmation-modal.component';
         NewConfirmationModalComponent
     ],
 })
+/**
+ * NewConfirmationModalModule module
+ * Implements NewConfirmationModalModule functionality
+ */
 export class NewConfirmationModalModule {
 }

@@ -95,6 +95,10 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
     ],
     exports: [EffectsModule]
 })
+/**
+ * ActionModule module
+ * Implements ActionModule functionality
+ */
 export class ActionModule {
     public static forRoot(): ModuleWithProviders<ActionModule> {
         return {

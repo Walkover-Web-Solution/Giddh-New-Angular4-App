@@ -14,6 +14,10 @@ import { ReferenceVoucher } from '../../ledger/ledger.vm';
  * if isStock is true we have to send inventory object inside it please see IInventory interface
  * its response wil be array of LedgerResponse
  */
+/**
+ * LedgerRequest class
+ * Implements LedgerRequest functionality
+ */
 export class LedgerRequest implements ILedger {
     public applyApplicableTaxes?: boolean;
     public attachedFile?: string;
@@ -39,6 +43,10 @@ export class LedgerRequest implements ILedger {
  * API:: ( mail ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/:entryUniqueName
  * its response will be success message in body in single object of LedgerResponse
  */
+/**
+ * LedgerUpdateRequest class
+ * Implements LedgerUpdateRequest functionality
+ */
 export class LedgerUpdateRequest extends LedgerRequest {
     public invoiceNumber: string;
     public invoiceGenerated: boolean;
@@ -46,6 +54,10 @@ export class LedgerUpdateRequest extends LedgerRequest {
     public voucherNo: string;
 }
 
+/**
+ * LedgerResponseDiscountClass class
+ * Implements LedgerResponseDiscountClass functionality
+ */
 export class LedgerResponseDiscountClass {
     public account: {
         accountType: string;
@@ -68,6 +80,10 @@ export class LedgerResponseDiscountClass {
  * API:: ( Create ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers
  * API:: ( Update ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/:entryUniqueName
  * API:: ( Get single transaction detail in ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/:entryUniqueName
+ */
+/**
+ * LedgerResponse class
+ * Implements LedgerResponse functionality
  */
 export class LedgerResponse {
     public attachedFile?: string;
@@ -138,17 +154,29 @@ export class LedgerResponse {
 }
 
 /** Model adjusted amounts for invoices */
+/**
+ * AdjustedAmount class
+ * Implements AdjustedAmount functionality
+ */
 export class AdjustedAmount {
     amountForAccount: number;
     amountForCompany: number;
 }
 
 /** Model invoice linking request */
+/**
+ * IInvoiceLinkingRequest class
+ * Implements IInvoiceLinkingRequest functionality
+ */
 export class IInvoiceLinkingRequest {
     public linkedInvoices: ILinkedInvoice[];
 }
 
 /** Model linked invoice */
+/**
+ * ILinkedInvoice class
+ * Implements ILinkedInvoice functionality
+ */
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
     public invoiceNumber?: string;
@@ -177,6 +205,10 @@ export class DownloadLedgerRequest {
     public uniqueName?: string;
 }
 
+/**
+ * DownloadLedgerAttachmentResponse interface definition
+ * Defines the structure and contract for DownloadLedgerAttachmentResponse objects
+ */
 export interface DownloadLedgerAttachmentResponse {
     fileType: string;
     name: string;
@@ -237,6 +269,10 @@ export class TransactionsResponse implements ITransactions {
     public nextToken?: string;
 }
 
+/**
+ * TransactionsRequest class
+ * Implements TransactionsRequest functionality
+ */
 export class TransactionsRequest {
     public q: string = '';
     public page: number = 0;
@@ -252,6 +288,10 @@ export class TransactionsRequest {
     public isTView?: boolean = false;
 }
 
+/**
+ * ReconcileRequest interface definition
+ * Defines the structure and contract for ReconcileRequest objects
+ */
 export interface ReconcileRequest {
     accountUniqueName?: string;
     from?: string;
@@ -259,16 +299,28 @@ export interface ReconcileRequest {
     chequeNumber?: string;
 }
 
+/**
+ * IReconcileTotal interface definition
+ * Defines the structure and contract for IReconcileTotal objects
+ */
 export interface IReconcileTotal {
     amount: number;
     type: string;
 }
 
+/**
+ * IReconcileVoucher interface definition
+ * Defines the structure and contract for IReconcileVoucher objects
+ */
 export interface IReconcileVoucher {
     name: string;
     shortCode: string;
 }
 
+/**
+ * ReconcileResponse class
+ * Implements ReconcileResponse functionality
+ */
 export class ReconcileResponse {
     public transactions: ILedgerTransactionItem[];
     public total: IReconcileTotal;
@@ -293,16 +345,28 @@ export class ReconcileResponse {
     public description: string;
 }
 
+/**
+ * MagicLinkRequest class
+ * Implements MagicLinkRequest functionality
+ */
 export class MagicLinkRequest {
     public from: string = '';
     public to: string = '';
     public branchUniqueName?: string = '';
 }
 
+/**
+ * MagicLinkResponse class
+ * Implements MagicLinkResponse functionality
+ */
 export class MagicLinkResponse {
     public magicLink: string;
 }
 
+/**
+ * ExportLedgerRequest class
+ * Implements ExportLedgerRequest functionality
+ */
 export class ExportLedgerRequest {
     public from: string = '';
     public to: string = '';
@@ -326,12 +390,20 @@ export interface IELedgerResponse {
     date: string;
 }
 
+/**
+ * IELedgerTransaction interface definition
+ * Defines the structure and contract for IELedgerTransaction objects
+ */
 export interface IELedgerTransaction {
     remarks: IELedgerRemarks;
     amount: number;
     type: string;
 }
 
+/**
+ * IELedgerRemarks interface definition
+ * Defines the structure and contract for IELedgerRemarks objects
+ */
 export interface IELedgerRemarks {
     description: string;
     method: string;
@@ -363,6 +435,10 @@ export interface ILedgerAdvanceSearchRequest {
     inventory: Inventory;
 }
 
+/**
+ * ILedgerAdvanceSearchResponse interface definition
+ * Defines the structure and contract for ILedgerAdvanceSearchResponse objects
+ */
 export interface ILedgerAdvanceSearchResponse {
     page: number;
     count: number;
@@ -380,6 +456,10 @@ export interface ILedgerAdvanceSearchResponse {
     nextToken?: string;
 }
 
+/**
+ * Inventory interface definition
+ * Defines the structure and contract for Inventory objects
+ */
 export interface Inventory {
     includeInventory?: any;
     inventories: string[];
@@ -395,22 +475,38 @@ export interface Inventory {
     itemValueGreaterThan: boolean;
 }
 
+/**
+ * IForwardedBalance interface definition
+ * Defines the structure and contract for IForwardedBalance objects
+ */
 export interface IForwardedBalance {
     amount: number;
     type: string;
     description: string;
 }
 
+/**
+ * IClosingBalance interface definition
+ * Defines the structure and contract for IClosingBalance objects
+ */
 export interface IClosingBalance {
     amount: number;
     type: string;
 }
 
+/**
+ * IParticular interface definition
+ * Defines the structure and contract for IParticular objects
+ */
 export interface IParticular {
     name: string;
     uniqueName: string;
 }
 
+/**
+ * DebitTransaction interface definition
+ * Defines the structure and contract for DebitTransaction objects
+ */
 export interface DebitTransaction {
     particular: IParticular;
     amount: number;
@@ -435,39 +531,71 @@ export interface DebitTransaction {
     convertedAmount?: string;
 }
 
+/**
+ * InvoiceList interface definition
+ * Defines the structure and contract for InvoiceList objects
+ */
 export interface InvoiceList {
     invoiceNumber: string;
     status: string;
 }
 
+/**
+ * IUnpaidInvoiceListResponse interface definition
+ * Defines the structure and contract for IUnpaidInvoiceListResponse objects
+ */
 export interface IUnpaidInvoiceListResponse {
     invoiceList: InvoiceList[];
     size: number;
 }
 
+/**
+ * IVariant interface definition
+ * Defines the structure and contract for IVariant objects
+ */
 export interface IVariant extends IParticular {
     variantDiscount?: any;
 }
 
 /** Type for ledger type */
+/**
+ * LedgerType interface definition
+ * Defines the structure and contract for LedgerType objects
+ */
 export type LedgerType = 'cr' | 'dr';
 
 /** Type for ledger view */
+/**
+ * TLedgerView interface definition
+ * Defines the structure and contract for TLedgerView objects
+ */
 export type  TLedgerView  = 'STATEMENT_VIEW' | 'T_VIEW';
 
 /** Enum for ledger view */
+/**
+ * LedgerViewEnum enumeration
+ * Defines constant values for LedgerViewEnum
+ */
 export enum LedgerViewEnum  {
     StatementView = 'STATEMENT_VIEW',
     TView = 'T_VIEW'
 }
 
 /** Enum for transaction type i.e  CREDIT or DEBIT */
+/**
+ * TransactionType enumeration
+ * Defines constant values for TransactionType
+ */
 export enum TransactionType  {
     Credit = 'CREDIT',
     Debit = 'DEBIT'
 }
 
 /** Enum representing dropdown types in ledger entry panel */
+/**
+ * LedgerDropdownTypeEnum enumeration
+ * Defines constant values for LedgerDropdownTypeEnum
+ */
 export enum LedgerDropdownTypeEnum {
     TAG = 'tag',
     TAX = 'tax',

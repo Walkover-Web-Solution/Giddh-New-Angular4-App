@@ -20,12 +20,19 @@ import { SalesTaxReport } from '../../theme/tax-authority/utility/tax-authority.
 import { CompanyActions } from '../../actions/company.actions';
 import { TaxAuthorityComponentStore } from '../../theme/tax-authority/utility/tax-authority.store';
 
+/**
+ * DateCheckResult interface definition
+ * Defines the structure and contract for DateCheckResult objects
+ */
 interface DateCheckResult {
     status: boolean;
     monthName?: string;
     monthNumber?: number;
     year?: number;
 }
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'vat-report-filters',
     templateUrl: './vat-report-filters.component.html',
@@ -33,6 +40,10 @@ interface DateCheckResult {
     providers: [TaxAuthorityComponentStore],
     standalone:false
 })
+/**
+ * VatReportFiltersComponent component
+ * Handles vatreportfilters functionality and user interactions
+ */
 export class VatReportFiltersComponent implements OnInit, OnChanges {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -180,6 +191,10 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     /** True if tax modules is restricted */
     public isTaxRestrictedModule: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private gstReconcileService: GstReconcileService,
@@ -205,6 +220,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -215,15 +233,24 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         this.isVatReport = this.moduleType === "VAT_REPORT";
         this.isLiabilityReport = this.moduleType === "LIABILITY_REPORT";
 
+        /**
+         * Handles if functionality
+         */
         if (this.isLiabilityReport) {
             this.getQueryParams();
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.hasQueryParams) {
             this.getSelectedCurrency();
         }
 
         // Refresh report data according to universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj && !this.hasQueryParams) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -241,14 +268,23 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         this.getCurrentCompanyBranches();
 
         // Get All Tax Authorities for US Country
+        /**
+         * Handles if functionality
+         */
         if (this.isUSCompany) {
             this.componentStore.taxAuthorityList$.pipe(takeUntil(this.destroyed$)).subscribe(taxAuthorities => {
+                /**
+                 * Handles if functionality
+                 */
                 if (taxAuthorities?.length) {
                     let arr: IOption[] = [];
                     (Array.isArray(taxAuthorities) ? taxAuthorities : []).forEach(taxAuthority => {
                         arr.push({ label: taxAuthority.name, value: taxAuthority?.uniqueName });
                     });
                     this.taxAuthorityList = arr;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.taxAuthority.taxAuthorityUniqueName) {
                         this.setTaxAuthorityLabel(this.taxAuthority.taxAuthorityUniqueName);
                     }
@@ -257,12 +293,18 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             this.componentStore.getTaxAuthorityList();
 
             this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(taxes => {
+                /**
+                 * Handles if functionality
+                 */
                 if (taxes) {
                     let arr: IOption[] = [];
                     (Array.isArray(taxes) ? taxes : []).forEach(tax => {
                         arr.push({ label: tax?.name, value: tax?.uniqueName });
                     });
                     this.taxList = arr;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.taxAuthority.taxUniqueName) {
                         this.setTaxLabel(this.taxAuthority.taxUniqueName);
                     }
@@ -278,6 +320,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof  ShareGroupModalComponent
      */
     public buyPlan(subscriptionId: string): void {
+        /**
+         * Handles if functionality
+         */
         if (subscriptionId) {
             this.router.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
         }
@@ -288,14 +333,23 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     * @memberof VatReportFiltersComponent
     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ('currentTaxAuthorityUniqueName' in changes && changes.currentTaxAuthorityUniqueName.currentValue !== changes.currentTaxAuthorityUniqueName.previousValue) {
             this.taxAuthority.taxAuthorityUniqueName = changes.currentTaxAuthorityUniqueName.currentValue;
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('currentTaxUniqueName' in changes && changes.currentTaxUniqueName.currentValue !== changes.currentTaxUniqueName.previousValue) {
             this.taxAuthority.taxUniqueName = changes.currentTaxUniqueName.currentValue;
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('activeCompany' in changes && changes.activeCompany.currentValue !== changes.activeCompany.previousValue) {
             this.setTaxTypeLabelPlaceholder();
         }
@@ -308,9 +362,15 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     private setTaxTypeLabelPlaceholder(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompany && this.commonLocaleData) {
             const alpha2CountryCode = this.activeCompany?.countryV2?.alpha2CountryCode;
 
+            /**
+             * Handles if functionality
+             */
             if (VAT_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
                 this.taxType.label = this.commonLocaleData?.app_vat;
                 this.taxType.placeholder = this.commonLocaleData?.app_enter_vat;
@@ -333,6 +393,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      */
     private setTaxAuthorityLabel(uniqueName: string): void {
         let taxAuthorityObj = this.taxAuthorityList.find(taxAuthority => taxAuthority.value === uniqueName);
+        /**
+         * Handles if functionality
+         */
         if (taxAuthorityObj) {
             this.taxAuthority.taxAuthorityName = taxAuthorityObj?.label;
             this.onTaxAuthorityChange(taxAuthorityObj);
@@ -348,6 +411,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      */
     private setTaxLabel(uniqueName: string): void {
         let taxObj = this.taxList.find(tax => tax.value === uniqueName);
+        /**
+         * Handles if functionality
+         */
         if (taxObj) {
             this.taxAuthority.taxName = taxObj?.label;
             this.onTaxChange(taxObj);
@@ -362,6 +428,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      */
     private getQueryParams(): void {
         this.route.queryParams.pipe(take(1)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params && Object.keys(params)?.length > 0) {
                 const from = params['from'];
                 const to = params['to'];
@@ -399,6 +468,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
 
         const isMonthwiseDateRange = this.checkFullMonthRange(fromDateInYYYYDDMM, toDateInYYYYDDMM);
 
+        /**
+         * Handles if functionality
+         */
         if (isMonthwiseDateRange.status) {
             this.getYearStartAndEndDate({ label: isMonthwiseDateRange.year, value: isMonthwiseDateRange?.year });
             this.getMonthStartAndEndDate({ label: isMonthwiseDateRange.monthName, value: isMonthwiseDateRange?.monthNumber });
@@ -415,6 +487,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     private getCurrentCompanyBranches(): void {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -430,11 +505,17 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
@@ -447,11 +528,17 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.hasTaxNumber || (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch)) {
                         this.loadTaxDetails();
                     }
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -469,6 +556,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     private loadTaxDetails(): void {
         this.isTaxApiInProgress.emit(true);
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body) {
                 this.taxes = response.body.map(tax => ({
                     label: tax,
@@ -478,7 +568,13 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                 this.currentTaxNumber.emit(this.taxNumber);
             }
             this.isTaxApiInProgress.emit(false);
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.hasQueryParams) {
                     this.getVatReport();
                 }
@@ -493,6 +589,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
            this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -508,6 +607,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      */
     public dateSelectedCallback(value?: any): void {
         this.hasQueryParams = false;
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
@@ -517,10 +619,16 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         this.selectedYear = "";
         this.year = null;
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -539,6 +647,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      */
     private getFinancialYears(): void {
         this.settingsFinancialYearService.getFinancialYearLimits().pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res.body.startDate && res.body.endDate) {
                 this.createFinancialYearsList(res.body.startDate, res.body.endDate);
             }
@@ -554,12 +665,18 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     * @memberof VatReportFiltersComponent
     */
     private createFinancialYearsList(startDate: any, endDate: any): any {
+        /**
+         * Handles if functionality
+         */
         if (startDate && endDate) {
             let startYear = startDate.split('-');
             startYear = startYear[startYear?.length - 1];
 
             let endYear = endDate.split('-');
             endYear = endYear[endYear?.length - 1];
+            /**
+             * Handles for functionality
+             */
             for (let year = startYear; year <= endYear; year++) {
                 this.financialYears.push({ label: year.toString(), value: year.toString() });
             }
@@ -574,10 +691,16 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public onCurrencyChange(event: any, initialCall: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (this.vatReportCurrencyCode !== event?.value) {
             this.vatReportCurrencyCode = event.value;
             this.currentCurrencyCode.emit(event.value);
 
+            /**
+             * Handles if functionality
+             */
             if (!initialCall) {
                 this.saveSelectedCurrency(event.value);
                 this.getVatReport();
@@ -591,6 +714,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public onTaxAuthorityChange(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.taxAuthorityUniqueName.emit(event.value);
             this.taxAuthority.taxAuthorityName = event.label;
@@ -605,6 +731,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public onTaxChange(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.taxUniqueName.emit(event.value);
             this.taxAuthority.taxName = event.label;
@@ -620,10 +749,16 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     * @memberof VatReportFiltersComponent
     */
     public getYearStartAndEndDate(selectedYear: any): void {
+        /**
+         * Handles if functionality
+         */
         if (selectedYear?.value && selectedYear?.label !== this.selectedYear) {
             this.year = Number(selectedYear?.value);
             this.selectedYear = selectedYear.label;
 
+            /**
+             * Handles if functionality
+             */
             if (this.selectedMonth) {
                 this.getMonthStartAndEndDate(this.selectedMonth);
             }
@@ -637,6 +772,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public getMonthStartAndEndDate(selectedMonth: any): void {
+        /**
+         * Handles if functionality
+         */
         if (selectedMonth) {
             this.selectedMonth = selectedMonth;
 
@@ -660,6 +798,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public getVatReport(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value) {
             this.taxNumber = event.value;
             this.currentTaxNumber.emit(this.taxNumber);
@@ -682,6 +823,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public handleBranchChange(selectedEntity: any): void {
+        /**
+         * Handles if functionality
+         */
         if (selectedEntity) {
             this.currentBranch.name = selectedEntity.label;
             this.currentBranch.uniqueName = selectedEntity.value;
@@ -697,7 +841,13 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     */
     public getSelectedCurrency(): void {
         this.commonService.getSelectedTableColumns(this.moduleType).pipe(take(1)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body) {
                     this.onCurrencyChange({ value: this.isVatReport ? response.body?.vatReportCurrency : response.body?.liabilityReportCurrency }, true);
                 } else if (response.body === null) {
@@ -718,6 +868,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         }
         request[this.isVatReport ? 'vatReportCurrency' : 'liabilityReportCurrency'] = currencyCode;
         this.commonService.saveSelectedTableColumns(request).pipe(take(1)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'error' && response.message) {
                 this.toaster.showSnackBar("error", response.message);
             }
@@ -744,6 +897,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         const isLastDayOfMonth = to.isSame(toEndOfMonth, 'day');
         const isSameMonthAndYear = from.isSame(to, 'month') && from.isSame(to, 'year');
 
+        /**
+         * Handles if functionality
+         */
         if (isFirstDayOfMonth && isLastDayOfMonth && isSameMonthAndYear) {
             return {
                 status: true,

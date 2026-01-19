@@ -18,12 +18,19 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
 import { ServiceConfig } from '../../../services/service.config';
 import { CustomFieldsService } from '../../../services/custom-fields.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'template-edit-filter',
     templateUrl: './template-edit-filter.component.html',
     styleUrls: ['./template-edit-filter.component.scss'],
     standalone: false
 })
+/**
+ * TemplateEditFilterComponent component
+ * Handles templateeditfilter functionality and user interactions
+ */
 export class TemplateEditFilterComponent implements OnInit {
     /** Ng form instance of content filter component */
     @ViewChild(NgForm) templateForm: NgForm;
@@ -163,6 +170,10 @@ export class TemplateEditFilterComponent implements OnInit {
     /** Hold list of account custom fields */
     public accountCustomFields: IOption[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private generalService: GeneralService,
         private toasty: ToasterService,
@@ -239,7 +250,13 @@ export class TemplateEditFilterComponent implements OnInit {
         });
 
         this.templateService.setTemplateVoucherType(this.voucherType);
+        /**
+         * Handles if functionality
+         */
         if (this.templateMode === TemplateModeEnum.Create) {
+            /**
+             * Handles if functionality
+             */
             if (this.templateType === VoucherTypeEnum.purchase_order || this.templateType === VoucherTypeEnum.purchase_bill) {
                 const tallyTemplate = this.sampleTemplates?.find(template => template?.templateType === TemplateTypeEnum.TallyTemplate);
                 this.initializeTemplate(this.companyUniqueName, companies, cloneDeep(tallyTemplate));
@@ -291,13 +308,22 @@ export class TemplateEditFilterComponent implements OnInit {
             this.initializeSelectedSignatureType();
 
             // Set logo size and preview
+            /**
+             * Handles if functionality
+             */
             if (this.customTemplate?.logoSize) {
                 this.defaultImageSize = this.customTemplate.logoSize === '100' ? 'L'
                     : this.customTemplate.logoSize === '80' ? 'M' : 'S';
             }
+            /**
+             * Handles if functionality
+             */
             if (this.customTemplate?.logoUniqueName) {
                 this.logoAttached = true;
                 this.isFileUploaded = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.templateService.isLogoUpdateInProgress) {
                     this.showDeleteButton = true;
                     const preview: any = document.getElementById('logoImage');
@@ -307,16 +333,40 @@ export class TemplateEditFilterComponent implements OnInit {
 
             // Tally template-specific logic
 
+            /**
+             * Handles if functionality
+             */
             if (this.customTemplate?.templateType === TemplateTypeEnum.TallyTemplate) {
                 const footerData = this.customTemplate?.sections?.footer?.data;
                 const headerData = this.customTemplate?.sections?.header?.data;
+                /**
+                 * Handles if functionality
+                 */
                 if (footerData?.imageSignature) footerData.imageSignature.display = true;
+                /**
+                 * Handles if functionality
+                 */
                 if (footerData?.slogan) footerData.slogan.display = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherType !== VoucherTypeEnum.sales) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (headerData?.invoiceDate && headerData?.voucherDate) headerData.invoiceDate.label = headerData.voucherDate.label;
+                    /**
+                     * Handles if functionality
+                     */
                     if (headerData?.invoiceNumber && headerData?.voucherNumber) headerData.invoiceNumber.label = headerData.voucherNumber.label;
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (headerData?.voucherDate && headerData?.invoiceDate) headerData.voucherDate.label = headerData.invoiceDate.label;
+                    /**
+                     * Handles if functionality
+                     */
                     if (headerData?.voucherNumber && headerData?.invoiceNumber) headerData.voucherNumber.label = headerData.invoiceNumber.label;
                 }
             }
@@ -326,6 +376,9 @@ export class TemplateEditFilterComponent implements OnInit {
 
         // Listen for logo path changes
         this.templateService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
+            /**
+             * Handles if functionality
+             */
             if (!path) {
                 this.showDeleteButton = false;
                 this.logoAttached = false;
@@ -366,13 +419,22 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onValueChange(fieldName: string, value: string) {
         // Clear existing timer
+        /**
+         * Handles if functionality
+         */
         if (this.fieldChangeTimer) {
+            /**
+             * Handles clearTimeout functionality
+             */
             clearTimeout(this.fieldChangeTimer);
         }
 
         // Set new timer with 500ms delay
         this.fieldChangeTimer = setTimeout(() => {
             const template = cloneDeep(this.customTemplate);
+            /**
+             * Handles if functionality
+             */
             if (fieldName) template[fieldName] = value;
             this.templateService.setCustomTemplate(template);
         }, 1500);
@@ -386,6 +448,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onPatternValidation(validation: { isValid: boolean, value: string }): void {
+        /**
+         * Handles if functionality
+         */
         if (!validation.isValid) {
             this.toasty.showSnackBar("error", `Invalid UPI ID: ${validation.value}`);
         }
@@ -400,6 +465,9 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public changeColor(primaryColor: string, secondaryColor: string) {
         const template = cloneDeep(this.customTemplate);
+        /**
+         * Handles if functionality
+         */
         if (template) {
             template.templateColor = primaryColor;
             template.tableColor = secondaryColor;
@@ -417,9 +485,15 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onDesignChange(fieldName: string, value: string): void {
         let template;
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'uniqueName') {
             const selectedTemplate = cloneDeep(this.sampleTemplates?.find((t: CustomTemplateResponse) => t?.uniqueName === value));
             template = selectedTemplate || cloneDeep(this.customTemplate);
+            /**
+             * Handles if functionality
+             */
             if (this.templateMode === TemplateModeEnum.Update && selectedTemplate) {
                 template.uniqueName = this.customTemplate?.uniqueName;
                 template.name = this.customTemplate?.name;
@@ -430,9 +504,15 @@ export class TemplateEditFilterComponent implements OnInit {
         }
         template.copyFrom = value;
         this.selectedTemplateUniqueName = value;
+        /**
+         * Handles if functionality
+         */
         if (template?.sections?.['header']?.data?.['companyName']) {
             template.sections['header'].data['companyName'].label = this.activeCompanyName;
         }
+        /**
+         * Handles if functionality
+         */
         if (template?.sections?.['footer']?.data?.['companyName']) {
             template.sections['footer'].data['companyName'].label = this.activeCompanyName;
         }
@@ -448,6 +528,9 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public resetPrintSetting(): void {
         const template = cloneDeep(this.customTemplate);
+        /**
+         * Handles if functionality
+         */
         if (template) {
             template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 25;
         }
@@ -473,6 +556,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onFontSizeSelect(fontSize: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (!fontSize?.value) {
             const template = cloneDeep(this.customTemplate);
             this.onValueChange('fontSize', template?.fontSize);
@@ -488,6 +574,9 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public uploadLogo(): void {
         this.mainLogoSelectedFile = document.getElementById("logo-edit");
+        /**
+         * Handles if functionality
+         */
         if (this.mainLogoSelectedFile?.files?.length) {
             this.mainLogoFile = this.mainLogoSelectedFile.files[0];
             this.generalService.getSelectedFile(this.mainLogoFile, (blob, fileObj) => {
@@ -498,6 +587,9 @@ export class TemplateEditFilterComponent implements OnInit {
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe(response => {
                         this.isFileUploadInProgress = false;
+                        /**
+                         * Handles if functionality
+                         */
                         if (response?.status === 'success') {
                             this.showDeleteButton = true;
                             this.onValueChange('logoUniqueName', response?.body?.uniqueName);
@@ -526,6 +618,9 @@ export class TemplateEditFilterComponent implements OnInit {
             preview.src = reader.result;
             this.templateService.setLogoPath(preview.src);
         };
+        /**
+         * Handles if functionality
+         */
         if (file) {
             reader.readAsDataURL(file);
             this.logoAttached = true;
@@ -552,10 +647,16 @@ export class TemplateEditFilterComponent implements OnInit {
 
         // Clear the file input element to allow re-uploading the same file
         const logoInput = document.getElementById("logo-edit") as HTMLInputElement;
+        /**
+         * Handles if functionality
+         */
         if (logoInput) {
             logoInput.value = "";
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.customTemplate?.logoUniqueName) {
             this.customTemplate.logoUniqueName = '';
         }
@@ -573,6 +674,9 @@ export class TemplateEditFilterComponent implements OnInit {
     public validatePrintSetting(val: number, idx: number, marginPosition: string): void {
         const paddingCordinatesValue = [200, 200, 200, 200];
         const paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
+        /**
+         * Handles if functionality
+         */
         if (val > paddingCordinatesValue[idx]) {
             const maxVal = paddingCordinatesValue[idx];
             this.customTemplate[marginPosition] = maxVal;
@@ -587,8 +691,17 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public setFontAndFontSize(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.customTemplate) return;
+        /**
+         * Handles if functionality
+         */
         if (this.customTemplate?.font) {
+            /**
+             * Handles if functionality
+             */
             if (this.customTemplate?.templateType === TemplateTypeEnum.TallyTemplate) {
                 this.presetFonts = [
                     { label: 'Open Sans', value: 'Open Sans' },
@@ -598,12 +711,21 @@ export class TemplateEditFilterComponent implements OnInit {
                 this.presetFonts = this.templateFonts;
             }
             (Array.isArray(this.templateFonts) ? this.templateFonts : []).forEach(font => {
+                /**
+                 * Handles if functionality
+                 */
                 if (font?.value === this.customTemplate?.font) this.selectedFont = font?.label;
             });
         }
+        /**
+         * Handles if functionality
+         */
         if (this.customTemplate?.fontSize) {
             this.customTemplate.fontSize = this.customTemplate?.fontSize.toString();
             (Array.isArray(this.templateFontsSize) ? this.templateFontsSize : []).forEach(fontSize => {
+                /**
+                 * Handles if functionality
+                 */
                 if (fontSize?.value == this.customTemplate?.fontSize) this.selectedFontSize = fontSize?.label;
             });
         }
@@ -639,6 +761,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
             this.signatureImgAttached = false;
             this.signatureSrc = '';
@@ -657,7 +782,13 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onFieldChange(): void {
         // Clear existing timer
+        /**
+         * Handles if functionality
+         */
         if (this.fieldChangeTimer) {
+            /**
+             * Handles clearTimeout functionality
+             */
             clearTimeout(this.fieldChangeTimer);
         }
 
@@ -675,12 +806,27 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public changeDisableShipping(): void {
         let template = cloneDeep(this.customTemplate);
+        /**
+         * Handles if functionality
+         */
         if (!template?.sections?.header?.data?.shippingAddress?.display) {
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.header?.data?.shippingGstin) template.sections.header.data.shippingGstin.display = false;
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.header?.data?.shippingState) template.sections.header.data.shippingState.display = false;
 
         } else {
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.header?.data?.shippingGstin) template.sections.header.data.shippingGstin.display = true;
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.header?.data?.shippingState) template.sections.header.data.shippingState.display = true;
         }
 
@@ -694,11 +840,26 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public changeDisableBilling(): void {
         let template = cloneDeep(this.customTemplate);
+        /**
+         * Handles if functionality
+         */
         if (!template?.sections?.header?.data?.billingAddress?.display) {
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.header?.data?.billingGstin) template.sections.header.data.billingGstin.display = false;
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.header?.data?.billingState) template.sections.header.data.billingState.display = false;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.header?.data?.billingGstin) template.sections.header.data.billingGstin.display = true;
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.header?.data?.billingState) template.sections.header.data.billingState.display = true;
         }
 
@@ -734,6 +895,9 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public uploadImage(): void {
         this.footerSelectedFile = document.getElementById("signatureImg-edit");
+        /**
+         * Handles if functionality
+         */
         if (this.footerSelectedFile?.files?.length) {
             this.footerFile = this.footerSelectedFile?.files[0];
 
@@ -743,11 +907,20 @@ export class TemplateEditFilterComponent implements OnInit {
                 this.commonService.uploadImageBase64({ base64: base64, format: this.footerFile.type, fileName: this.footerFile.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isSignatureUploadInProgress = false;
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'success') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.templateService.unusedImageSignature) {
                             this.removeFileFromServer();
                         }
                         this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName;
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.customTemplate?.sections?.footer?.data?.imageSignature) {
                             this.customTemplate.sections.footer.data.imageSignature.label = response?.body?.uniqueName;
                         }
@@ -777,10 +950,16 @@ export class TemplateEditFilterComponent implements OnInit {
 
         // Clear the file input element to allow re-uploading the same file
         const signatureInput = document.getElementById("signatureImg-edit") as HTMLInputElement;
+        /**
+         * Handles if functionality
+         */
         if (signatureInput) {
             signatureInput.value = "";
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.customTemplate?.sections?.footer?.data?.imageSignature) {
             this.customTemplate.sections.footer.data.imageSignature.label = '';
         }
@@ -804,11 +983,26 @@ export class TemplateEditFilterComponent implements OnInit {
     */
     public chooseSigntureType(val: string): void {
         let template = cloneDeep(this.customTemplate);
+        /**
+         * Handles if functionality
+         */
         if (val === 'slogan') {
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.footer?.data?.slogan) template.sections.footer.data.slogan.display = true;
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.footer?.data?.imageSignature) template.sections.footer.data.imageSignature.display = false;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.footer?.data?.imageSignature) template.sections.footer.data.imageSignature.display = true;
+            /**
+             * Handles if functionality
+             */
             if (template?.sections?.footer?.data?.slogan) template.sections.footer.data.slogan.display = false;
         }
         this.templateService.setCustomTemplate(template);
@@ -821,6 +1015,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     private initializeSelectedSignatureType(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.display) {
             this.selectedSignatureType = 'image';
         } else if (this.customTemplate?.sections?.footer?.data?.slogan?.display) {
@@ -849,7 +1046,13 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public changeDisableQuantity(): void {
         let template = cloneDeep(this.customTemplate);
+        /**
+         * Handles if functionality
+         */
         if (template?.sections?.table?.data?.totalQuantity) {
+            /**
+             * Handles if functionality
+             */
             if (!template?.sections?.table?.data?.quantity?.display) {
                 template.sections.table.data.totalQuantity.display = false;
             } else {
@@ -868,14 +1071,26 @@ export class TemplateEditFilterComponent implements OnInit {
     */
     public checkedTaxBifurcation(label: string, sectionType: string): void {
         let template = cloneDeep(this.customTemplate);
+        /**
+         * Handles if functionality
+         */
         if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
+            /**
+             * Handles if functionality
+             */
             if (template.sections.table.data.taxBifurcation?.display) {
                 template.sections.table.data.taxBifurcation.label = label;
             } else {
                 template.sections.table.data.taxBifurcation.label = '';
             }
         } else {
+            /**
+             * Handles if functionality
+             */
             if (template && template.sections && template.sections.footer && template.sections.footer.data && template.sections.footer.data.taxBifurcation) {
+                /**
+                 * Handles if functionality
+                 */
                 if (template.sections.footer.data.taxBifurcation?.display) {
                     template.sections.footer.data.taxBifurcation.label = label;
                 } else {
@@ -894,6 +1109,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public handleHeader(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.customTemplate?.sections?.['header']?.data?.['formNameInvoice']) {
             this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
         }
@@ -905,6 +1123,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public assignImageSignature(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
             this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
             this.signatureImgAttached = true;
@@ -921,12 +1142,21 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public handleInvoiceDateNumberChange(isDate: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isDate) {
+            /**
+             * Handles if functionality
+             */
             if (this.customTemplate?.sections?.['header']?.data?.['voucherDate'] && this.customTemplate?.sections?.['header']?.data?.['invoiceDate']) {
                 this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate?.sections['header']?.data['invoiceDate']?.label;
                 this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate?.sections['header']?.data['invoiceDate']?.display;
             }
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.customTemplate?.sections?.['header']?.data?.['voucherNumber'] && this.customTemplate?.sections?.['header']?.data?.['invoiceNumber']) {
                 this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate?.sections['header']?.data['invoiceNumber']?.label;
                 this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate?.sections['header']?.data['invoiceNumber']?.display;
@@ -959,13 +1189,22 @@ export class TemplateEditFilterComponent implements OnInit {
         let companyName = '';
         let companyAddress = '';
 
+        /**
+         * Handles if functionality
+         */
         if (currentCompany) {
             companyName = currentCompany?.name || '';
             companyAddress = currentCompany?.address || '';
             const firstAddress = currentCompany?.addresses?.[0];
+            /**
+             * Handles if functionality
+             */
             if (firstAddress?.taxNumber) {
                 this.templateService.companyGSTIN.next(firstAddress.taxNumber);
             }
+            /**
+             * Handles if functionality
+             */
             if (currentCompany.panNumber) {
                 this.templateService.companyPAN.next(currentCompany.panNumber);
             }
@@ -973,8 +1212,14 @@ export class TemplateEditFilterComponent implements OnInit {
 
         this.templateService.setCompanyNameVisibility(true);
 
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate) {
             const processedTemplate = cloneDeep(defaultTemplate);
+            /**
+             * Handles if functionality
+             */
             if (companyName) {
                 processedTemplate.sections.header.data.companyName.label = companyName;
                 processedTemplate.sections.footer.data.companyName.label = companyName;
@@ -1006,7 +1251,13 @@ export class TemplateEditFilterComponent implements OnInit {
                 count: API_BULK_FETCH_LIMIT,
                 moduleUniqueName: 'account'
             }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.status === 'success') {
                     const customFields = response.body?.results?.map(customField => {
                         return {

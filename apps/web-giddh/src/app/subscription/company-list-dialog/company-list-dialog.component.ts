@@ -11,6 +11,10 @@ import { CompanyListDialogComponentStore } from './utility/company-list-dialog.s
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { ToasterService } from '../../services/toaster.service';
 
+/**
+ * CompanyRequest interface definition
+ * Defines the structure and contract for CompanyRequest objects
+ */
 export interface CompanyRequest {
     page: number;
     count: number;
@@ -19,6 +23,9 @@ export interface CompanyRequest {
     sortBy: 'NAME' | 'TOTAL_INVOICES' | 'TOTAL_INVOICES' | 'TOTAL_BILLS' | 'STATUS';
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'company-list-dialog',
     templateUrl: './company-list-dialog.component.html',
@@ -27,6 +34,10 @@ export interface CompanyRequest {
     providers: [CompanyListDialogComponentStore, SubscriptionComponentStore],
     standalone: false
 })
+/**
+ * CompanyListDialogComponent component
+ * Handles companylistdialog functionality and user interactions
+ */
 export class CompanyListDialogComponent implements OnInit {
     /** Instance of company list */
     @ViewChild('companyList', { static: false }) public companyList: ElementRef;
@@ -63,6 +74,10 @@ export class CompanyListDialogComponent implements OnInit {
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private changeDetection: ChangeDetectorRef,
@@ -91,6 +106,9 @@ export class CompanyListDialogComponent implements OnInit {
         this.getAllCompaniesList();
 
         this.companyList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.dataSource = new MatTableDataSource<any>(response?.results);
             } else {
@@ -99,6 +117,9 @@ export class CompanyListDialogComponent implements OnInit {
         });
 
         this.archiveCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let text = this.localeData?.company_message;
                 text = text?.replace("[TYPE]", response?.archiveStatus === 'USER_ARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
@@ -108,19 +129,31 @@ export class CompanyListDialogComponent implements OnInit {
         });
 
         this.companyListForm.get('name').valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((searchedText) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (searchedText !== null && searchedText !== undefined) {
                     this.companyListRequest.query = searchedText;
                     this.showClearFilter = true;
                     this.getAllCompaniesList();
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (searchedText === null || searchedText === "") {
                     this.showClearFilter = false;
                 }
             });
 
         this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getAllCompaniesList();
             }
@@ -259,6 +292,9 @@ export class CompanyListDialogComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.componentStore.archiveCompany(request);
             }

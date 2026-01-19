@@ -9,8 +9,16 @@ import { Injectable, ChangeDetectorRef, NgZone } from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * Angular21ChangeDetectionService service
+ * Provides angular21changedetection related business logic and data operations
+ */
 export class Angular21ChangeDetectionService {
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() { }
 
     /**
@@ -24,6 +32,9 @@ export class Angular21ChangeDetectionService {
         ngZone.run(() => {
             cdRef.detectChanges();
         });
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             cdRef.detectChanges();
         }, 10);
@@ -39,13 +50,22 @@ export class Angular21ChangeDetectionService {
     public forceCompleteRefresh(cdRef: ChangeDetectorRef, ngZone: NgZone, table?: any): void {
         ngZone.run(() => {
             cdRef.detectChanges();
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (table) {
                     table.renderRows();
                 }
                 cdRef.detectChanges();
             }, 0);
         });
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             cdRef.detectChanges();
         }, 50);
@@ -84,6 +104,9 @@ export class Angular21ChangeDetectionService {
         } catch (error) {
 
             // Fallback to basic change detection
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 try {
                     cdRef.detectChanges();
@@ -116,11 +139,17 @@ export class Angular21ChangeDetectionService {
     public batchChangeDetection(
         cdRef: ChangeDetectorRef,
         ngZone: NgZone,
+        /**
+         * Handles operations functionality
+         */
         operations: (() => void)[]
     ): void {
         // Execute all operations first
         (Array.isArray(operations) ? operations : []).forEach(operation => {
             try {
+                /**
+                 * Handles operation functionality
+                 */
                 operation();
             } catch (error) {
 

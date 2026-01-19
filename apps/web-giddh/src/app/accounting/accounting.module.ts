@@ -31,6 +31,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         JournalVoucherComponent,
@@ -72,5 +75,9 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         HamburgerMenuModule
     ],
 })
+/**
+ * AccountingModule module
+ * Implements AccountingModule functionality
+ */
 export class AccountingModule {
 }

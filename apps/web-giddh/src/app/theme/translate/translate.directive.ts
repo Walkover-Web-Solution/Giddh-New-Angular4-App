@@ -5,11 +5,18 @@ import { Store, select } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: '[appTranslate]',
     standalone: false
 })
 
+/**
+ * TranslateDirective directive
+ * Implements TranslateDirective functionality
+ */
 export class TranslateDirective implements OnInit, OnDestroy {
     /* Taking input the file name */
     @Input() file: string;
@@ -28,6 +35,10 @@ export class TranslateDirective implements OnInit, OnDestroy {
     /* Initializing the current language */
     private currentLanguage: string = "";
 
+    /**
+     * Creates an instance of directive
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private localeService: LocaleService, private store: Store<AppState>) {
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             this.currentLanguage = response?.value;
@@ -51,6 +62,9 @@ export class TranslateDirective implements OnInit, OnDestroy {
      * @memberof TranslateDirective
      */
     public getLocale(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.file && this.currentLanguage) {
             this.localeService.getLocale(this.file, this.currentLanguage).subscribe(response => {
                 this.localeData.emit(response);
@@ -58,10 +72,19 @@ export class TranslateDirective implements OnInit, OnDestroy {
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.requireCommonData) {
             this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.commonLocaleData.emit(response);
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.file) {
                         this.translationComplete.emit(true);
                     }

@@ -5,12 +5,19 @@ import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-inventory-stock-group',
     styleUrls: [`./aside-inventory.components.scss`],
     templateUrl: './aside-inventory.components.html',
     standalone: false
 })
+/**
+ * AsideInventoryComponent class
+ * Implements AsideInventoryComponent functionality
+ */
 export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public autoFocus: boolean = false;
@@ -34,6 +41,10 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
     public autoFocusOnChild: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private inventoryAction: InventoryAction
@@ -50,12 +61,21 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
 
         this.manageInProcess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s.isOpen && s.isGroup) {
                 this.isAddGroupOpen = true;
                 this.isAddStockOpen = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (s.isUpdate) {
                     this.addGroup = false;
                 } else {
@@ -64,6 +84,9 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
             } else if (s.isOpen && !s.isGroup) {
                 this.isAddGroupOpen = false;
                 this.isAddStockOpen = true;
+                /**
+                 * Handles if functionality
+                 */
                 if (s.isUpdate) {
                     this.addStock = false;
                 } else {
@@ -73,12 +96,18 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.createGroupSuccess$.subscribe(d => {
+            /**
+             * Handles if functionality
+             */
             if (d && this.isAddGroupOpen) {
                 this.closeAsidePane();
             }
         });
 
         this.createStockSuccess$.subscribe(d => {
+            /**
+             * Handles if functionality
+             */
             if (d && this.isAddStockOpen) {
                 this.closeAsidePane();
             }
@@ -86,30 +115,45 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
 
         // subscribe createStockSuccess for resting form
         this.removeStockSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s && this.isAddStockOpen) {
                 this.closeAsidePane();
             }
         });
 
         this.removeGroupSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s && this.isAddGroupOpen) {
                 this.closeAsidePane();
             }
         });
 
         this.UpdateStockSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s && this.isAddStockOpen) {
                 this.closeAsidePane();
             }
         });
 
         this.UpdateGroupSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s && this.isAddGroupOpen) {
                 this.closeAsidePane();
             }
         });
 
         this.MoveStockSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s && this.isAddStockOpen) {
                 this.closeAsidePane();
             }
@@ -117,22 +161,34 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
+    /**
+     * Opens grouppane
+     */
     public openGroupPane() {
         this.hideFirstStep = true;
         this.isAddStockOpen = false;
     }
 
+    /**
+     * Opens stockpane
+     */
     public openStockPane() {
         this.hideFirstStep = true;
         this.isAddStockOpen = true;
     }
 
+    /**
+     * Closes asidepane
+     */
     public closeAsidePane(e?: any) {
         this.hideFirstStep = false;
         this.isAddStockOpen = false;
         this.isAddGroupOpen = false;
         this.addGroup = false;
         this.addStock = false;
+        /**
+         * Handles if functionality
+         */
         if (!e) {
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(false));
             this.closeAsideEvent.emit();
@@ -141,11 +197,20 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles animateAside functionality
+     */
     public animateAside(e: any) {
         this.animatePaneAside.emit(e);
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(c) {
+        /**
+         * Handles if functionality
+         */
         if (c.autoFocus && c.autoFocus.currentValue) {
             this.autoFocusOnChild = true;
         } else {
@@ -153,6 +218,9 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

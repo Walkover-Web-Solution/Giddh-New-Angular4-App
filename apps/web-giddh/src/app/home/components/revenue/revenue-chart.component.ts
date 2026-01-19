@@ -17,6 +17,9 @@ import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-form
 import { forEach, keys } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'revenue-chart',
     templateUrl: 'revenue-chart.component.html',
@@ -25,6 +28,10 @@ Chart.register(...registerables);
     encapsulation: ViewEncapsulation.None,
     standalone:false
 })
+/**
+ * RevenueChartComponent component
+ * Handles revenuechart functionality and user interactions
+ */
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     public requestInFlight: boolean = false;
@@ -66,6 +73,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public chartLabelsize = [];
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhNumberFormatPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService, private titlecasePipe: TitleCasePipe) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
         this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'day'));
@@ -79,23 +90,38 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphParams.previousTo = dayjs(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.getRevenueGraphTypes();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
+        /**
+         * Handles if functionality
+         */
         if (this.chart) {
             this.chart.destroy();
             this.chart = null;
@@ -104,12 +130,21 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Retrieves revenuegraphtypes data
+     */
     public getRevenueGraphTypes() {
         this.store.pipe(select(s => s.home.revenueGraphTypes), takeUntil(this.destroyed$)).subscribe(res => {
             this.revenueGraphTypes = [];
 
+            /**
+             * Handles if functionality
+             */
             if (res && res.length > 0) {
                 Object.keys(res).forEach(key => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (key === "0") {
                         this.activeGraphType = res[key];
                         this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
@@ -125,6 +160,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves revenuegraphdata data
+     */
     public getRevenueGraphData(): void {
         this.requestInFlight = true;
         let revenueGraphDataRequest = new RevenueGraphDataRequest();
@@ -140,11 +178,20 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
             this.summaryData.lowest = 0;
             let res = response?.body;
 
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && res?.balances) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.balances !== null) {
                     let x = 0;
                     Object.keys(res.balances).forEach(key => {
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (res.balances[key].current) {
                             this.chartLabelsize.push(x);
                             this.currentData.push({
@@ -155,6 +202,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                             });
                         }
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (res.balances[key].previous) {
                             this.previousData.push({
                                 x: x,
@@ -173,30 +223,51 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                 let previousHighest = 0;
                 let previousLowest = 0;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (res.currentClosingBalance !== null && res.currentClosingBalance.amount !== null) {
                     this.summaryData.totalCurrent = giddhRoundOff(res.currentClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (res.previousClosingBalance !== null && res.previousClosingBalance.amount !== null) {
                     this.summaryData.totalLast = giddhRoundOff(res.previousClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (res.previousHighestClosingBalance !== null && res.previousHighestClosingBalance.amount !== null) {
                     previousHighest = giddhRoundOff(Number(res.previousHighestClosingBalance.amount), this.giddhBalanceDecimalPlaces);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (res.currentHighestClosingBalance !== null && res.currentHighestClosingBalance.amount !== null) {
                     currentHighest = giddhRoundOff(Number(res.currentHighestClosingBalance.amount), this.giddhBalanceDecimalPlaces);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (res.previousLowestClosingBalance !== null && res.previousLowestClosingBalance.amount !== null) {
                     previousLowest = giddhRoundOff(Number(res.previousLowestClosingBalance.amount), this.giddhBalanceDecimalPlaces);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (res.currentLowestClosingBalance !== null && res.currentLowestClosingBalance.amount !== null) {
                     currentLowest = giddhRoundOff(Number(res.currentLowestClosingBalance.amount), this.giddhBalanceDecimalPlaces);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (currentHighest > previousHighest) {
                     this.summaryData.highest = giddhRoundOff(res.currentHighestClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                     this.summaryData.highestLabel = res.currentHighestClosingBalance.dateLabel;
@@ -205,6 +276,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     this.summaryData.highestLabel = res.previousHighestClosingBalance.dateLabel;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (currentLowest < previousLowest) {
                     this.summaryData.lowest = giddhRoundOff(res.currentLowestClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                     this.summaryData.lowestLabel = res.currentLowestClosingBalance.dateLabel;
@@ -215,6 +289,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
                 this.createChart();
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "error" && response?.message) {
                     this.toasterService.errorToast(response.message);
                 }
@@ -224,10 +301,16 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles refreshChart functionality
+     */
     public refreshChart() {
         this.getRevenueGraphData();
     }
 
+    /**
+     * Retrieves weekstartenddate data
+     */
     public getWeekStartEndDate(date) {
         // If no date object supplied, use current date
         let now = date ? new Date(date) : new Date();
@@ -248,6 +331,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
 
+    /**
+     * Handles changeGraphType functionality
+     */
     public changeGraphType(gtype) {
         this.activeGraphType = gtype;
         this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
@@ -256,6 +342,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.refreshChart();
     }
 
+    /**
+     * Shows linechart element
+     */
     public showLineChart() {
         this.chartChanged = true;
         this.generalService.invokeEvent.next("hideallcharts");
@@ -272,6 +361,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.createChart();
     }
 
+    /**
+     * Updates existing chartfrequency
+     */
     public updateChartFrequency(interval) {
         this.graphParams.interval = interval;
 
@@ -282,12 +374,21 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
         this.createChart();
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.getRevenueGraphData();
         }, 200);
     }
 
+    /**
+     * Sets previousdate value
+     */
     public setPreviousDate() {
+        /**
+         * Handles if functionality
+         */
         if ((this.previousDateRangePickerValue[0] !== null) && (this.previousDateRangePickerValue[1] !== null)) {
             this.graphParams.previousFrom = dayjs(this.previousDateRangePickerValue[0]).format(GIDDH_DATE_FORMAT);
             this.graphParams.previousTo = dayjs(this.previousDateRangePickerValue[1]).format(GIDDH_DATE_FORMAT);
@@ -296,7 +397,13 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Sets currentdate value
+     */
     public setCurrentDate() {
+        /**
+         * Handles if functionality
+         */
         if ((this.currentDateRangePickerValue[0] !== null) && (this.currentDateRangePickerValue[1] !== null)) {
             this.graphParams.currentFrom = dayjs(this.currentDateRangePickerValue[0]).format(GIDDH_DATE_FORMAT);
             this.graphParams.currentTo = dayjs(this.currentDateRangePickerValue[1]).format(GIDDH_DATE_FORMAT);
@@ -306,6 +413,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Shows columnchart element
+     */
     public showColumnChart() {
         this.generalService.invokeEvent.next("showallcharts");
         this.graphParams.interval = "daily";
@@ -340,6 +450,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.chart?.destroy();
 
         /* For Chart Type Line  */
+        /**
+         * Handles if functionality
+         */
         if (this.chartType === 'line') {
             this.chart = new Chart("revenueChartLargeCanvas", {
                 type: chartType,
@@ -383,6 +496,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                                     let data = datasetIndex === 0 ? currentData : previousData;
                                     let tooltipIndex = dataIndex;
 
+                                    /**
+                                     * Handles for functionality
+                                     */
                                     for (let i = 0; i < data.length; i++) {
                                         label = data[tooltipIndex].tooltipAfterLabel
                                     }
@@ -395,6 +511,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                                     let data = datasetIndex === 0 ? currentData : previousData;
                                     let tooltipIndex = dataIndex;
 
+                                    /**
+                                     * Handles for functionality
+                                     */
                                     for (let i = 0; i < data.length; i++) {
                                         label = data[tooltipIndex].tooltipLabel
                                     }
@@ -431,11 +550,23 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                                         { divider: 1e3, suffix: 'k' }
                                     ];
                                     function formatNumber(n) {
+                                        /**
+                                         * Handles for functionality
+                                         */
                                         for (let i = 0; i < ranges.length; i++) {
+                                            /**
+                                             * Handles if functionality
+                                             */
                                             if (n >= ranges[i].divider) {
+                                                /**
+                                                 * Handles return functionality
+                                                 */
                                                 return (n / ranges[i].divider).toString() + ranges[i].suffix;
                                             }
                                         }
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (Math.floor(n) === n) {
                                             return value;
                                         }
@@ -453,6 +584,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         }
 
         /* For Chart Type Bar  */
+        /**
+         * Handles if functionality
+         */
         if (this.chartType === 'bar') {
             this.chart = new Chart("revenueChartCanvas", {
                 type: chartType,
@@ -494,6 +628,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                                     let data = datasetIndex === 0 ? currentData : previousData;
                                     let tooltipIndex = dataIndex;
 
+                                    /**
+                                     * Handles for functionality
+                                     */
                                     for (let i = 0; i < data.length; i++) {
                                         label = data[tooltipIndex].tooltipAfterLabel
                                     }
@@ -506,6 +643,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                                     let data = datasetIndex === 0 ? currentData : previousData;
                                     let tooltipIndex = dataIndex;
 
+                                    /**
+                                     * Handles for functionality
+                                     */
                                     for (let i = 0; i < data.length; i++) {
                                         label = data[tooltipIndex].tooltipLabel
                                     }
@@ -538,11 +678,23 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                                         { divider: 1e3, suffix: 'k' }
                                     ];
                                     function formatNumber(n) {
+                                        /**
+                                         * Handles for functionality
+                                         */
                                         for (let i = 0; i < ranges.length; i++) {
+                                            /**
+                                             * Handles if functionality
+                                             */
                                             if (n >= ranges[i].divider) {
+                                                /**
+                                                 * Handles return functionality
+                                                 */
                                                 return (n / ranges[i].divider).toString() + ranges[i].suffix;
                                             }
                                         }
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (Math.floor(n) === n) {
                                             return value;
                                         }

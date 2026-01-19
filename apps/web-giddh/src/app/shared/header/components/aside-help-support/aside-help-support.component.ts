@@ -9,6 +9,9 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-help-support',
     templateUrl: './aside-help-support.component.html',
@@ -16,6 +19,10 @@ import { takeUntil } from 'rxjs/operators';
     standalone: false
 })
 
+/**
+ * AsideHelpSupportComponent component
+ * Handles asidehelpsupport functionality and user interactions
+ */
 export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     //Event emitter to close the Aside panel
@@ -31,6 +38,10 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private authService: AuthenticationService,
         @Inject(ServiceConfig) private serviceConfig,
@@ -80,6 +91,9 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      */
     private getElectronAppVersion(): void {
         this.authService.GetElectronAppVersion().pipe(takeUntil(this.destroyed$)).subscribe((res: string) => {
+            /**
+             * Handles if functionality
+             */
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
@@ -96,6 +110,9 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      */
     private getElectronMacAppVersion(): void {
         this.authService.getElectronMacAppVersion().pipe(takeUntil(this.destroyed$)).subscribe((res: string) => {
+            /**
+             * Handles if functionality
+             */
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];

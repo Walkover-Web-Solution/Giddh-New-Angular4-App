@@ -9,14 +9,28 @@ import { Observable } from "rxjs";
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * CommandKService service
+ * Provides commandk related business logic and data operations
+ */
 export class CommandKService {
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 
     }
 
+    /**
+     * Handles searchCommandK functionality
+     */
     public searchCommandK(request: CommandKRequest, companyUniqueName: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.COMMAND_K;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
@@ -25,10 +39,16 @@ export class CommandKService {
         url = url?.replace(':group', encodeURIComponent(request.group));
         url = url?.replace(':isMobile', encodeURIComponent(request.isMobile));
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 }

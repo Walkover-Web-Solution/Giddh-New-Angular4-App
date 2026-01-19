@@ -7,6 +7,9 @@ import { KeyboardShortutModule } from "../helpers/directives/keyboardShortcut/ke
 import { AsideMenuOtherTaxes } from "./aside-menu-other-taxes";
 import { MatButtonModule } from "@angular/material/button";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AsideMenuOtherTaxes
@@ -24,6 +27,10 @@ import { MatButtonModule } from "@angular/material/button";
         AsideMenuOtherTaxes
     ]
 })
+/**
+ * AsideMenuOtherTaxesModule module
+ * Implements AsideMenuOtherTaxesModule functionality
+ */
 export class AsideMenuOtherTaxesModule {
 
 }

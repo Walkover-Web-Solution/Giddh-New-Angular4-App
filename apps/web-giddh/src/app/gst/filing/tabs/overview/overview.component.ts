@@ -4,6 +4,9 @@ import { GstDatePeriod } from '../../../../models/api-models/GstReconcile';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'filing-overview',
@@ -11,6 +14,10 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['overview.component.scss'],
     standalone:false
 })
+/**
+ * FilingOverviewComponent component
+ * Handles filingoverview functionality and user interactions
+ */
 export class FilingOverviewComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: GstDatePeriod = new GstDatePeriod();
     @Input() public activeCompanyGstNumber: string = '';
@@ -28,9 +35,16 @@ export class FilingOverviewComponent implements OnInit, OnDestroy {
     public filters: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private route: Router, private activatedRoute: ActivatedRoute) {
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.showTransaction = this.route.routerState.snapshot.url.includes('transaction');
@@ -43,6 +57,9 @@ export class FilingOverviewComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles selectTxn functionality
+     */
     public selectTxn(param) {
         this.filters = param;
     }

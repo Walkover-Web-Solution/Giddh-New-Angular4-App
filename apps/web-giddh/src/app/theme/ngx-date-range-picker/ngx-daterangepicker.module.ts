@@ -14,6 +14,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { NewConfirmationModalModule } from '../new-confirmation-modal/confirmation-modal.module';
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         NgxDaterangepickerComponent,
@@ -37,10 +40,21 @@ import { NewConfirmationModalModule } from '../new-confirmation-modal/confirmati
     ]
 })
 
+/**
+ * NgxDaterangepickerMd module
+ * Implements NgxDaterangepickerMd functionality
+ */
 export class NgxDaterangepickerMd {
+    /**
+     * Creates an instance of module
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
     }
 
+    /**
+     * Handles forRoot functionality
+     */
     static forRoot(config: LocaleConfig = {}): ModuleWithProviders<NgxDaterangepickerMd> {
         return {
             ngModule: NgxDaterangepickerMd,

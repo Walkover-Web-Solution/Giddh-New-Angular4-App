@@ -1,6 +1,9 @@
 import { NgModule } from "@angular/core";
 import { EntryAmountDirective } from "./entry-amount.directive";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         EntryAmountDirective
@@ -9,6 +12,10 @@ import { EntryAmountDirective } from "./entry-amount.directive";
         EntryAmountDirective
     ]
 })
+/**
+ * EntryAmountModule module
+ * Implements EntryAmountModule functionality
+ */
 export class EntryAmountModule {
 
 }

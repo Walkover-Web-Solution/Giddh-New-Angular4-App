@@ -22,6 +22,9 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { FieldTypes } from '../../../custom-fields/custom-fields.constant';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'bulk-stock',
     templateUrl: './bulk-stock-edit.component.html',
@@ -30,6 +33,10 @@ import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
     standalone:false
 })
 
+/**
+ * BulkStockEditComponent component
+ * Handles bulkstockedit functionality and user interactions
+ */
 export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /** Store Advance search dialog template reference*/
@@ -217,6 +224,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Discounts list */
     public discountsList: IDiscountList[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private route: ActivatedRoute,
         private formBuilder: UntypedFormBuilder,
@@ -234,6 +245,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.initBulkStockForm();
         this.getCustomFields();
         this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 const results = response.map(result => {
                     this.allCustomField[result.uniqueName] = result;
@@ -261,10 +275,19 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.searchInputObservableInitialize();
 
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(select => select.inventory.bulkStock),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((res: any) => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (res && res?.results) {
                 this.isApiCalled = false;
                 const bulkStockForm = this.bulkStockData;
@@ -286,7 +309,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.taxDropdown.valueChanges.pipe(debounceTime(700),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)).subscribe((search: string) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!search) {
                     this.taxes$.pipe(take(1)).subscribe(res => {
                         this.filteredTaxesList = res as IOption[];
@@ -300,6 +329,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params?.type) {
 
                 this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
@@ -310,6 +342,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data.body?.results?.length > 0) {
                 this.salesAccountList = data.body.results.map((item: any) => {
                     return {
@@ -322,6 +357,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
         this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data.body?.results?.length > 0) {
                 this.purchaseAccountList = data.body.results.map((item: any) => {
                     return {
@@ -335,6 +373,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.salesService.getAccountsWithCurrency('fixedassets').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data.body?.results?.length > 0) {
                 this.fixedAssetAccountList = data.body.results.map((item: any) => {
                     return {
@@ -352,6 +393,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getAllDiscounts();
 
         this.bulkStockEditForm.valueChanges.pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((searchedText: any) => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText && this.selectTableRowIndex !== -1) {
                 this.valueChangesOnUpdate(this.selectTableRowIndex);
             }
@@ -366,6 +410,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getAllDiscounts(): void {
         this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.discountsList = response;
             }
@@ -380,6 +427,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getStockGroups(): void {
         this.inventoryService.GetGroupsWithStocksFlatten(this.inventoryType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.stockUnitGroupList = [];
                 this.arrangeStockGroups(response.body?.results, this.stockUnitGroupList);
@@ -416,21 +466,36 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         const customFields = ['customFields'];
         const currentFieldsData = this.bulkStockData.value[selectTableRowIndex];
         Object.keys(currentFieldsData).forEach(key => {
+            /**
+             * Handles if functionality
+             */
             if (unitFields.includes(key)) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!isEqual(currentFieldsData[key], this.dropdownValues[selectTableRowIndex][key][0]?.uniqueName)) {
                     requestBody[key] = currentFieldsData[key] ? [{ uniqueName: currentFieldsData[key] }] : [];
                 }
             } else if (customFields.includes(key)) {
                 requestBody[key] = [];
                 currentFieldsData[key].forEach((item: any, index: number) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!isEqual(item, this.dropdownValues[selectTableRowIndex][key][index])) {
                         requestBody[key].push(item);
                     }
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (requestBody[key].length === 0) {
                     delete requestBody[key];
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (!isEqual(currentFieldsData[key], this.dropdownValues[selectTableRowIndex][key])) {
                     requestBody[key] = currentFieldsData[key];
                 }
@@ -445,8 +510,14 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public hideTableInput(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.selectTableRowIndex !== -1) {
             // Close mat-menus for current row
+            /**
+             * Handles for functionality
+             */
             for (let i = 0; i < this.menusPerRow; i++) {
                 this.menuTriggers.get((this.selectTableRowIndex * this.menusPerRow) + i).closeMenu();
             }
@@ -463,8 +534,14 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public showTableInput($event: any, index: number): void {
         $event.stopPropagation();
+        /**
+         * Handles if functionality
+         */
         if (this.selectTableRowIndex !== -1 && this.selectTableRowIndex !== index) {
             // Close mat-menus for previous row
+            /**
+             * Handles for functionality
+             */
             for (let i = 0; i < this.menusPerRow; i++) {
                 this.menuTriggers.get((this.selectTableRowIndex * this.menusPerRow) + i).closeMenu();
             }
@@ -481,6 +558,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public getTaxes(): void {
         this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.length > 0) {
                 this.taxes = response || [];
                 this.taxes$ = of(this.taxes);
@@ -497,22 +577,37 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public selectTax(taxSelected: any, selectTableRowIndex: number): void {
+        /**
+         * Handles if functionality
+         */
         if (!taxSelected) {
             return;
         }
         // For bulk edit, we need to handle tax selection per row
         const currentRowIndex = selectTableRowIndex;
+        /**
+         * Handles if functionality
+         */
         if (currentRowIndex === -1) {
             return;
         }
 
         // Initialize row-specific tax arrays if not exists
+        /**
+         * Handles if functionality
+         */
         if (!this.selectedTaxes[currentRowIndex]) {
             this.selectedTaxes[currentRowIndex] = [];
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.taxTempArray[currentRowIndex]) {
             this.taxTempArray[currentRowIndex] = [];
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.taxesList[currentRowIndex]) {
             this.taxesList[currentRowIndex] = cloneDeep(this.taxes);
         }
@@ -520,7 +615,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         // Work with row-specific tax list to maintain state per row
         let rowTaxes = this.taxesList[currentRowIndex];
 
+        /**
+         * Handles if functionality
+         */
         if (!this.isTaxSelectionOpen) {
+            /**
+             * Handles if functionality
+             */
             if (this.processedTaxes.includes(taxSelected.uniqueName)) {
                 return;
             }
@@ -529,15 +630,27 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
         let isSelected = this.selectedTaxes[currentRowIndex]?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
 
+        /**
+         * Handles if functionality
+         */
         if (taxSelected.taxType !== 'gstcess') {
             let index = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp.taxType === taxSelected.taxType);
 
+            /**
+             * Handles if functionality
+             */
             if (index > -1 && !isSelected?.length) {
                 (Array.isArray(rowTaxes) ? rowTaxes : []).forEach((tax) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') &&
                         (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
                         tax.isChecked = false;
@@ -546,18 +659,30 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
 
+            /**
+             * Handles if functionality
+             */
             if (index < 0 && !isSelected?.length) {
                 (Array.isArray(rowTaxes) ? rowTaxes : []).forEach((tax) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') &&
                         (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (tax?.uniqueName === taxSelected.uniqueName) {
                         tax.isChecked = true;
                         tax.isDisabled = false;
@@ -567,6 +692,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             } else if (index > -1 && !isSelected?.length) {
                 // Find and update the tax in row-specific list
                 let rowTax = rowTaxes.find(tax => tax.uniqueName === taxSelected.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (rowTax) {
                     rowTax.isChecked = true;
                     rowTax.isDisabled = false;
@@ -580,13 +708,22 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.taxTempArray[currentRowIndex].splice(idx, 1);
                 // Update row-specific tax list
                 let rowTax = rowTaxes.find(tax => tax.uniqueName === taxSelected.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (rowTax) {
                     rowTax.isChecked = false;
                 }
                 (Array.isArray(rowTaxes) ? rowTaxes : []).forEach((tax) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isDisabled = false;
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') &&
                         (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
                         tax.isDisabled = false;
@@ -594,8 +731,14 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         } else {
+            /**
+             * Handles if functionality
+             */
             if (!isSelected?.length) {
                 let rowTax = rowTaxes.find(tax => tax.uniqueName === taxSelected.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (rowTax) {
                     rowTax.isChecked = true;
                 }
@@ -604,6 +747,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 let idx = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp?.uniqueName === taxSelected.uniqueName);
                 this.taxTempArray[currentRowIndex].splice(idx, 1);
                 let rowTax = rowTaxes.find(tax => tax.uniqueName === taxSelected.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (rowTax) {
                     rowTax.isChecked = false;
                 }
@@ -624,6 +770,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public openedSelectTax(isOpen: boolean): void {
         this.isTaxSelectionOpen = isOpen;
 
+        /**
+         * Handles if functionality
+         */
         if (!isOpen) {
             // When dropdown closes, clear processed taxes for this session
             this.processedTaxes = [];
@@ -638,6 +787,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public getTaxesForRow(rowIndex: number): any[] {
+        /**
+         * Handles if functionality
+         */
         if (!this.taxesList[rowIndex]) {
             this.taxesList[rowIndex] = cloneDeep(this.taxes);
         }
@@ -652,11 +804,17 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getStockUnits(index: number): void {
         this.stockMainUnits = [];
+        /**
+         * Handles if functionality
+         */
         if (!this.bulkStockData.value[index].stockUnitUniqueName) {
             return;
         }
 
         this.manufacturingService.loadStockUnits(this.bulkStockData.value[index].stockUnitUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(units => {
+            /**
+             * Handles if functionality
+             */
             if (units?.length) {
                 units?.forEach(unit => {
                     this.stockMainUnits.push({ label: unit?.code, value: unit?.uniqueName });
@@ -740,6 +898,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     private createCustomFieldsFormArray(customFields: any[]): FormArray {
         const formArray = this.formBuilder.array([]);
 
+        /**
+         * Handles if functionality
+         */
         if (customFields && customFields.length > 0) {
             (Array.isArray(customFields) ? customFields : []).forEach(field => {
                 formArray.push(this.formBuilder.group({
@@ -794,6 +955,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.cdr.detectChanges();
@@ -809,17 +973,29 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public updateForm(requestBody: any, selectTableRowIndex: number): void {
         Object.keys(requestBody).forEach(field => {
+            /**
+             * Handles if functionality
+             */
             if (requestBody[field] === null || requestBody[field] === undefined) {
                 delete requestBody[field];
             }
         });
         this.inventoryStore.updateInventoryVariant(requestBody);
         this.inventoryStore.updateInventoryVariantSuccess$.pipe(filter(Boolean), take(1)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 Object.keys(response).forEach(key => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (key === 'customFields') {
                         response[key].forEach((field: any) => {
                             this.dropdownValues[selectTableRowIndex][key].forEach((customField: any, customFieldIndex: number) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (customField.uniqueName === field.uniqueName) {
                                     this.dropdownValues[selectTableRowIndex][key][customFieldIndex] = field;
                                 }
@@ -859,6 +1035,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public handlePageEvent(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.pageCount !== event.pageSize) {
             this.pagination.currentPage = 1;
         } else {
@@ -891,6 +1070,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public toggleInput(key: string): void {
         this.hideTableHeadInput();
+        /**
+         * Handles if functionality
+         */
         if (!(this.tableHeadInput[key] && this.searchString && this.searchStringKey)) {
             this.tableHeadInput[key] = !this.tableHeadInput[key];
         }
@@ -903,6 +1085,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public hideTableHeadInput(): void {
         Object.entries(this.tableHeadInput).forEach(([key]) => {
+            /**
+             * Handles if functionality
+             */
             if (this.tableHeadInput[key] && this.searchString && this.searchStringKey) {
                 this.tableHeadInput[key] = true;
             } else {
@@ -920,24 +1105,45 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public getInputIndex(index: number, key: string): void {
         this.selectTableRowName = key;
         // Trigger dropdown opening if it's the taxes field
+        /**
+         * Handles if functionality
+         */
         if (key === 'archive' || key === 'salesTaxInclusive' || key === 'purchaseTaxInclusive' || key === 'fixedAssetTaxInclusive') {
+            /**
+             * Handles for functionality
+             */
             for (let i = 0; i < this.menusPerRow; i++) {
+                /**
+                 * Handles if functionality
+                 */
                 if (key === 'archive' && i === 0 || key === 'salesTaxInclusive' && i === 1 || key === 'purchaseTaxInclusive' && i === 2 || key === 'fixedAssetTaxInclusive' && i === 3) {
                     continue;
                 }
                 this.menuTriggers.get((this.selectTableRowIndex * this.menusPerRow) + i)?.closeMenu();
             }
         } else {
+            /**
+             * Handles for functionality
+             */
             for (let i = 0; i < this.menusPerRow; i++) {
                 this.menuTriggers.get((this.selectTableRowIndex * this.menusPerRow) + i)?.closeMenu();
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (key === 'taxes') {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.openTaxDropdownIfNeeded();
             }, 50);
         } else {
             const taxSelect = this.taxSelects.toArray()[0];
+            /**
+             * Handles if functionality
+             */
             if (taxSelect && taxSelect.panelOpen) {
                 taxSelect.close();
                 this.cdr.detectChanges();
@@ -952,80 +1158,176 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private searchInputObservableInitialize(): void {
         this.thVariantName.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.searchBy(searchedText, "variant_name");
             }
         });
 
         this.thVariantUniqueName.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.searchBy(searchedText, "variant_unique_name");
             }
         });
 
         this.thStockName.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.searchBy(searchedText, "stock_name");
             }
         });
 
         this.thStockUniqueName.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.searchBy(searchedText, "stock_unique_name");
             }
         });
 
         this.thStockGroupName.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.searchBy(searchedText, "stock_group_name");
             }
         });
 
         this.thHsn.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.searchBy(searchedText, "hsn");
             }
         });
 
         this.thSac.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.searchBy(searchedText, "sac");
             }
         });
 
         this.thSkuCode.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText !== null && searchedText !== undefined) {
                 this.searchBy(searchedText, "sku");
             }
@@ -1037,6 +1339,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public sort(key: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.sortOrderStatus === null || this.sortOrderStatus === 'desc') {
             this.sortOrderStatus = 'asc';
         } else {
@@ -1068,6 +1373,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.searchString = searchedText;
         this.searchStringKey = key;
         let bodyObj;
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchData !== null) {
             bodyObj = {
                 "search": searchedText,
@@ -1125,6 +1433,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.hideTableHeadInput();
         this.isLoading = false;
 
+        /**
+         * Handles if functionality
+         */
         if (this.isApiCalled) {
             this.store.dispatch(this.inventoryAction.getBulkStockList({
                 inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
@@ -1165,6 +1476,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public setDisplayColumns(columns: any): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             const columnMap = {};
             columns?.forEach(column => {
@@ -1246,6 +1560,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         // Check initial state
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.openTaxDropdownIfNeeded();
         }, 200);
@@ -1256,9 +1573,18 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     private openTaxDropdownIfNeeded(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.selectTableRowName === 'taxes' && this.selectTableRowIndex !== -1) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 const taxSelect = this.taxSelects.toArray()[0]; // Get the first (current) tax select
+                /**
+                 * Handles if functionality
+                 */
                 if (taxSelect && !taxSelect.panelOpen) {
                     taxSelect.open();
                 }

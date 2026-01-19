@@ -24,6 +24,9 @@ export class GroupFlattenHelper {
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
+            /**
+             * Handles if functionality
+             */
             if (listItem?.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));

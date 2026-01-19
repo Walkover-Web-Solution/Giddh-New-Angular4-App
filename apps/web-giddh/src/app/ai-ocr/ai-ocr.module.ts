@@ -31,6 +31,9 @@ import { AiOcrListComponent } from "./ai-ocr-list/ai-ocr-list.component";
 import { AiOcrRoutingModule } from "./ai-ocr.routing.module";
 import { MatBadgeModule } from "@angular/material/badge";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         ScrollingModule,
@@ -67,4 +70,8 @@ import { MatBadgeModule } from "@angular/material/badge";
     declarations: [AiOcrComponent, AiOcrCreateComponent, AiOcrListComponent],
     providers: [],
 })
+/**
+ * AiOcrModule module
+ * Implements AiOcrModule functionality
+ */
 export class AiOcrModule {}

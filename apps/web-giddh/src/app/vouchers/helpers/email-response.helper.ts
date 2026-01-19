@@ -13,6 +13,9 @@ export class EmailResponseHelper {
      * @returns State update object
      */
     public static handleEmailResponse(res: any, toaster: ToasterService): { sendEmailInProgress: boolean; sendEmailIsSuccess: boolean } {
+        /**
+         * Handles if functionality
+         */
         if (res.status === "success") {
             toaster.showSnackBar("success", res.body);
             return { sendEmailInProgress: false, sendEmailIsSuccess: true };

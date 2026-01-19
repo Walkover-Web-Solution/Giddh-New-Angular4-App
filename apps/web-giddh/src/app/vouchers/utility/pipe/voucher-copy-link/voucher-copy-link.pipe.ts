@@ -2,13 +2,24 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { VoucherTypeEnum } from "../../vouchers.const";
 import { VouchersUtilityService } from "../../vouchers.utility.service";
 
+/**
+ * Handles Pipe functionality
+ */
 @Pipe({
     name: 'voucherCopyLink',
     pure: true,
     standalone:false
 })
+/**
+ * VoucherCopyLinkPipe pipe
+ * Implements VoucherCopyLinkPipe functionality
+ */
 export class VoucherCopyLinkPipe implements PipeTransform {
 
+    /**
+     * Creates an instance of pipe
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private vouchersUtilityService: VouchersUtilityService
     ) {
@@ -27,6 +38,9 @@ export class VoucherCopyLinkPipe implements PipeTransform {
         let copyText = "";
         let voucherName = this.vouchersUtilityService.getVoucherNameByType(voucherType, localeData, true);
 
+        /**
+         * Handles switch functionality
+         */
         switch (voucherType) {
             case VoucherTypeEnum.debitNote:
             case VoucherTypeEnum.creditNote:

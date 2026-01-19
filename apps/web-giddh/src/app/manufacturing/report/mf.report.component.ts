@@ -39,6 +39,9 @@ const filter2 = [
     { label: 'Voucher Number', value: 'voucherNumber' }
 ];
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'manufacturing-report',
     templateUrl: './mf.report.component.html',
@@ -46,6 +49,10 @@ const filter2 = [
     standalone: false
 })
 
+/**
+ * MfReportComponent component
+ * Handles mfreport functionality and user interactions
+ */
 export class MfReportComponent implements OnInit, OnDestroy {
     /** True if component is getting input in some parent component */
     @Input() public fromParentComponent: boolean = false;
@@ -114,6 +121,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
     /** Displayed columns for manufacturing report mat-table */
     public displayedColumns: string[] = ['date', 'voucherNumber', 'stockName', 'manufacturingQuantity', 'manufacturingUnit', 'materialData', 'warehouse'];
 
+/**
+ * Creates an instance of component
+ * Initializes component dependencies and sets up initial state
+ */
 constructor(
         private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
@@ -130,13 +141,22 @@ constructor(
         this.isReportLoading$ = this.store.pipe(select(p => p.manufacturing.isMFReportLoading), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
+        /**
+         * Handles if functionality
+         */
         if (this.currentOrganizationType === OrganizationType.Company) {
             this.getWarehouses();
         }
 
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -153,9 +173,18 @@ constructor(
         // Refresh the stock list
 
         this.store.pipe(select(p => p.inventory.manufacturingStockList), takeUntil(this.destroyed$)).subscribe((o: any) => {
+            /**
+             * Handles if functionality
+             */
             if (o) {
+                /**
+                 * Handles if functionality
+                 */
                 if (o.results) {
                     this.stockListDropDown = [];
+                    /**
+                     * Handles forEach functionality
+                     */
                     forEach(o.results, (unit: any) => {
                         this.stockListDropDown.push({
                             label: ` ${unit.name} (${unit?.uniqueName})`,
@@ -169,6 +198,9 @@ constructor(
             }
         });
         this.store.pipe(select(p => p.manufacturing.reportData), takeUntil(this.destroyed$)).subscribe((o: any) => {
+            /**
+             * Handles if functionality
+             */
             if (o) {
                 this.reportData = cloneDeep(o);
             }
@@ -181,6 +213,9 @@ constructor(
 
         // Refresh report data according to universal date
         this.store.pipe(select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
                 this.mfStockSearchRequest.dateRange = this.universalDate;
@@ -192,12 +227,18 @@ constructor(
             }
         })), takeUntil(this.destroyed$)).subscribe();
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch?.name,
@@ -214,10 +255,16 @@ constructor(
                 });
                 this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -231,6 +278,9 @@ constructor(
                     }
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -242,6 +292,9 @@ constructor(
         this.initializeWarehouse();
     }
 
+    /**
+     * Initializes ializesearchreqobj
+     */
     public initializeSearchReqObj() {
         this.mfStockSearchRequest.product = '';
         this.mfStockSearchRequest.searchBy = '';
@@ -250,11 +303,17 @@ constructor(
         this.mfStockSearchRequest.count = PAGINATION_LIMIT;
     }
 
+    /**
+     * Handles goToCreateNewPage functionality
+     */
     public goToCreateNewPage() {
         this.store.dispatch(this.manufacturingActions.RemoveMFItemUniqueNameFomStore());
         this.router.navigate(['/pages/manufacturing/edit']);
     }
 
+    /**
+     * Retrieves reports data
+     */
     public getReports() {
         let data = cloneDeep(this.mfStockSearchRequest);
         data.from = this.fromDate;
@@ -269,6 +328,9 @@ constructor(
      * @memberof MfReportComponent
      */
     public handlePageEvent(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if ((event.pageIndex + 1) !== this.lastPage || this.mfStockSearchRequest.count !== event.pageSize) {
             let data = cloneDeep(this.mfStockSearchRequest);
             data.page = this.mfStockSearchRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
@@ -281,15 +343,27 @@ constructor(
 
 
 
+    /**
+     * Handles editMFItem functionality
+     */
     public editMFItem(item) {
+        /**
+         * Handles if functionality
+         */
         if (item?.uniqueName) {
             this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item?.uniqueName));
             this.router.navigate(['/pages/manufacturing/edit']);
         }
     }
 
+    /**
+     * Retrieves reportdataonfresh data
+     */
     public getReportDataOnFresh() {
         let data = cloneDeep(this.mfStockSearchRequest);
+        /**
+         * Handles if functionality
+         */
         if (this.universalDate) {
             data.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
             data.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
@@ -300,15 +374,27 @@ constructor(
         this.store.dispatch(this.manufacturingActions.GetMfReport(data));
     }
 
+    /**
+     * Handles clearDate functionality
+     */
     public clearDate(model: string) {
         this.mfStockSearchRequest[model] = '';
     }
 
+    /**
+     * Sets today value
+     */
     public setToday(model: string) {
         this.mfStockSearchRequest[model] = dayjs();
     }
 
+    /**
+     * Handles bsValueChange functionality
+     */
     public bsValueChange(event: any) {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.mfStockSearchRequest.from = dayjs(event[0]).format(GIDDH_DATE_FORMAT);
             this.mfStockSearchRequest.to = dayjs(event[1]).format(GIDDH_DATE_FORMAT);
@@ -335,6 +421,9 @@ constructor(
         this.warehouses = this.allWarehouses[selectedEntity?.value];
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -350,8 +439,14 @@ constructor(
         DatepickerMethodsHelper.toggleGiddhDatepicker(this.universalDatepickerTrigger, isOpen);
     }
 
+    /**
+     * Handles dateSelectedCallback functionality
+     */
     public dateSelectedCallback(value?: any): void {
         DatepickerMethodsHelper.dateSelectedCallback(value, this, this.universalDatepickerTrigger);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.mfStockSearchRequest.from = this.fromDate;
             this.mfStockSearchRequest.to = this.toDate;
@@ -367,6 +462,9 @@ constructor(
     private initializeWarehouse(): void {
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             this.warehouses = [];
+            /**
+             * Handles if functionality
+             */
             if (warehouses && warehouses.results) {
                 (Array.isArray(warehouses.results) ? warehouses.results : []).forEach(warehouse => {
                     this.warehouses.push({ label: warehouse.name, value: warehouse?.uniqueName, additional: warehouse });
@@ -408,6 +506,9 @@ constructor(
      * @memberof MfReportComponent
      */
     public showClearFilter(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (this.mfStockSearchRequest.warehouseUniqueName || this.mfStockSearchRequest.product || this.mfStockSearchRequest.searchBy || this.mfStockSearchRequest.searchOperation || this.mfStockSearchRequest.searchValue) {
             return true;
         }
@@ -422,14 +523,26 @@ constructor(
      */
     public getWarehouses(): void {
         this.store.pipe(select(state => state.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
+            /**
+             * Handles if functionality
+             */
             if (branches) {
+                /**
+                 * Handles if functionality
+                 */
                 if (branches.results?.length) {
                     this.allWarehouses = [];
                     (Array.isArray(branches.results) ? branches.results : []).forEach(branch => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.allWarehouses[branch?.uniqueName]) {
                             this.allWarehouses[branch?.uniqueName] = [];
                         }
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (branch?.warehouses?.length > 0) {
                             (Array.isArray(branch?.warehouses) ? branch?.warehouses : []).forEach(warehouse => {
                                 this.allWarehouses[branch?.uniqueName].push({ label: warehouse?.name, value: warehouse?.uniqueName, additional: warehouse?.taxNumber });

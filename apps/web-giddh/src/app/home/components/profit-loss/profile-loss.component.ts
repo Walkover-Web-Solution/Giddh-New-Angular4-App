@@ -27,6 +27,9 @@ import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'profit-loss',
     templateUrl: 'profit-loss.component.html',
@@ -34,6 +37,10 @@ Chart.register(...registerables);
     standalone:false
 })
 
+/**
+ * ProfitLossComponent component
+ * Handles profitloss functionality and user interactions
+ */
 export class ProfitLossComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     /** Angular Material menu trigger for datepicker */
@@ -74,21 +81,34 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     /** Chart object */
     public chart: any;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig, private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhNumberFormatPipe, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         // img path
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
                 this.activeCompany = activeCompany;
@@ -97,6 +117,9 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
         // listen for universal date
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let dates = [];
                 dates = [dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT), dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
@@ -109,6 +132,9 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Resets chartdata to default state
+     */
     public resetChartData() {
         this.dataFound = false;
         this.totalIncome = 0;
@@ -121,7 +147,13 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
+        /**
+         * Handles if functionality
+         */
         if (this.chart) {
             this.chart.destroy();
             this.chart = null;
@@ -130,7 +162,13 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Retrieves filterdate data
+     */
     public getFilterDate(dates: any) {
+        /**
+         * Handles if functionality
+         */
         if (dates !== null) {
             this.requestInFlight = true;
             this.plRequest.from = dates[0];
@@ -158,6 +196,9 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
      * @memberof ProfitLossComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -172,16 +213,25 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     * @memberof ProfitLossComponent
     */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -202,6 +252,9 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
      */
     public getProfitLossData(): void {
         this.tlPlService.GetProfitLoss(cloneDeep(this.plRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body) {
                 this.dataFound = true;
                 let data = cloneDeep(response.body) as ProfitLossData;
@@ -209,6 +262,9 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 let expense;
                 let npl;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.incomeStatement && data.incomeStatement.revenue) {
                     revenue = cloneDeep(data.incomeStatement.revenue) as GetRevenueResponse;
                     this.totalIncome = giddhRoundOff(revenue.amount, this.giddhBalanceDecimalPlaces);
@@ -218,6 +274,9 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                     this.totalIncomeType = '';
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.incomeStatement && data.incomeStatement.totalExpenses) {
                     expense = cloneDeep(data.incomeStatement.totalExpenses) as GetTotalExpenseResponse;
                     this.totalExpense = giddhRoundOff(expense.amount, this.giddhBalanceDecimalPlaces);
@@ -227,6 +286,9 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                     this.totalExpenseType = '';
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.incomeStatement && data.incomeStatement.incomeBeforeTaxes) {
                     npl = cloneDeep(data.incomeStatement.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
                     this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
@@ -236,6 +298,9 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                     this.netProfitLoss = 0;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.totalIncome === 0 && this.totalExpense === 0) {
                     this.resetChartData();
                 } else {

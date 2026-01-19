@@ -13,6 +13,9 @@ import { MasterComponent } from '../master/master.component';
 import { PageLeaveUtilityService } from 'apps/web-giddh/src/app/services/page-leave-utility.service';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-manage-groups-accounts',
     templateUrl: './manage-groups-accounts.component.html',
@@ -20,6 +23,10 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
     standalone: false,
     changeDetection: ChangeDetectionStrategy.Default
 })
+/**
+ * ManageGroupsAccountsComponent component
+ * Handles managegroupsaccounts functionality and user interactions
+ */
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Instance of master component */
@@ -65,6 +72,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public archivedDropdownIsOpen: boolean = false;
 
     // tslint:disable-next-line:no-empty
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private groupWithAccountsAction: GroupWithAccountsAction,
@@ -83,6 +94,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     @HostListener('window:resize', ['$event'])
+    /**
+     * Handles resizeEvent functionality
+     */
     public resizeEvent(e) {
         this.headerRect = this.header.nativeElement?.getBoundingClientRect();
         this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
@@ -95,7 +109,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     @HostListener('keyup', ['$event'])
+    /**
+     * Handles keyup event
+     */
     public onKeyUp(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.keyupInitialized && this.generalService.allowCharactersNumbersSpecialCharacters(event)) {
             this.groupSrch?.nativeElement.focus();
             this.searchString = event.key;
@@ -104,18 +124,30 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     // tslint:disable-next-line:no-empty
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.dispatch(this.generalAction.addAndManageClosed());
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
         this.getTopSharedGroups();
         // search groups
         this.groupSearchTerms.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe(term => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.initialLoad) {
                     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
                     this.store.dispatch(this.accountsAction.resetActiveAccount());
                     this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
+                    /**
+                     * Handles if functionality
+                     */
                     if (term) {
                         this.searchMasters(term);
                         this.breadcrumbPath = [];
@@ -126,6 +158,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                         this.breadcrumbUniquePath = [];
                     }
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (term) {
                         this.searchMasters(term);
                         this.breadcrumbPath = [];
@@ -144,20 +179,35 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         });
 
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            /**
+             * Handles if functionality
+             */
             if (value[0] === "accountdeleted") {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.searchString) {
                     this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
                 }
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.keyupInitialized) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.groupSrch?.nativeElement.focus();
             }, 200);
         }
 
         this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges && !response) {
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             }
@@ -168,12 +218,24 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         document.querySelector('body')?.classList?.add('master-page');
     }
 
+    /**
+     * Handles ngAfterViewChecked functionality
+     */
     public ngAfterViewChecked() {
         this.changeDetectionService.safeChangeDetection(this.cdRef, this.ngZone);
     }
 
+    /**
+     * Handles searchGroups functionality
+     */
     public searchGroups(term: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges) {
+            /**
+             * Handles if functionality
+             */
             if (!this.isPageLeaveConfirmationOpen) {
                 this.confirmPageLeave(() => {
                     this.searchGroupsAndAccounts(term);
@@ -184,6 +246,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.searchGroupsAndAccounts(term);
     }
 
+    /**
+     * Handles searchGroupsAndAccounts functionality
+     */
     private searchGroupsAndAccounts(term: string): void {
         this.store.dispatch(this.groupWithAccountsAction.setGroupAndAccountsSearchString(term));
         this.groupSearchTerms.next(term);
@@ -191,8 +256,17 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.breadcrumbUniquePath = [];
     }
 
+    /**
+     * Resets groupsearchstring to default state
+     */
     public resetGroupSearchString(needToFireRequest: boolean = true) {
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges) {
+            /**
+             * Handles if functionality
+             */
             if (!this.isPageLeaveConfirmationOpen) {
                 this.confirmPageLeave(() => {
                     this.resetSearchString(needToFireRequest);
@@ -203,7 +277,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.resetSearchString(needToFireRequest);
     }
 
+    /**
+     * Resets searchstring to default state
+     */
     private resetSearchString(needToFireRequest: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (needToFireRequest) {
             this.groupSearchTerms.next('');
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
@@ -216,7 +296,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.searchString = "";
     }
 
+    /**
+     * Closes popupevent
+     */
     public closePopupEvent(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges) {
             this.confirmPageLeave(() => {
                 this.closePopup();
@@ -239,19 +325,31 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.closeEvent.emit(true);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         this.closePopup();
     }
 
+    /**
+     * Handles scrollToRight functionality
+     */
     public scrollToRight(): void {
         let element = document.querySelector('#horizontal-master-scroll');
+        /**
+         * Handles if functionality
+         */
         if (element) {
             element.scrollLeft = element.scrollWidth;
         }
     }
 
+    /**
+     * Handles breadcrumbPathChanged functionality
+     */
     public breadcrumbPathChanged(obj) {
         this.breadcrumbUniquePath = obj.breadcrumbUniqueNamePath;
         this.breadcrumbPath = obj.breadcrumbPath;
@@ -269,6 +367,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.breadcrumbPath = [];
         this.breadcrumbUniquePath = [];
         this.groupService.getGroupsWithAccounts(term, null, this.selectedArchivedOption).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.searchedMasterData = response?.body;
                 this.changeDetectionService.triggerChangeDetection(this.cdRef, this.ngZone);
@@ -287,6 +388,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     private getTopSharedGroups(): void {
         this.topSharedGroups = [];
         this.groupService.getTopSharedGroups().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.topSharedGroups = response?.body?.results;
                 this.changeDetectionService.triggerChangeDetection(this.cdRef, this.ngZone);
@@ -307,8 +411,14 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.isPageLeaveConfirmationOpen = true;
         this.pageLeaveUtilityService.confirmPageLeave(action => {
             this.isPageLeaveConfirmationOpen = false;
+            /**
+             * Handles if functionality
+             */
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                /**
+                 * Handles callback functionality
+                 */
                 callback();
             }
         });
@@ -320,6 +430,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     @HostListener("document:keyup.esc")
+    /**
+     * Handles pressescape event
+     */
     public onPressEscape(): void {
         this.closePopupEvent();
     }
@@ -334,6 +447,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      public onArchivedFilterSelected(event: any, search: boolean = true): void {
         this.selectedArchivedOption = event.value;
         this.selectedArchivedLabel = event.label;
+        /**
+         * Handles if functionality
+         */
         if (search) {
             this.searchGroups(this.searchString);
         }
@@ -346,6 +462,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
             this.onArchivedFilterSelected(this.archivedOptions[0], false);

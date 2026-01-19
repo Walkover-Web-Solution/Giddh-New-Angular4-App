@@ -10,6 +10,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -32,6 +35,10 @@ import { MatButtonModule } from '@angular/material/button';
     ]
 })
 
+/**
+ * CommandKModule module
+ * Implements CommandKModule functionality
+ */
 export class CommandKModule {
     public static forRoot(): ModuleWithProviders<CommandKModule> {
         return {

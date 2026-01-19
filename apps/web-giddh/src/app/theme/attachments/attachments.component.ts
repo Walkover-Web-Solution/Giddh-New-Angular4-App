@@ -23,6 +23,9 @@ import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ServiceConfig } from "../../services/service.config";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "attachments",
     templateUrl: "./attachments.component.html",
@@ -30,6 +33,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * AttachmentsComponent component
+ * Handles attachments functionality and user interactions
+ */
 export class AttachmentsComponent implements OnInit, OnDestroy {
     /** Taking selected entry as input */
     @Input() public selectedItem: any;
@@ -66,6 +73,10 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private commonService: CommonService,
         private generalService: GeneralService,
@@ -91,6 +102,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -98,6 +112,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
             } else {
@@ -106,6 +123,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            /**
+             * Handles if functionality
+             */
             if (settings) {
                 this.invoiceSettings = settings;
             } else {
@@ -113,7 +133,13 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (!this.previewedFile) {
+            /**
+             * Handles if functionality
+             */
             if (this.voucherPdf?.type) {
                 this.showVoucherPreview();
             } else if (this.attachments?.length > 0) {
@@ -144,13 +170,25 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     private getFiles(): void {
         let getRequest = {
+            /**
+             * Handles voucherType functionality
+             */
             voucherType: (this.selectedItem.voucherGeneratedType) ? this.selectedItem.voucherGeneratedType : undefined,
             entryUniqueName: this.selectedItem.voucherUniqueName ?? this.selectedItem.entryUniqueName ?? this.selectedItem?.uniqueName,
+            /**
+             * Handles uniqueName functionality
+             */
             uniqueName: (this.selectedItem.voucherUniqueName) ? this.selectedItem.voucherUniqueName : undefined
         };
 
         this.commonService.downloadFile(getRequest, "ALL").pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body?.attachments?.length > 0) {
                     this.attachments = response.body?.attachments;
 
@@ -159,6 +197,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                         let objectURL;
                         let fileSource;
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             objectURL = `data:image/${fileExtention};base64,` + attachment.encodedData;
                             fileSource = this.domSanitizer.bypassSecurityTrustUrl(objectURL);
@@ -176,9 +217,15 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                     });
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body?.data) {
                     let objectURL = this.generalService.base64ToBlob(response.body?.data, 'application/pdf', 512);
                     this.voucherPdf = { name: this.selectedItem?.voucherNumber, uniqueName: this.selectedItem?.voucherUniqueName, type: "pdf", src: objectURL, originalSrc: objectURL, encodedData: response.body?.data, isChecked: false, originalFileExtension: "pdf" };
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.selectedItem?.isAttachment || !this.attachments?.length) {
                         this.showVoucherPreview();
                     } else {
@@ -209,6 +256,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public showFilePreview(attachment: any): void {
         this.previewedFile = cloneDeep(attachment);
+        /**
+         * Handles if functionality
+         */
         if (attachment?.type === "pdf") {
             const file = new Blob([attachment?.src], { type: 'application/pdf' });
             let pdfFileURL = URL.createObjectURL(file);
@@ -239,6 +289,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         let file = new Image();
         file.src = this.previewedFile.originalSrc;
         let windowObject = window.open("");
+        /**
+         * Handles if functionality
+         */
         if (windowObject?.document) {
             windowObject.document.write(file.outerHTML);
         }
@@ -255,6 +308,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         attachment.isChecked = event?.checked;
 
         let allAttachmentSelected = this.attachments?.filter(attachment => !attachment.isChecked);
+        /**
+         * Handles if functionality
+         */
         if ((!this.attachments?.length || (this.attachments?.length && !allAttachmentSelected?.length)) && (!this.voucherPdf?.type || this.voucherPdf?.isChecked)) {
             this.selectAll = true;
         } else {
@@ -280,16 +336,31 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public downloadFiles(): void {
         let isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked);
+        /**
+         * Handles if functionality
+         */
         if (isAttachmentSelected?.length > 0 && this.voucherPdf?.isChecked) {
             let getRequest = {
                 typeOfInvoice: ["Original"],
                 voucherType: this.selectedItem.voucherGeneratedType,
+                /**
+                 * Handles entryUniqueName functionality
+                 */
                 entryUniqueName: (this.selectedItem.voucherUniqueName) ? undefined : this.selectedItem.entryUniqueName,
+                /**
+                 * Handles uniqueName functionality
+                 */
                 uniqueName: (this.selectedItem.voucherUniqueName) ? this.selectedItem.voucherUniqueName : undefined
             };
 
             this.commonService.downloadFile(getRequest, "ALL", "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status !== "error") {
+                    /**
+                     * Saves as data
+                     */
                     saveAs(response, `${this.selectedItem.voucherNumber}.` + 'zip');
                 } else {
                     this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -299,11 +370,20 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             }));
         } else if (isAttachmentSelected?.length > 0) {
             let src = this.generalService.base64ToBlob(this.attachments[0].encodedData, this.attachments[0].type, 512);
+            /**
+             * Saves as data
+             */
             saveAs(src, `${this.attachments[0].name}`);
         } else if (this.voucherPdf?.isChecked) {
+            /**
+             * Saves as data
+             */
             saveAs(this.voucherPdf.src, `${this.voucherPdf.name}.pdf`);
         } else if (this.previewedFile?.type) {
             let src = this.generalService.base64ToBlob(this.previewedFile.encodedData, this.previewedFile.originalFileExtension, 512);
+            /**
+             * Saves as data
+             */
             saveAs(src, `${this.previewedFile.name}.${this.previewedFile.originalFileExtension}`);
         } else {
             this.toaster.showSnackBar("error", this.localeData?.download_unavailable);
@@ -329,12 +409,21 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.ledgerService.removeAttachment(this.attachments[index]?.uniqueName).subscribe((response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'success') {
                         let updatedAttachments = this.attachments?.filter(attachment => attachment?.uniqueName !== this.attachments[index]?.uniqueName);
                         this.attachments = updatedAttachments;
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.fileInputElement && this.fileInputElement.nativeElement) {
                             this.fileInputElement.nativeElement.value = '';
                         }
@@ -358,6 +447,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public showDeleteVoucherModal(): void {
         let messageBody = this.localeData?.confirm_delete_voucher;
         let autoDeleteEntries = (this.selectedItem?.voucherGenerated && this.selectedItem?.voucherGeneratedType === VoucherTypeEnum.sales) ? this.invoiceSettings?.invoiceSettings?.autoDeleteEntries : false;
+        /**
+         * Handles if functionality
+         */
         if (autoDeleteEntries) {
             messageBody = this.localeData?.entries_delete_message;
         }
@@ -374,6 +466,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let bulkDeleteModel = {
                     voucherUniqueNames: [this.selectedItem?.voucherUniqueName],
@@ -381,7 +476,13 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 };
 
                 this.invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response.status === "success") {
                             this.toaster.showSnackBar("success", response.body);
                             this.voucherPdf = null;
@@ -410,6 +511,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             return attachment;
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.voucherPdf) {
             this.voucherPdf.isChecked = event?.checked;
         }
@@ -426,6 +530,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public printFiles(): void {
         let isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked && attachment.type !== "unsupported");
 
+        /**
+         * Handles if functionality
+         */
         if (!isAttachmentSelected?.length && !this.voucherPdf?.isChecked && (!this.previewedFile || this.previewedFile?.type === "unsupported")) {
             this.toaster.showSnackBar("error", this.localeData?.print_unavailable);
             return;
@@ -433,13 +540,25 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
 
         let filesToPrint = [];
 
+        /**
+         * Handles if functionality
+         */
         if (this.voucherPdf?.isChecked) {
             filesToPrint.push({ file: this.voucherPdf?.encodedData, type: "pdf" });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (isAttachmentSelected?.length > 0) {
             (Array.isArray(isAttachmentSelected) ? isAttachmentSelected : []).forEach(attachment => {
+                /**
+                 * Handles if functionality
+                 */
                 if (attachment?.type !== "unsupported") {
+                    /**
+                     * Handles if functionality
+                     */
                     if (attachment?.type === "image") {
                         filesToPrint.push({ file: `data:image/${attachment?.type};base64,` + attachment?.encodedData, type: attachment?.type });
                     } else {
@@ -449,7 +568,13 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!isAttachmentSelected?.length && !this.voucherPdf?.isChecked && this.previewedFile?.type !== "unsupported") {
+            /**
+             * Handles if functionality
+             */
             if (this.previewedFile?.type === "image") {
                 filesToPrint.push({ file: `data:image/${this.previewedFile?.type};base64,` + this.previewedFile?.encodedData, type: this.previewedFile?.type });
             } else {
@@ -457,6 +582,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (filesToPrint?.length > 0) {
             this.processPrintQueue(filesToPrint, 0);
         }
@@ -471,15 +599,30 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     private processPrintQueue(files: any, index: number): void {
+        /**
+         * Handles printJS functionality
+         */
         printJS({
             printable: files[index]?.file, type: files[index]?.type, base64: true, documentTitle: "",
+            /**
+             * Handles printdialogclose event
+             */
             onPrintDialogClose: () => {
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (files[index + 1]) {
                         this.processPrintQueue(files, index + 1);
                     }
                 }, 100);
             },
+            /**
+             * Handles error event
+             */
             onError: (error) => {
                 this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
             }
@@ -493,9 +636,15 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     private previewFileAfterDelete(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.voucherPdf) {
             this.showVoucherPreview();
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.attachments?.length > 0) {
                 this.showFilePreview(this.attachments[0]);
             } else {

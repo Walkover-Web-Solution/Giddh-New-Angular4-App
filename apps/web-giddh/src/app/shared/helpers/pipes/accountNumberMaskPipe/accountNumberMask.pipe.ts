@@ -1,11 +1,21 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Handles Pipe functionality
+ */
 @Pipe({
     name: 'accountNumberMask',
     pure: true,
     standalone: false
 })
+/**
+ * AccountNumberMaskPipe pipe
+ * Implements AccountNumberMaskPipe functionality
+ */
 export class AccountNumberMaskPipe implements PipeTransform {
+    /**
+     * Handles constructor functionality
+     */
     public constructor() { }
     /**
      * This will be use for convert account number to mask format.
@@ -15,6 +25,9 @@ export class AccountNumberMaskPipe implements PipeTransform {
      * @memberof AccountNumberMaskPipe
      */
     public transform(accountNumber: string, defaultAccountNumberLength:number = 4): string {
+        /**
+         * Handles if functionality
+         */
         if (!accountNumber) {
             return '';
         }

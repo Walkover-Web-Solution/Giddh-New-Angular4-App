@@ -10,12 +10,23 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { concat, forEach, get, keys } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsProfileService service
+ * Provides settingsprofile related business logic and data operations
+ */
 export class SettingsProfileService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -23,8 +34,14 @@ export class SettingsProfileService {
     /*
     * Get company profile
     */
+    /**
+     * Handles GetProfileInfo functionality
+     */
     public GetProfileInfo(): Observable<BaseResponse<SmsKeyClass, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (this.companyUniqueName) {
             return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<SmsKeyClass, string> = res;
@@ -52,11 +69,17 @@ export class SettingsProfileService {
      * Patch company profile
      */
     public PatchProfile(model: any, companyUniqueName?: any, status?: any): Observable<BaseResponse<any, any>> {
+        /**
+         * Handles if functionality
+         */
         if (companyUniqueName) {
             this.companyUniqueName = companyUniqueName;
         } else {
             this.companyUniqueName = (model.moveCompany) ? model.moveCompany : this.generalService.companyUniqueName;
         }
+        /**
+         * Handles if functionality
+         */
         if (status) {
             model = status;
         } else {
@@ -119,10 +142,19 @@ export class SettingsProfileService {
         const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.GET_COMPANY_ADDRESSES}`
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        /**
+         * Handles if functionality
+         */
         if (method === 'GET') {
+            /**
+             * Handles if functionality
+             */
             if (params) {
                 Object.keys(params).forEach((key, index) => {
                     const delimiter = index === 0 ? '?' : '&'
+                    /**
+                     * Handles if functionality
+                     */
                     if (params[key] !== undefined) {
                         contextPath += `${delimiter}${key}=${params[key]}`
                     }
@@ -294,10 +326,16 @@ export class SettingsProfileService {
     public verifyPortalWhilteLabel(domainUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.VERIFY_PORTAL_WHITE_LABEL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':domainUniqueName', encodeURIComponent(domainUniqueName)), '').pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
@@ -311,11 +349,17 @@ export class SettingsProfileService {
     public addPortalDomain(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + SETTINGS_PROFILE_API.ADD_PORTAL_DOMAIN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
@@ -329,11 +373,17 @@ export class SettingsProfileService {
     public sharedDomainEmail(model: any, domainUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + SETTINGS_PROFILE_API.SHARE_PORTAL_DOMAIN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':domainUniqueName', encodeURIComponent(domainUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
@@ -379,11 +429,17 @@ export class SettingsProfileService {
      */
     public updateSubscriptionPayment(model: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SETTINGS_PROFILE_API.SUBSCRIPTION_CHARGE?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionRequest?.subscriptionId)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 

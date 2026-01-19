@@ -7,6 +7,9 @@ import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { A11yModule } from "@angular/cdk/a11y";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         DiscountDropdownComponent
@@ -24,4 +27,8 @@ import { A11yModule } from "@angular/cdk/a11y";
         DiscountDropdownComponent
     ]
 })
+/**
+ * DiscountDropdownModule module
+ * Implements DiscountDropdownModule functionality
+ */
 export class DiscountDropdownModule { }

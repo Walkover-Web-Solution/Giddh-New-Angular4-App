@@ -24,12 +24,23 @@ import { LEDGER_API } from "./apiurls/ledger.api";
 import { concat, forEach, get, includes, keys } from '../lodash-optimized';
 
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * VoucherService service
+ * Provides voucher related business logic and data operations
+ */
 export class VoucherService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private errorHandler: GiddhErrorHandler,
         private http: HttpWrapperService,
@@ -48,10 +59,16 @@ export class VoucherService {
     public getInvoiceSettings(): Observable<BaseResponse<InvoiceSetting, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVOICE_API.SETTING_INVOICE?.replace(':companyUniqueName', this.companyUniqueName)).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<InvoiceSetting, string> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<InvoiceSetting, string>(e)));
     }
 
@@ -73,12 +90,18 @@ export class VoucherService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':vouchers', voucherType), request)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<ProformaResponse, ProformaFilter> = res;
                     data.queryString = { page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf' };
                     data.request = request;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<ProformaResponse, ProformaFilter>(e, request, { page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf' })));
     }
 
@@ -98,6 +121,9 @@ export class VoucherService {
             count: body?.count,
             from: body?.from,
             to: body?.to,
+            /**
+             * Handles q functionality
+             */
             q: ((body?.q) ? encodeURIComponent(body?.q) : body?.q),
             sort: body?.sort,
             sortBy: body?.sortBy
@@ -112,12 +138,18 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.post(url
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestPayload).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
                     data.queryString = { page: body?.page, count: body?.count, from: body?.from, to: body?.to, type: 'pdf' };
                     data.request = body;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, { page: body?.page, count: body?.count, from: body?.from, to: body?.to, type: 'pdf' })));
     }
 
@@ -190,11 +222,17 @@ export class VoucherService {
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             , model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = model;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
@@ -217,12 +255,18 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.post(url, requestObj
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<Voucher, ReceiptVoucherDetailsRequest> = res;
                 data.queryString = accountUniqueName;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, { accountUniqueName })));
     }
 
@@ -262,12 +306,18 @@ export class VoucherService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaGetRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
     }
 
@@ -370,11 +420,17 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.post(url, model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
@@ -393,11 +449,17 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.put(url, model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = model;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
@@ -433,12 +495,18 @@ export class VoucherService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
@@ -464,12 +532,18 @@ export class VoucherService {
 
         return this.http.post(url
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), payload).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<ReciptResponse, any> = res;
                     data.queryString = { page: payload?.page, count: payload?.count, from: payload?.from, to: payload?.to };
                     data.request = payload;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, any>(e, payload)));
     }
 
@@ -493,11 +567,17 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.post(url, model.dataToSend).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, any> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
     }
 
@@ -515,12 +595,18 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.post(url, action).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, string> = res;
                 data.request = voucherUniqueName;
                 data.queryString = { voucherUniqueName, action };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, string>(e, voucherUniqueName)));
     }
 
@@ -571,11 +657,17 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.post(url, model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
@@ -595,12 +687,18 @@ export class VoucherService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaUpdateActionRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaUpdateActionRequest>(e, request)));
     }
 
@@ -619,12 +717,18 @@ export class VoucherService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaGetRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
     }
 
@@ -644,12 +748,18 @@ export class VoucherService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaGetRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
     }
 
@@ -669,12 +779,18 @@ export class VoucherService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaGetRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
     }
 
@@ -698,12 +814,18 @@ export class VoucherService {
             url,
             queryRequest
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ReciptDeleteRequest> = res;
                 data.request = queryRequest;
                 data.queryString = { accountUniqueName };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName))
         )
     }
@@ -718,11 +840,17 @@ export class VoucherService {
      */
     public bulkUpdateInvoice(model: any, actionType: string): Observable<BaseResponse<any, any>> {
         let url;
+        /**
+         * Handles if functionality
+         */
         if (actionType) {
             url = this.config.apiUrl + BULK_UPDATE_VOUCHER.BULK_UPDATE_VOUCHER_ACTION?.replace(':companyUniqueName', this.generalService.companyUniqueName)?.replace(':actionType', actionType);
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.post(url, model).pipe(
+            /**
+             * Handles map functionality
+             */
             map(res => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -754,11 +882,17 @@ export class VoucherService {
         delete postRequest.to;
 
         return this.http.post(url, postRequest).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = postRequest;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequest)));
     }
 
@@ -777,7 +911,13 @@ export class VoucherService {
         let httpMethod: 'post' | 'get' = 'post';
         let apiParams = model;
         let responseType = (fileType === 'base64') ? {} : { responseType: 'blob' };
+        /**
+         * Handles if functionality
+         */
         if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(voucherType)) {
+            /**
+             * Handles if functionality
+             */
             if (this.generalService.voucherApiVersion === 2) {
                 apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
                     ?.replace(':fileType', fileType)
@@ -788,6 +928,9 @@ export class VoucherService {
                     ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                     ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
                     ?.replace(':fileType', fileType);
+                /**
+                 * Handles if functionality
+                 */
                 if (downloadOption && this.generalService.voucherApiVersion === 1)
                 {
                     const delimiter = apiUrl.includes('?') ? '&' : '?';
@@ -823,6 +966,9 @@ export class VoucherService {
      * @memberof VoucherService
      */
     public getVoucherVersions(getRequestObject: any, postRequestObject: any, voucherType: string): Observable<BaseResponse<any, string>> {
+        /**
+         * Handles if functionality
+         */
         if (voucherType === VoucherTypeEnum.purchaseOrder) {
             let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_VERSIONS;
             url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
@@ -841,12 +987,18 @@ export class VoucherService {
                 ?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName)),
                 postRequestObject
             ).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.queryString = voucherType;
                     data.request = postRequestObject;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
         } else {
             let url = this.config.apiUrl + INVOICE_API.GET_ALL_VERSIONS;
@@ -857,10 +1009,16 @@ export class VoucherService {
             url = this.generalService.addVoucherVersion(url, 2);
 
             return this.http.get(url).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, string> = res;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
         }
     }
@@ -895,9 +1053,15 @@ export class VoucherService {
         const formData: FormData = new FormData();
         formData.append('file', postRequest.file, postRequest.fileName);
 
+        /**
+         * Handles if functionality
+         */
         if (postRequest.entries) {
             formData.append('entries', postRequest.entries);
         }
+        /**
+         * Handles if functionality
+         */
         if (addVoucherVersion) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
@@ -919,6 +1083,9 @@ export class VoucherService {
         let url: string = `${this.config.apiUrl}${SALES_API_V4.UPDATE_ATTACHMENT?.replace(':companyUniqueName', this.generalService.companyUniqueName)}`;
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.patch(url, postRequestObject).pipe(
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
     }
 
@@ -937,22 +1104,34 @@ export class VoucherService {
                 : INVOICE_API_2.CANCEL_E_INVOICE}`;
 
         contextPath = contextPath?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        /**
+         * Handles if functionality
+         */
         if (requestObject.accountUniqueName) {
             contextPath = contextPath?.replace(':accountUniqueName', encodeURIComponent(requestObject.accountUniqueName));
             delete requestObject.accountUniqueName;
         }
         Object.keys(requestObject).forEach((key, index) => {
             const delimiter = index === 0 ? '?' : '&'
+            /**
+             * Handles if functionality
+             */
             if (requestObject[key] !== undefined) {
                 contextPath += `${delimiter}${key}=${encodeURIComponent(requestObject[key])}`
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
         }
 
         return this.http.post(contextPath, postObject).pipe(
+            /**
+             * Handles catchError functionality
+             */
             catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
     }
 }

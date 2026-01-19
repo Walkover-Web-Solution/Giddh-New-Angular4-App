@@ -32,6 +32,9 @@ import { environment } from '../../../../../../environments/environment.generate
 import { each, forEach } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'trial-balance-grid',
     templateUrl: './trial-balance-grid.component.html',
@@ -40,6 +43,10 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
     providers: [FinancialReportsComponentStore],
     standalone:false
 })
+/**
+ * TrialBalanceGridComponent component
+ * Handles trialbalancegrid functionality and user interactions
+ */
 export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
 
     public noData: boolean;
@@ -81,6 +88,10 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     public imgPath: string = "";
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private cd: ChangeDetectorRef,
         private zone: NgZone,
@@ -92,18 +103,30 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.accountSearchControl.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.searchInput = newValue;
                 this.hideData = true;
                 this.searchChange.emit(this.searchInput);
                 this.isExpandToggledDuringSearch = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (newValue === '') {
                     this.showClearSearch = false;
                 }
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.hideData = false;
                     this.cd.detectChanges();
@@ -111,8 +134,14 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.listOfCheckGroupsAccounts = [];
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.refresh.emit();
                 }, 600);
@@ -120,20 +149,44 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges) {
+        /**
+         * Handles if functionality
+         */
         if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
+            /**
+             * Handles if functionality
+             */
             if (this.data$) {
                 this.zone.runOutsideAngular(() => {
                     this.toggleGroupVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.data$) {
                         // always make first level visible ....
+                        /**
+                         * Handles each functionality
+                         */
                         each(this.data$.groupDetails, (grp: ChildGroup) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (grp.isIncludedInSearch) {
                                 grp.isVisible = true;
                                 grp.isCreated = true;
                                 grp.isOpen = false;
+                                /**
+                                 * Handles each functionality
+                                 */
                                 each(grp.accounts, (acc: Account) => {
+                                    /**
+                                     * Handles if functionality
+                                     */
                                     if (acc.isIncludedInSearch) {
                                         acc.isVisible = false;
                                         acc.isCreated = false;
@@ -157,29 +210,53 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles markForCheck functionality
+     */
     public markForCheck() {
         this.cd.markForCheck();
     }
 
+    /**
+     * Handles trackByFn functionality
+     */
     public trackByFn(index, item: ChildGroup) {
         return item?.uniqueName;
     }
 
+    /**
+     * Toggles search state
+     */
     public toggleSearch() {
         this.showClearSearch = true;
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.searchInputEl && this.searchInputEl.nativeElement) {
                 this.searchInputEl.nativeElement.focus();
             }
         }, 200);
     }
 
+    /**
+     * Handles clickedOutside functionality
+     */
     public clickedOutside(event, el) {
+        /**
+         * Handles if functionality
+         */
         if (this.accountSearchControl?.value !== null && this.accountSearchControl?.value !== '') {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.childOf(event.target, el)) {
             return;
         } else {
@@ -188,6 +265,9 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /* tslint:disable */
+    /**
+     * Handles childOf functionality
+     */
     public childOf(c, p) {
         return DomUtilsHelper.childOf(c, p);
     }
@@ -200,19 +280,34 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof TrialBalanceGridComponent
      */
     public toggleGroupVisibility(group: Array<ChildGroup>, isVisible: boolean): void {
+        /**
+         * Handles for functionality
+         */
         for (let groupIndex = 0; groupIndex < group?.length; groupIndex++) {
             const currentGroup: ChildGroup = group[groupIndex];
+            /**
+             * Handles if functionality
+             */
             if (currentGroup.isIncludedInSearch) {
                 currentGroup.isCreated = isVisible;
                 currentGroup.isVisible = isVisible;
                 currentGroup.isOpen = isVisible;
+                /**
+                 * Handles for functionality
+                 */
                 for (let accountIndex = 0; accountIndex < currentGroup.accounts?.length; accountIndex++) {
                     const currentAccount: Account = currentGroup.accounts[accountIndex];
+                    /**
+                     * Handles if functionality
+                     */
                     if (currentAccount.isIncludedInSearch) {
                         currentAccount.isCreated = isVisible;
                         currentAccount.isVisible = isVisible;
                     }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (currentGroup.childGroups?.length) {
                     this.toggleGroupVisibility(currentGroup.childGroups, isVisible);
                 }
@@ -260,7 +355,13 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      */
     private uncheckAll(entityType: 'group' | 'account' = 'group'): void {
         this.extractCheckedAccountsGroups(this.data$.groupDetails, entityType);
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {
                     request: {
@@ -287,6 +388,9 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
         (Array.isArray(groupAccountDetails) ? groupAccountDetails : []).forEach(groupAccount => {
+            /**
+             * Handles if functionality
+             */
             if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
                     uniqueName: groupAccount.uniqueName,
@@ -294,9 +398,15 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                     checked: false
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (groupAccount.childGroups?.length) {
                 this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
             }
+            /**
+             * Handles if functionality
+             */
             if (groupAccount.accounts?.length) {
                 this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
             }
@@ -316,6 +426,9 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.uncheckAll();
             }

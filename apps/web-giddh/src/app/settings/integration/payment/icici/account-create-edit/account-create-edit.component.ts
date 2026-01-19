@@ -12,6 +12,9 @@ import { take, takeUntil } from "rxjs/operators";
 import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../constants/settings.constant";
 import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'icici-account-create-edit',
     templateUrl: './account-create-edit.component.html',
@@ -20,6 +23,10 @@ import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-le
     standalone: false
 })
 
+/**
+ * AccountCreateEditComponent component
+ * Handles accountcreateedit functionality and user interactions
+ */
 export class AccountCreateEditComponent implements OnInit, OnDestroy {
     /** This holds bank account details, If this is passed, it means we are in edit mode */
     @Input() public activeBankAccount: any;
@@ -56,6 +63,10 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     /** True if we should show select all option selected */
     public shouldShowSelectAllChecked: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private settingsIntegrationService: SettingsIntegrationService,
@@ -74,6 +85,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeBankAccount) {
             this.paymentAlerts = this.activeBankAccount?.bankResource?.paymentAlerts?.map(user => user?.uniqueName);
 
@@ -96,6 +110,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
         }
 
         this.accountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (this.accountForm.dirty) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
@@ -123,6 +140,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     private loadDefaultBankAccountsSuggestions(): void {
         this.salesService.getAccountsWithCurrency('bankaccounts,loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
                     label: account.name,
@@ -143,11 +163,17 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     private loadUsersWithCompanyPermissions(): void {
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.usersList = [];
                 this.paymentAlertsUsersList = [];
                 let index = 0;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.length > 0) {
                     this.paymentAlertsUsersList.push({ index: index, label: this.commonLocaleData?.app_select_all, value: this.selectAllRecords });
                     index++;
@@ -159,6 +185,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     });
 
                     let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
+                    /**
+                     * Handles if functionality
+                     */
                     if ((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
                         // if all options checked and select all is unchecked, we need to show select all as selected
                         this.paymentAlerts.push(this.selectAllRecords);
@@ -174,13 +203,22 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public saveNewAccount(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.accountForm?.invalid) {
             this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts?.filter(user => user !== this.selectAllRecords));
 
             this.settingsIntegrationService.bankAccountRegistration(this.accountForm.value).pipe(take(1)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success") {
                     this.accountForm.markAsPristine();
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.body?.message) {
                         this.toaster.clearAllToaster();
                         this.toaster.successToast(response?.body?.message);
@@ -204,8 +242,14 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public closeAccountModal(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountForm.dirty) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action) {
                     this.closeModalEvent.emit(true);
                 }
@@ -223,9 +267,18 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public selectPaymentAlertUsers(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             let isSelectedValueAlreadyChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser === event?.value);
+            /**
+             * Handles if functionality
+             */
             if (event?.value === this.selectAllRecords) {
+                /**
+                 * Handles if functionality
+                 */
                 if (isSelectedValueAlreadyChecked?.length > 0) {
                     this.paymentAlerts = [];
                     this.forceClearPaymentUpdates$ = observableOf({ status: true });
@@ -233,6 +286,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.paymentAlerts = this.paymentAlertsUsersList.map(user => user?.value);
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (isSelectedValueAlreadyChecked?.length > 0) {
                     this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== event?.value);
                 } else {
@@ -241,6 +297,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
 
                 let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
                 let isSelectAllChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser === this.selectAllRecords);
+                /**
+                 * Handles if functionality
+                 */
                 if ((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1) && !isSelectAllChecked?.length) {
                     // if all options checked and select all is unchecked, we need to show select all as selected
                     this.paymentAlerts.push(this.selectAllRecords);
@@ -259,6 +318,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public clearSingleItem(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.paymentAlerts = event?.map(user => user?.value);
             this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
@@ -272,6 +334,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.amountLimitDurations = [
                 { label: this.localeData?.payment?.amount_limit?.daily, value: SettingsAmountLimitDuration.Daily },
@@ -287,9 +352,15 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public updateAccount(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.accountForm?.invalid) {
             this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts?.filter(user => user !== this.selectAllRecords));
 
+            /**
+             * Handles if functionality
+             */
             if (!this.accountForm.get('maxAmount')?.value) {
                 this.accountForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
@@ -297,6 +368,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
             let request = { bankAccountUniqueName: this.activeBankAccount?.bankResource?.uniqueName };
 
             let accountFormObj;
+            /**
+             * Handles if functionality
+             */
             if (!this.isIciciBankSupportedCountry) {
                 accountFormObj = {
                     accountNumber: this.accountForm.get('accountNumber')?.value,
@@ -305,9 +379,15 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 };
             }
             this.settingsIntegrationService.updateAccount(!this.isIciciBankSupportedCountry ? accountFormObj :this.accountForm.value, request).pipe(take(1)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success") {
                     this.accountForm.markAsPristine();
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.body?.message) {
                         this.toaster.clearAllToaster();
                         this.toaster.successToast(response?.body?.message);
@@ -328,6 +408,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public actionAccount(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeBankAccount) {
             this.updateAccount();
         } else {
@@ -343,6 +426,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public isSelectAllChecked(value: any): boolean {
+        /**
+         * Handles return functionality
+         */
         return ((this.selectAllRecords === value && this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length) || (this.selectAllRecords === value && !this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length - 1));
     }
 }

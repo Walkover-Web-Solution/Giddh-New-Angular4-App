@@ -17,7 +17,15 @@ import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { TributeConfig } from '../../shared/helpers/directives/tributeMention/tributeType';
 
+/**
+ * ExportType interface definition
+ * Defines the structure and contract for ExportType objects
+ */
 type ExportType = 'SINGLE_PDF' | 'MULTIPLE_PDF' | 'EXCEL' | 'CSV';
+/**
+ * ExportTypeEnum enumeration
+ * Defines constant values for ExportTypeEnum
+ */
 enum ExportTypeEnum {
     singlePdf = 'SINGLE_PDF',
     multiplePdf = 'MULTIPLE_PDF',
@@ -25,6 +33,9 @@ enum ExportTypeEnum {
     csv = FileTypeEnum.CSV
 };
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-bulk-export',
     templateUrl: './bulk-export.component.html',
@@ -32,6 +43,10 @@ enum ExportTypeEnum {
     providers: [VoucherComponentStore],
     standalone: false
 })
+/**
+ * BulkExportComponent component
+ * Handles bulkexport functionality and user interactions
+ */
 export class BulkExportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -72,6 +87,10 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         suggestionSuffix: '}'
     };
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,
         public dialogRef: MatDialogRef<any>,
@@ -113,20 +132,35 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             showOtherTaxValue: new FormControl<boolean>(false, { nonNullable: true })
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.vouchersOnlySupportExcelExport.includes(this.inputData?.voucherType)) {
             this.exportForm.get('exportType').setValue(ExportTypeEnum.excel);
         }
 
         this.getRecipientEmail();
 
+        /**
+         * Handles if functionality
+         */
         if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
             this.exportForm.get('copyTypes').setValidators(Validators.required);
             this.exportForm.get('copyTypes').updateValueAndValidity();
         }
 
         this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success" && response?.body) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.body.type === "base64") {
                         this.dialogRef?.close();
                         let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
@@ -141,7 +175,13 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.message) {
                     this.toasterService.showSnackBar("success", response.message);
                 } else {
@@ -149,6 +189,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                         ? 'text/csv'
                         : 'application/vnd.ms-excel';
                     const blob = this.generalService.base64ToBlob(response.data, mimeType, 512);
+                    /**
+                     * Saves as data
+                     */
                     saveAs(blob, response.name);
                 }
                 this.dialogRef?.close(true);
@@ -163,6 +206,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      */
     public getRecipientEmail(): void {
         this.componentStore.sessionUserEmail$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result && result.user) {
                 this.exportForm.get('recipients').patchValue(result.user.email);
             }
@@ -187,12 +233,18 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      * @memberof BulkExportComponent
      */
     public exportVouchers(sendMail: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.get('exportType').value === ExportTypeEnum.excel || this.exportForm.get('exportType').value === ExportTypeEnum.csv) {
             this.exportExcelDownload();
             return;
         }
 
         this.isValidForm = this.exportForm.valid;
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.invalid && this.exportForm.get('voucherExport').value) {
             return;
         }
@@ -212,6 +264,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             fileNameFormat: this.exportForm.get('selectedFormatList').value.trim(),
         };
 
+        /**
+         * Handles if functionality
+         */
         if (postRequest.fileNameFormat.length) {
             (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach(format => {
                 const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
@@ -221,9 +276,15 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
             postRequest.copyTypes = this.exportForm.value?.copyTypes;
         }
+        /**
+         * Handles if functionality
+         */
         if (!postRequest.attachmentExport) {
             delete postRequest.fileNameFormat;
         }
@@ -233,11 +294,20 @@ export class BulkExportComponent implements OnInit, OnDestroy {
 
         let validRecipients: boolean = true;
 
+        /**
+         * Handles if functionality
+         */
         if (sendMail && this.exportForm.value?.recipients) {
             let recipients = this.exportForm.value?.recipients.split(",");
             let validEmails = [];
+            /**
+             * Handles if functionality
+             */
             if (recipients && recipients.length > 0) {
                 (Array.isArray(recipients) ? recipients : []).forEach(email => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         let invalidEmail = this.localeData?.invalid_email;
                         invalidEmail = invalidEmail?.replace("[EMAIL]", email);
@@ -245,6 +315,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                         validRecipients = false;
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         validEmails.push(email.trim());
                     }
@@ -256,15 +329,24 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             postRequest.sendTo = undefined;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!validRecipients) {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (sendMail && !this.exportForm.value?.recipients) {
             this.toasterService.showSnackBar("error", this.localeData?.email_required);
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!postRequest.copyTypes) {
             postRequest.copyTypes = ["ORIGINAL"];
         }
@@ -281,6 +363,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public getFileFormat() {
         let fileNameFormat = this.exportForm.get("selectedFormatList").value;
         (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach((format) => {
+            /**
+             * Handles if functionality
+             */
             if(this.exportForm.get("selectedFormatList").value.includes(`{${format.value}}`)) {
                 fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }
@@ -294,6 +379,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.copyTypes = [
                 { value: CopyType.ORIGINAL, label: this.localeData?.invoice_copy_options?.original },
@@ -360,6 +448,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      * @memberof BulkExportComponent
      */
     public onExportTypeChange(event: MatRadioChange): void {
+        /**
+         * Handles if functionality
+         */
         if (event.value === this.exportTypeEnum.excel || event.value === this.exportTypeEnum.csv) {
             this.exportForm.get('attachmentExport').setValue(false);
             this.exportForm.get('attachmentExport').disable();
@@ -375,6 +466,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      * @memberof BulkExportComponent
      */
     public onVoucherExportChange(event: MatSlideToggleChange): void {
+        /**
+         * Handles if functionality
+         */
         if (event.checked) {
             this.exportForm.get('exportType').setValue(this.exportTypeEnum.multiplePdf);
         } else {

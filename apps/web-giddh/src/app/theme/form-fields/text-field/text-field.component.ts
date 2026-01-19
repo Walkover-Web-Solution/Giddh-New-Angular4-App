@@ -6,6 +6,9 @@ import { Subject } from "rxjs";
 const noop = () => {
 };
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "text-field",
     styleUrls: ["./text-field.component.scss"],
@@ -20,6 +23,10 @@ const noop = () => {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * TextFieldComponent component
+ * Handles textfield functionality and user interactions
+ */
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', { static: false }) public textField: ElementRef;
     @Input() public pattern: any = null;
@@ -55,19 +62,32 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     /** Used for change detection */
     public stateChanges = new Subject<void>();
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
+    /**
+     * Handles touchedcallback event
+     */
     private onTouchedCallback: () => void = noop;
     /** Callback function to notify parent component of value changes */
+    /**
+     * Handles changecallback event
+     */
     private onChangeCallback: (_: any) => void = noop;
     /** True if field is autocomplete */
     @Input() public autocomplete: string;
     /** Holds mat suffic */
     @Input() public matSuffix: any;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Optional() @Self() public ngControl: NgControl,
         private elementRef: ElementRef<HTMLElement>,
         private changeDetectionRef: ChangeDetectorRef
     ) {
+        /**
+         * Handles if functionality
+         */
         if (this.ngControl != null) {
             this.ngControl.valueAccessor = this;
         }
@@ -88,6 +108,9 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (this.autoFocus) {
            this.inputFocus();
         }
@@ -99,6 +122,9 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public inputFocus(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.textField?.nativeElement?.focus();
         }, 50);
@@ -197,6 +223,9 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
         this.onChangeCallback(this.value);
     }
 
+    /**
+     * Handles change event
+     */
     public handleChange(): void {
         this.onChangeCallback(this.value);
     }

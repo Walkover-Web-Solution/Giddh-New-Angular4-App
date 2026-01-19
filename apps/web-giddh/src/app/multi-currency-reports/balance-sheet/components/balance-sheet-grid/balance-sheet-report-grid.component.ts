@@ -23,6 +23,9 @@ import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { forEach } from '../../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'balance-sheet-report-grid',
     templateUrl: './balance-sheet-report-grid.component.html',
@@ -30,6 +33,10 @@ selector: 'balance-sheet-report-grid',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * BalanceSheetReportGridComponent component
+ * Handles balancesheetreportgrid functionality and user interactions
+ */
 export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Reference to the search input element */
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
@@ -68,6 +75,10 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
     /** Observable to manage memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private changeDetectionRef: ChangeDetectorRef, 
         private zone: NgZone,
         public generalService: GeneralService) {
@@ -82,19 +93,37 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof BalanceSheetReportGridComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
+            /**
+             * Handles if functionality
+             */
             if (this.bsData) {
                 this.zone.run(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.bsData) {
                         this.toggleVisibility(this.bsData.assets, changes.expandAll.currentValue);
                         this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
                         // always make first level visible ....
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.bsData.liabilities) {
                             (Array.isArray(this.bsData.liabilities) ? this.bsData.liabilities : []).forEach((childGroup: any) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (childGroup.isIncludedInSearch) {
                                     childGroup.isVisible = true;
                                     (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: any) => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -102,11 +131,20 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
                                 }
                             });
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.bsData.assets) {
                             (Array.isArray(this.bsData.assets) ? this.bsData.assets : []).forEach((childGroup: any) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (childGroup.isIncludedInSearch) {
                                     childGroup.isVisible = true;
                                     (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: any) => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -130,16 +168,28 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
     public ngOnInit(): void {
         this.lastSyncDate = dayjs(this.lastSyncDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_DD_MMMM_YYYY);
         this.bsSearchControl.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (newValue) {
                     this.searchInput = newValue;
                     this.hideData = true;
                     this.searchChange.emit(this.searchInput);
                     this.isExpandToggledDuringSearch = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (newValue === '') {
                         this.showClearSearch = false;
                     }
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.hideData = false;
                         this.changeDetectionRef.detectChanges();
@@ -156,7 +206,13 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      */
     public toggleSearch(): void {
         this.showClearSearch = true;
+        /**
+         * Handles if functionality
+         */
         if (this.searchInputEl && this.searchInputEl.nativeElement) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.searchInputEl.nativeElement.focus();
             }, 200);
@@ -172,6 +228,9 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof BalanceSheetReportGridComponent
      */
     public clickedOutside(event: any, element: ElementRef): void {
+        /**
+         * Handles if functionality
+         */
         if ((this.bsSearchControl?.value !== null && this.bsSearchControl?.value !== '') || this.generalService.childOf(event.target, element)) {
             return;
         } else {
@@ -188,11 +247,17 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      */
     private toggleVisibility(data: ChildGroup[], isVisible: boolean): void {
         (Array.isArray(data) ? data : []).forEach((childGroup: ChildGroup) => {
+            /**
+             * Handles if functionality
+             */
             if (childGroup.isIncludedInSearch) {
                 childGroup.isCreated = true;
                 childGroup.isVisible = isVisible;
                 childGroup.isOpen = isVisible;
                 (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (account.isIncludedInSearch) {
                         account.isCreated = true;
                         account.isVisible = isVisible;

@@ -28,6 +28,9 @@ import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
@@ -35,6 +38,10 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
     standalone:false
 })
 
+/**
+ * DaybookComponent component
+ * Handles daybook functionality and user interactions
+ */
 export class DaybookComponent implements OnInit, OnDestroy {
     public companyName: string;
     /** True, If loader is working */
@@ -126,6 +133,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
         let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
+        /**
+         * Handles return functionality
+         */
         return (hasParticularSelected?.length) ? true : false;
     }
     /** This will hold the file type extension for expand */
@@ -133,6 +143,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private companyActions: CompanyActions,
@@ -153,8 +167,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -163,12 +183,18 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -184,10 +210,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch || !this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -201,11 +233,17 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.daybookQueryRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch?.uniqueName : "";
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.initialApiCalled) {
                     this.initialApiCalled = true;
                     this.initialRequest();
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -217,9 +255,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.getCompanyTaxes();
     }
 
+    /**
+     * Handles selectedDate functionality
+     */
     public selectedDate(value: any) {
         let from = dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT);
         let to = dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT);
+        /**
+         * Handles if functionality
+         */
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
             this.daybookQueryRequest.from = from;
             this.daybookQueryRequest.to = to;
@@ -228,6 +272,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles openadvancesearch event
+     */
     public onOpenAdvanceSearch() {
         this.modalDialogRef = this.dialog.open(this.advanceSearchModal, {
             maxWidth: '1000px'
@@ -239,14 +286,23 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param obj contains search params
      */
     public closeAdvanceSearchPopup(reqObj: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!reqObj.cancle) {
             this.searchFilterData = cloneDeep(reqObj.dataToSend);
+            /**
+             * Handles if functionality
+             */
             if (this.dateRangePickerCmp) {
                 this.dateRangePickerCmp.render();
             }
             this.daybookQueryRequest.from = (reqObj.fromDate) ? reqObj.fromDate : this.todaySelected ? '' : this.daybookQueryRequest.from;
             this.daybookQueryRequest.to = (reqObj.toDate) ? reqObj.toDate : this.todaySelected ? '' : this.daybookQueryRequest.to;
             this.daybookQueryRequest.page = 0;
+            /**
+             * Handles if functionality
+             */
             if (reqObj.action === 'search') {
                 this.modalDialogRef.close();
                 this.getDaybook(this.searchFilterData);
@@ -268,6 +324,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public getDaybook(withFilters: DayBookRequestModel = null): void {
         this.showLoader = true;
         let daybookRequest = cloneDeep(withFilters);
+        /**
+         * Handles if functionality
+         */
         if (withFilters) {
             delete daybookRequest.defaultVouchersLabel;
             delete daybookRequest.defaultTagsLabel;
@@ -275,7 +334,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
             delete daybookRequest.inventory.defaultInventoriesLabel;
         }
         this.daybookService.GetDaybook(daybookRequest, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.body?.entries?.length > 0) {
                     this.daybookQueryRequest.page = response?.body?.page;
                     response?.body?.entries.map(item => {
@@ -287,6 +352,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 } else {
                     this.daybookData = { entries: [], totalItems: 0, page: 0 };
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.todaySelected) {
                     this.daybookQueryRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     this.daybookQueryRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -298,6 +366,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 }
 
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.message) {
                     this.daybookData = { entries: [], totalItems: 0, page: 0 };
                     this.toasterService.showSnackBar("error", response?.message);
@@ -310,8 +381,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Toggles expand state
+     */
     public toggleExpand() {
         this.isAllExpanded = !this.isAllExpanded;
+        /**
+         * Handles if functionality
+         */
         if (this.daybookData) {
             this.daybookData.entries?.map(entry => {
                 entry.isExpanded = this.isAllExpanded;
@@ -321,17 +398,26 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.checkIsStockEntryAvailable();
     }
 
+    /**
+     * Initializes ialrequest
+     */
     public initialRequest() {
         this.searchFilterData = null;
         this.showAdvanceSearchIcon = false;
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.todaySelected) {
                         this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
                         this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -363,6 +449,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.getDaybook(this.searchFilterData);
     }
 
+    /**
+     * Handles exportDaybook functionality
+     */
     public exportDaybook() {
         this.daybookExportRequestType = 'post';
         this.modalDialogRef = this.dialog.open(this.exportDaybookModal, {
@@ -370,14 +459,29 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 });
     }
 
+    /**
+     * Hides exportdaybookmodal element
+     */
     public hideExportDaybookModal(response: any) {
         this.modalDialogRef.close();
+        /**
+         * Handles if functionality
+         */
         if (response !== 'close') {
+            /**
+             * Handles if functionality
+             */
             if ((response.type === 'admin-detailed' || response.type === 'view-detailed') || (response.type === 'admin-condensed' || response.type === 'view-condensed')) {
                 this.daybookQueryRequest.type = response.type;
                 this.daybookQueryRequest.format = response.fileType;
                 this.daybookQueryRequest.sort = response.order;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.daybookExportRequestType === 'post') {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.fileType === "csv") {
                         let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
                         exportBodyRequest.from = this.daybookQueryRequest.from;
@@ -390,12 +494,21 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         exportBodyRequest.tagNames = this.searchFilterData?.tags;
                         exportBodyRequest.includeTag = this.searchFilterData?.includeTag;
                         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status === 'success') {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (typeof response?.body === "string") {
                                     this.toasterService.showSnackBar("success", response?.body);
                                     this.router.navigate(["/pages/downloads"]);
                                 } else {
                                     let blob = this.generalService.base64ToBlob(response?.body?.encodedData, response?.queryString?.requestType, 512);
+                                    /**
+                                     * Saves as data
+                                     */
                                     saveAs(blob, response?.body?.name);
                                 }
                             } else {
@@ -404,11 +517,20 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status === 'success') {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (response?.body?.type === "message") {
                                     this.toasterService.showSnackBar("success", response?.body?.file);
                                 } else {
                                     let blob = this.generalService.base64ToBlob(response?.body?.data, response?.queryString?.requestType, 512);
+                                    /**
+                                     * Saves as data
+                                     */
                                     saveAs(blob, response?.body?.name);
                                 }
                             } else {
@@ -418,11 +540,20 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     }
                 } else if (this.daybookExportRequestType === 'get') {
                     this.daybookService.ExportDaybook(null, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response?.status === 'success') {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.body?.type === "message") {
                                 this.toasterService.showSnackBar("success", response?.body?.file);
                             } else {
                                 let blob = this.generalService.base64ToBlob(response?.body?.data, response?.queryString?.requestType, 512);
+                                /**
+                                 * Saves as data
+                                 */
                                 saveAs(blob, response?.body?.name);
                             }
                         } else {
@@ -439,12 +570,21 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 exportBodyRequestObj.exportType = "ENTRIES_EXPORT";
                 let branchUniqueName = this.generalService.currentBranchUniqueName ? this.generalService.currentBranchUniqueName : this.currentBranch ? this.currentBranch?.uniqueName : "";
                 this.daybookService.exportDaybookExpandedPost(exportBodyRequestObj, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'success') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (typeof response?.body === "string") {
                             this.toasterService.showSnackBar("success", response?.body);
                             this.router.navigate(["/pages/downloads"]);
                         } else {
                             let blob = this.generalService.base64ToBlob(response?.body?.encodedData, response?.queryString?.requestType, 512);
+                            /**
+                             * Saves as data
+                             */
                             saveAs(blob, response?.body?.name);
                         }
                     } else {
@@ -455,6 +595,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -467,11 +610,20 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public expandEntry(entry: any): any {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             let isInventory: boolean = false;
             entry.isExpanded = !entry.isExpanded;
+            /**
+             * Handles if functionality
+             */
             if (entry && entry.otherTransactions) {
                 isInventory = entry.otherTransactions.some(otherTrasaction => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (otherTrasaction && otherTrasaction.inventory) {
                         return true;
                     } else {
@@ -479,6 +631,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     }
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (isInventory && entry.isExpanded) {
                 this.isEntryExpanded = true;
             } else if (isInventory && !entry.isExpanded) {
@@ -494,10 +649,19 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public checkIsStockEntryAvailable(): any {
+        /**
+         * Handles if functionality
+         */
         if (this.daybookData) {
             this.isEntryExpanded = this.daybookData.entries.some(entry => {
+                /**
+                 * Handles if functionality
+                 */
                 if (entry.isExpanded && entry.otherTransactions) {
                     return entry.otherTransactions.some(otherTrasaction => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (otherTrasaction && otherTrasaction.inventory) {
                             return true;
                         } else {
@@ -518,6 +682,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -538,17 +705,26 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.todaySelected = false;
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -580,6 +756,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public showUpdateLedgerModal(txn: any): void {
+        /**
+         * Handles if functionality
+         */
         if (txn.creditAmount === null) {
             this.entrySide = "dr";
         } else {
@@ -653,12 +832,18 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public showUpdateLedgerModalIpad(txn: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.touchedTransaction?.uniqueName === txn?.uniqueName) {
             this.showUpdateLedgerModal(txn);
         } else {
             this.touchedTransaction = txn;
         }
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.touchedTransaction = {};
         }, 200);
@@ -671,12 +856,21 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public toggleAsidePane(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             event.preventDefault();
         }
         this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
         this.ledgerAsidePaneModal.afterClosed().subscribe(response => {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }

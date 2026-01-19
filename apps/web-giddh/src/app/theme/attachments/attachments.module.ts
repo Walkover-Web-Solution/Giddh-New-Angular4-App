@@ -11,6 +11,9 @@ import { FormsModule } from "@angular/forms";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AttachmentsComponent
@@ -31,6 +34,10 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         AttachmentsComponent
     ]
 })
+/**
+ * AttachmentsModule module
+ * Implements AttachmentsModule functionality
+ */
 export class AttachmentsModule {
 
 }

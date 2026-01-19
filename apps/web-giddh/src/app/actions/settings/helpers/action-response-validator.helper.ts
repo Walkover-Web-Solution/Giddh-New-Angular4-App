@@ -25,12 +25,21 @@ export class ActionResponseValidatorHelper {
         showToast: boolean = false,
         errorAction: CustomActions = { type: 'EmptyAction' }
     ): CustomActions {
+        /**
+         * Handles if functionality
+         */
         if (response?.status === 'error') {
+            /**
+             * Handles if functionality
+             */
             if (showToast) {
                 toasty.errorToast(response.message);
             }
             return errorAction;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (showToast && typeof response.body === 'string') {
                 toasty.successToast(response.body);
             }

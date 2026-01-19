@@ -6,9 +6,16 @@ import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * LocaleService service
+ * Provides locale related business logic and data operations
+ */
 export class LocaleService {
     /** This will hold the common locale json */
     public commonLocale: any = {};
@@ -34,6 +41,10 @@ export class LocaleService {
         this._language = lang;
     }
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService) {
 
     }
@@ -48,6 +59,9 @@ export class LocaleService {
      */
     public getLocale(folder: string, languageCode: string): Observable<BaseResponse<any, any>> {
         let url = "";
+        /**
+         * Handles if functionality
+         */
         if (folder) {
             url = "assets/locale/" + folder + "/" + languageCode + ".json";
         } else {
@@ -55,9 +69,15 @@ export class LocaleService {
         }
 
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!folder) {
                     this.commonLocale = data;
                 }

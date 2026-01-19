@@ -24,6 +24,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -54,4 +57,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ],
     declarations: [MainComponent, CustomerWiseComponent, AdvanceListItemsPopupComponent]
 })
+/**
+ * CustomPriceModule module
+ * Implements CustomPriceModule functionality
+ */
 export class CustomPriceModule { }

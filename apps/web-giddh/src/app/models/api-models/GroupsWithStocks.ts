@@ -8,6 +8,10 @@ import { IGroupsWithStocksFlattenItem, IGroupsWithStocksHierarchyMinItem } from 
  * you can pass query parameters in this as page, query as q and and count
  * its response will be hash as GroupsWithStocksFlatten
  */
+/**
+ * GroupsWithStocksFlatten class
+ * Implements GroupsWithStocksFlatten functionality
+ */
 export class GroupsWithStocksFlatten implements IPaginatedResponse {
     public count: number;
     public page: number;
@@ -22,6 +26,10 @@ export class GroupsWithStocksFlatten implements IPaginatedResponse {
  * GET call
  * API:: (groups-with-stocks-hierarchy-min) company/:companyUniqueName/stock-group/groups-with-stocks-hierarchy-min
  * its response will be hash as GroupsWithStocksHierarchyMin
+ */
+/**
+ * GroupsWithStocksHierarchyMin class
+ * Implements GroupsWithStocksHierarchyMin functionality
  */
 export class GroupsWithStocksHierarchyMin implements IPaginatedResponse {
     public count: number;

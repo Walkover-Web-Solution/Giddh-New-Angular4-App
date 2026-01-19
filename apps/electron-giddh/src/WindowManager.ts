@@ -15,22 +15,38 @@ export default class WindowManager {
     private stateManager = new StateManager();
     private windows: BrowserWindow[] = [];
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         app.on('window-all-closed', () => {
             // restore default set of windows
             this.stateManager.restoreWindows();
             // On OS X it is common for applications and their menu bar
             // to stay active until the user quits explicitly with Cmd + Q
+            /**
+             * Handles if functionality
+             */
             if (process.platform === 'darwin') {
                 // reopen initial window
                 // this.openWindows();
+                /**
+                 * Handles if functionality
+                 */
                 if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
                     autoUpdater.quitAndInstall();
                 } else {
                     app.quit();
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         autoUpdater.quitAndInstall();
                     }, 60000);
@@ -42,6 +58,9 @@ export default class WindowManager {
     }
 
     public static saveWindowState(window: BrowserWindow, descriptor: WindowItem): void {
+        /**
+         * Handles if functionality
+         */
         if (window.isMaximized()) {
             delete descriptor.width;
             delete descriptor.height;
@@ -56,18 +75,33 @@ export default class WindowManager {
         }
     }
 
+    /**
+     * Opens windows
+     */
     public openWindows(url: string = null): void {
         let descriptors = this.stateManager.getWindows();
+        /**
+         * Handles if functionality
+         */
         if (descriptors == null || descriptors.length === 0) {
             this.stateManager.restoreWindows();
             descriptors = this.stateManager.getWindows();
         }
 
+        /**
+         * Handles for functionality
+         */
         for (const descriptor of descriptors) {
+            /**
+             * Handles if functionality
+             */
             if (isUrlInvalid(descriptor.url) && isUrlInvalid(url)) {
                 // was error on load
                 descriptor.url = DEFAULT_URL;
             }
+            /**
+             * Handles if functionality
+             */
             if (!isUrlInvalid(url)) {
                 descriptor.url = url;
             }
@@ -87,11 +121,17 @@ export default class WindowManager {
             };
 
             let isMaximized = true;
+            /**
+             * Handles if functionality
+             */
             if (descriptor.width != null && descriptor.height != null) {
                 options.width = descriptor.width;
                 options.height = descriptor.height;
                 isMaximized = false;
             }
+            /**
+             * Handles if functionality
+             */
             if (descriptor.x != null && descriptor.y != null) {
                 options.x = descriptor.x;
                 options.y = descriptor.y;
@@ -99,9 +139,15 @@ export default class WindowManager {
             }
 
             const window = new BrowserWindowElectron(options);
+            /**
+             * Handles if functionality
+             */
             if (isMaximized) {
                 window.maximize();
             }
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 window.loadURL(descriptor.url);
                 window.show();
@@ -114,9 +160,18 @@ export default class WindowManager {
         this.appUpdater = new AppUpdaterV1();
     }
 
+    /**
+     * Handles focusFirstWindow functionality
+     */
     public focusFirstWindow(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.windows.length > 0) {
             const window = this.windows[0];
+            /**
+             * Handles if functionality
+             */
             if (window.isMinimized()) {
                 window.restore();
             }
@@ -125,10 +180,16 @@ export default class WindowManager {
     }
 
 
+    /**
+     * Handles registerWindowEventHandlers functionality
+     */
     private registerWindowEventHandlers(window: BrowserWindow, descriptor: WindowItem): void {
         window.on('close', () => {
             WindowManager.saveWindowState(window, descriptor);
             const url = window.webContents.getURL();
+            /**
+             * Handles if functionality
+             */
             if (!isUrlInvalid(url)) {
                 descriptor.url = url;
             }
@@ -142,11 +203,20 @@ export default class WindowManager {
 
         window.on('app-command', (e: any, command: string) => {
             // navigate the window back when the user hits their mouse back button
+            /**
+             * Handles if functionality
+             */
             if (command === 'browser-backward') {
+                /**
+                 * Handles if functionality
+                 */
                 if (window.webContents.canGoBack()) {
                     window.webContents.goBack();
                 }
             } else if (command === 'browser-forward') {
+                /**
+                 * Handles if functionality
+                 */
                 if (window.webContents.canGoForward()) {
                     window.webContents.goForward();
                 }

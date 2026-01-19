@@ -5,6 +5,9 @@ import { AuthHMRCRoutingModule } from './auth-hmrc.routing.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [AuthHMRCComponent],
     imports: [
@@ -15,5 +18,9 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
     ],
     exports: [ AuthHMRCComponent ],
 })
+/**
+ * AuthHMRCModule module
+ * Implements AuthHMRCModule functionality
+ */
 export class AuthHMRCModule {
 }

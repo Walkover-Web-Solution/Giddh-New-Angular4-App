@@ -15,6 +15,9 @@ import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/
 import { IOption, RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'share-group-modal',
     templateUrl: './share-group-modal.component.html',
@@ -22,6 +25,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
     standalone: false
 })
 
+/**
+ * ShareGroupModalComponent component
+ * Handles sharegroupmodal functionality and user interactions
+ */
 export class ShareGroupModalComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -54,6 +61,10 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private groupWithAccountsAction: GroupWithAccountsAction,
@@ -69,6 +80,9 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.shareGroupForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
@@ -76,8 +90,14 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         });
 
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+                /**
+                 * Handles if functionality
+                 */
                 if (activeCompany.subscription?.planDetails?.restrictedModules && Object.hasOwn(activeCompany.subscription.planDetails.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                     const module = activeCompany.moduleRestrictionStatus.find(
                         (module) => module?.moduleName === this.restrictedModules.Users
@@ -88,6 +108,9 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         });
 
         this.allPermissions$.pipe(takeUntil(this.destroyed$)).subscribe((permissions) => {
+            /**
+             * Handles if functionality
+             */
             if (permissions?.length) {
                 this.allPermissions = permissions.map((permission: GetAllPermissionResponse) => ({
                     label: permission.name,
@@ -97,12 +120,18 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         });
 
         this.activeGroupSharedWith$.pipe(takeUntil(this.destroyed$)).subscribe((sharedWith) => {
+            /**
+             * Handles if functionality
+             */
             if (sharedWith) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
         this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((permissionSuccess) => {
+            /**
+             * Handles if functionality
+             */
             if (permissionSuccess) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 this.selectedPermission = "";
@@ -111,8 +140,14 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves groupsharedwith data
+     */
     public getGroupSharedWith() {
         this.activeGroup$.subscribe((group) => {
+            /**
+             * Handles if functionality
+             */
             if (group) {
                 this.store.dispatch(this.groupWithAccountsAction.sharedGroupWith(group.uniqueName));
             }
@@ -125,6 +160,9 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
      * @memberof  ShareGroupModalComponent
      */
     public buyPlan(subscriptionId: string): void {
+        /**
+         * Handles if functionality
+         */
         if (subscriptionId) {
             this.closeModal();
             this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
@@ -133,6 +171,9 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles shareGroup functionality
+     */
     public async shareGroup() {
         let activeGrp = await this.activeGroup$.pipe(first()).toPromise();
         let userRole = {
@@ -144,10 +185,16 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
     }
 
+    /**
+     * Handles unShareGroup functionality
+     */
     public async unShareGroup(entryUniqueName: string, groupUniqueName: string) {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'group', groupUniqueName));
     }
 
+    /**
+     * Updates existing permission
+     */
     public updatePermission(model: ShareRequestForm, event: any) {
         let data = cloneDeep(model);
         let newPermission = event.value;
@@ -155,11 +202,17 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'group'));
     }
 
+    /**
+     * Closes modal
+     */
     public closeModal() {
         this.shareGroupForm.reset();
         this.closeShareGroupModal.emit();
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

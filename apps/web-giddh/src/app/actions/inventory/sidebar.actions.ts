@@ -12,16 +12,32 @@ import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
 import { CustomActions } from '../../store/custom-actions';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SidebarAction actions
+ * Defines sidebaraction related action creators for state management
+ */
 export class SidebarAction {
 
     public GetInventoryGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetInventoryGroup),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupsStock(action.payload?.groupUniqueName).pipe(shareReplay(), map(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'error') {
                         this._toasty.errorToast(response.message, response.code);
                     } else {
@@ -33,11 +49,23 @@ export class SidebarAction {
 
     public GetInventoryStock$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetInventoryStock),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetStockDetails(action.payload.activeGroupUniqueName, action.payload.stockUniqueName);
             }),
+            /**
+             * Handles map functionality
+             */
             map(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     return this.GetInventoryStockResponse(response);
                 } else {
@@ -48,8 +76,17 @@ export class SidebarAction {
 
     public GetInventoryStockResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetInventoryStockResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
@@ -58,31 +95,64 @@ export class SidebarAction {
 
     public GetGroupUniqueName$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetGroupUniqueName),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsStock(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetGroupUniqueNameResponse(response);
             })));
 
     public GetGroupUniqueNameResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetGroupUniqueNameResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
             })));
 
     public GetGroupsWithStocksHierarchyMin$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload?.q, action.payload?.page, action.payload?.count)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GetGroupsWithStocksHierarchyMinResponse(response);
             })));
 
     public GetGroupsWithStocksHierarchyMinResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
@@ -91,22 +161,44 @@ export class SidebarAction {
 
     public SearchGroupsWithStocks$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.SearchGroupsWithStocks),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._inventoryService.SearchStockGroupsWithStocks(action.payload?.q, action.payload?.page, action.payload?.count)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.SearchGroupsWithStocksResponse(response);
             })));
 
     public SearchGroupsWithStocksResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(InventoryActionsConst.SearchGroupsWithStocksResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
             })));
 
+    /**
+     * Creates an instance of actions
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions,
         private _toasty: ToasterService,
         private store: Store<AppState>,
@@ -114,6 +206,9 @@ export class SidebarAction {
     ) {
     }
 
+    /**
+     * Handles OpenGroup functionality
+     */
     public OpenGroup(groupUniqueName: string): CustomActions {
         return {
             type: InventoryActionsConst.InventoryGroupToggleOpen,
@@ -121,6 +216,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles GetInventoryGroup functionality
+     */
     public GetInventoryGroup(groupUniqueName: string): CustomActions {
         return {
             type: InventoryActionsConst.GetInventoryGroup,
@@ -128,6 +226,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles GetInventoryGroupResponse functionality
+     */
     public GetInventoryGroupResponse(value: BaseResponse<StockGroupResponse, string>): CustomActions {
         return {
             type: InventoryActionsConst.GetInventoryGroupResponse,
@@ -135,6 +236,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles GetGroupUniqueName functionality
+     */
     public GetGroupUniqueName(groupUniqueName: string): CustomActions {
         return {
             type: InventoryActionsConst.GetGroupUniqueName,
@@ -142,6 +246,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles GetGroupUniqueNameResponse functionality
+     */
     public GetGroupUniqueNameResponse(value: BaseResponse<StockGroupResponse, string>): CustomActions {
         return {
             type: InventoryActionsConst.GetGroupUniqueNameResponse,
@@ -149,6 +256,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles GetInventoryStock functionality
+     */
     public GetInventoryStock(stockUniqueName: string, activeGroupUniqueName: string): CustomActions {
         return {
             type: InventoryActionsConst.GetInventoryStock,
@@ -156,6 +266,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles GetInventoryStockResponse functionality
+     */
     public GetInventoryStockResponse(value: BaseResponse<StockDetailResponse, string>): CustomActions {
         return {
             type: InventoryActionsConst.GetInventoryStockResponse,
@@ -163,6 +276,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles GetGroupsWithStocksHierarchyMin functionality
+     */
     public GetGroupsWithStocksHierarchyMin(q?: string, page?: number, count?: number): CustomActions {
         return {
             type: InventoryActionsConst.GetGroupsWithStocksHierarchyMin,
@@ -170,6 +286,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles GetGroupsWithStocksHierarchyMinResponse functionality
+     */
     public GetGroupsWithStocksHierarchyMinResponse(value: BaseResponse<GroupsWithStocksHierarchyMin, string>): CustomActions {
         return {
             type: InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse,
@@ -177,6 +296,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles SetActiveStock functionality
+     */
     public SetActiveStock(value: string) {
         return {
             type: InventoryActionsConst.SetActiveStock,
@@ -184,6 +306,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles SearchGroupsWithStocks functionality
+     */
     public SearchGroupsWithStocks(q?: string, page?: number, count?: number): CustomActions {
         return {
             type: InventoryActionsConst.SearchGroupsWithStocks,
@@ -191,6 +316,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles SearchGroupsWithStocksResponse functionality
+     */
     public SearchGroupsWithStocksResponse(value: BaseResponse<GroupsWithStocksFlatten, string>): CustomActions {
         return {
             type: InventoryActionsConst.SearchGroupsWithStocksResponse,
@@ -198,6 +326,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles ShowBranchScreen functionality
+     */
     public ShowBranchScreen(bool: boolean) {
         return {
             type: InventoryActionsConst.ShowBranchScreen,
@@ -205,6 +336,9 @@ export class SidebarAction {
         };
     }
 
+    /**
+     * Handles ShowBranchScreenSideBar functionality
+     */
     public ShowBranchScreenSideBar(bool: boolean) {
         return {
             type: InventoryActionsConst.ShowBranchScreenSideBar,

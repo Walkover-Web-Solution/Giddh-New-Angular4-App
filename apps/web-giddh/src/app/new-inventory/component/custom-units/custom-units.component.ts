@@ -7,6 +7,9 @@ import { ToasterService } from "../../../services/toaster.service";
 import { ASIDE_PANE_CONFIG } from "../../../app.constant";
 import { remove } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "custom-units",
     
@@ -14,6 +17,10 @@ import { remove } from '../../../lodash-optimized';
     standalone: false,
     styleUrls: ["./custom-units.component.scss"]
 })
+/**
+ * CustomUnitsComponent component
+ * Handles customunits functionality and user interactions
+ */
 export class CustomUnitsComponent implements OnInit, OnDestroy {
     /** Instance of create unit component */
     @ViewChild("createUnit", { static: false }) public createUnit: any;
@@ -48,6 +55,10 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private inventoryService: InventoryService,
         private dialog: MatDialog,
@@ -96,6 +107,9 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     public closeCreateUnitModal(event: boolean): void {
         this.matDialogRef?.close();
 
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.getUnitMappings();
         }
@@ -108,17 +122,29 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
      */
     public getUnitGroups(resetSelectedGroup: boolean = true, reloadUnitMappings: boolean = true): void {
         this.unitGroups = [];
+        /**
+         * Handles if functionality
+         */
         if (resetSelectedGroup) {
             this.selectedGroup = {};
             this.selectedUnitGroupIndex = 0;
         }
         this.isGroupListLoading = true;
         this.inventoryService.getStockUnitGroups().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length) {
                 this.unitGroups = response.body;
+                /**
+                 * Handles if functionality
+                 */
                 if (resetSelectedGroup) {
                     this.selectedGroup = this.unitGroups[0];
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (reloadUnitMappings) {
                     this.getUnitMappings();
                 }
@@ -139,6 +165,9 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
         this.unitMappings = [];
         this.isUnitListLoading = true;
         this.inventoryService.getStockMappedUnit([this.selectedGroup?.uniqueName]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length) {
                 this.unitMappings = response.body;
             }
@@ -158,6 +187,9 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
         this.isLoading = true;
 
         this.inventoryService.getStockMappedUnitByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.unitDetails = response.body;
             } else {
@@ -178,6 +210,9 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
         this.unitDetails = {};
         this.selectedUnitIndex = null;
 
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.getUnitMappings();
         }
@@ -210,6 +245,9 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     public closeCreateUnitGroupModal(event: any): void {
         this.matDialogRef?.close();
 
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.getUnitGroups();
         }
@@ -222,7 +260,13 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
      * @memberof CustomUnitsComponent
      */
     public closeUpdateUnitGroup(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.action) {
+            /**
+             * Handles if functionality
+             */
             if (event?.action === "delete") {
                 this.getUnitGroups();
             } else {

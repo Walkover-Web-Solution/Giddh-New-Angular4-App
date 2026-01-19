@@ -6,6 +6,10 @@ import { COMMON_ACTIONS } from '../../actions/common.const';
 import { UNAUTHORISED } from '../../app.constant';
 import { cloneDeep, findIndex, forEach, sortBy } from '../../lodash-optimized';
 
+/**
+ * CustomTemplateState interface definition
+ * Defines the structure and contract for CustomTemplateState objects
+ */
 export interface CustomTemplateState {
     sampleTemplates: CustomTemplateResponse[];
     customCreatedTemplates: CustomTemplateResponse[];
@@ -22,6 +26,9 @@ export const initialState: CustomTemplateState = {
 };
 
 export function InvoiceTemplateReducer(state = initialState, action: CustomActions): CustomTemplateState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
@@ -29,6 +36,9 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
         case INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE: {
             let nextState = cloneDeep(state);
             let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res && res.status === 'success') {
                 nextState.sampleTemplates = res.body;
             }
@@ -37,6 +47,9 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
         case INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE: {
             let nextState = cloneDeep(state);
             let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res && res.status === 'success') {
                 nextState.customCreatedTemplates = sortBy(res.body, [(o) => !o.isDefault]);
                 nextState.hasInvoiceTemplatePermissions = true;
@@ -48,10 +61,19 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
         case INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE: {
             let nextState = cloneDeep(state);
             let res: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let uniqName = res.queryString?.templateUniqueName;
                 let indx = nextState.customCreatedTemplates?.findIndex((template) => template?.uniqueName === uniqName);
+                /**
+                 * Handles if functionality
+                 */
                 if (indx > -1) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res.body?.type === 'voucher') {
                         (Array.isArray(nextState.customCreatedTemplates) ? nextState.customCreatedTemplates : []).forEach((tem) => tem.isDefaultForVoucher = false);
                         nextState.customCreatedTemplates[indx].isDefaultForVoucher = true;
@@ -67,9 +89,15 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
         case INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE: {
             let nextState = cloneDeep(state);
             let res: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let uniqName = res?.queryString?.templateUniqueName;
                 let indx = nextState.customCreatedTemplates?.findIndex((template) => template?.uniqueName === uniqName);
+                /**
+                 * Handles if functionality
+                 */
                 if (indx > -1) {
                     nextState.customCreatedTemplates.splice(indx, 1);
                 }

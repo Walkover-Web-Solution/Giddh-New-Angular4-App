@@ -1,5 +1,9 @@
 import { IClosingBalance, IForwardBalance } from './ledger.interface';
 
+/**
+ * IDashboardCbMainItem interface definition
+ * Defines the structure and contract for IDashboardCbMainItem objects
+ */
 export interface IDashboardCbMainItem {
     forwardedBalance: IForwardBalance;
     creditTotal: number;
@@ -12,6 +16,10 @@ export interface IDashboardCbMainItem {
     groupName: string;
 }
 
+/**
+ * IChildGroups interface definition
+ * Defines the structure and contract for IChildGroups objects
+ */
 export interface IChildGroups {
     forwardedBalance: IForwardBalance;
     creditTotal: number;
@@ -24,6 +32,10 @@ export interface IChildGroups {
     category: any;
 }
 
+/**
+ * ICbAccount interface definition
+ * Defines the structure and contract for ICbAccount objects
+ */
 export interface ICbAccount {
     creditTotal: number;
     debitTotal: number;
@@ -33,6 +45,10 @@ export interface ICbAccount {
     name: string;
 }
 
+/**
+ * IBankAccount interface definition
+ * Defines the structure and contract for IBankAccount objects
+ */
 export interface IBankAccount {
     itemId: number;
     itemAccountId: number;

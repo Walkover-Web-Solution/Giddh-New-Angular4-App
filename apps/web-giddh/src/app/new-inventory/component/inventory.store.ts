@@ -15,6 +15,10 @@ import { LedgerService } from "../../services/ledger.service";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { map } from '../../lodash-optimized';
 
+/**
+ * InventoryState interface definition
+ * Defines the structure and contract for InventoryState objects
+ */
 export interface InventoryState {
     isLoading: boolean;
     discountsList: IDiscountList[];
@@ -37,10 +41,21 @@ const DEFAULT_STATE: InventoryState = {
     updateInventoryVariantSuccess:null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * InventoryComponentStore store
+ * Manages inventorycomponent state using NgRx ComponentStore
+ */
 export class InventoryComponentStore extends ComponentStore<any> {
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private inventoryService: InventoryService,
@@ -51,6 +66,9 @@ export class InventoryComponentStore extends ComponentStore<any> {
         private ledgerService: LedgerService,
         private customFieldsService: CustomFieldsService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -70,11 +88,20 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly exportStock = this.effect((data$: Observable<{ stockReportRequest: any, queryParams: any }>) => {
         return data$.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isLoading: true });
                 return this.inventoryService.getItemWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
                                 this.router.navigate(["/pages/downloads"]);
@@ -106,11 +133,20 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly exportVariant = this.effect((data$: Observable<{ stockReportRequest: any, queryParams: any }>) => {
         return data$.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isLoading: true });
                 return this.inventoryService.getVariantWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
                                 this.router.navigate(["/pages/downloads"]);
@@ -143,11 +179,20 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly exportGroup = this.effect((data$: Observable<{ stockReportRequest: any, queryParams: any }>) => {
         return data$.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isLoading: true });
                 return this.inventoryService.getGroupWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
                                 this.router.navigate(["/pages/downloads"]);
@@ -180,11 +225,20 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly exportTransaction = this.effect((data$: Observable<{ stockReportRequest: any, queryParams: any }>) => {
         return data$.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isLoading: true });
                 return this.inventoryService.getTransactionReportExport(req.queryParams, req.stockReportRequest).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
                                 this.router.navigate(["/pages/downloads"]);
@@ -217,8 +271,14 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly getDiscountList = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 return this.settingsDiscountService.GetDiscounts().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             const discounts = res?.body?.map(discount => {
@@ -249,11 +309,20 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly uploadAttachment = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ uploadAttachmentInProgress: true, uploadAttachmentIsSuccess: null });
                 return this.commonService.uploadFile(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({ uploadAttachmentInProgress: false, uploadAttachmentIsSuccess: res?.body });
                             } else {
@@ -269,6 +338,9 @@ export class InventoryComponentStore extends ComponentStore<any> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -282,11 +354,20 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly previewVariantImage = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ downloadAttachmentInProgress: true, previewAttachmentIsSuccess: null });
                 return this.ledgerService.downloadAttachement(req?.uniqueName, req?.type).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({ downloadAttachmentInProgress: false, previewAttachmentIsSuccess: res?.body });
                             } else {
@@ -302,6 +383,9 @@ export class InventoryComponentStore extends ComponentStore<any> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -315,6 +399,9 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly resetUploadAttachmentState = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     uploadAttachmentIsSuccess: null
@@ -331,11 +418,20 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly getCustomFields = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ customFieldsSuccess: null });
                 return this.customFieldsService.list(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res && res.status === "success") {
                                 return this.patchState({ customFieldsSuccess: res.body?.results });
                             } else {
@@ -350,6 +446,9 @@ export class InventoryComponentStore extends ComponentStore<any> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -363,11 +462,20 @@ export class InventoryComponentStore extends ComponentStore<any> {
      */
     readonly updateInventoryVariant = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles mergeMap functionality
+             */
             mergeMap((req) => {
                 this.patchState({ updateInventoryVariantSuccess: null });
                 return this.inventoryService.updateInventoryVariant(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res && res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({ updateInventoryVariantSuccess: req });
@@ -383,6 +491,9 @@ export class InventoryComponentStore extends ComponentStore<any> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

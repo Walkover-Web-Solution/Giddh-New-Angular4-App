@@ -26,6 +26,9 @@ const initialState: InventoryInOutState = {
 };
 
 export function InventoryInOutReducer(state: InventoryInOutState = initialState, action: CustomActions): InventoryInOutState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case INVENTORY_USER_ACTIONS.GET_ALL_USERS_RESPONSE: {
             return { ...state, inventoryUsers: action.payload.body?.results };

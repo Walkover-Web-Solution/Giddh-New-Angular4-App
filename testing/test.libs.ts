@@ -8,8 +8,14 @@ import {
 declare const require: any;
 
 // First, initialize the Angular testing environment.
+/**
+ * Retrieves testbed data
+ */
 getTestBed().initTestEnvironment(
     BrowserDynamicTestingModule,
+    /**
+     * Handles platformBrowserDynamicTesting functionality
+     */
     platformBrowserDynamicTesting()
 );
 // Then we find all the tests.

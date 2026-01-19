@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'company-import-export-component',
     templateUrl: 'company-import-export.component.html',
@@ -8,6 +11,10 @@ selector: 'company-import-export-component',
     standalone: false
 })
 
+/**
+ * CompanyImportExportComponent component
+ * Handles companyimportexport functionality and user interactions
+ */
 export class CompanyImportExportComponent {
     public mode: 'import' | 'export' = 'export';
     public isFirstScreen: boolean = true;
@@ -16,15 +23,25 @@ export class CompanyImportExportComponent {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
 
     }
 
+    /**
+     * Sets activetab value
+     */
     public setActiveTab(mode: 'import' | 'export') {
         this.mode = mode;
         this.isFirstScreen = false;
     }
 
+    /**
+     * Handles back functionality
+     */
     public back() {
         this.isFirstScreen = true;
     }

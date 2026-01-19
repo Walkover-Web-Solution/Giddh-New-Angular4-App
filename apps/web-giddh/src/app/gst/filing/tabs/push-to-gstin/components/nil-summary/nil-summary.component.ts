@@ -5,6 +5,9 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'nil-summary',
@@ -12,6 +15,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     styleUrls: ['nil-summary.component.css'],
     standalone: false
 })
+/**
+ * NilSummaryComponent component
+ * Handles nilsummary functionality and user interactions
+ */
 export class NilSummaryComponent implements OnInit, OnDestroy {
     @Input() public nilSummary: NilSummary = new NilSummary();
     /* This will hold local JSON data */
@@ -22,12 +29,22 @@ export class NilSummaryComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig ) {}
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

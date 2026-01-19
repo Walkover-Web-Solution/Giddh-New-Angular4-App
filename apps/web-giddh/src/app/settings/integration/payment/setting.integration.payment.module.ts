@@ -13,6 +13,9 @@ import { TranslateDirectiveModule } from "../../../theme/translate/translate.dir
 import { AccountCreateEditComponent } from "./icici/account-create-edit/account-create-edit.component";
 import { PayorCreateEditComponent } from "./icici/payor-create-edit/payor-create-edit.component";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AccountCreateEditComponent,
@@ -37,6 +40,10 @@ import { PayorCreateEditComponent } from "./icici/payor-create-edit/payor-create
     ]
 })
 
+/**
+ * SettingIntegrationPaymentModule module
+ * Implements SettingIntegrationPaymentModule functionality
+ */
 export class SettingIntegrationPaymentModule {
     
 }

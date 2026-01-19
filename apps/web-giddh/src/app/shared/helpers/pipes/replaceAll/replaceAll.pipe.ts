@@ -13,6 +13,10 @@ import { Pipe, PipeTransform } from "@angular/core";
     pure: true,
     standalone: false
 })
+/**
+ * ReplaceAllPipe pipe
+ * Implements ReplaceAllPipe functionality
+ */
 export class ReplaceAllPipe implements PipeTransform {
 
     /**
@@ -26,6 +30,9 @@ export class ReplaceAllPipe implements PipeTransform {
      * @memberof ReplaceAllPipe
      */
     transform(value: any = '', searchValue: string = '', replaceValue: any = ''): string {
+        /**
+         * Handles if functionality
+         */
         if (!value || !searchValue) {
             return String(value);
         }

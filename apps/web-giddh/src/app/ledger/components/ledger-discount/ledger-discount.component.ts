@@ -6,6 +6,9 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { DiscountProcessingHelper } from '../../helpers/discount-processing.helper';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'ledger-discount',
     templateUrl: 'ledger-discount.component.html',
@@ -13,6 +16,10 @@ import { DiscountProcessingHelper } from '../../helpers/discount-processing.help
     standalone: false
 })
 
+/**
+ * LedgerDiscountComponent component
+ * Handles ledgerdiscount functionality and user interactions
+ */
 export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
     public get defaultDiscount(): LedgerDiscountClass {
@@ -47,6 +54,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     /** Emitter for create new discount */
     @Output() public createNewDiscount: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    /**
+     * Handles focuslastdiv event
+     */
     public onFocusLastDiv(el) {
         el.stopPropagation();
         el.preventDefault();
@@ -57,6 +67,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
             });
         let index = focussable?.indexOf(document.activeElement);
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
@@ -64,9 +77,15 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
         return false;
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.prepareDiscountList();
 
+        /**
+         * Handles if functionality
+         */
         if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
             this.discountFixedValueModal = this.defaultDiscount.amount;
         } else {
@@ -75,10 +94,19 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
         this.change();
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue || changes.ledgerAmount) {
             this.prepareDiscountList();
 
+            /**
+             * Handles if functionality
+             */
             if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
                 this.discountFixedValueModal = this.defaultDiscount.amount;
             } else {
@@ -86,6 +114,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.change();
         }
+        /**
+         * Handles if functionality
+         */
         if ('discountsList' in changes && changes.discountsList.currentValue !== changes.discountsList.previousValue) {
             this.prepareDiscountList();
         }
@@ -97,6 +128,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof LedgerDiscountComponent
      */
     public prepareDiscountList(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         }
@@ -115,6 +149,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
         );
     }
 
+    /**
+     * Handles discountFromInput functionality
+     */
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
         this.defaultDiscount.amount = parseFloat(String(val)?.replace(/,/g, ''));
         this.defaultDiscount.discountValue = parseFloat(String(val)?.replace(/,/g, ''));
@@ -122,11 +159,17 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
         this.change();
 
+        /**
+         * Handles if functionality
+         */
         if (!val) {
             this.discountFromVal = true;
             this.discountFromPer = true;
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (type === 'PERCENTAGE') {
             this.discountFromPer = true;
             this.discountFromVal = false;
@@ -146,6 +189,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      */
     public change(event?: any, discount?: any, preventEmit?: boolean) {
         this.discountTotal = giddhRoundOff(this.generateTotal(), this.giddhBalanceDecimalPlaces);
+        /**
+         * Handles if functionality
+         */
         if (!preventEmit) {
             /** Should emit only conditionally, done to avoid
              * recursive call to change method in case of inclusive tax calculation for stock
@@ -159,7 +205,13 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      * @returns {number}
      */
     public generateTotal(): number {
+        /**
+         * Handles if functionality
+         */
         if (this.discountAccountsDetails && this.discountAccountsDetails[0]) {
+            /**
+             * Handles if functionality
+             */
             if (this.discountAccountsDetails[0].amount) {
                 this.discountAccountsDetails[0].isActive = true;
             } else {
@@ -183,6 +235,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
         return perFromAmount + fixedListTotal;
     }
 
+    /**
+     * Handles trackByFn functionality
+     */
     public trackByFn(index) {
         return index;
     }
@@ -194,6 +249,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     * @memberof LedgerDiscountComponent
     */
     public toggleDiscountMenu(isOpen: boolean = false) {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             !this.discountMenu.menuOpen && this.discountMenu?.openMenu();
         } else {
@@ -210,6 +268,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
         this.createNewDiscount.emit();
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

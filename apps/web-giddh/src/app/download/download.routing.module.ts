@@ -2,6 +2,9 @@ import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { DownloadComponent } from "./download.component";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -12,5 +15,9 @@ import { DownloadComponent } from "./download.component";
     ],
     exports: [RouterModule]
 })
+/**
+ * DownloadRoutingModule module
+ * Implements DownloadRoutingModule functionality
+ */
 export class DownloadRoutingModule {
 }

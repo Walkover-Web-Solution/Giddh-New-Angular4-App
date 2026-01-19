@@ -23,6 +23,9 @@ import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { forEach, indexOf, keys } from '../../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'profit-loss-report-grid',
     templateUrl: './profit-loss-report-grid.component.html',
@@ -30,6 +33,10 @@ selector: 'profit-loss-report-grid',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * ProfitLossReportGridComponent component
+ * Handles profitlossreportgrid functionality and user interactions
+ */
 export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Reference to the search input element */
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
@@ -70,6 +77,10 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
     /** Flag to indicate if the expand all button was toggled during a search */
     public isExpandToggledDuringSearch: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private changeDetectionRef: ChangeDetectorRef, 
         private zone: NgZone,
         public generalService: GeneralService) {
@@ -86,18 +97,36 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
     public ngOnInit(): void {
         this.lastSyncDate = dayjs(this.lastSyncDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_DD_MMMM_YYYY);
         this.plSearchControl.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$))
             .subscribe((newValue) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (newValue) {
                     this.searchInput = newValue;
                     this.hideData = true;
                     this.searchChange.emit(this.searchInput);
                     this.isExpandToggledDuringSearch = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (newValue === '') {
                         this.showClearSearch = false;
                     }
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.hideData = false;
                         this.changeDetectionRef.detectChanges();
@@ -115,18 +144,36 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      * @memberof ProfitLossReportGridComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
+            /**
+             * Handles if functionality
+             */
             if (this.plData && this.cogsData) {
                 this.zone.run(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.plData) {
                         this.toggleVisibility(this.plData.expArr, changes.expandAll.currentValue);
                         this.toggleVisibility(this.plData.incArr, changes.expandAll.currentValue);
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.plData.incArr) {
                             (Array.isArray(this.plData.incArr) ? this.plData.incArr : []).forEach((group: any) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (group.isIncludedInSearch) {
                                     group.isVisible = true;
                                     (Array.isArray(group.accounts) ? group.accounts : []).forEach((account: any) => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -134,11 +181,20 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
                                 }
                             });
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.plData.expArr) {
                             (Array.isArray(this.plData.expArr) ? this.plData.expArr : []).forEach((group: any) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (group.isIncludedInSearch) {
                                     group.isVisible = true;
                                     (Array.isArray(group.accounts) ? group.accounts : []).forEach((account: any) => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -148,8 +204,17 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
                         }
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.cogsData) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.cogsData.isIncludedInSearch) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (!this.cogsData.level1) {
                                 this.cogsData.isOpen = changes.expandAll.currentValue;
                             } else {
@@ -174,7 +239,13 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      */
     public toggleSearch(): void {
         this.showClearSearch = true;
+        /**
+         * Handles if functionality
+         */
         if (this.searchInputEl && this.searchInputEl.nativeElement) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.searchInputEl.nativeElement.focus();
             }, 200);
@@ -202,6 +273,9 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      * @memberof ProfitLossReportGridComponent
      */
     public clickedOutside(event: any, element: ElementRef): void {
+        /**
+         * Handles if functionality
+         */
         if ((this.plSearchControl?.value !== null && this.plSearchControl?.value !== '') || this.generalService.childOf(event.target, element)) {
             return;
         } else {
@@ -221,8 +295,17 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
     private toggleVisibility(data: ChildGroup[], isVisible: boolean): void {
         let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
         (Array.isArray(data) ? data : []).forEach((group: ChildGroup) => {
+            /**
+             * Handles if functionality
+             */
             if (group.isIncludedInSearch) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!group.level1) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (parentGroups?.indexOf(group?.uniqueName) === -1) {
                         group.isCreated = false;
                         group.isVisible = isVisible;
@@ -234,6 +317,9 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
                     group.isOpen = true;
                 }
                 (Array.isArray(group.accounts) ? group.accounts : []).forEach((account: Account) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (account.isIncludedInSearch) {
                         account.isCreated = true;
                         account.isVisible = isVisible;
@@ -252,6 +338,9 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      * @memberof ProfitLossReportGridComponent
      */
     public getKeys(obj: Record<string, any> | null | undefined): string[] | [] {
+        /**
+         * Handles if functionality
+         */
         if (obj) {
             return Object.keys(obj);
         } else {

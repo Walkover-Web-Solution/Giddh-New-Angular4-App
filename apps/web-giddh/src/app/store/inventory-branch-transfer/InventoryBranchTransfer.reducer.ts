@@ -3,6 +3,10 @@ import { CustomActions } from '../custom-actions';
 import { INVENTORY_BRANCH_TRANSFER, INVENTORY_LINKED_STOCKS } from '../../actions/inventory/inventory.const';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 
+/**
+ * InventoryBranchTransferState interface definition
+ * Defines the structure and contract for InventoryBranchTransferState objects
+ */
 export interface InventoryBranchTransferState {
     isBranchTransferInProcess: boolean;
     isBranchTransferSuccess: boolean;
@@ -23,6 +27,9 @@ const initialState: InventoryBranchTransferState = {
 
 export function InventoryBranchTransferReducer(state: InventoryBranchTransferState = initialState, action: CustomActions): InventoryBranchTransferState {
 
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);

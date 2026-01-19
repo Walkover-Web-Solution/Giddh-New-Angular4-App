@@ -6,6 +6,9 @@ import { NeedsAuthentication } from '../../decorators/needsAuthentication';
 import { NeedsAuthorization } from '../../decorators/needAuthorization';
 import { TriggersComponent } from './triggers.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -29,5 +32,9 @@ import { TriggersComponent } from './triggers.component';
     ],
     exports: [RouterModule]
 })
+/**
+ * TriggersRoutingModule module
+ * Implements TriggersRoutingModule functionality
+ */
 export class TriggersRoutingModule {
 }

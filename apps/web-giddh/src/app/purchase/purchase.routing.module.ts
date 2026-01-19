@@ -16,6 +16,9 @@ const INVOICE_ROUTES: Routes = [
     }
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [],
     imports: [
@@ -31,5 +34,9 @@ const INVOICE_ROUTES: Routes = [
     ],
     providers: [Location]
 })
+/**
+ * PurchaseRoutingModule module
+ * Implements PurchaseRoutingModule functionality
+ */
 export class PurchaseRoutingModule {
 }

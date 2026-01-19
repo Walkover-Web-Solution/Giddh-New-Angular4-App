@@ -7,6 +7,9 @@ import { AppState } from '../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'push-to-gstin',
@@ -14,6 +17,10 @@ import { Router } from '@angular/router';
     styleUrls: ['./push-to-gstin.component.scss'],
     standalone: false
 })
+/**
+ * PushToGstInComponent component
+ * Handles pushtogstin functionality and user interactions
+ */
 export class PushToGstInComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: GstDatePeriod = null;
     @Input() public activeCompanyGstNumber: string = '';
@@ -28,6 +35,10 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
     public gstr1SummaryDetailsInProcess = signal<boolean>(false);
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private gstrAction: GstReconcileActions,
@@ -36,6 +47,9 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(s => s.gstR.gstr1SummaryResponse), takeUntil(this.destroyed$)).subscribe(result => {
             this.gstr1SummaryDetails = result;
+            /**
+             * Handles if functionality
+             */
             if (this.showHsn) {
                 this.changeDetectorRef.detectChanges();
             }
@@ -46,10 +60,16 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.getSummary();
     }
 
+    /**
+     * Retrieves summary data
+     */
     public getSummary() {
         let request: Gstr1SummaryRequest = new Gstr1SummaryRequest();
         request.gstin = this.activeCompanyGstNumber;
@@ -59,6 +79,9 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.gstrAction.GetGSTR1SummaryDetails(request));
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

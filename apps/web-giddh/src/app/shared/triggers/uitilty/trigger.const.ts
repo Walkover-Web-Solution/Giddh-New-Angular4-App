@@ -1,4 +1,8 @@
 /** Trigger list interface */
+/**
+ * ITriggerList interface definition
+ * Defines the structure and contract for ITriggerList objects
+ */
 export interface ITriggerList {
     title: string;
     entity: string;

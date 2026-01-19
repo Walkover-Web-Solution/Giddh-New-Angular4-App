@@ -13,12 +13,23 @@ import { GeneralService } from './general.service';
 import { TaxSupportedCountries, TaxType } from '../vouchers/utility/vouchers.const';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SubscriptionsService service
+ * Provides subscriptions related business logic and data operations
+ */
 export class SubscriptionsService {
     public dayjs = dayjs;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
         private generalService: GeneralService,
@@ -26,6 +37,9 @@ export class SubscriptionsService {
 
     }
 
+    /**
+     * Retrieves subscribedcompanies data
+     */
     public getSubScribedCompanies(): Observable<BaseResponse<SubscriptionsUser, string>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTIONS_API.SUBSCRIBED_COMPANIES).pipe(map((res) => {
             let data: BaseResponse<SubscriptionsUser, string> = res;
@@ -35,8 +49,14 @@ export class SubscriptionsService {
         }), catchError((e) => this.errorHandler.HandleCatch<SubscriptionsUser, string>(e, '')));
     }
 
+    /**
+     * Handles GetSubScribedUserTransaction functionality
+     */
     public GetSubScribedUserTransaction(subscription): Observable<BaseResponse<string, string>> {
         let paymentFrequency = 'daily';
+        /**
+         * Handles if functionality
+         */
         if (subscription.plan && subscription.plan.paymentFrequency) {
             paymentFrequency = subscription.plan.paymentFrequency.toLowerCase();
         }
@@ -72,8 +92,14 @@ export class SubscriptionsService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
+    /**
+     * Handles GetSubScribedCompanyTransaction functionality
+     */
     public GetSubScribedCompanyTransaction(params): Observable<BaseResponse<string, string>> {
         let paymentFrequency = 'daily';
+        /**
+         * Handles if functionality
+         */
         if (params.subscription.plan && params.subscription.plan.paymentFrequency) {
             paymentFrequency = params.subscription.plan.paymentFrequency.toLowerCase();
         }
@@ -90,6 +116,9 @@ export class SubscriptionsService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
+    /**
+     * Handles GetSubscribedCompaniesList functionality
+     */
     public GetSubscribedCompaniesList(subscription): Observable<BaseResponse<string, string>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTIONS_API.SUBSCRIBED_COMPANIES_LIST
             ?.replace(':subscriptionId', subscription.subscriptionId))
@@ -147,7 +176,13 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public showTaxTypeByCountry(countryCode: string, companyCountryCode: string): TaxType {
+        /**
+         * Handles if functionality
+         */
         if (companyCountryCode === countryCode) {
+            /**
+             * Handles if functionality
+             */
             if (countryCode === TaxSupportedCountries.IN) {
                 return TaxType.GST;
             } else if (countryCode === TaxSupportedCountries.UAE) {
@@ -176,12 +211,18 @@ export class SubscriptionsService {
             ?.replace(':fromMoveCompany', encodeURIComponent(pagination?.fromMoveCompany ?? ''))
             , reqObj)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -196,11 +237,17 @@ export class SubscriptionsService {
     public createSubscription(model: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.CREATE_SUBSCRIPTION, model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -217,11 +264,17 @@ export class SubscriptionsService {
             ?.replace(':company', encodeURIComponent(this.generalService.companyUniqueName ?? '')),
             model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -237,12 +290,18 @@ export class SubscriptionsService {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SUBSCRIPTION_BY_ID
             ?.replace(':subscriptionId', encodeURIComponent(id ?? '')))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -258,11 +317,17 @@ export class SubscriptionsService {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.CANCEL_SUBSCRIPTION_BY_ID
             ?.replace(':subscriptionId', encodeURIComponent(id ?? '')))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -280,12 +345,18 @@ export class SubscriptionsService {
             ?.replace(':subscriptionId', encodeURIComponent(subscriptionId ?? '')),
             model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -302,11 +373,17 @@ export class SubscriptionsService {
             ?.replace(':requestId', encodeURIComponent(model?.reqId ? model?.reqId : model))
             ?.replace(':reject', encodeURIComponent(model?.reason ? true : false)), model?.reason)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = model?.reason;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model?.reason, {}))
             );
     }
@@ -322,12 +399,18 @@ export class SubscriptionsService {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_BILLING_DETAILS
             ?.replace(':billingAccountUnqiueName', encodeURIComponent(billingAccountUnqiueName ?? '')))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -351,12 +434,18 @@ export class SubscriptionsService {
             ?.replace(':query', encodeURIComponent(params.query ?? ''))
             , model
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = '';
                 data.queryString = {};
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
         );
     }
@@ -373,11 +462,17 @@ export class SubscriptionsService {
         return this.http.patch(this.config.apiUrl + SUBSCRIPTION_V2_API.UPDATE_BILLING_DETAILS
             ?.replace(':billingAccountUnqiueName', encodeURIComponent(billingAccountUnqiueName ?? '')), model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -394,12 +489,18 @@ export class SubscriptionsService {
             ?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionId))
             ?.replace(':promocode', encodeURIComponent(model?.promoCode ?? '')))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -414,12 +515,18 @@ export class SubscriptionsService {
     public getChangePlanDetails(request: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_CHANGE_PLAN_DETAILS, request)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -434,12 +541,18 @@ export class SubscriptionsService {
     public updatePlan(request: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.UPDATE_PLAN, request)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -455,12 +568,18 @@ export class SubscriptionsService {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.BUY_PLAN,
             model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -479,12 +598,18 @@ export class SubscriptionsService {
             ?.replace(":q", model.q ?? '')
             ?.replace(":count", model.count))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -500,12 +625,18 @@ export class SubscriptionsService {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_PAYMENT_METHOD,
             model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -521,12 +652,18 @@ export class SubscriptionsService {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_PAYMENT_METHODS
             ?.replace(':subscriptionId', encodeURIComponent(subscriptionId)))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -542,11 +679,17 @@ export class SubscriptionsService {
         return this.http.delete(this.config.apiUrl + SUBSCRIPTION_V2_API.DELETE_PAYMENT_METHOD
             ?.replace(':paymentUniqueName', encodeURIComponent(paymentUniqueName ?? '')), '')
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -562,11 +705,17 @@ export class SubscriptionsService {
         return this.http.patch(this.config.apiUrl + SUBSCRIPTION_V2_API.SET_DEFAULT_PAYMENT_METHOD
             ?.replace(':paymentUniqueName', encodeURIComponent(paymentUniqueName ?? '')), '')
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -582,11 +731,17 @@ export class SubscriptionsService {
         return this.http.patch(this.config.apiUrl + SUBSCRIPTION_V2_API.SET_ARCHIVE_UNARCHIVE_COMPANY
             ?.replace(':companyUniqueName', encodeURIComponent(model?.companyUniqueName ?? '')), model?.status)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = model?.status;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model?.status, {}))
             );
     }
@@ -603,12 +758,18 @@ export class SubscriptionsService {
             ?.replace(':subscriptionId', encodeURIComponent(req?.subscriptionId))
             ?.replace(':billingRequestId', encodeURIComponent(req?.billingRequestId)))
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
@@ -623,12 +784,18 @@ export class SubscriptionsService {
     public getPlanAmountCalculation(model: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.CALCULATION_PLAN_AMOUNT, model)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = model;
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {}))
             );
     }
@@ -647,12 +814,18 @@ export class SubscriptionsService {
             ?.replace(':orderId', encodeURIComponent(model?.orderId))
             , '')
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {}))
             );
     }

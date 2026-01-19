@@ -17,6 +17,10 @@ import { UNAUTHORISED } from '../../app.constant';
 import { ITaxAuthority } from '../../models/interfaces/tax.interface';
 import { cloneDeep, filter, findIndex, map, orderBy } from '../../lodash-optimized';
 
+/**
+ * LinkedAccountsState interface definition
+ * Defines the structure and contract for LinkedAccountsState objects
+ */
 export interface LinkedAccountsState {
     bankAccounts?: BankAccountsResponse[];
     isBankAccountsInProcess?: boolean;
@@ -25,6 +29,10 @@ export interface LinkedAccountsState {
     iframeSource?: string;
 }
 
+/**
+ * DiscountState interface definition
+ * Defines the structure and contract for DiscountState objects
+ */
 export interface DiscountState {
     isDiscountListInProcess: boolean;
     discountList: IDiscountList[];
@@ -47,6 +55,10 @@ const discountInitialState: DiscountState = {
     isDiscountUpdateSuccess: false
 };
 
+/**
+ * AmazonState interface definition
+ * Defines the structure and contract for AmazonState objects
+ */
 export interface AmazonState {
     isSellerSuccess: boolean;
     isSellerUpdated: boolean;
@@ -57,6 +69,10 @@ const AmazonInititalState: AmazonState = {
     isSellerUpdated: false
 };
 
+/**
+ * Taxes interface definition
+ * Defines the structure and contract for Taxes objects
+ */
 export interface Taxes {
     taxes: [{
         label: string;
@@ -69,6 +85,10 @@ export interface Taxes {
     }]
 }
 
+/**
+ * SettingsState interface definition
+ * Defines the structure and contract for SettingsState objects
+ */
 export interface SettingsState {
     integration: IntegrationPage;
     profile: any;
@@ -128,6 +148,9 @@ export const initialState: SettingsState = {
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
     let newState = cloneDeep(state);
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
@@ -140,6 +163,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE:
             let gtsmsres: BaseResponse<SmsKeyClass, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (gtsmsres?.status === 'success') {
                 newState.integration.smsForm = gtsmsres.body;
                 return Object.assign({}, state, newState);
@@ -147,6 +173,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE:
             let crtsmsres: BaseResponse<string, SmsKeyClass> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (crtsmsres?.status === 'success') {
                 newState.integration.smsForm = crtsmsres.request;
                 return Object.assign({}, state, newState);
@@ -154,6 +183,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE:
             let gtemlres: BaseResponse<EmailKeyClass, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (gtemlres?.status === 'success') {
                 newState.integration.emailForm = gtemlres.body;
                 return Object.assign({}, state, newState);
@@ -161,6 +193,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE:
             let crtemlres: BaseResponse<string, EmailKeyClass> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (crtemlres?.status === 'success') {
                 newState.integration.emailForm = crtemlres.request;
                 return Object.assign({}, state, newState);
@@ -168,6 +203,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE:
             let crtpytres: BaseResponse<string, PaymentClass> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (crtpytres?.status === 'success') {
                 newState.integration.paymentForm = crtpytres.request;
                 return Object.assign({}, state, newState);
@@ -175,12 +213,18 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE:
             let crtpytUpres: BaseResponse<string, PaymentClass> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (crtpytUpres?.status === 'success') {
                 return Object.assign({}, state, newState);
             }
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.GET_PAYPAL_DETAILS_RESPONSE:
             let getPaypalResponse: BaseResponse<PaypalDetailsResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (getPaypalResponse?.status === 'success') {
                 newState.integration.paypalForm = getPaypalResponse.body;
                 return Object.assign({}, state, newState);
@@ -189,6 +233,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS_RESPONSE:
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS_RESPONSE:
             let savePaypalResponse: BaseResponse<PaypalDetailsResponse, PayPalClass> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (savePaypalResponse?.status === 'success') {
                 newState.integration.paypalForm = savePaypalResponse.body;
                 return Object.assign({}, state, newState);
@@ -196,6 +243,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYPAL_DETAILS_RESPONSE:
             let deletePaypalResponse: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (deletePaypalResponse?.status === 'success') {
                 newState.integration.paypalForm = null;
                 return Object.assign({}, state, newState);
@@ -204,6 +254,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE:
             let getRzrPayRes: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (getRzrPayRes?.status === 'success') {
                 newState.integration.razorPayForm = getRzrPayRes.body;
                 return Object.assign({}, state, newState);
@@ -212,6 +265,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE:
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE:
             let svRzrPayRes: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (svRzrPayRes?.status === 'success') {
                 newState.integration.razorPayForm = svRzrPayRes.body;
                 return Object.assign({}, state, newState);
@@ -219,6 +275,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE:
             let dltRzrPayRes: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (dltRzrPayRes?.status === 'success') {
                 newState.integration.razorPayForm = null;
                 return Object.assign({}, state, newState);
@@ -233,6 +292,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.profile = response.body;
                 newState.profileRequest = true;
@@ -247,6 +309,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
                 newState.currentBranch = response.body;
                 return Object.assign({}, state, newState);
@@ -255,6 +320,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.profile = cloneDeep(response.body);
                 newState.updateProfileSuccess = true;
@@ -282,6 +350,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 return {
                     ...state,
@@ -299,6 +370,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.inventory = response.body;
                 newState.profileRequest = true;
@@ -308,6 +382,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.updateProfileSuccess = true;
                 newState.profileRequest = true;
@@ -326,6 +403,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE: {
             let response: BaseResponse<BankAccountsResponse[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.linkedAccounts.isBankAccountsInProcess = false;
                 newState.linkedAccounts.bankAccounts = orderBy(response.body, ['siteName'], ['asc']);
@@ -336,6 +416,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE: {
             let response: BaseResponse<LinkedAccountsState[], string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.linkedAccounts = response.body as LinkedAccountsState;
                 return Object.assign({}, state, newState);
@@ -352,8 +435,17 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE: {
             let response: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
+                /**
+                 * Handles map functionality
+                 */
                 map(newState.linkedAccounts.bankAccounts, (ac) => {
+                    /**
+                     * Handles filter functionality
+                     */
                     filter(ac.accounts, (account) => account.loginId !== response.request);
                 });
             } else {
@@ -364,6 +456,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS_RESPONSE: {
             let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.financialYears = response.body;
                 return Object.assign({}, state, newState);
@@ -372,6 +467,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR_RESPONSE: {
             let response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.financialYears = null;
                 return Object.assign({}, state, newState);
@@ -380,6 +478,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE: {
             let response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.financialYears = null;
                 return Object.assign({}, state, newState);
@@ -388,6 +489,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE: {
             let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.financialYears = null;
                 newState.refreshCompany = true;
@@ -403,6 +507,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.financialYears = null;
                 newState.usersWithCompanyPermissions = response.body;
@@ -412,6 +519,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.linkedAccounts.iframeSource = response.body?.connectUrl;
                 return Object.assign({}, state, newState);
@@ -428,6 +538,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.branches = response.body;
                 return Object.assign({}, state, newState);
@@ -436,6 +549,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE:
             let cashFreeRes: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (cashFreeRes?.status === 'success') {
                 newState.integration.payoutForm = cashFreeRes.body;
                 return Object.assign({}, state, newState);
@@ -444,6 +560,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE:
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE:
             let savecashFreeRes: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (savecashFreeRes?.status === 'success') {
                 newState.integration.payoutForm = savecashFreeRes.request;
                 return Object.assign({}, state, newState);
@@ -451,6 +570,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE:
             let dltCashFreeRes: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (dltCashFreeRes?.status === 'success') {
                 newState.integration.payoutForm = {};
                 return Object.assign({}, state, newState);
@@ -459,6 +581,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE:
             let autoCollectRes: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (autoCollectRes?.status === 'success') {
                 newState.integration.autoCollect = autoCollectRes.body;
                 return Object.assign({}, state, newState);
@@ -468,6 +593,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE:
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE:
             let saveautoCollectRes: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (saveautoCollectRes?.status === 'success') {
                 newState.integration.autoCollect = saveautoCollectRes.request;
                 return Object.assign({}, state, newState);
@@ -475,6 +603,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE:
             let dltautoCollectRes: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (dltautoCollectRes?.status === 'success') {
                 newState.integration.autoCollect = {};
                 return Object.assign({}, state, newState);
@@ -483,6 +614,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE:
             let paymentGatewayRes: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (paymentGatewayRes?.status === 'success') {
                 newState.integration.paymentGateway = paymentGatewayRes.body;
                 return Object.assign({}, state, newState);
@@ -491,6 +625,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE:
             let paymntGtwy: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (paymntGtwy?.status === 'success') {
                 newState.integration.paymentGateway = paymntGtwy.request;
                 return Object.assign({}, state, newState);
@@ -498,6 +635,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE:
             let dltpaymentGatewayRes: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (dltpaymentGatewayRes?.status === 'success') {
                 newState.integration.paymentGateway = {};
                 return Object.assign({}, state, newState);
@@ -505,6 +645,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE: {
             let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (AmazonSellerRes?.status === 'success') {
                 newState.integration.amazonSeller = AmazonSellerRes.body;
                 return Object.assign({}, state, newState);
@@ -520,6 +663,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE: {
             let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (AmazonSellerRes?.status === 'success') {
                 newState.amazonState.isSellerSuccess = true;
                 return Object.assign({}, state, newState);
@@ -536,6 +682,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE: {
             let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (AmazonSellerRes?.status === 'success') {
                 let seller = state.integration.amazonSeller?.findIndex(p => p.sellerId === AmazonSellerRes.body?.sellerId);
                 newState.integration.amazonSeller[seller] = cloneDeep(AmazonSellerRes.body);
@@ -546,6 +695,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE: {
             let deleteAmazonSellerRes: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (deleteAmazonSellerRes?.status === 'success') {
                 let st = newState.integration.amazonSeller?.findIndex(p => p.sellerId === deleteAmazonSellerRes.request.sellerId);
                 newState.integration.amazonSeller.splice(st, 1);
@@ -555,6 +707,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response && response.body) {
                 return Object.assign({}, state, { isGmailIntegrated: true });
             } else {
@@ -564,6 +719,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 return Object.assign({}, state, { isGmailIntegrated: false });
             } else {
@@ -578,6 +736,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE:
             let taxes: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (taxes?.status === 'success') {
                 return Object.assign({}, state, {
                     taxes: taxes.body
@@ -599,6 +760,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS_RESPONSE: {
             let financialYearLimits: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (financialYearLimits?.status === 'success') {
                 return Object.assign({}, state, {
                     financialYearLimits: financialYearLimits.body

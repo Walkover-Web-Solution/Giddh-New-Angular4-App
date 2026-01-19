@@ -10,12 +10,23 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { concat, forEach, get, keys } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SearchService service
+ * Provides search related business logic and data operations
+ */
 export class SearchService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -34,6 +45,9 @@ export class SearchService {
             ?.replace(':to', encodeURIComponent(request.toDate))
             ?.replace(':refresh', String(request.refresh))
             ?.replace(':page', String(request.page));
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
@@ -45,6 +59,9 @@ export class SearchService {
                 res.body.page = request.page;
                 return res;
             }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e)));
     }
 
@@ -58,10 +75,19 @@ export class SearchService {
     public searchAccount(params: any): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':version/', String(this.generalService.voucherApiVersion === 1 ? '' : 'v3/'));
+        /**
+         * Handles if functionality
+         */
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
+                /**
+                 * Handles if functionality
+                 */
                 if (params[key] !== undefined) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (key === 'branchUniqueName') {
                         params[key] = params[key] === companyUniqueName ? '' : params[key];
                     }
@@ -83,10 +109,19 @@ export class SearchService {
     public searchAccountV2(params: any): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH_V2}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        /**
+         * Handles if functionality
+         */
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
+                /**
+                 * Handles if functionality
+                 */
                 if (params[key] !== undefined) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (key === 'branchUniqueName') {
                         params[key] = params[key] === companyUniqueName ? '' : params[key];
                     }
@@ -112,9 +147,15 @@ export class SearchService {
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(uniqueName))
             ?.replace(':version', this.generalService.voucherApiVersion === 1 ? 'v2' : 'v3');
+        /**
+         * Handles if functionality
+         */
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&';
+                /**
+                 * Handles if functionality
+                 */
                 if (key === 'branchUniqueName') {
                     params[key] = params[key] === companyUniqueName ? '' : params[key];
                 }
@@ -136,10 +177,19 @@ export class SearchService {
     public searchAccountV3(params: any): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH_V3}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        /**
+         * Handles if functionality
+         */
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
+                /**
+                 * Handles if functionality
+                 */
                 if (params[key] !== undefined) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (key === 'branchUniqueName') {
                         params[key] = params[key] === companyUniqueName ? '' : params[key];
                     }

@@ -14,6 +14,10 @@ import { giddhRoundOff } from '../../helperFunctions';
     name: 'giddhRoundOff',
     standalone: false
 })
+/**
+ * GiddhRoundOffPipe pipe
+ * Implements GiddhRoundOffPipe functionality
+ */
 export class GiddhRoundOffPipe implements PipeTransform {
 
     /**

@@ -62,8 +62,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Bound method reference for event listener cleanup */
+    /**
+     * Handles boundHandleQueryParamsCompanySwitch functionality
+     */
     private boundHandleQueryParamsCompanySwitch: (event: any) => void;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>,
         private router: Router,
         private _generalService: GeneralService,
@@ -121,6 +128,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * Handle session state changes
      */
     private handleSessionStateChange(sessionState: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isValidSession(sessionState)) {
             this.setUserSession(sessionState);
         } else {
@@ -144,6 +154,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         userFlags.isNewUser = true;
         this._generalService.user = { ...sessionState.user.user, ...userFlags };
 
+        /**
+         * Handles if functionality
+         */
         if (sessionState.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
             this._generalService.sessionId = sessionState.user.session.id;
         }
@@ -170,6 +183,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      */
     private storeCompanyUniqueNameParameter(): void {
         const companyUniqueName = this._generalService.getUrlParameter("companyUniqueName");
+        /**
+         * Handles if functionality
+         */
         if (companyUniqueName) {
             this._generalService.setParameterInLocalStorage("companyUniqueName", companyUniqueName);
         }
@@ -180,6 +196,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      */
     private storeVersionParameter(): void {
         const version = this._generalService.getUrlParameter("version");
+        /**
+         * Handles if functionality
+         */
         if (version) {
             this._generalService.setParameterInLocalStorage("voucherApiVersion", version);
         }
@@ -189,6 +208,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * Handle authentication redirect logic
      */
     private handleAuthenticationRedirect(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isUserAuthenticated()) {
             this.processUnauthenticatedUser();
         }
@@ -208,6 +230,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         const locationInfo = this.getLocationInfo();
         this.logLocationInfo(locationInfo);
 
+        /**
+         * Handles if functionality
+         */
         if (!locationInfo.isLoginLike) {
             this.handleRedirectLogic(locationInfo);
         }
@@ -252,6 +277,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private handleRedirectLogic(locationInfo: any): void {
         const environmentInfo = this.getEnvironmentInfo(locationInfo.href);
 
+        /**
+         * Handles if functionality
+         */
         if (this.shouldUseHardRedirect(environmentInfo)) {
             this.performHardRedirect(locationInfo);
         } else {
@@ -310,6 +338,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private performSoftRedirect(locationInfo: any): void {
         const returnUrl = this.extractReturnUrl(locationInfo.path, locationInfo.search);
 
+        /**
+         * Handles if functionality
+         */
         if (this.shouldIncludeReturnUrl(returnUrl)) {
             this.storeReturnUrlInSession(returnUrl);
             this.router.navigate(['/login'], { queryParams: { returnUrl } });
@@ -324,6 +355,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private extractReturnUrl(path: string, search: string): string {
         const currentUrl = path + search;
 
+        /**
+         * Handles if functionality
+         */
         if (currentUrl.startsWith('/pages/')) {
             return currentUrl.split('/pages/')[1] || '';
         } else {
@@ -372,6 +406,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * Initialize Electron integration if running in Electron
      */
     private initializeElectronIntegration(): void {
+        /**
+         * Handles if functionality
+         */
         if (Configuration.isElectron) {
             this.setupElectronCommunication();
         }
@@ -383,6 +420,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private setupElectronCommunication(): void {
         try {
             const electron = this.getElectronInstance();
+            /**
+             * Handles if functionality
+             */
             if (electron?.ipcRenderer) {
                 this.setupIpcRenderer(electron.ipcRenderer);
             } else if (this.getElectronAPI()) {
@@ -397,6 +437,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * Get Electron instance
      */
     private getElectronInstance(): any {
+        /**
+         * Handles return functionality
+         */
         return (window as any).require?.("electron");
     }
 
@@ -404,6 +447,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * Get Electron API instance
      */
     private getElectronAPI(): any {
+        /**
+         * Handles return functionality
+         */
         return (window as any).electronAPI;
     }
 
@@ -422,6 +468,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         const electronAPI = this.getElectronAPI();
         this.sendServerEnvironmentToMain(electronAPI);
 
+        /**
+         * Handles if functionality
+         */
         if (electronAPI.on) {
             this.setupAppCloseHandler(electronAPI);
         }
@@ -447,6 +496,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private setupAppCloseHandler(communicator: any): void {
         communicator.on('app-close-requested', () => {
             this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (confirmed) {
                     communicator.send('force-close');
                 }
@@ -459,9 +511,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      */
     private setupRouterEventHandling(): void {
         this.router.events.pipe(
+            /**
+             * Handles filter functionality
+             */
             filter(event => event instanceof NavigationStart),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((event: any) => {
+            /**
+             * Handles if functionality
+             */
             if (event) {
                 this.dialog?.closeAll();
             }
@@ -472,6 +533,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * Initialize CodeMirror if not already loaded
      */
     private initializeCodeMirror(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isCodeMirrorLoaded()) {
             this.loadCodeMirrorScript();
         }
@@ -495,16 +559,31 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         document.body.appendChild(codeMirrorScriptTag);
     }
 
+    /**
+     * Handles sidebarStatusChange functionality
+     */
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
     }
 
+    /**
+     * Handles sideBarStateChange functionality
+     */
     public sideBarStateChange(event: boolean) {
         this.sideMenu.isopen = event;
     }
 
+    /**
+     * Handles changeOnMobileView functionality
+     */
     private changeOnMobileView(isMobile) {
+        /**
+         * Handles if functionality
+         */
         if (isMobile) {
+            /**
+             * Handles if functionality
+             */
             if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
                 localStorage.setItem('isMobileSiteGiddh', 'true');
             }
@@ -515,12 +594,21 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
+        /**
+         * Handles reassignNavigationalArray functionality
+         */
         reassignNavigationalArray(isMobile, (this._generalService.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && branches?.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -534,6 +622,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result?.breakpoints[BREAKPOINT_SCREEN_SIZE.UNSUPPORTED]) {
                 this.router.navigate(['/mobile-restricted']);
             }
@@ -542,7 +633,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.subscribeToLazyRouteLoading();
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.activeLocale !== response?.value) {
                     this.activeLocale = response?.value;
                     this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
@@ -554,6 +651,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.value) {
                 document.querySelector("body")?.classList?.remove("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
@@ -567,6 +667,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         // Listen for query params company/branch switch event from hybrid storage
         window.addEventListener('giddh-query-params-company-switch', this.boundHandleQueryParamsCompanySwitch);
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this._generalService.addLinkTag("./assets/styles/vendors/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
@@ -575,6 +678,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/styles/vendors/lightbox.css");
 
             /* RAZORPAY */
+            /**
+             * Handles if functionality
+             */
             if (window['Razorpay'] === undefined) {
                 let scriptTag = document.createElement('script');
                 scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -586,6 +692,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
 
             /* Xml */
+            /**
+             * Handles if functionality
+             */
             if (window['xmlScriptTag'] === undefined) {
                 let xmlScriptTag = document.createElement('script');
                 xmlScriptTag.src = './assets/js/xml.min.js';
@@ -606,10 +715,19 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         // }
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         this.hideMainGiddhLoader();
 
+        /**
+         * Handles if functionality
+         */
         if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.store.dispatch(this.companyActions.RefreshCompanies());
             }, 1000);
@@ -619,10 +737,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._cdr.detectChanges();
 
         // Console all global variables after Angular app is fully loaded (controlled by debug flag)
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this._generalService.logAllGlobalVariables();
         }, 2000);
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
+            /**
+             * Handles if functionality
+             */
             if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !Configuration.isElectron) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
@@ -630,6 +754,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 window.location.reload();
                 return;
             }
+            /**
+             * Handles if functionality
+             */
             if (!(evt instanceof NavigationEnd)) {
                 return;
             }
@@ -637,12 +764,21 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         const search = location.search || '';
+        /**
+         * Handles if functionality
+         */
         if (this._generalService.user && this._generalService.sessionId && search) {
             const params = new URLSearchParams(search);
             const raw = params.get('returnUrl') || params.get('returnurl');
+            /**
+             * Handles if functionality
+             */
             if (raw && raw.trim()) {
                 try {
                     const decoded = decodeURIComponent(raw);
+                    /**
+                     * Handles if functionality
+                     */
                     if (!Configuration.isElectron) {
                         const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded.startsWith('/') ? decoded.substring(1) : decoded}`;
                         this.router.navigateByUrl(`/${target}`);
@@ -654,9 +790,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this._generalService.user && this._generalService.sessionId) {
             try {
                 const stored = sessionStorage.getItem('returnUrl');
+                /**
+                 * Handles if functionality
+                 */
                 if (stored && stored.trim()) {
                     const decoded = decodeURIComponent(stored);
                     const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded.startsWith('/') ? decoded.substring(1) : decoded}`;
@@ -669,14 +811,23 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         const lastState = localStorage.getItem('lastState');
 
+        /**
+         * Handles if functionality
+         */
         if (lastState) {
             localStorage.removeItem('lastState');
             return this.router.navigate([lastState]);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
             this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = clone(isChanged);
                 }
@@ -694,8 +845,17 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         document.getElementById("main-giddh-loader")?.classList.add("d-none");
     }
 
+    /**
+     * Retrieves laststatefromurl data
+     */
     private getLastStateFromUrl(url: string): string {
+        /**
+         * Handles if functionality
+         */
         if (url) {
+            /**
+             * Handles if functionality
+             */
             if (url.includes('/pages/')) {
                 return url.substr(url.lastIndexOf('/') + 1, url.length);
             } else if (url.includes('/ledger/') || url.includes('/invoice/')) {
@@ -706,6 +866,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         return 'home';
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         // Remove event listener to prevent memory leaks
         window.removeEventListener('giddh-query-params-company-switch', this.boundHandleQueryParamsCompanySwitch);
@@ -721,6 +884,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      */
     private subscribeToLazyRouteLoading(): void {
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            /**
+             * Handles if functionality
+             */
             if (event instanceof RouteConfigLoadStart) {
                 this.loadingService.show();
             } else if (event instanceof RouteConfigLoadEnd) {
@@ -739,6 +905,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private handleQueryParamsCompanySwitch(detail: any): void {
         console.log('handleQueryParamsCompanySwitch called with:', detail);
 
+        /**
+         * Handles if functionality
+         */
         if (!detail || !detail.companyUniqueName || !detail.company) {
             console.warn('Invalid detail provided to handleQueryParamsCompanySwitch:', detail);
             return;
@@ -770,6 +939,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         };
 
+        /**
+         * Handles if functionality
+         */
         if (branchUniqueName) {
             this.setOrganizationDetails(OrganizationType.Branch, details);
             this._generalService.currentBranchUniqueName = branchUniqueName;
@@ -783,8 +955,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.dispatch(this.loginActions.ChangeCompany(companyUniqueName, false));
 
         // Navigate to final state if branch is selected (same as switchBranch)
+        /**
+         * Handles if functionality
+         */
         if (branchUniqueName) {
             this.companyService.getStateDetails(companyUniqueName).pipe(take(1)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.body) {
                     this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
                         this._generalService.finalNavigate(response.body.lastState);

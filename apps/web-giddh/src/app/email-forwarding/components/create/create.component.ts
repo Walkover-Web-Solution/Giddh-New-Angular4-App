@@ -16,6 +16,9 @@ import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { SalesActions } from '../../../actions/sales/sales.action';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'create',
     templateUrl: './create.component.html',
@@ -23,6 +26,10 @@ selector: 'create',
     providers: [EmailForwardingComponentStore],
     standalone: false
 })
+/**
+ * CreateComponent component
+ * Handles create functionality and user interactions
+ */
 export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
@@ -88,6 +95,10 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Hold account aside menu reference  */
     public accountAsideMenuRef: MatDialogRef<any>;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
@@ -115,8 +126,14 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.imgPath = Configuration.isElectron ? "assets/images/" : environment.AppUrl + environment.APP_FOLDER + "assets/images/";
 
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response['uniqueName']) {
                 this.isLoading = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.currentStep === 3) {
                     this.router.navigate(['pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
                 } else if (this.currentStep === 1) {
@@ -136,6 +153,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.store.select(state => state.sales.createdAccountDetails).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.createUpdateAccountCallback(response);
             }
@@ -148,7 +168,13 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     public ngAfterViewInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.targetStepIndex !== null) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.navigateToStep(this.targetStepIndex!);
                 this.targetStepIndex = null;
@@ -180,6 +206,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private checkEditMode(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params['uniqueName']) {
                 this.isEditMode = true;
                 this.handleUniqueName(params['uniqueName']);
@@ -199,8 +228,17 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
 
                 // In edit mode, ensure we stay on the correct step
+                /**
+                 * Handles if functionality
+                 */
                 if (this.currentStep > 0) {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.stepper && this.currentStep <= this.stepper.steps.length) {
                             this.stepper.selectedIndex = this.currentStep - 1;
                         }
@@ -219,8 +257,14 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     private getEmailFromQueryParams(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
             // Handle step navigation from query params
+            /**
+             * Handles if functionality
+             */
             if (queryParams['step']) {
                 const stepNumber = parseInt(queryParams['step'], 10);
+                /**
+                 * Handles if functionality
+                 */
                 if (!isNaN(stepNumber) && stepNumber >= 1) {
                     this.currentStep = stepNumber;
                     this.minAllowedStep = stepNumber === 3 ? 1 : stepNumber - 1; // Allow navigation between steps 2 and 3 when on step 3
@@ -229,12 +273,21 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                     const targetStepIndex = stepNumber - 1;
                     this.checkEditMode();
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentStep === 3) {
                         this.searchAccount();
                     }
 
                     // Navigate immediately if stepper is available, otherwise store for later
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.stepper) {
+                        /**
+                         * Sets timeout value
+                         */
                         setTimeout(() => {
                             this.navigateToStep(targetStepIndex);
                         }, 100);
@@ -244,6 +297,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
 
+            /**
+             * Handles if functionality
+             */
             if (queryParams['forwardedMail']) {
                 const [emailWithoutDomain, domain] = queryParams['forwardedMail'].split('@');
                 this.forwardedMailDomain = `@${domain}`;
@@ -254,10 +310,16 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 // Redirect to list page
                 this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
             }
+            /**
+             * Handles if functionality
+             */
             if (queryParams['uniqueName']) {
                 this.handleUniqueName(queryParams['uniqueName']);
             }
 
+            /**
+             * Handles if functionality
+             */
             if (queryParams['initial']) {
                 this.firstTimeCreate = true;
             }
@@ -275,6 +337,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
             uniqueName: uniqueName
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.currentStep === 2) {
             this.startConfirmationPolling(uniqueName);
         }
@@ -289,6 +354,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     public nextStep(stepper: MatStepper, currentForm: FormGroup, stepNumber: number): void {
+        /**
+         * Handles if functionality
+         */
         if (stepNumber === 1 && currentForm.get('forwardedMail').valid) {
             this.bankStatementStore.createEmailForwarding(
                 {
@@ -307,10 +375,19 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     public navigateToStep(stepIndex: number): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stepper && stepIndex >= 0 && stepIndex < this.stepper.steps.length) {
             // For linear steppers, mark all previous steps as completed
+            /**
+             * Handles for functionality
+             */
             for (let i = 0; i < stepIndex; i++) {
                 const step = this.stepper.steps.get(i);
+                /**
+                 * Handles if functionality
+                 */
                 if (step) {
                     step.completed = true;
                     step.editable = i >= this.minAllowedStep;
@@ -331,21 +408,42 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     private startConfirmationPolling(uniqueName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (!uniqueName || this.confirmationPollingStarted || this.emailForwardingResponse || this.stopPolling$.closed) {
             return;
         }
 
         this.confirmationPollingStarted = true;
 
+        /**
+         * Handles interval functionality
+         */
         interval(5000).pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.bankStatementStore.getEmailForwardingDetails(uniqueName);
                 return this.bankStatementStore.emailForwardingDetails$;
             }),
+            /**
+             * Handles filter functionality
+             */
             filter(Boolean),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.stopPolling$)
         ).subscribe((response: EmailForwardingResponse) => {
+            /**
+             * Handles if functionality
+             */
             if (Array.isArray(response?.confirmationData) && response.confirmationData.length > 0) {
                 this.emailForwardingResponse = response;
                 this.stopPolling$.next();
@@ -363,10 +461,16 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     public onStepSelectionChange(event: StepperSelectionEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.stepper) {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (event.selectedIndex < this.minAllowedStep) {
             this.stepper.selectedIndex = Math.max(this.minAllowedStep, event.previouslySelectedIndex);
             return;
@@ -374,9 +478,15 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.currentStep = event.selectedIndex + 1;
 
+        /**
+         * Handles if functionality
+         */
         if (this.currentStep === 2) {
             this.replaceUrlEmail();
             const uniqueName = this.emailForwardingForm.get('uniqueName')?.value;
+            /**
+             * Handles if functionality
+             */
             if (uniqueName) {
                 this.startConfirmationPolling(uniqueName);
             }
@@ -404,15 +514,27 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public submitForm(): void {
         this.isFormSubmitted = true;
+        /**
+         * Handles if functionality
+         */
         if (this.emailForwardingForm.valid) {
             this.isLoading = true;
             const formData = { ...this.emailForwardingForm.value };
+            /**
+             * Handles if functionality
+             */
             if (this.isEditMode) {
                 const passwordControl = this.emailForwardingForm.get('password');
+                /**
+                 * Handles if functionality
+                 */
                 if (!passwordControl?.dirty || formData.password === YOU_ARE_NOT_ALLOWED || !formData.password) {
                     delete formData.password;
                 }
             }
+            /**
+             * Handles if functionality
+             */
             if (!this.isEditMode) {
                 formData['forwardedMail'] = formData['forwardedMail'] + this.forwardedMailDomain;
             }
@@ -431,9 +553,15 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     public toggleEmailEdit(isCancel: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isEditingEmail) {
             this.lastEmail = this.emailForwardingForm.get('forwardedMail')?.value;
         }
+        /**
+         * Handles if functionality
+         */
         if (isCancel) {
             this.emailForwardingForm.get('forwardedMail')?.patchValue(this.lastEmail);
             this.lastEmail = "";
@@ -466,6 +594,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public copyEmail(): void {
         this.isCopied = true;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);
@@ -477,11 +608,17 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     public handleVerifyAndNext(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.emailForwardingResponse?.confirmationData?.[0]?.confirmLink) {
             // Open verification link in new tab
             window.open(this.emailForwardingResponse.confirmationData[0].confirmLink, '_blank');
 
             // Navigate to step 3
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.generalService.updateActivatedRouteQueryParams({
                     companyUniqueName: this.companyUniqueName,
@@ -503,11 +640,17 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     public handleCancel(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.emailForwardingResponse?.confirmationData?.[0]?.cancelLink) {
             // Open cancel link in new tab
             window.open(this.emailForwardingResponse.confirmationData[0].cancelLink, '_blank');
 
             // Redirect to onboarding page
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.router.navigate(['/pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
             }, 500);
@@ -536,12 +679,24 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private setupAccountSearchSubscription(): void {
         this.bankStatementStore.accountSearch$.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(200),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(accountSearchResponse => {
+            /**
+             * Handles if functionality
+             */
             if (accountSearchResponse && accountSearchResponse.results) {
                 const formattedResults: any[] = [];
                 (Array.isArray(accountSearchResponse.results) ? accountSearchResponse.results : []).forEach(result => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (result?.uniqueName) {
                         formattedResults.push({
                             value: result.uniqueName,
@@ -566,6 +721,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     private searchAccount(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountSearchCalled) {
             return; // Prevent multiple calls
         }
@@ -593,6 +751,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroyed$.complete();
 
         // Clean up polling subject
+        /**
+         * Handles if functionality
+         */
         if (!this.stopPolling$.closed) {
             this.stopPolling$.next();
             this.stopPolling$.complete();

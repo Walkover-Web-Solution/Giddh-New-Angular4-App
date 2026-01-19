@@ -8,12 +8,19 @@ import { ReportType } from '../multi-currency.const';
 import { TrialBalanceReportGridComponent } from './components/trial-balance-grid/trial-balance-report-grid.component';
 import { forEach } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'trial-balance-report',
     templateUrl: './trial-balance-report.component.html',
     providers: [MultiCurrencyReportsComponentStore],
     standalone: false
 })
+/**
+ * TrialBalanceReportComponent component
+ * Handles trialbalancereport functionality and user interactions
+ */
 export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Reference to the TrialBalanceReportGridComponent */
     @ViewChild('tbGrid', { static: true }) public tbGrid: TrialBalanceReportGridComponent;
@@ -38,6 +45,10 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
     /** Observable for report data */
     public reportDataList$: Observable<any> = this.componentStore.reportDataList$;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
         private componentStore: MultiCurrencyReportsComponentStore) {
@@ -51,6 +62,9 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      */
     public ngOnInit(): void {
         this.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.initData(response?.groupDetails);
                 (Array.isArray(response?.groupDetails) ? response?.groupDetails : []).forEach(groupDetail => {
@@ -79,6 +93,9 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
                 account['isCreated'] = false;
                 account['isVisible'] = false;
             });
+            /**
+             * Handles if functionality
+             */
             if (childGroup.childGroups) {
                 this.initData(childGroup.childGroups);
             }
@@ -146,6 +163,9 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @memberof TrialBalanceReportComponent
      */
     public expandAllEvent(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.changeDetectionRef.detectChanges();
         }, 1);
@@ -171,6 +191,9 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      */
     public searchChanged(event: string): void {
         this.search = event;
+        /**
+         * Handles if functionality
+         */
         if (!this.search) {
             this.expandAll = false;
         }

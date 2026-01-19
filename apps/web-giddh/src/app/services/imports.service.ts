@@ -10,13 +10,24 @@ import { ImportsRequest, ImportsResponse, ImportsSheetDownloadRequest } from '..
 import { IMPORTS_API } from './apiurls/imports.api';
 import { concat, get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ImportsService service
+ * Provides imports related business logic and data operations
+ */
 export class ImportsService {
     /** This will hold the company uniquename */
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -30,6 +41,9 @@ export class ImportsService {
     public getImports(importsRequest: ImportsRequest): Observable<BaseResponse<ImportsResponse, ImportsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORTS_API.IMPORTS;
+        /**
+         * Handles if functionality
+         */
         if (importsRequest.branchUniqueName) {
             importsRequest.branchUniqueName = importsRequest.branchUniqueName !== this.companyUniqueName ? importsRequest.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${importsRequest.branchUniqueName}`);
@@ -39,6 +53,9 @@ export class ImportsService {
             .replace(':to', encodeURIComponent(importsRequest.to))
             .replace(':count', encodeURIComponent(importsRequest.count))
             .replace(':page', encodeURIComponent(importsRequest.page))).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<ImportsResponse, ImportsRequest> = res;
                     data.request = importsRequest;

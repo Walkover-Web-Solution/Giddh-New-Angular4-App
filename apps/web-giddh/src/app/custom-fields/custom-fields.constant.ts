@@ -1,3 +1,7 @@
+/**
+ * FieldTypes enumeration
+ * Defines constant values for FieldTypes
+ */
 export enum FieldTypes {
     String = 'STRING',
     Number = 'NUMBER',
@@ -5,6 +9,10 @@ export enum FieldTypes {
     Barcode = 'BARCODE'
 }
 
+/**
+ * FieldModules enumeration
+ * Defines constant values for FieldModules
+ */
 export enum FieldModules {
     Account = 'account',
     Stock = 'stock',

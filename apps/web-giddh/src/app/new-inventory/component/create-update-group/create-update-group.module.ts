@@ -18,6 +18,9 @@ import { MainGroupComponent } from "./main-group.component";
 import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
 import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         MainGroupComponent,
@@ -48,6 +51,10 @@ import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confi
         PageLeaveConfirmationGuard
     ]
 })
+/**
+ * GroupCreateEditModule module
+ * Implements GroupCreateEditModule functionality
+ */
 export class GroupCreateEditModule {
 
 }

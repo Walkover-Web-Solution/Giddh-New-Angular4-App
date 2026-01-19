@@ -2,10 +2,18 @@
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 
+/**
+ * VerifyOtpRequest class
+ * Implements VerifyOtpRequest functionality
+ */
 export class VerifyOtpRequest {
     public otp: string;
 }
 
+/**
+ * GstReconcileActionsEnum enumeration
+ * Defines constant values for GstReconcileActionsEnum
+ */
 export enum GstReconcileActionsEnum {
     all = '',
     notfoundongiddh = 'notfoundongiddh',
@@ -15,6 +23,10 @@ export enum GstReconcileActionsEnum {
     reconcile = 'reconcile'
 }
 
+/**
+ * GstReconcileInvoiceRequest class
+ * Implements GstReconcileInvoiceRequest functionality
+ */
 export class GstReconcileInvoiceRequest {
     public monthYear: string;
     public from: string;
@@ -28,6 +40,10 @@ export class GstReconcileInvoiceRequest {
     public gstReturnType?: string;
 }
 
+/**
+ * GstReconcileInvoiceResult interface definition
+ * Defines the structure and contract for GstReconcileInvoiceResult objects
+ */
 export interface GstReconcileInvoiceResult {
     invoiceNumber: string;
     taxableAmount: number;
@@ -64,6 +80,10 @@ export interface GstReconcileInvoiceResult {
     data_in_giddh: Partial<GstReconcileInvoiceResult>;
 }
 
+/**
+ * GstReconcileInvoiceResponse class
+ * Implements GstReconcileInvoiceResponse functionality
+ */
 export class GstReconcileInvoiceResponse {
     public notFoundOnGiddh: number;
     public notFoundOnPortal: number;
@@ -77,6 +97,10 @@ export class GstReconcileInvoiceResponse {
     public reconcile: GstReconcileInvoiceDetails;
 }
 
+/**
+ * GstReconcileInvoiceDetails class
+ * Implements GstReconcileInvoiceDetails functionality
+ */
 export class GstReconcileInvoiceDetails {
     public page: number = 1;
     public count: number = PAGINATION_LIMIT;
@@ -86,6 +110,10 @@ export class GstReconcileInvoiceDetails {
     public size: number;
 }
 
+/**
+ * GstOverViewRequest class
+ * Implements GstOverViewRequest functionality
+ */
 export class GstOverViewRequest {
     public gstin: string;
     public from: string;
@@ -93,16 +121,28 @@ export class GstOverViewRequest {
     public currentDateTime?: string;
 }
 
+/**
+ * GstrSheetDownloadRequest class
+ * Implements GstrSheetDownloadRequest functionality
+ */
 export class GstrSheetDownloadRequest extends GstOverViewRequest {
     public type: string;
     public monthYear: string;
     public sheetType: string;
 }
 
+/**
+ * FileGstr1Request class
+ * Implements FileGstr1Request functionality
+ */
 export class FileGstr1Request extends GstOverViewRequest {
     public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
 }
 
+/**
+ * GstSaveGspSessionRequest class
+ * Implements GstSaveGspSessionRequest functionality
+ */
 export class GstSaveGspSessionRequest {
     public gstin: string;
     public userName: string;
@@ -110,6 +150,10 @@ export class GstSaveGspSessionRequest {
     public otp?: string;
 }
 
+/**
+ * GStTransactionRequest class
+ * Implements GStTransactionRequest functionality
+ */
 export class GStTransactionRequest extends GstOverViewRequest {
     public entityType: string;
     public type: string;
@@ -120,15 +164,27 @@ export class GStTransactionRequest extends GstOverViewRequest {
     public results: GstReconcileInvoiceResult[];
 }
 
+/**
+ * Gstr1SummaryRequest class
+ * Implements Gstr1SummaryRequest functionality
+ */
 export class Gstr1SummaryRequest extends GstOverViewRequest {
     public monthYear?: string;
 }
 
+/**
+ * GstDatePeriod class
+ * Implements GstDatePeriod functionality
+ */
 export class GstDatePeriod {
     public from: string;
     public to: string;
 }
 
+/**
+ * GstTransactionResult class
+ * Implements GstTransactionResult functionality
+ */
 export class GstTransactionResult {
     public page: number;
     public count: number;
@@ -138,6 +194,10 @@ export class GstTransactionResult {
     public size: number;
 }
 
+/**
+ * GstTransactionSummary class
+ * Implements GstTransactionSummary functionality
+ */
 export class GstTransactionSummary {
     public voucherDate: string;
     public voucherNumber: string;
@@ -165,11 +225,19 @@ export class GstTransactionSummary {
     public uniqueName?: string;
 }
 
+/**
+ * GstOverViewResult class
+ * Implements GstOverViewResult functionality
+ */
 export class GstOverViewResult {
     public count: number;
     public summary: GstOverViewSummary[];
 }
 
+/**
+ * GstOverViewSummary class
+ * Implements GstOverViewSummary functionality
+ */
 export class GstOverViewSummary {
     public gstReturnType: string;
     public totalTransactions: number;
@@ -186,6 +254,10 @@ export class GstOverViewSummary {
     public transactions?: GstOverViewSummary[];
 }
 
+/**
+ * Gstr1SummaryResponse class
+ * Implements Gstr1SummaryResponse functionality
+ */
 export class Gstr1SummaryResponse {
     public type: string;
     public validatedAgainstSchema: boolean;
@@ -205,12 +277,20 @@ export class Gstr1SummaryResponse {
     } = { gstin: '', fp: 0, brb: [], b2cl: [], cdnr: [], b2cs: [], exp: [], hsn: null, nil: null, doc_issue: null };
 }
 
+/**
+ * Gstr1SummaryErrors class
+ * Implements Gstr1SummaryErrors functionality
+ */
 export class Gstr1SummaryErrors {
     public number: number;
     public type: string;
     public messages: string[];
 }
 
+/**
+ * Gstr1SummaryBaseInvItemDetails class
+ * Implements Gstr1SummaryBaseInvItemDetails functionality
+ */
 export class Gstr1SummaryBaseInvItemDetails {
     public txval: number;
     public rt: number;
@@ -220,6 +300,10 @@ export class Gstr1SummaryBaseInvItemDetails {
     public csamt: number;
 }
 
+/**
+ * Gstr1SummaryBaseInvItems class
+ * Implements Gstr1SummaryBaseInvItems functionality
+ */
 export class Gstr1SummaryBaseInvItems {
     public num: number;
     public txval: number;
@@ -228,6 +312,10 @@ export class Gstr1SummaryBaseInvItems {
     public csamt: number;
 }
 
+/**
+ * Gstr1SummaryBaseInv class
+ * Implements Gstr1SummaryBaseInv functionality
+ */
 export class Gstr1SummaryBaseInv {
     public inum: string;
     public idt: string;
@@ -242,32 +330,56 @@ export class Gstr1SummaryBaseInv {
     public ngsup_amt: number;
 }
 
+/**
+ * B2BSummary class
+ * Implements B2BSummary functionality
+ */
 export class B2BSummary {
     public ctin: string;
     public inv: Partial<Gstr1SummaryBaseInv[]>;
 }
 
+/**
+ * B2CLSummary class
+ * Implements B2CLSummary functionality
+ */
 export class B2CLSummary {
     public pos: number;
     public inv: Partial<Gstr1SummaryBaseInv[]>;
 }
 
+/**
+ * B2CSSummary class
+ * Implements B2CSSummary functionality
+ */
 export class B2CSSummary extends Gstr1SummaryBaseInvItemDetails {
     public pos: number;
     public typ: string;
     public sply_typ: string;
 }
 
+/**
+ * CDNRSummary class
+ * Implements CDNRSummary functionality
+ */
 export class CDNRSummary {
     public ctin: string;
     public nt: Partial<Gstr1SummaryBaseInv[]>;
 }
 
+/**
+ * EXPSummary class
+ * Implements EXPSummary functionality
+ */
 export class EXPSummary {
     public exp_typ: string;
     public inv: Partial<Gstr1SummaryBaseInv[]>;
 }
 
+/**
+ * HSNSummaryDetails class
+ * Implements HSNSummaryDetails functionality
+ */
 export class HSNSummaryDetails {
     public num: number;
     public hsn_sc: number;
@@ -282,15 +394,27 @@ export class HSNSummaryDetails {
     public csamt: number;
 }
 
+/**
+ * HSNSummary class
+ * Implements HSNSummary functionality
+ */
 export class HSNSummary {
     public data: Partial<HSNSummaryDetails[]>;
     public empty: boolean;
 }
 
+/**
+ * NilSummary class
+ * Implements NilSummary functionality
+ */
 export class NilSummary {
     public inv: Partial<Gstr1SummaryBaseInv[]>;
 }
 
+/**
+ * DocIssueSummaryDetailsDocs class
+ * Implements DocIssueSummaryDetailsDocs functionality
+ */
 export class DocIssueSummaryDetailsDocs {
     public num: number;
     public from: string;
@@ -301,15 +425,27 @@ export class DocIssueSummaryDetailsDocs {
     public doc: string;
 }
 
+/**
+ * DocIssueSummaryDetails class
+ * Implements DocIssueSummaryDetails functionality
+ */
 export class DocIssueSummaryDetails {
     public doc_num: number;
     public docs: DocIssueSummaryDetailsDocs[] = [];
 }
 
+/**
+ * DocIssueSummary class
+ * Implements DocIssueSummary functionality
+ */
 export class DocIssueSummary {
     public doc_det: DocIssueSummaryDetails[];
 }
 
+/**
+ * GetGspSessionResponse class
+ * Implements GetGspSessionResponse functionality
+ */
 export class GetGspSessionResponse {
     public vayana: boolean;
     public taxpro: boolean;
@@ -328,6 +464,10 @@ export interface SupDetails {
     osup_nongst?: ItcElgAmt;
 }
 
+/**
+ * InterSupAmt interface definition
+ * Defines the structure and contract for InterSupAmt objects
+ */
 export interface InterSupAmt {
     pos?: string;
     txval?: number;
@@ -338,12 +478,20 @@ export interface InterSupAmt {
 }
 
 
+/**
+ * InterSup interface definition
+ * Defines the structure and contract for InterSup objects
+ */
 export interface InterSup {
     unreg_details?: InterSupAmt[];
     comp_details?: InterSupAmt[];
     uin_details?: InterSupAmt[];
 }
 
+/**
+ * ItcElgAmt interface definition
+ * Defines the structure and contract for ItcElgAmt objects
+ */
 export interface ItcElgAmt {
     ty?: string;
     txval?: number;
@@ -353,6 +501,10 @@ export interface ItcElgAmt {
     csamt?: number;
 }
 
+/**
+ * ItcElg interface definition
+ * Defines the structure and contract for ItcElg objects
+ */
 export interface ItcElg {
     itc_avl?: ItcElgAmt[];
     itc_rev?: ItcElgAmt[];
@@ -360,20 +512,36 @@ export interface ItcElg {
     itc_inelg?: ItcElgAmt[];
 }
 
+/**
+ * IsupDetail interface definition
+ * Defines the structure and contract for IsupDetail objects
+ */
 export interface IsupDetail {
     ty?: string;
     inter?: number;
     intra?: number;
 }
 
+/**
+ * InwardSup interface definition
+ * Defines the structure and contract for InwardSup objects
+ */
 export interface InwardSup {
     isup_details?: IsupDetail[];
 }
 
+/**
+ * IntrLtfee interface definition
+ * Defines the structure and contract for IntrLtfee objects
+ */
 export interface IntrLtfee {
     intr_details?: ItcElgAmt;
 }
 
+/**
+ * Gstr3bOverviewResult2 class
+ * Implements Gstr3bOverviewResult2 functionality
+ */
 export class Gstr3bOverviewResult2 {
     gstin?: string;
     ret_period?: string;
@@ -389,10 +557,18 @@ export class Gstr3bOverviewResult2 {
     sumCsamtval?: number;
 
 }
+/**
+ * Gstr3bOverviewResult class
+ * Implements Gstr3bOverviewResult functionality
+ */
 export class Gstr3bOverviewResult {
     status: string;
     body: Gstr3bOverviewResult2;
 }
+/**
+ * GstrJsonDownloadRequest class
+ * Implements GstrJsonDownloadRequest functionality
+ */
 export class GstrJsonDownloadRequest extends GstOverViewRequest {
     public type: string;
 }

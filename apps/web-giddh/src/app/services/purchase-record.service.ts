@@ -11,12 +11,23 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { PurchaseRecordAttachmentResponse } from '../models/api-models/PurchaseRecord';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * PurchaseRecordService service
+ * Provides purchaserecord related business logic and data operations
+ */
 export class PurchaseRecordService {
 
     /** @ignore */
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private http: HttpWrapperService,
         private errorHandler: GiddhErrorHandler,
@@ -36,18 +47,30 @@ export class PurchaseRecordService {
     public generatePurchaseRecord(requestObject: PurchaseRecordRequest | any, method: string = 'POST', updateAttachment?: boolean): Observable<BaseResponse<any, PurchaseRecordRequest>> {
         const accountUniqueName = requestObject.account?.uniqueName;
         // TODO: Add patch integration once the API is ready
+        /**
+         * Handles if functionality
+         */
         if (method === 'POST') {
             const contextPath: string =
                 `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE?.replace(':companyUniqueName', this.generalService.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
             return this.http.post(contextPath, requestObject).pipe(
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         } else if (method === 'PATCH') {
+            /**
+             * Handles if functionality
+             */
             if (updateAttachment) {
                 delete requestObject.account;
             }
             const contextPath: string =
                 `${this.config.apiUrl}${PURCHASE_RECORD_API.UPDATE?.replace(':companyUniqueName', this.generalService.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
             return this.http.patch(contextPath, requestObject).pipe(
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         }
     }
@@ -61,6 +84,9 @@ export class PurchaseRecordService {
      */
     public downloadAttachedFile(requestObject: any): Observable<BaseResponse<PurchaseRecordAttachmentResponse, any>> {
         const { accountUniqueName, purchaseRecordUniqueName } = requestObject;
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             let contextPath: string =
                 `${this.config.apiUrl}${PURCHASE_RECORD_API.V2.DOWNLOAD_ATTACHMENT?.replace(':companyUniqueName', this.generalService.companyUniqueName)
@@ -69,6 +95,9 @@ export class PurchaseRecordService {
             contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
 
             return this.http.post(contextPath, { uniqueName: purchaseRecordUniqueName }).pipe(
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         } else {
             let contextPath: string =
@@ -76,6 +105,9 @@ export class PurchaseRecordService {
                     ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
 
             return this.http.get(contextPath, { uniqueName: purchaseRecordUniqueName }).pipe(
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         }
     }
@@ -97,6 +129,9 @@ export class PurchaseRecordService {
                 ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
         delete requestObject.accountUniqueName;
         return this.http.get(contextPath, requestObject).pipe(
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 
@@ -111,6 +146,9 @@ export class PurchaseRecordService {
         const contextPath: string =
             `${this.config.apiUrl}${PURCHASE_RECORD_API.DELETE?.replace(':companyUniqueName', this.generalService.companyUniqueName)?.replace(':uniqueName', requestObject?.uniqueName)}`;
         return this.http.delete(contextPath).pipe(
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 
@@ -157,6 +195,9 @@ export class PurchaseRecordService {
      * @memberof PurchaseRecordService
      */
     public getPdf(requestObject: any): Observable<BaseResponse<any, any>> {
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             let url: string = this.config.apiUrl + PURCHASE_RECORD_API.V2.GET_PDF;
             url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
@@ -165,6 +206,9 @@ export class PurchaseRecordService {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
             return this.http.post(url, { uniqueName: requestObject?.uniqueName }).pipe(
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         } else {
             let url: string = this.config.apiUrl + PURCHASE_RECORD_API.GET_PDF;
@@ -173,6 +217,9 @@ export class PurchaseRecordService {
             url = url?.replace(':uniqueName', requestObject?.uniqueName);
 
             return this.http.get(url).pipe(
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         }
     }

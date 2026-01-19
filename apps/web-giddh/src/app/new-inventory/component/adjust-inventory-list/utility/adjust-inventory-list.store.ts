@@ -9,6 +9,10 @@ import { InventoryService } from "apps/web-giddh/src/app/services/inventory.serv
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { BaseResponse } from "apps/web-giddh/src/app/models/api-models/BaseResponse";
 
+/**
+ * AdjustInventoryListState interface definition
+ * Defines the structure and contract for AdjustInventoryListState objects
+ */
 export interface AdjustInventoryListState {
     adjustInventoryListInProgress: boolean;
     adjustInventoryList: any;
@@ -23,16 +27,30 @@ export const DEFAULT_ADJUSTINVENTORYLIST_STATE: AdjustInventoryListState = {
     deleteAdjustInventoryIsSuccess: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * AdjustInventoryListComponentStore store
+ * Manages adjustinventorylistcomponent state using NgRx ComponentStore
+ */
 export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInventoryListState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private inventoryService: InventoryService,
         private store: Store<AppState>
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_ADJUSTINVENTORYLIST_STATE);
     }
 
@@ -49,11 +67,20 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
      */
     readonly getAllAdjustInventoryReport = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ adjustInventoryListInProgress: true });
                 return this.inventoryService.getAdjustmentInventoryReport(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     adjustInventoryList: res ?? [],
@@ -75,6 +102,9 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -88,11 +118,20 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
      */
     readonly deleteInventoryAdjust = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ deleteAdjustInventoryInProgress: true, deleteAdjustInventoryIsSuccess: false });
                 return this.inventoryService.deleteInventoryAdjust(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res?.body);
                                 return this.patchState({ deleteAdjustInventoryInProgress: false, deleteAdjustInventoryIsSuccess: true });
@@ -106,6 +145,9 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
                             return this.patchState({ deleteAdjustInventoryInProgress: false, deleteAdjustInventoryIsSuccess: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

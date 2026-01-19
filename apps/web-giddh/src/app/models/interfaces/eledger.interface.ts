@@ -9,6 +9,10 @@ export interface IEledgerTransactionRemarks {
     chequeNumber?: any;
 }
 
+/**
+ * IEledgerTransaction interface definition
+ * Defines the structure and contract for IEledgerTransaction objects
+ */
 export interface IEledgerTransaction {
     remarks: IEledgerTransactionRemarks;
     amount: number;

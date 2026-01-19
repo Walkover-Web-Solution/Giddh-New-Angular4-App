@@ -11,12 +11,19 @@ import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { get, set } from '../../../../lodash-optimized';
 
+/**
+ * transporterDetails interface definition
+ * Defines the structure and contract for transporterDetails objects
+ */
 export interface transporterDetails {
     name: string;
     transporterId: string;
     action: string;
 }
 const ELEMENT_DATA: transporterDetails[] = [];
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-manage-transport',
 
@@ -24,6 +31,10 @@ const ELEMENT_DATA: transporterDetails[] = [];
     standalone: false,
     styleUrls: ['./aside-manage-transport.component.scss']
 })
+/**
+ * AsideManageTransportComponent component
+ * Handles asidemanagetransport functionality and user interactions
+ */
 export class AsideManageTransportComponent implements OnInit {
     /** Dialog Ref for update ledger */
     public confirmModalDialogRef: any;
@@ -65,6 +76,10 @@ export class AsideManageTransportComponent implements OnInit {
         totalItems: 0
     }
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetection: ChangeDetectorRef,
         private formBuilder: UntypedFormBuilder,
@@ -125,8 +140,14 @@ export class AsideManageTransportComponent implements OnInit {
      */
     public generateTransporter(generateTransporterForm: any): void {
         this.isValidForm = !this.transportedCreateEditForm.invalid;
+        /**
+         * Handles if functionality
+         */
         if (this.isValidForm) {
             this.invoiceServices.addEwayTransporter(generateTransporterForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.status === "success" && response.body) {
                     this.toasty.showSnackBar("success", 'Transported created successfully');
                     this.clearTransportForm();
@@ -148,6 +169,9 @@ export class AsideManageTransportComponent implements OnInit {
         this.isLoading = true;
         this.invoiceServices.getAllTransporterList(this.transporterObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "success" && response.body) {
                 this.transporterListDetails = response.body.results;
                 this.transporterObj.totalItems = response.body?.totalItems;
@@ -170,6 +194,9 @@ export class AsideManageTransportComponent implements OnInit {
         this.isLoading = true;
         this.invoiceServices.UpdateGeneratedTransporter(this.currentTransporterId, generateTransporterForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "success" && response.body) {
                 this.toasty.successToast('Transporter updated successfully');
                 this.transportEditMode = false;
@@ -202,6 +229,9 @@ export class AsideManageTransportComponent implements OnInit {
      */
     public editTransporter(transporter: any): void {
         this.transportEditMode = true;
+        /**
+         * Handles if functionality
+         */
         if (transporter !== undefined && transporter) {
             this.transportedCreateEditForm.get('transporterId').setValue(transporter.transporterId);
             this.transportedCreateEditForm.get('transporterName').setValue(transporter.transporterName);
@@ -229,10 +259,16 @@ export class AsideManageTransportComponent implements OnInit {
         });
 
         this.confirmModalDialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isLoading = true
                 this.invoiceServices.deleteTransporterById(transporter.transporterId).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isLoading = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.status === "success" && response.body) {
                         this.toasty.showSnackBar("success", response.body);
                         this.transporterObj.page = this.generalService.adjustPageIndex(this.transporterObj.totalItems, this.transporterObj.page, this.transporterObj.count);
@@ -251,6 +287,9 @@ export class AsideManageTransportComponent implements OnInit {
      * @memberof AsideManageTransportComponent
      */
     public detectChanges(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.changeDetection['destroyed']) {
             this.changeDetection.detectChanges();
         }

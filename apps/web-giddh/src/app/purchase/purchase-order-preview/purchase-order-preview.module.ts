@@ -6,6 +6,9 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         PurchaseOrderPreviewModalComponent
@@ -21,6 +24,10 @@ import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page
         PurchaseOrderPreviewModalComponent
     ]
 })
+/**
+ * PurchaseOrderPreviewModule module
+ * Implements PurchaseOrderPreviewModule functionality
+ */
 export class PurchaseOrderPreviewModule {
 
 }

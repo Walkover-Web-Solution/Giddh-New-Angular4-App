@@ -5,6 +5,10 @@ const PAGINATION_LIMIT = 20;
 import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
 import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocks-item.interface';
 
+/**
+ * INameUniqueName interface definition
+ * Defines the structure and contract for INameUniqueName objects
+ */
 export interface INameUniqueName {
     email?: any;
     uniqueName: string;
@@ -20,6 +24,10 @@ export interface INameUniqueName {
  * POST call
  * API:: (Create Stock Group) company/:companyUniqueName/stock-group
  * response will be hash as StockGroupResponse
+ */
+/**
+ * StockGroupRequest class
+ * Implements StockGroupRequest functionality
  */
 export class StockGroupRequest implements INameUniqueName {
     public isSelfParent?: boolean;
@@ -128,6 +136,10 @@ export class StockReportResponse implements IStockReport {
     public fromDate?: string = '';
     public toDate?: string = '';
 }
+/**
+ * StockReportRequest class
+ * Implements StockReportRequest functionality
+ */
 export class StockReportRequest {
     public stockGroupUniqueName: string;
     public stockUniqueName: string;
@@ -150,6 +162,10 @@ export class StockReportRequest {
     public branchUniqueName?: string;
 }
 
+/**
+ * StockTransactionReportRequest class
+ * Implements StockTransactionReportRequest functionality
+ */
 export class StockTransactionReportRequest {
     public from: string = '';
     public to: string = '';
@@ -175,6 +191,10 @@ export class StockTransactionReportRequest {
     public variants?: any[];
     public inventoryType?: string;
     public archived?: boolean;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
@@ -192,6 +212,10 @@ export class StockTransactionReportRequest {
 }
 
 
+/**
+ * SearchStockTransactionReportRequest class
+ * Implements SearchStockTransactionReportRequest functionality
+ */
 export class SearchStockTransactionReportRequest {
     public stockGroupUniqueNames: any[];
     public variantUniqueNames: any[];
@@ -204,6 +228,10 @@ export class SearchStockTransactionReportRequest {
     public searchPage?: string;
     public inventoryType?: string;
     public loadMore?: boolean;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.count = DROPDOWN_ITEMS_COUNT_LIMIT;
         this.page = 1;
@@ -214,6 +242,10 @@ export class SearchStockTransactionReportRequest {
     }
 }
 
+/**
+ * BalanceStockTransactionReportRequest class
+ * Implements BalanceStockTransactionReportRequest functionality
+ */
 export class BalanceStockTransactionReportRequest {
     public stockGroupUniqueNames: any[];
     public stockUniqueNames: any[];
@@ -228,6 +260,10 @@ export class BalanceStockTransactionReportRequest {
     public variantUniqueNames?: any[];
     public from: string = '';
     public to: string = '';
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];
@@ -242,6 +278,10 @@ export class BalanceStockTransactionReportRequest {
     }
 }
 
+/**
+ * StockTransactionReportRequestExport class
+ * Implements StockTransactionReportRequestExport functionality
+ */
 export class StockTransactionReportRequestExport {
     public stockGroupUniqueNames: any[];
     public stockUniqueNames: any[];
@@ -273,6 +313,10 @@ export class StockTransactionReportRequestExport {
     public showAccountUniqueName?: boolean;
     public showRate?: boolean;
     public showValue?: boolean;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];
@@ -303,6 +347,10 @@ export class StockTransactionReportRequestExport {
     }
 }
 
+/**
+ * StockReportRequestTransactionParams class
+ * Implements StockReportRequestTransactionParams functionality
+ */
 export class StockReportRequestTransactionParams {
     public from: string = '';
     public to: string = '';
@@ -312,6 +360,10 @@ export class StockReportRequestTransactionParams {
     public sortBy: string;
 }
 
+/**
+ * InventoryReportBalanceResponse class
+ * Implements InventoryReportBalanceResponse functionality
+ */
 export class InventoryReportBalanceResponse {
     public profit?: number;
     public opening?: any;
@@ -320,6 +372,10 @@ export class InventoryReportBalanceResponse {
     public outwards?: any;
 }
 
+/**
+ * GroupStockReportRequest class
+ * Implements GroupStockReportRequest functionality
+ */
 export class GroupStockReportRequest {
     public stockGroupUniqueName: string;
     public stockUniqueName: string;
@@ -344,6 +400,10 @@ export class GroupStockReportRequest {
     public branchUniqueName?: string;
 }
 
+/**
+ * AdvanceFilterOptions class
+ * Implements AdvanceFilterOptions functionality
+ */
 export class AdvanceFilterOptions {
     public filterCategory?: string;
     public filterCategoryType?: string;
@@ -456,6 +516,10 @@ export class GroupStockReportResponse {
     public stockGroupName?: any;
 }
 
+/**
+ * IGroupStockReport interface definition
+ * Defines the structure and contract for IGroupStockReport objects
+ */
 interface IGroupStockReport {
     openingBalance?: any;
     closingBalance?: any;
@@ -464,6 +528,10 @@ interface IGroupStockReport {
     stockUniqueName: string;
     stockName: string;
 }
+/**
+ * InventoryDownloadRequest class
+ * Implements InventoryDownloadRequest functionality
+ */
 export class InventoryDownloadRequest {
     public reportType: string; // allgroup/group/stock/account
     public stockGroupUniqueName?: string;
@@ -483,6 +551,10 @@ export class InventoryDownloadRequest {
     public branchUniqueName?: string;
 }
 
+/**
+ * InventoryReportRequest class
+ * Implements InventoryReportRequest functionality
+ */
 export class InventoryReportRequest {
     public totalItems?: number;
     public totalPages?: number;
@@ -500,6 +572,10 @@ export class InventoryReportRequest {
     public page: number;
     public sort: string;
     public sortBy: string;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.param = null;
         this.expression = null;
@@ -514,6 +590,10 @@ export class InventoryReportRequest {
     }
 }
 
+/**
+ * InventoryReportRequestExport class
+ * Implements InventoryReportRequestExport functionality
+ */
 export class InventoryReportRequestExport {
     public param?: string;
     public expression?: string;
@@ -536,6 +616,10 @@ export class InventoryReportRequestExport {
     public showOutwardsValue?: boolean;
     public showClosingStockQty?: boolean;
     public showClosingStockValue?: boolean;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.param = null;
         this.expression = null;
@@ -558,6 +642,10 @@ export class InventoryReportRequestExport {
     }
 }
 
+/**
+ * InventoryReportResponse class
+ * Implements InventoryReportResponse functionality
+ */
 export class InventoryReportResponse {
     public count: number;
     public page: number;
@@ -573,6 +661,10 @@ export class InventoryReportResponse {
     public toDate?: string = '';
 }
 
+/**
+ * IReportTransaction class
+ * Implements IReportTransaction functionality
+ */
 export class IReportTransaction {
     public opening: IInventoryQtyAmt;
     public inwards: IInventoryQtyAmt;
@@ -585,23 +677,43 @@ export class IReportTransaction {
     public stockGroupHasChild: boolean;
 }
 
+/**
+ * IInventoryQtyAmt class
+ * Implements IInventoryQtyAmt functionality
+ */
 export class IInventoryQtyAmt {
     public quantity: number;
     public amount: number;
 }
+/**
+ * IGroupWiseStock class
+ * Implements IGroupWiseStock functionality
+ */
 export class IGroupWiseStock {
     public name: string;
     public uniqueName: string;
 }
+/**
+ * IGroupWiseStockUnit class
+ * Implements IGroupWiseStockUnit functionality
+ */
 export class IGroupWiseStockUnit {
     public name: string;
     public code: string;
 }
+/**
+ * IInventoryBalance class
+ * Implements IInventoryBalance functionality
+ */
 export class IInventoryBalance {
     public amount: number;
     public type: string;
 }
 
+/**
+ * DiscountInfo interface definition
+ * Defines the structure and contract for DiscountInfo objects
+ */
 export interface DiscountInfo {
     type: string;
     discountValue: number;
@@ -612,17 +724,29 @@ export interface DiscountInfo {
     variantUniqueName: string;
 }
 
+/**
+ * CreateDiscount class
+ * Implements CreateDiscount functionality
+ */
 export class CreateDiscount {
     public customerVendorAccountUniqueName: string;
     public customerVendorGroupUniqueName: string;
     public discountInfo: DiscountInfo[] = [];
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(customerVendorAccountUniqueName: string, customerVendorGroupUniqueName: string) {
         this.customerVendorAccountUniqueName = customerVendorAccountUniqueName;
         this.customerVendorGroupUniqueName = customerVendorGroupUniqueName;
     }
 }
 
+/**
+ * AdjustInventoryListResponse class
+ * Implements AdjustInventoryListResponse functionality
+ */
 export class AdjustInventoryListResponse {
     public count: number;
     public page: number;
@@ -631,6 +755,10 @@ export class AdjustInventoryListResponse {
     public results: InventorytAdjustReport[];
 }
 
+/**
+ * InventorytAdjustReport class
+ * Implements InventorytAdjustReport functionality
+ */
 export class InventorytAdjustReport {
     public date: string;
     public refNo: string;
@@ -643,11 +771,19 @@ export class InventorytAdjustReport {
     public failureReason: string;
 }
 
+/**
+ * InventoryAdjustCommonUse class
+ * Implements InventoryAdjustCommonUse functionality
+ */
 export class InventoryAdjustCommonUse {
     name: string;
     uniqueName: string;
 }
 
+/**
+ * InventorytAdjustReportQueryRequest class
+ * Implements InventorytAdjustReportQueryRequest functionality
+ */
 export class InventorytAdjustReportQueryRequest {
     public q: string = '';
     public from?: string = '';

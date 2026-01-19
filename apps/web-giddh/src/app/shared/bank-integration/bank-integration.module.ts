@@ -30,6 +30,9 @@ import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.mo
 import { BankLinkComponent } from "./bank-link/bank-link.component";
 import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-integration-popup.component";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent, BankIntegrationDialogComponent ],
     imports: [
@@ -66,4 +69,8 @@ import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-in
     ],
     exports: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent, BankIntegrationDialogComponent]
 })
+/**
+ * BankIntegrationModule module
+ * Implements BankIntegrationModule functionality
+ */
 export class BankIntegrationModule {}

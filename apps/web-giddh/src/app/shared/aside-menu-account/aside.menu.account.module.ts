@@ -7,6 +7,9 @@ import { AsideMenuAccountInContactComponent } from "./aside.menu.account.compone
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AsideMenuAccountInContactComponent
@@ -23,6 +26,10 @@ import { MatButtonModule } from "@angular/material/button";
         AsideMenuAccountInContactComponent
     ]
 })
+/**
+ * AsideMenuAccountModule module
+ * Implements AsideMenuAccountModule functionality
+ */
 export class AsideMenuAccountModule {
 
 }

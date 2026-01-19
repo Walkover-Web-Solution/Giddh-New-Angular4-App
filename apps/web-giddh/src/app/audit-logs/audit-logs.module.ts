@@ -19,6 +19,9 @@ import { AuditLogsSidebarComponent } from './components/sidebar-components/audit
 import { AuditLogsServiceModule } from './services/audit-logs.service.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AuditLogsComponent,
@@ -53,5 +56,9 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         FormFieldsModule
     ],
 })
+/**
+ * AuditLogsModule module
+ * Implements AuditLogsModule functionality
+ */
 export class AuditLogsModule {
 }

@@ -9,12 +9,19 @@ import { ExportBodyRequest } from "../../models/api-models/DaybookRequest";
 import { LedgerService } from "../../services/ledger.service";
 import { ToasterService } from "../../services/toaster.service";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "sales-purchase-register-export",
     templateUrl: "./sales-purchase-register-export.component.html",
     styleUrls: ["./sales-purchase-register-export.component.scss"],
     standalone: false
 })
+/**
+ * SalesPurchaseRegisterExportComponent component
+ * Handles salespurchaseregisterexport functionality and user interactions
+ */
 export class SalesPurchaseRegisterExportComponent implements OnInit {
     /** Form Group for export  form */
     public exportForm: FormGroup;
@@ -23,6 +30,10 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
     /** True if api call in progress */
     public isLoading: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private dialog: MatDialog,
@@ -87,41 +98,77 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         exportBodyRequest.q = this.inputData?.q;
         exportBodyRequest.branchUniqueName = this.inputData?.branchUniqueName;
         exportBodyRequest.columnsToExport = ["Account UniqueName"];
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showVoucherType) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showVoucherNumber) {
             exportBodyRequest.columnsToExport.push("Voucher No");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showDiscount) {
             exportBodyRequest.columnsToExport.push("Discount");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showTax) {
             exportBodyRequest.columnsToExport.push("Tax");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showGroup) {
             exportBodyRequest.columnsToExport.push("Group");
             exportBodyRequest.columnsToExport.push("Group UniqueName");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showTaxNumber) {
             exportBodyRequest.columnsToExport.push("Tax Number");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showAddress) {
             exportBodyRequest.columnsToExport.push("Address");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showPincode) {
             exportBodyRequest.columnsToExport.push("Pincode");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showEmail) {
             exportBodyRequest.columnsToExport.push("Email");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showMobileNumber) {
             exportBodyRequest.columnsToExport.push("Mobile No");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showSalesPurchaseAccount) {
             exportBodyRequest.columnsToExport.push("SalesPurchase Account");
             exportBodyRequest.columnsToExport.push("SalesPurchase Account UniqueName");
         }
+        /**
+         * Handles if functionality
+         */
         if (this.exportForm.value.showStock) {
             exportBodyRequest.columnsToExport.push("Stock");
         }
@@ -131,6 +178,9 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
             .pipe(takeUntil(this.destroyed$))
             .subscribe((response) => {
                 this.isLoading = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success") {
                     this.toaster.successToast(response?.body);
                     this.router.navigate(["/pages/downloads"]);

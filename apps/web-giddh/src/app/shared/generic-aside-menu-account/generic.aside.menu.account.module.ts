@@ -8,6 +8,9 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 import { KeyboardShortutModule } from "../helpers/directives/keyboardShortcut/keyboardShortut.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         GenericAsideMenuAccountComponent
@@ -26,6 +29,10 @@ import { KeyboardShortutModule } from "../helpers/directives/keyboardShortcut/ke
     ]
 })
 
+/**
+ * GenericAsideMenuAccountModule module
+ * Implements GenericAsideMenuAccountModule functionality
+ */
 export class GenericAsideMenuAccountModule {
 
 }

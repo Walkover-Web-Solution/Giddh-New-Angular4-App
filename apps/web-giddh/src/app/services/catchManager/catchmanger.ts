@@ -11,11 +11,22 @@ import { ERROR_LOG_API } from '../apiurls/exception-log.api';
 import { take } from 'rxjs/operators';
 import { indexOf } from '../../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * GiddhErrorHandler class
+ * Implements GiddhErrorHandler functionality
+ */
 export class GiddhErrorHandler {
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private router: Router,
@@ -26,6 +37,9 @@ export class GiddhErrorHandler {
     public HandleCatch<TResponce, TRequest>(r: HttpErrorResponse, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
         let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
         // logout if invalid session detacted
+        /**
+         * Handles if functionality
+         */
         if (r?.status === 0) {
             data = {
                 body: null,
@@ -37,6 +51,9 @@ export class GiddhErrorHandler {
             data.queryString = queryString;
         } else {
             this.logApiError(r);
+            /**
+             * Handles if functionality
+             */
             if (r?.status === 500 ||
                 r?.status === 501 ||
                 r?.status === 502 ||
@@ -56,7 +73,13 @@ export class GiddhErrorHandler {
                 data.code = 'Internal Error';
             } else {
                 data = r.error as any;
+                /**
+                 * Handles if functionality
+                 */
                 if (data) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
                         this.store.dispatch({ type: 'LoginOut' });
                     } else if (data.code === 'INVALID_JSON') {
@@ -74,6 +97,9 @@ export class GiddhErrorHandler {
                     } else if (data.code === '') {
                         // handle unshared company response
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (typeof data !== 'string') {
                         data.request = request;
                         data.queryString = queryString;
@@ -82,11 +108,17 @@ export class GiddhErrorHandler {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (typeof data === "string") {
             data = {
                 statusCode: r?.status
             };
         } else {
+            /**
+             * Handles if functionality
+             */
             if (data) {
                 data.statusCode = r?.status;
             } else {
@@ -124,6 +156,9 @@ export class GiddhErrorHandler {
 export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
     let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
     // logout if invalid session detacted
+    /**
+     * Handles if functionality
+     */
     if (r?.status === 0) {
         data = {
             body: null,
@@ -134,6 +169,9 @@ export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryStr
         data.request = request;
         data.queryString = queryString;
     } else {
+        /**
+         * Handles if functionality
+         */
         if (r?.text() === '') {
             data.status = 'error';
             data.message = 'Something went wrong';
@@ -141,6 +179,9 @@ export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryStr
             data.code = 'Internal Error';
         } else {
             data = r?.json();
+            /**
+             * Handles if functionality
+             */
             if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
                 this.store.dispatch({ type: 'LoginOut' });
             }

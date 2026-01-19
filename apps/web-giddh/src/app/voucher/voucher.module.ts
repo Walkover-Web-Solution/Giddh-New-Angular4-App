@@ -39,6 +39,9 @@ import { MatDividerModule } from "@angular/material/divider";
 import { OnloadDirectiveModule } from "./directive/onload.module";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         VoucherRoutingModule,
@@ -88,4 +91,8 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
     declarations: [VoucherRendererComponent, VoucherComponent],
     providers: [TitleCasePipe],
 })
+/**
+ * VoucherModule module
+ * Implements VoucherModule functionality
+ */
 export class VoucherModule {}

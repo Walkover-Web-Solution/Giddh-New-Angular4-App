@@ -15,6 +15,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GeneralService } from '../../services/general.service';
 import { IOption } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'change-billing',
     templateUrl: './change-billing.component.html',
@@ -22,6 +25,10 @@ import { IOption } from '../../app.constant';
     providers: [ChangeBillingComponentStore],
     standalone:false
 })
+/**
+ * ChangeBillingComponent component
+ * Handles changebilling functionality and user interactions
+ */
 export class ChangeBillingComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -94,6 +101,10 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     /** This will hold gstin input  */
     public gstinInput: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: FormBuilder,
         private componentStore: ChangeBillingComponentStore,
@@ -124,6 +135,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         this.getActiveCompany();
 
         this.route.params.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params) {
                 this.billingDetails.billingAccountUnqiueName = params?.billingAccountUnqiueName;
                 this.getBillingDetails(this.billingDetails.billingAccountUnqiueName);
@@ -131,12 +145,18 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         });
 
         this.updateBillingDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data) {
                 this.router.navigate(['/pages/user-details/subscription']);
             }
         });
 
         this.getBillingDetails$.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data) {
                 this.getCountry();
                 this.getStates(data.country?.code);
@@ -145,7 +165,13 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 this.selectedState = data.state?.name ? data?.state?.code + ' - ' + data.state?.name : data?.county?.code + ' - ' + data.county?.name;
                 this.billingDetails.billingName = data?.billingName;
                 this.billingDetails.uniqueName = data?.uniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.changeBillingForm.get('taxNumber')?.value && this.changeBillingForm.get('taxNumber')?.value?.length >= 2) {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.validateGstNumber();
                     }, 50);
@@ -154,6 +180,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         });
 
         this.changeBillingForm.get('taxNumber')?.valueChanges.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(value => {
+            /**
+             * Handles if functionality
+             */
             if (value) {
                 this.gstinInput = true;
                 this.optionSelected = false;
@@ -225,6 +254,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
    */
     public getCountry(): void {
         this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.countrySource = [];
                 Object.keys(response).forEach(key => {
@@ -251,13 +283,25 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     public getStates(countryCode?: string): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
 
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.states = [];
                 this.countyList = [];
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response.stateList) {
                     Object.keys(response.stateList).forEach(key => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (key) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response.stateList[key].stateGstCode !== null) {
                                 this.stateGstCode[response.stateList[key].stateGstCode] = [];
                                 this.stateGstCode[response.stateList[key].stateGstCode] = response.stateList[key].code;
@@ -271,6 +315,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                     });
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response.countyList) {
                     this.countyList = response.countyList?.map(county => {
                         return { label: county.name, value: county.code };
@@ -292,11 +339,26 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      */
     public validateGstNumber(): void {
         let isValid: boolean = false;
+        /**
+         * Handles if functionality
+         */
         if (this.changeBillingForm.get('taxNumber')?.value) {
+            /**
+             * Handles if functionality
+             */
             if (this.formFields['taxName']) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                    /**
+                     * Handles for functionality
+                     */
                     for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                         let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                        /**
+                         * Handles if functionality
+                         */
                         if (regex.test(this.changeBillingForm.get('taxNumber')?.value)) {
                             isValid = true;
                         }
@@ -304,6 +366,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 } else {
                     isValid = true;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!isValid) {
                     let text = this.commonLocaleData?.app_invalid_tax_name;
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
@@ -318,11 +383,17 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             this.changeDetection.detectChanges();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.changeBillingForm.get('taxNumber')?.value?.length >= 2) {
             this.states?.find((state) => {
                 let code = this.changeBillingForm.get('taxNumber')?.value?.substr(0, 2);
                 let matchCode = state.stateGstCode == code;
                 this.disabledState = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (matchCode) {
                     this.disabledState = true;
                     this.selectedState = state.label;
@@ -337,6 +408,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             this.isGstinValid = false;
             this.selectedState = '';
             this.selectedStateCode = '';
+            /**
+             * Handles if functionality
+             */
             if (!this.optionSelected) {
                 this.changeBillingForm.controls['state'].setValue(null);
             }
@@ -363,6 +437,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      * @memberof ChangeBillingComponent
      */
     public selectCountry(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.selectedCountry = event.label;
             this.changeBillingForm.controls['country'].patchValue({
@@ -394,6 +471,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
       * @memberof ChangeBillingComponent
       */
     public selectState(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.optionSelected = true;
             this.changeBillingForm.controls['state'].patchValue({
@@ -411,6 +491,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      */
     private getCompanyProfile(): void {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
+            /**
+             * Handles if functionality
+             */
             if (profile && Object.keys(profile).length) {
                 this.company.countryName = profile.country;
                 this.company.countryCode = profile.countryCode || profile.countryV2.alpha2CountryCode;
@@ -432,6 +515,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
       */
     private showTaxTypeByCountry(countryCode: string): void {
         this.company.taxType = this.subscriptionService.showTaxTypeByCountry(countryCode, this.activeCompany?.countryV2?.alpha2CountryCode);
+        /**
+         * Handles if functionality
+         */
         if (this.company.taxType) {
             this.getOnboardingForm(countryCode);
         }
@@ -445,6 +531,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     * @memberof ChangeBillingComponent
     */
     private getOnboardingForm(countryCode: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.onboardingFormRequest.country !== countryCode) {
             this.onboardingFormRequest.formName = 'onboarding';
             this.onboardingFormRequest.country = countryCode;
@@ -460,9 +549,15 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      */
     private getOnboardingFormData(): void {
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.formFields = [];
                 Object.keys(response.fields).forEach(key => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.fields[key]) {
                         this.formFields[response.fields[key]?.name] = [];
                         this.formFields[response.fields[key]?.name] = response.fields[key];
@@ -480,6 +575,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      */
     private getActiveCompany(): void {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.activeCompany = response;
                 this.company.addresses = response.addresses;
@@ -496,6 +594,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     public onSubmit(): void {
         this.isFormSubmitted = false;
         const isGstinInput = this.changeBillingForm.get('taxNumber')?.value && !this.gstinInput ? false : !this.isGstinValid;
+        /**
+         * Handles if functionality
+         */
         if (this.changeBillingForm.invalid || (this.changeBillingForm.get('taxNumber')?.value && isGstinInput)) {
             this.isFormSubmitted = true;
             return;
@@ -514,6 +615,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             },
             address: this.changeBillingForm.value.address
         }
+        /**
+         * Handles if functionality
+         */
         if (this.changeBillingForm.value.country.code === 'GB') {
             request['county'] = {
                 name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,

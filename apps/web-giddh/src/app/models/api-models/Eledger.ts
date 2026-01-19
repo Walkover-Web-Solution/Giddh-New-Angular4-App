@@ -6,6 +6,10 @@ import { IEledgerTransaction } from '../interfaces/eledger.interface';
  * API:: ( mail ledger ) company/:companyUniqueName/accounts/:accountUniqueName/eledgers?refresh=false
  * Response will be success message and array of EledgerResponse in body
  */
+/**
+ * EledgerResponse class
+ * Implements EledgerResponse functionality
+ */
 export class EledgerResponse {
     public transactions: IEledgerTransaction[];
     public transactionId: string;

@@ -20,6 +20,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -50,5 +53,9 @@ import { ActivityCompareJsonComponent } from './components/activity-compare-json
         MatMenuModule
     ],
 })
+/**
+ * ActivityLogsModule module
+ * Implements ActivityLogsModule functionality
+ */
 export class ActivityLogsModule {
 }

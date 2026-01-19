@@ -4,6 +4,9 @@ import {
 } from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: '[profit-loss-report-grid-row]',
     templateUrl: './profit-loss-report-grid-row.component.html',
@@ -11,6 +14,10 @@ selector: '[profit-loss-report-grid-row]',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * ProfitLossReportGridRowComponent component
+ * Handles profitlossreportgridrow functionality and user interactions
+ */
 export class ProfitLossReportGridRowComponent implements OnChanges {
     /** Holds the group detail data for a specific child group in the report */
     @Input() public groupDetail: ChildGroup;
@@ -27,6 +34,10 @@ export class ProfitLossReportGridRowComponent implements OnChanges {
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private changeDetectionRef: ChangeDetectorRef) {
     }
 
@@ -38,9 +49,15 @@ export class ProfitLossReportGridRowComponent implements OnChanges {
      * @memberof ProfitLossReportGridComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
             this.changeDetectionRef.detectChanges();
         }
+        /**
+         * Handles if functionality
+         */
         if (changes?.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
             this.changeDetectionRef.detectChanges();
         }

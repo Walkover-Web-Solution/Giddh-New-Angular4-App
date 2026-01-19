@@ -16,6 +16,10 @@ import { FocusMonitor } from '@angular/cdk/a11y';
     selector: '[appFocusableClick]',
     standalone: true
 })
+/**
+ * FocusableClickDirective directive
+ * Implements FocusableClickDirective functionality
+ */
 export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
@@ -77,6 +81,9 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
         element.setAttribute('role', 'button');
 
         // Add cursor pointer style if not already present
+        /**
+         * Handles if functionality
+         */
         if (!element.style.cursor) {
             element.style.cursor = 'pointer';
         }
@@ -102,6 +109,9 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
      */
     @HostListener('keydown.enter', ['$event'])
     @HostListener('keydown.space', ['$event'])
+    /**
+     * Handles keyboardactivate event
+     */
     public onKeyboardActivate(event: KeyboardEvent): void {
         // Prevent default behavior (form submission, page scroll, etc.)
         event.preventDefault();
@@ -120,12 +130,18 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
     private executeClickFunction(): void {
         try {
             // Priority 1: Execute statements if provided
+            /**
+             * Handles if functionality
+             */
             if (this.clickStatements && this.componentContext) {
                 this.executeStatements();
                 return;
             }
 
             // Priority 2: Execute function if provided
+            /**
+             * Handles if functionality
+             */
             if (this.clickFunction && typeof this.clickFunction === 'function') {
                 this.clickFunction.apply(this.componentContext || null, this.clickArgs);
                 return;
@@ -143,6 +159,9 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
      * @memberof FocusableClickDirective
      */
     private executeStatements(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.componentContext) {
 
             return;
@@ -152,6 +171,9 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
             // Split statements by semicolon and execute each one
             const statements = this.clickStatements.split(';').map(s => s.trim()).filter(s => s);
 
+            /**
+             * Handles for functionality
+             */
             for (const statement of statements) {
                 this.executeStatement(statement);
             }
@@ -170,10 +192,19 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
     private executeStatement(statement: string): void {
         try {
             // Handle function calls like "func1()" or "func1(arg1, arg2)"
+            /**
+             * Handles if functionality
+             */
             if (statement.includes('(') && statement.includes(')')) {
                 const funcMatch = statement.match(/(\w+)\((.*?)\)/);
+                /**
+                 * Handles if functionality
+                 */
                 if (funcMatch) {
                     const [, funcName, argsString] = funcMatch;
+                    /**
+                     * Handles if functionality
+                     */
                     if (typeof this.componentContext[funcName] === 'function') {
                         // Parse arguments if any
                         const args = argsString ? this.parseArguments(argsString) : [];
@@ -188,6 +219,9 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
             }
             // Handle simple method calls without parentheses
             else {
+                /**
+                 * Handles if functionality
+                 */
                 if (typeof this.componentContext[statement] === 'function') {
                     this.componentContext[statement].call(this.componentContext);
                 }
@@ -206,6 +240,9 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
      * @memberof FocusableClickDirective
      */
     private parseArguments(argsString: string): any[] {
+        /**
+         * Handles if functionality
+         */
         if (!argsString.trim()) return [];
 
         try {
@@ -229,23 +266,44 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
         value = value.trim();
 
         // Boolean values
+        /**
+         * Handles if functionality
+         */
         if (value === 'true') return true;
+        /**
+         * Handles if functionality
+         */
         if (value === 'false') return false;
 
         // Null/undefined
+        /**
+         * Handles if functionality
+         */
         if (value === 'null') return null;
+        /**
+         * Handles if functionality
+         */
         if (value === 'undefined') return undefined;
 
         // Numbers
+        /**
+         * Handles if functionality
+         */
         if (!isNaN(Number(value)) && value !== '') return Number(value);
 
         // Strings (remove quotes if present)
+        /**
+         * Handles if functionality
+         */
         if ((value.startsWith('"') && value.endsWith('"')) ||
             (value.startsWith("'") && value.endsWith("'"))) {
             return value.slice(1, -1);
         }
 
         // Component property reference
+        /**
+         * Handles if functionality
+         */
         if (this.componentContext && this.componentContext.hasOwnProperty(value)) {
             return this.componentContext[value];
         }

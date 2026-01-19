@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { MATERIAL_VARIABLES_CSS_TEMPLATE } from './material-variables-template';
 
 /** White label configuration interface */
+/**
+ * IWhiteLabelConfig interface definition
+ * Defines the structure and contract for IWhiteLabelConfig objects
+ */
 export interface IWhiteLabelConfig {
     body?: {
         giddhWhiteLabel?: {
@@ -10,6 +14,10 @@ export interface IWhiteLabelConfig {
     };
 }
 
+/**
+ * ITheme interface definition
+ * Defines the structure and contract for ITheme objects
+ */
 export interface ITheme {
     primary: string;
     accent: string;
@@ -26,6 +34,10 @@ export interface ITheme {
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * DynamicThemeService service
+ * Provides dynamictheme related business logic and data operations
+ */
 export class DynamicThemeService {
     /** Default accent and warn colors for palette generation */
     private readonly defaultColors = {
@@ -50,6 +62,9 @@ export class DynamicThemeService {
         try {
             const theme = this.extractAndValidateThemeColor(whiteLabelConfig);
             
+            /**
+             * Handles if functionality
+             */
             if (!theme) {
 
                 this.removeMaterialVariablesCSS();
@@ -77,6 +92,9 @@ export class DynamicThemeService {
      * @memberof DynamicThemeService
      */
     private extractAndValidateThemeColor(config: IWhiteLabelConfig | null): ITheme | null {
+        /**
+         * Handles if functionality
+         */
         if (!config?.body?.giddhWhiteLabel?.theme?.primary) {
             return null;
         }
@@ -86,6 +104,9 @@ export class DynamicThemeService {
         const warn = config.body.giddhWhiteLabel.theme.warn || this.defaultColors.warn;
         
         const theme: ITheme = { primary, accent, warn };
+        /**
+         * Handles if functionality
+         */
         if (this.isValidHexColor(primary) && this.isValidHexColor(accent) && this.isValidHexColor(warn)) {
             return theme;
         }
@@ -122,6 +143,9 @@ export class DynamicThemeService {
         // Convert hex to RGB values
         const hexToRgb = (hex: string): string => {
             const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            /**
+             * Handles if functionality
+             */
             if (result) {
                 const r = parseInt(result[1], 16);
                 const g = parseInt(result[2], 16);
@@ -153,6 +177,9 @@ export class DynamicThemeService {
      */
     private loadMaterialVariablesCSS(): void {
         // Check if already loaded
+        /**
+         * Handles if functionality
+         */
         if (this.materialVariablesStyle) {
             return;
         }
@@ -174,6 +201,9 @@ export class DynamicThemeService {
      * @memberof DynamicThemeService
      */
     private removeMaterialVariablesCSS(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.materialVariablesStyle) {
             document.head.removeChild(this.materialVariablesStyle);
             this.materialVariablesStyle = null;

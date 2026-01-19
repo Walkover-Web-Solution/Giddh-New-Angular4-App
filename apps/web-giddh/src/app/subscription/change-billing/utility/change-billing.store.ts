@@ -8,6 +8,10 @@ import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
 
+/**
+ * BillingState interface definition
+ * Defines the structure and contract for BillingState objects
+ */
 export interface BillingState {
     getBillingDetailsInProgress: boolean;
     getBillingDetails: any
@@ -22,12 +26,26 @@ export const DEFAULT_CHANGE_BILLING_STATE: BillingState = {
     updateBillingDetailsInProgress: null,
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * ChangeBillingComponentStore store
+ * Manages changebillingcomponent state using NgRx ComponentStore
+ */
 export class ChangeBillingComponentStore extends ComponentStore<BillingState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
         private store: Store<AppState>) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_CHANGE_BILLING_STATE);
     }
 
@@ -44,11 +62,20 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
      */
     readonly getBillingDetails = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ getBillingDetailsInProgress: true });
                 return this.subscriptionService.getBillingDetails(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     getBillingDetails: res?.body ?? [],
@@ -69,6 +96,9 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -82,11 +112,20 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
     */
     readonly updateBillingDetails = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ updateBillingDetailsInProgress: true });
                 return this.subscriptionService.updateBillingDetails(req.request, req.id).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', res?.body);
                                 return this.patchState({
@@ -94,6 +133,9 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
                                     updateBillingDetailsSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -111,6 +153,9 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

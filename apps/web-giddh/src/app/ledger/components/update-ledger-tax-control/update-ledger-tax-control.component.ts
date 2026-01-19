@@ -29,11 +29,18 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     multi: true
 };
 
+/**
+ * UpdateLedgerTaxData component
+ * Handles updateledgertaxdata functionality and user interactions
+ */
 export class UpdateLedgerTaxData {
     public particular: INameUniqueName = { name: '', uniqueName: '' };
     public amount: number = 0;
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'update-ledger-tax-control',
     templateUrl: 'update-ledger-tax-control.component.html',
@@ -41,6 +48,10 @@ export class UpdateLedgerTaxData {
     providers: [TAX_CONTROL_VALUE_ACCESSOR],
     standalone:false
 })
+/**
+ * UpdateLedgerTaxControlComponent component
+ * Handles updateledgertaxcontrol functionality and user interactions
+ */
 export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, AfterViewInit {
 
     /** True if field is readonly */
@@ -93,17 +104,33 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
     /** Emitter for component init */
     @Output() public viewInitEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private generalService: GeneralService) {
 
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges) {
+        /**
+         * Handles if functionality
+         */
         if ('applicableTaxes' in changes || 'date' in changes) {
             const hasApplicableTaxesChanged = changes['applicableTaxes'] && changes['applicableTaxes'].currentValue !== changes['applicableTaxes'].previousValue;
+            /**
+             * Handles if functionality
+             */
             if (hasApplicableTaxesChanged) {
                 this.taxRenderData = [];
             }
             const hasDateChanged = changes['date'] && changes['date'].currentValue !== changes['date'].previousValue && dayjs(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid();
+            /**
+             * Handles if functionality
+             */
             if (hasApplicableTaxesChanged || hasDateChanged) {
                 this.sum = 0;
                 this.prepareTaxObject();
@@ -111,12 +138,18 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue ||
             changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
             this.calculateInclusiveOrExclusiveFormattedTax();
             this.taxAmountSumEvent.emit(this.sum);
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('taxes' in changes && changes && (Array.isArray(changes.taxes.currentValue))) {
             this.prepareTaxObject();
             this.change();
@@ -128,17 +161,29 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
      */
     public prepareTaxObject() {
 
+        /**
+         * Handles if functionality
+         */
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
             this.taxes = this.taxes?.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
             this.taxes = this.taxes?.filter(f => !this.exceptTaxTypes.includes(f.taxType));
         }
         this.taxes.map(tax => {
             const index = this.taxRenderData?.findIndex(f => f?.uniqueName === tax?.uniqueName);
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
+            /**
+             * Handles if functionality
+             */
             if (index > -1) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
                     this.taxRenderData[index].amount =
                         (dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)) || dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT)) ?
@@ -149,15 +194,24 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
                 taxObj.name = tax?.name;
                 taxObj.type = tax?.taxType;
                 taxObj.uniqueName = tax?.uniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.date) {
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
                     let exactDate = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
+                    /**
+                     * Handles if functionality
+                     */
                     if (exactDate && exactDate.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
                         let filteredTaxObject = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
+                        /**
+                         * Handles if functionality
+                         */
                         if (filteredTaxObject && filteredTaxObject.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
@@ -171,19 +225,31 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
                 this.taxRenderData.push(taxObj);
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (this.taxRenderData?.length) {
             this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
         }
     }
 
+    /**
+     * Toggles taxpopup state
+     */
     public toggleTaxPopup(action: boolean) {
         this.showTaxPopup = action;
     }
 
+    /**
+     * Handles trackByFn functionality
+     */
     public trackByFn(index) {
         return index;
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.taxAmountSumEvent.unsubscribe();
         this.isApplicableTaxesEvent.unsubscribe();
@@ -199,7 +265,13 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
         this.calculateInclusiveOrExclusiveFormattedTax();
         this.selectedTaxes = this.generateSelectedTaxes();
 
+        /**
+         * Handles if functionality
+         */
         if (this.allowedSelection > 0) {
+            /**
+             * Handles if functionality
+             */
             if (this.selectedTaxes && this.selectedTaxes.length >= this.allowedSelection) {
                 this.taxRenderData = this.taxRenderData.map(m => {
                     m.isDisabled = !m.isChecked;
@@ -212,12 +284,21 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
                 });
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type && this.allowedSelectionOfAType.type.length) {
             (Array.isArray(this.allowedSelectionOfAType.type) ? this.allowedSelectionOfAType.type : []).forEach(taxType => {
                 const selectedTaxes = this.taxRenderData?.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
+                /**
+                 * Handles if functionality
+                 */
                 if (selectedTaxes && selectedTaxes.length >= this.allowedSelectionOfAType.count) {
                     this.taxRenderData.map((taxesApplied => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (taxType === taxesApplied.type && !taxesApplied.isChecked) {
                             taxesApplied.isDisabled = true;
                         }
@@ -225,6 +306,9 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
                     }));
                 } else {
                     this.taxRenderData.map((taxesApplied => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (taxType === taxesApplied.type && taxesApplied.isDisabled) {
                             taxesApplied.isDisabled = false;
                         }
@@ -232,14 +316,23 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
                     }));
                 }
             });
+            /**
+             * Handles if functionality
+             */
             if (this.isAdvanceReceipt) {
                 // In case of advance receipt only a single tax is allowed in addition to CESS
                 // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
                 // except CESS taxes
                 let singleSelectedTax = this.taxRenderData?.filter((tax) => tax.isChecked && tax.type !== 'gstcess');
                 const atleastSingleTaxSelected: boolean = singleSelectedTax && singleSelectedTax.length !== 0;
+                /**
+                 * Handles if functionality
+                 */
                 if (atleastSingleTaxSelected) {
                     this.taxRenderData.map((taxesApplied => {
+                        /**
+                         * Handles if functionality
+                         */
                         if ('gstcess' !== taxesApplied.type && !taxesApplied.isChecked) {
                             taxesApplied.isDisabled = true;
                         }
@@ -248,7 +341,13 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
                 }
             }
         }
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.taxRenderData?.length) {
                 this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
             }
@@ -258,6 +357,9 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
         this.selectedTaxEvent.emit(this.selectedTaxes);
 
         let diff: boolean;
+        /**
+         * Handles if functionality
+         */
         if (this.selectedTaxes && this.selectedTaxes.length > 0) {
             let taxDifference = difference(this.selectedTaxes, this.applicableTaxes);
             diff = taxDifference && taxDifference.length > 0;
@@ -265,6 +367,9 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
             diff = this.applicableTaxes && this.applicableTaxes.length > 0;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (diff) {
             this.isApplicableTaxesEvent.emit(false);
         } else {
@@ -272,9 +377,15 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
         }
     }
 
+    /**
+     * Handles focuslastdiv event
+     */
     public onFocusLastDiv(el) {
         el.stopPropagation();
         el.preventDefault();
+        /**
+         * Handles if functionality
+         */
         if (!this.showTaxPopup) {
             this.showTaxPopup = true;
             this.hideOtherPopups.emit(true);
@@ -287,6 +398,9 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
             });
         let index = focussable?.indexOf(document.activeElement);
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
@@ -303,6 +417,9 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
     public handleInputFocus(): void {
         this.showTaxPopup = true;
         this.hideOtherPopups.emit(true);
+        /**
+         * Handles if functionality
+         */
         if (this.taxInputElement && this.taxInputElement.nativeElement) {
             this.taxInputElement.nativeElement.classList.remove('error-box');
         }
@@ -339,6 +456,9 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, Af
      * @memberof UpdateLedgerTaxControlComponent
      */
     private calculateInclusiveOrExclusiveFormattedTax(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isAdvanceReceipt) {
             // Inclusive tax calculation
             this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), this.giddhBalanceDecimalPlaces)}`;

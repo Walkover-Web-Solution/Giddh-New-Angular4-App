@@ -10,11 +10,22 @@ import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { concat, get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * VatService service
+ * Provides vat related business logic and data operations
+ */
 export class VatService {
     private companyUniqueName: string;
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
@@ -34,14 +45,23 @@ export class VatService {
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
+        /**
+         * Handles if functionality
+         */
         if (countryCode === 'ZW' || countryCode === 'KE') {
             url = url?.replace(':currencyCode', request.currencyCode);
         }
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<VatReportResponse, any> = res;
                 return data;
@@ -63,17 +83,26 @@ export class VatService {
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<VatReportResponse, any> = res;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
+    /**
+     * Handles downloadVatReport functionality
+     */
     public downloadVatReport(request: VatReportRequest, countryCode: 'UK' | 'ZW' | 'KE'): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const apiEndPoint = countryCode === 'ZW' ? VAT_API.DOWNLOAD_ZW_REPORT : (countryCode === 'KE' ? VAT_API.DOWNLOAD_KENYA_REPORT : VAT_API.DOWNLOAD_REPORT);
@@ -83,14 +112,23 @@ export class VatService {
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
+        /**
+         * Handles if functionality
+         */
         if (countryCode === 'ZW' || countryCode === 'KE') {
             url = url?.replace(':currencyCode', request.currencyCode);
         }
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 return res;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
@@ -114,6 +152,9 @@ export class VatService {
         url = url?.replace(':page', request.page);
         url = url?.replace(':count', request.count);
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -131,6 +172,9 @@ export class VatService {
         let url = this.config.apiUrl + VAT_API.CHECK_HMRC_AUTHORIZATION;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -150,6 +194,9 @@ export class VatService {
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         let payload = this.generalService.getUserAgentData();
         return this.http.post(url, { ...model, ...payload }).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -174,6 +221,9 @@ export class VatService {
         url = url?.replace(':to', encodeURIComponent(model?.to));
         let payload = this.generalService.getUserAgentData();
         return this.http.post(url, payload).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -197,6 +247,9 @@ export class VatService {
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
         return this.http.post(url, payload).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -223,6 +276,9 @@ export class VatService {
         url = url?.replace(':to', encodeURIComponent(model?.to));
         let payload = this.generalService.getUserAgentData();
         return this.http.post(url, payload).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: any = res;
                 return data;
@@ -246,6 +302,9 @@ export class VatService {
         url = url?.replace(':to', encodeURIComponent(model?.to));
         let payload = this.generalService.getUserAgentData();
         return this.http.post(url, payload).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -270,11 +329,17 @@ export class VatService {
         url = url?.replace(':currencyCode', request.currencyCode);
         url = url?.replace(':page', request.page ?? '');
         url = url?.replace(':count', request.count ?? '');
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -296,12 +361,18 @@ export class VatService {
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
         url = url?.replace(':currencyCode', request.currencyCode);
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
 
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 return res;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));

@@ -2,6 +2,10 @@ import { INameUniqueName } from '../api-models/Inventory';
 import { IAccountsInfo } from './account-info.interface';
 import { IHelpersForSearch } from './ulist.interface';
 
+/**
+ * IFlattenAccountsResultItem interface definition
+ * Defines the structure and contract for IFlattenAccountsResultItem objects
+ */
 export interface IFlattenAccountsResultItem extends IAccountsInfo, IHelpersForSearch {
     applicableTaxes?: any[];
     isFixed?: boolean;

@@ -13,12 +13,19 @@ import { PageLeaveUtilityService } from '../../services/page-leave-utility.servi
 import { IOption } from '../../app.constant';
 import { map as lodashMap, flatten, union, omit } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-menu-account',
     styleUrls: ['aside.menu.account.component.scss'],
     templateUrl: './aside.menu.account.component.html',
     standalone: false
 })
+/**
+ * AsideMenuAccountInContactComponent component
+ * Handles asidemenuaccountincontact functionality and user interactions
+ */
 export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
@@ -55,6 +62,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     /** True if action menu is open */
     @Input() public isActionMenu: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private accountService: AccountService,
         private store: Store<AppState>,
@@ -72,19 +83,34 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.deleteAccountSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.isDeleteAccSuccess)).pipe(takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles if functionality
+         */
         if (this.isUpdateAccount && this.activeAccountDetails) {
             this.accountDetails = this.activeAccountDetails;
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.accountDetails) {
             this.shouldShowBankDetail(this.accountDetails.uniqueName);
         }
 
         this.activeGroup$.subscribe((a) => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.virtualAccountEnable$.subscribe(s => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (s && s.companyCashFreeSettings && s.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && this.breadcrumbUniquePath[1] === 'sundrydebtors') {
                         this.showVirtualAccount = true;
                     } else {
@@ -95,12 +121,18 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         });
 
         this.deleteAccountSuccess$.subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.getUpdateList.emit(this.activeGroupUniqueName);
                 this.store.dispatch(this.accountsAction.resetDeleteAccountFlags());
             }
         });
         this.updateAccountIsSuccess$.subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.getUpdateList.emit(this.activeGroupUniqueName);
                 this.store.dispatch(this.accountsAction.resetUpdateAccountV2());
@@ -108,9 +140,15 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
+            /**
+             * Handles if functionality
+             */
             if (activeTab === 1) {
                 this.isMasterOpen = true;
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isMasterOpen) {
                     this.isMasterOpen = false;
                 }
@@ -118,26 +156,44 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges && !response) {
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             }
 
             this.hasUnsavedChanges = response;
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
     }
 
+    /**
+     * Handles addNewAcSubmit functionality
+     */
     public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
         this.getUpdateList.emit(this.activeGroupUniqueName);
     }
 
+    /**
+     * Handles isGroupSelected functionality
+     */
     public isGroupSelected(event) {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.activeGroupUniqueName = event.value;
             // in case of sundrycreditors or sundrydebtors no need to show address tab
+            /**
+             * Handles if functionality
+             */
             if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
                 this.isDebtorCreditor = true;
             }
@@ -151,6 +207,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
      * @memberof AsideMenuAccountInContactComponent
      */
     public closeAsidePane(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges) {
             this.confirmPageLeave(() => {
                 this.ngOnDestroy();
@@ -162,14 +221,23 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Shows deleteaccountmodal element
+     */
     public showDeleteAccountModal(): void {
         this.deleteAccountmodalRef = this.dialog.open(this.deleteAccountModal);
     }
 
+    /**
+     * Hides deleteaccountmodal element
+     */
     public hideDeleteAccountModal(): void {
         this.deleteAccountmodalRef?.close()
     }
 
+    /**
+     * Deletes account
+     */
     public deleteAccount() {
         let activeGrpName = this.activeGroupUniqueName;
 
@@ -184,6 +252,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
      * @memberof AsideMenuAccountInContactComponent
      */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }, usePatchApi?: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (usePatchApi) {
             this.store.dispatch(this.accountsAction.updateAccountV2Patch(accRequestObject?.value, accRequestObject.accountRequest));
         } else {
@@ -192,6 +263,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.hideDeleteAccountModal();
     }
 
+    /**
+     * Handles makeGroupListFlatwithLessDtl functionality
+     */
     public makeGroupListFlatwithLessDtl(rawList: any) {
         let obj;
         obj = lodashMap(rawList, (item: any) => {
@@ -205,6 +279,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         return obj;
     }
 
+    /**
+     * Handles flattenGroup functionality
+     */
     public flattenGroup(rawList: any[], parents: any[] = []) {
         let listofUN;
         listofUN = lodashMap(rawList, (listItem) => {
@@ -216,9 +293,15 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
+            /**
+             * Handles if functionality
+             */
             if (listItem) {
                 listItem.parentGroups = newParents;
             }
+            /**
+             * Handles if functionality
+             */
             if (listItem?.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));
@@ -230,6 +313,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         return flatten(listofUN);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -244,6 +330,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
      */
     private shouldShowBankDetail(accountUniqueName: string): void {
         this.accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body) {
                 this.accountDetails = response.body;
                 this.showBankDetail = this.accountDetails?.parentGroups.some(parent => parent?.uniqueName === 'sundrycreditors');
@@ -264,8 +353,14 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         document.querySelector("aside-menu-account")?.classList?.add("page-leave-confirmation-showing");
         this.pageLeaveUtilityService.confirmPageLeave(action => {
             document.querySelector("aside-menu-account")?.classList?.remove("page-leave-confirmation-showing");
+            /**
+             * Handles if functionality
+             */
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                /**
+                 * Handles callback functionality
+                 */
                 callback();
             }
         });

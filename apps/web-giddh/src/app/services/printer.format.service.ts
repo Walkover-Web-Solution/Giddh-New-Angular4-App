@@ -1,9 +1,16 @@
 // https://qz.io/wiki/2.0-raw-printing#escpos
 import { Injectable } from '@angular/core';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * PrinterFormatService service
+ * Provides printerformat related business logic and data operations
+ */
 export class PrinterFormatService {
   /** This will use for init printer */
   public initPrinter = '\x1B' + '\x40';

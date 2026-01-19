@@ -5,6 +5,9 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 import { GeneralService } from '../../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'onboarding',
     templateUrl: './onboarding.component.html',
@@ -12,6 +15,10 @@ selector: 'onboarding',
     providers: [EmailForwardingComponentStore],
     standalone: false
 })
+/**
+ * OnboardingComponent component
+ * Handles onboarding functionality and user interactions
+ */
 export class OnboardingComponent implements OnInit, OnDestroy {
     /** Subject to handle component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -28,6 +35,10 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     /** Branch unique name */  
     private branchUniqueName: string = '';
     
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -50,8 +61,14 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         
         // Subscribe to generated email changes
         this.bankStatementStore.generatedEmail$.pipe(
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((forwardedMail: string | null) => {
+            /**
+             * Handles if functionality
+             */
             if (forwardedMail) {
                 this.router.navigate(['/pages/email-forwarding/create'], { queryParams: { initial: true, companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName, forwardedMail } });
             }
@@ -73,15 +90,30 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         
         // Subscribe to the result
         this.bankStatementStore.emailForwardingList$.pipe(
+            /**
+             * Handles filter functionality
+             */
             filter(Boolean),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((emailForwardingList) => {
+            /**
+             * Handles if functionality
+             */
             if (emailForwardingList && emailForwardingList.length > 0) {
+                /**
+                 * Handles if functionality
+                 */
                 if (emailForwardingList.length > 1) {
                     // Data exists, redirect to list page (keep loader visible during redirect)
                     this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
                 } else if (emailForwardingList.length === 1) {
                     const queryParams = { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName, forwardedMail: emailForwardingList[0].forwardedMail };
+                    /**
+                     * Handles if functionality
+                     */
                     if (emailForwardingList[0].confirmationData?.length > 0) {
                         queryParams['step'] = 2;
                     } else {
@@ -91,6 +123,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
                 }
             } else {
                 // No data exists, show onboarding content
+               /**
+                * Sets timeout value
+                */
                setTimeout(() => {
                    this.generalService.updateActivatedRouteQueryParams({
                         ...this.route.snapshot.queryParams,

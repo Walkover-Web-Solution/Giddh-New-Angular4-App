@@ -16,15 +16,29 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * DashboardService service
+ * Provides dashboard related business logic and data operations
+ */
 export class DashboardService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService, private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
+    /**
+     * Retrieves pendingvoucherscount data
+     */
     public getPendingVouchersCount(fromDate: string = '', toDate: string = '', type: string = ''): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + DASHBOARD_API.GET_PENDING_VOUCHERS_COUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':fromDate', fromDate)?.replace(':toDate', toDate)?.replace(':type', encodeURIComponent(type)), {}).pipe(map((res) => {
@@ -35,6 +49,9 @@ export class DashboardService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', { fromDate, toDate, type })));
     }
 
+    /**
+     * Handles GetRationAnalysis functionality
+     */
     public GetRationAnalysis(date: string, refresh): Observable<BaseResponse<BankAccountsResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + DASHBOARD_API.RATIO_ANALYSIS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':date', date)?.replace(':refresh', refresh)).pipe(map((res) => {
@@ -44,6 +61,9 @@ export class DashboardService {
         }), catchError((e) => this.errorHandler.HandleCatch<BankAccountsResponse[], string>(e, '')));
     }
 
+    /**
+     * Handles GetRevenueGraphTypes functionality
+     */
     public GetRevenueGraphTypes(): Observable<BaseResponse<GraphTypesResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + DASHBOARD_API.REVENUE_GRAPH_TYPES).pipe(map((res) => {
@@ -53,6 +73,9 @@ export class DashboardService {
         }), catchError((e) => this.errorHandler.HandleCatch<GraphTypesResponse, string>(e, '')));
     }
 
+    /**
+     * Handles GetRevenueGraphData functionality
+     */
     public GetRevenueGraphData(request: RevenueGraphDataRequest): Observable<BaseResponse<RevenueGraphDataResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 

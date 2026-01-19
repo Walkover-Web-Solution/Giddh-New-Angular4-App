@@ -7,6 +7,9 @@ import { FILE_ATTACHMENT_TYPE } from '../../app.constant';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'ai-ocr-create',
     templateUrl: './ai-ocr-create.component.html',
@@ -14,6 +17,10 @@ import { AppState } from '../../store';
     standalone:false
 })
 
+/**
+ * AiOcrCreateComponent component
+ * Handles aiocrcreate functionality and user interactions
+ */
 export class AiOcrCreateComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -32,6 +39,10 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
     /** Source of image to be previewed */
     public imagePreviewSource: SafeUrl;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService,
@@ -49,8 +60,14 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.aiOcrService.aiOcrDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.store.dispatch(this.generalActions.openSideMenu(false));
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 const fileExtention = response.fileExtention?.toLowerCase();
+                /**
+                 * Handles if functionality
+                 */
                 if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                     // Attached file type is image
                     let objectURL = `data:image/${response.fileExtention};base64,` + response.encodedData;

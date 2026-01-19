@@ -1,3 +1,7 @@
+/**
+ * DayBookResponseModel interface definition
+ * Defines the structure and contract for DayBookResponseModel objects
+ */
 export interface DayBookResponseModel {
     file?: any;
     type?: string;
@@ -14,6 +18,10 @@ export interface DayBookResponseModel {
     data?: string;
 }
 
+/**
+ * Entry interface definition
+ * Defines the structure and contract for Entry objects
+ */
 export interface Entry {
     uniqueName: string;
     voucherName: string;
@@ -27,6 +35,10 @@ export interface Entry {
     isExpanded?: boolean;
 }
 
+/**
+ * OtherTransaction interface definition
+ * Defines the structure and contract for OtherTransaction objects
+ */
 export interface OtherTransaction {
     particular: Particular;
     amount: number;
@@ -34,6 +46,10 @@ export interface OtherTransaction {
     inventory: any
 }
 
+/**
+ * Particular interface definition
+ * Defines the structure and contract for Particular objects
+ */
 export interface Particular {
     uniqueName: string;
     name: string;

@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-create-unit',
     
@@ -7,6 +10,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     standalone: false,
     styleUrls: ['./aside-create-unit.component.scss']
 })
+/**
+ * AsideCreateNewUnitComponent component
+ * Handles asidecreatenewunit functionality and user interactions
+ */
 export class AsideCreateNewUnitComponent {
     /** Holds unit group details */
     @Input() public unitGroupDetails: any = {};

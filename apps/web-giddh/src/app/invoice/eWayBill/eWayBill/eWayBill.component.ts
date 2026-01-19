@@ -30,6 +30,9 @@ import { VoucherTypeEnum } from '../../../vouchers/utility/vouchers.const';
 import { PageEvent } from '@angular/material/paginator';
 import { EwayBillComponentStore } from '../utility/eWayBill.store';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'app-ewaybill-component',
@@ -39,6 +42,10 @@ import { EwayBillComponentStore } from '../utility/eWayBill.store';
     standalone:false
 })
 
+/**
+ * EWayBillComponent component
+ * Handles ewaybill functionality and user interactions
+ */
 export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild('cancelEwayForm', { static: true }) public cancelEwayForm: NgForm;
     @ViewChild('updateVehicleForm', { static: true }) public updateVehicleForm: NgForm;
@@ -158,6 +165,10 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     /** Voucher API Version */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
@@ -190,6 +201,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
         // bind state sources
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res && res.stateList) {
                 Object.keys(res.stateList).forEach(key => {
                     this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].stateGstCode });
@@ -199,13 +213,22 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.EwayBillfilterRequest.gstin = response;
             }
         });
     }
 
+    /**
+     * Handles selectedDate functionality
+     */
     public selectedDate(value: any) {
+        /**
+         * Handles if functionality
+         */
         if (value) {
             this.EwayBillfilterRequest.fromDate = dayjs(value.picker.startDate.$d).format(GIDDH_DATE_FORMAT);
             this.EwayBillfilterRequest.toDate = dayjs(value.picker.endDate.$d).format(GIDDH_DATE_FORMAT);
@@ -213,10 +236,16 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.getAllFilteredInvoice();
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.updateEwayVehicleform.transDocDate = dayjs().toDate();
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -224,6 +253,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.renderer.addClass(document.body, 'gst-sidebar-open');
         this.loadTaxDetails();
         this.cancelEwaySuccess$.subscribe(p => {
+            /**
+             * Handles if functionality
+             */
             if (p) {
                 this.store.dispatch(this.invoiceActions.getALLEwaybillList());
                 this.cancelEwayForm.reset();
@@ -231,15 +263,24 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             }
         });
         this.updateEwayvehicleSuccess$.subscribe(p => {
+            /**
+             * Handles if functionality
+             */
             if (p) {
                 this.updateVehicleForm.reset();
             }
         });
         this.store.pipe(select(state => state.ewaybillstate.EwayBillList), takeUntil(this.destroyed$)).subscribe((response: IEwayBillAllList) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.ewaybillLists = cloneDeep(response);
                 this.ewaybillLists.results = response.results;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.todaySelected) {
                     this.selectedDateRange = { startDate: dayjs(response.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response.toDate, GIDDH_DATE_FORMAT) };
                     this.selectedDateRangeUi = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -254,9 +295,21 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
         this.dataSource = (text$: Observable<any>): Observable<any> => {
             return text$.pipe(
+                /**
+                 * Handles debounceTime functionality
+                 */
                 debounceTime(300),
+                /**
+                 * Handles distinctUntilChanged functionality
+                 */
                 distinctUntilChanged(),
+                /**
+                 * Handles switchMap functionality
+                 */
                 switchMap((term: string) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (term.startsWith(' ', 0)) {
                         return [];
                     }
@@ -269,6 +322,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                         return [];
                     }));
                 }),
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
@@ -277,8 +333,17 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         };
 
         this.voucherNumberInput.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(s => {
             this.EwayBillfilterRequest.sort = null;
@@ -286,12 +351,21 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.EwayBillfilterRequest.searchTerm = s;
             this.EwayBillfilterRequest.searchOn = 'invoiceNumber';
             this.getAllFilteredInvoice();
+            /**
+             * Handles if functionality
+             */
             if (s === '') {
                 this.showSearchInvoiceNo = false;
             }
         });
         this.customerNameInput.valueChanges.pipe(debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(s => {
             this.EwayBillfilterRequest.sort = null;
@@ -308,6 +382,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
@@ -315,6 +392,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -330,10 +410,16 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch || !this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -347,11 +433,17 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.EwayBillfilterRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch?.uniqueName : "";
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.initialApiCalled) {
                     this.initialApiCalled = true;
                     this.initialRequest();
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -360,12 +452,18 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
 
         this.ewayBillFromPlace$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.updateEwayVehicleform.fromPlace = response;
             }
         });
     }
 
+    /**
+     * Retrieves allfilteredinvoice data
+     */
     public getAllFilteredInvoice() {
         this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(this.preparemodelForFilterEway()));
         this.detectChange();
@@ -379,11 +477,17 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public initialRequest() {
         this.showAdvanceSearchIcon = false;
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
+                    /**
+                     * Handles if functionality
+                     */
                     if (!response) {
                         this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
                         this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -430,6 +534,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.searchResults = [];
             return [];
         }), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.searchResults = response.map(item => ({
                     ...item,
@@ -440,9 +547,15 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles selectewaydownload event
+     */
     public onSelectEwayDownload(eway: Result) {
         this.selectedEway = cloneDeep(eway);
         this.invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(response.body.data, 'application/pdf', 512);
                 return saveAs(blob, response.body.name);
@@ -452,9 +565,15 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles selectewaydetaileddownload event
+     */
     public onSelectEwayDetailedDownload(ewayItem: Result) {
         this.selectedEway = cloneDeep(ewayItem);
         this.invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(response.body.data, 'application/pdf', 512);
                 return saveAs(blob, response.body.name);
@@ -476,6 +595,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             disableClose: true
         };
 
+        /**
+         * Handles if functionality
+         */
         if (dialogType === 'vehicle') {
             this.componentStore.getEwayBillFromPlace(ewayItem?.pincode);
             this.dialog.open(this.vehicleDialog, dialogConfig);
@@ -491,6 +613,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public cancelEwayBill(cancelEwayFormValue: any): void {
+        /**
+         * Handles if functionality
+         */
         if (cancelEwayFormValue) {
             this.cancelEwayRequest = cloneDeep(cancelEwayFormValue);
             this.cancelEwayRequest['ewbNo'] = this.selectedEwayItem.ewbNo;
@@ -506,6 +631,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public updateEwayTransport(updateEwayTransportFormValue: any): void {
+        /**
+         * Handles if functionality
+         */
         if (updateEwayTransportFormValue) {
             this.updateEwayVehicleObj = updateEwayTransportFormValue;
             this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
@@ -515,6 +643,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.detectChange();
     }
 
+    /**
+     * Handles sortbyApi functionality
+     */
     public sortbyApi(key, ord) {
         this.EwayBillfilterRequest.searchOn = null;
         this.EwayBillfilterRequest.searchTerm = null;
@@ -522,12 +653,24 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.EwayBillfilterRequest.sort = ord;
         this.getAllFilteredInvoice();
     }
+    /**
+     * Toggles search state
+     */
     public toggleSearch(fieldName: string) {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'invoiceNumber') {
             this.showSearchInvoiceNo = true;
             this.showSearchCustomer = false;
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                     this.invoiceSearch.nativeElement.focus();
                 }
@@ -535,7 +678,13 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         } else if (fieldName === 'customerUniqueName') {
             this.showSearchCustomer = true;
             this.showSearchInvoiceNo = false;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.customerSearch && this.customerSearch.nativeElement) {
                     this.customerSearch.nativeElement.focus();
                 }
@@ -546,8 +695,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         }
         this.detectChange();
     }
+    /**
+     * Handles sortButtonClicked functionality
+     */
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
         this.showAdvanceSearchIcon = true;
+        /**
+         * Handles if functionality
+         */
         if (this.showAdvanceSearchIcon) {
             this.EwayBillfilterRequest.sort = type
             this.EwayBillfilterRequest.sortBy = columnName;
@@ -555,53 +710,98 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles clickedOutside functionality
+     */
     public clickedOutside() {
         this.showSearchInvoiceNo = false;
         this.showSearchCustomer = false;
 
     }
+    /**
+     * Handles detectChange functionality
+     */
     detectChange() {
+       /**
+        * Handles if functionality
+        */
        if (!this._cd['destroyed']) {
             this._cd.detectChanges();
         }
     }
 
+    /**
+     * Handles preparemodelForFilterEway functionality
+     */
     public preparemodelForFilterEway(): IEwayBillfilter {
         let model: any = {
 
         };
         let request = cloneDeep(this.EwayBillfilterRequest);
+        /**
+         * Handles if functionality
+         */
         if (request.fromDate) {
             model.fromDate = request.fromDate;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.toDate) {
             model.toDate = request.toDate;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.sort) {
             model.sort = request.sort;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.sortBy) {
             model.sortBy = request.sortBy;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (request.searchOn) {
             model.searchOn = request.searchOn;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.searchTerm) {
             model.searchTerm = request.searchTerm;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.count) {
             model.count = request.count;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.page) {
             model.page = request.page;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             model.branchUniqueName = request.branchUniqueName;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.gstin) {
             model.gstin = request.gstin;
         }
+        /**
+         * Handles if functionality
+         */
         if (request.failedRequestLog) {
             model.failedRequestLog = request.failedRequestLog;
         }
@@ -615,6 +815,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -629,16 +832,25 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -670,6 +882,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.ewayUpdateVehicleReasonList = [
                 { value: '1', label: this.localeData?.vehicle_reason_list?.break_down },
@@ -708,6 +923,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         const actionPopupHeight = 300;
         const calculatedPosition = screenHeight - clickedPosition;
 
+        /**
+         * Handles if functionality
+         */
         if (calculatedPosition > actionPopupHeight) {
             this.isDropUp = false;
         } else {
@@ -725,14 +943,23 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      */
     private loadTaxDetails(): void {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body) {
                 this.taxes = response.body.map(tax => ({
                     label: tax,
                     value: tax
                 }));
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.EwayBillfilterRequest.gstin && this.taxes?.length > 0) {
                     this.EwayBillfilterRequest.gstin = this.taxes[0]?.value;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.initialApiCalled) {
                         this.selectTax();
                     }
@@ -748,10 +975,16 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public selectTax(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value) {
             this.EwayBillfilterRequest.gstin = event.value;
         }
 
+        /**
+         * Handles if functionality
+         */
         if ((this.currentCompanyBranches?.length > 2 && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch)) || this.EwayBillfilterRequest.gstin) {
             this.EwayBillfilterRequest.page = 0;
             this.getAllFilteredInvoice();
@@ -765,10 +998,16 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public onTabChange(event: MatTabChangeEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (!event || event.index === this.activeTabIndex) return;
 
         const colsToRemove = ['status', 'reason', 'ewbNo', 'ewayBillDate'];
         this.displayedColumns = this.displayedColumns.filter(col => !colsToRemove.includes(col));
+        /**
+         * Handles if functionality
+         */
         if (event.index === 0) {
             this.displayedColumns.splice(-2, 0, 'ewbNo', 'ewayBillDate');
             this.EwayBillfilterRequest.failedRequestLog = false;
@@ -798,8 +1037,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         }));
         voucher['voucherDate'] = voucher?.invoiceDate;
         this.invoiceService.setSelectedInvoicesList([voucher]);
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.voucherComponentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!response?.account?.billingDetails?.pincode) {
                     this._toaster.showSnackBar("error", this.localeData?.pincode_required);
                 } else {

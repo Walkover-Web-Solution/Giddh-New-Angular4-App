@@ -4,11 +4,18 @@ import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { AppState } from "../../store";
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: '[validateSectionPermission]',
     standalone: false
 })
 
+/**
+ * ValidateSectionPermissionDirective directive
+ * Implements ValidateSectionPermissionDirective functionality
+ */
 export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy {
     /** This defines if user has permission or not */
     @Input() public hasPermission: boolean = true;
@@ -17,6 +24,10 @@ export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy 
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of directive
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private elementRef: ElementRef,
         private renderer: Renderer2,
@@ -30,14 +41,26 @@ export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy 
      * @memberof ValidateSectionPermissionDirective
      */
     public ngOnChanges(): void {
+        /**
+         * Handles if functionality
+         */
         if(!this.hasPermission) {
             this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     let commonLocaleData = response;
+                    /**
+                     * Handles if functionality
+                     */
                     if(!this.errorMessage) {
                         this.errorMessage = commonLocaleData?.app_giddh_no_permissions;
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if(!this.elementRef.nativeElement?.parentElement?.querySelector(".giddh-no-permissions-error-message")) {
                         const errorDiv = this.renderer.createElement('div');
                         const errorText = this.renderer.createText(this.errorMessage);

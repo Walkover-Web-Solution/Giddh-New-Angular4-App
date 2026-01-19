@@ -65,6 +65,9 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { MatCardModule } from '@angular/material/card';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         DownloadOrSendInvoiceOnMailComponent,
@@ -148,5 +151,9 @@ import { MatCardModule } from '@angular/material/card';
         InvoiceUiDataService
     ]
 })
+/**
+ * InvoiceModule module
+ * Implements InvoiceModule functionality
+ */
 export class InvoiceModule {
 }

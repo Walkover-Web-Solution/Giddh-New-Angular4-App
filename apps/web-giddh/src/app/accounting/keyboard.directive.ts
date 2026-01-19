@@ -10,10 +10,17 @@ const KEY_CODE_CONSTANTS = {
     ARROW_UP: 'ArrowUp'
 };
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: '[onReturn]',
     standalone:false
 })
+/**
+ * OnReturnDirective directive
+ * Implements OnReturnDirective functionality
+ */
 export class OnReturnDirective {
     @Input() public onReturn: string;
     private el: ElementRef;
@@ -23,16 +30,29 @@ export class OnReturnDirective {
     private selectedField;
     private isOtherKeyPressed: boolean = false;
 
+    /**
+     * Creates an instance of directive
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _el: ElementRef) {
         this.el = this._el;
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.clickCount = 0;
         }, 2500);
     }
 
     @HostListener('keydown', ['$event'])
+    /**
+     * Handles keydown event
+     */
     public onKeyDown(e: any) {
+        /**
+         * Handles if functionality
+         */
         if (this.isNavigationKey(e)) {
             this.handleNavigationKeys(e);
         } else if (this.isAlphanumericKey(e)) {
@@ -44,6 +64,9 @@ export class OnReturnDirective {
      * Check if the pressed key is a navigation key
      */
     private isNavigationKey(e: any): boolean {
+        /**
+         * Handles return functionality
+         */
         return (e.key === KEY_CODE_CONSTANTS.ENTER || e.code === KEY_CODE_CONSTANTS.ENTER) ||
                (e.key === KEY_CODE_CONSTANTS.BACKSPACE || e.code === KEY_CODE_CONSTANTS.BACKSPACE) ||
                (KEY_CODE_CONSTANTS.SPACE.includes(e.key) || KEY_CODE_CONSTANTS.SPACE.includes(e.code)) ||
@@ -56,6 +79,9 @@ export class OnReturnDirective {
      * Check if the pressed key is alphanumeric
      */
     private isAlphanumericKey(e: any): boolean {
+        /**
+         * Handles return functionality
+         */
         return (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90);
     }
 
@@ -68,6 +94,9 @@ export class OnReturnDirective {
         const nodeList = Array.from(allElements);
         const indx = nodeList?.findIndex((ele) => ele === selectedEle);
 
+        /**
+         * Handles if functionality
+         */
         if (e.key === KEY_CODE_CONSTANTS.ENTER || e.code === KEY_CODE_CONSTANTS.ENTER) {
             this.handleEnterKey(e, selectedEle, allElements, indx);
         } else if (e.key === KEY_CODE_CONSTANTS.BACKSPACE || e.code === KEY_CODE_CONSTANTS.BACKSPACE) {
@@ -85,6 +114,9 @@ export class OnReturnDirective {
      * Handle Enter key press
      */
     private handleEnterKey(e: any, selectedEle: any, allElements: any, indx: number): void {
+        /**
+         * Handles if functionality
+         */
         if (e.ctrlKey) {
             return selectedEle.setAttribute('data-changed', true);
         } else {
@@ -93,6 +125,9 @@ export class OnReturnDirective {
 
         let target = this.determineEnterTarget(allElements, indx);
 
+        /**
+         * Handles if functionality
+         */
         if (target) {
             this.focusTarget(target, allElements, indx);
         }
@@ -104,6 +139,9 @@ export class OnReturnDirective {
     private determineEnterTarget(allElements: any, indx: number): any {
         let target = allElements[indx + 1];
 
+        /**
+         * Handles if functionality
+         */
         if (this.selectedField && this.selectedField === allElements[indx] && allElements[indx].value === '') {
             target = this.getTargetByRowType(allElements, indx);
         } else if (allElements[indx] && allElements[indx].classList.contains('stock-field') && this.selectedField !== allElements[indx]) {
@@ -128,6 +166,9 @@ export class OnReturnDirective {
         const activatedRow: any = window.document.querySelectorAll('tr.active-row');
         const rowEntryType = activatedRow[0].children[0].children[0]?.value;
 
+        /**
+         * Handles if functionality
+         */
         if (rowEntryType === 'by') {
             return allElements[indx + 4];
         } else if (rowEntryType === 'to') {
@@ -140,8 +181,14 @@ export class OnReturnDirective {
      * Handle stock invoice field navigation
      */
     private handleStockInvoiceField(allElements: any, indx: number): any {
+        /**
+         * Handles if functionality
+         */
         if (this.activeIndx === indx) {
             let target = allElements[indx + 1];
+            /**
+             * Handles if functionality
+             */
             if (target.disabled) {
                 target = allElements[indx + 4];
             }
@@ -158,9 +205,18 @@ export class OnReturnDirective {
      * Handle invoice account field navigation
      */
     private handleInvoiceAccountField(allElements: any, indx: number): any {
+        /**
+         * Handles if functionality
+         */
         if (this.activeIndx === indx) {
             const target = allElements[indx + 1];
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (target.disabled && allElements[indx]?.value.trim() === '') {
                     document.getElementById('invoice-narration').focus();
                 } else {
@@ -179,23 +235,41 @@ export class OnReturnDirective {
      * Focus on the target element with appropriate logic
      */
     private focusTarget(target: any, allElements: any, indx: number): void {
+        /**
+         * Handles if functionality
+         */
         if (target.disabled) {
             target = allElements[indx + 2];
         }
 
+        /**
+         * Handles if functionality
+         */
         if (allElements[indx] && allElements[indx].classList.contains('upper-fields')) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 target.focus();
             }, 210);
         } else {
+            /**
+             * Handles if functionality
+             */
             if (target?.value === 'NaN' || target?.value === 0) {
                 target.value = '';
             }
+            /**
+             * Handles if functionality
+             */
             if (this.clickCount > 1) {
                 this.clickCount = 0;
                 document.getElementById('narration').focus();
                 return;
             }
+            /**
+             * Handles if functionality
+             */
             if (allElements[indx] && allElements[indx].classList.contains('from-or-to-acc')) {
                 this.clickCount++;
             }
@@ -214,7 +288,13 @@ export class OnReturnDirective {
 
         target = this.determineBackspaceTarget(allElements, indx, target, rowEntryType);
 
+        /**
+         * Handles if functionality
+         */
         if (target && e.target?.value?.length === e.target.selectionEnd) {
+            /**
+             * Handles if functionality
+             */
             if (selectedEle.getAttribute('data-changed') === 'false' || selectedEle?.value.trim() === '') {
                 e.preventDefault();
                 this.focusBackspaceTarget(target, allElements, indx);
@@ -226,13 +306,22 @@ export class OnReturnDirective {
      * Determine the target element for Backspace key navigation
      */
     private determineBackspaceTarget(allElements: any, indx: number, target: any, rowEntryType: string): any {
+        /**
+         * Handles if functionality
+         */
         if (allElements[indx] && allElements[indx].classList.contains('debit-credit')) {
+            /**
+             * Handles if functionality
+             */
             if (rowEntryType === 'by') {
                 target = allElements[indx - 4];
             } else if (rowEntryType === 'to') {
                 target = allElements[indx - 5];
             }
         } else if (allElements[indx] && allElements[indx].classList.contains('byTo')) {
+            /**
+             * Handles if functionality
+             */
             if (target.disabled) {
                 target = allElements[indx - 2];
             }
@@ -246,8 +335,14 @@ export class OnReturnDirective {
      * Focus on backspace target with disabled field handling
      */
     private focusBackspaceTarget(target: any, allElements: any, indx: number): void {
+        /**
+         * Handles if functionality
+         */
         if (target.disabled) {
             target = allElements[indx - 2];
+            /**
+             * Handles if functionality
+             */
             if (target.disabled) {
                 target = allElements[indx - 3];
             }
@@ -260,6 +355,9 @@ export class OnReturnDirective {
      */
     private handleSpaceKey(allElements: any, indx: number): void {
         const target = allElements[indx];
+        /**
+         * Handles if functionality
+         */
         if (target) {
             // Space key handling - currently no specific action needed
         }
@@ -271,6 +369,9 @@ export class OnReturnDirective {
     private handleEscKey(selectedEle: any, nodeList: any[]): void {
         const gridType: any = window.document.getElementById('get-grid-type').getAttribute('data-gridType');
 
+        /**
+         * Handles if functionality
+         */
         if (gridType === 'invoice') {
             const invDateField: any = nodeList.find((ele: any) => ele.classList.contains('invoice-date-field'));
             invDateField.focus();
@@ -279,6 +380,9 @@ export class OnReturnDirective {
             vouDateField.focus();
         }
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             selectedEle.focus();
         }, 100);
@@ -288,6 +392,9 @@ export class OnReturnDirective {
      * Handle Arrow keys (Up/Down)
      */
     private handleArrowKeys(selectedEle: any): void {
+        /**
+         * Handles if functionality
+         */
         if (selectedEle.getAttribute('data-changed') === 'false') {
             selectedEle.value = '';
             selectedEle.setAttribute('data-changed', true);

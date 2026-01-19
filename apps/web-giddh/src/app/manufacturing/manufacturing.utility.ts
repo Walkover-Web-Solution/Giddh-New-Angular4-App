@@ -1,3 +1,7 @@
+/**
+ * MfStockSearchRequestClass class
+ * Implements MfStockSearchRequestClass functionality
+ */
 export class MfStockSearchRequestClass {
     public product: string;
     public searchOperation: string;
@@ -10,6 +14,10 @@ export class MfStockSearchRequestClass {
     public branchUniqueName: string;
 }
 
+/**
+ * LinkedStocks class
+ * Implements LinkedStocks functionality
+ */
 export class LinkedStocks {
     public stockUniqueName: string;
     public rate: number;

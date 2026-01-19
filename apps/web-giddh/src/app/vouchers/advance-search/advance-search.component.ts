@@ -9,6 +9,9 @@ import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Inv
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../shared/sales-person/sales-person.component';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-advance-search',
     templateUrl: './advance-search.component.html',
@@ -16,6 +19,10 @@ import { SalesPersonComponent } from '../../shared/sales-person/sales-person.com
     providers: [SalesPersonComponentStore],
     standalone:false
 })
+/**
+ * AdvanceSearchComponent component
+ * Handles advancesearch functionality and user interactions
+ */
 export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -74,6 +81,10 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /** Filtered Sales Person List */
     public filteredSalesPersonList: IOption[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
@@ -158,30 +169,51 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         });
 
         const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
+        /**
+         * Handles if functionality
+         */
         if (invoiceDateRange?.length) {
             this.fieldLabelValues.invoiceDateRange = invoiceDateRange[0]?.label;
         }
         const invoiceTotalAmount = this.filtersForEntryTotal?.filter(option => option.value === this.advanceFilters?.invoiceTotalAmount);
+        /**
+         * Handles if functionality
+         */
         if (invoiceTotalAmount?.length) {
             this.fieldLabelValues.invoiceTotalAmount = invoiceTotalAmount[0]?.label;
         }
         const dueDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.dueDateRange);
+        /**
+         * Handles if functionality
+         */
         if (dueDateRange?.length) {
             this.fieldLabelValues.dueDateRange = dueDateRange[0]?.label;
         }
         const dueAmount = this.filtersForEntryTotal?.filter(option => option.value === this.advanceFilters?.dueAmount);
+        /**
+         * Handles if functionality
+         */
         if (dueAmount?.length) {
             this.fieldLabelValues.dueAmount = dueAmount[0]?.label;
         }
         const dateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.dateRange);
+        /**
+         * Handles if functionality
+         */
         if (dateRange?.length) {
             this.fieldLabelValues.dateRange = dateRange[0]?.label;
         }
         const amountFieldSelector = this.dateOptions?.filter(option => option.value === this.advanceFilters?.amountFieldSelector);
+        /**
+         * Handles if functionality
+         */
         if (amountFieldSelector?.length) {
             this.fieldLabelValues.amountFieldSelector = amountFieldSelector[0]?.label;
         }
         const adjustmentVoucherOptions = this.adjustmentVoucherOptions?.filter(option => option.value === this.advanceFilters?.receiptType);
+        /**
+         * Handles if functionality
+         */
         if (adjustmentVoucherOptions?.length) {
             this.fieldLabelValues.adjustmentVoucherOptions = adjustmentVoucherOptions[0]?.label;
         }
@@ -192,7 +224,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
         /** Search for action dropdown */
         this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
+        /**
+         * Handles takeUntil functionality
+         */
         takeUntil(this.destroyed$)).subscribe((search: string) => {
+            /**
+             * Handles if functionality
+             */
             if (!search) {
                 this.salesPersonList$.pipe(take(1)).subscribe(res => {
                     this.filteredSalesPersonList = res as IOption[];
@@ -226,6 +264,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         this.searchForm.get('totalLessThan')?.patchValue(false);
         this.searchForm.get('totalMoreThan')?.patchValue(false);
 
+        /**
+         * Handles switch functionality
+         */
         switch (item?.value) {
             case 'greaterThan':
                 this.searchForm.get('totalMoreThan')?.patchValue(true);
@@ -259,6 +300,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         this.searchForm.get('amountExclude')?.patchValue(false);
         this.searchForm.get('amountEquals')?.patchValue(false);
 
+        /**
+         * Handles switch functionality
+         */
         switch (item?.value) {
             case 'greaterThan':
                 this.searchForm.get('amountGreaterThan')?.patchValue(true);
@@ -286,6 +330,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         this.searchForm.get('balanceLessThan')?.patchValue(false);
         this.searchForm.get('balanceMoreThan')?.patchValue(false);
 
+        /**
+         * Handles switch functionality
+         */
         switch (item?.value) {
             case 'greaterThan':
                 this.searchForm.get('balanceMoreThan')?.patchValue(true);
@@ -314,11 +361,17 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public dateChanged(item: IOption, type: string): void {
+        /**
+         * Handles if functionality
+         */
         if (type === 'invoice') {
             this.searchForm.get('voucherDateEqual')?.patchValue(false);
             this.searchForm.get('voucherDateAfter')?.patchValue(false);
             this.searchForm.get('voucherDateBefore')?.patchValue(false);
 
+            /**
+             * Handles switch functionality
+             */
             switch (item?.value) {
                 case 'on':
                     this.searchForm.get('voucherDateEqual')?.patchValue(true);
@@ -335,6 +388,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             this.searchForm.get('dueDateAfter')?.patchValue(false);
             this.searchForm.get('dueDateBefore')?.patchValue(false);
 
+            /**
+             * Handles switch functionality
+             */
             switch (item?.value) {
                 case 'on':
                     this.searchForm.get('dueDateEqual')?.patchValue(true);
@@ -362,12 +418,21 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
         const formatDateField = (fieldName: string): void => {
             let fieldValue = this.searchForm.get(fieldName)?.value;
+            /**
+             * Handles if functionality
+             */
             if (fieldValue) {
+                /**
+                 * Handles if functionality
+                 */
                 if (typeof fieldValue === 'string' && DATE_REGEX.test(fieldValue)) {
                     // If the field value is a string in the format YYYY-MM-DD, reformat it
                     fieldValue = dayjs(fieldValue, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
                 } else if (typeof fieldValue === 'object') {
                     fieldValue = dayjs(fieldValue).format(GIDDH_DATE_FORMAT);
+                    /**
+                     * Handles if functionality
+                     */
                     if (DATE_REGEX.test(fieldValue)) {
                         // If the field value is a string in the format YYYY-MM-DD, reformat it
                         fieldValue = dayjs(fieldValue, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
@@ -375,6 +440,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                 }
 
                 // Check if the fieldName exists in advanceFilters, and update it
+                /**
+                 * Handles if functionality
+                 */
                 if (this.advanceFilters.hasOwnProperty(fieldName)) {
                     this.advanceFilters[fieldName] = fieldValue;
                     // Update the form control with the new advanceFilters value
@@ -393,40 +461,82 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
         // Process each date control based on the type
         allDateControlNames.forEach(controlName => {
+            /**
+             * Handles switch functionality
+             */
             switch (this.type) {
                 case 'drcr':
                 case 'invoice':
                 case 'purchase':
+                    /**
+                     * Handles if functionality
+                     */
                     if (dueVoucherDates.includes(controlName)) {
+                        /**
+                         * Handles formatDateField functionality
+                         */
                         formatDateField('voucherDate');
+                        /**
+                         * Handles formatDateField functionality
+                         */
                         formatDateField('dueDate');
                     } else {
                         this.searchForm.get(controlName)?.patchValue(null);
                     }
+                    /**
+                     * Handles clearDateFields functionality
+                     */
                     clearDateFields(['expireFrom', 'expireTo', 'dueFrom', 'dueTo']);
                     break;
 
                 case 'proforma':
+                    /**
+                     * Handles if functionality
+                     */
                     if (expiryDateRanges.includes(controlName)) {
+                        /**
+                         * Handles formatDateField functionality
+                         */
                         formatDateField('expireFrom');
+                        /**
+                         * Handles formatDateField functionality
+                         */
                         formatDateField('expireTo');
                     } else {
                         this.searchForm.get(controlName)?.patchValue(null);
                     }
+                    /**
+                     * Handles clearDateFields functionality
+                     */
                     clearDateFields(['voucherDate', 'dueDate', 'dueFrom', 'dueTo']);
                     break;
 
                 case 'purchase-order':
+                    /**
+                     * Handles if functionality
+                     */
                     if (dueDateRanges.includes(controlName)) {
+                        /**
+                         * Handles formatDateField functionality
+                         */
                         formatDateField('dueFrom');
+                        /**
+                         * Handles formatDateField functionality
+                         */
                         formatDateField('dueTo');
                     } else {
                         this.searchForm.get(controlName)?.patchValue(null);
                     }
+                    /**
+                     * Handles clearDateFields functionality
+                     */
                     clearDateFields(['voucherDate', 'dueDate', 'expireFrom', 'expireTo']);
                     break;
 
                 default:
+                    /**
+                     * Handles clearDateFields functionality
+                     */
                     clearDateFields(allDateControlNames);
                     break;
             }

@@ -10,6 +10,9 @@ import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-
 import { PageEvent } from '@angular/material/paginator';
 
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'tax-authority-report',
     templateUrl: './tax-authority-report.component.html',
@@ -17,6 +20,10 @@ import { PageEvent } from '@angular/material/paginator';
     providers: [TaxAuthorityComponentStore],
     standalone: false
 })
+/**
+ * TaxAuthorityReportComponent component
+ * Handles taxauthorityreport functionality and user interactions
+ */
 export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -50,6 +57,10 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     /** Holds Active company details */
     public activeCompany: any = null;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: TaxAuthorityComponentStore,
         private formBuilder: FormBuilder,
@@ -65,6 +76,9 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
         this.initSalesTaxReportForm();
         this.loadTaxDetails();
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -72,6 +86,9 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
 
         // Subscribe Export Report Success Observable
         this.componentStore.exportTaxAuthorityWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.downloadReport(response.data, response.name);
             }
@@ -79,6 +96,9 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
 
         // Subscribe Sales Report List Observable
         this.componentStore.taxAuthorityWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.pagination.page = response.page;
                 this.pagination.totalItems = response.totalItems;
@@ -88,6 +108,9 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
 
         // Subscribe Tax Number Observable
         this.componentStore.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.length) {
                 this.getFormControl('taxNumber').patchValue(response.body[0]);
             }
@@ -111,6 +134,9 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     */
     public getSalesTaxReport(): void {
         const formValue = this.salesTaxReportForm.value;
+        /**
+         * Handles if functionality
+         */
         if (formValue.taxNumber && formValue.from && formValue.to) {
             const model: any = {
                 reportType: SalesTaxReport.TaxAuthorityWise,
@@ -183,6 +209,9 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     * @memberof AccountWiseReportComponent
     */
     public handlePageChange(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;

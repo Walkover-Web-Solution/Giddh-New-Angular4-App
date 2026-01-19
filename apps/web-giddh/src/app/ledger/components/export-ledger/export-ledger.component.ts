@@ -23,6 +23,9 @@ import { IOption } from '../../../app.constant';
 import { CopyType } from '../../../shared/Enums/common.enum';
 import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
 import { cloneDeep } from '../../../lodash-optimized';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
@@ -32,6 +35,10 @@ import { cloneDeep } from '../../../lodash-optimized';
     standalone:false
 })
 
+/**
+ * ExportLedgerComponent component
+ * Handles exportledger functionality and user interactions
+ */
 export class ExportLedgerComponent implements OnInit, OnDestroy {
     public emailTypeSelected: string = '';
     public exportAs: string = 'xlsx';
@@ -120,6 +127,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         suggestionSuffix: '}',
     };
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private ledgerService: LedgerService,
         private toaster: ToasterService,
@@ -135,24 +146,39 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(value => value.ledger.account), takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
             ledgerAccount?.parentGroups?.forEach(group => {
+                /**
+                 * Handles if functionality
+                 */
                 if (["sundrycreditors", "sundrydebtors"].includes(group?.uniqueName)) {
                     this.enableBillToBill = true;
                 }
             });
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
             this.exportRequest.showInAccountCurrency = !this.inputData?.currencyTogglerModel;
         }
 
         this.fileType = this.exportRequest.ledgerView ? 'XLSX' : 'CSV';
 
+        /**
+         * Handles if functionality
+         */
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
             (Array.isArray(this.permissionDataService.getData) ? this.permissionDataService.getData : []).forEach(f => {
+                /**
+                 * Handles if functionality
+                 */
                 if (f.name === 'LEDGER') {
                     let isAdmin = f.permissions?.filter((prm) => prm.code === 'UPDT');
                     this.emailTypeSelected = isAdmin?.length ? 'admin-detailed' : 'view-detailed';
@@ -164,6 +190,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue) {
             let dateObj = this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue;
             let universalDate = cloneDeep(dateObj);
@@ -173,6 +202,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             this.toDate = universalDate[1].format(GIDDH_DATE_FORMAT);
         } else {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
+                /**
+                 * Handles if functionality
+                 */
                 if (dateObj) {
                     let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -185,9 +217,18 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
 
         this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body.type === "base64") {
                     let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
+                    /**
+                     * Saves as data
+                     */
                     saveAs(blob, this.inputData?.voucherType + `.zip`);
                 }
             }
@@ -212,6 +253,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.to = this.toDate;
 
         let body = cloneDeep(this.inputData?.advanceSearchRequest);
+        /**
+         * Handles if functionality
+         */
         if (body && body.dataToSend) {
             body.dataToSend.type = this.emailTypeSelected;
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
@@ -221,11 +265,20 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
             body.dataToSend.exportType = this.exportRequest.exportType;
             body.dataToSend.fileType = this.fileType;
+            /**
+             * Handles if functionality
+             */
             if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
                 body.dataToSend.showInAccountCurrency = this.exportRequest.showInAccountCurrency;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.emailTypeSelected === this.emailTypeDetail) {
                 body.dataToSend.ledgerView = this.exportRequest.ledgerView ? 'T_View' : 'Statement_View';
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.exportRequest.ledgerView) {
                     body.dataToSend.showEntryVoucherNo = this.exportRequest.showEntryVoucherNo;
                     body.dataToSend.showVoucherNumber = this.exportRequest.showVoucherNumber;
@@ -235,11 +288,20 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
             this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success") {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.body?.type === "message") {
                         this.toaster.showSnackBar("success", response.body.name);
                     } else {
@@ -251,7 +313,13 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.emailTypeSelected === 'voucher') {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.exportRequest.voucherExport && !this.exportRequest.copyTypes.length) {
                     this.isValidForm = false;
                     this.isLoading = false;
@@ -262,8 +330,14 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     voucherExport: this.exportRequest.voucherExport,
                     entryUniqueNames: this.inputData?.selectEntryUniqueName
                 };
+                /**
+                 * Handles if functionality
+                 */
                 if (this.exportRequest.attachmentExport) {
                     let fileNameFormat = this.selectedFormatList?.trim();
+                    /**
+                     * Handles if functionality
+                     */
                     if (fileNameFormat?.length) {
                         (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach(format => {
                             // Sanitize format.value to prevent ReDoS attacks
@@ -278,6 +352,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                         postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
                     }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.exportRequest.voucherExport) {
                     postRequest.mergePdf = this.exportRequest.mergePdf;
                     postRequest.copyTypes = this.exportRequest.copyTypes;
@@ -293,9 +370,21 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body?.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'success') {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.body) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.emailTypeSelected === 'admin-detailed' || this.emailTypeSelected === 'view-detailed') {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response.body.encodedData) {
                                 let blob = this.generalService.base64ToBlob(response.body.encodedData, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'), 512);
                                 return download(response.body.name, blob, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'));
@@ -304,8 +393,17 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                 this.router.navigate(["/pages/downloads/exports"]);
                             }
                         } else {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response?.status === "success") {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (response?.body?.status === "success") {
+                                    /**
+                                     * Handles if functionality
+                                     */
                                     if (response.queryString.fileType === 'xlsx') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
                                         return download(response.body.fileName, blob, 'application/vnd.ms-excel');
@@ -335,6 +433,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public handleReportTypeChange(reportType: string): void {
+        /**
+         * Handles if functionality
+         */
         if (reportType === 'columnar') {
             this.exportAs = 'xlsx';
         }
@@ -367,6 +468,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -374,6 +478,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles dateSelectedCallback functionality
+     */
     public dateSelectedCallback(value?: any): void {
         DatepickerMethodsHelper.dateSelectedCallback(value, this, this.universalDatepickerTrigger);
     }
@@ -397,6 +504,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public getFileFormat() {
         let fileNameFormat = this.selectedFormatList;
         (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach((format) => {
+            /**
+             * Handles if functionality
+             */
             if (this.selectedFormatList.includes(`{${format.value}}`)) {
                 fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }
@@ -411,6 +521,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.copyTypes = [
                 { value: CopyType.ORIGINAL, label: this.localeData?.invoice_copy_options?.original },

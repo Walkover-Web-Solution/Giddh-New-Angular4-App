@@ -24,6 +24,9 @@ export class ProfitLossDataInitHelper {
                 account.isVisible = false;
                 account.category = category;
             });
+            /**
+             * Handles if functionality
+             */
             if (childGroup.childGroups) {
                 ProfitLossDataInitHelper.initData(childGroup.childGroups, category);
             }

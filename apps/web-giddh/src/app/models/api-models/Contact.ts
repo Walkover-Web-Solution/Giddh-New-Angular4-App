@@ -1,3 +1,7 @@
+/**
+ * DueRangeRequest interface definition
+ * Defines the structure and contract for DueRangeRequest objects
+ */
 export interface DueRangeRequest {
     range: string[];
 }
@@ -20,6 +24,10 @@ export interface GetContactsParams {
 }
 
 
+/**
+ * DueAmountReportQueryRequest class
+ * Implements DueAmountReportQueryRequest functionality
+ */
 export class DueAmountReportQueryRequest {
     public q: string = '';
     public from?: string = '';
@@ -31,6 +39,10 @@ export class DueAmountReportQueryRequest {
     public rangeCol: number = 0;
 }
 
+/**
+ * DueAmountReportRequest interface definition
+ * Defines the structure and contract for DueAmountReportRequest objects
+ */
 export interface DueAmountReportRequest {
     totalDueAmountGreaterThan: boolean;
     totalDueAmountLessThan: boolean;
@@ -40,11 +52,19 @@ export interface DueAmountReportRequest {
     name: string[];
 }
 
+/**
+ * CurrentAndPastDueAmount interface definition
+ * Defines the structure and contract for CurrentAndPastDueAmount objects
+ */
 export interface CurrentAndPastDueAmount {
     dueAmount: number;
     range: string;
 }
 
+/**
+ * Result interface definition
+ * Defines the structure and contract for Result objects
+ */
 export interface Result {
     name: string;
     groupName: string;
@@ -53,6 +73,10 @@ export interface Result {
     currentAndPastDueAmount: CurrentAndPastDueAmount[];
 }
 
+/**
+ * DueAmountReportResponse interface definition
+ * Defines the structure and contract for DueAmountReportResponse objects
+ */
 export interface DueAmountReportResponse {
     page: number;
     count: number;
@@ -64,18 +88,30 @@ export interface DueAmountReportResponse {
     overAllFutureDueAmount?: number;
 }
 
+/**
+ * AgingDropDownoptions interface definition
+ * Defines the structure and contract for AgingDropDownoptions objects
+ */
 export interface AgingDropDownoptions {
     fourth: number;
     fifth: number;
     sixth: number;
 }
 
+/**
+ * ContactAdvanceSearchCommonModal class
+ * Implements ContactAdvanceSearchCommonModal functionality
+ */
 export class ContactAdvanceSearchCommonModal {
     category: string;
     amountType: string;
     amount: number;
 }
 
+/**
+ * ContactAdvanceSearchModal class
+ * Implements ContactAdvanceSearchModal functionality
+ */
 export class ContactAdvanceSearchModal {
     openingBalance: number;
     openingBalanceType: string;
@@ -101,6 +137,10 @@ export class ContactAdvanceSearchModal {
     debitTotalNotEqual: boolean;
 }
 
+/**
+ * AgingAdvanceSearchModal class
+ * Implements AgingAdvanceSearchModal functionality
+ */
 export class AgingAdvanceSearchModal {
     includeTotalDueAmount: boolean = false;
     totalDueAmountGreaterThan: boolean = false;
@@ -111,6 +151,10 @@ export class AgingAdvanceSearchModal {
     name: string[];
 }
 
+/**
+ * CustomerVendorFiledFilter class
+ * Implements CustomerVendorFiledFilter functionality
+ */
 export class CustomerVendorFiledFilter {
     public selectAll: boolean = false;
     public parentGroup: boolean = false;

@@ -12,6 +12,10 @@ import { Pipe, PipeTransform } from "@angular/core";
     pure: true,
     standalone:false
 })
+/**
+ * ParticularPipe pipe
+ * Implements ParticularPipe functionality
+ */
 export class ParticularPipe implements PipeTransform {
 
     /**

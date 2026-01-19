@@ -24,6 +24,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -54,4 +57,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ],
     declarations: [MainComponent, CreateManufacturingComponent, ListManufacturingComponent]
 })
+/**
+ * ManufacturingModule module
+ * Implements ManufacturingModule functionality
+ */
 export class ManufacturingModule { }

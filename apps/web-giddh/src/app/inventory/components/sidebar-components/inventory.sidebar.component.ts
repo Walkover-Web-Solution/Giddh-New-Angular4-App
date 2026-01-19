@@ -12,12 +12,19 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { InvViewService } from '../../inv.view.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'inventory-sidebar',
     templateUrl: './inventory.sidebar.component.html',
     styleUrls: ['inventory.sidebar.component.scss'],
     standalone: false
 })
+/**
+ * InventorySidebarComponent component
+ * Handles inventorysidebar functionality and user interactions
+ */
 export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewInit {
     public groupsWithStocks$: Observable<IGroupsWithStocksHierarchyMinItem[]>;
     public sidebarRect: any;
@@ -49,12 +56,21 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     @HostListener('window:resize')
+    /**
+     * Handles resizeEvent functionality
+     */
     public resizeEvent() {
         this.sidebarRect = window.screen.height;
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(inventoryStore => inventoryStore.inventory.groupsWithStocks), takeUntil(this.destroyed$)).subscribe((data: any) => {
+            /**
+             * Handles if functionality
+             */
             if (data) {
                 this.stockGroupData = data;
                 this.changeDetectionRef.detectChanges();
@@ -69,18 +85,39 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
         this.getStocks('', 1);
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
+            /**
+             * Handles if functionality
+             */
             if (v) {
                 this.groupUniqueName = v.groupUniqueName;
                 this.stockUniqueName = v.stockUniqueName;
             }
         })
+        /**
+         * Handles observableFromEvent functionality
+         */
         observableFromEvent(this.search?.nativeElement, 'input').pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(500),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles map functionality
+             */
             map((e: any) => e.target.value), takeUntil(this.destroyed$))
             .subscribe((val: string) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (val) {
                     this.isSearching = true;
                 } else {
@@ -90,16 +127,28 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
             });
     }
 
+    /**
+     * Shows branchscreen element
+     */
     public showBranchScreen() {
         this.store.dispatch(this.sidebarAction.ShowBranchScreen(true));
         this.store.dispatch(this.sidebarAction.ShowBranchScreenSideBar(true));
     }
 
+    /**
+     * Handles downloadAllInventoryReports functionality
+     */
     public downloadAllInventoryReports(reportType: string, reportFormat: string) {
         let obj = new InventoryDownloadRequest();
+        /**
+         * Handles if functionality
+         */
         if (this.groupUniqueName) {
             obj.stockGroupUniqueName = this.groupUniqueName;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.stockUniqueName) {
             obj.stockUniqueName = this.stockUniqueName;
         }
@@ -110,6 +159,9 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
         obj.branchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : '';
         this.inventoryService.downloadAllInventoryReports(obj).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     this.toasty.infoToast(res?.body);
                 } else {
@@ -137,10 +189,16 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof InventorySidebarComponent
      */
     private getStocks(q?: string, page: number = 1): void {
+        /**
+         * Handles if functionality
+         */
         if (page === 1) {
             this.stockGroupData = [];
         }
         this.currentPage = page;
+        /**
+         * Handles if functionality
+         */
         if (!this.isSearching) {
             this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin('', page, 30));
         } else {
@@ -156,10 +214,16 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     public loadMore(): void {
         let getStocksInProgress;
         this.store.pipe(select(state => state.inventory.getStocksInProgress)).subscribe(response => getStocksInProgress = response);
+        /**
+         * Handles if functionality
+         */
         if (!getStocksInProgress) {
             let stocksTotalPages;
             this.store.pipe(select(state => state.inventory.stocksTotalPages)).subscribe(response => stocksTotalPages = response);
 
+            /**
+             * Handles if functionality
+             */
             if (this.currentPage < stocksTotalPages) {
                 this.currentPage = this.currentPage + 1;
                 this.getStocks(this.search?.nativeElement?.value, this.currentPage);

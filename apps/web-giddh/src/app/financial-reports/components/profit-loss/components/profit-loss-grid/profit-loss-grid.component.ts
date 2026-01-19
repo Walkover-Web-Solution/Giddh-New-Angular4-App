@@ -32,6 +32,9 @@ import { environment } from '../../../../../../environments/environment.generate
 import { each, forEach, indexOf, keys } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'profit-loss-grid',
     templateUrl: './profit-loss-grid.component.html',
@@ -40,6 +43,10 @@ selector: 'profit-loss-grid',
     providers: [FinancialReportsComponentStore],
     standalone: false
 })
+/**
+ * ProfitLossGridComponent component
+ * Handles profitlossgrid functionality and user interactions
+ */
 export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     public noData: boolean;
     public showClearSearch: boolean = false;
@@ -74,6 +81,10 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds images folder path */
     public imgPath: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private cd: ChangeDetectorRef,
         private zone: NgZone,
@@ -85,20 +96,38 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.plSearchControl.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.searchInput = newValue;
                 this.hideData = true;
                 this.searchChange.emit(this.searchInput);
                 this.isExpandToggledDuringSearch = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (newValue === '') {
                     this.showClearSearch = false;
                 }
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.hideData = false;
                     this.cd.detectChanges();
@@ -106,8 +135,14 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.listOfCheckGroupsAccounts = [];
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.refresh.emit();
                 }, 600);
@@ -115,19 +150,46 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges) {
+        /**
+         * Handles if functionality
+         */
         if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
+            /**
+             * Handles if functionality
+             */
             if (this.plData && this.cogsData) {
                 this.zone.run(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.plData) {
                         this.toggleVisibility(this.plData.expArr, changes.expandAll.currentValue);
                         this.toggleVisibility(this.plData.incArr, changes.expandAll.currentValue);
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.plData.incArr) {
+                            /**
+                             * Handles each functionality
+                             */
                             each(this.plData.incArr, (grp: any) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (grp.isIncludedInSearch) {
                                     grp.isVisible = true;
+                                    /**
+                                     * Handles each functionality
+                                     */
                                     each(grp.accounts, (acc: any) => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (acc.isIncludedInSearch) {
                                             acc.isVisible = true;
                                         }
@@ -135,11 +197,26 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                                 }
                             });
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.plData.expArr) {
+                            /**
+                             * Handles each functionality
+                             */
                             each(this.plData.expArr, (grp: any) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (grp.isIncludedInSearch) {
                                     grp.isVisible = true;
+                                    /**
+                                     * Handles each functionality
+                                     */
                                     each(grp.accounts, (acc: any) => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (acc.isIncludedInSearch) {
                                             acc.isVisible = true;
                                         }
@@ -149,8 +226,17 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                         }
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.cogsData) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.cogsData.isIncludedInSearch) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (!this.cogsData.level1) {
                                 this.cogsData.isOpen = changes.expandAll.currentValue;
                             } else {
@@ -167,26 +253,47 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Toggles search state
+     */
     public toggleSearch() {
         this.showClearSearch = true;
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.searchInputEl && this.searchInputEl.nativeElement) {
                 this.searchInputEl.nativeElement.focus();
             }
         }, 200);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles clickedOutside functionality
+     */
     public clickedOutside(event, el) {
+        /**
+         * Handles if functionality
+         */
         if (this.plSearchControl?.value !== null && this.plSearchControl?.value !== '') {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.childOf(event.target, el)) {
             return;
         } else {
@@ -195,15 +302,33 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /* tslint:disable */
+    /**
+     * Handles childOf functionality
+     */
     public childOf(c, p) {
         return DomUtilsHelper.childOf(c, p);
     }
 
+    /**
+     * Toggles visibility state
+     */
     private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
         let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
+        /**
+         * Handles each functionality
+         */
         each(data, (grp: ChildGroup) => {
+            /**
+             * Handles if functionality
+             */
             if (grp.isIncludedInSearch) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!grp.level1) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (parentGroups?.indexOf(grp?.uniqueName) === -1) {
                         grp.isCreated = false;
                         grp.isVisible = isVisible;
@@ -214,7 +339,13 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                 } else {
                     grp.isOpen = true;
                 }
+                /**
+                 * Handles each functionality
+                 */
                 each(grp.accounts, (acc: Account) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (acc.isIncludedInSearch) {
                         acc.isCreated = true;
                         acc.isVisible = isVisible;
@@ -233,6 +364,9 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ProfitLossGridComponent
      */
     public getKeys(obj: Record<string, any> | null | undefined): string[] | [] {
+        /**
+         * Handles if functionality
+         */
         if (obj) {
             return Object.keys(obj);
         } else {
@@ -249,7 +383,13 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
      */
     private uncheckAll(entityType: 'group' | 'account' = 'group'): void {
         this.extractCheckedAccountsGroups([...this.plData.incArr, ...this.plData.expArr], entityType);
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {
                     request: {
@@ -276,6 +416,9 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
         (Array.isArray(groupAccountDetails) ? groupAccountDetails : []).forEach(groupAccount => {
+            /**
+             * Handles if functionality
+             */
             if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
                     uniqueName: groupAccount.uniqueName,
@@ -283,9 +426,15 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                     checked: false
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (groupAccount.childGroups?.length) {
                 this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
             }
+            /**
+             * Handles if functionality
+             */
             if (groupAccount.accounts?.length) {
                 this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
             }
@@ -305,6 +454,9 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.uncheckAll();
             }

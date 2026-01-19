@@ -11,16 +11,30 @@ import { ESTIMATES_API, PROFORMA_API } from './apiurls/proforma.api';
 import { VoucherClass } from '../models/api-models/Sales';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ProformaService service
+ * Provides proforma related business logic and data operations
+ */
 export class ProformaService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private generalService: GeneralService, private http: HttpWrapperService, private errorHandler: GiddhErrorHandler, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this.generalService.companyUniqueName;
     }
 
+    /**
+     * Retrieves all data
+     */
     public getAll(request: ProformaFilter, voucherType: string): Observable<BaseResponse<ProformaResponse, ProformaFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.generalService.createQueryString(this.config.apiUrl + PROFORMA_API.getAll, {
@@ -31,15 +45,24 @@ export class ProformaService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':vouchers', voucherType), request)
             .pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<ProformaResponse, ProformaFilter> = res;
                     data.queryString = { page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf' };
                     data.request = request;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<ProformaResponse, ProformaFilter>(e, request, { page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf' })));
     }
 
+    /**
+     * Retrieves  data
+     */
     public get(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<VoucherClass, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + PROFORMA_API.base
@@ -48,15 +71,24 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<VoucherClass, ProformaGetRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<VoucherClass, ProformaGetRequest>(e, request)));
     }
 
+    /**
+     * Handles generate functionality
+     */
     public generate(request: VoucherClass): Observable<BaseResponse<VoucherClass, VoucherClass>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + PROFORMA_API.generate
@@ -65,15 +97,24 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountDetails?.uniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<VoucherClass, VoucherClass> = res;
                 data.queryString = request.accountDetails?.uniqueName;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<VoucherClass, VoucherClass>(e, request)));
     }
 
+    /**
+     * Updates existing 
+     */
     public update(request: VoucherClass): Observable<BaseResponse<VoucherClass, VoucherClass>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + PROFORMA_API.base
@@ -82,15 +123,24 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountDetails?.uniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<VoucherClass, VoucherClass> = res;
                 data.queryString = request.accountDetails?.uniqueName;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<VoucherClass, VoucherClass>(e, request)));
     }
 
+    /**
+     * Deletes 
+     */
     public delete(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.deleteWithBody(this.config.apiUrl + PROFORMA_API.base
@@ -99,15 +149,24 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaGetRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
     }
 
+    /**
+     * Handles download functionality
+     */
     public download(request: ProformaDownloadRequest, voucherType: string): Observable<BaseResponse<string, ProformaDownloadRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + PROFORMA_API.download
@@ -117,15 +176,24 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaDownloadRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaDownloadRequest>(e, request)));
     }
 
+    /**
+     * Handles generateInvoice functionality
+     */
     public generateInvoice(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + (voucherType === 'proformas' ? PROFORMA_API.generateInvoice : ESTIMATES_API.generateInvoice)
@@ -133,15 +201,24 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaGetRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
     }
 
+    /**
+     * Handles generateProforma functionality
+     */
     public generateProforma(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ESTIMATES_API.generateProforma
@@ -150,15 +227,24 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaGetRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
     }
 
+    /**
+     * Updates existing action
+     */
     public updateAction(request: ProformaUpdateActionRequest, voucherType: string): Observable<BaseResponse<string, ProformaUpdateActionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + PROFORMA_API.updateAction
@@ -167,15 +253,24 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaUpdateActionRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaUpdateActionRequest>(e, request)));
     }
 
+    /**
+     * Retrieves allversions data
+     */
     public getAllVersions(request: ProformaGetAllVersionRequest, voucherType: string): Observable<BaseResponse<ProformaGetAllVersionsResponse, ProformaGetAllVersionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.generalService.createQueryString(this.config.apiUrl + ESTIMATES_API.getVersions, {
@@ -188,15 +283,24 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<ProformaGetAllVersionsResponse, ProformaGetAllVersionRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<ProformaGetAllVersionsResponse, ProformaGetAllVersionRequest>(e, request)));
     }
 
+    /**
+     * Handles sendEmail functionality
+     */
     public sendEmail(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + PROFORMA_API.mailProforma
@@ -205,12 +309,18 @@ export class ProformaService {
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ProformaGetRequest> = res;
                 data.queryString = voucherType;
                 data.request = request;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
     }
 }

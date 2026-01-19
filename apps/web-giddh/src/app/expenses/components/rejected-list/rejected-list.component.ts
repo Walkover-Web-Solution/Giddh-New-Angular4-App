@@ -17,12 +17,19 @@ import { ServiceConfig } from '../../../services/service.config';
 import { GeneralService } from '../../../services/general.service';
 import { cloneDeep, forEach, isArray, map } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-rejected-list',
     
       standalone: false,templateUrl: './rejected-list.component.html',
     styleUrls: ['./rejected-list.component.scss'],
 })
+/**
+ * RejectedListComponent component
+ * Handles rejectedlist functionality and user interactions
+ */
 export class RejectedListComponent implements OnInit, OnChanges {
     /** Instance of delete entry modal */
     @ViewChild('deleteEntryModal') public deleteEntryModal;
@@ -59,6 +66,10 @@ export class RejectedListComponent implements OnInit, OnChanges {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
@@ -72,16 +83,28 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
 
+        /**
+         * Handles observableCombineLatest functionality
+         */
         observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            /**
+             * Handles if functionality
+             */
             if (!Array.isArray(resp[0])) {
                 return;
             }
             let dateObj = resp[0];
             this.todaySelected = resp[1];
+            /**
+             * Handles if functionality
+             */
             if (dateObj && !this.todaySelected) {
                 let universalDate = cloneDeep(dateObj);
                 let from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 let to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                /**
+                 * Handles if functionality
+                 */
                 if (from && to) {
                     this.pettycashRequest.from = from;
                     this.pettycashRequest.to = to;
@@ -125,12 +148,21 @@ export class RejectedListComponent implements OnInit, OnChanges {
      * @memberof RejectedListComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes['isClearFilter']) {
+            /**
+             * Handles if functionality
+             */
             if (changes['isClearFilter'].currentValue) {
                 this.clearFilter();
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes['pettyCashRejectedReportResponse'] && changes['pettyCashRejectedReportResponse'].currentValue) {
             this.getReportResponse();
         }
@@ -157,6 +189,9 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.actionPettycashRequest.actionType = 'revert';
         this.actionPettycashRequest.uniqueName = item?.uniqueName;
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", res?.body);
                 this.pettycashRequest.page = this.generalService.adjustPageIndex(this.pettyCashRejectedReportResponse?.totalItems, this.pettyCashRejectedReportResponse?.page, this.pettyCashRejectedReportResponse?.count);
@@ -217,6 +252,9 @@ export class RejectedListComponent implements OnInit, OnChanges {
      * @memberof RejectedListComponent
      */
     public detectChanges(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.cdRef['destroyed']) {
             this.cdRef.detectChanges();
         }
@@ -239,12 +277,18 @@ export class RejectedListComponent implements OnInit, OnChanges {
      * @memberof RejectedListComponent
      */
     private getReportResponse(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.pettyCashRejectedReportResponse) {
             this.rejectedItems = this.pettyCashRejectedReportResponse.results?.map((rejected, index) => {
                 rejected.index = index;
                 return rejected;
             });
             this.reportDates.emit([this.pettyCashRejectedReportResponse.fromDate, this.pettyCashRejectedReportResponse.toDate]);
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.detectChanges();
             }, 400);
@@ -258,6 +302,9 @@ export class RejectedListComponent implements OnInit, OnChanges {
      */
     public deleteEntry(): void {
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", res?.body);
                 this.pettycashRequest.page = this.generalService.adjustPageIndex(this.pettyCashRejectedReportResponse?.totalItems, this.pettyCashRejectedReportResponse?.page, this.pettyCashRejectedReportResponse?.count);

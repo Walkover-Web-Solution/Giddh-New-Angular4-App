@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { ColumnDefinition } from './giddh-table.component.const';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'giddh-table',
     templateUrl: './giddh-table.component.html',
@@ -8,6 +11,10 @@ import { ColumnDefinition } from './giddh-table.component.const';
     standalone: false
 })
 
+/**
+ * GiddhTableComponent component
+ * Handles giddhtable functionality and user interactions
+ */
 export class GiddhTableComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -43,6 +50,10 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() { }
 
     /**
@@ -98,7 +109,13 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
         this.topHeaderColumns = [];
         this.displayedColumns = [];
         Object.entries(this.columnDefinitions).forEach(([key, value]) => {
+            /**
+             * Handles if functionality
+             */
             if (Array.isArray(value) && value?.[1]) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isShowSecondaryHeader) {
                     this.topHeaderColumns.push(key + ' ');
                 }

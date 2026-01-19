@@ -2,12 +2,19 @@ import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-convert-bill-dialog',
     templateUrl: './convert-bill-dialog.component.html',
     styleUrls: ['./convert-bill-dialog.component.scss'],
     standalone: false
 })
+/**
+ * ConvertBillDialogComponent component
+ * Handles convertbilldialog functionality and user interactions
+ */
 export class ConvertBillDialogComponent implements OnInit {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -18,6 +25,10 @@ export class ConvertBillDialogComponent implements OnInit {
     /** Hold Form group */
     public convertToBillForm: FormGroup;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public vouchers,
         public dialogRef: MatDialogRef<any>,
@@ -32,6 +43,9 @@ export class ConvertBillDialogComponent implements OnInit {
      * @memberof ConvertBillDialogComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.vouchers?.length) {
             let formArray = this.convertToBillForm.get('purchaseOrders') as FormArray;
             (Array.isArray(this.vouchers) ? this.vouchers : []).forEach(voucher => {

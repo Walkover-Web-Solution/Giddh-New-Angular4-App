@@ -11,6 +11,9 @@ import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'view-subscription',
     templateUrl: './view-subscription.component.html',
@@ -18,6 +21,10 @@ import { ToasterService } from '../../services/toaster.service';
     providers: [ViewSubscriptionComponentStore, SubscriptionComponentStore, BuyPlanComponentStore],
     standalone: false
 })
+/**
+ * ViewSubscriptionComponent component
+ * Handles viewsubscription functionality and user interactions
+ */
 export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     /** Mat menu instance reference */
     @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
@@ -50,6 +57,10 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     /** This will use for active company */
     public activeCompany: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public dialog: MatDialog,
         private router: Router,
@@ -70,6 +81,9 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
    */
     public ngOnInit(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+            /**
+             * Handles if functionality
+             */
             if (params) {
                 this.subscriptionId = params.id;
                 this.getSubscriptionData(params.id);
@@ -77,6 +91,9 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         });
 
         this.subscriptionComponentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
             }
@@ -87,12 +104,18 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         });
 
         this.cancelSubscription$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.router.navigate(['/pages/user-details/subscription']);
             }
         });
 
         this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.selectedMoveCompany) {
                 this.getSubscriptionData(this.subscriptionId);
                 this.router.navigate(['/pages/user-details/subscription']);
@@ -114,6 +137,9 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         });
 
         transferDialogRef.afterClosed().subscribe((action) => {
+            /**
+             * Handles if functionality
+             */
             if (action) {
             } else {
                 transferDialogRef?.close();
@@ -128,6 +154,9 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     * @memberof ViewSubscriptionComponent
     */
     public addOrMoveCompanyCallback(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.selectedMoveCompany = true;
         }
@@ -178,6 +207,9 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         });
 
         cancelDialogRef.afterClosed().subscribe((action) => {
+            /**
+             * Handles if functionality
+             */
             if (action) {
                 this.subscriptionComponentStore.cancelSubscription(this.subscriptionId);
             } else {
@@ -202,6 +234,9 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public buyPlan(type: string): void {
+        /**
+         * Handles if functionality
+         */
         if (type === 'renew') {
             this.router.navigate(
                 ['/pages/user-details/subscription/buy-plan/' + this.subscriptionId],

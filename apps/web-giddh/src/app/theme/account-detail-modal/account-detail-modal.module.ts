@@ -8,6 +8,9 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatDialogModule } from '@angular/material/dialog';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -22,5 +25,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     declarations: [AccountDetailModalComponent],
     providers: [],
 })
+/**
+ * AccountDetailModalModule module
+ * Implements AccountDetailModalModule functionality
+ */
 export class AccountDetailModalModule {
 }

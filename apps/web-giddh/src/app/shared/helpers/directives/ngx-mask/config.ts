@@ -1,5 +1,9 @@
 import { InjectionToken } from '@angular/core';
 
+/**
+ * IConfig interface definition
+ * Defines the structure and contract for IConfig objects
+ */
 export interface IConfig {
     suffix: string;
     prefix: string;
@@ -21,6 +25,10 @@ export interface IConfig {
     allowUnsupportedPrefix: boolean;
 }
 
+/**
+ * optionsConfig interface definition
+ * Defines the structure and contract for optionsConfig objects
+ */
 export type optionsConfig = Partial<IConfig>;
 export const config: InjectionToken<IConfig> = new InjectionToken('config');
 export const NEW_CONFIG: InjectionToken<IConfig> = new InjectionToken('NEW_CONFIG');

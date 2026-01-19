@@ -19,6 +19,9 @@ import { SettingsFinancialYearActions } from '../../../actions/settings/financia
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AdjustmentInventory, DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG } from '../../../app.constant';
 import { cloneDeep, concat, filter, forEach, get, set } from '../../../lodash-optimized';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'adjust-inventory',
 
@@ -28,6 +31,10 @@ import { cloneDeep, concat, filter, forEach, get, set } from '../../../lodash-op
     providers: [AdjustInventoryComponentStore]
 })
 
+/**
+ * AdjustInventoryComponent component
+ * Handles adjustinventory functionality and user interactions
+ */
 export class AdjustInventoryComponent implements OnInit {
     /** Instance of create reason template */
     @ViewChild("createReason", { static: false }) public createReason: any;
@@ -125,6 +132,10 @@ export class AdjustInventoryComponent implements OnInit {
     /** True if update mode */
     public updateMode: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
@@ -142,10 +153,16 @@ export class AdjustInventoryComponent implements OnInit {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         /** Activate router observable */
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params?.type) {
                 this.inventoryType = params?.type.toLowerCase();
                 this.queryParams = params;
             }
+            /**
+             * Handles if functionality
+             */
             if (params?.refNo) {
                 this.referenceNumber = params?.refNo;
                 this.updateMode = true;
@@ -169,6 +186,9 @@ export class AdjustInventoryComponent implements OnInit {
         this.searchInventory(false);
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.adjustInventoryCreateEditForm.get('date')?.patchValue(dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT));
@@ -176,12 +196,21 @@ export class AdjustInventoryComponent implements OnInit {
                 this.stockReportRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (this.referenceNumber) {
             this.componentStore.inventoryAdjustData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.initForm(response);
                     this.stockReportRequest.to = this.adjustInventoryCreateEditForm.value.date;
                     this.inventoryData = response.variants;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.referenceNumber) {
                         this.stockGroupClosingBalance.closing = response?.closingBeforeAdjustment;
                         this.stockGroupClosingBalance.newValue = response?.closingAfterAdjustment;
@@ -202,6 +231,9 @@ export class AdjustInventoryComponent implements OnInit {
             });
         }
 
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([
             this.componentStore.reasons$.pipe(map(response => response?.results)),
             this.componentStore.settingsProfile$,
@@ -210,13 +242,22 @@ export class AdjustInventoryComponent implements OnInit {
             this.componentStore.financialYear$
         ]).pipe(takeUntil(this.destroyed$))
             .subscribe(([reasons, profile, expensesAccounts, warehouses, financialYear]) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.referenceNumber && this.translationLoaded) {
                     this.componentStore.inventoryAdjustData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response) {
                             this.initForm(response);
                         }
                     });
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (reasons) {
                     const mappedReasons = reasons.map(item => ({
                         value: item.uniqueName,
@@ -226,10 +267,16 @@ export class AdjustInventoryComponent implements OnInit {
                     this.reasons$ = observableOf(mappedReasons);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (profile) {
                     this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (warehouses) {
                     let warehouseResults = warehouses.filter(warehouse => !warehouse.isArchived);
                     const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
@@ -238,6 +285,9 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.label,
                         additional: item
                     }));
+                    /**
+                     * Handles if functionality
+                     */
                     if (mappedWarehouses?.length === 1) {
                         this.adjustInventoryCreateEditForm.get('warehouseName')?.patchValue(mappedWarehouses[0]?.label);
                         this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(mappedWarehouses[0]?.value);
@@ -245,15 +295,24 @@ export class AdjustInventoryComponent implements OnInit {
                     this.warehouses$ = observableOf(mappedWarehouses);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (financialYear) {
                     this.stockReportRequest.from = financialYear?.startDate;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (expensesAccounts) {
                     const mappedAccounts = expensesAccounts.map(item => ({
                         value: item.uniqueName,
                         label: item.name,
                         additional: item
                     }));
+                    /**
+                     * Handles if functionality
+                     */
                     if (mappedAccounts?.length === 1) {
                         this.adjustInventoryCreateEditForm.get('expenseAccountName')?.patchValue(mappedAccounts[0]?.label);
                         this.adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(mappedAccounts[0]?.value);
@@ -264,18 +323,27 @@ export class AdjustInventoryComponent implements OnInit {
             });
 
         this.componentStore.stockGroupClosingBalance$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && !this.referenceNumber) {
                 this.stockGroupClosingBalance.closing = response;
                 this.changeDetectorRef.detectChanges();
             }
         });
         this.dataSource = new MatTableDataSource<any>([]);
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([
             this.componentStore.itemWiseReport$.pipe(map(response => response?.results)),
             this.componentStore.variantWiseReport$.pipe(map(response => response?.results))
         ]).pipe(takeUntil(this.destroyed$))
             .subscribe(([itemWise, variantWise]) => {
 
+                /**
+                 * Handles if functionality
+                 */
                 if (itemWise) {
                     const mappedIItemWise = itemWise.map(item => ({
                         value: item.uniqueName,
@@ -287,12 +355,18 @@ export class AdjustInventoryComponent implements OnInit {
                     this.inventoryList$ = observableOf(filterdVariantData);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (variantWise) {
                     let data = variantWise?.map(result => ({
                         ...result,
                         newValue: 0,
                         changeValue: 0
                     }));
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.referenceNumber) {
                         this.stockGroupClosingBalance = {
                             newValue: 0,
@@ -307,10 +381,16 @@ export class AdjustInventoryComponent implements OnInit {
 
                     }
                     this.dataSource = new MatTableDataSource<any>(data);
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.referenceNumber) {
                         this.checkTableCheckBox();
                     }
                     this.componentStore.getStockGroupClosingBalance(this.balanceReqObj);
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.referenceNumber) {
                         this.calculateInventory();
                     }
@@ -322,6 +402,9 @@ export class AdjustInventoryComponent implements OnInit {
 
         /** Create inventory success observable */
         this.createAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.apiCallInProgress = false;
                 this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust`]);
@@ -332,6 +415,9 @@ export class AdjustInventoryComponent implements OnInit {
 
         /** Update inventory success observable */
         this.updateAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.apiCallInProgress = false;
                 this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust`]);
@@ -350,9 +436,15 @@ export class AdjustInventoryComponent implements OnInit {
        * @memberof AdjustInventoryComponent
        */
     public searchInventory(searchedText: any, loadMore: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (this.searchRequest.loadMore) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (searchedText !== null && searchedText !== undefined && typeof searchedText === 'string') {
             this.searchRequest.q = searchedText;
         }
@@ -363,12 +455,18 @@ export class AdjustInventoryComponent implements OnInit {
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
+        /**
+         * Handles if functionality
+         */
         if (loadMore) {
             this.searchRequest.page++;
         } else {
             this.searchRequest.page = 1;
         }
         this.searchRequest.searchPage = this.searchPage;
+        /**
+         * Handles if functionality
+         */
         if (this.searchRequest.page === 1 || this.searchRequest.page <= this.searchRequest.totalPages) {
             delete this.searchRequest.totalItems;
             delete this.searchRequest.totalPages;
@@ -376,10 +474,22 @@ export class AdjustInventoryComponent implements OnInit {
             this.searchRequest.loadMore = true;
             let initialData = cloneDeep(this.fieldFilteredOptions);
             this.componentStore.itemWiseReport$.pipe(debounceTime(700),
+                /**
+                 * Handles distinctUntilChanged functionality
+                 */
                 distinctUntilChanged(),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)).subscribe(response => {
                     this.searchRequest.loadMore = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (loadMore) {
                             let nextPaginatedData = response.results.map(item => ({
                                 value: item.uniqueName,
@@ -435,6 +545,9 @@ export class AdjustInventoryComponent implements OnInit {
         const refNo = this.adjustInventoryCreateEditForm.get("refNo").value; // not reset
         this.adjustInventoryCreateEditForm.reset();
         this.adjustInventoryCreateEditForm.get("date").patchValue(this.stockReportRequest.to);
+        /**
+         * Handles if functionality
+         */
         if (this.referenceNumber) {
             this.adjustInventoryCreateEditForm.get("refNo").patchValue(refNo);
         }
@@ -452,6 +565,9 @@ export class AdjustInventoryComponent implements OnInit {
         this.inventoryData = [];
         this.clearForm();
         this.showHideDiv = false;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.showHideDiv = true;
             this.changeDetectorRef.detectChanges();
@@ -477,6 +593,9 @@ export class AdjustInventoryComponent implements OnInit {
     public closeCreateReasonModal(event: boolean): void {
         this.matDialogRef?.close();
 
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.getReasons();
         }
@@ -488,6 +607,9 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public back(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.location.back();
         }
@@ -530,6 +652,9 @@ export class AdjustInventoryComponent implements OnInit {
     * @memberof AdjustInventoryComponent
     */
     public selectInventory(event: any, update: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.updateMode && update) {
             this.resetInventory(true);
         }
@@ -537,6 +662,9 @@ export class AdjustInventoryComponent implements OnInit {
         let reqObj: any;
         let toDate: any;
 
+        /**
+         * Handles if functionality
+         */
         if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
             toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
         } else {
@@ -568,6 +696,9 @@ export class AdjustInventoryComponent implements OnInit {
         this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
         const warehouseUniqueNames = this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value ? [this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value] : [];
         this.stockReportRequest.warehouseUniqueNames = warehouseUniqueNames;
+        /**
+         * Handles if functionality
+         */
         if (event.additional?.type !== null && event.additional?.type !== undefined && event.additional?.type === 'STOCK GROUP') {
             this.isEntityStockGroup = true;
             this.stockReportRequest.stockUniqueNames = [];
@@ -640,6 +771,9 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public updateInventoryAdjustment(): void {
         this.isFormSubmitted = false;
+        /**
+         * Handles if functionality
+         */
         if (this.adjustInventoryCreateEditForm.invalid) {
             this.isFormSubmitted = true;
             return;
@@ -650,6 +784,9 @@ export class AdjustInventoryComponent implements OnInit {
         this.adjustInventoryCreateEditForm.value.variantUniqueNames = mappedVariants;
 
         let toDate;
+        /**
+         * Handles if functionality
+         */
         if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
             toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
         } else {
@@ -674,6 +811,9 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public createInventoryAdjustment(): void {
         this.isFormSubmitted = false;
+        /**
+         * Handles if functionality
+         */
         if (this.adjustInventoryCreateEditForm.invalid) {
             this.isFormSubmitted = true;
             return;
@@ -684,6 +824,9 @@ export class AdjustInventoryComponent implements OnInit {
         this.adjustInventoryCreateEditForm.value.variantUniqueNames = mappedVariants;
 
         let toDate;
+        /**
+         * Handles if functionality
+         */
         if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
             toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
         } else {
@@ -722,6 +865,9 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public calculateInventory(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.referenceNumber) {
             let data;
             const inventoryMap = new Map(this.inventoryData.map(item => [item.variant.uniqueName, item]));
@@ -729,6 +875,9 @@ export class AdjustInventoryComponent implements OnInit {
             const variantWiseOnly = [];
             (Array.isArray(this.dataSource.data) ? this.dataSource.data : []).forEach(result => {
                 const updatedVariant = inventoryMap.get(result.variant.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (updatedVariant) {
                     mainResult.push(updatedVariant);
                 } else {
@@ -747,6 +896,9 @@ export class AdjustInventoryComponent implements OnInit {
                 totalChange += element.changeValue ?? 0;
                 totalNewValue += element.closingAfterAdjustment ?? 0;
                 oldNewValue += element?.newValue ?? 0;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
                     "QUANTITY_WISE") {
                     oldTotalClosing += element.closing?.quantity ?? 0;
@@ -759,6 +911,9 @@ export class AdjustInventoryComponent implements OnInit {
             this.stockGroupClosingBalance.newValue = totalNewValue + oldNewValue;
             this.dataSource = new MatTableDataSource<any>(data);
 
+            /**
+             * Handles if functionality
+             */
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise &&
                 this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
@@ -778,6 +933,9 @@ export class AdjustInventoryComponent implements OnInit {
                 this.dataSource = new MatTableDataSource<any>(data);
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise
                 && this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
@@ -797,6 +955,9 @@ export class AdjustInventoryComponent implements OnInit {
                 this.dataSource = new MatTableDataSource<any>(data);
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
                 this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
@@ -816,6 +977,9 @@ export class AdjustInventoryComponent implements OnInit {
                 this.dataSource = new MatTableDataSource<any>(data);
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
                 this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
@@ -837,6 +1001,9 @@ export class AdjustInventoryComponent implements OnInit {
         } else {
             this.stockGroupClosingBalance.changeValue = 0;
             this.stockGroupClosingBalance.newValue = 0;
+            /**
+             * Handles if functionality
+             */
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise &&
                 this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
@@ -855,6 +1022,9 @@ export class AdjustInventoryComponent implements OnInit {
                 this.dataSource.data = data;
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise
                 && this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
@@ -871,6 +1041,9 @@ export class AdjustInventoryComponent implements OnInit {
                 this.dataSource.data = data;
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
                 this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
@@ -890,6 +1063,9 @@ export class AdjustInventoryComponent implements OnInit {
 
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
                 this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
@@ -928,9 +1104,15 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public masterToggle(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isEntityStockGroup) {
             (Array.isArray(this.dataSource?.filteredData) ? this.dataSource?.filteredData : []).forEach(row => this.selection.select(row));
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.isAllSelected()) {
                 this.selection.clear();
             } else {
@@ -951,6 +1133,9 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public checkboxLabel(row?: any): string {
+        /**
+         * Handles if functionality
+         */
         if (!row) {
             return `${this.isAllSelected() ? 'deselect' : 'select'} 'all'`;
         }
@@ -964,6 +1149,9 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.adjustmentMethod = [
@@ -995,8 +1183,14 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public resetInventory(bySelectInventory: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (this.updateMode) {
             this.updateMode = false;
+            /**
+             * Handles if functionality
+             */
             if (!bySelectInventory) {
                 this.adjustInventoryCreateEditForm.get("entityName")?.patchValue(null);
                 this.adjustInventoryCreateEditForm.get("entityUniqueName")?.patchValue(null);
@@ -1052,12 +1246,18 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public checkTableCheckBox(): void {
         const shouldMasterToggle = this.isEntityStockGroup || (this.referenceNumber && !this.isEntityStockGroup);
+        /**
+         * Handles if functionality
+         */
         if (shouldMasterToggle) {
             this.masterToggle();
         } else {
             this.selection.clear();
         }
         this.showHideTable = false;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.showHideTable = true;
         });

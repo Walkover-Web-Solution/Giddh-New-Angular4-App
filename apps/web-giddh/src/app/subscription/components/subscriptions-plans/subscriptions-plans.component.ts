@@ -30,12 +30,19 @@ const TABLE_DATA: any[] = [
     { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
     { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true }
 ];
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'subscriptions-plans',
     styleUrls: ['./subscriptions-plans.component.scss'],
     templateUrl: './subscriptions-plans.component.html',
     standalone: false
 })
+/**
+ * SubscriptionsPlansComponent component
+ * Handles subscriptionsplans functionality and user interactions
+ */
 export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     @Input() public subscriptions: any;
     /** This will hold local JSON data */
@@ -86,12 +93,19 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     /**  This will be use for all subscription  */
     private allSubscriptions: any[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private generalService: GeneralService,
         private changeDetectionRef: ChangeDetectorRef, private authenticationService: AuthenticationService, private store: Store<AppState>,
         private router: Router, private companyActions: CompanyActions, public dialog: MatDialog,
         private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && !isEmpty(response)) {
                 let companyInfo = cloneDeep(response);
                 this.currentCompany = companyInfo?.name;
@@ -103,10 +117,19 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         /** This will use for get the active company from store  */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.activeCompany) {
                     this.getPlans(activeCompany);
                 }
@@ -124,16 +147,25 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.user) {
             this.logedInUser = this.generalService.user;
         }
 
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
+            /**
+             * Handles if functionality
+             */
             if (inProcess) {
                 this.isSwitchPlanInProcess = inProcess;
             } else {
                 this.isSwitchPlanInProcess = false;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.selectNewPlan) {
                     this.backClicked();
                     this.selectNewPlan = false;
@@ -142,10 +174,16 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            /**
+             * Handles if functionality
+             */
             if (val && val.showPlans === "true") {
                 this.isShowPlans = true;
             }
 
+            /**
+             * Handles if functionality
+             */
             if ((!val || val.showPlans !== "true") && this.isShowPlans) {
                 this.backClicked();
                 this.isShowPlans = false;
@@ -154,6 +192,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -188,11 +229,17 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
     public buyPlanClicked(plan: any) {
         let activationKey = this.licenceKey?.value;
+        /**
+         * Handles if functionality
+         */
         if (activationKey) {
             this.SubscriptionRequestObj.licenceKey = activationKey;
         } else {
             this.SubscriptionRequestObj.licenceKey = "";
         }
+        /**
+         * Handles if functionality
+         */
         if (this.allSubscriptions[plan?.uniqueName].planDetails.amount <= 0) {
             this.SubscriptionRequestObj.planUniqueName = plan?.uniqueName;
             this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
@@ -203,8 +250,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.selectedPlan(this.allSubscriptions[plan?.uniqueName]));
     }
 
+    /**
+     * Handles patchProfile functionality
+     */
     public patchProfile(obj) {
         this.settingsProfileService.PatchProfile(obj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "error") {
                 this.toasty.errorToast(response.message);
             } else {
@@ -215,9 +268,15 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Creates new companyviaactivationkey
+     */
     public createCompanyViaActivationKey() {
         let activationKey = this.licenceKey?.value;
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
+        /**
+         * Handles if functionality
+         */
         if (activationKey) {
             this.SubscriptionRequestObj.licenceKey = activationKey;
             this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
@@ -236,6 +295,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public showPlansByType(type: string): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.showPlans) {
             this.showPlans = type;
         }
@@ -259,6 +321,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     * @memberof SubscriptionsPlansComponent
     */
     public renewPlan(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.seletedUserPlans && this.seletedUserPlans.planDetails && this.seletedUserPlans.planDetails.amount > 0) {
 
             this.subscriptionPlan = {
@@ -289,6 +354,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
         } else {
             this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
+            /**
+             * Handles if functionality
+             */
             if (this.seletedUserPlans?.subscriptionId) {
                 this.SubscriptionRequestObj.subscriptionId = this.seletedUserPlans?.subscriptionId;
                 this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });

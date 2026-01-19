@@ -6,6 +6,10 @@ import { ToasterService } from "../../../services/toaster.service";
 import { LocaleService } from "../../../services/locale.service";
 import { SalesBifurcationDetailsService } from "./sales-bifurcation-details.service";
 
+/**
+ * SalesBifurcationDetailsState interface definition
+ * Defines the structure and contract for SalesBifurcationDetailsState objects
+ */
 export interface SalesBifurcationDetailsState {
     salesBifurcationDetailsList: any;
     salesBifurcationDetailsListInProgress: boolean
@@ -16,15 +20,29 @@ export const DEFAULT_STATE: SalesBifurcationDetailsState = {
     salesBifurcationDetailsListInProgress: false
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SalesBifurcationDetailsStore store
+ * Manages salesbifurcationdetails state using NgRx ComponentStore
+ */
 export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcationDetailsState> implements OnDestroy {
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private localeService: LocaleService,
         private salesBifurcationDetailsService: SalesBifurcationDetailsService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -42,17 +60,29 @@ export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcatio
      */
     readonly getAllSalesBifurcationDetails = this.effect((data: Observable<{ params: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(({ params }) => {
                 this.patchState({ salesBifurcationDetailsList: null, salesBifurcationDetailsListInProgress: true });
                 return this.salesBifurcationDetailsService.salesBifurcationDetails(params).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({
                                     salesBifurcationDetailsList: res.body,
                                     salesBifurcationDetailsListInProgress: false,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -70,6 +100,9 @@ export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcatio
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

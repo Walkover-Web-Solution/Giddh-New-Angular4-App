@@ -1,6 +1,9 @@
 import { NgModule } from "@angular/core";
 import { OnloadDirective } from "./onload.directive";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         OnloadDirective
@@ -9,6 +12,10 @@ import { OnloadDirective } from "./onload.directive";
         OnloadDirective
     ]
 })
+/**
+ * OnloadDirectiveModule module
+ * Implements OnloadDirectiveModule functionality
+ */
 export class OnloadDirectiveModule {
     
 }

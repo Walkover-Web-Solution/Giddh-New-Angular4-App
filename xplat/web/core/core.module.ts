@@ -29,6 +29,9 @@ export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, `./assets/i18n/`, '.json');
 }
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         BrowserModule,
@@ -52,15 +55,29 @@ export function createTranslateLoader(http: HttpClient) {
         })
     ],
     providers: [
+        /**
+         * Handles provideHttpClient functionality
+         */
         provideHttpClient()
     ]
 })
+/**
+ * FooCoreModule module
+ * Implements FooCoreModule functionality
+ */
 export class FooCoreModule {
+    /**
+     * Creates an instance of module
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Optional()
         @SkipSelf()
         parentModule: FooCoreModule
     ) {
+        /**
+         * Handles throwIfAlreadyLoaded functionality
+         */
         throwIfAlreadyLoaded(parentModule, 'FooCoreModule');
     }
 }

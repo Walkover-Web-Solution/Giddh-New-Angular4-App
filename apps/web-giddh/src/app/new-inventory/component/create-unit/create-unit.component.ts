@@ -9,12 +9,19 @@ import { cloneDeep } from '../../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'create-unit',
     templateUrl: './create-unit.component.html',
     styleUrls: ['./create-unit.component.scss'],
     standalone:false
 })
+/**
+ * CreateNewUnitComponent component
+ * Handles createnewunit functionality and user interactions
+ */
 export class CreateNewUnitComponent implements OnInit, OnDestroy {
     /** Holds unit group details */
     @Input() public unitGroupDetails: any = {};
@@ -45,6 +52,10 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private inventoryService: InventoryService,
         private formBuilder: UntypedFormBuilder,
@@ -65,9 +76,15 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
         this.getUnitMappings();
 
         this.unitForm.get('code').valueChanges.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe(code => {
+            /**
+             * Handles if functionality
+             */
             if (code) {
                 this.mappedUnitList = this.mappedUnitList?.map(mappedUnit => {
                     const existingLabel = mappedUnit?.additional?.label;
+                    /**
+                     * Handles if functionality
+                     */
                     if (existingLabel?.trim() === this.unitForm?.get('name')?.value?.trim()) {
                         mappedUnit.value = code;
                         mappedUnit.label = this.unitForm?.get('name')?.value?.trim() + " (" + code + ")";
@@ -106,6 +123,9 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
             })
         });
 
+        /**
+         * Handles if functionality
+         */
         if (!this.unitDetails?.uniqueName) {
             this.unitForm.get('group').get('name').patchValue(this.unitGroupDetails?.name);
             this.unitForm.get('group').get('uniqueName').patchValue(this.unitGroupDetails?.uniqueName);
@@ -117,6 +137,9 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
             this.unitForm.get('group').get('name').patchValue(this.unitDetails?.group?.name);
             this.unitForm.get('group').get('uniqueName').patchValue(this.unitDetails?.group?.uniqueName);
 
+            /**
+             * Handles if functionality
+             */
             if (this.unitDetails.mappings?.length) {
                 this.unitDetails.mappings?.forEach(mapping => {
                     this.addNewMappedUnit(mapping);
@@ -170,10 +193,16 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
         this.isValidFormMappings = true;
 
         let mappings = this.unitForm.get('mappings') as UntypedFormArray;
+        /**
+         * Handles for functionality
+         */
         for (let mapping of mappings.controls) {
             this.removeMappedUnit(0);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!mappings.controls?.length) {
             this.addNewMappedUnit();
         }
@@ -198,17 +227,26 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
     public getUnitMappings(): void {
         let groups = ["maingroup"];
 
+        /**
+         * Handles if functionality
+         */
         if (this.unitForm.get('group').get('uniqueName').value !== "maingroup") {
             groups.push(this.unitForm.get('group').get('uniqueName').value);
         }
 
         this.inventoryService.getStockMappedUnit(groups).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length) {
                 const tempUnits = []
                 let usedMappedUnit = [];
                 this.mappedUnitList = [];
 
                 response.body?.forEach(unit => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!usedMappedUnit[unit?.stockUnitX?.uniqueName] && groups.includes(unit?.stockUnitXGroup?.uniqueName)) {
                         usedMappedUnit[unit?.stockUnitX?.uniqueName] = unit;
                         tempUnits.push(unit?.stockUnitX?.code);
@@ -218,12 +256,21 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
                 });
 
                 StockUnits.forEach(unit => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!tempUnits[unit?.value]) {
                         this.unitList.push(unit);
                     }
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.unitDetails?.uniqueName) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!tempUnits[this.unitDetails?.code]) {
                         this.unitList.push({ label: this.unitDetails?.name + " (" + this.unitDetails?.code + ")", value: this.unitDetails?.code, uniqueName: this.unitDetails?.uniqueName });
                     }
@@ -235,7 +282,13 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
                     this.unitList.push({ label: unit.label + " (" + unit.value + ")", value: unit.value, uniqueName: unit.uniqueName });
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.unitDetails?.uniqueName) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!tempUnits[this.unitDetails?.code]) {
                         this.unitList.push({ label: this.unitDetails?.name + " (" + this.unitDetails?.code + ")", value: this.unitDetails?.code, uniqueName: this.unitDetails?.uniqueName });
                     }
@@ -255,25 +308,43 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
 
         this.unitForm.value?.mappings.forEach((mapping) => {
             let checkValidation: boolean = false;
+            /**
+             * Handles if functionality
+             */
             if (mapping?.stockUnitY?.code || mapping?.quantity || mapping?.stockUnitX?.code) {
                 checkValidation = true;
             }
+            /**
+             * Handles if functionality
+             */
             if (checkValidation && (!mapping?.stockUnitY?.code || !mapping?.quantity || !mapping?.stockUnitX?.code)) {
                 this.isValidFormMappings = false;
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.isValidForm && this.isValidFormMappings) {
             let tempUnitForm = cloneDeep(this.unitForm.value);
 
             tempUnitForm.mappings = tempUnitForm.mappings?.filter(mapping => mapping?.stockUnitY?.code && mapping?.quantity && mapping?.stockUnitX?.code);
 
+            /**
+             * Handles if functionality
+             */
             if (!tempUnitForm?.mappings?.length) {
                 delete tempUnitForm.mappings;
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.unitDetails?.uniqueName) {
                 this.inventoryService.UpdateStockUnit(tempUnitForm, this.unitDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.closeAsideEvent.emit(true);
                         this.toaster.showSnackBar("success", this.localeData?.unit_updated);
@@ -283,6 +354,9 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
                 });
             } else {
                 this.inventoryService.CreateStockUnit(tempUnitForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.resetForm();
                         this.closeAsideEvent.emit(true);
@@ -302,10 +376,19 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
      * @memberof CreateNewUnitComponent
      */
     public selectUnit(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             event.value = event.value?.replace(/\s/g, "")?.toLowerCase();
 
+            /**
+             * Handles if functionality
+             */
             if (!event?.additional?.stockUnitXGroup?.uniqueName) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!event.additional) {
                     event.additional = {};
                 }
@@ -314,11 +397,17 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
             }
 
             const isUnitAvailable = this.unitList?.filter(unit => unit.value === event.value);
+            /**
+             * Handles if functionality
+             */
             if (!isUnitAvailable?.length) {
                 this.unitList.push(event);
             }
 
             const isUnitAvailableMappedUnit = this.mappedUnitList?.filter(unit => unit.value === event.value);
+            /**
+             * Handles if functionality
+             */
             if (!isUnitAvailableMappedUnit?.length) {
                 this.mappedUnitList.push({ label: event.label + " (" + event.value + ")", value: event.value, additional: { label: event.label, value: event.value, additional: event.additional || event } });
             }
@@ -346,10 +435,16 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isLoading = true;
                 this.inventoryService.DeleteStockUnit(this.unitDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isLoading = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.toaster.showSnackBar("success", this.localeData?.unit_deleted);
                         this.closeAsideEvent.emit(true);
@@ -380,6 +475,9 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
      */
     public getUnitGroups(): void {
         this.inventoryService.getStockUnitGroups().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length) {
                 this.groupList = response.body?.map(group => {
                     return { label: group.name, value: group.uniqueName };
@@ -396,6 +494,9 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
      * @memberof CreateNewUnitComponent
      */
     public selectXUnit(mapping: any, event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (mapping && event) {
             mapping?.get('stockUnitX')?.get('name').patchValue(event.label);
             mapping?.get('stockUnitX')?.get('code').patchValue(event.value);
@@ -413,6 +514,9 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
      * @memberof CreateNewUnitComponent
      */
     public selectYUnit(mapping: any, event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (mapping && event) {
             mapping?.get('stockUnitY')?.get('name').patchValue(event.label);
             mapping?.get('stockUnitY')?.get('code').patchValue(event.value);

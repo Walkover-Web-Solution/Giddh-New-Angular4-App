@@ -13,12 +13,19 @@ import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-
 import { GetAuditLogsRequest } from '../models/api-models/Logs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import { cloneDeep } from '../lodash-optimized';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'audit-logs',
     templateUrl: './audit-logs.component.html',
     styleUrls: [`./audit-logs.component.scss`],
     standalone:false
 })
+/**
+ * AuditLogsComponent component
+ * Handles auditlogs functionality and user interactions
+ */
 export class AuditLogsComponent implements OnInit, OnDestroy {
     /** To check module for new version  */
     public isNewVersion: boolean = false;
@@ -54,18 +61,34 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private generalService: GeneralService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             this.router.navigate(['/pages/home']);
         }
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isNewVersion = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (response.version && String(response.version).toLocaleLowerCase() === 'new') {
                     this.isNewVersion = true;
                 }
@@ -76,6 +99,9 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
 
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -86,12 +112,18 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         });
 
         this.auditLogsRequest$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.entity) {
                 this.showClearFilter = true;
             }
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -123,6 +155,9 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsComponent
      */
     public resetFilter(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isNewVersion && this.auditLogFormComponent) {
             this.auditLogFormComponent.resetFilters();
             this.showClearFilter = false;

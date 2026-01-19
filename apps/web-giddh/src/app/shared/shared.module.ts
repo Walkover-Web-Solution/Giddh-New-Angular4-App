@@ -74,6 +74,9 @@ export function provideConfig() {
     return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -178,6 +181,9 @@ export function provideConfig() {
     providers: [
         {
             provide: AuthServiceConfig,
+            /**
+             * Handles useFactory functionality
+             */
             useFactory: (injector: Injector) => {
                 const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
                 return new AuthServiceConfig(
@@ -194,7 +200,15 @@ export function provideConfig() {
         }
     ]
 })
+/**
+ * SharedModule module
+ * Implements SharedModule functionality
+ */
 export class SharedModule {
+    /**
+     * Creates an instance of module
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private injector: Injector){}
     public static forRoot(): ModuleWithProviders<SharedModule> {
         return {

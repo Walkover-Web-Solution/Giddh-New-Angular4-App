@@ -35,6 +35,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ExportMasterDialogComponent } from '../export-master-dialog/export-master-dialog.component';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'account-operations',
     templateUrl: './account-operations.component.html',
@@ -42,6 +45,10 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
     standalone: false
 })
 
+/**
+ * AccountOperationsComponent component
+ * Handles accountoperations functionality and user interactions
+ */
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -157,11 +164,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     /** Emitted when account is updated */
     @Output() public accountUpdated = new EventEmitter<boolean>();
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions, public dialog: MatDialog) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.showNewForm$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNew), takeUntil(this.destroyed$));
         this.showAddNewAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewAccount), takeUntil(this.destroyed$));
@@ -182,19 +196,34 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             (state: AppState) => state.company && state.company.taxes],
             (activeAccount, activeAccountTaxHierarchy, taxes) => {
                 let arr: IOption[] = [];
+                /**
+                 * Handles if functionality
+                 */
                 if (taxes) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (activeAccount) {
                         let applicableTaxes = activeAccount.applicableTaxes.map(p => p?.uniqueName);
 
                         // set isGstEnabledAcc or not
+                        /**
+                         * Handles if functionality
+                         */
                         if (activeAccount.parentGroups[0]?.uniqueName) {
                             let col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                         }
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (activeAccountTaxHierarchy) {
 
+                            /**
+                             * Handles if functionality
+                             */
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
                                 let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
                                 let allTaxes = applicableTaxes?.filter(f => inheritedTaxes?.indexOf(f) === -1);
@@ -253,16 +282,25 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         };
 
         this.activeAccount$.subscribe(account => {
+            /**
+             * Handles if functionality
+             */
             if (account && account.parentGroups[0]?.uniqueName) {
                 let col = account.parentGroups[0]?.uniqueName;
                 this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                 this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
             }
 
+            /**
+             * Handles if functionality
+             */
             if (account && this.breadcrumbUniquePath[1]) {
                 this.isDiscountableAccount$ = observableOf(this.breadcrumbUniquePath[1] === 'sundrydebtors');
                 this.discountAccountForm?.patchValue({ discountUniqueName: account.discounts[0] ? account.discounts[0]?.uniqueName : undefined });
             }
+            /**
+             * Handles if functionality
+             */
             if(account) {
                 this.store.dispatch(this.accountsAction.sharedAccountWith(account.uniqueName));
             }
@@ -290,7 +328,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         });
 
         this.showAddNewGroup$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.breadcrumbPath?.indexOf(this.commonLocaleData?.app_create_group) === -1) {
                     this.breadcrumbPath.push(this.commonLocaleData?.app_create_group);
                 }
@@ -298,7 +342,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         });
 
         this.showAddNewAccount$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.breadcrumbPath?.indexOf(this.commonLocaleData?.app_create_account) === -1) {
                     this.breadcrumbPath.push(this.commonLocaleData?.app_create_account);
                 }
@@ -306,7 +356,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         });
 
         this.activeGroup$.subscribe((group) => {
+            /**
+             * Handles if functionality
+             */
             if (group) {
+                /**
+                 * Handles if functionality
+                 */
                 if (group.uniqueName === 'sundrycreditors' || group.uniqueName === 'sundrydebtors') {
                     this.showGroupLedgerExportButton$ = observableOf(true);
                     this.isDebtorCreditor = true;
@@ -314,6 +370,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                     this.showGroupLedgerExportButton$ = observableOf(false);
                 }
                 this.virtualAccountEnable$.subscribe(s => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (s && s.companyCashFreeSettings && s.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && this.breadcrumbUniquePath[1] === 'sundrydebtors') {
                         this.showVirtualAccount = true;
                     } else {
@@ -321,14 +380,26 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                     }
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.breadcrumbUniquePath) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.breadcrumbUniquePath[0]) {
                         let col = this.breadcrumbUniquePath[0];
                         this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                         this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.breadcrumbUniquePath[1]) {
                         let col = this.breadcrumbUniquePath[1];
+                        /**
+                         * Handles if functionality
+                         */
                         if (col === 'sundrycreditors') {
                             this.showBankDetail = true;
                         } else {
@@ -336,6 +407,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                         }
                     }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (group) {
                     this.store.dispatch(this.groupWithAccountsAction.sharedGroupWith(group.uniqueName));
                 }
@@ -343,12 +417,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         });
 
         this.activeGroupUniqueName$.subscribe((a) => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.isRootLevelGroupFunc(a);
             }
         });
 
         this.moveAccountSuccess$.subscribe(p => {
+            /**
+             * Handles if functionality
+             */
             if (p) {
                 this.moveAccountForm.reset();
             }
@@ -359,12 +439,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         });
 
         this.activeGroupSharedWith$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.groupSharedWith = this.localeData?.shared_with?.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
 
         this.activeAccountSharedWith$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.accountSharedWith = this.localeData?.shared_with?.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
@@ -374,6 +460,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.permissionActions.GetAllPermissions());
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
 
         this.isTaxableAccount$ = this.store.pipe(select(createSelector([
@@ -381,6 +470,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             (activeAccount) => {
                 let result: boolean = false;
                 let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
+                /**
+                 * Handles if functionality
+                 */
                 if (activeGroupUniqueName && activeAccount) {
                     result = this.getAccountFromGroup(activeAccount, false);
                 } else {
@@ -390,6 +482,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             })), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles shareAccount functionality
+     */
     public shareAccount() {
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
@@ -400,10 +495,16 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.shareAccountForm.reset();
     }
 
+    /**
+     * Handles moveToAccountSelected functionality
+     */
     public moveToAccountSelected(event: any) {
         this.moveAccountForm?.patchValue({ moveto: event?.item?.uniqueName });
     }
 
+    /**
+     * Handles moveAccount functionality
+     */
     public moveAccount() {
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
@@ -417,6 +518,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.moveAccountForm.reset();
     }
 
+    /**
+     * Handles unShareGroup functionality
+     */
     public unShareGroup(val) {
         let activeGrp;
         this.activeGroup$.pipe(take(1)).subscribe(p => activeGrp = p);
@@ -424,18 +528,33 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp?.uniqueName));
     }
 
+    /**
+     * Handles unShareAccount functionality
+     */
     public unShareAccount(val) {
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
         this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc?.uniqueName));
     }
 
+    /**
+     * Handles flattenGroup functionality
+     */
     public flattenGroup(rawList: any[], parents: any[] = []): any[] {
         return GroupFlattenHelper.flattenGroup(rawList, parents);
     }
 
+    /**
+     * Handles isRootLevelGroupFunc functionality
+     */
     public isRootLevelGroupFunc(uniqueName: string) {
+        /**
+         * Handles for functionality
+         */
         for (let grp of this.topSharedGroups) {
+            /**
+             * Handles if functionality
+             */
             if (grp?.uniqueName === uniqueName) {
                 this.isRootLevelGroup = true;
                 return;
@@ -445,9 +564,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         }
     }
 
+    /**
+     * Handles flattenAccounts functionality
+     */
     public flattenAccounts(groups: GroupsWithAccountsResponse[] = [], accounts: IAccountsInfo[]): IAccountsInfo[] {
+        /**
+         * Handles each functionality
+         */
         each(groups, grp => {
             accounts.push(...grp.accounts);
+            /**
+             * Handles if functionality
+             */
             if (grp.groups) {
                 this.flattenAccounts(grp.groups, accounts);
             }
@@ -455,6 +583,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         return accounts;
     }
 
+    /**
+     * Handles makeGroupListFlatwithLessDtl functionality
+     */
     public makeGroupListFlatwithLessDtl(rawList: any) {
         let obj;
         obj = map(rawList, (item: any) => {
@@ -468,23 +599,38 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         return obj;
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         this.showTaxes = false;
+        /**
+         * Handles if functionality
+         */
         if ('breadcrumbUniquePath' in changes && changes.breadcrumbUniquePath.currentValue !== changes.breadcrumbUniquePath.previousValue) {
             this.isDebtorCreditor = changes.breadcrumbUniquePath.currentValue.includes('sundrycreditors') || changes.breadcrumbUniquePath.currentValue.includes('sundrydebtors');
             this.showBankDetail = changes.breadcrumbUniquePath.currentValue.includes('sundrycreditors');
         }
     }
 
+    /**
+     * Handles taxHierarchy functionality
+     */
     public taxHierarchy() {
         let activeAccount: AccountResponseV2 = null;
         let activeGroup: GroupResponse = null;
         this.store.pipe(take(1)).subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s.groupwithaccounts) {
                 activeAccount = s.groupwithaccounts.activeAccount;
                 activeGroup = s.groupwithaccounts.activeGroup;
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (activeAccount) {
             this.store.dispatch(this.companyActions.getTax());
             this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
@@ -495,27 +641,45 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     }
 
+    /**
+     * Retrieves accountfromgroup data
+     */
     public getAccountFromGroup(activeGroup: AccountResponseV2, result: boolean): boolean {
+        /**
+         * Handles if functionality
+         */
         if (activeGroup.category === 'income' || activeGroup.category === 'expenses') {
             result = true;
         }
         return result;
     }
 
+    /**
+     * Handles applyTax functionality
+     */
     public applyTax() {
         let activeAccount: AccountResponseV2 = null;
         let activeGroup: GroupResponse = null;
         this.store.pipe(take(1)).subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s.groupwithaccounts) {
                 activeAccount = s.groupwithaccounts.activeAccount;
                 activeGroup = s.groupwithaccounts.activeGroup;
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (activeAccount) {
             let data: ApplyTaxRequest = new ApplyTaxRequest();
             data.isAccount = true;
             data.taxes = [];
             this.activeAccountTaxHierarchy$.pipe(take(1)).subscribe((t) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (t) {
                     (Array.isArray(t.inheritedTaxes) ? t.inheritedTaxes : []).forEach(tt => {
                         (Array.isArray(tt.applicableTaxes) ? tt.applicableTaxes : []).forEach(ttt => {
@@ -573,11 +737,17 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.shareAccountRef?.close();
     }
 
+    /**
+     * Shows addgroupform element
+     */
     public showAddGroupForm() {
         this.store.dispatch(this.groupWithAccountsAction.showAddGroupForm());
         this.groupDetailForm.reset();
     }
 
+    /**
+     * Shows addaccountform element
+     */
     public showAddAccountForm() {
         this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm());
     }
@@ -622,7 +792,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.closeDeleteMergedAccountDialog();
     }
 
+    /**
+     * Handles selectAccount functionality
+     */
     public selectAccount(v: IOption[]) {
+        /**
+         * Handles if functionality
+         */
         if (v?.length) {
             let accounts = [];
             v.map(a => {
@@ -634,15 +810,24 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         }
     }
 
+    /**
+     * Sets accountformovefunc value
+     */
     public setAccountForMoveFunc(v: string) {
         this.setAccountForMove = v;
         this.showDeleteMove = true;
     }
 
+    /**
+     * Handles mergeAccounts functionality
+     */
     public mergeAccounts() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let finalData: AccountMergeRequest[] = [];
+        /**
+         * Handles if functionality
+         */
         if (this.selectedaccountForMerge?.length) {
             this.selectedaccountForMerge.map((acc) => {
                 let obj = new AccountMergeRequest();
@@ -681,6 +866,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.moveMergedAccountRef?.close();
     }
 
+    /**
+     * Handles moveMergeAccountTo functionality
+     */
     public moveMergeAccountTo() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
@@ -693,18 +881,30 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.closeMoveMergedAccountDialog();
     }
 
+    /**
+     * Handles addNewAccount functionality
+     */
     public addNewAccount(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
     }
 
+    /**
+     * Updates existing account
+     */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, accountRequest: AccountRequestV2 }, isAccountArchived?: boolean) {
         accRequestObject.value.isMasterOpen = this.isMasterOpen;
+        /**
+         * Handles if functionality
+         */
         if (isAccountArchived) {
             this.store.dispatch(this.accountsAction.updateAccountV2Patch(accRequestObject?.value, accRequestObject.accountRequest));
         } else {
             this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
         }
         this.updateAccountIsSuccess$.pipe(take(1)).subscribe((isSuccess: boolean) => {
+            /**
+             * Handles if functionality
+             */
             if (isSuccess) {
                 this.accountUpdated.emit(true);
             }
@@ -732,6 +932,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.deleteAccountRef?.close();
     }
 
+    /**
+     * Deletes account
+     */
     public deleteAccount() {
         let activeAccUniqueName = null;
         this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
@@ -741,7 +944,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.closeDeleteAccountDialog();
     }
 
+    /**
+     * Handles customMoveGroupFilter functionality
+     */
     public customMoveGroupFilter(term: string, item: IOption): boolean {
+        /**
+         * Handles return functionality
+         */
         return (item?.label?.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value?.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
@@ -766,6 +975,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public hideGroupExportModal(response: any) {
         this.groupExportLedgerRef?.close();
         this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
+            /**
+             * Handles if functionality
+             */
             if (response !== 'close') {
                 this.groupExportLedgerBodyRequest.from = response.body?.from;
                 this.groupExportLedgerBodyRequest.to = response.body?.to;
@@ -779,6 +991,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.groupExportLedgerBodyRequest.sort = response.body?.sort ? 'ASC' : 'DESC';
                 this.groupExportLedgerBodyRequest.fileType = response.fileType;
                 this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'success') {
                         this.router.navigate(["/pages/downloads/exports"]);
                         this.toaster.showSnackBar("success", response?.body);
@@ -796,6 +1011,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
      * This will use for hide group export account modal
      */
     public hideAccountGroupExportModal(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.groupExportLedgerRef?.close();
             this.router.navigate(['pages/downloads']);
@@ -803,16 +1021,28 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
 
+    /**
+     * Handles isGroupSelected functionality
+     */
     public isGroupSelected(event) {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.activeGroupUniqueName$ = observableOf(event.value);
             // in case of sundrycreditors or sundrydebtors no need to show address tab
+            /**
+             * Handles if functionality
+             */
             if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
                 this.isDebtorCreditor = true;
             }
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -826,6 +1056,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public getDiscountList(): void {
         this.discounts = [];
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length > 0) {
                 Object.keys(response?.body).forEach(key => {
                     this.discounts.push({

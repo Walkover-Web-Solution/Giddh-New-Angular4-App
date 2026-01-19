@@ -14,7 +14,13 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
+    /**
+     * Handles return functionality
+     */
     return (field: UntypedFormControl): { [key: string]: any } => {
+        /**
+         * Handles if functionality
+         */
         if (!field?.value) {
             return null;
         }
@@ -28,6 +34,9 @@ function validateFieldWithPatterns(patterns: Array<string>) {
                 return pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             });
 
+        /**
+         * Handles if functionality
+         */
         if (safePatterns.length === 0) {
             return null;
         }
@@ -54,16 +63,27 @@ function validateFieldWithPatterns(patterns: Array<string>) {
 }
 
 /** Enum for tax type name */
+/**
+ * TaxTypeNameEnum enumeration
+ * Defines constant values for TaxTypeNameEnum
+ */
 enum TaxTypeNameEnum {
     GSTIN = 'GSTIN'
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'create-address',
     templateUrl: './create-address.component.html',
     styleUrls: ['./create-address.component.scss'],
     standalone: false
 })
+/**
+ * CreateAddressComponent component
+ * Handles createaddress functionality and user interactions
+ */
 export class CreateAddressComponent implements OnInit, OnDestroy {
     /** Emits when aside menu is closed */
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
@@ -115,6 +135,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     /** Holds the type of address configuration */
     public addressConfigurationType: typeof SettingsAsideFormType = SettingsAsideFormType;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toasterService: ToasterService,
@@ -135,6 +159,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(entity => !entity?.isConsolidated);
         this.setFormData();
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
             }
@@ -147,6 +174,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.addressConfiguration && changes.addressConfiguration.currentValue !== changes.addressConfiguration.previousValue && (this.addressConfiguration?.stateList?.length || this.addressConfiguration?.countyList?.length || this.addressConfiguration?.
             linkedEntities)) {
             this.setFormData();
@@ -159,8 +189,14 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public checkGstNumValidation(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid) {
             this.toasterService.clearAllToaster();
+            /**
+             * Handles if functionality
+             */
             if (this.addressConfiguration.tax.name === TaxTypeNameEnum.GSTIN) {
                 this.getGstConfirmationPopup();
             }
@@ -177,8 +213,14 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     * @memberof CreateAddressComponent
     */
     public getGstConfirmationPopup(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.addressForm.get('taxNumber')?.value) {
             this.commonService.getGstInformationDetails(this.addressForm.get('taxNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                /**
+                 * Handles if functionality
+                 */
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
                                 width: '40%',
@@ -191,6 +233,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                             }
                     });
                     dialogRef.afterClosed().subscribe(response => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response) {
                             let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
                             this.addressForm.get('name')?.patchValue(result.body?.lgnm);
@@ -222,6 +267,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * Filter linked entities based on archived status
      */
     private filterLinkedEntities(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress ||
             this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
             this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(
@@ -235,6 +283,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * Create form based on configuration type
      */
     private createFormBasedOnType(): void {
+        /**
+         * Handles switch functionality
+         */
         switch (this.addressConfiguration.type) {
             case SettingsAsideFormType.CreateAddress:
             case SettingsAsideFormType.CreateBranchAddress:
@@ -275,6 +326,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * Create form for editing address
      */
     private createEditAddressForm(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.addressToUpdate) return;
 
         const taxValidatorPatterns = this.getTaxValidatorPatterns();
@@ -301,6 +355,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * Create form for editing branch
      */
     private createEditBranchForm(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.branchToUpdate) return;
 
         this.addressForm = this.formBuilder.group({
@@ -316,6 +373,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * Create form for editing warehouse
      */
     private createEditWarehouseForm(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.warehouseToUpdate) return;
 
         this.addressForm = this.formBuilder.group({
@@ -368,11 +428,17 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     private updateLinkedEntityDefaults(linkedEntities: any[]): void {
         const entityList = [...linkedEntities];
+        /**
+         * Handles while functionality
+         */
         while (entityList?.length) {
             const entity = entityList.pop();
             const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(
                 linkEntity => linkEntity?.uniqueName === entity?.uniqueName
             );
+            /**
+             * Handles if functionality
+             */
             if (entityIndex > -1) {
                 this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
             }
@@ -383,6 +449,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * Set default organization entity for new address
      */
     private setDefaultOrganizationEntity(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.currentOrganizationUniqueName && this.addressConfiguration?.linkedEntities?.some(
             entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
             const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(
@@ -396,6 +465,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * Handle hidden link entity scenario
      */
     private handleHiddenLinkEntity(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress && this.hideLinkEntity) {
             this.addressConfiguration?.linkedEntities?.forEach(option => {
                 this.addressForm.get('linkedEntity')?.patchValue([
@@ -410,9 +482,15 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * Setup form validators based on tax configuration
      */
     private setupFormValidators(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isGSTINTaxType()) {
             const taxField = this.addressForm.get('taxNumber');
             taxField?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+                /**
+                 * Handles if functionality
+                 */
                 if (taxField.valid && taxField?.value) {
                     this.addressForm.get('address').setValidators([Validators.required]);
                 } else {
@@ -428,12 +506,18 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     private setupFormSubscriptions(): void {
         this.addressForm?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (this.addressForm?.dirty) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
 
         this.addressForm?.get('taxNumber')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            /**
+             * Handles if functionality
+             */
             if (value !== null && value !== undefined && this.isGSTINTaxType()) {
                 this.getStateCode(value);
             }
@@ -447,10 +531,16 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public closeAsidePane(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.addressForm?.dirty) {
             document.querySelector("create-address")?.classList?.add("page-leave-confirmation-showing");
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 document.querySelector("create-address")?.classList?.remove("page-leave-confirmation-showing");
+                /**
+                 * Handles if functionality
+                 */
                 if (action) {
                     this.closeAsideEvent.emit(event);
                 }
@@ -480,7 +570,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
         let tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
+        /**
+         * Handles if functionality
+         */
         if (!this.hideLinkEntity || this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
+            /**
+             * Handles if functionality
+             */
             if (Array.isArray(this.addressForm.get('linkedEntity')?.value)) {
                 let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
                     return item = item.uniqueName;
@@ -489,24 +585,42 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             const taxField = this.addressForm.get('taxNumber');
+            /**
+             * Handles if functionality
+             */
             if (taxField?.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === TaxTypeNameEnum.GSTIN) {
                 // Tax is valid and has value then address is mandatory for GST taxes
                 const addresssValue = (this.addressForm.get('address')?.value || '')?.trim();
                 this.addressForm.get('address').setValue(addresssValue);
+                /**
+                 * Handles if functionality
+                 */
                 if (!addresssValue) {
                     return;
                 }
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.addressForm?.get('taxNumber')?.value) {
             const trimmedTaxNumber = this.addressForm?.get('taxNumber')?.value?.trim();
             this.addressForm?.get('taxNumber')?.patchValue(trimmedTaxNumber);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.addressForm?.get('alias')?.value) {
             this.addressForm?.get('name')?.patchValue(this.addressForm?.get('alias').value);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             this.saveAddress.emit({
                 formValue: this.addressForm.getRawValue(),
@@ -520,6 +634,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 hideLinkEntity: this.hideLinkEntity
             });
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.hideLinkEntity || this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
             this.addressForm.get('linkedEntity').patchValue(tempAddressFormData);
         }
@@ -534,15 +651,27 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     private getStateCode(taxValue: string): void {
         let gstVal: string = taxValue?.trim();
+        /**
+         * Handles if functionality
+         */
         if (gstVal?.length) {
+            /**
+             * Handles if functionality
+             */
             if (gstVal.length >= 2) {
                 let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
+                /**
+                 * Handles if functionality
+                 */
                 if (currentState) {
                     this.addressForm?.get('stateLabel')?.patchValue(currentState?.label ?? null);
                     this.addressForm.get('state')?.patchValue(currentState?.value);
                 } else {
                     this.addressForm.get('state')?.patchValue(null);
                     this.addressForm?.get('stateLabel')?.patchValue(null);
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.addressConfiguration?.tax?.name && !this.addressForm.get('taxNumber')?.valid) {
                         let message = this.commonLocaleData?.app_invalid_tax_name;
                         message = message?.replace("[TAX_NAME]", this.addressConfiguration.tax.name);
@@ -569,14 +698,23 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public setDefault(option: any, event: any): void {
         event.stopPropagation();
         event.preventDefault();
+        /**
+         * Handles if functionality
+         */
         if (!option.isDefault) {
             (Array.isArray(this.addressConfiguration.linkedEntities) ? this.addressConfiguration.linkedEntities : []).forEach(entity => {
+                /**
+                 * Handles if functionality
+                 */
                 if (entity?.value !== option?.value) {
                     entity.isDefault = false;
                 }
             });
         }
         option.isDefault = !option.isDefault;
+        /**
+         * Handles if functionality
+         */
         if (option.isDefault) {
             this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value, option]);
         }
@@ -589,6 +727,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public selectEntity(option: any): void {
+        /**
+         * Handles if functionality
+         */
         if (option?.isDefault) {
             option.isDefault = false;
         }
@@ -613,6 +754,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedEntities: Array<any>): void {
         (Array.isArray(this.addressConfiguration.linkedEntities) ? this.addressConfiguration.linkedEntities : []).forEach(entity => {
+            /**
+             * Handles if functionality
+             */
             if (!selectedEntities?.includes(entity?.uniqueName)) {
                 entity.isDefault = false;
             }
@@ -665,6 +809,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public clearForm(): void {
         this.selectedEntity = [];
+        /**
+         * Handles if functionality
+         */
         if (this.addressConfiguration.type === 'createAddress' || this.addressConfiguration.type === 'createBranchAddress') {
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             this.addressForm.markAsPristine();

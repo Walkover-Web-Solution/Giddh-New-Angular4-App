@@ -5,6 +5,9 @@ import { ReplaySubject } from 'rxjs';
 import { cloneDeep } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-aside-menu-other-taxes',
     templateUrl: './aside-menu-other-taxes.html',
@@ -12,6 +15,10 @@ import { IOption } from '../../app.constant';
     host: { 'class': 'app-aside-menu-other-taxes' },
     standalone: false
 })
+/**
+ * AsideMenuOtherTaxes class
+ * Implements AsideMenuOtherTaxes functionality
+ */
 export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
     @Input() public otherTaxesModal: SalesOtherTaxesModal;
@@ -29,10 +36,17 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     /** Selected calculation method label */
     public selectedCalculationMethod: any;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
     ) {
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         document.querySelector("body").classList.add("aside-menu-othertax-open");
         this.addZindexCdkOverlay();
@@ -50,29 +64,53 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method?.value === this.otherTaxesModal?.tcsCalculationMethod);
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
             this.otherTaxesModal = changes.otherTaxesModal.currentValue;
 
             this.defaultOtherTaxesModal = cloneDeep(changes.otherTaxesModal.currentValue);
 
+            /**
+             * Handles if functionality
+             */
             if (this.defaultOtherTaxesModal.appliedOtherTax) {
                 this.selectedTaxUniqueName = this.defaultOtherTaxesModal.appliedOtherTax.uniqueName;
                 this.applyTax({ label: this.defaultOtherTaxesModal.appliedOtherTax.name, value: this.defaultOtherTaxesModal.appliedOtherTax.uniqueName });
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.calculationMethodOptions?.length > 0) {
                 this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method?.value === this.otherTaxesModal.tcsCalculationMethod);
             }
         }
     }
 
+    /**
+     * Handles applyTax functionality
+     */
     public applyTax(tax: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (tax && tax?.value) {
             this.defaultOtherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
+            /**
+             * Handles if functionality
+             */
             if (!this.selectedTaxUniqueName) {
                 let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
                 const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
+                /**
+                 * Handles if functionality
+                 */
                 if (!isTdsTax) {
                     this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
                 } else {
@@ -82,11 +120,17 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles clear event
+     */
     public onClear(): void {
         this.defaultOtherTaxesModal.appliedOtherTax = null;
         this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
     }
 
+    /**
+     * Saves taxes data
+     */
     public saveTaxes(): void {
         this.otherTaxesModal = cloneDeep(this.defaultOtherTaxesModal);
         this.applyTaxes.emit(this.otherTaxesModal);
@@ -110,6 +154,9 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      * @memberof AsideMenuOtherTaxes
      */
     public closeTaxesModal(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.target?.className?.indexOf("option") === -1) {
             this.closeModal.emit(true);
         }
@@ -122,6 +169,9 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      * @memberof AsideMenuOtherTaxes
      */
     public onCalculateTax(tax: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (tax && tax.value) {
             this.defaultOtherTaxesModal.tcsCalculationMethod = (tax.value === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) ? SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount : SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
         }

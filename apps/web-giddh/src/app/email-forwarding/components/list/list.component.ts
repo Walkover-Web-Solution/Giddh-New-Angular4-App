@@ -13,6 +13,9 @@ import { EmailForwardingComponentStore } from '../../store/email-forwarding.stor
 import { Router } from '@angular/router';
 import { ToasterService } from '../../../services/toaster.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'email-forwarding-list',
     templateUrl: './list.component.html',
@@ -20,6 +23,10 @@ selector: 'email-forwarding-list',
     providers: [EmailForwardingComponentStore],
     standalone: false
 })
+/**
+ * ListComponent component
+ * Handles list functionality and user interactions
+ */
 export class ListComponent implements OnInit, OnDestroy {
     /** Subject to handle component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -53,6 +60,10 @@ export class ListComponent implements OnInit, OnDestroy {
     /** Branch unique name */  
     private branchUniqueName: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private router: Router,
         private bankStatementStore: EmailForwardingComponentStore,
@@ -73,14 +84,23 @@ export class ListComponent implements OnInit, OnDestroy {
         this.loadEmailForwardingData();
         this.setupSubscriptions();
         this.bankStatementStore.deleteEmailForwardingIsSuccess$.pipe(filter(Boolean),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(() => {
             this.loadEmailForwardingData();
         });
 
         this.bankStatementStore.generatedEmail$.pipe(
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((forwardedMail: string | null) => {
+            /**
+             * Handles if functionality
+             */
             if (forwardedMail) {
                 this.router.navigate(['pages/email-forwarding/create'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName, forwardedMail } });
             }
@@ -95,9 +115,18 @@ export class ListComponent implements OnInit, OnDestroy {
      */
     private setupSubscriptions(): void {
         this.bankStatementStore.emailForwardingList$.pipe(
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((emailForwardingList) => {
+            /**
+             * Handles if functionality
+             */
             if (emailForwardingList) {
+                /**
+                 * Handles if functionality
+                 */
                 if (emailForwardingList.length === 0) {
                     this.router.navigate(['pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
                 }
@@ -107,6 +136,9 @@ export class ListComponent implements OnInit, OnDestroy {
         });
 
         this.bankStatementStore.isLoading$.pipe(
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((isLoading) => {
             this.isLoading.set(isLoading);
@@ -130,6 +162,9 @@ export class ListComponent implements OnInit, OnDestroy {
      * @memberof ListComponent
      */
     public createNew(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isLoading()) {
             return;
         }
@@ -154,6 +189,9 @@ export class ListComponent implements OnInit, OnDestroy {
             }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.bankStatementStore.deleteEmailForwarding(uniqueName);
             }
@@ -168,6 +206,9 @@ export class ListComponent implements OnInit, OnDestroy {
      */
     public editStatement(element: EmailForwardingResponse): void {
         const queryParams = { companyUniqueName: this.companyUniqueName, forwardedMail: element.forwardedMail};
+        /**
+         * Handles if functionality
+         */
         if (element && element.confirmationData?.length > 0) {
             queryParams['step'] = 2;
         } else {
@@ -186,6 +227,9 @@ export class ListComponent implements OnInit, OnDestroy {
      * @memberof ListComponent
      */
     public onCopyForwardedMail(event: MouseEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             event.stopPropagation();
         }

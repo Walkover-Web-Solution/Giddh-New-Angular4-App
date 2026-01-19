@@ -24,6 +24,9 @@ import { ArchiveSalesPersonComponent } from './archive/archive.component';
 import { MobileNumberInputComponent } from '../mobile-number-input';
 import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-sales-person',
     standalone: true,
@@ -49,6 +52,10 @@ import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keybo
     providers: [SalesPersonService, SalesPersonComponentStore]
 })
 
+/**
+ * SalesPersonComponent component
+ * Handles salesperson functionality and user interactions
+ */
 export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
     /** ViewChild reference for name field */
     @ViewChild('nameField') nameField: InputFieldComponent;
@@ -109,6 +116,10 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Voucher API Version */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesPersonData: any,
         public dialogRef: MatDialogRef<any>,
@@ -143,6 +154,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         })).subscribe();
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.totalResults = res.totalItems;
             }
@@ -167,6 +181,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             });
             dialogRef.afterClosed().subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response === this.commonLocaleData?.app_yes) {
                     this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_archive, this.localeData?.archive_alternative_message, this.localeData?.transfer_and_archive);
                 } else {
@@ -181,6 +198,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
             this.transferAndDeleteDialogRef?.close();
             this.transferAndArchiveDialogRef?.close();
             this.salesPersonListIsModified = true;
+            /**
+             * Handles if functionality
+             */
             if (this.salesPersonData?.activeSalePersonUniqueName === response.uniqueName) {
                 this.activeSalePersonIsTransfer = response;
             }
@@ -218,6 +238,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public onSubmit(): void {
         this.isFormSubmitted = true;
+        /**
+         * Handles if functionality
+         */
         if (this.salesPersonForm?.valid) {
             this.salesPersonAction(this.isEditMode ? SalesPersonActionEnum.UPDATE : SalesPersonActionEnum.CREATE, this.salesPersonUniqueName);
         }
@@ -232,6 +255,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public salesPersonAction(action: SalesPersonActionEnum, element?: any): void {
         const salesPersonForm = this.salesPersonForm?.value;
+        /**
+         * Handles switch functionality
+         */
         switch (action) {
             case SalesPersonActionEnum.CREATE:
                 this.componentStore.createUpdateSalesPerson({ model: salesPersonForm, uniqueName: null });
@@ -240,6 +266,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.componentStore.createUpdateSalesPerson({ model: salesPersonForm, uniqueName: this.salesPersonUniqueName });
                 break;
             case SalesPersonActionEnum.DELETE:
+                /**
+                 * Handles if functionality
+                 */
                 if (!element?.linkedEntities?.length) {
                     // Show delete confirmation only if sales person is not linked with any account/entry/voucher
                     const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
@@ -253,6 +282,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                     });
                     dialogRef.afterClosed().subscribe(response => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response === this.commonLocaleData?.app_yes) {
                             this.salesPersonUniqueName = element?.uniqueName;
                             this.componentStore.deleteSalesPerson(element?.uniqueName);
@@ -260,6 +292,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.focusInputField();
                     });
                 } else {
+                     /**
+                      * Handles if functionality
+                      */
                      if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                         this.salesPersonUniqueName = element?.uniqueName;
                         this.componentStore.patchState({
@@ -279,12 +314,18 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.currentSalesPerson = element;
                 this.initForm(element);
                 this.openMatExpansionPanel = false;
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.openMatExpansionPanel = true;
                     this.focusInputField();
                 }, 0);
                 break;
             case SalesPersonActionEnum.ARCHIVE:
+                /**
+                 * Handles if functionality
+                 */
                 if (element.archiveStatus === SalesPersonArchiveEnum.ARCHIVE) {
                     const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                         panelClass: ['mat-dialog-sm'],
@@ -297,6 +338,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                     });
                     dialogRef.afterClosed().subscribe(response => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response === this.commonLocaleData?.app_yes) {
                             this.componentStore.archiveUnarchiveSalesPerson({ model: { action: ActionTypeEnum.UNARCHIVED }, uniqueName: element?.uniqueName });
                         }
@@ -320,7 +364,13 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof SalesPersonComponent
      */
     private focusInputField(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.nameField && typeof this.nameField.inputFocus === 'function') {
                 this.nameField.inputFocus();
             }
@@ -334,6 +384,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public closeDialog(): void {
         let response = null;
+        /**
+         * Handles if functionality
+         */
         if (this.salesPersonListIsModified) {
             response = {
                 isTransfer: this.activeSalePersonIsTransfer
@@ -383,6 +436,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
         this.transferAndDeleteDialogRef.afterClosed().subscribe(model => {
+            /**
+             * Handles if functionality
+             */
             if (model) {
                 this.componentStore.archiveUnarchiveSalesPerson({ model: model, uniqueName: this.salesPersonUniqueName });
             }

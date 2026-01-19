@@ -14,6 +14,9 @@ import { cloneDeep, find, forEach, map, some } from '../../lodash-optimized';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'upload-file',
     templateUrl: './upload-file.component.html',
@@ -22,6 +25,10 @@ import { VoucherType } from '../../ledger/components/import-statement/import-sta
     standalone: false
 })
 
+/**
+ * UploadFileComponent component
+ * Handles uploadfile functionality and user interactions
+ */
 export class UploadFileComponent implements OnInit, OnDestroy {
     @Input() public isLoading: boolean;
     @Input() public entity: string;
@@ -76,6 +83,10 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     /** Holds a reference to the `VoucherType` enum */
     public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import/
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private activatedRoute: ActivatedRoute,
@@ -88,11 +99,17 @@ export class UploadFileComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Handles filechange event
+     */
     public onFileChange(file: FileList) {
         let validExts = ['csv', 'xls', 'xlsx'];
         let type = (file && file.item(0)) ? this.getExt(file.item(0).name) : 'null';
         let isValidFileType = validExts.some(s => type === s);
 
+        /**
+         * Handles if functionality
+         */
         if (!isValidFileType) {
             this.toasterService.errorToast(this.localeData?.invalid_file_type);
             this.selectedFileName = '';
@@ -101,6 +118,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         }
 
         this.file = file.item(0);
+        /**
+         * Handles if functionality
+         */
         if (this.file) {
             this.selectedFileName = this.file.name;
         } else {
@@ -108,18 +128,30 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles downloadSampleFile functionality
+     */
     public async downloadSampleFile(entity: string, isCsv: boolean = false) {
         const fileUrl = SAMPLE_FILES_URL + `${entity}.${isCsv ? 'csv' : 'xlsx'}`;
         const fileName = `${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
+            /**
+             * Saves as data
+             */
             saveAs(blob, fileName);
         } catch (e) {
             console.log('error while downloading sample file :', e);
         }
     }
 
+    /**
+     * Retrieves ext data
+     */
     public getExt(path) {
+        /**
+         * Handles return functionality
+         */
         return (path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop(-1) : 'null';
     }
 
@@ -133,18 +165,30 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         this.voucherListResponse = this.generalService.getVoucherTypeList(this.commonLocaleData, ['sales', 'purchase', 'receipt', 'payment', 'journal', 'contra', 'debit note', 'credit note', 'advance-receipt']);
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data) {
                 this.entity = data.type;
                 this.setTitle();
+                /**
+                 * Handles if functionality
+                 */
                 if (this.entity === this.voucherType.AccountWise && !this.accountSearchRequest.isLoading) {
                     this.searchAccount();
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.entity === "banktransactions") {
                     this.router.navigate(['/pages/import/select-type']);
                 }
@@ -152,12 +196,18 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         });
         this.setTitle();
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -168,6 +218,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
                 const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
@@ -175,6 +228,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                     this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -183,12 +239,18 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         });
 
         this.ledgerComponentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
+            /**
+             * Handles if functionality
+             */
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
                 const currentOptions = this.accountSearchResponseSubject.value;
                 const newOptions = [...currentOptions];
 
                 accountSearchResponse.results?.forEach(result => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (result?.uniqueName) {
                         newOptions.push({
                             value: result.uniqueName,
@@ -209,6 +271,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      * @memberof UploadFileComponent
      */
     public setTitle(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.entity === 'group') {
             this.title = this.localeData?.groups;
         } else if (this.entity === 'account') {
@@ -266,6 +331,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     * @memberof UploadFileComponent
     */
     public searchAccount(query: string = '', page: number = 1): void {
+        /**
+         * Handles if functionality
+         */
         if (page === 1) {
             this.accountSearchResponseSubject.next([]);
         }
@@ -295,9 +363,15 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      * @memberof UploadFileComponent
      */
     public handleSearchAccountScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountSearchRequest.isLoading) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.defaultCount === this.accountSearchRequest.count) {
             this.searchAccount(this.accountSearchRequest.q, this.accountSearchRequest.page + 1);
         }

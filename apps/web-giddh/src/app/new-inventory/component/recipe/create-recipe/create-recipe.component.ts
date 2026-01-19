@@ -9,6 +9,9 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { cloneDeep, filter, forEach, isEqual } from '../../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'create-recipe',
 
@@ -17,6 +20,10 @@ import { cloneDeep, filter, forEach, isEqual } from '../../../../lodash-optimize
     styleUrls: ['./create-recipe.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+/**
+ * CreateRecipeComponent component
+ * Handles createrecipe functionality and user interactions
+ */
 export class CreateRecipeComponent implements OnChanges, OnDestroy {
     /** Stock object */
     @Input() public stock: any = {};
@@ -47,6 +54,10 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     /** True ifi is by product link expanded*/
     private isByLinkedStockExpanded: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private inventoryService: InventoryService,
         private ledgerService: LedgerService,
@@ -65,10 +76,16 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      * @memberof CreateRecipeComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.stock?.currentValue && changes?.stock?.firstChange) {
             this.variantsList = [];
 
             changes?.stock?.currentValue?.variants?.forEach(variant => {
+                /**
+                 * Handles if functionality
+                 */
                 if (variant?.uniqueName) {
                     this.variantsList.push({
                         label: variant.name,
@@ -80,6 +97,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             this.getVariantRecipe();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes?.variants?.currentValue) {
             this.newVariants = changes?.variants?.currentValue?.filter(variant => !variant?.uniqueName);
         }
@@ -137,6 +157,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             isEdit: true
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.variantsList?.length === 1) {
             this.recipeObject.manufacturingDetails[0].variant.name = this.variantsList[0].label;
             this.recipeObject.manufacturingDetails[0].variant.uniqueName = this.variantsList[0].value;
@@ -144,6 +167,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         this.getStocks(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1].linkedStocks[0], 1, "");
         this.getAllStocks(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1].byProducts[0], 1, "");
 
+        /**
+         * Handles if functionality
+         */
         if (!this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1]?.units?.length) {
             this.getStockUnits(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1], this.stock.stockUnitUniqueName, true).subscribe(updatedObject => {
                 this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1] = updatedObject;
@@ -151,6 +177,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         }
 
         (Array.isArray(this.recipeObject.manufacturingDetails) ? this.recipeObject.manufacturingDetails : []).forEach(data => {
+            /**
+             * Handles if functionality
+             */
             if (data?.linkedStocks[0]
                 ?.variant.uniqueName || data?.byProducts[0]
                     ?.variant.uniqueName) {
@@ -226,12 +255,18 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      * @memberof CreateRecipeComponent
      */
     public getStocks(stockObject: any, page: number = 1, q?: string, callback?: Function, assignDataAndCallback: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (page > stockObject?.stocksTotalPages || this.preventStocksApiCall || q === undefined) {
             return;
         }
 
         this.preventStocksApiCall = true;
 
+        /**
+         * Handles if functionality
+         */
         if (q) {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
@@ -240,9 +275,18 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
 
         stockObject.stocksPageNumber = page;
         this.inventoryService.getStocksV2({ inventoryType: this.stock.type, page: page, q: q }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.results?.length) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!callback || assignDataAndCallback) {
                     stockObject.stocksTotalPages = response.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         stockObject.stocks = [];
                     }
@@ -255,10 +299,19 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
 
                         stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
                     });
+                    /**
+                     * Handles if functionality
+                     */
                     if (assignDataAndCallback) {
+                        /**
+                         * Handles callback functionality
+                         */
                         callback(response);
                     }
                 } else {
+                    /**
+                     * Handles callback functionality
+                     */
                     callback(response);
                 }
             } else {
@@ -266,6 +319,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                 stockObject.stocksTotalPages = 1;
             }
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventStocksApiCall = false;
                 this.changeDetectionRef.detectChanges();
@@ -284,12 +340,18 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
    * @memberof CreateRecipeComponent
    */
     public getAllStocks(stockObject: any, page: number = 1, q?: string, callback?: Function, assignDataAndCallback: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (page > stockObject?.stocksTotalPages || this.preventByProductStocksApiCall || q === undefined) {
             return;
         }
 
         this.preventByProductStocksApiCall = true;
 
+        /**
+         * Handles if functionality
+         */
         if (q) {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
@@ -298,9 +360,18 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
 
         stockObject.stocksPageNumber = page;
         this.inventoryService.getStocksV2({ inventoryType: '', page: page, q: q }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.results?.length) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!callback || assignDataAndCallback) {
                     stockObject.stocksTotalPages = response.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         stockObject.stocks = [];
                     }
@@ -313,10 +384,19 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
 
                         stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
                     });
+                    /**
+                     * Handles if functionality
+                     */
                     if (assignDataAndCallback) {
+                        /**
+                         * Handles callback functionality
+                         */
                         callback(response);
                     }
                 } else {
+                    /**
+                     * Handles callback functionality
+                     */
                     callback(response);
                 }
             } else {
@@ -324,6 +404,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                 stockObject.stocksTotalPages = 1;
             }
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventByProductStocksApiCall = false;
                 this.changeDetectionRef.detectChanges();
@@ -368,6 +451,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         object.stockUniqueName = event?.value;
         object.stockName = event?.label;
 
+        /**
+         * Handles if functionality
+         */
         if (!object.stockUniqueName) {
             return;
         }
@@ -376,12 +462,21 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         object.variants = [];
 
         this.ledgerService.loadStockVariants(object.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(variants => {
+            /**
+             * Handles if functionality
+             */
             if (variants?.length) {
                 variants?.forEach(variant => {
                     object.variants.push({ label: variant?.name, value: variant?.uniqueName });
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!isEdit) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (object.variants?.length === 1) {
                         object.variant = {
                             name: object.variants[0].label,
@@ -425,6 +520,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      * @memberof CreateRecipeComponent
      */
     public getStockUnits(object: any, stockUnitUniqueName: string, isFinishedStock: boolean, isEdit: boolean = false): Observable<any> {
+        /**
+         * Handles if functionality
+         */
         if (!stockUnitUniqueName) {
             return of(null);
         }
@@ -432,10 +530,19 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         object.units = [];
 
         // Finished stock case (sync)
+        /**
+         * Handles if functionality
+         */
         if (isFinishedStock && this.recipeObject.manufacturingDetails[0]?.units?.length) {
             object.units = cloneDeep(this.recipeObject.manufacturingDetails[0]?.units);
 
+            /**
+             * Handles if functionality
+             */
             if (!isEdit) {
+                /**
+                 * Handles if functionality
+                 */
                 if (object.units.length === 1) {
                     object.manufacturingUnitCode = object.units[0].label;
                     object.manufacturingUnitUniqueName = object.units[0].value;
@@ -450,15 +557,30 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
 
         // async case
         return this.manufacturingService.loadStockUnits(stockUnitUniqueName).pipe(
+            /**
+             * Handles tap functionality
+             */
             tap(units => {
+                /**
+                 * Handles if functionality
+                 */
                 if (units?.length) {
                     object.units = units.map(unit => ({
                         label: unit.code,
                         value: unit.uniqueName
                     }));
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (!isEdit) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (object.units.length === 1) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (isFinishedStock) {
                                 object.manufacturingUnitCode = object.units[0].label;
                                 object.manufacturingUnitUniqueName = object.units[0].value;
@@ -467,6 +589,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                 object.stockUnitUniqueName = object.units[0].value;
                             }
                         } else {
+                            /**
+                             * Handles if functionality
+                             */
                             if (isFinishedStock) {
                                 object.manufacturingUnitCode = "";
                                 object.manufacturingUnitUniqueName = "";
@@ -478,6 +603,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     }
                 }
             }),
+            /**
+             * Handles map functionality
+             */
             map(() => object)
         );
     }
@@ -492,8 +620,14 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      * @memberof CreateRecipeComponent
      */
     public checkIfVariantIsAlreadyUsed(selectedRecipe: any, event: any, index: number): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             let isSelected = this.recipeObject.manufacturingDetails?.filter((recipe, i) => { return recipe?.variant?.uniqueName === event.value && i !== index });
+            /**
+             * Handles if functionality
+             */
             if (isSelected?.length) {
                 selectedRecipe.variant.name = "";
                 selectedRecipe.variant.uniqueName = "";
@@ -509,6 +643,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public getVariantRecipe(): void {
         this.manufacturingService.getVariantRecipe(this.stock.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
                 this.recipeExists = true;
                 this.getStocks({}, 1, "", (data: any) => {
@@ -523,10 +660,16 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     });
 
                     response?.body?.manufacturingDetails?.forEach((manufacturingDetail, index) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.recipeObject.manufacturingDetails) {
                             this.recipeObject.manufacturingDetails = [];
                             this.recipeObject.manufacturingDetails[index] = [];
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.recipeObject.manufacturingDetails[index]) {
                             this.recipeObject.manufacturingDetails[index] = [];
                         }
@@ -542,6 +685,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         });
 
                         let linkedStockIndex = 0;
+                        /**
+                         * Handles if functionality
+                         */
                         if (!manufacturingDetail?.linkedStocks?.length) {
                             this.recipeObject.manufacturingDetails[index].linkedStocks?.push(
                                 {
@@ -600,10 +746,16 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     });
 
                     response?.body?.manufacturingDetails?.forEach((manufacturingDetail, index) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.recipeObject.manufacturingDetails) {
                             this.recipeObject.manufacturingDetails = [];
                             this.recipeObject.manufacturingDetails[index] = [];
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.recipeObject.manufacturingDetails[index]) {
                             this.recipeObject.manufacturingDetails[index] = [];
                         }
@@ -613,6 +765,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                             this.recipeObject.manufacturingDetails[index] = updatedObject;
                         });
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (!manufacturingDetail?.byProducts?.length) {
                             this.recipeObject.manufacturingDetails[index].byProducts?.push(
                                 {
@@ -666,6 +821,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                 this.existingRecipe = [];
                 this.addNewRecipe();
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.variantsList?.length === 1) {
                     this.recipeObject.manufacturingDetails[0].variant.name = this.variantsList[0].label;
                     this.recipeObject.manufacturingDetails[0].variant.uniqueName = this.variantsList[0].value;
@@ -694,6 +852,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.recipeObject.manufacturingDetails[recipeIndex].linkedStocks = this.recipeObject.manufacturingDetails[recipeIndex].linkedStocks?.filter((linkedStock, i) => i !== index);
                 this.changeDetectionRef.detectChanges();
@@ -721,7 +882,13 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.recipeObject.manufacturingDetails[0].byProducts.length === 1) {
                     this.recipeObject.manufacturingDetails[0].byProducts = [
                         {
@@ -763,6 +930,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.recipeObject.manufacturingDetails = this.recipeObject.manufacturingDetails?.filter((recipe, i) => i !== index);
                 this.changeDetectionRef.detectChanges();
@@ -778,10 +948,16 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public formatRecipeRequest(): any {
         let recipeObject = { manufacturingDetails: [] };
+        /**
+         * Handles if functionality
+         */
         if (!this.recipeObject?.manufacturingDetails) {
             return recipeObject; // Return empty recipeObject if manufacturingDetails is missing
         }
         this.recipeObject.manufacturingDetails?.forEach(manufacturingDetail => {
+            /**
+             * Handles if functionality
+             */
             if (manufacturingDetail?.variant?.uniqueName && ((manufacturingDetail?.linkedStocks?.length > 0 && manufacturingDetail.linkedStocks?.filter(linkedStock => linkedStock?.variant?.uniqueName)?.length > 0) || (manufacturingDetail.byProducts?.length > 0 && manufacturingDetail.byProducts?.filter(linkedStock => linkedStock?.variant?.uniqueName)?.length > 0))) {
                 let linkedStocks = [];
                 let byProductLinkedStocks = [];
@@ -797,6 +973,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     });
                 });
                 manufacturingDetail.byProducts?.forEach(byProduct => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (byProduct.stockUniqueName) {
                         byProductLinkedStocks.push({
                             stockUniqueName: byProduct.stockUniqueName,
@@ -834,6 +1013,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public hasRecipeForStock(): boolean {
         const recipeObject = this.formatRecipeRequest();
+        /**
+         * Handles if functionality
+         */
         if ((this.recipeExists || recipeObject?.manufacturingDetails?.length) && !isEqual(this.existingRecipe, recipeObject)) {
             return true;
         } else {
@@ -850,20 +1032,32 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     public saveRecipeFromStock(): void {
         let recipeObject = this.formatRecipeRequest();
 
+        /**
+         * Handles if functionality
+         */
         if (this.existingRecipe?.manufacturingDetails?.length) {
             this.existingRecipe?.manufacturingDetails?.forEach(existingRecipe => {
                 let recipeExists = recipeObject?.manufacturingDetails?.filter(recipe => recipe?.variant?.uniqueName === existingRecipe?.variant?.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (!recipeExists?.length) {
                     recipeObject.manufacturingDetails.push({ variant: existingRecipe?.variant, manufacturingQuantity: existingRecipe.manufacturingQuantity, manufacturingUnitUniqueName: existingRecipe.manufacturingUnitUniqueName, linkedStocks: [], byProducts: [] });
                 }
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!recipeObject?.manufacturingDetails?.length) {
             return;
         }
 
         this.manufacturingService.saveRecipe(this.stock.uniqueName, recipeObject).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.recipe_saved);
             } else {
@@ -881,6 +1075,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         this.variantsList = [];
 
         this.stock?.variants?.forEach(variant => {
+            /**
+             * Handles if functionality
+             */
             if (variant?.uniqueName) {
                 this.variantsList.push({
                     label: variant.name,

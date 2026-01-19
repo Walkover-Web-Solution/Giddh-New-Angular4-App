@@ -32,6 +32,9 @@ import { environment } from '../../../../../../environments/environment.generate
 import { each, forEach } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'balance-sheet-grid',
     templateUrl: './balance-sheet-grid.component.html',
@@ -40,6 +43,10 @@ selector: 'balance-sheet-grid',
     providers: [FinancialReportsComponentStore],
     standalone: false
 })
+/**
+ * BalanceSheetGridComponent component
+ * Handles balancesheetgrid functionality and user interactions
+ */
 export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     public noData: boolean;
     public showClearSearch: boolean = false;
@@ -73,6 +80,10 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds images folder path */
     public imgPath: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private cd: ChangeDetectorRef,
         private zone: NgZone,
@@ -84,20 +95,47 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges) {
+        /**
+         * Handles if functionality
+         */
         if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
+            /**
+             * Handles if functionality
+             */
             if (this.bsData) {
                 this.zone.run(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.bsData) {
                         this.toggleVisibility(this.bsData.assets, changes.expandAll.currentValue);
                         this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
                         // always make first level visible ....
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.bsData.liabilities) {
+                            /**
+                             * Handles each functionality
+                             */
                             each(this.bsData.liabilities, (grp: any) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (grp.isIncludedInSearch) {
                                     grp.isVisible = true;
+                                    /**
+                                     * Handles each functionality
+                                     */
                                     each(grp.accounts, (acc: any) => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (acc.isIncludedInSearch) {
                                             acc.isVisible = true;
                                         }
@@ -105,11 +143,26 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
                                 }
                             });
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.bsData.assets) {
+                            /**
+                             * Handles each functionality
+                             */
                             each(this.bsData.assets, (grp: any) => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (grp.isIncludedInSearch) {
                                     grp.isVisible = true;
+                                    /**
+                                     * Handles each functionality
+                                     */
                                     each(grp.accounts, (acc: any) => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (acc.isIncludedInSearch) {
                                             acc.isVisible = true;
                                         }
@@ -125,18 +178,30 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.bsSearchControl.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.searchInput = newValue;
                 this.hideData = true;
                 this.searchChange.emit(this.searchInput);
                 this.isExpandToggledDuringSearch = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (newValue === '') {
                     this.showClearSearch = false;
                 }
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.hideData = false;
                     this.cd.detectChanges();
@@ -144,8 +209,14 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.listOfCheckGroupsAccounts = [];
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.refresh.emit();
                 }, 600);
@@ -153,21 +224,39 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Toggles search state
+     */
     public toggleSearch() {
         this.showClearSearch = true;
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.searchInputEl && this.searchInputEl.nativeElement) {
                 this.searchInputEl.nativeElement.focus();
             }
         }, 200);
     }
 
+    /**
+     * Handles clickedOutside functionality
+     */
     public clickedOutside(event, el) {
+        /**
+         * Handles if functionality
+         */
         if (this.bsSearchControl?.value !== null && this.bsSearchControl?.value !== '') {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.childOf(event.target, el)) {
             return;
         } else {
@@ -176,17 +265,35 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /* tslint:disable */
+    /**
+     * Handles childOf functionality
+     */
     public childOf(c, p) {
         return DomUtilsHelper.childOf(c, p);
     }
 
+    /**
+     * Toggles visibility state
+     */
     private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+        /**
+         * Handles each functionality
+         */
         each(data, (grp: ChildGroup) => {
+            /**
+             * Handles if functionality
+             */
             if (grp.isIncludedInSearch) {
                 grp.isCreated = true;
                 grp.isVisible = isVisible;
                 grp.isOpen = isVisible;
+                /**
+                 * Handles each functionality
+                 */
                 each(grp.accounts, (acc: Account) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (acc.isIncludedInSearch) {
                         acc.isCreated = true;
                         acc.isVisible = isVisible;
@@ -207,7 +314,13 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
      */
     private uncheckAll(entityType: 'group' | 'account' = 'group'): void {
         this.extractCheckedAccountsGroups([...this.bsData.liabilities, ...this.bsData.assets], entityType);
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {
                     request: {
@@ -234,6 +347,9 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
         (Array.isArray(groupAccountDetails) ? groupAccountDetails : []).forEach(groupAccount => {
+            /**
+             * Handles if functionality
+             */
             if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
                     uniqueName: groupAccount.uniqueName,
@@ -241,9 +357,15 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
                     checked: false
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (groupAccount.childGroups?.length) {
                 this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
             }
+            /**
+             * Handles if functionality
+             */
             if (groupAccount.accounts?.length) {
                 this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
             }
@@ -263,6 +385,9 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.uncheckAll();
             }

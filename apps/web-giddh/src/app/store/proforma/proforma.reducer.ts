@@ -6,6 +6,10 @@ import { VoucherClass } from '../../models/api-models/Sales';
 import { UNAUTHORISED } from '../../app.constant';
 import { cloneDeep, map } from '../../lodash-optimized';
 
+/**
+ * ProformaState interface definition
+ * Defines the structure and contract for ProformaState objects
+ */
 export interface ProformaState {
     isGenerateInProcess: boolean;
     isGenerateSuccess: boolean;
@@ -59,6 +63,9 @@ const initialState: ProformaState = {
 };
 
 export function ProformaReducer(state: ProformaState = initialState, action: CustomActions): ProformaState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         // region generate proforma
         case PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST: {
@@ -72,8 +79,14 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 
         case PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE: {
             let response: BaseResponse<VoucherClass, VoucherClass> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 let no: string;
+                /**
+                 * Handles switch functionality
+                 */
                 switch (response.request.voucherDetails.voucherType) {
                     case 'proformas':
                         no = response.body?.number;
@@ -149,6 +162,9 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
         case PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE: {
             let vouchers = { ...state.vouchers };
             let result = action.payload as BaseResponse<any, VoucherClass>;
+            /**
+             * Handles if functionality
+             */
             if (result?.status === 'success') {
                 return {
                     ...state,
@@ -157,6 +173,9 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
                     vouchers: {
                         ...vouchers,
                         results: vouchers.results.map(m => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (m.estimateNumber === result.body?.number) {
                                 m.grandTotal = result.body?.grandTotal;
                             }
@@ -235,6 +254,9 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             };
 
         case PROFORMA_ACTIONS.GENERATE_PROFORMA_FROM_ESTIMATE_RESPONSE:
+            /**
+             * Handles if functionality
+             */
             if (action.payload?.status === 'success') {
                 return {
                     ...state,
@@ -258,6 +280,9 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             };
 
         case PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES_RESPONSE:
+            /**
+             * Handles if functionality
+             */
             if (action.payload?.status === 'success') {
                 return {
                     ...state,

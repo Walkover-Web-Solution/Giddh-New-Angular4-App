@@ -19,6 +19,9 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 import { cloneDeep } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'purchase-setting',
     templateUrl: './purchase-setting.component.html',
@@ -26,6 +29,10 @@ import { cloneDeep } from '../../lodash-optimized';
     standalone: false
 })
 
+/**
+ * PurchaseSettingComponent component
+ * Handles purchasesetting functionality and user interactions
+ */
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /** Selected tab index for Material tabs */
     public selectedTabIndex: number = 0;
@@ -58,6 +65,10 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of company */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private dialog: MatDialog, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
 
@@ -78,6 +89,9 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            /**
+             * Handles if functionality
+             */
             if (val.code) {
                 this.saveGmailAuthCode(val.code);
             }
@@ -104,23 +118,38 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      */
     public initSettings(): void {
         this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "success" && response.body) {
                 this.invoiceSettings = cloneDeep(response.body);
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.invoiceSettings.purchaseBillSettings.enableVoucherDownload) {
                     this.invoiceSettings.purchaseBillSettings.enableVoucherDownload = false;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.invoiceSettings.invoiceSettings.purchaseRoundOff) {
                     this.invoiceSettings.invoiceSettings.purchaseRoundOff = false;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.invoiceSettings.invoiceSettings.generateAutoPurchaseNumber) {
                     this.invoiceSettings.invoiceSettings.generateAutoPurchaseNumber = false;
                 }
 
                 this.originalEmail = cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.invoiceSettings.purchaseBillSettings.lockDate) {
                     this.lockDate = dayjs(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
                 }
@@ -149,11 +178,17 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public updateForm(): void {
         let formToSave = cloneDeep(this.invoiceSettings);
 
+        /**
+         * Handles if functionality
+         */
         if (formToSave.purchaseBillSettings.lockDate instanceof Date) {
             formToSave.purchaseBillSettings.lockDate = dayjs(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
 
         this.invoiceService.UpdateInvoiceSetting(formToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "success" && response.body) {
                 this.toaster.successToast(response.body);
             } else {
@@ -171,6 +206,9 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      */
     public verifyEmail(emailId: any): boolean {
         let email = new RegExp(/[a-z0-9!#$%&'*+=?^_{|}~-]+(?:.[a-z0-9!#$%&’*+=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g);
+        /**
+         * Handles if functionality
+         */
         if (email.test(emailId)) {
             this.updateSettingsEmail(emailId);
             return true;
@@ -188,6 +226,9 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public deleteEmail(emailId: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!emailId) {
             return false;
         } else {
@@ -222,6 +263,9 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         };
 
         this.purchaseOrderService.updateSettingsEmail(getRequestObject, postRequestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "success" && response.body) {
                 this.initSettings();
                 this.toaster.successToast(response.body);
@@ -241,14 +285,26 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string): void {
         const dataToSave = {
             code: authCode,
+            /**
+             * Handles client_secret functionality
+             */
             client_secret: (this.serviceConfig.GOOGLE_CLIENT_SECRET || GOOGLE_CLIENT_SECRET),
+            /**
+             * Handles client_id functionality
+             */
             client_id: (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID),
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl()
         };
 
         this.authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.status === 'success') {
                     this.toaster.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
                 } else {

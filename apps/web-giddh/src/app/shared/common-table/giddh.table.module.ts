@@ -5,6 +5,9 @@ import { MatTableModule } from "@angular/material/table";
 import { AmountFieldComponentModule } from "../amount-field/amount-field.module";
 import { GiddhTableComponent } from "./giddh-table.component";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         GiddhTableComponent
@@ -18,6 +21,10 @@ import { GiddhTableComponent } from "./giddh-table.component";
         GiddhTableComponent
     ]
 })
+/**
+ * GiddhTableModule module
+ * Implements GiddhTableModule functionality
+ */
 export class GiddhTableModule {
 
 }

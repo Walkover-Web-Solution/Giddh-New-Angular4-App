@@ -7,22 +7,45 @@ import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { REMOVE_TRAILING_ZERO_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { giddhRoundOff } from '../../helperFunctions';
 
+/**
+ * Handles Pipe functionality
+ */
 @Pipe({ name: 'giddhCurrency', pure: true, standalone: false })
 
+/**
+ * GiddhCurrencyPipe pipe
+ * Implements GiddhCurrencyPipe functionality
+ */
 export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public _currencyNumberType: string;
     public currencyDecimalType: number;
 
+    /**
+     * Creates an instance of pipe
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private _generalService: GeneralService) {
+        /**
+         * Handles if functionality
+         */
         if (!this._generalService.isCurrencyPipeLoaded) {
             this.store.pipe(select(p => p.settings.profile), distinctUntilKeyChanged('balanceDisplayFormat'), takeUntil(this.destroyed$)).subscribe((o) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (o && o.name) {
                     this._currencyNumberType = o.balanceDisplayFormat ? o.balanceDisplayFormat : 'IND_COMMA_SEPARATED';
                     this.currencyDecimalType = o.balanceDecimalPlaces ? o.balanceDecimalPlaces : 0;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currencyDecimalType) {
                         localStorage.setItem('currencyDecimalType', this.currencyDecimalType?.toString());
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (this._currencyNumberType) {
                         localStorage.setItem('currencyNumberType', this._currencyNumberType);
                     }
@@ -32,6 +55,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -46,6 +72,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
      * @memberof GiddhCurrencyPipe
      */
     public transform(input: number, customDecimalPlaces?: number, shouldRemoveTrailingZeros?: boolean): string {
+        /**
+         * Handles if functionality
+         */
         if (input == null) {
             return;
         }
@@ -53,6 +82,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
         const transformContext = this.initializeTransformContext(input, customDecimalPlaces);
 
         // Handle simple numbers (3 digits or less)
+        /**
+         * Handles if functionality
+         */
         if (transformContext.result[0]?.length <= 3) {
             return this.handleSimpleNumber(transformContext, shouldRemoveTrailingZeros);
         }
@@ -84,6 +116,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
     private handleSimpleNumber(context: any, shouldRemoveTrailingZeros: boolean): string {
         const { result, digitAfterDecimal } = context;
 
+        /**
+         * Handles if functionality
+         */
         if (!result[0]?.toString()?.includes('-')) {
             return this.formatSimplePositiveNumber(result, digitAfterDecimal, shouldRemoveTrailingZeros);
         } else {
@@ -97,7 +132,13 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
     private formatSimplePositiveNumber(result: string[], digitAfterDecimal: number, shouldRemoveTrailingZeros: boolean): string {
         let op = result[0]?.toString();
 
+        /**
+         * Handles if functionality
+         */
         if (result?.length > 1) {
+            /**
+             * Handles if functionality
+             */
             if (digitAfterDecimal !== 0) {
                 result[1] = (result[1]?.length < 4) ? result[1] + '0000' : result[1];
                 op += '.' + result[1];
@@ -116,7 +157,13 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
     private formatSimpleNegativeNumber(result: string[], digitAfterDecimal: number, shouldRemoveTrailingZeros: boolean): string {
         let op = '-' + result[0].substring(1);
 
+        /**
+         * Handles if functionality
+         */
         if (result?.length > 1) {
+            /**
+             * Handles if functionality
+             */
             if (digitAfterDecimal !== 0) {
                 result[1] = (result[1]?.length < 4) ? result[1] + '0000' : result[1];
                 op += '.' + result[1];
@@ -133,6 +180,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
      * Get decimal padding based on decimal places
      */
     private getDecimalPadding(digitAfterDecimal: number): string {
+        /**
+         * Handles switch functionality
+         */
         switch (digitAfterDecimal) {
             case 2: return '.00';
             case 3: return '.000';
@@ -160,7 +210,13 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
      * Process decimal part for complex numbers
      */
     private processDecimalPart(result: string[], digitAfterDecimal: number): string | null {
+        /**
+         * Handles if functionality
+         */
         if (result?.length > 1) {
+            /**
+             * Handles if functionality
+             */
             if (digitAfterDecimal !== 0) {
                 result[1] = (result[1]?.length < 4) ? result[1] + '0000' : result[1];
                 const dummyNumber = '1.' + result[1];
@@ -169,6 +225,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 return tempResult[1];
             }
         } else {
+            /**
+             * Handles switch functionality
+             */
             switch (digitAfterDecimal) {
                 case 2: return '00';
                 case 3: return '000';
@@ -183,6 +242,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
      * Apply currency formatting based on type
      */
     private applyCurrencyFormatting(currencyType: string, otherNumbers: string, lastThree: string, afterdecDigit: string | null): string {
+        /**
+         * Handles switch functionality
+         */
         switch (currencyType) {
             case 'IND_COMMA_SEPARATED':
                 return this.formatIndianComma(otherNumbers, lastThree, afterdecDigit);
@@ -201,12 +263,21 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
      * Format with Indian comma separation (2-digit groups)
      */
     private formatIndianComma(otherNumbers: string, lastThree: string, afterdecDigit: string | null): string {
+        /**
+         * Handles if functionality
+         */
         if (!otherNumbers) return '';
 
+        /**
+         * Handles if functionality
+         */
         if (otherNumbers !== '' && otherNumbers !== '-') {
             lastThree = ',' + lastThree;
         }
         let output = otherNumbers?.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+        /**
+         * Handles if functionality
+         */
         if (afterdecDigit) {
             output += '.' + afterdecDigit;
         }
@@ -217,10 +288,16 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
      * Format with international comma separation (3-digit groups)
      */
     private formatInternationalComma(otherNumbers: string, lastThree: string, afterdecDigit: string | null): string {
+        /**
+         * Handles if functionality
+         */
         if (otherNumbers !== '' && otherNumbers !== '-') {
             lastThree = ',' + lastThree;
         }
         let output = otherNumbers?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + lastThree;
+        /**
+         * Handles if functionality
+         */
         if (afterdecDigit) {
             output += '.' + afterdecDigit;
         }
@@ -231,10 +308,16 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
      * Format with space separation
      */
     private formatSpaceSeparated(otherNumbers: string, lastThree: string, afterdecDigit: string | null): string {
+        /**
+         * Handles if functionality
+         */
         if (otherNumbers !== '' && otherNumbers !== '-') {
             lastThree = ' ' + lastThree;
         }
         let output = otherNumbers?.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + lastThree;
+        /**
+         * Handles if functionality
+         */
         if (afterdecDigit) {
             output += '.' + afterdecDigit;
         }
@@ -245,10 +328,16 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
      * Format with apostrophe separation
      */
     private formatApostropheSeparated(otherNumbers: string, lastThree: string, afterdecDigit: string | null): string {
+        /**
+         * Handles if functionality
+         */
         if (otherNumbers !== '' && otherNumbers !== '-') {
             lastThree = '\'' + lastThree;
         }
         let output = otherNumbers?.replace(/\B(?=(\d{3})+(?!\d))/g, "\'") + lastThree;
+        /**
+         * Handles if functionality
+         */
         if (afterdecDigit) {
             output += '.' + afterdecDigit;
         }
@@ -259,10 +348,16 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
      * Format with default comma separation
      */
     private formatDefaultComma(otherNumbers: string, lastThree: string, afterdecDigit: string | null): string {
+        /**
+         * Handles if functionality
+         */
         if (otherNumbers !== '' && otherNumbers !== '-') {
             lastThree = ',' + lastThree;
         }
         let output = otherNumbers?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + lastThree;
+        /**
+         * Handles if functionality
+         */
         if (afterdecDigit) {
             output += '.' + afterdecDigit;
         }

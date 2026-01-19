@@ -7,6 +7,9 @@ import { GiddhLayoutModule } from "../shared/layout/layout.module";
 import { PageComponent } from "./page.component";
 import { PageRoutingModule } from "./page.routing.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         PageComponent
@@ -25,6 +28,10 @@ import { PageRoutingModule } from "./page.routing.module";
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
+/**
+ * PageModule module
+ * Implements PageModule functionality
+ */
 export class PageModule {
 
 }

@@ -3,6 +3,9 @@ import { KeyboardShortcutDirective } from './keyboardShortcut.directive';
 import { NavigationWalkerDirective } from './navigationWalker.directive';
 import { NgInitDirective } from './ng-init.directive';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [],
     declarations: [
@@ -16,6 +19,10 @@ import { NgInitDirective } from './ng-init.directive';
         NgInitDirective,
     ]
 })
+/**
+ * KeyboardShortutModule module
+ * Implements KeyboardShortutModule functionality
+ */
 export class KeyboardShortutModule {
     //
 }

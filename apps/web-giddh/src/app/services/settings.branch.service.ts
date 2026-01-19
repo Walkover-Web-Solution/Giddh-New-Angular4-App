@@ -11,12 +11,23 @@ import { BranchFilterRequest } from '../models/api-models/Company';
 import { COMPANY_API } from './apiurls/company.api';
 import { concat, get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsBranchService service
+ * Provides settingsbranch related business logic and data operations
+ */
 export class SettingsBranchService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -24,6 +35,9 @@ export class SettingsBranchService {
     /*
     * Get all branches
     */
+    /**
+     * Handles GetAllBranches functionality
+     */
     public GetAllBranches(request: BranchFilterRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = (request.companyUniqueName) ? request.companyUniqueName : this.generalService.companyUniqueName;
         let from = (request.from) ? request.from : "";
@@ -35,6 +49,9 @@ export class SettingsBranchService {
         url = url?.replace(':hierarchyType', request.hierarchyType ?? '');
 
         let delimiter = '&';
+        /**
+         * Handles if functionality
+         */
         if (request.query !== undefined) {
             url = url.concat(`&q=${request.query}`);
         }
@@ -85,6 +102,9 @@ export class SettingsBranchService {
         return this.http.patch(this.config.apiUrl + SETTINGS_BRANCH_API.UPDATE_BRANCH_STATUS
             ?.replace(':companyUniqueName', companyUniqueName)
             ?.replace(':branchUniqueName', branchUniqueName), model).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<any, string> = res;
                     data.queryString = {};

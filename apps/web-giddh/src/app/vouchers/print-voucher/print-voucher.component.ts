@@ -11,6 +11,9 @@ import { ToasterService } from '../../services/toaster.service';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'print-voucher',
     templateUrl: './print-voucher.component.html',
@@ -18,6 +21,10 @@ import { VoucherComponentStore } from '../utility/vouchers.store';
     providers: [VoucherComponentStore],
     standalone: false
 })
+/**
+ * PrintVoucherComponent component
+ * Handles printvoucher functionality and user interactions
+ */
 export class PrintVoucherComponent implements OnInit {
     /** Emit the cancel dialog event */
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -44,6 +51,10 @@ export class PrintVoucherComponent implements OnInit {
     /** True if download voucher is getting error */
     public isVoucherDownloadError: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private proformaService: ProformaService,
@@ -61,6 +72,9 @@ export class PrintVoucherComponent implements OnInit {
      * @memberof PrintVoucherComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedItem) {
             this.downloadVoucher('base64');
         }
@@ -72,6 +86,9 @@ export class PrintVoucherComponent implements OnInit {
      * @memberof PrintVoucherComponent
      */
     public printVoucher(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.pdfContainer) {
             this.componentStore.printVoucher(this.pdfContainer);
             this.changeDetection.detectChanges();
@@ -88,6 +105,9 @@ export class PrintVoucherComponent implements OnInit {
         this.setLoadingState(true);
         this.isVoucherDownloadError = false;
 
+        /**
+         * Handles if functionality
+         */
         if (!this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice) {
             this.downloadVoucherType1();
         } else if (this.invoiceType.isSalesInvoice) {
@@ -111,6 +131,9 @@ export class PrintVoucherComponent implements OnInit {
 
         this.sanitizedPdfFileUrl = null;
         this.commonService.downloadFile(getRequest, "VOUCHER").pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result && result.status === 'success') {
                 this.selectedItem.blob = this.generalService.base64ToBlob(result.body?.data, 'application/pdf', 512);
                 const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
@@ -119,6 +142,9 @@ export class PrintVoucherComponent implements OnInit {
                 this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                 this.setVoucherDownloadErrorState(false);
 
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.printVoucher();
                 });
@@ -147,12 +173,18 @@ export class PrintVoucherComponent implements OnInit {
         let accountUniqueName: string = this.selectedItem?.uniqueName;
 
         this.receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result && result.status === 'success') {
                 this.selectedItem.blob = result;
                 const file = new Blob([result], { type: 'application/pdf' });
                 URL.revokeObjectURL(this.pdfFileURL);
                 this.pdfFileURL = URL.createObjectURL(file);
                 this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.printVoucher();
                 });
@@ -184,6 +216,9 @@ export class PrintVoucherComponent implements OnInit {
 
         let voucherType = "";
 
+        /**
+         * Handles if functionality
+         */
         if (this.invoiceType.isProformaInvoice) {
             voucherType = VoucherTypeEnum.generateProforma;
             request.proformaNumber = this.selectedItem?.voucherNumber;
@@ -193,12 +228,18 @@ export class PrintVoucherComponent implements OnInit {
         }
 
         this.proformaService.download(request, voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result && result.status === 'success') {
                 let blob: Blob = this.generalService.base64ToBlob(result.body, 'application/pdf', 512);
                 const file = new Blob([blob], { type: 'application/pdf' });
                 URL.revokeObjectURL(this.pdfFileURL);
                 this.pdfFileURL = URL.createObjectURL(file);
                 this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.printVoucher();
                 });

@@ -26,12 +26,23 @@ import { IRegistration, GetOTPRequest, BulkPaymentResponse, BulkPaymentConfirmRe
 import { ReportsRequestModel, ReportsResponseModel } from "../models/api-models/Reports";
 import { concat, get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * CompanyService service
+ * Provides company related business logic and data operations
+ */
 export class CompanyService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this.generalService.companyUniqueName;
@@ -42,11 +53,17 @@ export class CompanyService {
      */
     public CreateNewCompany(company: CompanyCreateRequest): Observable<BaseResponse<CompanyResponse, CompanyCreateRequest>> {
         return this.http.post(this.config.apiUrl + COMPANY_API.CREATE_COMPANY, company).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<CompanyResponse, CompanyCreateRequest> = res;
                 data.request = company;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<CompanyResponse, CompanyCreateRequest>(e, company)));
     }
 
@@ -55,11 +72,17 @@ export class CompanyService {
      */
     public SocketCreateCompany(company: SocketNewCompanyRequest): Observable<BaseResponse<any, SocketNewCompanyRequest>> {
         return this.http.post('https://ebl-api-h7duexlbuq-el.a.run.app/func/CMEQnVPyk2a8', company).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, SocketNewCompanyRequest> = res;
                 data.request = company;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, SocketNewCompanyRequest>(e, SocketNewCompanyRequest)));
     }
 
@@ -70,10 +93,16 @@ export class CompanyService {
         let uniqueName = (this.generalService?.user) ? this.generalService?.user?.uniqueName : "";
 
         return this.http.get(this.config.apiUrl + COMPANY_API.COMPANY_LIST?.replace(':uniqueName', uniqueName)).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<CompanyResponse[], string> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, '')));
     }
 
@@ -86,22 +115,37 @@ export class CompanyService {
      */
     public countryListBySubscriptionId(subscriptionId: any): Observable<BaseResponse<CompanyResponse[], string>> {
         return this.http.get(this.config.apiUrl + COMPANY_API.GET_COUNTRY_LIST_BY_SUBSCRIPTION_ID?.replace(':subscriptionId', subscriptionId)).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<CompanyResponse[], string> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, '')));
     }
     // Get business nature for create company
+    /**
+     * Handles GetAllBusinessNatureList functionality
+     */
     public GetAllBusinessNatureList() {
         return this.http.get(this.config.apiUrl + COMPANY_API.BUSINESS_NATURE_LIST
         ).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = '';
                 data.queryString = {};
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
@@ -110,10 +154,16 @@ export class CompanyService {
      */
     public CurrencyList(): Observable<BaseResponse<ICurrencyResponse[], string>> {
         return this.http.get(this.config.apiUrl + 'currency').pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<ICurrencyResponse[], string> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<ICurrencyResponse[], string>(e, '')));
     }
 
@@ -123,6 +173,9 @@ export class CompanyService {
     public getStateDetails(cmpUniqueName?: string, fetchLastState?: boolean): Observable<BaseResponse<StateDetailsResponse, string>> {
         let url = '';
         let delimeter = '';
+        /**
+         * Handles if functionality
+         */
         if (cmpUniqueName) {
             url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS?.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName ? cmpUniqueName : ''));
             delimeter = '&';
@@ -130,6 +183,9 @@ export class CompanyService {
             url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS?.replace('?companyUniqueName=:companyUniqueName', '');
             delimeter = '?';
         }
+        /**
+         * Handles if functionality
+         */
         if (fetchLastState) {
             url = url.concat(`${delimeter}fetchLastState=true`);
         }
@@ -142,6 +198,9 @@ export class CompanyService {
     }
 
     //Get razorPay paymentID
+    /**
+     * Retrieves razorpayorderid data
+     */
     public getRazorPayOrderId(amount: any, currency: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + COMPANY_API.RAZORPAY_ORDERID?.replace(':amount', amount)?.replace(':currency', currency)).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
@@ -150,7 +209,13 @@ export class CompanyService {
     }
 
     // Effects need to be review
+    /**
+     * Sets statedetails value
+     */
     public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<string, StateDetailsRequest>> {
+        /**
+         * Handles if functionality
+         */
         if (stateDetails.companyUniqueName) {
             return this.http.post(this.config.apiUrl + COMPANY_API.SET_STATE_DETAILS, stateDetails).pipe(map((res) => {
                 let data: BaseResponse<string, StateDetailsRequest> = res;
@@ -162,8 +227,14 @@ export class CompanyService {
         }
     }
 
+    /**
+     * Retrieves applicationdate data
+     */
     public getApplicationDate(): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (this.companyUniqueName) {
             return this.http.get(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<string, any> = res;
@@ -191,8 +262,14 @@ export class CompanyService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, dateObj)));
     }
 
+    /**
+     * Retrieves companytaxes data
+     */
     public getCompanyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (this.companyUniqueName) {
             return this.http.get(this.config.apiUrl + COMPANY_API.TAX?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<TaxResponse[], string> = res;
@@ -203,6 +280,9 @@ export class CompanyService {
         }
     }
 
+    /**
+     * Retrieves comapnyusers data
+     */
     public getComapnyUsers(): Observable<BaseResponse<AccountSharedWithResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + COMPANY_API.GET_COMPANY_USERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
@@ -211,6 +291,9 @@ export class CompanyService {
         }), catchError((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e)));
     }
 
+    /**
+     * Handles sendEmail functionality
+     */
     public sendEmail(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + COMPANY_API.SEND_EMAIL
@@ -225,6 +308,9 @@ export class CompanyService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
     }
 
+    /**
+     * Handles downloadCSV functionality
+     */
     public downloadCSV(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + COMPANY_API.DOWNLOAD_CSV
@@ -234,6 +320,9 @@ export class CompanyService {
             ?.replace(':to', encodeURIComponent(request.params.to))
             ?.replace(':sortBy', encodeURIComponent(request.params.sortBy))
             ?.replace(':sort', encodeURIComponent(request.params.sort));
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
@@ -243,6 +332,9 @@ export class CompanyService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
     }
 
+    /**
+     * Handles sendSms functionality
+     */
     public sendSms(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + COMPANY_API.SEND_SMS
@@ -276,6 +368,9 @@ export class CompanyService {
      */
     public getRegisteredAccount(): Observable<BaseResponse<IRegistration, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (this.companyUniqueName) {
             return this.http.get(this.config.apiUrl + COMPANY_API.REGISTER_ACCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<IRegistration, string> = res;
@@ -291,6 +386,9 @@ export class CompanyService {
      */
     public getOTP(request) {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (this.companyUniqueName) {
             return this.http.get(this.config.apiUrl + COMPANY_API.GET_OTP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankUserId', encodeURIComponent(request.params.bankUserId))).pipe(map((res) => {
                 let data: BaseResponse<IRegistration, string> = res;
@@ -304,6 +402,9 @@ export class CompanyService {
     /*
   * get registered sales
   * */
+    /**
+     * Retrieves salesregister data
+     */
     public getSalesRegister(request: ReportsRequestModel) {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = this.config.apiUrl + COMPANY_API.GET_REGISTERED_SALES
@@ -311,6 +412,9 @@ export class CompanyService {
             ?.replace(':fromDate', encodeURIComponent(request.from))
             ?.replace(':toDate', encodeURIComponent(request.to))
             ?.replace(':interval', encodeURIComponent(request.interval));
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             contextPath = contextPath.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
@@ -335,6 +439,9 @@ export class CompanyService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(params.from))
             ?.replace(':to', encodeURIComponent(params.to));
+        /**
+         * Handles if functionality
+         */
         if (params.branchUniqueName) {
             params.branchUniqueName = params.branchUniqueName !== this.companyUniqueName ? params.branchUniqueName : '';
             contextPath = contextPath.concat(`&branchUniqueName=${encodeURIComponent(params.branchUniqueName)}`);
@@ -359,6 +466,9 @@ export class CompanyService {
             ?.replace(':fromDate', encodeURIComponent(request.from))
             ?.replace(':toDate', encodeURIComponent(request.to))
             ?.replace(':interval', encodeURIComponent(request.interval));
+        /**
+         * Handles if functionality
+         */
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             contextPath = contextPath.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
@@ -377,6 +487,9 @@ export class CompanyService {
      * @memberof CompanyService
      */
     public getIntegratedBankInCompany(companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        /**
+         * Handles if functionality
+         */
         if (!companyUniqueName) {
             companyUniqueName = this.generalService.companyUniqueName;
         }
@@ -452,6 +565,9 @@ export class CompanyService {
             businessNature: requestObject.businessNature || '',
             addresses: []
         }
+        /**
+         * Handles if functionality
+         */
         if (requestObject.addresses && requestObject.addresses.length) {
             const addressDetails = requestObject.addresses[0];
             requestPayload.addresses = [
@@ -466,6 +582,9 @@ export class CompanyService {
         }
         return this.http.post(this.config.apiUrl + COMPANY_API.CREATE_NEW_BRANCH
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), requestPayload).pipe(
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
     }
 
@@ -484,6 +603,9 @@ export class CompanyService {
         };
         return this.http.put(contextPath
             ?.replace(':companyUniqueName', encodeURIComponent(requestObject.companyUniqueName)), requestPayload).pipe(
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
     }
 
@@ -497,6 +619,9 @@ export class CompanyService {
         let url = `${this.config.apiUrl}${COMPANY_API.GET_SIDE_BAR_ITEM}`;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         return this.http.get(url).pipe(
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
     }
 

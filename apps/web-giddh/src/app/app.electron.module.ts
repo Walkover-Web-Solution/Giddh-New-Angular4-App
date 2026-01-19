@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { ROUTES } from './app.routes';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         AppModule,
@@ -16,4 +19,8 @@ import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
     ],
     bootstrap: [AppComponent]
 })
+/**
+ * AppElectronModule module
+ * Implements AppElectronModule functionality
+ */
 export class AppElectronModule { }

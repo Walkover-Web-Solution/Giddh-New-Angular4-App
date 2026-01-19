@@ -10,6 +10,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { cloneDeep } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'new-inventory-advance-search',
 
@@ -19,6 +22,10 @@ import { cloneDeep } from '../../../lodash-optimized';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+/**
+ * NewInventoryAdvanceSearch component
+ * Handles newinventoryadvancesearch functionality and user interactions
+ */
 export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
     /** Reference of datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
@@ -57,6 +64,10 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
     /** Holds report type for modules */
     public reportType: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
@@ -71,9 +82,18 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
      */
     public ngOnInit() {
         this.reportType = this.inputData?.reportType;
+        /**
+         * Handles if functionality
+         */
         if (this.inputData?.stockReportRequest) {
+            /**
+             * Handles if functionality
+             */
             if (this.inputData?.advanceSearchResponse) {
                 this.advanceSearchFormObj = cloneDeep(this.inputData.advanceSearchResponse?.stockReportRequest);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.advanceSearchFormObj.expression === 'EQUALS') {
                     this.advanceSearchFormObj.expression = "Equals";
                 } else if (this.advanceSearchFormObj.expression === 'NOT_EQUALS') {
@@ -83,9 +103,15 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
                 } else if (this.advanceSearchFormObj.expression === "GREATER_THAN") {
                     this.advanceSearchFormObj.expression = "Greater than";
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.advanceSearchFormObj.param === "OPENING_AMOUNT" || this.advanceSearchFormObj.param === "OPENING_QUANTITY") {
                     this.advanceSearchFormObj.param1 = "Opening Stock";
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.advanceSearchFormObj.param === "CLOSING_AMOUNT" || this.advanceSearchFormObj.param === "CLOSING_QUANTITY") {
                     this.advanceSearchFormObj.param1 = "Closing Stock";
                 }
@@ -98,6 +124,9 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
             this.advanceSearchFormObj.toDate = dayjs(to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         } else {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
+                /**
+                 * Handles if functionality
+                 */
                 if (dateObj) {
                     let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -134,6 +163,9 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
      * @memberof NewInventoryAdvanceSearch
      */
     public selectCategory(category: any): void {
+        /**
+         * Handles if functionality
+         */
         if (category) {
             this.advanceSearchFormObj.param1 = category;
         }
@@ -146,6 +178,9 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
      * @memberof NewInventoryAdvanceSearch
      */
     public selectCategoryOptions(expression: any): void {
+        /**
+         * Handles if functionality
+         */
         if (expression) {
             this.advanceSearchFormObj.param2 = expression;
         }
@@ -158,6 +193,9 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
      * @memberof NewInventoryAdvanceSearch
      */
     public selectValueType(value: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value) {
             this.advanceSearchFormObj.expression = value;
         }
@@ -171,7 +209,13 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
      * @memberof NewInventoryAdvanceSearch
      */
     public advanceSearchAction(type?: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchFormObj.param1 && this.advanceSearchFormObj.param2) {
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchFormObj.param1 === 'Opening Stock') {
                 this.advanceSearchFormObj.param1 = "OPENING";
             } else if (this.advanceSearchFormObj.param1 === 'Closing Stock') {
@@ -179,6 +223,9 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
             }
             this.advanceSearchFormObj.param = this.advanceSearchFormObj.param1?.toUpperCase() + '_' + this.advanceSearchFormObj.param2?.toUpperCase();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchFormObj.expression === 'Equals') {
             this.advanceSearchFormObj.expression = "EQUALS";
         } else if (this.advanceSearchFormObj.expression === 'Excluded') {
@@ -188,6 +235,9 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
         } else if (this.advanceSearchFormObj.expression === "Greater than") {
             this.advanceSearchFormObj.expression = "GREATER_THAN";
         }
+        /**
+         * Handles if functionality
+         */
         if (type === 'cancel') {
             this.dialogRef.close();
             return;
@@ -199,6 +249,9 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
             this.advanceSearchFormObj.val = null;
             this.advanceSearchFormObj.searching = false;
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
+                /**
+                 * Handles if functionality
+                 */
                 if (dateObj) {
                     let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -224,15 +277,24 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
      * @memberof NewInventoryAdvanceSearch
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -248,6 +310,9 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
      * @memberof NewInventoryAdvanceSearch
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -262,6 +327,9 @@ export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {
      * @memberof NewInventoryAdvanceSearch
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.advanceSearchCategoryTransaction= [

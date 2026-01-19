@@ -15,10 +15,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { VatReportComponentStore } from '../utility/vat.report.store';
 
+/**
+ * ObligationsStatus interface definition
+ * Defines the structure and contract for ObligationsStatus objects
+ */
 export interface ObligationsStatus {
     label: string;
     value: '' | 'F' | 'O';
 }
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'obligations-component',
     templateUrl: './obligations.component.html',
@@ -27,6 +34,10 @@ export interface ObligationsStatus {
     standalone:false
 })
 
+/**
+ * ObligationsComponent component
+ * Handles obligations functionality and user interactions
+ */
 export class ObligationsComponent implements OnInit, OnDestroy {
     /** Directive to get reference of datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
@@ -87,6 +98,10 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     /** True if tax modules is restricted */
     public isTaxRestrictedModule: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
@@ -98,6 +113,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.iniObligationsForm();
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.companyUniqueName = activeCompany.uniqueName;
                 this.activeCompany = activeCompany;
@@ -114,6 +132,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -122,10 +143,19 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.getUniversalDatePickerDate();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
 
+        /**
+         * Handles if functionality
+         */
         if (this.isCompanyMode || this.isConsolidatedBranch) {
             this.loadTaxDetails();
             this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.length > 1) {
                         this.isMultipleBranch = true;
                         let unarchivedBranches = response.filter(branch => branch.isArchived === false);
@@ -138,6 +168,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         this.isMultipleBranch = false;
+                        /**
+                         * Handles if functionality
+                         */
                         if (response.uniqueName) {
                             this.getFormControl('branchUniqueName').setValue(response.uniqueName);
                         }
@@ -149,17 +182,29 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             this.getCurrentCompanyBranchTaxNumber();
         }
         this.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.length) {
                 this.taxesList = response.body.map(tax => ({
                     label: tax,
                     value: tax
                 }));
+                /**
+                 * Handles if functionality
+                 */
                 if (this.taxesList.length === 1) {
                     this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isCompanyMode || this.isConsolidatedBranch) {
                     this.hasTaxNumber = true;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isTaxRestrictedModule) {
                     this.getURLHMRCAuthorization();
                 }
@@ -167,7 +212,13 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         });
 
         this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.body) {
                     this.connectToHMRCUrl = response.body;
                 } else {
@@ -177,6 +228,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         });
 
         this.obligationList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.obligations) {
                 this.tableDataSource = response.body.obligations.map(item => {
                     item.start = dayjs(item.start).format(GIDDH_DATE_FORMAT);
@@ -187,6 +241,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             }
         });
 
+        /**
+         * Handles merge functionality
+         */
         merge(this.componentStore.getObligationListInProgress$, this.componentStore.getTaxNumberInProgress$, this.componentStore.getHMRCInProgress$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading.set(response);
@@ -201,10 +258,16 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     */
     private getCurrentCompanyBranchTaxNumber(): void {
         this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 const currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                 let currentBranch = response.find(branch => branch?.uniqueName === currentBranchUniqueName);
                 this.hasTaxNumber = currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.hasTaxNumber) {
                     this.loadTaxDetails();
                 }
@@ -218,6 +281,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
      * @memberof  ObligationsComponent
      */
     public buyPlan(subscriptionId: string): void {
+        /**
+         * Handles if functionality
+         */
         if (subscriptionId) {
             this.route.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
         }
@@ -239,6 +305,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.statusList = [
                 { label: this.commonLocaleData?.app_all, value: '' },
@@ -271,6 +340,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     public taxNumberSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.getFormControl('taxNumber').setValue(event.value);
         }
@@ -283,6 +355,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     public statusSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value || event?.value === '') {
             this.getFormControl('status').setValue(event.value);
         }
@@ -295,6 +370,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     public branchSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.getFormControl('branchUniqueName').setValue(event.value);
         }
@@ -328,6 +406,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response.status === 'success') {
                 this.getVatObligations();
             }
@@ -366,6 +447,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     */
     private getUniversalDatePickerDate(): void {
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -392,7 +476,13 @@ export class ObligationsComponent implements OnInit, OnDestroy {
      * @memberof ObligationsComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -408,16 +498,25 @@ export class ObligationsComponent implements OnInit, OnDestroy {
      * @memberof ObligationsComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

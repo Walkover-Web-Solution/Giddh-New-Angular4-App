@@ -9,10 +9,17 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { CustomActions } from '../store/custom-actions';
 import { LocaleService } from '../services/locale.service';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
 
+/**
+ * CommonActions actions
+ * Defines common related action creators for state management
+ */
 export class CommonActions {
     public static GET_COUNTRY = 'GetCountry';
     public static GET_COUNTRY_RESPONSE = "GetCountryResponse";
@@ -42,44 +49,105 @@ export class CommonActions {
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(CommonActions.GET_COUNTRY),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._commonService.GetCountry(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.GetCountryResponse(response))));
 
     public getAllCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(CommonActions.GET_ALL_COUNTRY),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._commonService.GetCountry(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.GetAllCountryResponse(response))));
 
     public getCallingCodes$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(CommonActions.GET_CALLING_CODES),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._commonService.GetCallingCodes()),
+            /**
+             * Handles map functionality
+             */
             map(response => this.GetCallingCodesResponse(response))));
 
     public getOnboardingForm$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(CommonActions.GET_ONBOARDING_FORM),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._commonService.getOnboardingForm(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.GetOnboardingFormResponse(response))));
 
     public getPartytypes$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(CommonActions.GET_PARTY_TYPE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._commonService.GetPartyType()),
+            /**
+             * Handles map functionality
+             */
             map(response => this.GetPartyTypeResponse(response))));
 
     public getCommonLocaleData$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(CommonActions.GET_COMMON_LOCALE_DATA),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.localeService.getLocale('', action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.setCommonLocaleData(response))));
 
+    /**
+     * Creates an instance of actions
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions, private _commonService: CommonService, private localeService: LocaleService) {
 
     }
 
+    /**
+     * Handles GetCountry functionality
+     */
     public GetCountry(value: CountryRequest): CustomActions {
         return {
             type: CommonActions.GET_COUNTRY,
@@ -87,6 +155,9 @@ export class CommonActions {
         };
     }
 
+    /**
+     * Handles GetCountryResponse functionality
+     */
     public GetCountryResponse(value: BaseResponse<CountryResponse, CountryRequest>): CustomActions {
         return {
             type: CommonActions.GET_COUNTRY_RESPONSE,
@@ -94,6 +165,9 @@ export class CommonActions {
         };
     }
 
+    /**
+     * Handles GetAllCountry functionality
+     */
     public GetAllCountry(value: CountryRequest): CustomActions {
         return {
             type: CommonActions.GET_ALL_COUNTRY,
@@ -101,6 +175,9 @@ export class CommonActions {
         };
     }
 
+    /**
+     * Handles GetAllCountryResponse functionality
+     */
     public GetAllCountryResponse(value: BaseResponse<CountryResponse, CountryRequest>): CustomActions {
         return {
             type: CommonActions.GET_ALL_COUNTRY_RESPONSE,
@@ -108,6 +185,9 @@ export class CommonActions {
         };
     }
 
+    /**
+     * Handles GetCallingCodes functionality
+     */
     public GetCallingCodes(): CustomActions {
         return {
             type: CommonActions.GET_CALLING_CODES,
@@ -115,6 +195,9 @@ export class CommonActions {
         };
     }
 
+    /**
+     * Handles GetCallingCodesResponse functionality
+     */
     public GetCallingCodesResponse(value: BaseResponse<CallingCodesResponse, any>): CustomActions {
         return {
             type: CommonActions.GET_CALLING_CODES_RESPONSE,
@@ -122,6 +205,9 @@ export class CommonActions {
         };
     }
 
+    /**
+     * Handles GetOnboardingForm functionality
+     */
     public GetOnboardingForm(value: OnboardingFormRequest): CustomActions {
         return {
             type: CommonActions.GET_ONBOARDING_FORM,
@@ -129,6 +215,9 @@ export class CommonActions {
         };
     }
 
+    /**
+     * Handles GetOnboardingFormResponse functionality
+     */
     public GetOnboardingFormResponse(value: BaseResponse<OnboardingFormResponse, any>): CustomActions {
         return {
             type: CommonActions.GET_ONBOARDING_FORM_RESPONSE,
@@ -136,12 +225,18 @@ export class CommonActions {
         };
     }
 
+    /**
+     * Handles GetPartyType functionality
+     */
     public GetPartyType(): CustomActions {
         return {
             type: CommonActions.GET_PARTY_TYPE,
         };
     }
 
+    /**
+     * Handles GetPartyTypeResponse functionality
+     */
     public GetPartyTypeResponse(value: BaseResponse<any, any>): CustomActions {
         return {
             type: CommonActions.GET_PARTY_TYPE_RESPONSE,
@@ -149,12 +244,18 @@ export class CommonActions {
         };
     }
 
+    /**
+     * Resets onboardingform to default state
+     */
     public resetOnboardingForm(): CustomActions {
         return {
             type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE
         };
     }
 
+    /**
+     * Resets country to default state
+     */
     public resetCountry(): CustomActions {
         return {
             type: CommonActions.RESET_COUNTRY

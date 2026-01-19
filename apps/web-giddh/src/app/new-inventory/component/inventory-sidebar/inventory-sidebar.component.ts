@@ -36,11 +36,18 @@ interface SidebarNode {
 }
 
 /** Flat node with expandable and level information */
+/**
+ * SidebarFlatNode interface definition
+ * Defines the structure and contract for SidebarFlatNode objects
+ */
 interface SidebarFlatNode {
     expandable: boolean;
     name: string;
     level: number;
 }
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'inventory-sidebar',
     
@@ -49,14 +56,24 @@ interface SidebarFlatNode {
     styleUrls: [`./inventory-sidebar.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+/**
+ * InventorySidebarComponent component
+ * Handles inventorysidebar functionality and user interactions
+ */
 export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactivate {
     /** This will hold new inventory template reference */
     @ViewChild('asideMenuStateForCreateNewInventoryTemplate') asideMenuStateForCreateNewInventoryTemplate: TemplateRef<any>;
     /** This will hold aside menu state */
     public asideMenuStateForCreateNewInventoryDialogRef: MatDialogRef<any>;
     /** Callback function to check for unsaved changes from parent component */
+    /**
+     * Handles hasUnsavedChangesCallback functionality
+     */
     public hasUnsavedChangesCallback: () => boolean;
     /** Callback function to clean up forms from parent component */
+    /**
+     * Handles markFormsAsPristineCallback functionality
+     */
     public markFormsAsPristineCallback: () => void;
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -73,6 +90,9 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
     /** Holds images folder path */
     public imgPath: string = "";
     /** Holds transformer data */
+    /**
+     * Handles transformer functionality
+     */
     public transformer = (node: SidebarNode, level: number) => {
         return {
             expandable: !!node.children && node.children.length > 0,
@@ -101,6 +121,9 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
     /** Holds dataSource data */
     public dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
     /** Holds tree data has child */
+    /**
+     * Handles hasChild functionality
+     */
     public hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
     /** Holds inventory type module  */
     public moduleType: string = '';
@@ -111,6 +134,10 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
     /** Holds current page url */
     private currentUrl: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private router: Router,
         private changeDetection: ChangeDetectorRef,
@@ -135,6 +162,9 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
         this.currentUrl = this.router.url;
         this.setupNavigationListener();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            /**
+             * Handles if functionality
+             */
             if (event instanceof NavigationEnd) {
                 this.currentUrl = event.url;
                 this.openActiveMenu(this.currentUrl);
@@ -142,16 +172,25 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
         });
 
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
 
         this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length >= 2;
                 this.changeDetection.detectChanges();
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
@@ -168,14 +207,23 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
     public openActiveMenu(url: string): void {
         let activeNodeIndex = null;
         this.dataSource.data?.forEach((tree, index) => {
+            /**
+             * Handles if functionality
+             */
             if (activeNodeIndex === null) {
                 let activeNode = tree?.children?.filter(node => node?.link === url || node?.hiddenLink?.includes(url));
+                /**
+                 * Handles if functionality
+                 */
                 if (activeNode?.length) {
                     activeNodeIndex = index;
                 }
             }
         });
         let rootLevelNodes = this.treeControl.dataNodes?.filter(node => node.level === 0);
+        /**
+         * Handles if functionality
+         */
         if (activeNodeIndex !== null) {
             this.treeControl.expand(rootLevelNodes[activeNodeIndex]);
         }
@@ -199,10 +247,16 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
     public goToPreviousPage(): void {
         // Check for unsaved changes before proceeding
         
+        /**
+         * Handles if functionality
+         */
         if (this.showPageLeaveConfirmation) {
             let dialogRef = this.pageLeaveUtilityService.openDialog();
             
             dialogRef.afterClosed().subscribe((action) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action) {
                     // User confirmed to proceed - clean up and continue
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
@@ -234,6 +288,9 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
      * @memberof ActivityLogsComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.dataList = [
@@ -329,6 +386,9 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
      */
     public openAsidePaneDialog(node?: any): void {
         this.moduleType = node?.moduleType;
+        /**
+         * Handles if functionality
+         */
         if (node?.openActiveMenu) {
             this.asideMenuStateForCreateNewInventoryDialogRef = this.dialog.open(this.asideMenuStateForCreateNewInventoryTemplate, ASIDE_PANE_CONFIG);
         }
@@ -410,18 +470,30 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
      * @memberof InventorySidebarComponent
      */
     public canDeactivate(): Promise<boolean> {
+        /**
+         * Handles if functionality
+         */
         if (this.showPageLeaveConfirmation) {
             return new Promise<boolean>((resolve) => {
                 let dialogRef = this.pageLeaveUtilityService.openDialog();
                 
                 dialogRef.afterClosed().subscribe((action) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (action) {
                         // User confirmed to proceed - clean up and continue
                         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                         this.markFormsAsPristine();
+                        /**
+                         * Handles resolve functionality
+                         */
                         resolve(true);
                     } else {
                         // User cancelled - stay on current page
+                        /**
+                         * Handles resolve functionality
+                         */
                         resolve(false);
                     }
                 });

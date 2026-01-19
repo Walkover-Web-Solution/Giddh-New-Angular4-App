@@ -1,12 +1,24 @@
+/**
+ * ApplyDiscountRequest class
+ * Implements ApplyDiscountRequest functionality
+ */
 export class ApplyDiscountRequest {
     public discountUniqueName: string;
     public accountUniqueNames: string[];
 }
+/**
+ * AssignDiscountRequestForAccount class
+ * Implements AssignDiscountRequestForAccount functionality
+ */
 export class AssignDiscountRequestForAccount {
     public discountUniqueNames: string[];
     public accountUniqueName: string;
 }
 
+/**
+ * ApplyDiscountRequestV2 class
+ * Implements ApplyDiscountRequestV2 functionality
+ */
 export class ApplyDiscountRequestV2 {
     public uniqueName: string;
     public discounts: string[];

@@ -8,6 +8,9 @@ import { AccountsAction } from '../../../actions/accounts.actions';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { GeneralService } from '../../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'ledger-aside-pane',
     templateUrl: './ledger-aside-pane.component.html',
@@ -15,6 +18,10 @@ import { GeneralService } from '../../../services/general.service';
     standalone: false
 })
 
+/**
+ * LedgerAsidePaneComponent component
+ * Handles ledgerasidepane functionality and user interactions
+ */
 export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -34,6 +41,10 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private inventorySidebarAction: SidebarAction,
@@ -46,35 +57,53 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         document.querySelector('body').classList.add('ledger-aside-pane');
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.inventorySidebarAction.GetGroupsWithStocksHierarchyMin());
         // subscribe createStockSuccess for resting form
         this.createStockSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.backButtonPressed();
             }
         });
 
         this.createAccountIsSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.backButtonPressed();
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges && !response) {
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             }
 
             this.hasUnsavedChanges = response;
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
     }
 
+    /**
+     * Toggles stockpane state
+     */
     public toggleStockPane(type?: string) {
         this.hideFirstScreen = true;
         this.isAddAccountOpen = false;
@@ -82,6 +111,9 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         this.isAddStockOpen = !this.isAddStockOpen;
     }
 
+    /**
+     * Toggles accountpane state
+     */
     public toggleAccountPane() {
         this.hideFirstScreen = true;
         this.isAddStockOpen = false;
@@ -94,6 +126,9 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
      * @memberof LedgerAsidePaneComponent
      */
     public backButtonPressed() {
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges && this.isAddAccountOpen) {
             this.confirmPageLeave(() => {
                 this.closeAddAccount(true);
@@ -110,6 +145,9 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
      * @memberof LedgerAsidePaneComponent
      */
     public closeAsidePane(e?: any) {
+        /**
+         * Handles if functionality
+         */
         if (this.hasUnsavedChanges && this.isAddAccountOpen) {
             this.confirmPageLeave(() => {
                 this.closeAddAccount(e);
@@ -132,12 +170,18 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;
         this.isAddAccountOpen = false;
+        /**
+         * Handles if functionality
+         */
         if (!event) {
             this.closeAsideEvent.emit();
         }
         this.changeDetectionRef.detectChanges();
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         document.querySelector('body').classList.remove('ledger-aside-pane');
         this.destroyed$.next(true);
@@ -155,8 +199,14 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         document.querySelector("ledger-aside-pane")?.classList?.add("page-leave-confirmation-showing");
         this.pageLeaveUtilityService.confirmPageLeave(action => {
             document.querySelector("ledger-aside-pane")?.classList?.remove("page-leave-confirmation-showing");
+            /**
+             * Handles if functionality
+             */
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                /**
+                 * Handles callback functionality
+                 */
                 callback();
             }
         });

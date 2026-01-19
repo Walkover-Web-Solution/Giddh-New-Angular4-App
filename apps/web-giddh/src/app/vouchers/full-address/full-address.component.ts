@@ -1,12 +1,19 @@
 import { Component, Input } from "@angular/core";
 import { TaxType } from "../utility/vouchers.const";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "full-address",
     templateUrl: "./full-address.component.html",
     styleUrls: ["./full-address.component.scss"],
     standalone: false
 })
+/**
+ * FullAddressComponent component
+ * Handles fulladdress functionality and user interactions
+ */
 export class FullAddressComponent {
     /** Address details */
     @Input() public address: any;

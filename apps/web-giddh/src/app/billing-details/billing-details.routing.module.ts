@@ -3,6 +3,9 @@ import { RouterModule } from '@angular/router';
 import { NeedsAuthorization } from '../decorators/needAuthorization';
 import { BillingDetailComponent } from './billing-details.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -16,5 +19,9 @@ import { BillingDetailComponent } from './billing-details.component';
     ],
     exports: [RouterModule]
 })
+/**
+ * BillingDetailRoutingModule module
+ * Implements BillingDetailRoutingModule functionality
+ */
 export class BillingDetailRoutingModule {
 }

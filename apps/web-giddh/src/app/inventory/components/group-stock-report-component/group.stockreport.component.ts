@@ -29,6 +29,9 @@ import { GeneralService } from '../../../services/general.service';
 import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 import { MatMenuTrigger } from '@angular/material/menu';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'invetory-group-stock-report',
     templateUrl: './group.stockreport.component.html',
@@ -36,6 +39,10 @@ import { MatMenuTrigger } from '@angular/material/menu';
     standalone: false
 })
 
+/**
+ * InventoryGroupStockReportComponent component
+ * Handles inventorygroupstockreport functionality and user interactions
+ */
 export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
     /** Reference to advance search dialog template */
@@ -172,23 +179,53 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         },
         ranges: {
             'Last 1 Day': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(1, 'day'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ],
             'Last 7 Days': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(6, 'day'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ],
             'Last 30 Days': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(29, 'day'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ],
             'Last 6 Months': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(6, 'month'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ],
             'Last 1 Year': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(12, 'month'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ]
         },
@@ -224,6 +261,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     /** Reference to advance search dialog */
     public dialogRef: MatDialogRef<any>;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private stockReportActions: StockReportActions,
@@ -242,6 +283,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 const stockGroup = cloneDeep(a);
                 const stockList = [];
@@ -250,6 +294,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                     stockList.push({ label: `${stock.name} (${stock?.uniqueName})`, value: stock?.uniqueName });
                 });
                 this.stockList$ = observableOf(stockList);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.GroupStockReportRequest && !this.GroupStockReportRequest.stockGroupUniqueName) {
                     this.GroupStockReportRequest.stockGroupUniqueName = stockGroup?.uniqueName;
                 }
@@ -259,6 +306,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
         // tslint:disable-next-line:no-shadowed-variable
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
+            /**
+             * Handles if functionality
+             */
             if (branches && branches.length > 0) {
                 this.branchAvailable = true;
             } else {
@@ -269,24 +319,42 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         // get view from sidebar while clicking on group/stock
         let len = document.location.pathname?.split('/')?.length;
         this.groupUniqueNameFromURL = document.location.pathname?.split('/')[len - 2];
+        /**
+         * Handles if functionality
+         */
         if (this.groupUniqueNameFromURL && len === 6) {
             this.groupUniqueName = this.groupUniqueNameFromURL;
             this.initReport();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.invViewService.getActiveGroupUniqueName()) {
             this.groupUniqueName = this.invViewService.getActiveGroupUniqueName();
             this.initReport();
         }
 
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
+            /**
+             * Handles if functionality
+             */
             if (v && !v.isOpen) {
                 this.activeGroupName = v.name;
                 this.groupUniqueName = v.groupUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.groupUniqueName) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.groupUniqueName) {
                         this.initReport();
                     }
@@ -295,7 +363,13 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         });
 
         this.groupStockReport$.subscribe((res: any) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.isGroupNotFound) {
                     this.groupStockReport = undefined;
                     this.groupNotFoundMessage = res.message;
@@ -311,6 +385,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         });
 
         this.universalDate$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
                 this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
@@ -322,6 +399,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.selectedCmp = activeCompany;
                 this.getAllBranch();
@@ -329,26 +409,53 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         });
 
         this.productUniqueNameInput.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(s => {
             this.isFilterCorrect = true;
             this.GroupStockReportRequest.stockName = s;
+            /**
+             * Handles if functionality
+             */
             if (s === '') {
                 this.showProductSearch = false;
             }
             this.getGroupReport(true);
         });
         this.sourceUniqueNameInput.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.isFilterCorrect = true;
                 this.GroupStockReportRequest.source = s;
                 this.getGroupReport(true);
+                /**
+                 * Handles if functionality
+                 */
                 if (s === '') {
                     this.showProductSearch = false;
                 }
@@ -370,10 +477,19 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes.currentBranchAndWarehouse && !isEqual(changes.currentBranchAndWarehouse.previousValue, changes.currentBranchAndWarehouse.currentValue)) {
+            /**
+             * Handles if functionality
+             */
             if (this.currentBranchAndWarehouse) {
                 this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
                 this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.isCompany ? undefined : this.currentBranchAndWarehouse.branch;
+                /**
+                 * Handles if functionality
+                 */
                 if (!changes.currentBranchAndWarehouse.firstChange) {
                     // Make a manual service call only when it is not first change
                     this.getGroupReport(true);
@@ -383,23 +499,38 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     @HostListener('document:keyup', ['$event'])
+    /**
+     * Handles keyboardevent event
+     */
     public handleKeyboardEvent(event: KeyboardEvent) {
+        /**
+         * Handles if functionality
+         */
         if (event.altKey && event.which === 73) { // Alt + i
             event.preventDefault();
             event.stopPropagation();
             this.openAsidePaneDialog();
         }
+        /**
+         * Handles if functionality
+         */
         if (event.altKey && event.which === 78 && this.branchAvailable) { // Alt + N
             event.preventDefault();
             event.stopPropagation();
             this.openBranchTransferDialog();
         }
+        /**
+         * Handles if functionality
+         */
         if (event.which === ESCAPE) {
             this.asideBranchTransferPaneDialogRef?.close();
             this.asidePaneDialogRef?.close();
         }
     }
 
+    /**
+     * Initializes report
+     */
     public initReport() {
         this.GroupStockReportRequest.page = 1;
         this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
@@ -410,18 +541,30 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest)));
     }
 
+    /**
+     * Retrieves groupreport data
+     */
     public getGroupReport(resetPage: boolean) {
         this.GroupStockReportRequest.from = this.fromDate || null;
         this.GroupStockReportRequest.to = this.toDate || null;
         this.invViewService.setActiveDate(this.GroupStockReportRequest.from, this.GroupStockReportRequest.to);
         this.activeGroup$.pipe(take(1)).subscribe(activeGroup => {
+            /**
+             * Handles if functionality
+             */
             if (activeGroup) {
                 this.GroupStockReportRequest.stockGroupUniqueName = activeGroup?.uniqueName;
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.GroupStockReportRequest.page = 1;
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.GroupStockReportRequest.stockGroupUniqueName) {
             return;
         }
@@ -433,10 +576,19 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      */
     public getAllBranch() {
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
+            /**
+             * Handles if functionality
+             */
             if (entities) {
                 let newEntities = [];
+                /**
+                 * Handles if functionality
+                 */
                 if (entities.length) {
                     newEntities = [...entities];
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.selectedCmp && entities.findIndex(p => p?.uniqueName === this.selectedCmp?.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         newEntities.push(this.selectedCmp);
@@ -452,51 +604,87 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         })), takeUntil(this.destroyed$)).subscribe();
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles goToManageGroup functionality
+     */
     public goToManageGroup() {
+        /**
+         * Handles if functionality
+         */
         if (this.groupUniqueName) {
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
             this.setInventoryAsideState(true, true, true);
         }
     }
 
+    /**
+     * Handles nextPage functionality
+     */
     public nextPage() {
         this.GroupStockReportRequest.page++;
         this.getGroupReport(false);
     }
 
+    /**
+     * Handles prevPage functionality
+     */
     public prevPage() {
         this.GroupStockReportRequest.page--;
         this.getGroupReport(false);
     }
 
+    /**
+     * Closes fromdate
+     */
     public closeFromDate(e: any) {
+        /**
+         * Handles if functionality
+         */
         if (this.showFromDatePicker) {
             this.showFromDatePicker = false;
         }
     }
 
+    /**
+     * Closes todate
+     */
     public closeToDate(e: any) {
+        /**
+         * Handles if functionality
+         */
         if (this.showToDatePicker) {
             this.showToDatePicker = false;
         }
     }
 
+    /**
+     * Handles selectedDate functionality
+     */
     public selectedDate(value: any, from?: string) { //from like advance search
         this.fromDate = dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT);
         this.toDate = dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.pickerSelectedFromDate = value.picker.startDate;
         this.pickerSelectedToDate = value.picker.endDate;
+        /**
+         * Handles if functionality
+         */
         if (!from) {
             this.isFilterCorrect = true;
             this.getGroupReport(true);
         }
     }
 
+    /**
+     * Handles filterFormData functionality
+     */
     public filterFormData() {
         this.getGroupReport(true);
     }
@@ -522,6 +710,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
 
 
+    /**
+     * Handles DownloadGroupReports functionality
+     */
     public DownloadGroupReports(type: string) {
         this.GroupStockReportRequest.reportDownloadType = type;
         this._toasty.infoToast('Upcoming feature');
@@ -546,18 +737,30 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     // From Entity Dropdown
+    /**
+     * Handles selectEntity functionality
+     */
     public selectEntity(option: IOption) {
         this._toasty.infoToast('Upcoming feature');
         this.GroupStockReportRequest.branchDetails = option.label;
     }
 
     // From inventory type Dropdown
+    /**
+     * Handles selectTransactionType functionality
+     */
     public selectTransactionType(inventoryType) {
         this.GroupStockReportRequest.transactionType = inventoryType;
         this.getGroupReport(true);
     }
 
+    /**
+     * Handles sortButtonClicked functionality
+     */
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+        /**
+         * Handles if functionality
+         */
         if (this.GroupStockReportRequest.sort !== type || this.GroupStockReportRequest.sortBy !== columnName) {
             this.GroupStockReportRequest.sort = type;
             this.GroupStockReportRequest.sortBy = columnName;
@@ -566,20 +769,41 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.getGroupReport(true);
     }
 
+    /**
+     * Handles clickedOutside functionality
+     */
     public clickedOutside(event, el, fieldName: string) {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'product') {
+            /**
+             * Handles if functionality
+             */
             if (this.productUniqueNameInput.value !== null && this.productUniqueNameInput.value !== '') {
                 return;
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'source') {
+            /**
+             * Handles if functionality
+             */
             if (this.sourceUniqueNameInput.value !== null && this.sourceUniqueNameInput.value !== '') {
                 return;
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.childOf(event.target, el)) {
             return;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (fieldName === 'product') {
                 this.showProductSearch = false;
             } else if (fieldName === 'source') {
@@ -589,16 +813,31 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     /* tslint:disable */
+    /**
+     * Handles childOf functionality
+     */
     public childOf(c, p) {
+        /**
+         * Handles while functionality
+         */
         while ((c = c.parentNode) && c !== p) {
         }
         return !!c;
     }
 
     // focus on click search box
+    /**
+     * Shows productsearchbox element
+     */
     public showProductSearchBox() {
         this.showProductSearch = !this.showProductSearch;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.productName && this.productName.nativeElement) {
                 this.productName.nativeElement.focus();
                 this.productName.nativeElement.value = null;
@@ -606,9 +845,18 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         }, 200);
     }
 
+    /**
+     * Shows sourcesearchbox element
+     */
     public showSourceSearchBox() {
         this.showSourceSearch = !this.showSourceSearch;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.sourceName && this.sourceName.nativeElement) {
                 this.sourceName.nativeElement.focus();
                 this.sourceName.nativeElement.value = null;
@@ -617,6 +865,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     //******* Advance search modal *******//
+    /**
+     * Resets filter to default state
+     */
     public resetFilter() {
         this.showAdvanceSearchModal = true;
         this.advanceSearchAction('clear');
@@ -632,14 +883,23 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.showProductSearch = false;
         this.GroupStockReportRequest.stockName = null;
         this.GroupStockReportRequest.source = null;
+        /**
+         * Handles if functionality
+         */
         if (this.productName && this.productName.nativeElement) {
             this.productName.nativeElement.value = null;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.sourceName && this.sourceName.nativeElement) {
             this.sourceName.nativeElement.value = null;
         }
         //Reset Date with universal date
         this.universalDate$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
                 this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
@@ -677,9 +937,15 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public advanceSearchAction(type?: string) {
+        /**
+         * Handles if functionality
+         */
         if (type === 'cancel') {
             this.clearModal();
             this.showAdvanceSearchModal = false;
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchDialogRef) {
                 this.advanceSearchDialogRef.close();
             }
@@ -689,6 +955,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.isFilterCorrect) {
             this.datePickerOptions = {
                 ...this.datePickerOptions,
@@ -696,6 +965,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 endDate: dayjs(this.pickerSelectedToDate).toDate()
             };
             this.showAdvanceSearchModal = false;
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchDialogRef) {
                 this.advanceSearchDialogRef.close();
             }
@@ -704,13 +976,22 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     }
 
+    /**
+     * Handles clearModal functionality
+     */
     public clearModal() {
+        /**
+         * Handles if functionality
+         */
         if (this.GroupStockReportRequest.number || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.entity) {
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
 
             this.GroupStockReportRequest.number = null;
             this.getGroupReport(true);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName?.nativeElement.value) {
             // do something...
         } else {
@@ -722,6 +1003,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * onDDElementSelect
      */
     public clearShSelect(type: string) {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
                 this.filterCategory = null;
@@ -739,7 +1023,13 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.mapAdvFilters();
     }
 
+    /**
+     * Handles ddelementselect event
+     */
     public onDDElementSelect(event: IOption, type?: string) {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
                 this.filterCategory = event.value;
@@ -754,11 +1044,20 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.mapAdvFilters();
     }
 
+    /**
+     * Handles downloadAllInventoryReports functionality
+     */
     public downloadAllInventoryReports(reportType: string, reportFormat: string) {
         let obj = new InventoryDownloadRequest();
+        /**
+         * Handles if functionality
+         */
         if (this.GroupStockReportRequest.stockGroupUniqueName) {
             obj.stockGroupUniqueName = this.GroupStockReportRequest.stockGroupUniqueName;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.GroupStockReportRequest.stockUniqueName) {
             obj.stockUniqueName = this.GroupStockReportRequest.stockUniqueName;
         }
@@ -770,6 +1069,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         obj.branchUniqueName = this.currentBranchAndWarehouse.branch;
         this.inventoryService.downloadAllInventoryReports(obj).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     this._toasty.infoToast(res?.body);
                 } else {
@@ -778,21 +1080,39 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             });
     }
 
+    /**
+     * Handles mapAdvFilters functionality
+     */
     public mapAdvFilters() {
+        /**
+         * Handles if functionality
+         */
         if (this.filterCategory) { // entity = Opening Stock, inwards, outwards, Closing Stock
             this.GroupStockReportRequest.entity = this.filterCategory;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.filterCategoryType) { // value = quantity/value
             this.GroupStockReportRequest.value = this.filterCategoryType;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.filterValueCondition) { // condition = GREATER_THAN,GREATER_THAN_OR_EQUALS,LESS_THAN,LESS_THAN_OR_EQUALS,EQUALS,NOT_EQUALS
             this.GroupStockReportRequest.condition = this.filterValueCondition;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchForm.controls['filterAmount'].value && !this.advanceSearchForm.controls['filterAmount'].invalid) { // number=1 {any number given by user}
             this.GroupStockReportRequest.number = parseFloat(this.advanceSearchForm.controls['filterAmount'].value);
         } else {
             this.GroupStockReportRequest.number = null;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || (this.productName && this.productName.nativeElement && this.productName.nativeElement.value) || this.GroupStockReportRequest.entity || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.number) {
             this.isFilterCorrect = true;
         } else {
@@ -822,11 +1142,17 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      */
     public hideModal(isNoteCreatedSuccessfully?: boolean): void {
         this.dialogRef?.close();
+        /**
+         * Handles if functionality
+         */
         if (isNoteCreatedSuccessfully) {
             this.getGroupReport(true);
         }
     }
 
+    /**
+     * Opens branchtransferpopup
+     */
     public openBranchTransferPopup(event) {
         this.branchTransferMode = event;
         this.openBranchTransferDialog();
@@ -850,6 +1176,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -865,16 +1194,25 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public dateSelectedCallback(value?: any, from?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -882,6 +1220,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.pickerSelectedFromDate = value.startDate;
             this.pickerSelectedToDate = value.endDate;
+            /**
+             * Handles if functionality
+             */
             if (!from) {
                 this.isFilterCorrect = true;
             }

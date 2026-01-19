@@ -23,6 +23,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         OnboardingComponent,
@@ -54,5 +57,9 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
         EmailForwardingService
     ]
 })
+/**
+ * BankStatementModule module
+ * Implements BankStatementModule functionality
+ */
 export class BankStatementModule {
 }

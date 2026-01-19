@@ -8,10 +8,21 @@ import { Store } from "@ngrx/store";
 import { remove } from '../lodash-optimized';
 import { Configuration } from '../app.constant';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * PageLeaveUtilityService service
+ * Provides pageleaveutility related business logic and data operations
+ */
 export class PageLeaveUtilityService {
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private dialog: MatDialog,
         private localeService: LocaleService,
@@ -50,6 +61,9 @@ export class PageLeaveUtilityService {
 
         dialogRef.afterClosed().subscribe((action) => {
             document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
+            /**
+             * Handles if functionality
+             */
             if (action) {
                 this.removeBrowserConfirmationDialog();
             }
@@ -65,11 +79,17 @@ export class PageLeaveUtilityService {
      */
     public removeBrowserConfirmationDialog(): void {
         this.store.dispatch(this.commonAction.hasUnsavedChanges(false));
+        /**
+         * Handles if functionality
+         */
         if (Configuration.isElectron) {
             try {
                 let electronIpcAvailable = false;
 
                 // Try electronAPI first (secure context)
+                /**
+                 * Handles if functionality
+                 */
                 if ((window as any).electronAPI && (window as any).electronAPI.send) {
                     try {
                         (window as any).electronAPI.send('has-unsaved-changes', false);
@@ -80,9 +100,15 @@ export class PageLeaveUtilityService {
                 }
 
                 // Try legacy electron require (fallback)
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable && (window as any).require) {
                     try {
                         const electron = (window as any).require('electron');
+                        /**
+                         * Handles if functionality
+                         */
                         if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
                             electron.ipcRenderer.send('has-unsaved-changes', false);
                             electronIpcAvailable = true;
@@ -93,6 +119,9 @@ export class PageLeaveUtilityService {
                 }
 
                 // Fallback to regular browser behavior if IPC not available
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable) {
 
                     window.onbeforeunload = null;
@@ -113,15 +142,24 @@ export class PageLeaveUtilityService {
      * @memberof PageLeaveUtilityService
      */
     public addBrowserConfirmationDialog(saveGlobalUnsavedChange: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (saveGlobalUnsavedChange) {
             this.store.dispatch(this.commonAction.hasUnsavedChanges(true));
         }
 
+        /**
+         * Handles if functionality
+         */
         if (Configuration.isElectron) {
             try {
                 let electronIpcAvailable = false;
 
                 // Try electronAPI first (secure context)
+                /**
+                 * Handles if functionality
+                 */
                 if ((window as any).electronAPI && (window as any).electronAPI.send) {
                     try {
                         (window as any).electronAPI.send('has-unsaved-changes', true);
@@ -132,9 +170,15 @@ export class PageLeaveUtilityService {
                 }
 
                 // Try legacy electron require (fallback)
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable && (window as any).require) {
                     try {
                         const electron = (window as any).require('electron');
+                        /**
+                         * Handles if functionality
+                         */
                         if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
                             electron.ipcRenderer.send('has-unsaved-changes', true);
                             electronIpcAvailable = true;
@@ -145,6 +189,9 @@ export class PageLeaveUtilityService {
                 }
 
                 // Fallback to regular browser behavior if IPC not available
+                /**
+                 * Handles if functionality
+                 */
                 if (!electronIpcAvailable) {
 
                     window.onbeforeunload = () => 'true';
@@ -202,9 +249,18 @@ export class PageLeaveUtilityService {
         let dialogRef = this.openDialog(saveGlobalUnsavedChange);
 
         dialogRef.afterClosed().subscribe((action) => {
+            /**
+             * Handles if functionality
+             */
             if (action) {
+                /**
+                 * Handles callback functionality
+                 */
                 callback(true);
             } else {
+                /**
+                 * Handles callback functionality
+                 */
                 callback(false);
             }
         });

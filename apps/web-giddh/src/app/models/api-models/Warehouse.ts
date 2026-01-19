@@ -1,3 +1,7 @@
+/**
+ * WareHouseResponse class
+ * Implements WareHouseResponse functionality
+ */
 export class WareHouseResponse {
     countryCode: string;
     currencyCode: string;

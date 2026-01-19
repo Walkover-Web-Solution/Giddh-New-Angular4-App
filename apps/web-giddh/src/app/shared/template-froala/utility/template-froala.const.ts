@@ -1,4 +1,8 @@
 /** Email type enum */
+/**
+ * EmailType enumeration
+ * Defines constant values for EmailType
+ */
 export enum EmailType {
     To = 'to',
     Cc = 'cc',
@@ -6,19 +10,35 @@ export enum EmailType {
     ReplyTo = 'replyTo'
 };
 /** Trigger module enum */
+/**
+ * TriggerModuleEnum enumeration
+ * Defines constant values for TriggerModuleEnum
+ */
 export enum TriggerModuleEnum {
     VoucherDue = 'VOUCHER_DUE'
 }
 /** Trigger action enum */
+/**
+ * TriggerActionEnum enumeration
+ * Defines constant values for TriggerActionEnum
+ */
 export enum TriggerActionEnum {
     AttachVoucherPdf = 'ATTACH_VOUCHER_PDF'
 }
 /** Entity enum */
+/**
+ * EntityEnum enumeration
+ * Defines constant values for EntityEnum
+ */
 export enum EntityEnum {
     Account = 'ACCOUNT',
     Group = 'GROUP'
 }
 /** Other time options enum */
+/**
+ * OtherTimeOptionsEnum enumeration
+ * Defines constant values for OtherTimeOptionsEnum
+ */
 export enum OtherTimeOptionsEnum {
     DayOfWeek = 'dayOfWeek',
     DayOfMonth = 'dayOfMonth'

@@ -8,6 +8,10 @@ import { SearchService } from "../services/search.service";
 import { AccountService } from "../services/account.service";
 import { AccountRequestV2 } from "../models/api-models/Account";
 
+/**
+ * LedgerState interface definition
+ * Defines the structure and contract for LedgerState objects
+ */
 export interface LedgerState {
     ledgerBalance: any;
     signedUrlSuccess: any;
@@ -26,14 +30,28 @@ export const DEFAULT_LEDGER_STATE: LedgerState = {
     isLedgerViewChange: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * LedgerComponentStore store
+ * Manages ledgercomponent state using NgRx ComponentStore
+ */
 export class LedgerComponentStore extends ComponentStore<LedgerState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private toasterService: ToasterService,
         private ledgerService: LedgerService,
         private searchService: SearchService,
         private accountService: AccountService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_LEDGER_STATE);
     }
     public signedUrlSuccess$ = this.select((state) => state.signedUrlSuccess);
@@ -49,16 +67,28 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
      */
     readonly getLedgerBalance = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ ledgerBalance: null });
                 return this.ledgerService.getLedgerBalance(req.trxRequest, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     ledgerBalance: res.body
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -75,6 +105,9 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -97,11 +130,20 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
      */
     readonly uploadVoucher = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ uploadVoucherSuccess: false });
                 return this.ledgerService.uploadVoucher(req.url, req.file).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.statusText === "OK") {
                                 return this.patchState({
                                     uploadVoucherSuccess: true
@@ -120,6 +162,9 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -133,11 +178,20 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
      */
     readonly getSignedUrl = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ signedUrlSuccess: null });
                 return this.ledgerService.getSignedUrl(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     signedUrlSuccess: res.body
@@ -156,6 +210,9 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -169,11 +226,20 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
      */
     readonly importVoucher = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ importVoucherSuccess: null });
                 return this.ledgerService.importVoucher(req.requestObject, req.signedUrlResponse).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     importVoucherSuccess: res.body
@@ -192,6 +258,9 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -205,11 +274,20 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
      */
     readonly getProjectAccount = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ accountSearch: null });
                 return this.searchService.searchAccountV3(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ accountSearch: res.body });
                             } else {
@@ -222,6 +300,9 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                             return this.patchState({ accountSearch: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -235,11 +316,20 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
      */
     readonly updateAccount = this.effect((data: Observable<{ model: AccountRequestV2, accountUniqueName: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isLedgerViewChange: null });
                 return this.accountService.UpdateAccountWithoutGroupUniqueName(req.model, req.accountUniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 res.body?.message && this.toasterService.showSnackBar('success', res.body.message);
                                 return this.patchState({ isLedgerViewChange: true });
@@ -253,6 +343,9 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                             return this.patchState({ isLedgerViewChange: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

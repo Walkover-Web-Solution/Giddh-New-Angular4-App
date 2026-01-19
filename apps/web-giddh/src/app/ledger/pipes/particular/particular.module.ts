@@ -11,4 +11,8 @@ import { ParticularPipe } from './particular.pipe';
     declarations: [ParticularPipe],
     exports: [ParticularPipe]
 })
+/**
+ * ParticularPipeModule module
+ * Implements ParticularPipeModule functionality
+ */
 export class ParticularPipeModule {}

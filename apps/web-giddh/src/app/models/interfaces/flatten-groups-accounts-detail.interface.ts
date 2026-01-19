@@ -5,6 +5,10 @@
 
 import { INameUniqueName } from './name-unique-name.interface';
 
+/**
+ * IFlattenGroupsAccountsDetailItem interface definition
+ * Defines the structure and contract for IFlattenGroupsAccountsDetailItem objects
+ */
 export interface IFlattenGroupsAccountsDetailItem {
     applicableTaxes: any[];
     groupName: string;
@@ -20,6 +24,10 @@ export interface IFlattenGroupsAccountsDetailItem {
     uNameStr?: string;
 }
 
+/**
+ * IFlattenGroupsAccountsDetail interface definition
+ * Defines the structure and contract for IFlattenGroupsAccountsDetail objects
+ */
 export interface IFlattenGroupsAccountsDetail extends IFlattenGroupsAccountsDetailItem {
     accountDetails: IFlattenGroupsAccountsDetailItem[];
 }

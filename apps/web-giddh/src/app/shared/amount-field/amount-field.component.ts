@@ -2,6 +2,9 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { GeneralService } from '../../services/general.service';
 import { DecimalPipe } from '@angular/common';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'amount-field',
     templateUrl: './amount-field.component.html',
@@ -9,6 +12,10 @@ import { DecimalPipe } from '@angular/common';
     standalone: false
 })
 
+/**
+ * AmountFieldComponent component
+ * Handles amountfield functionality and user interactions
+ */
 export class AmountFieldComponent implements OnInit, OnChanges {
     /* amount type will be any */
     @Input() public amount: any;
@@ -25,6 +32,10 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     /** this will store direction */
     public direction: string = "ltr";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private generalService: GeneralService, private decimalPipe: DecimalPipe) {
 
     }
@@ -55,8 +66,14 @@ export class AmountFieldComponent implements OnInit, OnChanges {
      * @memberof AmountFieldComponent
      */
     public detectDirection(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.currencyCode) {
             let isRtlCurrency = this.generalService.isRtlCurrency(this.currencyCode);
+            /**
+             * Handles if functionality
+             */
             if (isRtlCurrency) {
                 this.direction = "rtl";
             } else {

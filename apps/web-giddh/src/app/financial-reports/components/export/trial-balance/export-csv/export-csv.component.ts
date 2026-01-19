@@ -19,6 +19,10 @@ import { Configuration } from '../../../../../app.constant';
 import { environment } from '../../../../../../environments/environment.generated';
 import { forEach, indexOf } from '../../../../../lodash-optimized';
 
+/**
+ * Total interface definition
+ * Defines the structure and contract for Total objects
+ */
 export interface Total {
     ob: number;
     cb: number;
@@ -26,29 +30,49 @@ export interface Total {
     dr: number;
 }
 
+/**
+ * FormatCsv component
+ * Handles formatcsv functionality and user interactions
+ */
 class FormatCsv implements IFormatable {
+    /**
+     * Handles csv functionality
+     */
     public csv = () => `${this.header}\r\n\r\n${this.title}\r\n${this.body}\r\n${this.footer}\r\n`;
     private header: string = '';
     private body: string = '';
     private footer: string = '';
     private title: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private request: TrialBalanceRequest,
         private localeData) {
         this.title = this.localeData?.csv.trial_balance.name + ',' + this.localeData?.csv.trial_balance.opening_balance + ',' + this.localeData?.csv.trial_balance.debit + ',' + this.localeData?.csv.trial_balance.credit + ',' + this.localeData?.csv.trial_balance.closing_balance + '\r\n';
     }
 
+    /**
+     * Sets header value
+     */
     public setHeader(selectedCompany: CompanyResponse) {
         this.header = `${selectedCompany.name ?? ''}\r\n"${selectedCompany.address ?? ''}"\r\n${selectedCompany.city ?? ''}${selectedCompany?.pincode ? '-' : ''}${selectedCompany?.pincode ?? ''}\r\n${this.localeData?.csv.trial_balance.trial_balance} ${this.request.from ?? ''} ${this.localeData?.csv.trial_balance.to} ${this.request.to  ?? ''}\r\n`;
     }
 
+    /**
+     * Sets rowdata value
+     */
     public setRowData(data: any[], padding: number) {
         this.body += ' '.repeat(padding);
         (Array.isArray(data) ? data : []).forEach(value => this.body += `${value},`);
         this.body += `\r\n`;
     }
 
+    /**
+     * Sets footer value
+     */
     public setFooter(data: any[]) {
         this.footer += this.localeData?.csv.trial_balance.total;
         (Array.isArray(data) ? data : []).forEach(value => this.footer += `${value},`);
@@ -56,12 +80,19 @@ class FormatCsv implements IFormatable {
     }
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'trial-balance-export-csv',
     templateUrl: './export-csv.component.html',
     providers: [RecTypePipe],
     standalone: false
 })
+/**
+ * TrialBalanceExportCsvComponent component
+ * Handles trialbalanceexportcsv functionality and user interactions
+ */
 export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
     @Input() public trialBalanceRequest: TrialBalanceRequest;
     @Input() public selectedCompany: CompanyResponse;
@@ -79,6 +110,10 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private recType: RecTypePipe,
@@ -92,20 +127,32 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/csv.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/csv.svg';
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles downloadCSV functionality
+     */
     public downloadCSV(value: string) {
         this.showCsvDownloadOptions = false;
         let csv = '';
         let name = '';
         let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);
+        /**
+         * Handles switch functionality
+         */
         switch (value) {
             case 'group-wise':
                 csv = this.dataFormatter.formatDataGroupWise(this.localeData, this.trialBalanceRequest.from, this.trialBalanceRequest.to);
@@ -127,11 +174,17 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         this.downLoadFile(name, csv);
     }
 
+    /**
+     * Retrieves ieversion data
+     */
     private getIEVersion(): number {
         let Idx;
         let sAgent;
         sAgent = window.navigator.userAgent;
         Idx = sAgent?.indexOf('MSIE');
+        /**
+         * Handles if functionality
+         */
         if (Idx > 0) {
             return parseInt(sAgent.substring(Idx + 5, sAgent?.indexOf('.', Idx)));
         } else if (!!navigator.userAgent.match(/Trident\/7\./)) {
@@ -141,7 +194,13 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles downLoadFile functionality
+     */
     private downLoadFile(fileName: string, csv: string) {
+        /**
+         * Handles if functionality
+         */
         if (this.getIEVersion() > 0) {
             let win;
             win = window.open();
@@ -151,6 +210,9 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
             win.close();
         } else {
             let data = new Blob([csv], { type: 'data:text/csv;charset=utf-8' });
+            /**
+             * Saves as data
+             */
             saveAs(data, fileName);
         }
     }
@@ -168,6 +230,9 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         exportBodyRequest.tagName = this.trialBalanceRequest.tagName;
         exportBodyRequest.branchUniqueName = this.trialBalanceRequest.branchUniqueName;
         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 this.router.navigate(["/pages/downloads"]);
                 this.toaster.showSnackBar("success", response?.body);

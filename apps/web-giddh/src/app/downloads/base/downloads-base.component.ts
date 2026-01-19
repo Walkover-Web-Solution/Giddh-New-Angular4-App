@@ -8,6 +8,10 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
  * Used by imports.component and exports.component
  */
 @Directive()
+/**
+ * DownloadsBaseComponent component
+ * Handles downloadsbase functionality and user interactions
+ */
 export abstract class DownloadsBaseComponent {
     /** This will hold local JSON data */
     public localeData: any = {};

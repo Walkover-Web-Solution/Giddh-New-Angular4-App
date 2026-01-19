@@ -18,6 +18,9 @@ import { NewConfirmationModalComponent } from '../../theme/new-confirmation-moda
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, filter, forEach, includes, map, set } from '../../lodash-optimized';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'project-wise-accounting',
     templateUrl: './project-wise-accounting.component.html',
@@ -25,6 +28,10 @@ import { cloneDeep, filter, forEach, includes, map, set } from '../../lodash-opt
     providers: [ProjectWiseAccountingComponentStore],
     standalone: false
 })
+/**
+ * ProjectWiseAccountingListComponent component
+ * Handles projectwiseaccountinglist functionality and user interactions
+ */
 export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** Holds table sorting reference */
     @ViewChild(MatSort) sortBy: MatSort;
@@ -90,6 +97,10 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** Stores loading status of profit and loss */
     public profitAndLossStatus: string = 'loading';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public dialog: MatDialog,
         private componentStore: ProjectWiseAccountingComponentStore,
@@ -99,6 +110,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     ) {
         this.componentStore.patchState({ isFetchingProjects: true });
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.setDefaultProject();
@@ -113,6 +127,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.projectName.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((searchedText: string) => {
+            /**
+             * Handles if functionality
+             */
             if (typeof searchedText === 'string' && searchedText.trim() !== this.projectListRequest.searchQuery) {
                 this.isSearch = searchedText !== '';
                 this.projectListRequest.queryColumn = 'NAME';
@@ -125,6 +142,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
 
         this.projectStatus.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((searchedText: string) => {
+            /**
+             * Handles if functionality
+             */
             if (typeof searchedText === 'string' && searchedText.trim() !== this.projectListRequest.searchQuery) {
                 this.isSearch = searchedText !== '';
                 this.projectListRequest.queryColumn = 'STATUS';
@@ -137,6 +157,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.projectsList$.pipe(takeUntil(this.destroyed$)).subscribe(projectList => {
+            /**
+             * Handles if functionality
+             */
             if (projectList) {
                 this.totalResults = projectList.totalItems;
                 this.dataSource = this.addDefaultProfitAndLoss(projectList.results);
@@ -145,8 +168,14 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.projectProfitDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 (Array.isArray(this.dataSource) ? this.dataSource : []).forEach((project) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (project.uniqueName === response.uniqueName)
                         project.profitAndLoss = response.profitAndLoss;
                 })
@@ -155,6 +184,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -165,14 +197,23 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.removeProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(deleteProjectUniqueName => {
+            /**
+             * Handles if functionality
+             */
             if (deleteProjectUniqueName) {
                 this.dataSource = this.dataSource.filter((project) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (project?.uniqueName != deleteProjectUniqueName) {
                         return project;
                     }
                 });
                 this.totalResults -= 1;
                 this.projectListRequest.page = this.generalService.adjustPageIndex(this.totalResults, this.projectListRequest.page, this.projectListRequest.count);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.dataSource.length === 0) {
                     this.getAllProjectList();
                 }
@@ -181,6 +222,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.saveProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body) {
                 this.handleProjectResponse(response);
                 this.changeDetection.detectChanges();
@@ -188,9 +232,18 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(branchList => {
+            /**
+             * Handles if functionality
+             */
             if (branchList) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isCompany) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.displayedColumns?.includes("action")) {
                         this.displayedColumns.splice(this.displayedColumns.length, 0, "action");
                     }
@@ -216,6 +269,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public toggleSearch(fieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === "name") {
             this.isShowSearchBox.name = true;
         } else if (fieldName === "status") {
@@ -231,6 +287,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     * @memberof ProjectWiseAccountingListComponent
     */
     public getSearchFieldText(fieldName: string): string {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === "name" || fieldName === "status") {
             return fieldName === "name" ? this.localeData?.project_name : this.commonLocaleData?.app_status;
         }
@@ -247,19 +306,34 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (searchedFieldName === "name") {
+            /**
+             * Handles if functionality
+             */
             if (this.projectName?.value) {
                 return;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.generalService.childOf(event.target, element)) {
                 return;
             } else {
                 this.isShowSearchBox.name = false;
             }
         } else if (searchedFieldName === "status") {
+            /**
+             * Handles if functionality
+             */
             if (this.projectStatus?.value) {
                 return;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.generalService.childOf(event.target, element)) {
                 return;
             } else {
@@ -275,12 +349,18 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public handleProjectResponse(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (response.isCreateFlow) {
             response.body["profitAndLoss"] = null;
             this.totalResults += 1;
             this.dataSource = [response.body, ...this.dataSource];
         } else {
             (Array.isArray(this.dataSource) ? this.dataSource : []).forEach((project) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (project.uniqueName === response.body.uniqueName) {
                     project.name = response.body.name;
                     project.status = response.body.status;
@@ -310,6 +390,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public getAllProjectList(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isLoadingGetProject) {
             this.isLoadingGetProject = true;
             this.componentStore.getAllProjects(this.projectListRequest);
@@ -354,6 +437,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public sortChange(event: Sort): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.projectListRequest.sort = event.direction ? event.direction : 'asc';
             this.projectListRequest.sortBy = event.active?.toUpperCase();
@@ -393,6 +479,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body) {
                 this.handleProjectResponse(response);
                 this.changeDetection.detectChanges();
@@ -407,6 +496,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public openDeleteProjectDialog(project: any): void {
+        /**
+         * Handles if functionality
+         */
         if (project?.uniqueName) {
             const data: any = {
                 companyUniqueName: this.projectListRequest.companyUniqueName,
@@ -421,6 +513,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             });
 
             dialogRef.afterClosed().subscribe((response) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response === this.commonLocaleData?.app_yes) {
                     this.componentStore.deleteProject(data);
                 }
@@ -435,6 +530,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public getProfitLoss(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.uniqueName) {
             event.profitAndLoss = this.profitAndLossStatus;
             const profitRequest = {
@@ -454,6 +552,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     * @memberof ProjectWiseAccountingListComponent
     */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -469,16 +570,25 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

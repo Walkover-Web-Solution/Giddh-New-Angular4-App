@@ -3,6 +3,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "downloads",
     templateUrl: "./downloads.component.html",
@@ -10,6 +13,10 @@ import { takeUntil } from "rxjs/operators";
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * DownloadsComponent component
+ * Handles downloads functionality and user interactions
+ */
 export class DownloadsComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -22,6 +29,10 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private route: ActivatedRoute,
         private router: Router
@@ -36,6 +47,9 @@ export class DownloadsComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params['type'] && this.activeTab !== params['type']) {
                 this.activeTab = params['type'];
                 this.selectedTabIndex = (this.activeTab === "imports") ? 1 : 0;
@@ -49,6 +63,9 @@ export class DownloadsComponent implements OnInit, OnDestroy {
      * @memberof DownloadsComponent
      */
     public tabChanged(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.index === 0) {
             this.router.navigate(['/pages/downloads/exports']);
         } else if (event?.index === 1) {

@@ -7,6 +7,9 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { GIDDH_DATEPICKER_FORMAT, PickDateAdapter } from "../datepicker-shared/datepicker-adapter";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         GiddhDaterangepickerComponent
@@ -29,6 +32,10 @@ import { GIDDH_DATEPICKER_FORMAT, PickDateAdapter } from "../datepicker-shared/d
     ]
 })
 
+/**
+ * GiddhDateRangepickerModule module
+ * Implements GiddhDateRangepickerModule functionality
+ */
 export class GiddhDateRangepickerModule {
 
 }

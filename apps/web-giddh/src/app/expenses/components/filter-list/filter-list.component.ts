@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { ExpenseResults } from '../../../models/api-models/Expences';
 import { map } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-filter-list',
     standalone: false,
@@ -9,6 +12,10 @@ import { map } from '../../../lodash-optimized';
     styleUrls: ['./filter-list.component.scss'],
 })
 
+/**
+ * FilterListComponent component
+ * Handles filterlist functionality and user interactions
+ */
 export class FilterListComponent implements OnInit, OnChanges {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -20,6 +27,10 @@ export class FilterListComponent implements OnInit, OnChanges {
     public monthNames = [];
     public selectedItem: ExpenseResults;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
 
     }
@@ -32,7 +43,13 @@ export class FilterListComponent implements OnInit, OnChanges {
     public ngOnInit(): void {
         this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
 
+        /**
+         * Handles if functionality
+         */
         if (this.expensesDetailedItems?.length > 0) {
+            /**
+             * Handles map functionality
+             */
             map(this.expensesDetailedItems, (resp: ExpenseResults) => {
                 resp.entryDate = this.getDateToDMY(resp.entryDate);
             });
@@ -48,6 +65,9 @@ export class FilterListComponent implements OnInit, OnChanges {
      */
     public getDateToDMY(selectedDate: any): any {
         let date = selectedDate?.split('-');
+        /**
+         * Handles if functionality
+         */
         if (date?.length === 3) {
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
             let year = date[2]?.substr(0, 4);
@@ -64,6 +84,9 @@ export class FilterListComponent implements OnInit, OnChanges {
      * @memberof FilterListComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes['selectedRowItem']) {
             this.selectedItem = changes['selectedRowItem'].currentValue;
         }

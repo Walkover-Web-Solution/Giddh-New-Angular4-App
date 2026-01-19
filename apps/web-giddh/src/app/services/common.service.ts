@@ -10,47 +10,82 @@ import { GeneralService } from './general.service';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * CommonService service
+ * Provides common related business logic and data operations
+ */
 export class CommonService {
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private generalService: GeneralService, private errorHandler: GiddhErrorHandler) {
 
     }
 
+    /**
+     * Handles GetCountry functionality
+     */
     public GetCountry(request: CountryRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.COUNTRY;
         url = url?.replace(':formName', request.formName);
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<CountryResponse, any> = res;
                 return data;
             }));
     }
 
+    /**
+     * Handles GetCallingCodes functionality
+     */
     public GetCallingCodes(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.CALLING_CODES;
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<CallingCodesResponse, any> = res;
                 return data;
             }));
     }
 
+    /**
+     * Retrieves onboardingform data
+     */
     public getOnboardingForm(request: OnboardingFormRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.FORM;
         url = url?.replace(':formName', request.formName);
         url = url?.replace(':country', request.country);
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<OnboardingFormResponse, any> = res;
                 return data;
             }));
     }
 
+    /**
+     * Handles GetPartyType functionality
+     */
     public GetPartyType(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.PARTY_TYPE;
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -75,9 +110,15 @@ export class CommonService {
         let responseType = (fileType === "base64") ? {} : { responseType: 'blob' };
 
         return this.http.post(url, model, responseType).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 return res;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e))
         );
     }
@@ -91,6 +132,9 @@ export class CommonService {
     public getStockUnits(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.STOCK_UNITS;
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -108,6 +152,9 @@ export class CommonService {
         let companyUniqueName = this.generalService.companyUniqueName;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -125,6 +172,9 @@ export class CommonService {
         const companyUniqueName = this.generalService.companyUniqueName;
         const contextPath = COMMON_API.GST_STOCK_UNITS?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         return this.http.patch(this.config.apiUrl + contextPath, params).pipe(
+            /**
+             * Handles map functionality
+             */
             map((response) => {
                 let data: BaseResponse<any, any> = response;
                 data.request = params;
@@ -184,13 +234,22 @@ export class CommonService {
         const formData: FormData = new FormData();
         formData.append('file', postRequest.file, postRequest.fileName);
 
+        /**
+         * Handles if functionality
+         */
         if (postRequest.entries) {
             formData.append('entries', postRequest.entries);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (addVoucherVersion && this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
+        /**
+         * Handles if functionality
+         */
         if (postRequest.type) {
             url += `?type=${postRequest.type}`;
         }
@@ -248,6 +307,9 @@ export class CommonService {
         url = url?.replace(':customerUniqueName', encodeURIComponent(model.customerUniqueName));
         url = url?.replace(':invoiceType', encodeURIComponent(model.invoiceType));
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.queryString = { model };
@@ -255,6 +317,9 @@ export class CommonService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * Retrieves countrystates data
+     */
     public getCountryStates(country: string): Observable<any> {
         let url = this.config.apiUrl + 'country/' + country;
         return this.http.get(url).pipe(map((res) => {

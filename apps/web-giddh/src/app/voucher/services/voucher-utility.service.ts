@@ -8,9 +8,16 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { VoucherForm } from '../../models/api-models/Voucher';
 import * as cleaner from 'fast-clean';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'any'
 })
+/**
+ * VoucherUtilityService service
+ * Provides voucherutility related business logic and data operations
+ */
 export class VoucherUtilityService {
 
     /**
@@ -52,10 +59,16 @@ export class VoucherUtilityService {
      */
     public getVoucherRequestObjectForInvoice(data: any): any {
         data.type = this.parseVoucherType(data.type);
+        /**
+         * Handles if functionality
+         */
         if (data.account) {
             data.account.customerName = data.account.name;
             delete data.account.name;
             delete data.account.country;
+            /**
+             * Handles if functionality
+             */
             if (data.account.billingDetails) {
                 data.account.billingDetails.taxNumber = (data.account.billingDetails.gstNumber) ? data.account.billingDetails.gstNumber : "";
                 data.account.billingDetails.country = {
@@ -68,6 +81,9 @@ export class VoucherUtilityService {
                 delete data.account.billingDetails.countryName;
                 delete data.account.billingDetails.countryCode;
             }
+            /**
+             * Handles if functionality
+             */
             if (data.account.shippingDetails) {
                 data.account.shippingDetails.taxNumber = (data.account.shippingDetails.gstNumber) ? data.account.shippingDetails.gstNumber : "";
                 data.account.shippingDetails.country = {
@@ -81,11 +97,17 @@ export class VoucherUtilityService {
                 delete data.account.shippingDetails.countryCode;
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (data?.entries?.length) {
             // TODO: Remove this once the API issue is resolved
             data?.entries?.forEach(entry => {
                 entry.discounts = entry?.discounts?.filter(discount => (discount?.name && discount?.particular) || discount?.discountValue);
                 entry?.transactions?.forEach(transaction => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (transaction?.stock) {
                         transaction.stock.rate.rateForAccount = transaction.stock.rate?.amountForAccount;
                         transaction.stock.taxInclusive = transaction.stock.taxInclusive ?? transaction.taxInclusive;
@@ -94,14 +116,26 @@ export class VoucherUtilityService {
                 });
             });
         }
+        /**
+         * Handles if functionality
+         */
         if (data?.company) {
+            /**
+             * Handles if functionality
+             */
             if (data.company.billingDetails) {
                 data.company.billingDetails.taxNumber = data.company.billingDetails.gstNumber;
             }
+            /**
+             * Handles if functionality
+             */
             if (data.company.shippingDetails) {
                 data.company.shippingDetails.taxNumber = data.company.shippingDetails.gstNumber;
             }
         }
+        /**
+         * Handles if functionality
+         */
         if ([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
             data.number = data.invoiceNumberAgainstVoucher || data.number || '';
         }
@@ -116,6 +150,9 @@ export class VoucherUtilityService {
      * @memberof VoucherUtilityService
      */
     public parseVoucherType(voucher: VoucherTypeEnum): string {
+        /**
+         * Handles if functionality
+         */
         if (voucher === VoucherTypeEnum.cash) {
             return VoucherTypeEnum.sales;
         }
@@ -131,6 +168,9 @@ export class VoucherUtilityService {
      * @memberof VoucherUtilityService
      */
     public prepareVoucherForm(voucherType: VoucherTypeEnum, formConfiguration?: any): VoucherForm {
+        /**
+         * Handles if functionality
+         */
         if (formConfiguration) {
             return formConfiguration.find(form => form.type === voucherType);
         } else {
@@ -160,6 +200,9 @@ export class VoucherUtilityService {
             nullCleaner: true
         });
 
+        /**
+         * Handles if functionality
+         */
         if (!updatedData.account?.shippingDetails) {
             updatedData.account.shippingDetails = {
                 address: [],

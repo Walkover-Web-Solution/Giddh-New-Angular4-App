@@ -4,6 +4,10 @@ import { GraphTypesResponse } from '../../models/api-models/Dashboard';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 
+/**
+ * HomeState interface definition
+ * Defines the structure and contract for HomeState objects
+ */
 export interface HomeState {
     value?: string;
     RatioAnalysis?: any;
@@ -17,6 +21,9 @@ export const initialState: HomeState = {
 };
 
 export function homeReducer(state = initialState, action: CustomActions): HomeState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
@@ -27,6 +34,9 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
         }
         case HOME.GET_RATIO_ANALYSIS_RESPONSE: {
             let rationAnalysisRes: BaseResponse<any, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (rationAnalysisRes?.status === 'success') {
                 return Object.assign({}, state, { RatioAnalysis: rationAnalysisRes.body });
             }
@@ -35,6 +45,9 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
 
         case HOME.GET_REVENUE_GRAPH_TYPES_RESPONSE: {
             let revenueGraphTypes: BaseResponse<GraphTypesResponse, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (revenueGraphTypes?.status === 'success') {
                 return Object.assign({}, state, { revenueGraphTypes: revenueGraphTypes.body });
             }

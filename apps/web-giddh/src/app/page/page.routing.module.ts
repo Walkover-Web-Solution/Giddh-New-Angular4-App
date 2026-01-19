@@ -3,6 +3,9 @@ import { RouterModule } from "@angular/router";
 import { UserAuthenticated } from "../decorators/UserAuthenticated";
 import { PageComponent } from "./page.component";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -16,6 +19,10 @@ import { PageComponent } from "./page.component";
     exports: [RouterModule]
 })
 
+/**
+ * PageRoutingModule module
+ * Implements PageRoutingModule functionality
+ */
 export class PageRoutingModule {
 
 }

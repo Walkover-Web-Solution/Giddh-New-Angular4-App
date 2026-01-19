@@ -3,6 +3,9 @@ import { RouterModule } from "@angular/router";
 import { NeedsAuthentication } from "../decorators/needsAuthentication";
 import { VerifyEmailComponent } from "./verify-email.component";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -20,5 +23,9 @@ import { VerifyEmailComponent } from "./verify-email.component";
     ],
     exports: [RouterModule]
 })
+/**
+ * VerifyEmailRoutingModule module
+ * Implements VerifyEmailRoutingModule functionality
+ */
 export class VerifyEmailRoutingModule {
 }

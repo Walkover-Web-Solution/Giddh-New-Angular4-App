@@ -4,6 +4,9 @@ import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IOption } from '../../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'bank-integration-popup',
     styleUrls: ['./bank-integration-popup.component.scss'],
@@ -11,6 +14,10 @@ import { IOption } from '../../../app.constant';
     standalone: false
 })
 
+/**
+ * BankIntegrationDialogComponent component
+ * Handles bankintegrationdialog functionality and user interactions
+ */
 export class BankIntegrationDialogComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -19,6 +26,10 @@ export class BankIntegrationDialogComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>
     ) { }
 

@@ -23,6 +23,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { ServiceConfig } from '../../services/service.config';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-invoice-setting',
     templateUrl: './invoice.settings.component.html',
@@ -30,6 +33,10 @@ import { ServiceConfig } from '../../services/service.config';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * InvoiceSettingComponent component
+ * Handles invoicesetting functionality and user interactions
+ */
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** Selected tab index for Material tabs */
     @ViewChild('staticTabsSettings', { static: true }) public staticTabs: MatTabGroup;
@@ -91,6 +98,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private commonActions: CommonActions,
         private dialog: MatDialog,
@@ -126,19 +137,34 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.initSettingObj();
 
         this._route.queryParams.pipe(delay(200), takeUntil(this.destroyed$)).subscribe((val) => {
+            /**
+             * Handles if functionality
+             */
             if (val && val.tabIndex) {
                 this.selectTab(val.tabIndex);
             }
+            /**
+             * Handles if functionality
+             */
             if (val.code) {
                 this.saveGmailAuthCode(val.code);
             }
         });
 
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.fields) {
                     this.formFields = [];
                     Object.keys(res.fields)?.forEach(key => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (res.fields[key]) {
                             this.formFields[res.fields[key].name] = [];
                             this.formFields[res.fields[key].name] = res.fields[key];
@@ -147,6 +173,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 }
             } else {
                 let companyCountry = this.activeCompany?.countryV2?.alpha2CountryCode;
+                /**
+                 * Handles if functionality
+                 */
                 if (companyCountry === 'IN') {
                     const requestObject = {
                         formName: 'onboarding',
@@ -162,8 +191,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Initializes settingobj
+     */
     public initSettingObj() {
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
+            /**
+             * Handles if functionality
+             */
             if (setting && setting.invoiceSettings) {
 
                 this.originalEmail = cloneDeep(setting.invoiceSettings.email);
@@ -189,6 +224,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 this.proformaWebhook.push(cloneDeep(this.webhookMock));
 
 
+                /**
+                 * Handles if functionality
+                 */
                 if (webhookArray?.length > 0) {
                     this.webhooks = webhookArray;
                 } else {
@@ -197,6 +235,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 }
 
 
+                /**
+                 * Handles if functionality
+                 */
                 if (setting.razorPayform && !isEmpty(setting.razorPayform)) {
                     this.razorpayObj = cloneDeep(setting.razorPayform);
                     this.razorpayObj.password = 'YOU_ARE_NOT_ALLOWED';
@@ -205,17 +246,26 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     this.updateRazor = false;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.invoiceSetting.createPaymentEntry && !this.getRazorPayDetailResponse) {
                     this.store.dispatch(this.invoiceActions.getRazorPayDetail());
                     this.getRazorPayDetailResponse = true;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (setting.companyEmailSettings) {
                     this.companyEmailSettings.sendThroughGmail = cloneDeep(setting.companyEmailSettings.sendThroughGmail);
                 } else {
                     this.companyEmailSettings.sendThroughGmail = false;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.invoiceSetting.lockDate) {
                     this.isLockDateSet = true;
                     this.lockDate = dayjs(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT).toDate();
@@ -236,11 +286,17 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public addNewWebhook(webhook, entityType?: string) {
         webhook['entity'] = entityType;
         let objToSave = cloneDeep(webhook);
+        /**
+         * Handles if functionality
+         */
         if (!objToSave.url || !objToSave.triggerAt) {
             this._toasty.warningToast(this.localeData?.webhook_required_error);
             return false;
         } else if (objToSave.url && objToSave.triggerAt) {
             this.validateWebhook(objToSave);
+            /**
+             * Handles if functionality
+             */
             if (this.webhookIsValidate) {
                 this.saveWebhook(objToSave);
             }
@@ -267,6 +323,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * Delete Webhook
      */
     public deleteWebhook(webhook, index) {
+        /**
+         * Handles if functionality
+         */
         if (webhook?.uniqueName) {
             this.store.dispatch(this.invoiceActions.deleteWebhook(webhook?.uniqueName));
             this.initSettingObj();
@@ -282,6 +341,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         let razorpayObj: RazorPayDetailsResponse = cloneDeep(this.settingResponse?.razorPayform) || new RazorPayDetailsResponse();
 
+        /**
+         * Handles if functionality
+         */
         if (this.webhooks && this.webhooks.length > 0 && !this.webhooks[this.webhooks.length - 1]?.url && !this.webhooks[this.webhooks.length - 1]?.triggerAt) {
             this.webhooks.splice(this.webhooks.length - 1);
         }
@@ -299,23 +361,44 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         };
         delete this.formToSave.sendThroughGmail;
         delete this.formToSave.razorPayform; // delete razorPay before sending form
+        /**
+         * Handles if functionality
+         */
         if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
             this.formToSave.invoiceSettings.lockDate = dayjs(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
             const invoiceSettings = this.formToSave.invoiceSettings;
+            /**
+             * Handles if functionality
+             */
             if (!invoiceSettings.gstEInvoiceUserName || !invoiceSettings.gstEInvoiceUserPassword || !invoiceSettings.gstEInvoiceGstin) {
                 this._toasty.errorToast(this.localeData?.e_invoice_fields_required_error_message);
                 return;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
                 let isValid = false;
+                /**
+                 * Handles for functionality
+                 */
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    /**
+                     * Handles if functionality
+                     */
                     if (regex.test(invoiceSettings.gstEInvoiceGstin)) {
                         isValid = true;
                     }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!isValid) {
                     this._toasty.errorToast(this.localeData?.e_invoice_invalid_gstin_error_message);
                     return;
@@ -323,6 +406,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.formToSave.invoiceSettings.autoPaid) {
             this.formToSave.invoiceSettings.autoPaid = 'runtime';
         } else {
@@ -331,6 +417,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         this.formToSave.companyCashFreeSettings = cloneDeep(this.companyCashFreeSettings);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
+        /**
+         * Handles if functionality
+         */
         if (!isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
             this.saveRazorPay(this.razorpayObj, form);
         }
@@ -344,11 +433,17 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.razorpayObj.account = cloneDeep(this.accountToSend);
         this.razorpayObj.autoCapturePayment = true;
         this.razorpayObj.companyName = '';
+        /**
+         * Handles if functionality
+         */
         if (form.createPaymentEntry && (!this.razorpayObj.userName || !this.razorpayObj.account)) {
             this._toasty.warningToast(this.localeData?.razorpay_error);
             return false;
         }
         let razorpayObj = cloneDeep(this.razorpayObj);
+        /**
+         * Handles if functionality
+         */
         if (this.updateRazor) {
             delete razorpayObj.password;
             this.store.dispatch(this.invoiceActions.updateRazorPayDetail(razorpayObj));
@@ -377,6 +472,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public validateWebhook(webhook) {
         let url = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,5}[.]{0,1}/;
+        /**
+         * Handles if functionality
+         */
         if (!url.test(webhook.url)) {
             this._toasty.warningToast(this.localeData?.invalid_webhook_url);
         } else {
@@ -397,6 +495,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public selectLinkAccount(data) {
         let arrOfAcc = cloneDeep(this.accountList);
+        /**
+         * Handles if functionality
+         */
         if (data?.value && this.accountToSend) {
             let result = arrOfAcc?.filter((obj) => obj?.uniqueName === data.value);
             this.accountToSend.name = result[0]?.name;
@@ -409,6 +510,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public verfiyEmail(emailId) {
         let email = new RegExp(/[a-z0-9!#$%&'*+=?^_{|}~-]+(?:.[a-z0-9!#$%&’*+=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g);
+        /**
+         * Handles if functionality
+         */
         if (email.test(emailId)) {
             this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
         } else {
@@ -421,6 +525,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * delete Email
      */
     public deleteEmail(emailId) {
+        /**
+         * Handles if functionality
+         */
         if (!emailId) {
             return false;
         } else {
@@ -434,12 +541,21 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * checkDueDays
      */
     public checkDueDays(value: number, indx: number, flag: string) {
+        /**
+         * Handles if functionality
+         */
         if (indx !== null) {
+            /**
+             * Handles if functionality
+             */
             if (indx > -1 && value > 90 && flag === 'length') {
                 let webhooks = cloneDeep(this.webhooks);
                 webhooks[indx].triggerAt = 90;
                 this.webhooks = webhooks;
             }
+            /**
+             * Handles if functionality
+             */
             if (indx > -1 && isNaN(value) && flag === 'alpha') {
                 let webhooks = cloneDeep(this.webhooks);
                 webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt)?.replace(/\D/g, '')) !== 0 ? Number(String(webhooks[indx].triggerAt)?.replace(/\D/g, '')) : null;
@@ -459,26 +575,50 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * validateDefaultDueDate
      */
     public validateDefaultDueDate(defaultDueDate: string) {
+        /**
+         * Handles if functionality
+         */
         if (defaultDueDate) {
             let invoiceSetting = cloneDeep(this.invoiceSetting);
+            /**
+             * Handles if functionality
+             */
             if (isNaN(Number(defaultDueDate)) && defaultDueDate?.indexOf('-') === -1) {
                 invoiceSetting.duePeriod = Number(defaultDueDate?.replace(/\D/g, '')) !== 0 && !isNaN(Number(defaultDueDate?.replace(/\D/g, ''))) ? Number(defaultDueDate?.replace(/\D/g, '')) : null;
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (defaultDueDate?.indexOf('-') !== -1 && (defaultDueDate?.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate?.indexOf('-') > 0) {
                 invoiceSetting.duePeriod = Number(defaultDueDate?.replace(/\D/g, ''));
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (String(defaultDueDate)?.length > 3) {
+                /**
+                 * Handles if functionality
+                 */
                 if (defaultDueDate?.indexOf('-') !== -1) {
                     invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 4));
                 } else {
                     invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 3));
                 }
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;
                 });
@@ -492,6 +632,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @memberof InvoiceSettingComponent
      */
     public gstEInvoiceEnableChange(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.invoiceSetting.gstEInvoiceEnable) {
             this.invoiceSetting.generateEinvoiceShowPopUp = false;
             this.invoiceSetting.generateAutoEWayBill = false;
@@ -506,15 +649,24 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.showDatePicker = !this.showDatePicker;
     }
 
+    /**
+     * Handles lockdateblur event
+     */
     public onLockDateBlur(ev) {
         this.isLockDateSet = !!ev.target?.value;
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Saves gmailauthcode data
+     */
     private saveGmailAuthCode(authCode: string) {
         const dataToSave = {
             code: authCode,
@@ -524,6 +676,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             redirect_uri: this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl))
         };
         this._authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this._toasty.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
             } else {
@@ -534,6 +689,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves redirecturl data
+     */
     private getRedirectUrl(baseHref: string) {
         const baseUrl = baseHref.endsWith('/') ? baseHref : baseHref + '/';
         return `${baseUrl}pages/invoice/preview/settings`;
@@ -546,6 +704,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @memberof InvoiceSettingComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.paymentGatewayList = [
                 { value: 'razorpay', label: this.localeData?.razorpay },
@@ -561,6 +722,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @memberof InvoiceSettingComponent
      */
     public handleEInvoiceChange(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!event) {
             // E-Invoice unchecked reset the credentials
             this.invoiceSetting.gstEInvoiceGstin = '';
@@ -581,9 +745,15 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         let branches = [];
         let currentBranch;
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 branches = response;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     // Find the current checked out branch
                     currentBranch = branches.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
@@ -591,8 +761,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     // Find the HO branch
                     currentBranch = branches.find(branch => !branch.parentBranch);
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (currentBranch && currentBranch.addresses) {
                     const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+                    /**
+                     * Handles if functionality
+                     */
                     if (defaultAddress) {
                         this.invoiceSetting.gstEInvoiceGstin = defaultAddress.taxNumber;
                     }
@@ -608,6 +784,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @memberof InvoiceSettingComponent
      */
     public selectTab(id: number) {
+        /**
+         * Handles if functionality
+         */
         if (this.staticTabs) {
             this.staticTabs.selectedIndex = id;
         }

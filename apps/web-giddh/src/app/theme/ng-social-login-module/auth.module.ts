@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { AuthService } from './auth.service';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [],
     declarations: [],
@@ -9,5 +12,9 @@ import { AuthService } from './auth.service';
         AuthService
     ]
 })
+/**
+ * SocialLoginModule module
+ * Implements SocialLoginModule functionality
+ */
 export class SocialLoginModule {
 }

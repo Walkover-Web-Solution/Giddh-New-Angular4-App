@@ -13,6 +13,9 @@ import { EWayBillComponentStore } from '../eWayBill.store';
 import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-e-way-bill-create',
     templateUrl: './e-way-bill-create-component.html',
@@ -20,6 +23,10 @@ import { PageEvent } from '@angular/material/paginator';
     providers: [EWayBillComponentStore],
     standalone: false
 })
+/**
+ * EWayBillCreateComponent class
+ * Implements EWayBillCreateComponent functionality
+ */
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Template reference for invoice removal confirmation dialog */
     @ViewChild('invoiceRemoveConfirmationModel', { static: true }) public invoiceRemoveConfirmationModel: TemplateRef<any>;
@@ -64,6 +71,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
@@ -91,12 +102,18 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
 
         this.componentStore.transporterListDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.transporterListDetails = response;
             }
         })
 
         this.componentStore.transporterList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.length) {
                 let transporterDropdown = null;
                 let transporterArr = null;
@@ -109,18 +126,27 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.isEwaybillGeneratedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.generateEwayBillform.reset();
             }
         });
 
         this.componentStore.updateTransporterSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.generateNewTransporterForm.reset();
             }
         });
 
         this.componentStore.isGenarateTransporterSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.clearTransportForm();
             }
@@ -167,6 +193,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public clearTransportForm(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.generateNewTransporterForm) {
             this.generateNewTransporterForm.reset();
         }
@@ -189,15 +218,27 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public onSubmitEwaybill(): void {
         this.isFormInvalid = this.generateEwayBillform.invalid;
+        /**
+         * Handles if functionality
+         */
         if (!this.isFormInvalid) {
             const formData = this.generateEwayBillform?.value;
             Object.keys(formData).forEach(key => {
+                /**
+                 * Handles if functionality
+                 */
                 if (formData[key] === null || (typeof formData[key] === "string" && formData[key].trim() === "")) {
                     delete formData[key];
                 }
             });
+            /**
+             * Handles if functionality
+             */
             if (formData.transDocDt) {
                 const formattedDate = dayjs(formData.transDocDt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+                /**
+                 * Handles if functionality
+                 */
                 if (dayjs(formData.transDocDt).isValid()) {
                     formData.transDocDt = formattedDate;
                 } else {
@@ -215,6 +256,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public onResetGenerateBillForm(): void {
         Object.keys(this.generateEwayBillform.controls).forEach((key) => {
+            /**
+             * Handles if functionality
+             */
             if (key !== 'toGstIn' && key !== 'toPinCode') {
                 this.generateEwayBillform.get(key)?.reset(null);
             }
@@ -282,6 +326,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public setTransporterDetail(trans: any): void {
+        /**
+         * Handles if functionality
+         */
         if (trans !== undefined && trans) {
             this.generateNewTransporterForm.get('transporterId').patchValue(trans.transporterId);
             this.generateNewTransporterForm.get('transporterName').patchValue(trans.transporterName);
@@ -308,6 +355,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public detectChanges(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.changeDetectorRef['destroyed']) {
             this.changeDetectorRef.detectChanges();
         }

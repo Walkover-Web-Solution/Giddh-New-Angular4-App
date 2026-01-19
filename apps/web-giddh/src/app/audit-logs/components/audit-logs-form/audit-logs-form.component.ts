@@ -18,12 +18,19 @@ import { AuditLogsSidebarVM } from './Vm';
 import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { cloneDeep, concat, filter, flatten, forEach, map, omit, set, union } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'audit-logs-form',
     templateUrl: './audit-logs-form.component.html',
     styleUrls: ['audit-logs-form.component.scss'],
     standalone: false
 })
+/**
+ * AuditLogsFormComponent component
+ * Handles auditlogsform functionality and user interactions
+ */
 export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -62,6 +69,10 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
     /** Entity sh-selct refence */
     @ViewChild('selectEntity') public dropdownRef: ReactiveDropdownFieldComponent;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>,
         private companyService: CompanyService,
         private auditLogsActions: AuditLogsActions,
@@ -69,6 +80,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
         private groupService: GroupService,
         private searchService: SearchService
     ) {
+        /**
+         * Handles super functionality
+         */
         super();
     }
 
@@ -82,6 +96,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
         this.auditLogFormVM.getLogsInprocess$ = this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$));
         this.auditLogFormVM.user$ = this.store.pipe(select(state => { if (state.session.user) { return state.session.user.user; } }), take(1));
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 let users: IOption[] = [];
                 data.body?.map((item) => {
@@ -121,6 +138,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
+            /**
+             * Handles if functionality
+             */
             if (listItem.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));
@@ -174,7 +194,13 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
      */
     public getFormFilter(): void {
         this.auditLogsService.getAuditLogFormFilters().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body) {
                     this.auditLogFilterForm = response.body;
                     this.auditLogFormVM.filters = [];
@@ -195,6 +221,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
      * @memberof AuditLogsFormComponent
      */
     public prepareOperationFormData(selectEntity: any): void {
+        /**
+         * Handles if functionality
+         */
         if (selectEntity?.filter) {
             this.getOperationsFilterData(selectEntity.filter);
         } else {
@@ -211,12 +240,21 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
      */
     public getOperationsFilterData(entityType: string): any {
         this.auditLogFormVM.filters = [];
+        /**
+         * Handles if functionality
+         */
         if (entityType) {
             let selectedEntityObject = this.auditLogFilterForm?.filter(element => {
+                /**
+                 * Handles if functionality
+                 */
                 if (element.entity.label.toLocaleLowerCase() === entityType.toLocaleLowerCase()) {
                     return element;
                 }
             });
+            /**
+             * Handles if functionality
+             */
             if (selectedEntityObject && selectedEntityObject.length) {
                 this.auditLogFormVM.filters = cloneDeep(selectedEntityObject[0].operations)
             }
@@ -244,6 +282,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
      * @memberof AuditLogsFormComponent
      */
     public selectedEntityType(event: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (event && event.value) {
             this.getOperationsFilterData(event.value);
         }
@@ -276,7 +317,13 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
      * @memberof AuditLogsFormComponent
      */
     public focusOnEntity(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.dropdownRef && typeof this.dropdownRef.openDropdownPanel === 'function') {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 try {
                     this.dropdownRef.openDropdownPanel();
@@ -298,6 +345,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
      */
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.accountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -306,6 +356,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
                 page
             }
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -313,6 +366,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.accounts = searchResults;
                     } else {
@@ -324,7 +380,13 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
                     this.auditLogFormVM.accounts$ = observableOf(this.accounts);
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
@@ -337,6 +399,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
             this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
             this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
             this.preventDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
             }, 500);
@@ -350,11 +415,17 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
      * @memberof AuditLogsFormComponent
      */
     public handleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
             this.onAccountSearchQueryChanged(
                 this.accountsSearchResultsPaginationData.query,
                 this.accountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -381,6 +452,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.groupsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -390,6 +464,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
                 count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -397,6 +474,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.searchedGroups = searchResults;
                     } else {
@@ -408,7 +488,13 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
                     this.auditLogFormVM.groups$ = observableOf(this.searchedGroups);
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     }
                 }
@@ -418,6 +504,9 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
             this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
             this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
             this.preventDefaultGroupScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultGroupScrollApiCall = false;
             }, 500);
@@ -431,11 +520,17 @@ export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnIni
      * @memberof AuditLogsFormComponent
      */
     public handleGroupScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
             this.onGroupSearchQueryChanged(
                 this.groupsSearchResultsPaginationData.query,
                 this.groupsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {

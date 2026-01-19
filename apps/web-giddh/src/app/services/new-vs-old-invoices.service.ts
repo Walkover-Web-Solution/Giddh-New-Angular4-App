@@ -10,18 +10,32 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * NewVsOldInvoicesService service
+ * Provides newvsoldinvoices related business logic and data operations
+ */
 export class NewVsOldInvoicesService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this.generalService.companyUniqueName;
     }
 
+    /**
+     * Handles GetNewVsOldInvoices functionality
+     */
     public GetNewVsOldInvoices(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + NEWVSOLDINVOICE_API.GET
@@ -33,6 +47,9 @@ export class NewVsOldInvoicesService {
                 data.queryString = queryRequest;
                 return data;
             }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<NewVsOldInvoicesResponse, string>(e, null, queryRequest)));
     }
 }

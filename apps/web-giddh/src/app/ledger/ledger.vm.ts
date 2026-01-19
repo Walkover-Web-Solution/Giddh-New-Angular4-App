@@ -14,6 +14,10 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { ITaxControlData } from '../models/interfaces/tax.interface';
 import { IOption } from '../app.constant';
 
+/**
+ * LedgerVM class
+ * Implements LedgerVM functionality
+ */
 export class LedgerVM {
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
     public activeAccount: AccountResponse | AccountResponseV2;
@@ -61,15 +65,28 @@ export class LedgerVM {
     public reckoningCreditTotal: number = 0;
     public convertedReckoningCreditTotal: number = 0;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.noAccountChosenForNewEntry = false;
         this.blankLedger = this.getBlankLedger();
     }
 
+    /**
+     * Calculates reckonging value
+     */
     public calculateReckonging(transactions: any) {
+        /**
+         * Handles if functionality
+         */
         if (transactions.forwardedBalance?.amount === 0) {
             let recTotal = 0;
             let convertedTotal = 0;
+            /**
+             * Handles if functionality
+             */
             if (transactions.creditTotal > transactions.debitTotal) {
                 recTotal = transactions.creditTotal;
                 convertedTotal = transactions.convertedCreditTotal;
@@ -83,7 +100,13 @@ export class LedgerVM {
             this.reckoningDebitTotal = recTotal;
             this.convertedReckoningDebitTotal = convertedTotal;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (transactions.forwardedBalance?.type === 'DEBIT') {
+                /**
+                 * Handles if functionality
+                 */
                 if ((transactions.forwardedBalance?.amount + transactions.debitTotal) <= transactions.creditTotal) {
                     this.reckoningCreditTotal = transactions.creditTotal;
                     this.convertedReckoningCreditTotal = transactions.convertedCreditTotal;
@@ -100,6 +123,9 @@ export class LedgerVM {
                     return;
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if ((transactions.forwardedBalance?.amount + transactions.creditTotal) <= transactions.debitTotal) {
                     this.reckoningCreditTotal = transactions.debitTotal;
                     this.convertedReckoningCreditTotal = transactions.convertedDebitTotal;
@@ -131,6 +157,9 @@ export class LedgerVM {
 
         // Set amount and total from creditAmount to creditTotal and debitAmount to debitTotal (In case of statement view)
         requestObj.transactions.forEach(bl => {
+            /**
+             * Handles if functionality
+             */
             if (bl.type === 'DEBIT') {
                 bl.amount = bl.debitAmount;
                 bl.total = bl.debitTotal;
@@ -147,6 +176,9 @@ export class LedgerVM {
 
         // map over transactions array
         requestObj.transactions.map((bl) => {
+            /**
+             * Handles if functionality
+             */
             if (bl) {
                 // set transaction.particular to selectedAccount uniqueName
                 bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName || bl.selectedAccount?.value : bl.particular;
@@ -157,15 +189,24 @@ export class LedgerVM {
                 bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
                 // delete local id
                 delete bl['id'];
+                /**
+                 * Handles if functionality
+                 */
                 if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
                     bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
                 }
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (requestObj.voucherType === 'advance-receipt') {
             /** Voucher type in case of advance receipt should be 'rcpt' but to differentiate the drop down values 'advance-receipt' is used */
             requestObj.voucherType = 'rcpt';
         }
+        /**
+         * Handles if functionality
+         */
         if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid && requestObj.invoicesToBePaid.length) {
             requestObj.invoicesToBePaid = [];
         }
@@ -199,13 +240,25 @@ export class LedgerVM {
         this.blankLedger.transactions[index].type = type;
     }
 
+    /**
+     * Retrieves understandingtext data
+     */
     public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups, localeData?: any) {
+        /**
+         * Handles if functionality
+         */
         if (localeData) {
             let data;
             let isReverseChargeAccount = false;
 
+            /**
+             * Handles if functionality
+             */
             if (parentGroups) {
                 parentGroups.forEach(key => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (key?.uniqueName === "reversecharge") {
                         isReverseChargeAccount = true;
                     }
@@ -214,23 +267,41 @@ export class LedgerVM {
 
             let underStandingTextData = localeData?.text_data;
 
+            /**
+             * Handles if functionality
+             */
             if (isReverseChargeAccount) {
                 data = cloneDeep(underStandingTextData?.find(p => p.accountType === "ReverseCharge"));
             } else {
                 data = cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             }
 
+            /**
+             * Handles if functionality
+             */
             if (data) {
+                /**
+                 * Handles if functionality
+                 */
                 if (data.balanceText && data.balanceText.cr) {
                     data.balanceText.cr = data.balanceText.cr?.replace('<accountName>', accountName);
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (data.balanceText && data.balanceText.dr) {
                     data.balanceText.dr = data.balanceText.dr?.replace('<accountName>', accountName);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (data.text && data.text.dr) {
                     data.text.dr = data.text.dr?.replace('<accountName>', accountName);
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (data.text && data.text.cr) {
                     data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
@@ -250,15 +321,24 @@ export class LedgerVM {
      * @returns void
      */
     public getReadyBankTransactionsForUI(data: IELedgerResponse[], isCompany?: boolean) {
+        /**
+         * Handles if functionality
+         */
         if (data && data.length > 0) {
             this.bankTransactionsCreditData = [];
             this.bankTransactionsDebitData = [];
             this.showEledger = true;
             let creditLoop = 0, debitLoop = 0;
             let blankLedger = this.getBlankLedger();
+            /**
+             * Handles forEach functionality
+             */
             forEach(data, (txn: IELedgerResponse) => {
                 let item: BlankLedgerVM;
                 item = cloneDeep(blankLedger);
+                /**
+                 * Handles if functionality
+                 */
                 if (isCompany) {
                     item.transactions = [
                         this.addNewTransaction('DEBIT'),
@@ -268,19 +348,31 @@ export class LedgerVM {
                 item.entryDate = txn.date;
                 item.transactionId = txn.transactionId;
                 item.isBankTransaction = true;
+                /**
+                 * Handles forEach functionality
+                 */
                 forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {
                     item.description = bankTxn.remarks.description;
+                    /**
+                     * Handles if functionality
+                     */
                     if (bankTxn.type === 'DEBIT') {
                         item.voucherType = 'rcpt';
                     } else {
                         item.voucherType = 'pay';
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (bankTxn.remarks.chequeNumber) {
                         item.chequeNumber = bankTxn.remarks.chequeNumber;
                     }
                     // push transaction
                     item.transactions.map(transaction => {
                         transaction.isChecked = false;
+                        /**
+                         * Handles if functionality
+                         */
                         if (transaction.type === bankTxn.type) {
                             transaction.amount = bankTxn.amount;
                             transaction.id = item.transactionId;
@@ -290,6 +382,9 @@ export class LedgerVM {
                         return n.type === bankTxn.type;
                     });
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (item.transactions[0].type === "CREDIT") {
                     item.index = creditLoop;
                     this.bankTransactionsCreditData.push(item);
@@ -320,6 +415,9 @@ export class LedgerVM {
 
         // map over transactions array
         requestObj.transactions.map((bl: any) => {
+            /**
+             * Handles if functionality
+             */
             if (bl) {
                 // set transaction.particular to selectedAccount uniqueName
                 bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
@@ -331,10 +429,16 @@ export class LedgerVM {
                 delete bl['id'];
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (requestObj.voucherType === 'advance-receipt') {
             /** Voucher type in case of advance receipt should be 'rcpt' but to differentiate the drop down values 'advance-receipt' is used */
             requestObj.voucherType = 'rcpt';
         }
+        /**
+         * Handles if functionality
+         */
         if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid && requestObj.invoicesToBePaid.length) {
             requestObj.invoicesToBePaid = [];
         } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
@@ -343,6 +447,9 @@ export class LedgerVM {
         return requestObj;
     }
 
+    /**
+     * Handles staticDefaultDiscount functionality
+     */
     public staticDefaultDiscount(): LedgerDiscountClass {
         return {
             discountType: 'FIX_AMOUNT',
@@ -401,11 +508,18 @@ export class LedgerVM {
         };
     }
 
+    /**
+     * Retrieves uuid data
+     */
     private getUuId(): string {
         return Date.now().toString() + Math.random().toString(36)?.replace(/[^a-zA-Z0-9]+/g, '')?.substr(0, 6);
     }
 }
 
+/**
+ * BlankLedgerVM class
+ * Implements BlankLedgerVM functionality
+ */
 export class BlankLedgerVM {
     public transactions: TransactionVM[];
     public voucherType: string;
@@ -448,15 +562,27 @@ export class BlankLedgerVM {
     public salesPersonName?: string;
 }
 
+/**
+ * IInvoiceLinkingRequest class
+ * Implements IInvoiceLinkingRequest functionality
+ */
 export class IInvoiceLinkingRequest {
     public linkedInvoices: ILinkedInvoice[];
 }
 
+/**
+ * ILinkedInvoice class
+ * Implements ILinkedInvoice functionality
+ */
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
     public voucherType: string;
 }
 
+/**
+ * ReferenceVoucher class
+ * Implements ReferenceVoucher functionality
+ */
 export class ReferenceVoucher {
     public uniqueName: string;
     public number?: any;
@@ -464,6 +590,10 @@ export class ReferenceVoucher {
     public date?: string;
 }
 
+/**
+ * TransactionVM class
+ * Implements TransactionVM functionality
+ */
 export class TransactionVM {
     public id?: string;
     public amount: number = 0;
@@ -509,6 +639,10 @@ export class TransactionVM {
     public subVoucher?: string;
 }
 
+/**
+ * IInventory interface definition
+ * Defines the structure and contract for IInventory objects
+ */
 export interface IInventory {
     unit: IInventoryUnit;
     quantity: number;
@@ -518,6 +652,10 @@ export interface IInventory {
     taxInclusive?: boolean;
 }
 
+/**
+ * IInventoryUnit interface definition
+ * Defines the structure and contract for IInventoryUnit objects
+ */
 export interface IInventoryUnit {
     stockUnitUniqueName?: any;
     uniqueName?: any;

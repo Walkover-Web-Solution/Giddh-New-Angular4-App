@@ -19,7 +19,13 @@ import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keybo
  * Provides industry-standard validation with comprehensive error detection
  */
 export function mobileNumberValidator(country: Country | null) {
+    /**
+     * Handles return functionality
+     */
     return (control: AbstractControl): ValidationErrors | null => {
+        /**
+         * Handles if functionality
+         */
         if (!control.value || !country) {
             return null;
         }
@@ -34,6 +40,9 @@ export function mobileNumberValidator(country: Country | null) {
             let phoneNumber: any;
             
             // Parse the phone number
+            /**
+             * Handles if functionality
+             */
             if (phoneNumberString.startsWith('+')) {
                 // Parse as international number
                 phoneNumber = phoneUtil.parse(phoneNumberString, null);
@@ -46,17 +55,26 @@ export function mobileNumberValidator(country: Country | null) {
             const parsedCountryCode = phoneUtil.getRegionCodeForNumber(phoneNumber);
             
             // Check if the country matches the selected country
+            /**
+             * Handles if functionality
+             */
             if (parsedCountryCode !== country.code) {
                 return { wrongCountry: true };
             }
             
             // Validate the phone number
+            /**
+             * Handles if functionality
+             */
             if (!phoneUtil.isValidNumber(phoneNumber)) {
                 return { invalidNumber: true };
             }
 
             // Check if it's a mobile number
             const numberType = phoneUtil.getNumberType(phoneNumber);
+            /**
+             * Handles if functionality
+             */
             if (numberType !== libphonenumber.PhoneNumberType.MOBILE && 
                 numberType !== libphonenumber.PhoneNumberType.FIXED_LINE_OR_MOBILE) {
                 return { notMobile: true };
@@ -66,11 +84,17 @@ export function mobileNumberValidator(country: Country | null) {
             const nationalNumber = phoneNumber.getNationalNumber().toString();
             
             // Check for obviously invalid patterns (all same digits, sequential, etc.)
+            /**
+             * Handles if functionality
+             */
             if (isObviouslyInvalid(nationalNumber)) {
                 return { obviouslyInvalid: true };
             }
             
             // Check for possible numbers (less strict validation)
+            /**
+             * Handles if functionality
+             */
             if (!phoneUtil.isPossibleNumber(phoneNumber)) {
                 return { impossibleNumber: true };
             }
@@ -93,11 +117,17 @@ export function mobileNumberValidator(country: Country | null) {
  */
 function isObviouslyInvalid(nationalNumber: string): boolean {
     // Check for all same digits (e.g., 1111111111)
+    /**
+     * Handles if functionality
+     */
     if (/^(\d)\1+$/.test(nationalNumber)) {
         return true;
     }
     
     // Check for sequential digits (e.g., 1234567890)
+    /**
+     * Handles if functionality
+     */
     if (isSequential(nationalNumber)) {
         return true;
     }
@@ -120,13 +150,22 @@ function isObviouslyInvalid(nationalNumber: string): boolean {
  * @private
  */
 function isSequential(number: string): boolean {
+    /**
+     * Handles for functionality
+     */
     for (let i = 0; i < number.length - 2; i++) {
         const digit1 = parseInt(number[i]);
         const digit2 = parseInt(number[i + 1]);
         const digit3 = parseInt(number[i + 2]);
         
+        /**
+         * Handles if functionality
+         */
         if (digit2 === digit1 + 1 && digit3 === digit2 + 1) {
             // Found at least 3 sequential digits
+            /**
+             * Handles if functionality
+             */
             if (i === 0 && number.length >= 6) {
                 // If it starts with sequential and is long enough, likely invalid
                 return true;
@@ -136,6 +175,9 @@ function isSequential(number: string): boolean {
     return false;
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'mobile-number-input',
     standalone: true,
@@ -165,6 +207,10 @@ function isSequential(number: string): boolean {
     templateUrl: './mobile-number-input.component.html',
     styleUrls: ['./mobile-number-input.component.scss']
 })
+/**
+ * MobileNumberInputComponent component
+ * Handles mobilenumberinput functionality and user interactions
+ */
 export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
     /** ViewChild reference to mobile input element */
     @ViewChild('mobileInput', { static: false }) public mobileInput: ElementRef<HTMLInputElement>;
@@ -225,7 +271,13 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     private userHasManuallySelectedCountry: boolean = false;
 
     /** ControlValueAccessor callbacks */
+    /**
+     * Handles change event
+     */
     private onChange = (value: string) => {};
+    /**
+     * Handles touched event
+     */
     private onTouched = () => {};
 
     /** List of all supported countries with their data */
@@ -283,6 +335,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         this.localeService.getLocale('mobile-number-input', this.localeService.language || 'en')
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.localeData = response;
                     this.setDefaultLabel();
@@ -303,11 +358,17 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      */
     public validate(control: AbstractControl): ValidationErrors | null {
         // If no value and required, return required error
+        /**
+         * Handles if functionality
+         */
         if (!control.value) {
             return this.required ? { required: true } : null;
         }
 
         // If no country selected, can't validate
+        /**
+         * Handles if functionality
+         */
         if (!this.selectedCountry) {
             return { noCountrySelected: true };
         }
@@ -320,12 +381,18 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             const phoneNumber = phoneUtil.parse(fullNumber, this.selectedCountry.code);
             
             // Check if the number is valid
+            /**
+             * Handles if functionality
+             */
             if (!phoneUtil.isValidNumber(phoneNumber)) {
                 return { invalidNumber: true };
             }
 
             // Check if it's a mobile number
             const numberType = phoneUtil.getNumberType(phoneNumber);
+            /**
+             * Handles if functionality
+             */
             if (numberType !== libphonenumber.PhoneNumberType.MOBILE && 
                 numberType !== libphonenumber.PhoneNumberType.FIXED_LINE_OR_MOBILE) {
                 return { notMobile: true };
@@ -333,6 +400,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             
             // Check if number belongs to the selected country
             const numberRegion = phoneUtil.getRegionCodeForNumber(phoneNumber);
+            /**
+             * Handles if functionality
+             */
             if (numberRegion !== this.selectedCountry.code) {
                 return { wrongCountry: true };
             }
@@ -352,6 +422,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     private setDefaultLabel(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.label && this.localeData?.mobile_number) {
             this.label = this.localeData.mobile_number;
         }
@@ -368,6 +441,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     public getTranslatedMessage(key: string, params?: any): string {
         let message = this.localeData?.[key] || key;
         
+        /**
+         * Handles if functionality
+         */
         if (params) {
             Object.keys(params).forEach(param => {
                 message = message.replace(new RegExp(`{{${param}}}`, 'g'), params[param]);
@@ -385,6 +461,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      */
     private detectUserCountryForWriteValue(): void {
         // Don't override if user has manually selected a country
+        /**
+         * Handles if functionality
+         */
         if (this.countrySetProgrammatically || this.userHasManuallySelectedCountry) {
             return;
         }
@@ -405,10 +484,16 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                 // Only perform country detection if:
                 // 1. Mobile number field is empty
                 // 2. User hasn't manually selected a country
+                /**
+                 * Handles if functionality
+                 */
                 if (location && location.countryCode && !this.mobileControl.value && !this.userHasManuallySelectedCountry) {
                     // Use the new geolocation service method that handles all duplicate cases
                     const detectedCountry = this.geolocationService.mapCountryCodeToCountry(location.countryCode);
                     
+                    /**
+                     * Handles if functionality
+                     */
                     if (detectedCountry) {
                         this.selectedCountry = detectedCountry;
                         this.countryControl.setValue(detectedCountry, { emitEvent: false });
@@ -427,6 +512,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      */
     private initializeDefaultCountry(): void {
         const defaultCountry = this.countries.find(country => country.dialCode === this.DEFAULT_COUNTRY_CODE);
+        /**
+         * Handles if functionality
+         */
         if (defaultCountry) {
             this.selectedCountry = defaultCountry;
             this.countryControl.setValue(defaultCountry);
@@ -440,6 +528,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     private setupFormControls(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.required) {
             this.mobileControl.setValidators([Validators.required]);
         }
@@ -455,11 +546,17 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         this.countryControl.valueChanges
             .pipe(distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe(country => {
+                /**
+                 * Handles if functionality
+                 */
                 if (country) {
                     this.selectedCountry = country;
                     this.updateValidators();
                     
                     // Track manual user selections to prevent auto-detection override
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.countrySetProgrammatically) {
                         // This is a manual user selection via dropdown
                         this.userHasManuallySelectedCountry = true;
@@ -483,10 +580,16 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     private updateValidators(): void {
         const validators = [];
         
+        /**
+         * Handles if functionality
+         */
         if (this.required) {
             validators.push(Validators.required);
         }
         
+        /**
+         * Handles if functionality
+         */
         if (this.selectedCountry) {
             validators.push(mobileNumberValidator(this.selectedCountry));
         }
@@ -495,6 +598,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         this.mobileControl.updateValueAndValidity({ emitEvent: false });
         
         // Trigger validation display
+        /**
+         * Handles if functionality
+         */
         if (this.mobileControl.value) {
             this.mobileControl.markAsTouched();
         }
@@ -516,19 +622,34 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         this.countrySetProgrammatically = false;
         
         // Handle mobile number when country changes
+        /**
+         * Handles if functionality
+         */
         if (this.mobileControl.value) {
             const currentValue = this.mobileControl.value.replace(/\s+/g, '');
             let mobileNumber = currentValue;
             
             // Extract pure mobile number from current input
+            /**
+             * Handles if functionality
+             */
             if (previousCountry) {
                 // Remove previous country's dial code if present
+                /**
+                 * Handles if functionality
+                 */
                 if (currentValue.startsWith('+')) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (currentValue.startsWith(previousCountry.dialCode)) {
                         mobileNumber = currentValue.substring(previousCountry.dialCode.length);
                     } else {
                         // Check for any dial code pattern and extract number
                         const dialCodeMatch = currentValue.match(/^\+\d{1,4}/);
+                        /**
+                         * Handles if functionality
+                         */
                         if (dialCodeMatch) {
                             mobileNumber = currentValue.substring(dialCodeMatch[0].length);
                         }
@@ -536,6 +657,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                 } else {
                     // Remove dial code without + if present
                     const previousDialCodeWithoutPlus = previousCountry.dialCode.substring(1);
+                    /**
+                     * Handles if functionality
+                     */
                     if (currentValue.startsWith(previousDialCodeWithoutPlus)) {
                         mobileNumber = currentValue.substring(previousDialCodeWithoutPlus.length);
                     }
@@ -555,7 +679,13 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     private focusMobileInput(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.mobileInput?.nativeElement) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.mobileInput.nativeElement.focus();
             }, 100);
@@ -575,14 +705,26 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         const cursorPosition = target.selectionStart || 0;
         
         // Allow numbers (0-9)
+        /**
+         * Handles if functionality
+         */
         if (/[0-9]/.test(char)) {
             return;
         }
         
         // Allow plus sign at the beginning (position 0) or if cursor is at position 0
+        /**
+         * Handles if functionality
+         */
         if (char === '+') {
+            /**
+             * Handles if functionality
+             */
             if (cursorPosition === 0) {
                 // If there's already a + at the beginning, prevent duplicate
+                /**
+                 * Handles if functionality
+                 */
                 if (currentValue.startsWith('+')) {
                     event.preventDefault();
                     return;
@@ -595,12 +737,18 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         }
         
         // Allow backspace, delete, arrow keys, tab, etc.
+        /**
+         * Handles if functionality
+         */
         if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter'].includes(char)) {
             return;
         }
         
         // Prevent spaces, parentheses, and other characters during typing
         // These will be handled during paste operations
+        /**
+         * Handles if functionality
+         */
         if ([' ', '(', ')', '-', '.'].includes(char)) {
             event.preventDefault();
             return;
@@ -624,6 +772,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         value = this.sanitizeInput(value);
         
         // Update the input field with sanitized value if it changed
+        /**
+         * Handles if functionality
+         */
         if (target.value !== value) {
             target.value = value;
         }
@@ -633,6 +784,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         
         // Update form control with the final value from the input field
         const finalValue = target.value;
+        /**
+         * Handles if functionality
+         */
         if (this.mobileControl.value !== finalValue) {
             this.mobileControl.setValue(finalValue, { emitEvent: false });
         }
@@ -648,6 +802,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public onMobileFocus(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.countrySelect && this.countrySelect.panelOpen) {
             this.countrySelect.close();
         }
@@ -662,6 +819,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     private handleInputScenarios(value: string, target: HTMLInputElement): void {
+        /**
+         * Handles if functionality
+         */
         if (value.startsWith('+')) {
             // Scenario 1: Number with + dial code
             this.handleDialCodeInput(value, target);
@@ -675,10 +835,16 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             let minDigitsRequired = dialCodeWithoutPlus.length + 2;
             
             // Special case for India: user typing 919111525164 should wait until 9191 (4 digits)
+            /**
+             * Handles if functionality
+             */
             if (this.selectedCountry.code === 'IN') {
                 minDigitsRequired = Math.max(4, dialCodeWithoutPlus.length + 2);
             }
             
+            /**
+             * Handles if functionality
+             */
             if (value.startsWith(dialCodeWithoutPlus) && 
                 value.length >= minDigitsRequired &&
                 value.length > 15) { // Use reasonable max length for international numbers
@@ -687,11 +853,17 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                 
                 // Additional validation: ensure the remaining number looks like a valid mobile number
                 // (starts with valid mobile number patterns for the country)
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isValidMobileNumberStart(mobileNumber)) {
                     this.mobileControl.setValue(mobileNumber, { emitEvent: false });
                     target.value = mobileNumber;
                     
                     // Set cursor position to end of input
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         target.setSelectionRange(mobileNumber.length, mobileNumber.length);
                     }, 0);
@@ -709,16 +881,25 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     private isValidMobileNumberStart(mobileNumber: string): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!this.selectedCountry || !mobileNumber) {
             return false;
         }
         
         // For India (+91), valid mobile numbers start with 6, 7, 8, or 9
+        /**
+         * Handles if functionality
+         */
         if (this.selectedCountry.code === 'IN') {
             return /^[6-9]/.test(mobileNumber);
         }
         
         // For US/Canada (+1), valid mobile numbers start with 2-9 (area code)
+        /**
+         * Handles if functionality
+         */
         if (this.selectedCountry.code === 'US' || this.selectedCountry.code === 'CA') {
             return /^[2-9]/.test(mobileNumber);
         }
@@ -738,6 +919,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      */
     private handleDialCodeInput(value: string, target: HTMLInputElement): void {
         // Only process if we have enough characters for a meaningful dial code
+        /**
+         * Handles if functionality
+         */
         if (value.length < 2) {
             return;
         }
@@ -745,23 +929,38 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         // Auto-detect country from dial code
         this.autoDetectCountry(value);
         
+        /**
+         * Handles if functionality
+         */
         if (this.selectedCountry && value.startsWith(this.selectedCountry.dialCode)) {
             // For NANP (+1), wait for area code before extracting mobile number
+            /**
+             * Handles if functionality
+             */
             if (this.selectedCountry.dialCode === '+1' && value.length < 5) {
                 // Don't extract yet, wait for area code (need at least +1XXX)
                 return;
             }
             
             // Only extract mobile number if we have the complete dial code and sufficient digits
+            /**
+             * Handles if functionality
+             */
             if (value.length > this.selectedCountry.dialCode.length) {
                 const mobileNumber = value.substring(this.selectedCountry.dialCode.length);
                 
                 // Prevent infinite loop by checking if the value is different
+                /**
+                 * Handles if functionality
+                 */
                 if (target.value !== mobileNumber) {
                     this.mobileControl.setValue(mobileNumber, { emitEvent: false });
                     target.value = mobileNumber;
                     
                     // Set cursor position to end of input
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         target.setSelectionRange(mobileNumber.length, mobileNumber.length);
                     }, 0);
@@ -779,10 +978,16 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     private sanitizeInput(value: string): string {
+        /**
+         * Handles if functionality
+         */
         if (!value) return '';
         
         // If starts with +, keep the + and remove all non-numeric characters after it
         // This handles formats like: +55 (11) 98765-4321, +82 10-1234-5678
+        /**
+         * Handles if functionality
+         */
         if (value.startsWith('+')) {
             return '+' + value.substring(1).replace(/[^0-9]/g, '');
         }
@@ -800,6 +1005,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public getFlagDisplay(country: Country): string {
+        /**
+         * Handles if functionality
+         */
         if (this.useImageFlags && country.flagImage) {
             return country.flagImage;
         }
@@ -827,6 +1035,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      */
     private autoDetectCountry(value: string): void {
         // Only attempt detection if we have at least 2 characters (+X)
+        /**
+         * Handles if functionality
+         */
         if (value.length < 2) {
             return;
         }
@@ -834,8 +1045,14 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         // First, try comprehensive area code detection for duplicate dial codes
         const detectedCountry = this.detectCountryByAreaCode(value);
         
+        /**
+         * Handles if functionality
+         */
         if (detectedCountry) {
             // Found a country using area code detection
+            /**
+             * Handles if functionality
+             */
             if (this.selectedCountry?.code !== detectedCountry.code) {
                 this.selectedCountry = detectedCountry;
                 this.countryControl.setValue(detectedCountry, { emitEvent: false });
@@ -856,10 +1073,22 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         const sortedCountries = [...this.countries].sort((a, b) => b.dialCode.length - a.dialCode.length);
         
         // Handle longer dial codes first (like +1340, +1684, etc.)
+        /**
+         * Handles for functionality
+         */
         for (const country of sortedCountries) {
+            /**
+             * Handles if functionality
+             */
             if (value.startsWith(country.dialCode) && value.length >= country.dialCode.length) {
                 // For longer dial codes (4+ characters), require exact match
+                /**
+                 * Handles if functionality
+                 */
                 if (country.dialCode.length > 3) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.selectedCountry?.dialCode !== country.dialCode) {
                         this.selectedCountry = country;
                         this.countryControl.setValue(country, { emitEvent: false });
@@ -878,7 +1107,13 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         }
         
         // Handle shorter dial codes (2-3 characters) with caution for potential longer codes
+        /**
+         * Handles for functionality
+         */
         for (const country of sortedCountries) {
+            /**
+             * Handles if functionality
+             */
             if (value.startsWith(country.dialCode) && value.length >= country.dialCode.length) {
                 // Check if this could be part of a longer dial code
                 const potentialLongerCodes = sortedCountries.filter(c => 
@@ -886,17 +1121,26 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                 );
                 
                 // If there are potential longer codes and input is short, wait for more input
+                /**
+                 * Handles if functionality
+                 */
                 if (potentialLongerCodes.length > 0 && value.length < 6) {
                     const couldBeLongerCode = potentialLongerCodes.some(c => 
                         value.startsWith(c.dialCode.substring(0, Math.min(value.length, c.dialCode.length)))
                     );
                     
+                    /**
+                     * Handles if functionality
+                     */
                     if (couldBeLongerCode) {
                         continue; // Don't select yet, might be a longer code
                     }
                 }
                 
                 // Safe to select this country
+                /**
+                 * Handles if functionality
+                 */
                 if (this.selectedCountry?.dialCode !== country.dialCode) {
                     this.selectedCountry = country;
                     this.countryControl.setValue(country, { emitEvent: false });
@@ -1130,6 +1374,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     private detectCountryByAreaCode(phoneNumber: string): Country | null {
+        /**
+         * Handles if functionality
+         */
         if (!phoneNumber.startsWith('+')) {
             return null;
         }
@@ -1141,7 +1388,13 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         // Try to match dial codes from longest to shortest
         const sortedDialCodes = Object.keys(this.AREA_CODE_MAPPINGS).sort((a, b) => b.length - a.length);
         
+        /**
+         * Handles for functionality
+         */
         for (const code of sortedDialCodes) {
+            /**
+             * Handles if functionality
+             */
             if (phoneNumber.startsWith(code)) {
                 dialCode = code;
                 numberPart = phoneNumber.substring(code.length);
@@ -1149,6 +1402,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!dialCode || !this.AREA_CODE_MAPPINGS[dialCode]) {
             return null;
         }
@@ -1158,13 +1414,25 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         // Try different area code lengths (from longest to shortest for better matching)
         const maxAreaCodeLength = Math.max(...Object.keys(areaCodeMap).map(code => code.length));
         
+        /**
+         * Handles for functionality
+         */
         for (let length = maxAreaCodeLength; length >= 2; length--) {
+            /**
+             * Handles if functionality
+             */
             if (numberPart.length >= length) {
                 const areaCode = numberPart.substring(0, length);
                 const countryCode = areaCodeMap[areaCode];
                 
+                /**
+                 * Handles if functionality
+                 */
                 if (countryCode) {
                     const country = this.countries.find(c => c.code === countryCode);
+                    /**
+                     * Handles if functionality
+                     */
                     if (country) {
                         return country;
                     }
@@ -1174,6 +1442,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
 
         // If no area code match found, use default country for this dial code
         const defaultCountryCode = this.DEFAULT_COUNTRY_MAPPINGS[dialCode];
+        /**
+         * Handles if functionality
+         */
         if (defaultCountryCode) {
             return this.countries.find(c => c.code === defaultCountryCode) || null;
         }
@@ -1188,6 +1459,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public getFullPhoneNumber(): string {
+        /**
+         * Handles if functionality
+         */
         if (!this.selectedCountry || !this.mobileControl.value) {
             return '';
         }
@@ -1195,6 +1469,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         let mobileNumber = this.mobileControl.value.replace(/\s+/g, '');
         
         // Check if mobile number already contains the dial code with +
+        /**
+         * Handles if functionality
+         */
         if (mobileNumber.startsWith(this.selectedCountry.dialCode)) {
             return mobileNumber;
         }
@@ -1203,6 +1480,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         // This prevents treating valid mobile numbers that happen to start with dial code digits
         // as having duplicate dial codes
         const dialCodeWithoutPlus = this.selectedCountry.dialCode.substring(1);
+        /**
+         * Handles if functionality
+         */
         if (mobileNumber.startsWith(dialCodeWithoutPlus) && 
             mobileNumber.length > 15) { // Use reasonable max length for international numbers
             // Only remove dial code if the number is longer than expected (indicating duplicate)
@@ -1242,6 +1522,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public setDisabledState(isDisabled: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isDisabled) {
             this.mobileControl.disable({ emitEvent: false });
             this.countryControl.disable({ emitEvent: false });
@@ -1258,8 +1541,14 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public writeValue(value: string): void {
+        /**
+         * Handles if functionality
+         */
         if (value) {
             // Handle different input formats
+            /**
+             * Handles if functionality
+             */
             if (value.startsWith('+')) {
                 // International format with +
                 this.handleInternationalNumber(value);
@@ -1290,6 +1579,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      */
     private isLikelyInternationalNumber(value: string): boolean {
         // Must be numeric and longer than typical mobile numbers (>10 digits)
+        /**
+         * Handles if functionality
+         */
         if (!/^\d+$/.test(value) || value.length <= 10) {
             return false;
         }
@@ -1312,6 +1604,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         this.autoDetectCountry(value);
         
         // Check if country was detected and update accordingly
+        /**
+         * Handles if functionality
+         */
         if (this.selectedCountry && value.startsWith(this.selectedCountry.dialCode)) {
             // Mark that country was set programmatically
             this.countrySetProgrammatically = true;
@@ -1322,6 +1617,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         } else {
             // Try to find matching country manually if auto-detection failed
             const detectedCountry = this.findCountryByDialCode(value);
+            /**
+             * Handles if functionality
+             */
             if (detectedCountry) {
                 this.selectedCountry = detectedCountry;
                 this.countryControl.setValue(detectedCountry, { emitEvent: false });
@@ -1364,6 +1662,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     private findCountryByDialCode(phoneNumber: string): Country | null {
+        /**
+         * Handles if functionality
+         */
         if (!phoneNumber.startsWith('+')) {
             return null;
         }
@@ -1371,7 +1672,13 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         // Use optimized sorted dial codes for matching
         const sortedDialCodes = this.getSortedDialCodes();
         
+        /**
+         * Handles for functionality
+         */
         for (const dialCode of sortedDialCodes) {
+            /**
+             * Handles if functionality
+             */
             if (phoneNumber.startsWith(dialCode)) {
                 return this.countries.find(country => country.dialCode === dialCode) || null;
             }
@@ -1389,6 +1696,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public getFormattedPhoneNumber(format: any = libphonenumber.PhoneNumberFormat.INTERNATIONAL): string {
+        /**
+         * Handles if functionality
+         */
         if (!this.selectedCountry || !this.mobileControl.value) {
             return '';
         }
@@ -1398,6 +1708,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         try {
             const phoneNumber = phoneUtil.parse(this.mobileControl.value, this.selectedCountry.code);
             
+            /**
+             * Handles if functionality
+             */
             if (phoneUtil.isValidNumber(phoneNumber)) {
                 return phoneUtil.format(phoneNumber, format);
             }
@@ -1445,6 +1758,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public isPhoneNumberValid(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!this.selectedCountry || !this.mobileControl.value) {
             return false;
         }
@@ -1466,6 +1782,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public getPhoneNumberType(): any | null {
+        /**
+         * Handles if functionality
+         */
         if (!this.selectedCountry || !this.mobileControl.value) {
             return null;
         }
@@ -1487,13 +1806,28 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public enableAutoFormatting(enable: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (enable) {
             this.mobileControl.valueChanges.pipe(
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$),
+                /**
+                 * Handles distinctUntilChanged functionality
+                 */
                 distinctUntilChanged()
             ).subscribe(value => {
+                /**
+                 * Handles if functionality
+                 */
                 if (value && this.selectedCountry) {
                     const formatted = this.getNationalPhoneNumber();
+                    /**
+                     * Handles if functionality
+                     */
                     if (formatted !== value) {
                         this.mobileControl.setValue(formatted, { emitEvent: false });
                     }
@@ -1509,6 +1843,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     public openedChange(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (!event) {
             // Focus the mobile input after country change
             this.focusMobileInput();

@@ -6,6 +6,9 @@ import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { IOption } from "../../../app.constant";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "select-field",
     styleUrls: ["./select-field.component.scss"],
@@ -13,6 +16,10 @@ import { IOption } from "../../../app.constant";
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * SelectFieldComponent component
+ * Handles selectfield functionality and user interactions
+ */
 export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     /** Holds template of options on the component itself */
     @ContentChild('optionTemplate', { static: false }) public optionTemplate: TemplateRef<any>;
@@ -85,6 +92,10 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     /** Keyboard shortcut command label */
     @Input() public showKeyboardCommand: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private cdr: ChangeDetectorRef
     ) {
     }
@@ -95,15 +106,27 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+                /**
+                 * Handles if functionality
+                 */
                 if (search) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (typeof search === "string" && search !== this.defaultValue) {
                         this.dynamicSearchedQuery.emit(search);
                     } else if (search?.label !== this.defaultValue) {
                         this.dynamicSearchedQuery.emit(search?.label || "");
                     }
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.allowValueReset) {
                         this.selectedValue = "";
                         this.searchFormControl.setValue({ label: "" });
@@ -115,9 +138,15 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             });
         } else {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+                /**
+                 * Handles if functionality
+                 */
                 if (search) {
                     this.filterOptions(search);
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.allowValueReset) {
                         this.selectedValue = "";
                         this.searchFormControl.setValue({ label: "" });
@@ -138,9 +167,18 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+            /**
+             * Handles if functionality
+             */
             if (!this.options || this.options?.length === 0) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.enableDynamicSearch) {
                     this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
                 } else {
@@ -148,13 +186,25 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                 }
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (changes?.options) {
             this.fieldFilteredOptions = changes.options.currentValue?.filter(item => item.label !== "" || item.value !== "");
         }
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.openDropdown) {
                 this.openDropdownPanel();
             }
@@ -181,6 +231,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     private filterOptions(search: string): void {
         let filteredOptions: IOption[] = [];
         this.options?.forEach(option => {
+            /**
+             * Handles if functionality
+             */
             if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
@@ -210,6 +263,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public optionSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.option?.value?.label) {
             this.selectedValue = event?.option?.value?.label;
             this.selectedOption.emit(event?.option?.value);
@@ -232,6 +288,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public scrollEndEvent(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isPaginationEnabled && this.scrollableElementId === event) {
             this.fieldFilteredOptions = this.options;
             this.scrollEnd.emit();
@@ -255,7 +314,13 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public onBlur(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (!this.searchFormControl?.value && !this.defaultValue) {
                 this.selectedValue = "";
                 this.selectedOption.emit({ label: '', value: '' });
@@ -270,6 +335,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     * @memberof SelectFieldComponent
     */
     public closeDropdownPanel(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") > -1) {
             /*
                 Don't close the panel if the user clicks at the corner of the input field,
@@ -309,7 +377,13 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public addClassForDropdown(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
                 document.querySelectorAll(".cdk-overlay-pane")[document.querySelectorAll(".cdk-overlay-pane")?.length - 1]?.classList?.add("dropdown-position");
             }

@@ -14,12 +14,19 @@ import { OrganizationProfile, SettingsAsideFormType } from '../constants/setting
 import { WarehouseActions } from '../warehouse/action/warehouse.action';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'address-settings',
     templateUrl: './address-settings.component.html',
     styleUrls: ['./address-settings.component.scss'],
     standalone:false
 })
+/**
+ * AddressSettingsComponent component
+ * Handles addresssettings functionality and user interactions
+ */
 export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds Aside Account AsidePane Dialog Template Reference */
     @ViewChild("asideAccountAsidePane") public asideAccountAsidePane: TemplateRef<any>;
@@ -137,6 +144,10 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public voucherApiVersion: number;
 
     /** @ignore */
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
@@ -154,6 +165,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -165,40 +179,88 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
 
         this.searchAddressNameInput.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(addressName => {
+            /**
+             * Handles if functionality
+             */
             if (!this.searchAddressNameInput.pristine) {
                 this.addressSearchRequest.name = addressName;
                 this.searchAddress.emit(this.addressSearchRequest);
             }
         });
         this.searchAddressInput.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(address => {
+            /**
+             * Handles if functionality
+             */
             if (!this.searchAddressInput.pristine) {
                 this.addressSearchRequest.address = address;
                 this.searchAddress.emit(this.addressSearchRequest);
             }
         });
         this.searchTaxInput.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(address => {
+            /**
+             * Handles if functionality
+             */
             if (!this.searchTaxInput.pristine) {
                 this.addressSearchRequest.address = address;
                 this.searchAddress.emit(this.addressSearchRequest);
             }
         });
         this.searchStateInput.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(stateName => {
+            /**
+             * Handles if functionality
+             */
             if (!this.searchStateInput.pristine) {
                 this.addressSearchRequest.state = stateName;
                 this.searchAddress.emit(this.addressSearchRequest);
@@ -214,11 +276,23 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnChanges(changes: SimpleChanges): void {
         this.hideLinkEntity = true;
 
+        /**
+         * Handles if functionality
+         */
         if (this.addresses?.length > 1) {
             this.hideLinkEntity = false;
         } else {
+            /**
+             * Handles combineLatest functionality
+             */
             combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response[0] && response[1]) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response[0]?.results?.length > 1 || response[1]?.length > 1) {
                         this.hideLinkEntity = false;
                     }
@@ -226,6 +300,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes.closeSidePane?.currentValue) {
             this.closeAccountAsidePane();
         }
@@ -389,6 +466,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public toggleSearch(fieldName: string, el: any): void {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'searchAddressNameInput') {
             this.showSearchName = true;
             this.showSearchAddress = false;
@@ -410,6 +490,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
             this.showSearchAddress = false;
             this.showSearchTax = false;
         }
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             el.focus();
         }, 200);
@@ -425,26 +508,47 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public clickedOutside(event: Event, el: HTMLElement, fieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'searchAddressNameInput') {
+            /**
+             * Handles if functionality
+             */
             if (this.searchAddressNameInput?.value !== null && this.searchAddressNameInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'searchAddressInput') {
+            /**
+             * Handles if functionality
+             */
             if (this.searchAddressInput?.value !== null && this.searchAddressInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'searchTaxInput') {
+            /**
+             * Handles if functionality
+             */
             if (this.searchTaxInput?.value !== null && this.searchTaxInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'searchStateInput') {
+            /**
+             * Handles if functionality
+             */
             if (this.searchStateInput?.value !== null && this.searchStateInput?.value !== '') {
                 return;
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.childOf(event.target, el)) {
             return;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (fieldName === 'searchAddressNameInput') {
                 this.showSearchName = false;
             } else if (fieldName === 'searchAddressInput') {
@@ -466,6 +570,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public childOf(child, parent): boolean {
+        /**
+         * Handles while functionality
+         */
         while ((child = child.parentNode) && child !== parent) {
         }
         return !!child;
@@ -491,6 +598,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public onConfirmation(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.organizationType === OrganizationType.Branch) {
             this.handleUnLinkAddress(this.selectedAddress);
         } else {

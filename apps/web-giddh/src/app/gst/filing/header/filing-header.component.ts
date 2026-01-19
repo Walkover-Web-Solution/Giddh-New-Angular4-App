@@ -20,6 +20,9 @@ import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, Configuration, RestrictedModules } from '../../../app.constant';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'filing-header',
@@ -27,6 +30,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     styleUrls: ['filing-header.component.scss'],
     standalone:false
 })
+/**
+ * FilingHeaderComponent component
+ * Handles filingheader functionality and user interactions
+ */
 export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public currentPeriod: any = null;
     @Input() public selectedGst: string = null;
@@ -93,6 +100,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds Tax Service Enum */
     public taxServiceEnum = TaxServiceEnum;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private toasty: ToasterService,
@@ -113,7 +124,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
@@ -122,6 +139,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.holdActiveRoute = this.router.routerState.snapshot.url.includes('entityType');
+            /**
+             * Handles if functionality
+             */
             if (this.holdActiveRoute) {
                 this.showDate = false;
             } else {
@@ -129,12 +149,18 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.companyGst$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.activeCompanyGstNumber = a;
             }
         });
 
         this.gstSessionResponse$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.isTaxproAuthenticated = a.taxpro;
                 this.isVayanaAuthenticated = a.vayana;
@@ -143,11 +169,17 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params && params['from'] && params['to']) {
                 this.currentPeriod = {
                     from: params['from'],
                     to: params['to']
                 };
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.selectedMonth) {
                     const fromDate = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT);
                     this.selectedMonth = fromDate.isValid() ? fromDate.toISOString() : dayjs().startOf('month').toISOString();
@@ -162,6 +194,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         request.from = this.currentPeriod.from;
         request.to = this.currentPeriod.to;
         request.gstin = this.activeCompanyGstNumber;
+        /**
+         * Handles if functionality
+         */
         if (this.selectedGst === GstReport.Gstr1) {
             this.navigateToOverview();
             this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
@@ -171,6 +206,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles pullFromGstIn functionality
+     */
     public pullFromGstIn(ev) {
         let request: GstReconcileInvoiceRequest = new GstReconcileInvoiceRequest();
         request.from = this.currentPeriod.from;
@@ -182,7 +220,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.store.dispatch(this.reconcileAction.GstReconcileInvoiceRequest(request));
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(s: SimpleChanges) {
+        /**
+         * Handles if functionality
+         */
         if (s && s.currentPeriod && s.currentPeriod.currentValue) {
             let date = {
                 startDate: dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
@@ -191,7 +235,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             this.isMonthSelected = date.startDate === this.currentPeriod.from && date.endDate === this.currentPeriod.to;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (s && s.fileReturn && s.fileReturn.currentValue && s.fileReturn.currentValue.isAuthenticate) {
+            /**
+             * Handles if functionality
+             */
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
             } else {
@@ -199,15 +249,27 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (s && s.fileGstr3b && s.fileGstr3b.currentValue?.via) {
             let gsp = s.fileGstr3b.currentValue.via;
+            /**
+             * Handles if functionality
+             */
             if (this.gstAuthenticated) {
+                /**
+                 * Handles if functionality
+                 */
                 if (gsp === this.taxServiceEnum.VAYANA && this.isVayanaAuthenticated) {
                     this.fileGstr3B(gsp);
                 } else if (gsp === this.taxServiceEnum.VAYANA && !this.isVayanaAuthenticated) {
                     this.openSettingAsidePane(null, gsp);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (gsp === this.taxServiceEnum.TAXPRO && this.isTaxproAuthenticated) {
                     this.fileGstr3B(gsp);
                 } else if (gsp === this.taxServiceEnum.TAXPRO && !this.isTaxproAuthenticated) {
@@ -228,10 +290,16 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof FilingHeaderComponent
      */
     public openSettingAsidePane(event: any, selectedService?: TaxServiceType): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             event.preventDefault();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (selectedService) {
             this.selectedService = selectedService;
         }
@@ -245,6 +313,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof FilingHeaderComponent
      */
     public onDownloadSheetGSTR(typeOfSheet: string) {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompanyGstNumber) {
             let request: GstrSheetDownloadRequest = new GstrSheetDownloadRequest();
             request.sheetType = typeOfSheet;
@@ -269,7 +340,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles fileGstReturn functionality
+     */
     public fileGstReturn(Via: 'JIO_GST' | 'TAXPRO' | 'VAYANA') {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompanyGstNumber) {
             this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
         } else {
@@ -277,7 +354,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles fileGstReturnV2 functionality
+     */
     public fileGstReturnV2() {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedGst === GstReport.Gstr1) {
             this.store.dispatch(this.gstReconcileActions.FileGstr1({
                 gstin: this.activeCompanyGstNumber,
@@ -287,6 +370,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 currentDateTime: this.generalService.getCurrentDateTime()
             }));
         }
+        /**
+         * Handles if functionality
+         */
         if (this.selectedGst === GstReport.Gstr3b) {
             let gsp;
             gsp = this.isVayanaAuthenticated ? this.taxServiceEnum.VAYANA : this.taxServiceEnum.TAXPRO;
@@ -294,6 +380,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles fileGstr3B functionality
+     */
     public fileGstr3B(via) {
         this.store.dispatch(this.invoicePurchaseActions.FileGSTR3B({ from: this.currentPeriod.from, to: this.currentPeriod.to }, this.activeCompanyGstNumber, via));
     }
@@ -328,6 +417,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof FilingHeaderComponent
      */
     public periodChanged(date: any): void {
+        /**
+         * Handles if functionality
+         */
         if (date) {
             this.selectedMonth = date;
             this.currentPeriod = {
@@ -336,6 +428,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             };
             this.isMonthSelected = true;
             this.store.dispatch(this.reconcileAction.SetSelectedPeriod(this.currentPeriod));
+            /**
+             * Handles if functionality
+             */
             if (this.selectedGst === GstReport.Gstr1) {
                 this.navigateToOverview();
             } else {
@@ -352,6 +447,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     * @memberof FilingHeaderComponent
     */
     public onDownloadJsonGSTR(type: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompanyGstNumber) {
             let request: GstrJsonDownloadRequest = new GstrJsonDownloadRequest();
             request.type = type;
@@ -359,6 +457,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
             this.gstReconcileService.downloadGSTRJSON(request).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === "success") {
                     let blobData = this.generalService.base64ToBlob(res?.body.data, "json", 512);
                     return saveAs(blobData, res?.body.name);

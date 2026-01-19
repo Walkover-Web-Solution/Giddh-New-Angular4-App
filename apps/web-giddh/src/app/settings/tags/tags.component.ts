@@ -10,18 +10,29 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * TagInterface interface definition
+ * Defines the structure and contract for TagInterface objects
+ */
 export interface TagInterface {
     name: string,
     description: string,
     uniqueName: string
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'setting-tags',
     standalone: false,
     templateUrl: './tags.component.html',
     styleUrls: ['./tags.component.scss'],
 })
+/**
+ * SettingsTagsComponent component
+ * Handles settingstags functionality and user interactions
+ */
 export class SettingsTagsComponent implements OnInit {
     /** Create Confirmation Dialog template reference */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
@@ -48,6 +59,10 @@ export class SettingsTagsComponent implements OnInit {
     /** True if api call in progress */
     public isApiCallInProgress: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private settingsTagService: SettingsTagService,
         private toaster: ToasterService,
@@ -63,6 +78,9 @@ export class SettingsTagsComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.tagFormInit();
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.companyUniqueName?.trim()) {
             this.getTags();
         }
@@ -77,12 +95,21 @@ export class SettingsTagsComponent implements OnInit {
         this.tags = [];
         this.isLoading.set(true);
         this.settingsTagService.GetAllTags().pipe(take(1)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length > 0) {
+                /**
+                 * Handles map functionality
+                 */
                 map(response?.body, (tag) => {
                     tag.uniqueName = tag?.name;
                 });
                 let tagsData = orderBy(response?.body, 'name');
                 this.tags = cloneDeep(tagsData);
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.tagInput.nativeElement.focus();
                 }, 100);
@@ -98,15 +125,24 @@ export class SettingsTagsComponent implements OnInit {
      * @memberof SettingsTagsComponent
      */
     public createTag(event: MatChipInputEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isApiCallInProgress) {
             return;
         }
         const value = event?.value?.trim();
+        /**
+         * Handles if functionality
+         */
         if (value.length) {
             this.tagForm.get('name').patchValue(value);
             const formValue = this.tagForm.value;
             this.isApiCallInProgress = true;
             this.settingsTagService.CreateTag(formValue).pipe(take(1)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.tagForm.reset();
                     event.chipInput!.clear();
@@ -125,14 +161,23 @@ export class SettingsTagsComponent implements OnInit {
      * @memberof SettingsTagsComponent
      */
     public updateTag(tag: TagInterface, event: MatChipEditedEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isApiCallInProgress) {
             return;
         }
         tag.name = event.value.trim();
         this.setTagValue(tag);
+        /**
+         * Handles if functionality
+         */
         if (tag) {
             this.isApiCallInProgress = true;
             this.settingsTagService.UpdateTag(tag).pipe(take(1)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
                 }
@@ -148,10 +193,16 @@ export class SettingsTagsComponent implements OnInit {
      * @memberof SettingsTagsComponent
      */
     public onUserConfirmation(deleteTagConfirmation: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (deleteTagConfirmation) {
             const model = this.tagForm.value;
 
             this.settingsTagService.DeleteTag(model).pipe(take(1)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.showToaster(this.commonLocaleData?.app_messages?.tag_deleted, response);
                     this.announcer.announce(`Removed ${model?.name}`);
@@ -171,6 +222,9 @@ export class SettingsTagsComponent implements OnInit {
      */
     private showToaster(successMessage: string, response: any): void {
         this.toaster.clearAllToaster();
+        /**
+         * Handles if functionality
+         */
         if (response?.status === "success") {
             this.getTags();
             this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);
@@ -187,6 +241,9 @@ export class SettingsTagsComponent implements OnInit {
      * @memberof SettingsTagsComponent
      */
     private setTagValue(tag: TagInterface): void {
+        /**
+         * Handles if functionality
+         */
         if (tag?.name) {
             this.tagForm.get('name').patchValue(tag?.name);
             this.tagForm.get('uniqueName').patchValue(tag?.uniqueName);

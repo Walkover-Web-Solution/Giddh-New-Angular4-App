@@ -27,6 +27,9 @@ import { MatCardModule } from '@angular/material/card';
 import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.module';
 import { FroalaTemplateEditorModule } from '../template-froala/template-froala.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
   imports: [
         CommonModule,
@@ -57,4 +60,8 @@ import { FroalaTemplateEditorModule } from '../template-froala/template-froala.m
     exports: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent],
     declarations: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent]
 })
+/**
+ * TriggersModule module
+ * Implements TriggersModule functionality
+ */
 export class TriggersModule { }

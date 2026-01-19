@@ -7,6 +7,9 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'institutions-list',
     styleUrls: ['./institutions-list.component.scss'],
@@ -16,6 +19,10 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
     standalone: false
 })
 
+/**
+ * InstitutionsListComponent component
+ * Handles institutionslist functionality and user interactions
+ */
 export class InstitutionsListComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -40,6 +47,10 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     /** Search field form control */
     public searchFormControl = new FormControl();
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: SettingIntegrationComponentStore,
         public dialogRef: MatDialogRef<InstitutionsListComponent>,
@@ -61,6 +72,9 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
         this.commonLocaleData = this.inputData?.commonLocaleData;
         this.getAllInstitutionsList();
         this.institutionsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.institutions = response.results;
                 this.filteredBanks = response.results;
@@ -69,6 +83,9 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
         });
 
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.openWindow(response.link);
                 this.dialogRef.close(response?.reference);
@@ -95,6 +112,9 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
      * @memberof InstitutionsListComponent
      */
     public filterInstitutions(searchText: string): void {
+        /**
+         * Handles if functionality
+         */
         if (searchText) {
             const lowerCaseTerm = searchText.toLowerCase();
             this.filteredBanks = this.institutions.filter(item =>

@@ -13,12 +13,19 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'cr-dr-list',
     templateUrl: 'cr-dr-list.component.html',
     styleUrls: ['./cr-dr-list.component.scss', '../../home.component.scss'],
     standalone: false
 })
+/**
+ * CrDrComponent component
+ * Handles crdr functionality and user interactions
+ */
 export class CrDrComponent implements OnInit, OnDestroy {
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
@@ -65,20 +72,33 @@ export class CrDrComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private contactService: ContactService, private cdRef: ChangeDetectorRef, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
 
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -93,24 +113,36 @@ export class CrDrComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
 
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
             }
         });
 
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
     }
 
+    /**
+     * Retrieves accounts data
+     */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
         this.isLoading = true;
         this.drAccounts = [];
@@ -119,14 +151,26 @@ export class CrDrComponent implements OnInit, OnDestroy {
         refresh = refresh ? refresh : 'false';
 
         this.contactService.GetContactsDashboard(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
+                /**
+                 * Handles if functionality
+                 */
                 if (groupUniqueName === "sundrydebtors") {
                     this.drAccounts = res.body?.results;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (groupUniqueName === "sundrycreditors") {
                     this.crAccounts = res.body?.results;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!(this.fromDate && this.toDate) && res.body && res.body.results && res.body.results.fromDate && res.body.results.toDate) {
                     this.apiFromDate = res.body.results.fromDate;
                     this.apiToDate = res.body.results.toDate;
@@ -146,12 +190,21 @@ export class CrDrComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Retrieves accountsreport data
+     */
     public getAccountsReport() {
+        /**
+         * Handles if functionality
+         */
         if (!this.fromDate || !this.toDate) {
             this.fromDate = "";
             this.toDate = "";
@@ -161,12 +214,21 @@ export class CrDrComponent implements OnInit, OnDestroy {
         this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', this.showRecords, '', 'closingBalance', 'desc');
     }
 
+    /**
+     * Handles changeShowRecords functionality
+     */
     public changeShowRecords(showRecords) {
         this.showRecords = showRecords;
         this.getAccountsReport();
     }
 
+    /**
+     * Retrieves filterdate data
+     */
     public getFilterDate(dates: any) {
+        /**
+         * Handles if functionality
+         */
         if (dates !== null) {
             this.dueDate = new Date(dates[1].split("-").reverse().join("-"));
             this.fromDate = dates[0];
@@ -181,6 +243,9 @@ export class CrDrComponent implements OnInit, OnDestroy {
      * @memberof CrDrComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -195,16 +260,25 @@ export class CrDrComponent implements OnInit, OnDestroy {
     * @memberof ProfitLossComponent
     */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

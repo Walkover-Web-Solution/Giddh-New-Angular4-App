@@ -5,6 +5,9 @@ import { ImportTypeSelectComponent } from './import-type-select/import-type-sele
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { ImportReportComponent } from './import-report/import-report.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -20,5 +23,9 @@ import { ImportReportComponent } from './import-report/import-report.component';
     ],
     exports: [RouterModule]
 })
+/**
+ * ImportExcelRoutingModule module
+ * Implements ImportExcelRoutingModule functionality
+ */
 export class ImportExcelRoutingModule {
 }

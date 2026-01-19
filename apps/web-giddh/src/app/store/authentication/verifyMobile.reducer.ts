@@ -21,6 +21,9 @@ const initialState = {
 
 export function VerifyMobileReducer(state: VerifyMobileState = initialState, action: CustomActions): VerifyMobileState {
 
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case VerifyMobileActions.SET_VERIFIACATION_MOBILENO:
             return Object.assign({}, state, {

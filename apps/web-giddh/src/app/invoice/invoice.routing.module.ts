@@ -19,6 +19,9 @@ const INVOICE_ROUTES: Routes = [
     { path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent },
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild(INVOICE_ROUTES),
@@ -27,5 +30,9 @@ const INVOICE_ROUTES: Routes = [
         RouterModule
     ]
 })
+/**
+ * InvoiceRoutingModule module
+ * Implements InvoiceRoutingModule functionality
+ */
 export class InvoiceRoutingModule {
 }

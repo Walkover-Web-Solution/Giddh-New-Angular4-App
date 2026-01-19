@@ -6,6 +6,10 @@ import { Store } from "@ngrx/store";
 import { ToasterService } from "../services/toaster.service";
 import { TlPlService } from "../services/tl-pl.service";
 
+/**
+ * MultiCurrencyReportsState interface definition
+ * Defines the structure and contract for MultiCurrencyReportsState objects
+ */
 export interface MultiCurrencyReportsState {
     reportDataList: any;
     inProgressReport: boolean;
@@ -18,16 +22,30 @@ const DEFAULT_STATE: MultiCurrencyReportsState = {
     filterRequestData: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * MultiCurrencyReportsComponentStore store
+ * Manages multicurrencyreportscomponent state using NgRx ComponentStore
+ */
 export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurrencyReportsState> {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
         private TlPlService: TlPlService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
     public reportDataList$: Observable<any> = this.select(state => state.reportDataList);
@@ -49,11 +67,20 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
      */
     readonly getMultiCurrencyReport = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ reportDataList: null, filterRequestData: null, inProgressReport: true });
                 return this.TlPlService.getMultiCurrencyReport(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && res.body) {
                                 res.body.response.message && this.toaster.showSnackBar("error", res.body.response.message);
                                 return this.patchState({ reportDataList: res.body.response, filterRequestData: { request: res.body.request, lastFetchedAt: res.body.lastFetchedAt }, inProgressReport: false });
@@ -67,6 +94,9 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
                             return this.patchState({ reportDataList: null, filterRequestData: null, inProgressReport: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -83,10 +113,19 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
      */
     readonly createMultiCurrencyReport = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.TlPlService.createMultiCurrencyReport(req.reportType, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success" && res.body?.file) {
                                 this.toaster.showSnackBar("success", res.body.file);
                             } else {
@@ -97,6 +136,9 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
                             this.toaster.showSnackBar("error", error);
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

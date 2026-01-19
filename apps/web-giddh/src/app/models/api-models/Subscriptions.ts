@@ -1,5 +1,9 @@
 import { PAGINATION_LIMIT } from "../../app.constant";
 
+/**
+ * SubscriptionPlan interface definition
+ * Defines the structure and contract for SubscriptionPlan objects
+ */
 export interface SubscriptionPlan {
     amount: number;
     paymentFrequency: string;
@@ -7,6 +11,10 @@ export interface SubscriptionPlan {
     transactionLimit: number;
 }
 
+/**
+ * ITransactions interface definition
+ * Defines the structure and contract for ITransactions objects
+ */
 export interface ITransactions {
     additionalCharges: number;
     currentTransactionCount: number;
@@ -19,6 +27,10 @@ export interface ITransactions {
 
 // New Subscription model
 
+/**
+ * SubscriptionsUser interface definition
+ * Defines the structure and contract for SubscriptionsUser objects
+ */
 export interface SubscriptionsUser {
     companies?: any;
     companiesWithTransactions: CompaniesWithTransaction[];
@@ -41,6 +53,10 @@ export interface SubscriptionsUser {
     remainingDays?: number
 }
 
+/**
+ * PlanDetails class
+ * Implements PlanDetails functionality
+ */
 export class PlanDetails {
     countries: any[];
     name: string;
@@ -55,6 +71,10 @@ export class PlanDetails {
     transactionLimit: number;
 }
 
+/**
+ * UserDetails class
+ * Implements UserDetails functionality
+ */
 export class UserDetails {
     name: string;
     uniqueName: string;
@@ -63,12 +83,20 @@ export class UserDetails {
     mobileno?: any;
 }
 
+/**
+ * CompaniesWithTransaction class
+ * Implements CompaniesWithTransaction functionality
+ */
 export class CompaniesWithTransaction {
     uniqueName: string;
     name: string;
     transactions: number;
 }
 
+/**
+ * SubscriptionReportRequest class
+ * Implements SubscriptionReportRequest functionality
+ */
 export class SubscriptionReportRequest {
     public totalItems?: number;
     public totalPages?: number;
@@ -76,12 +104,20 @@ export class SubscriptionReportRequest {
     public page: number;
     public sort: string;
     public sortBy: string;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
     }
 }
 
+/**
+ * SearchSubscriptionRequest class
+ * Implements SearchSubscriptionRequest functionality
+ */
 export class SearchSubscriptionRequest {
     public q: any;
     public count: number;
@@ -90,6 +126,10 @@ export class SearchSubscriptionRequest {
     public totalPages?: number;
     public loadMore?: boolean;
     public fromMoveCompany?: boolean;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;

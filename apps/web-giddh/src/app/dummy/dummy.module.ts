@@ -4,6 +4,9 @@ import { DummyComponent } from "./dummy.component";
 import { DummyRoutingModule } from "./dummy.routing.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         DummyComponent
@@ -18,6 +21,10 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
     ]
 })
 
+/**
+ * DummyModule module
+ * Implements DummyModule functionality
+ */
 export class DummyModule {
 
 }

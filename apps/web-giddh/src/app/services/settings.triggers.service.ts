@@ -9,17 +9,31 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsTriggersService service
+ * Provides settingstriggers related business logic and data operations
+ */
 export class SettingsTriggersService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     // GetTriggers
+    /**
+     * Handles GetTriggers functionality
+     */
     public GetTriggers(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + TRIGGER_API.GET?.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {

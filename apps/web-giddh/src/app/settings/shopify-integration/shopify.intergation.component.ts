@@ -5,12 +5,19 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { isEmpty } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'shopify-integration',
     templateUrl: './shopify.intergation.component.html',
     styleUrls: ['./shopify.intergation.component.scss'],
     standalone:false
 })
+/**
+ * ShopifyIntegrationComponent component
+ * Handles shopifyintegration functionality and user interactions
+ */
 export class ShopifyIntegrationComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -21,6 +28,10 @@ export class ShopifyIntegrationComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private ecommerceService: EcommerceService, private store: Store<AppState>,) {
     }
 
@@ -31,9 +42,18 @@ export class ShopifyIntegrationComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res && !isEmpty(res)) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
                     (Array.isArray(res.ecommerceDetails) ? res.ecommerceDetails : []).forEach(item => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
                             this.getShopifyVerifyStatus(item.uniqueName);
                         }
@@ -52,7 +72,13 @@ export class ShopifyIntegrationComponent implements OnInit, OnDestroy {
     public getShopifyVerifyStatus(ecommerceUniqueName: string): void {
         const requestObj = { source: "shopify" };
         this.ecommerceService.isShopifyConnected(requestObj, ecommerceUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.status === 'success' && response.body === 'VERIFIED') {
                     this.isEcommerceShopifyUserVerified = true;
                 }

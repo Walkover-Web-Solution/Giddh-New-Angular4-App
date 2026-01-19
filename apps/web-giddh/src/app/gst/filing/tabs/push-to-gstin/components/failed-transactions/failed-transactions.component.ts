@@ -7,6 +7,9 @@ import { Configuration, DROPDOWN_ITEMS_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '..
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'failed-transactions',
@@ -14,6 +17,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     styleUrls: ['failed-transactions.component.scss'],
     standalone: false
 })
+/**
+ * FailedTransactionsComponent component
+ * Handles failedtransactions functionality and user interactions
+ */
 export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public failedTransactions: Gstr1SummaryErrors[] = [];
     /* This will hold local JSON data */
@@ -28,10 +35,17 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig ) {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
@@ -40,11 +54,17 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
      * ngOnChnages
      */
     public ngOnChanges(s: SimpleChanges) {
+        /**
+         * Handles if functionality
+         */
         if (s['failedTransactions']?.currentValue && s['failedTransactions']?.currentValue !== s['failedTransactions']?.previousValue) {
             this.handlePageEvent({ pageIndex: 0, pageSize: this.itemsPerPage, length: this.failedTransactions?.length });
         }
     }
 
+    /**
+     * Handles sortBy functionality
+     */
     public sortBy(col: string, order: string) {
         this.filteredTransactions = orderBy(this.filteredTransactions, [col], [order]);
     }
@@ -63,6 +83,9 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
         this.filteredTransactions = this.failedTransactions?.slice(startIndex, endIndex + 1);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

@@ -20,6 +20,9 @@ import { cloneDeep } from '../../../lodash-optimized';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { AdvanceSearchRangeHelper } from '../../../shared/helpers/advance-search-range.helper';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'advance-search-model',
     templateUrl: './advance-search.component.html',
@@ -29,6 +32,10 @@ import { AdvanceSearchRangeHelper } from '../../../shared/helpers/advance-search
     standalone: false
 })
 
+/**
+ * AdvanceSearchModelComponent component
+ * Handles advancesearchmodel functionality and user interactions
+ */
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
     @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -138,6 +145,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     /** Filtered Sales Person List */
     public filteredSalesPersonList: IOption[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private groupService: GroupService,
         private inventoryService: InventoryService,
@@ -150,6 +161,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.setAdvanceSearchForm();
 
@@ -163,7 +177,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         });
 
         this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)).subscribe((search: string) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!search) {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
                         this.filteredSalesPersonList = res as IOption[];
@@ -184,48 +204,81 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('advanceSearchRequest' in changes && changes.advanceSearchRequest.currentValue && changes.advanceSearchRequest.currentValue !== changes.advanceSearchRequest.previousValue && changes.advanceSearchRequest.currentValue.dataToSend?.bsRangeValue) {
             this.fromDate = dayjs((changes.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
             this.toDate = dayjs((changes.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
             this.selectedDateRange = { startDate: changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0], endDate: changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1] };
             this.selectedDateRangeUi = dayjs(changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchForm) {
                 let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
                 bsDaterangepicker?.patchValue(this.selectedDateRangeUi);
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchForm && 'advanceSearchRequest' in changes && changes.advanceSearchRequest.currentValue && changes.advanceSearchRequest.currentValue.dataToSend) {
             let dataToSend = changes.advanceSearchRequest.currentValue.dataToSend;
 
             this.groupUniqueNames = [];
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend.accountUniqueNames) {
                     this.advanceSearchForm.get('accountUniqueNames')?.patchValue(dataToSend.accountUniqueNames);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend.groupUniqueNames) {
                     this.advanceSearchForm.get('groupUniqueNames')?.patchValue(dataToSend.groupUniqueNames);
                     this.groupUniqueNames = dataToSend.groupUniqueNames;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend.particulars) {
                     this.advanceSearchForm.get('particulars')?.patchValue(dataToSend.particulars);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend.vouchers) {
                     this.advanceSearchForm.get('vouchers')?.patchValue(dataToSend.vouchers);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend.inventory) {
                     this.advanceSearchForm.get('inventory')?.patchValue(dataToSend.inventory);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (dataToSend.amountOption) {
                     this.advanceSearchForm.get('amountOption')?.patchValue(dataToSend.amountOption);
                 }
@@ -247,6 +300,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
     }
 
+    /**
+     * Resets advancesearchmodal to default state
+     */
     public resetAdvanceSearchModal() {
         this.advanceSearchRequest.dataToSend.bsRangeValue = this.advanceSearchRequestClone.dataToSend.bsRangeValue;
         let f: any = dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT);
@@ -260,6 +316,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.setAdvanceSearchForm();
     }
 
+    /**
+     * Sets advancesearchform value
+     */
     public setAdvanceSearchForm() {
         this.advanceSearchForm = this.fb.group({
             bsRangeValue: [[]],
@@ -304,9 +363,15 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             salesPersonUniqueNames: [[]]
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchRequest) {
             this.advanceSearchForm?.patchValue(this.advanceSearchRequest.dataToSend);
 
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchForm.get('includeDescription')?.value) {
                 this.isExpanded = true;
             } else {
@@ -315,7 +380,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         }
     }
 
+    /**
+     * Sets vouchertypes value
+     */
     public setVoucherTypes(event?: any) {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.voucherTypeList = observableOf([{
                 label: this.commonLocaleData?.app_voucher_types?.sales,
@@ -354,6 +425,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         }
     }
 
+    /**
+     * Handles cancel event
+     */
     public onCancel() {
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: true });
         this.toggleGiddhDatepicker(false);
@@ -364,17 +438,29 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      */
     public onSearch() {
         this.advanceSearchRequest.dataToSend = this.advanceSearchForm?.value;
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchRequest.dataToSend && typeof this.advanceSearchRequest.dataToSend.bsRangeValue === 'string') {
             this.advanceSearchRequest.dataToSend.bsRangeValue = [this.fromDate, this.toDate];
         }
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchRequest.dataToSend && this.advanceSearchRequest.dataToSend.dateOnCheque) {
             this.advanceSearchRequest.dataToSend.dateOnCheque = (dayjs(this.advanceSearchRequest.dataToSend.dateOnCheque).format('dddd') !== 'Invalid date') ? dayjs(this.advanceSearchRequest.dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT) : this.advanceSearchRequest.dataToSend.dateOnCheque;
         }
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: false });
     }
 
+    /**
+     * Handles prepareRequest functionality
+     */
     public prepareRequest() {
         let dataToSend = cloneDeep(this.advanceSearchForm?.value);
+        /**
+         * Handles if functionality
+         */
         if (dataToSend.dateOnCheque) {
             dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
         }
@@ -396,11 +482,17 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public toggleOtherDetails() {
         let val: boolean = !this.advanceSearchForm.get('includeDescription')?.value;
         this.advanceSearchForm.get('includeDescription')?.patchValue(val);
+        /**
+         * Handles if functionality
+         */
         if (!val) {
             this.advanceSearchForm.get('description')?.patchValue(null);
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -414,6 +506,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -428,18 +523,30 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
        * @memberof AdvanceSearchModelComponent
        */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.startDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchForm) {
                 this.fromDate = dayjs(value.startDate, GIDDH_DATE_FORMAT).toDate();
                 this.toDate = dayjs(value.endDate, GIDDH_DATE_FORMAT).toDate();
@@ -459,11 +566,17 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountsSearchResultsPaginationData.query === query && this.accountsSearchResultsPaginationData.page === page) {
             return;
         }
         this.accountsSearchResultsPaginationData.query = query;
         this.accountsSearchResultsPaginationData.page = page;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultScrollApiCall &&
             ((typeof query === 'string') || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -471,10 +584,16 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 q: encodeURIComponent(query),
                 page
             }
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
             }
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -482,6 +601,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                             label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.accounts = searchResults;
                     } else {
@@ -494,7 +616,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     this.changeDetectionRef.detectChanges();
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
@@ -509,6 +637,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
             this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
             this.preventDefaultScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
             }, 500);
@@ -522,11 +653,17 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public handleScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
             this.onAccountSearchQueryChanged(
                 this.accountsSearchResultsPaginationData.query,
                 this.accountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -552,11 +689,17 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        /**
+         * Handles if functionality
+         */
         if (query !== "" && this.stocksSearchResultsPaginationData.query === query && this.stocksSearchResultsPaginationData.page === page) {
             return;
         }
         this.stocksSearchResultsPaginationData.query = query;
         this.stocksSearchResultsPaginationData.page = page;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultStockScrollApiCall &&
             (typeof query === 'string' || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -565,10 +708,16 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 page,
                 count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
             }
             this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -576,6 +725,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                             label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.stocks = searchResults;
                     } else {
@@ -587,7 +739,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     this.stockListDropDown$ = observableOf(this.stocks);
                     this.stocksSearchResultsPaginationData.page = data.body.page;
                     this.stocksSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     }
                     this.changeDetectionRef.detectChanges();
@@ -600,6 +758,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.stocksSearchResultsPaginationData.page = this.defaultStockPaginationData.page;
             this.stocksSearchResultsPaginationData.totalPages = this.defaultStockPaginationData.totalPages;
             this.preventDefaultStockScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultStockScrollApiCall = false;
             }, 500);
@@ -616,11 +777,17 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        /**
+         * Handles if functionality
+         */
         if (this.groupsSearchResultsPaginationData.query === query && this.groupsSearchResultsPaginationData.page === page) {
             return;
         }
         this.groupsSearchResultsPaginationData.query = query;
         this.groupsSearchResultsPaginationData.page = page;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultGroupScrollApiCall &&
             ((typeof query === "string") || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -629,10 +796,16 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 page,
                 count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -640,6 +813,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                             label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.searchedGroups = searchResults;
                     } else {
@@ -652,7 +828,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     this.changeDetectionRef.detectChanges();
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
@@ -667,6 +849,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
             this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
             this.preventDefaultGroupScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultGroupScrollApiCall = false;
             }, 500);
@@ -680,11 +865,17 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public handleStockScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stocksSearchResultsPaginationData.page < this.stocksSearchResultsPaginationData.totalPages) {
             this.onStockSearchQueryChanged(
                 this.stocksSearchResultsPaginationData.query,
                 this.stocksSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.stocksSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -707,11 +898,17 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public handleGroupScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
             this.onGroupSearchQueryChanged(
                 this.groupsSearchResultsPaginationData.query,
                 this.groupsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {

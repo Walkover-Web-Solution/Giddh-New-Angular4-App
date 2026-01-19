@@ -9,10 +9,21 @@ import { CUSTOM_FIELDS } from './apiurls/custom-fields.api';
 import { GeneralService } from './general.service';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * CustomFieldsService service
+ * Provides customfields related business logic and data operations
+ */
 export class CustomFieldsService {
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private generalService: GeneralService) {
 
     }
@@ -31,10 +42,16 @@ export class CustomFieldsService {
         url = url?.replace(':page', request.page);
         url = url?.replace(':count', request.count);
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
@@ -49,10 +66,16 @@ export class CustomFieldsService {
         let url = this.config.apiUrl + CUSTOM_FIELDS.CREATE;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
         return this.http.post(url, request).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
@@ -68,10 +91,16 @@ export class CustomFieldsService {
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
         url = url?.replace(':customFieldUniqueName', customFieldUniqueName);
         return this.http.delete(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, customFieldUniqueName)));
     }
 
@@ -88,10 +117,16 @@ export class CustomFieldsService {
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
         url = url?.replace(':customFieldUniqueName', customFieldUniqueName);
         return this.http.patch(url, request).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
@@ -107,10 +142,16 @@ export class CustomFieldsService {
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
         url = url?.replace(':customFieldUniqueName', customFieldUniqueName);
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, customFieldUniqueName)));
     }
 }

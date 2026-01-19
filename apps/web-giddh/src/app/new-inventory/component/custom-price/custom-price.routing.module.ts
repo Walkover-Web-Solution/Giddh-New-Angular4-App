@@ -17,10 +17,17 @@ const routes: Routes = [
     }
 ];
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [],
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
+/**
+ * CustomPriceRoutingModule module
+ * Implements CustomPriceRoutingModule functionality
+ */
 export class CustomPriceRoutingModule {
 }

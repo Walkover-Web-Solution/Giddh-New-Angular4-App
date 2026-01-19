@@ -8,6 +8,9 @@ import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-wa
 import { NeedsAuthorization } from '../decorators/needAuthorization';
 import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmation-guard';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -34,5 +37,9 @@ import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmatio
     providers: [SettingsDeactivateGuard],
     exports: [RouterModule]
 })
+/**
+ * SettingRountingModule module
+ * Implements SettingRountingModule functionality
+ */
 export class SettingRountingModule {
 }

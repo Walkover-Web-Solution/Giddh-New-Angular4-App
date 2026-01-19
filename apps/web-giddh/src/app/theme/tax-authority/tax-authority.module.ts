@@ -21,6 +21,9 @@ import { AmountFieldComponentModule } from '../../shared/amount-field/amount-fie
 import { AccountWiseReportComponent } from './reports/account-wise-report/account-wise-report.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -54,4 +57,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         CreateComponent
     ]
 })
+/**
+ * TaxAuthorityModule module
+ * Implements TaxAuthorityModule functionality
+ */
 export class TaxAuthorityModule { }

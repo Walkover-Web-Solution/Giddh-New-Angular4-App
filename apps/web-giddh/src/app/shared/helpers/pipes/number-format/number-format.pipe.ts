@@ -6,8 +6,15 @@ import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { giddhRoundOff } from '../../helperFunctions';
 import { NUMBER_FORMAT_LOCALE_MAP, DEFAULT_NUMBER_FORMAT_LOCALE, DEFAULT_NUMBER_DISPLAY_FORMAT } from '../../../../app.constant';
 
+/**
+ * Handles Pipe functionality
+ */
 @Pipe({ name: 'giddhNumberFormat', pure: true, standalone: false })
 
+/**
+ * GiddhNumberFormatPipe pipe
+ * Implements GiddhNumberFormatPipe functionality
+ */
 export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
     /** Subject to handle component destruction and unsubscribe from observables */
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -16,10 +23,20 @@ export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
     /** Locale string for number formatting (e.g., 'en-IN', 'en-US', 'fr-FR') */
     private locale: string = DEFAULT_NUMBER_FORMAT_LOCALE;
 
+    /**
+     * Creates an instance of pipe
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>) {
         this.store.pipe(select(state => state.settings.profile), distinctUntilKeyChanged('balanceDisplayFormat'), takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile && profile.name) {
                 this.companyDecimalPlaces = profile.balanceDecimalPlaces ? profile.balanceDecimalPlaces : 2;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.companyDecimalPlaces) {
                     localStorage.setItem('currencyDecimalType', this.companyDecimalPlaces.toString());
                 }
@@ -65,6 +82,9 @@ export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
      * @memberof GiddhNumberFormatPipe
      */
     public transform(value: number, customDecimalPlaces?: number): string {
+        /**
+         * Handles if functionality
+         */
         if (value == null || isNaN(value)) {
             return '';
         }

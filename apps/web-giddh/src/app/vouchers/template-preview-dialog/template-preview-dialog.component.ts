@@ -7,12 +7,19 @@ import { InvoiceTemplatesService } from '../../services/invoice.templates.servic
 import { ToasterService } from '../../services/toaster.service';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
   selector: 'app-template-preview-dialog',
   templateUrl: './template-preview-dialog.component.html',
   styleUrls: ['./template-preview-dialog.component.scss'],
   standalone:false
 })
+/**
+ * TemplatePreviewDialogComponent component
+ * Handles templatepreviewdialog functionality and user interactions
+ */
 export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
   /* Hold invoice  type*/
   public selectedInvoiceType: any = '';
@@ -31,6 +38,10 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
   /** Dynamic template preview title */
   public templatePreviewTitle: string = '';
 
+  /**
+   * Creates an instance of component
+   * Initializes component dependencies and sets up initial state
+   */
   constructor(
     public dialog: MatDialog,
     private domSanitizer: DomSanitizer,
@@ -61,6 +72,9 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
   private setTemplatePreviewTitle(): void {
     let templateType = '';
     // Map template types to display names
+    /**
+     * Handles switch functionality
+     */
     switch (this.data?.type?.toLowerCase()) {
       case VoucherTypeEnum.sales:
       case VoucherTypeEnum.invoice:
@@ -92,6 +106,9 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
    */
   public getTemplatePreview(): void {
     this.invoiceTemplatesService.getTemplatePreview(this.data?.type, this.data?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+      /**
+       * Handles if functionality
+       */
       if (response?.status === 'success') {
         this.selectedInvoiceType = this.generalService.base64ToBlob(response?.body?.data, 'application/pdf', 512);
         const file = new Blob([this.selectedInvoiceType], { type: 'application/pdf' });

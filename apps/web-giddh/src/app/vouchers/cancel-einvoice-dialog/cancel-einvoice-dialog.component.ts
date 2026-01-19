@@ -6,6 +6,9 @@ import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { IOption } from '../../app.constant';
 
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'cancel-einvoice-dialog',
     templateUrl: './cancel-einvoice-dialog.component.html',
@@ -13,6 +16,10 @@ import { IOption } from '../../app.constant';
     providers: [VoucherComponentStore],
     standalone: false
 })
+/**
+ * CancelEInvoiceDialogComponent component
+ * Handles canceleinvoicedialog functionality and user interactions
+ */
 export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -31,6 +38,10 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
     /** Holds Voucher Type */
     public voucherType: string;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
@@ -62,6 +73,9 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
         ];
 
         this.componentStore.cancelEInvoiceIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.dialogRef.close(true);
             }
@@ -76,6 +90,9 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
     public submitEInvoiceCancellation(): void {
         const eInvoiceCancelForm = this.eInvoiceCancelForm.value;
 
+        /**
+         * Handles if functionality
+         */
         if (eInvoiceCancelForm) {
             const requestObject: any = {
                 cnlRsn: eInvoiceCancelForm.cancellationReason,
@@ -97,6 +114,9 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
     */
     public handleBlurOnCancellationRemarks(): void {
         const cancellationRemarksControl = this.eInvoiceCancelForm?.get('cancellationRemarks');
+        /**
+         * Handles if functionality
+         */
         if (cancellationRemarksControl) {
             cancellationRemarksControl.patchValue(cancellationRemarksControl.value?.trim());
         }

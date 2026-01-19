@@ -22,6 +22,9 @@ import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, Configuration } from '../../../app.constant';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'create-warehouse',
     templateUrl: './create-warehouse.component.html',
@@ -29,6 +32,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     standalone:false
 })
 
+/**
+ * CreateWarehouseComponent component
+ * Handles createwarehouse functionality and user interactions
+ */
 export class CreateWarehouseComponent implements OnInit, OnDestroy {
     /** Stores the comapny details */
     public companyDetails: any = {
@@ -83,6 +90,10 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     /** Holds Create Account Asidepane Dialog Ref */
     public asideAccountAsidePaneDialogRef: MatDialogRef<any>;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
@@ -113,6 +124,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('setting-sidebar-open');
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.name) {
                 this.companyDetails = {
                     name: response.name,
@@ -125,6 +139,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -140,6 +157,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             address: ['']
         });
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.name) {
                 this.companyDetails = {
                     name: response.name,
@@ -152,6 +172,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -161,6 +184,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         this.imgPath = Configuration.isElectron ? 'assets/images/warehouse-image.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/warehouse-image.svg';
 
         this.warehouseForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
@@ -175,6 +201,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         this.addresses?.addressToShow?.forEach(address => {
+            /**
+             * Handles if functionality
+             */
             if (!selectedAddresses.includes(address?.uniqueName)) {
                 address.isDefault = false;
             }
@@ -188,6 +217,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      * @memberof CreateWarehouseComponent
      */
     public selectAddress(option: any): void {
+        /**
+         * Handles if functionality
+         */
         if (option.isDefault) {
             option.isDefault = false;
         }
@@ -203,14 +235,23 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public setDefault(option: any, event: any): void {
         event.stopPropagation();
         event.preventDefault();
+        /**
+         * Handles if functionality
+         */
         if (!option.isDefault) {
             this.addresses?.addressToShow?.forEach(address => {
+                /**
+                 * Handles if functionality
+                 */
                 if (address?.value !== option?.value) {
                     address.isDefault = false;
                 }
             });
         }
         option.isDefault = !option.isDefault;
+        /**
+         * Handles if functionality
+         */
         if (option.isDefault) {
             this.warehouseForm.get('address')?.patchValue([
                 ...(this.warehouseForm.get('address')?.value || []),
@@ -233,7 +274,13 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             }))
         };
         this.settingsProfileService.createNewWarehouse(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.status === 'success') {
                     this.toastService.successToast(this.localeData?.warehouse_created);
                     this.warehouseForm.reset();
@@ -254,6 +301,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public handleFormClear(): void {
         this.addresses?.addressToShow?.forEach(address => {
+            /**
+             * Handles if functionality
+             */
             if (address) {
                 address.isDefault = false;
             }
@@ -271,11 +321,17 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public loadStates(countryCode: string): void {
         this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
                 this.addressConfiguration.countyList = [];
 
+                /**
+                 * Handles if functionality
+                 */
                 if (result.stateList) {
                     Object.keys(result.stateList).forEach(key => {
                         this.addressConfiguration.stateList.push({
@@ -287,6 +343,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     });
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (result.countyList) {
                     this.addressConfiguration.countyList = result.countyList?.map(county => {
                         return { label: county.name, value: county.code };
@@ -321,6 +380,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         };
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success' && response?.body) {
                 this.closeAddressAsidePane();
                 this.addresses?.addressToShow?.push({
@@ -349,7 +411,13 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
         this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
                     // Tax field found, support for the country taxation
@@ -368,6 +436,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public loadLinkedEntities(successCallback?: Function): void {
         this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
@@ -375,7 +446,13 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     label: result.name,
                     value: result?.uniqueName
                 }));
+                /**
+                 * Handles if functionality
+                 */
                 if (successCallback) {
+                    /**
+                     * Handles successCallback functionality
+                     */
                     successCallback();
                 }
             }
@@ -403,6 +480,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     private loadAddresses(method: string, params?: any): void {
         this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body && response.status === 'success') {
                 const modifiedAddresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {
@@ -436,6 +516,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      * @memberof CreateWarehouseComponent
      */
     public selectEntity(option: any): void {
+        /**
+         * Handles if functionality
+         */
         if (option.isDefault) {
             option.isDefault = false;
         }
@@ -467,11 +550,23 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
 
         this.hideLinkEntity = true;
 
+        /**
+         * Handles if functionality
+         */
         if (this.addresses?.addressToShow?.length > 1) {
             this.hideLinkEntity = false;
         } else {
+            /**
+             * Handles combineLatest functionality
+             */
             combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response[0] && response[1]) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response[0]?.results?.length > 1 || response[1]?.length > 1) {
                         this.hideLinkEntity = false;
                     }
@@ -487,6 +582,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      * @memberof CreateWarehouseComponent
      */
     public onSearchQueryChanged(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.addresses.addressToShow = this.addresses?.addressToShow?.filter(address => address.label.toUpperCase().indexOf(event.toUpperCase()) > -1);
         }

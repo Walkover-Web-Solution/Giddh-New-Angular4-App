@@ -33,12 +33,19 @@ import { EnvironmentService } from "../services/environment.service";
 
 declare var initSendOTP: any;
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "signup",
     templateUrl: "./signup.component.html",
     styleUrls: ["./signup.component.scss"],
     standalone:false
 })
+/**
+ * SignupComponent component
+ * Handles signup functionality and user interactions
+ */
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
     public isLoginWithEmailSubmited$: Observable<boolean>;
@@ -90,6 +97,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
 
     // tslint:disable-next-line:no-empty
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
@@ -150,6 +161,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     // tslint:disable-next-line:no-empty
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         // Use EnvironmentService for consistent asset path handling
         this.imgPath = this.environmentService.getImagePath('');
@@ -182,10 +196,19 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
+        /**
+         * Handles if functionality
+         */
         if (!Configuration.isElectron) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.subscribe((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!res && user) {
+                        /**
+                         * Handles switch functionality
+                         */
                         switch (user.provider) {
                             case "GOOGLE": {
                                 this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
@@ -203,12 +226,18 @@ export class SignupComponent implements OnInit, OnDestroy {
 
         //  get login state and check if twoWayAuth is needed
         this.userLoginState$.subscribe(status => {
+            /**
+             * Handles if functionality
+             */
             if (status === userLoginStateEnum.needTwoWayAuth) {
                 this.showTwoWayAuthModal();
             }
         });
 
         this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.showTwoWayAuthModal();
                 this.store.dispatch(this.loginAction.hideTwoWayOtpPopup());
@@ -217,6 +246,9 @@ export class SignupComponent implements OnInit, OnDestroy {
 
         // check if two way auth is successfully done
         this.isTwoWayAuthInSuccess$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.hideTowWayAuthModal();
                 this.store.dispatch(this.loginAction.resetTwoWayAuthModal());
@@ -224,6 +256,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         });
 
         this.signupVerifyEmail$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.signupVerifyForm.get("email")?.patchValue(a);
             }
@@ -245,6 +280,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles LoginWithEmail functionality
+     */
     public LoginWithEmail(email: string) {
         let data = new SignupwithEmaillModel();
         this.retryCount++;
@@ -253,6 +291,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithEmailRequest(data));
     }
 
+    /**
+     * Handles VerifyEmail functionality
+     */
     public VerifyEmail(email: string, code: string) {
         let data = new VerifyEmailModel();
         data.email = email;
@@ -260,6 +301,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.VerifyEmailRequest(data));
     }
 
+    /**
+     * Handles VerifyCode functionality
+     */
     public VerifyCode(mobile: string, code: string) {
         let data = new VerifyMobileModel();
         data.countryCode = Number(this.selectedCountry);
@@ -268,6 +312,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.VerifyMobileRequest(data));
     }
 
+    /**
+     * Handles verifyTwoWayCode functionality
+     */
     public verifyTwoWayCode() {
         let user: VerifyEmailResponseModel;
         this.userDetails$.pipe(take(1)).subscribe(p => user = p);
@@ -312,6 +359,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.mobileVerifyForm.get("mobileNumber").reset();
     }
 
+    /**
+     * Shows twowayauthmodal element
+     */
     public showTwoWayAuthModal() {
         this.twoWayAuthDialogRef = this.dialog.open(this.twoWayAuthTemplate, {
             panelClass: 'mat-dialog-md',
@@ -319,16 +369,25 @@ export class SignupComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Hides towwayauthmodal element
+     */
     public hideTowWayAuthModal() {
         this.twoWayAuthDialogRef?.close();
     }
 
+    /**
+     * Resets twowayauthmodal to default state
+     */
     public resetTwoWayAuthModal() {
         this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.notLoggedIn));
         this.hideTowWayAuthModal();
     }
 
     // tslint:disable-next-line:no-empty
+    /**
+     * Retrieves otp data
+     */
     public getOtp(mobileNumber: string, code: string) {
         let data: SignupWithMobile = new SignupWithMobile();
         data.mobileNumber = mobileNumber;
@@ -343,6 +402,9 @@ export class SignupComponent implements OnInit, OnDestroy {
      * @memberof SignupComponent
      */
     public async signInWithProviders(provider: string) {
+        /**
+         * Handles if functionality
+         */
         if (Configuration.isElectron) {
             // Enhanced Electron OAuth with robust error handling
             try {
@@ -350,9 +412,15 @@ export class SignupComponent implements OnInit, OnDestroy {
                 let authMethod = 'none';
 
                 // Method 1: Try legacy require first (most reliable)
+                /**
+                 * Handles if functionality
+                 */
                 if ((window as any).require) {
                     try {
                         const electron = (window as any).require("electron");
+                        /**
+                         * Handles if functionality
+                         */
                         if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
                             ipcRenderer = electron.ipcRenderer;
                             authMethod = 'legacy-require';
@@ -364,8 +432,14 @@ export class SignupComponent implements OnInit, OnDestroy {
                 }
 
                 // Method 2: Try secure electronAPI as fallback
+                /**
+                 * Handles if functionality
+                 */
                 if (!ipcRenderer && (window as any).electronAPI) {
                     const electronAPI = (window as any).electronAPI;
+                    /**
+                     * Handles if functionality
+                     */
                     if (electronAPI.send && electronAPI.once) {
                         ipcRenderer = {
                             send: electronAPI.send.bind(electronAPI),
@@ -376,6 +450,9 @@ export class SignupComponent implements OnInit, OnDestroy {
                     }
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (ipcRenderer && provider === "google") {
                     try {
                         // Send authentication request
@@ -385,6 +462,9 @@ export class SignupComponent implements OnInit, OnDestroy {
                         ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
 
                             // Handle error response from main process
+                            /**
+                             * Handles if functionality
+                             */
                             if (arg && arg.error) {
 
                                 this.toaster.errorToast('Google authentication failed: ' + arg.error);
@@ -392,6 +472,9 @@ export class SignupComponent implements OnInit, OnDestroy {
                             }
 
                             // Handle successful response
+                            /**
+                             * Handles if functionality
+                             */
                             if (arg && arg.access_token) {
 
                                 this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
@@ -415,8 +498,14 @@ export class SignupComponent implements OnInit, OnDestroy {
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
+            /**
+             * Handles if functionality
+             */
             if (provider === "google") {
                 // Only call authService.signIn for web (non-Electron) environments
+                /**
+                 * Handles if functionality
+                 */
                 if (!Configuration.isElectron) {
                     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
                 }
@@ -424,6 +513,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -436,6 +528,9 @@ export class SignupComponent implements OnInit, OnDestroy {
      * @memberof SignupComponent
      */
     public setCountryCode(event: IOption) {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             let country = this.countryCodeList?.filter((obj) => obj?.value === event.value);
             this.selectedCountry = country[0].label;
@@ -453,8 +548,14 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.selectedBanner = "slide" + selectedSlide;
     }
 
+    /**
+     * Handles SignupWithPasswd functionality
+     */
     public SignupWithPasswd(model: UntypedFormGroup) {
         let ObjToSend = model?.value;
+        /**
+         * Handles if functionality
+         */
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
         }
@@ -471,28 +572,43 @@ export class SignupComponent implements OnInit, OnDestroy {
         let configuration = {
             widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID,
             tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,
+            /**
+             * Handles success functionality
+             */
             success: (data: any) => {
                 this.ngZone.run(() => {
                     this.initiateSignup(data);
                 });
             },
+            /**
+             * Handles failure functionality
+             */
             failure: (error: any) => {
                 this.toaster.errorToast(error?.message);
             }
         };
 
         /* OTP SIGNUP */
+        /**
+         * Handles if functionality
+         */
         if (window['initSendOTP'] === undefined) {
             let scriptTag = document.createElement('script');
             scriptTag.src = Configuration.isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             scriptTag.onload = () => {
+                /**
+                 * Initializes sendotp
+                 */
                 initSendOTP(configuration);
                 this.loaderService.hide();
             };
             document.body.appendChild(scriptTag);
         } else {
+            /**
+             * Initializes sendotp
+             */
             initSendOTP(configuration);
             this.loaderService.hide();
         }
@@ -507,6 +623,9 @@ export class SignupComponent implements OnInit, OnDestroy {
      */
     private initiateSignup(data: any): void {
         this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
             } else {

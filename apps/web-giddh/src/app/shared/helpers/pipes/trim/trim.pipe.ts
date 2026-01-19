@@ -1,10 +1,17 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
+/**
+ * Handles Pipe functionality
+ */
 @Pipe({
     name: 'trim',
     pure: true,
     standalone: false
 })
+/**
+ * TrimPipe pipe
+ * Implements TrimPipe functionality
+ */
 export class TrimPipe implements PipeTransform {
     /**
      * Trims the string with whitespace

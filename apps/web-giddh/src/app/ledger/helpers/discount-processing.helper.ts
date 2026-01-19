@@ -16,13 +16,22 @@ export class DiscountProcessingHelper {
         discountsList: any[],
         discountAccountsDetails: LedgerDiscountClass[]
     ): LedgerDiscountClass[] {
+        /**
+         * Handles if functionality
+         */
         if (!discountAccountsDetails) {
             discountAccountsDetails = [];
         }
 
         discountsList?.forEach(acc => {
+            /**
+             * Handles if functionality
+             */
             if (discountAccountsDetails) {
                 let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;

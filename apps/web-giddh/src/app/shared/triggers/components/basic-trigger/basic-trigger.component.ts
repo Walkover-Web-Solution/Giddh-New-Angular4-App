@@ -9,6 +9,9 @@ import { TriggerComponentStore } from "../../uitilty/trigger.store";
 import { TemplateFroalaComponent } from "../../../template-froala/template-froala.component";
 import { PageEvent } from "@angular/material/paginator";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-basic-trigger',
     templateUrl: './basic-trigger.component.html',
@@ -17,6 +20,10 @@ import { PageEvent } from "@angular/material/paginator";
     standalone: false
 })
 
+/**
+ * BasicTriggerComponent component
+ * Handles basictrigger functionality and user interactions
+ */
 export class BasicTriggerComponent implements OnInit {
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -48,6 +55,10 @@ export class BasicTriggerComponent implements OnInit {
         count: PAGINATION_LIMIT
     };
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private generalService: GeneralService,
         private componentStore: TriggerComponentStore,
@@ -101,6 +112,9 @@ export class BasicTriggerComponent implements OnInit {
             }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.componentStore.deleteTrigger(element.uniqueName);
             }
@@ -119,6 +133,9 @@ export class BasicTriggerComponent implements OnInit {
             data: { isTrigger: true, ...(triggerUniqueName ? { triggerUniqueName } : {}) }
         });
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getTriggerList();
             }

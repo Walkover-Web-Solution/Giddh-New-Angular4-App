@@ -17,6 +17,9 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { MatRadioModule } from "@angular/material/radio";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AddCompanyComponent
@@ -45,6 +48,10 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input";
     ]
 })
 
+/**
+ * AddcompanyModule class
+ * Implements AddcompanyModule functionality
+ */
 export class AddcompanyModule {
 
 }

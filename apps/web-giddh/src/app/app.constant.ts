@@ -9,12 +9,20 @@ import { environment } from '../environments/environment.generated';
 // These are injected at build time via webpack.partial.js
 
 /** Add Company business type*/
+/**
+ * BusinessTypes enumeration
+ * Defines constant values for BusinessTypes
+ */
 export enum BusinessTypes {
     Registered = 'Registered',
     Unregistered = 'Unregistered'
 };
 
 /** Branch Hierarchy Type */
+/**
+ * BranchHierarchyType enumeration
+ * Defines constant values for BranchHierarchyType
+ */
 export enum BranchHierarchyType {
     Flatten = 'flatten',
     Tree = 'tree'
@@ -49,6 +57,10 @@ export const SYNC_TALLY_HELP_DOC_URL = 'https://giddh.com/help/sync-with-tally-1
 export const BANK_STATEMENT_HELP_DOC_URL = 'https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh';
 
 /** Restricted modules */
+/**
+ * RestrictedModules enumeration
+ * Defines constant values for RestrictedModules
+ */
 export enum RestrictedModules {
     TaxFilling = 'Tax filing',
     EInvoice = 'E-invoice',
@@ -114,12 +126,20 @@ export const DROPDOWN_ITEMS_COUNT_LIMIT = 20;
 export const API_BULK_FETCH_LIMIT = 200;
 
 /** SubVoucher type */
+/**
+ * SubVoucher enumeration
+ * Defines constant values for SubVoucher
+ */
 export enum SubVoucher {
     ReverseCharge = 'REVERSE_CHARGE',
     AdvanceReceipt = 'ADVANCE_RECEIPT'
 }
 
 /** Adjustment inventory */
+/**
+ * AdjustmentInventory enumeration
+ * Defines constant values for AdjustmentInventory
+ */
 export enum AdjustmentInventory {
     QuantityWise = 'QUANTITY_WISE',
     ValueWise = 'VALUE_WISE',
@@ -166,7 +186,13 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     },
     {
         name: DatePickerDefaultRangeEnum.LastMonth, value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().subtract(1, 'month').startOf('month'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().subtract(1, 'month').endOf('month')
         ]
     },
@@ -177,43 +203,85 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     },
     {
         name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().quarter(dayjs().quarter()).startOf('quarter'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().startOf('year').subtract(9, 'year'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisYearToDate, value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().startOf('year'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastQuarter, value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').endOf('quarter')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastFinancialYear, value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().startOf('year').subtract(10, 'year'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().endOf('year').subtract(10, 'year')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastYear, value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().subtract(1, 'year').startOf('year'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().subtract(1, 'year').endOf('year')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.AllTime, value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().startOf('year').subtract(10, 'year'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs()
         ]
     }
@@ -228,7 +296,13 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
         name: DatePickerDefaultRangeEnum.LastMonth,
         value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().subtract(1, 'month').startOf('month'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().subtract(1, 'month').endOf('month')
         ],
         key: "LastMonth"
@@ -236,7 +310,13 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
         name: DatePickerDefaultRangeEnum.ThisQuarterToDate,
         value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().quarter(dayjs().quarter()).startOf('quarter'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs()
         ],
         key: "ThisQuarterToDate"
@@ -244,7 +324,13 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
         name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate,
         value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().startOf('year').subtract(9, 'year'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs()
         ],
         key: "ThisFinancialYearToDate"
@@ -252,7 +338,13 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
         name: DatePickerDefaultRangeEnum.LastQuarter,
         value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').endOf('quarter')
         ],
         key: "LastQuarter"
@@ -260,7 +352,13 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
         name: DatePickerDefaultRangeEnum.AllTime,
         value: [
+            /**
+             * Handles dayjs functionality
+             */
             dayjs().startOf('year').subtract(10, 'year'),
+            /**
+             * Handles dayjs functionality
+             */
             dayjs()
         ],
         key: "AllTime"
@@ -312,6 +410,10 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
 
 /** Type of voucher that is adjusted */
+/**
+ * AdjustedVoucherType enumeration
+ * Defines constant values for AdjustedVoucherType
+ */
 export enum AdjustedVoucherType {
     Receipt = 'rcpt',
     AdvanceReceipt = 'advance-receipt',
@@ -328,6 +430,10 @@ export enum AdjustedVoucherType {
 }
 
 /** Collection of search field default text for empty results */
+/**
+ * SearchResultText enumeration
+ * Defines constant values for SearchResultText
+ */
 export enum SearchResultText {
     NewSearch = 'Type to search a/c',
     NotFound = 'No results found'
@@ -372,6 +478,10 @@ export const EMAIL_VALIDATION_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-
 export const MOBILE_REGEX_PATTERN = /^([0|\+[0-9]{1,5})?([6-9][0-9]{9})$/;
 
 /** E-invoice statuses */
+/**
+ * EInvoiceStatus enumeration
+ * Defines constant values for EInvoiceStatus
+ */
 export enum EInvoiceStatus {
     YetToBePushed = 'yet-to-be pushed',
     Pushed = 'pushed',
@@ -588,15 +698,27 @@ export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1
 export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1';
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
 export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
+/**
+ * BROADCAST_CHANNELS enumeration
+ * Defines constant values for BROADCAST_CHANNELS
+ */
 export enum BROADCAST_CHANNELS {
     REAUTH_PLAID_SUCCESS = 'REAUTH_PLAID_SUCCESS'
 };
 export const QZ_CERTIFICATE = "https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/digital-certificate.txt";
 export const QZ_PEM = "https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/private-key.pem";
+/**
+ * QZ_FILES enumeration
+ * Defines constant values for QZ_FILES
+ */
 export enum QZ_FILES {
     MacOS = 'https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/qz-tray.pkg',
     Windows = 'https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/qz-tray.exe'
 };
+/**
+ * SUPPORTED_OPERATING_SYSTEMS enumeration
+ * Defines constant values for SUPPORTED_OPERATING_SYSTEMS
+ */
 export enum SUPPORTED_OPERATING_SYSTEMS {
     MacOS = 'MacOS',
     Windows = 'Windows'
@@ -652,6 +774,10 @@ export enum ACCOUNTING_BREAKPOINTS {
 }
 
 /** HTML tag name  */
+/**
+ * HtmlElementEnum enumeration
+ * Defines constant values for HtmlElementEnum
+ */
 export enum HtmlElementEnum {
     Input = 'INPUT',
     Textarea = 'TEXTAREA',
@@ -672,6 +798,10 @@ export const KeyCodesEnum = {
 };
 
 /** List of all the HTTP methods */
+/**
+ * HttpMethod enumeration
+ * Defines constant values for HttpMethod
+ */
 export enum HttpMethod {
     POST = 'post',
     GET = 'get',
@@ -681,6 +811,10 @@ export enum HttpMethod {
 }
 
 /** Type of all HTTP methods */
+/**
+ * HttpMethodType interface definition
+ * Defines the structure and contract for HttpMethodType objects
+ */
 export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 
 /** Config for aside pane */
@@ -705,6 +839,10 @@ export const PaymentProvider = {
 };
 
 /** Weekdays enum */
+/**
+ * WeekdaysEnum enumeration
+ * Defines constant values for WeekdaysEnum
+ */
 export enum WeekdaysEnum {
     DAILY = 'daily',
     SUNDAY = 'sunday',
@@ -717,6 +855,10 @@ export enum WeekdaysEnum {
 }
 
 /** Get Bifurcation Type */
+/**
+ * GetBifurcationType enumeration
+ * Defines constant values for GetBifurcationType
+ */
 export enum GetBifurcationType {
     MONTH = 'month',
     QUATER = 'quater',
@@ -738,6 +880,10 @@ export const Configuration = {
 };
 
 /** Holds Dropdown label value interface */
+/**
+ * IOption interface definition
+ * Defines the structure and contract for IOption objects
+ */
 export interface IOption {
     value: string;
     label: string;
@@ -997,6 +1143,10 @@ export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';
 export const DEFAULT_NUMBER_DISPLAY_FORMAT = 'IND_COMMA_SEPARATED';
 
 /** Holds all possible field types for form fields */
+/**
+ * FormFieldsType enumeration
+ * Defines constant values for FormFieldsType
+ */
 export enum FormFieldsType {
     BOOLEAN = 'BOOLEAN',
     STRING = 'STRING',

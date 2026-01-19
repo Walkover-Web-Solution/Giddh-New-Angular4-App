@@ -15,77 +15,136 @@ import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../mode
 import { APPLY_DISCOUNT_API } from './apiurls/apply-discount.api';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * AccountService service
+ * Provides account related business logic and data operations
+ */
 export class AccountService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this.generalService.companyUniqueName;
     }
 
+    /**
+     * Handles UpdateAccount functionality
+     */
     public UpdateAccount(model: AccountRequest, accountUniqueName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.UPDATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<AccountResponse, AccountRequest> = res;
                 data.request = model;
                 data.queryString = { accountUniqueName };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e)));
     }
 
+    /**
+     * Handles MergeAccount functionality
+     */
     public MergeAccount(model: AccountMergeRequest[], accountUniqueName: string): Observable<BaseResponse<string, AccountMergeRequest[]>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.MERGE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, AccountMergeRequest[]> = res;
                 data.request = model;
                 data.queryString = { accountUniqueName };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, AccountMergeRequest[]>(e)));
     }
 
+    /**
+     * Handles UnmergeAccount functionality
+     */
     public UnmergeAccount(model: AccountUnMergeRequest, accountUniqueName: string): Observable<BaseResponse<string, AccountUnMergeRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ACCOUNTS_API.UNMERGE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, AccountUnMergeRequest> = res;
                 data.request = model;
                 data.queryString = { accountUniqueName };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, AccountUnMergeRequest>(e)));
     }
 
+    /**
+     * Handles ApplyTax functionality
+     */
     public ApplyTax(model: ApplyTaxRequest): Observable<BaseResponse<string, ApplyTaxRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let mod = [];
         mod.push(model);
         return this.http.post(this.config.apiUrl + APPLY_TAX_API.APPLY_TAX?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), mod).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ApplyTaxRequest> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ApplyTaxRequest>(e)));
     }
 
+    /**
+     * Handles ApplyDiscount functionality
+     */
     public ApplyDiscount(model: AssignDiscountRequestForAccount): Observable<BaseResponse<string, AssignDiscountRequestForAccount>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + APPLY_DISCOUNT_API.APPLY_DISCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, AssignDiscountRequestForAccount> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, AssignDiscountRequestForAccount>(e)));
     }
 
+    /**
+     * Handles GetApplyDiscount functionality
+     */
     public GetApplyDiscount(accountUniqueName: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + APPLY_DISCOUNT_API.GET_APPLY_DISCOUNT_API?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
@@ -96,65 +155,113 @@ export class AccountService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
+    /**
+     * Handles AccountMove functionality
+     */
     public AccountMove(model: AccountMoveRequest, accountUniqueName: string, activeGroupUniqueName: string): Observable<BaseResponse<string, AccountMoveRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.MOVE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, AccountMoveRequest> = res;
                 data.request = model;
                 data.queryString = { accountUniqueName, activeGroupUniqueName };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, AccountMoveRequest>(e)));
     }
 
+    /**
+     * Handles AccountShare functionality
+     */
     public AccountShare(model: ShareAccountRequest, accountUniqueName: string): Observable<BaseResponse<string, ShareAccountRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.SHARE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ShareAccountRequest> = res;
                 data.request = model;
                 data.queryString = { accountUniqueName };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ShareAccountRequest>(e)));
     }
 
+    /**
+     * Handles Share functionality
+     */
     public Share(model: ShareEntityRequest, roleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ACCOUNTS_API.SHARE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':roleUniqueName', encodeURIComponent(roleUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ShareEntityRequest> = res;
                 data.request = model;
                 data.queryString = { roleUniqueName, entity: model.entity, entityUniqueName: model.entityUniqueName };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e)));
     }
 
+    /**
+     * Handles UnShare functionality
+     */
     public UnShare(entryUniqueName: string, entity: string, entityUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':assignRoleEntryUniqueName', encodeURIComponent(entryUniqueName))).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ShareEntityRequest> = res;
                 data.queryString = { entryUniqueName, entityUniqueName, entity };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e)));
     }
 
+    /**
+     * Handles UpdateEntityPermission functionality
+     */
     public UpdateEntityPermission(model: ShareRequestForm, entity: string, newRoleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':assignRoleEntryUniqueName', encodeURIComponent(model?.uniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ShareEntityRequest> = res;
                 data.queryString = { model, newRoleUniqueName, entity };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e)));
     }
 
+    /**
+     * Handles AccountUnshare functionality
+     */
     public AccountUnshare(userEmail: string, accountUniqueName: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
@@ -166,18 +273,30 @@ export class AccountService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
+    /**
+     * Handles AccountShareWith functionality
+     */
     public AccountShareWith(accountUniqueName: string): Observable<BaseResponse<AccountSharedWithResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + ACCOUNTS_API.SHARED_WITH?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<AccountSharedWithResponse[], string> = res;
                 data.request = '';
                 data.queryString = { accountUniqueName };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e)));
     }
 
+    /**
+     * Handles DeleteAccount functionality
+     */
     public DeleteAccount(accountUniqueName: string, groupUniqueName: string): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + ACCOUNTS_API.DELETE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
@@ -188,8 +307,14 @@ export class AccountService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName })));
     }
 
+    /**
+     * Retrieves flattenaccounts data
+     */
     public getFlattenAccounts(q?: string, page?: string, count?: string): Observable<BaseResponse<FlattenAccountsResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (this.companyUniqueName) {
             return this.http.get(this.config.apiUrl + ACCOUNTS_API.FLATTEN_ACCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':q', encodeURIComponent(q || ''))?.replace(':count', count || '')?.replace(':page', encodeURIComponent(page || ''))).pipe(map((res) => {
                 let data: BaseResponse<FlattenAccountsResponse, string> = res;
@@ -202,6 +327,9 @@ export class AccountService {
         }
     }
 
+    /**
+     * Handles GetTaxHierarchy functionality
+     */
     public GetTaxHierarchy(accountUniqueName: string): Observable<BaseResponse<AccountsTaxHierarchyResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + ACCOUNTS_API.TAX_HIERARCHY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
@@ -222,7 +350,13 @@ export class AccountService {
      */
     public GetAccountDetailsV2(accountUniqueName: string, source?: string): Observable<BaseResponse<AccountResponseV2, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (accountUniqueName) {
+            /**
+             * Handles if functionality
+             */
             if (!source) {
                 source = "";
             }
@@ -237,15 +371,24 @@ export class AccountService {
         }
     }
 
+    /**
+     * Handles CreateAccountV2 functionality
+     */
     public CreateAccountV2(model: AccountRequestV2, groupUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ACCOUNTS_API_V2.CREATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res;
                 data.request = model;
                 data.queryString = { groupUniqueName };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, { groupUniqueName })));
     }
 
@@ -278,6 +421,9 @@ export class AccountService {
         const companyUniqueName = this.generalService.companyUniqueName;
         const contextPath = ACCOUNTS_API.CREATE_UPDATE_DELETE?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         return this.http.put(this.config.apiUrl + contextPath, model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((response) => {
                 let data: BaseResponse<any, any> = response;
                 data.request = model;
@@ -297,27 +443,42 @@ export class AccountService {
         return this.http.patch(this.config.apiUrl + ACCOUNTS_API_V2.UPDATE_WITH_ACCOUNT_UNIQUE_NAME
             ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res;
                     data.request = model;
                     data.queryString = { accountUniqueName, isMasterOpen };
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e)));
     }
 
 
+    /**
+     * Handles UpdateAccountV2 functionality
+     */
     public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API_V2.UPDATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':groupUniqueName', encodeURIComponent(reqObj?.groupUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(reqObj?.accountUniqueName)), model).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res;
                     data.request = model;
                     data.queryString = reqObj;
                     return data;
                 }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e)));
     }
 
@@ -331,11 +492,17 @@ export class AccountService {
     public applyDiscounts(model: ApplyDiscountRequestV2): Observable<BaseResponse<string, ApplyDiscountRequestV2>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + APPLY_DISCOUNT_API.APPLY_DISCOUNTS_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, ApplyDiscountRequestV2> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, ApplyDiscountRequestV2>(e)));
     }
 

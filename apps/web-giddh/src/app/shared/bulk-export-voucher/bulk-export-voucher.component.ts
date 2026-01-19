@@ -10,8 +10,15 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { saveAs } from 'file-saver';
 
+/**
+ * bulkExportVoucherTypes interface definition
+ * Defines the structure and contract for bulkExportVoucherTypes objects
+ */
 type bulkExportVoucherTypes = 'sales' | 'debit note' | 'credit note' | 'purchase' | 'payment' | 'receipt';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'bulk-export-voucher',
     templateUrl: './bulk-export-voucher.component.html',
@@ -19,6 +26,10 @@ type bulkExportVoucherTypes = 'sales' | 'debit note' | 'credit note' | 'purchase
     standalone: false
 })
 
+/**
+ * BulkExportVoucherComponent component
+ * Handles bulkexportvoucher functionality and user interactions
+ */
 export class BulkExportVoucherComponent implements OnDestroy {
     /** Type of voucher */
     @Input() public type: bulkExportVoucherTypes = "sales";
@@ -59,6 +70,10 @@ export class BulkExportVoucherComponent implements OnDestroy {
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private bulkVoucherExportService: BulkVoucherExportService,
         private generalService: GeneralService,
@@ -80,6 +95,9 @@ export class BulkExportVoucherComponent implements OnDestroy {
      * @memberof BulkExportVoucherComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.downloadCopyOptions = [
                 { label: this.localeData?.invoice_copy_options?.original, value: 'ORIGINAL' },
@@ -97,6 +115,9 @@ export class BulkExportVoucherComponent implements OnDestroy {
      */
     public getRecipientEmail(): void {
         this.store.pipe(select(appState => appState.session.user), take(1)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result && result.user) {
                 this.recipients = result.user.email;
             }
@@ -110,6 +131,9 @@ export class BulkExportVoucherComponent implements OnDestroy {
      * @memberof BulkExportVoucherComponent
      */
     public exportVouchers(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isLoading) {
             return;
         }
@@ -123,11 +147,17 @@ export class BulkExportVoucherComponent implements OnDestroy {
         getRequest.q = (this.advanceSearch.q) ? this.advanceSearch.q : "";
 
         postRequest = this.advanceSearch;
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             postRequest.uniqueNames = this.voucherUniqueNames;
         } else {
             postRequest.voucherUniqueNames = this.voucherUniqueNames;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.type === 'sales') {
             postRequest.copyTypes = this.copyTypes;
         }
@@ -138,11 +168,20 @@ export class BulkExportVoucherComponent implements OnDestroy {
 
         let validRecipients: boolean = true;
 
+        /**
+         * Handles if functionality
+         */
         if (event && this.recipients) {
             let recipients = this.recipients.split(",");
             let validEmails = [];
+            /**
+             * Handles if functionality
+             */
             if (recipients && recipients.length > 0) {
                 (Array.isArray(recipients) ? recipients : []).forEach(email => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
 
@@ -152,11 +191,17 @@ export class BulkExportVoucherComponent implements OnDestroy {
                         validRecipients = false;
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         validEmails.push(email.trim());
                     }
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (this.generalService.voucherApiVersion === 2) {
                 postRequest.email = { to: validEmails };
             } else {
@@ -167,6 +212,9 @@ export class BulkExportVoucherComponent implements OnDestroy {
             postRequest.sendTo = undefined;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!validRecipients) {
             return;
         }
@@ -175,7 +223,13 @@ export class BulkExportVoucherComponent implements OnDestroy {
 
         this.bulkVoucherExportService.bulkExport(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body.type === "base64") {
                     this.closeModal();
                     let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);

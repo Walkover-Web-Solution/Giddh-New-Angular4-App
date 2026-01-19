@@ -14,6 +14,9 @@ export class AdvanceSearchRangeHelper {
      * @param form - Form group containing the fields to update
      */
     public static onRangeSelect(type: string, data: IOption, form: UntypedFormGroup): void {
+        /**
+         * Handles switch functionality
+         */
         switch (type + '-' + data?.value) {
             case 'amount-greaterThan':
                 form.get('includeAmount')?.patchValue(true);

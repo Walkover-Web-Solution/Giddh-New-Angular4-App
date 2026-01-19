@@ -6,6 +6,9 @@ import { PurchaseSendEmailModalComponent } from "./purchase-send-email.component
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         PurchaseSendEmailModalComponent
@@ -22,6 +25,10 @@ import { MatButtonModule } from "@angular/material/button";
         PurchaseSendEmailModalComponent
     ]
 })
+/**
+ * PurchaseSendEmailModule module
+ * Implements PurchaseSendEmailModule functionality
+ */
 export class PurchaseSendEmailModule {
 
 }

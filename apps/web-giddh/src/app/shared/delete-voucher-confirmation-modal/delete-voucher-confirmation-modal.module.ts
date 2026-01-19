@@ -6,6 +6,9 @@ import { DeleteVoucherConfirmationModalComponent } from "./delete-voucher-confir
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         DeleteVoucherConfirmationModalComponent
@@ -21,6 +24,10 @@ import { MatDialogModule } from "@angular/material/dialog";
         DeleteVoucherConfirmationModalComponent
     ]
 })
+/**
+ * DeleteVoucherConfirmationModalModule module
+ * Implements DeleteVoucherConfirmationModalModule functionality
+ */
 export class DeleteVoucherConfirmationModalModule {
     
 }

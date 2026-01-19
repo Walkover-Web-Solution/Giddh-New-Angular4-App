@@ -21,6 +21,10 @@ import { SearchService } from "../../services/search.service";
 import { InvoiceReceiptFilter } from '../../models/api-models/recipt';
 import { ProformaFilter } from '../../models/api-models/proforma';
 
+/**
+ * VoucherState interface definition
+ * Defines the structure and contract for VoucherState objects
+ */
 export interface VoucherState {
     isLoading: boolean;
     createUpdateInProgress: boolean;
@@ -145,9 +149,20 @@ const DEFAULT_STATE: VoucherState = {
     verifyEmailIsSuccess: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * VoucherComponentStore store
+ * Manages vouchercomponent state using NgRx ComponentStore
+ */
 export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
@@ -160,6 +175,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private authenticationService: AuthenticationService,
         private purchaseOrderService: PurchaseOrderService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -245,8 +263,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 return this.settingsDiscountService.GetDiscounts().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<IDiscountList[], any>) => {
                             return this.patchState({
@@ -260,6 +284,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -268,9 +295,15 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getInvoiceSettings = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ isLoading: true });
                 return this.voucherService.getInvoiceSettings().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<InvoiceSetting, any>) => {
                             return this.patchState({
@@ -286,6 +319,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -294,11 +330,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getPreviousVouchers = this.effect((data: Observable<{ model: InvoiceReceiptFilter, type: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getAllVouchers(req.model, req.type).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<LastVouchersResponse, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "error" && res.message) {
                                 this.toaster.showSnackBar("error", res.message);
                             }
@@ -316,6 +361,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -324,11 +372,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getPreviousProformaEstimates = this.effect((data: Observable<{ model: ProformaFilter, type: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getAllProformaEstimate(req.model, req.type).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "error" && res.message) {
                                 this.toaster.showSnackBar("error", res.message);
                             }
@@ -346,6 +403,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -354,9 +414,15 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getCreatedTemplates = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ createdTemplatesIsLoading: true });
                 return this.voucherService.getAllCreatedTemplates(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -372,6 +438,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -380,8 +449,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getStockVariants = this.effect((data: Observable<{ q: any, index: number, autoSelectVariant: boolean }>) => {
         return data.pipe(
+            /**
+             * Handles mergeMap functionality
+             */
             mergeMap((req) => {
                 return this.ledgerService.loadStockVariants(req.q).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: Array<IVariant>) => {
                             return this.patchState({
@@ -395,6 +470,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -403,11 +481,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly deleteAttachment = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ deleteAttachmentInProgress: true, deleteAttachmentIsSuccess: false });
                 return this.ledgerService.removeAttachment(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({ deleteAttachmentInProgress: false, deleteAttachmentIsSuccess: true });
@@ -424,6 +511,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -432,9 +522,15 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getExchangeRate = this.effect((data: Observable<{ fromCurrency: string, toCurrency: string, date: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ exchangeRate: null, exchangeRateInProgress: true });
                 return this.ledgerService.GetCurrencyRateNewApi(req.fromCurrency, req.toCurrency, req.date).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -450,6 +546,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -458,8 +557,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getBriefAccounts = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.getBriefAccounts(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -473,6 +578,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -481,8 +589,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getAccountDetails = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.accountService.GetAccountDetailsV2(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -496,6 +610,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -504,8 +621,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getCountryStates = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.commonService.getCountryStates(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -519,6 +642,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -527,8 +653,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getAccountCountryStates = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.commonService.getCountryStates(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -542,6 +674,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -550,8 +685,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getVendorPurchaseOrders = this.effect((data: Observable<{ request: any, payload: any, commonLocaleData: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.getVendorPurchaseOrders(req.request, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             let vendorPurchaseOrders = [];
@@ -561,10 +702,16 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                 let pending = [];
                                 let totalPending = 0;
 
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (item.pendingDetails.stocks) {
                                     pending.push(item.pendingDetails.stocks + ((item.pendingDetails.stocks === 1) ? " " + req.commonLocaleData?.app_product : " " + req.commonLocaleData?.app_products));
                                     totalPending += item.pendingDetails.stocks;
                                 }
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (item.pendingDetails.services) {
                                     pending.push(item.pendingDetails.services + ((item.pendingDetails.services === 1) ? " " + req.commonLocaleData?.app_service : " " + req.commonLocaleData?.app_services));
                                     totalPending += item.pendingDetails.services;
@@ -590,6 +737,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -598,10 +748,19 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getParticularDetails = this.effect((data: Observable<{ accountUniqueName: string, payload: any, entryIndex: number }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.searchService.loadDetails(req.accountUniqueName, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({
                                     particularDetails: { body: res?.body ?? {}, entryIndex: req.entryIndex }
@@ -620,6 +779,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -628,8 +790,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getPurchaseOrderDetails = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.getPurchaseOrder(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
@@ -645,6 +813,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -653,8 +824,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getEstimateProformaDetails = this.effect((data: Observable<{ voucherType: string, payload: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.getEstimateProforma(req.payload, req.voucherType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
@@ -670,6 +847,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -678,8 +858,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.getVoucherDetails(req.accountUniqueName, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
@@ -695,6 +881,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -703,10 +892,19 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly printVoucher = this.effect((pdfContainer$: Observable<any>) => {
         return pdfContainer$.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((pdfContainer) => {
                 const window = pdfContainer?.nativeElement?.contentWindow;
+                /**
+                 * Handles if functionality
+                 */
                 if (window) {
                     window.focus();
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         window.print();
                     }, 200);
@@ -718,11 +916,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly sendVoucherOnEmail = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ sendEmailInProgress: true, sendEmailIsSuccess: null });
                 return this.voucherService.sendVoucherOnEmail(req.accountUniqueName, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: true });
@@ -736,6 +943,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -744,11 +954,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly sendProformaEstimateOnEmail = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ sendEmailInProgress: true, sendEmailIsSuccess: null });
                 return this.voucherService.sendProformaEstimateOnEmail(req.request, req.voucherType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: true });
@@ -762,6 +981,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -770,11 +992,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getVouchersList = this.effect((data: Observable<{ request: any, date: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ vouchersForAdjustment: null });
                 return this.voucherService.getVouchersList(req.request, req.date).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 res.request = req.request;
                                 return this.patchState({ vouchersForAdjustment: res });
@@ -788,6 +1019,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             return this.patchState({ vouchersForAdjustment: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -796,8 +1030,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getVoucherListForCreditDebitNote = this.effect((data: Observable<{ request: any, date: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.ledgerService.getInvoiceListsForCreditNote(req.request, req.date).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -811,6 +1051,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -819,8 +1062,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getPendingPurchaseOrders = this.effect((data: Observable<{ request: any, payload: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.getVendorPurchaseOrders(req.request, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -834,6 +1083,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -842,9 +1094,15 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getPurchaseOrders = this.effect((data: Observable<{ request: any }>) => {
         return data.pipe(
+            /**
+             * Handles mergeMap functionality
+             */
             mergeMap((req) => {
                 this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getPurchaseOrderList(req.request).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             res.body['voucherType'] = 'purchase-order';
@@ -861,6 +1119,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -869,8 +1130,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getCountryList = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.commonService.GetCountry(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -884,6 +1151,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -892,8 +1162,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getEntriesByEntryUniqueNames = this.effect((data: Observable<{ accountUniqueName: any, payload: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.getEntriesByEntryUniqueNames(req.accountUniqueName, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -907,6 +1183,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -915,8 +1194,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getVoucherBalances = this.effect((data: Observable<{ requestType: any, payload: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.getVoucherBalances(req.payload, req.requestType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -930,6 +1215,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -938,10 +1226,19 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly exportVouchers = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.exportVouchers(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({
                                     exportVouchersFile: res.body
@@ -960,6 +1257,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -968,10 +1268,19 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly generateEInvoice = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({
@@ -991,6 +1300,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -999,11 +1311,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly bulkUpdateInvoice = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ bulkUpdateVoucherIsSuccess: false, bulkUpdateVoucherInProgress: true });
                 return this.voucherService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({
@@ -1026,6 +1347,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1034,15 +1358,27 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly bulkExportVoucher = this.effect((data: Observable<{ getRequest: any, postRequest: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     bulkExportVoucherInProgress: true,
                     bulkExportVoucherResponse: null
                 });
                 return this.voucherService.bulkExport(req.getRequest, req.postRequest).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.body.type !== "base64") {
                                     this.toaster.showSnackBar("success", res.body.file);
                                 }
@@ -1067,6 +1403,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1075,14 +1414,23 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly actionVoucher = this.effect((data: Observable<{ voucherUniqueName: string, payload: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     actionVoucherInProgress: true,
                     actionVoucherIsSuccess: false
                 });
                 return this.voucherService.actionVoucher(req.voucherUniqueName, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.patchState({
                                     actionVoucherInProgress: false,
@@ -1104,6 +1452,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1112,13 +1463,22 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly actionEstimateProforma = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     actionVoucherIsSuccess: false
                 });
                 return this.voucherService.updateAction(req.request, req.voucherType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.patchState({
                                     actionVoucherIsSuccess: true
@@ -1137,6 +1497,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1145,13 +1508,22 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly convertToInvoice = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     convertToInvoice: false
                 });
                 return this.voucherService.generateInvoice(req.request, req.voucherType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.patchState({
                                     convertToInvoice: true
@@ -1170,6 +1542,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1178,13 +1553,22 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly convertToProforma = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     convertToProforma: false
                 });
                 return this.voucherService.generateProforma(req.request, req.voucherType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.patchState({
                                     convertToProforma: true
@@ -1203,6 +1587,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1211,13 +1598,22 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly adjustVoucherWithAdvanceReceipts = this.effect((data: Observable<{ adjustments: any, voucherUniqueName: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     adjustVoucherIsSuccess: false
                 });
                 return this.voucherService.adjustAnInvoiceWithAdvanceReceipts(req.adjustments, req.voucherUniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.patchState({
                                     adjustVoucherIsSuccess: true
@@ -1236,6 +1632,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1244,11 +1643,17 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly uploadImageBase64 = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     uploadImageBase64InProgress: true
                 });
                 return this.commonService.uploadImageBase64(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -1264,6 +1669,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1272,6 +1680,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly resetAll = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     lastVouchers: null,
@@ -1294,6 +1705,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly resetAttachmentState = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     deleteAttachmentIsSuccess: null
@@ -1305,6 +1719,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly resetExchangeRate = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     exchangeRate: null,
@@ -1317,6 +1734,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly resetGenerateEInvoice = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     eInvoiceGenerated: null
@@ -1328,11 +1748,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly deleteVoucher = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
                 return this.voucherService.deleteReceipt(req.accountUniqueName, req.model).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success" && typeof res.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
                             } else if (res.status === "error" && res.message) {
@@ -1349,6 +1778,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1357,11 +1789,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly deleteEstimsteProformaVoucher = this.effect((data: Observable<{ payload: any, voucherType: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
                 return this.voucherService.deleteEstimsteProformaVoucher(req.payload, req.voucherType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success" && typeof res.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
                             } else if (res.status === "error" && res.message) {
@@ -1378,6 +1819,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1386,11 +1830,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly deleteSinglePOVoucher = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
                 return this.voucherService.deleteSinglePOVoucher(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success" && typeof res.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({
@@ -1410,6 +1863,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1418,13 +1874,22 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly sendEmailOnPurchaseOrder = this.effect((data: Observable<{ request: any, model: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     sendEmailInProgress: true, sendEmailIsSuccess: null
                 });
                 return this.voucherService.sendEmail(req.request, req.model).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 res.body && this.toaster.showSnackBar("success", res.body);
                                 this.patchState({
@@ -1447,6 +1912,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1455,11 +1923,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly purchaseOrderBulkUpdateAction = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ bulkUpdateVoucherIsSuccess: false, bulkUpdateVoucherInProgress: true });
                 return this.voucherService.bulkUpdate(req.actionType, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 res.body && this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({
@@ -1482,6 +1959,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1494,11 +1974,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
      */
     readonly purchaseOrderStatusUpdate = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ actionVoucherInProgress: true, actionVoucherIsSuccess: false });
                 return this.voucherService.purchaseOrderStatusUpdate(req.accountUniqueName, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     actionVoucherInProgress: false,
@@ -1520,6 +2009,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1528,16 +2020,31 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly downloadVoucherPdf = this.effect((data: Observable<{ model: any, type: string, fileType: string, voucherType: string, isDownloadFromDialog: boolean }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (req.isDownloadFromDialog) {
                     this.patchState({ isVoucherFileDownloading: true });
                 } else {
                     this.patchState({ isVoucherDownloading: true, isVoucherDownloadError: false });
                 }
                 return this.voucherService.downloadPdfFile(req.model, req.type, req.fileType, req.voucherType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (req.isDownloadFromDialog) {
                                     return this.patchState({
                                         isVoucherFileDownloading: false,
@@ -1550,6 +2057,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                     });
                                 }
                             } else if (res.status !== "error") {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (req.isDownloadFromDialog) {
                                     return this.patchState({
                                         isVoucherFileDownloading: false,
@@ -1563,6 +2073,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                 }
                             } else {
                                 res.message && this.toaster.showSnackBar("error", res.message);
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (req.isDownloadFromDialog) {
                                     return this.patchState({
                                         isVoucherFileDownloading: false,
@@ -1579,6 +2092,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
+                            /**
+                             * Handles if functionality
+                             */
                             if (req.isDownloadFromDialog) {
                                 return this.patchState({
                                     isVoucherFileDownloading: false,
@@ -1593,6 +2109,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             }
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1601,11 +2120,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getVoucherVersions = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any, voucherType: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isVoucherVersionsInProgress: true });
                 return this.voucherService.getVoucherVersions(req.getRequestObject, req.postRequestObject, req.voucherType).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     isVoucherVersionsInProgress: false,
@@ -1627,6 +2155,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1635,11 +2166,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly uploadFile = this.effect((data: Observable<{ postRequestObject: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ uploadFileInProgress: true });
                 return this.voucherService.uploadFile(req.postRequestObject).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     uploadFileInProgress: false,
@@ -1661,6 +2201,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1669,10 +2212,19 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly updateAttachmentInVoucher = this.effect((data: Observable<{ postRequestObject: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.voucherService.updateAttachmentInVoucher(req.postRequestObject).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     updateAttachmentInVoucherIsSuccess: true
@@ -1691,6 +2243,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1704,11 +2259,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
      */
     readonly saveGmailAuthCode = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ saveGmailAuthCodeIsSuccess: null });
                 return this.authenticationService.saveGmailAuthCode(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({
                                     saveGmailAuthCodeIsSuccess: res,
@@ -1727,6 +2291,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1740,11 +2307,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
      */
     readonly cancelEInvoice = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ cancelEInvoiceInProgress: true });
                 return this.voucherService.cancelEInvoice(req.getRequestObject, req.postRequestObject).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 typeof res.body === 'string' && this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({
@@ -1767,6 +2343,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -1780,11 +2359,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
      */
     readonly verifyPurchaseEmail = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ verifyEmailIsSuccess: null });
                 return this.purchaseOrderService.updateSettingsEmail(req.getRequestObject, req.postRequestObject).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 typeof res.body === 'string' && this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({
@@ -1804,6 +2392,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

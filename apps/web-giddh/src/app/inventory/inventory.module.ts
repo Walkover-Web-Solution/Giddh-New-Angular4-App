@@ -52,6 +52,9 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -137,4 +140,8 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         MatExpansionModule
     ]
 })
+/**
+ * InventoryModule module
+ * Implements InventoryModule functionality
+ */
 export class InventoryModule { }

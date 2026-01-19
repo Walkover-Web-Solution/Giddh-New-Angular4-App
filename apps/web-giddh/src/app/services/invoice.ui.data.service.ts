@@ -6,16 +6,27 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { NgForm } from '@angular/forms';
 import { cloneDeep, forEach, keys, set } from '../lodash-optimized';
 
+/**
+ * TemplateContentUISectionVisibility service
+ * Provides templatecontentuisectionvisibility related business logic and data operations
+ */
 export class TemplateContentUISectionVisibility {
     public header: boolean = true;
     public table: boolean = false;
     public footer: boolean = false;
 }
 declare var _: any;
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
 
+/**
+ * InvoiceUiDataService service
+ * Provides invoiceuidata related business logic and data operations
+ */
 export class InvoiceUiDataService {
     /** Holds the current custom template data */
     public customTemplate: BehaviorSubject<CustomTemplateResponse> = new BehaviorSubject(new CustomTemplateResponse());
@@ -65,6 +76,9 @@ export class InvoiceUiDataService {
      * @memberof InvoiceUiDataService
      */
     public initCustomTemplate(template: CustomTemplateResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (template) {
             this.bRToNewLine(template);
             this.customTemplate.next(cloneDeep(template));
@@ -144,6 +158,9 @@ export class InvoiceUiDataService {
      * @memberof InvoiceUiDataService
      */
     public setTemplateVoucherType(type: string): void {
+        /**
+         * Handles if functionality
+         */
         if (type === 'invoice') {
             type = 'sales'
         }
@@ -187,8 +204,14 @@ export class InvoiceUiDataService {
      */
     public bRToNewLine(template: any): any {
         const fields = ['message1', 'companyAddress', 'slogan'];
+        /**
+         * Handles if functionality
+         */
         if (template?.sections?.footer?.data) {
             (Array.isArray(fields) ? fields : []).forEach(field => {
+                /**
+                 * Handles if functionality
+                 */
                 if (template.sections.footer.data[field]) {
                     const label = template.sections.footer.data[field]?.label;
                     template.sections.footer.data[field].label = label ? label.replace(/<br\s*[\/]?>/gi, '\n') : '';
@@ -216,6 +239,9 @@ export class InvoiceUiDataService {
      * @memberof InvoiceUiDataService
      */
     public setTemplateUniqueName(template: CustomTemplateResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (template) {
             this.bRToNewLine(template);
             this.customTemplate.next(cloneDeep(template));
@@ -229,10 +255,16 @@ export class InvoiceUiDataService {
      * @memberof InvoiceUiDataService
      */
     public setContentForm(form: NgForm): void {
+        /**
+         * Handles if functionality
+         */
         if (form) {
             this.contentForm = form;
             this.contentFormErrors = 0;
             Object.keys(form.controls).forEach(key => {
+                /**
+                 * Handles if functionality
+                 */
                 if (form.controls[key].errors) {
                     this.contentFormErrors++;
                 }

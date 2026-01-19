@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { GST_UTILITY_DOWNLOAD_LINK } from '../../../app.constant';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'push-to-portal',
     templateUrl: './push-to-portal.component.html',
@@ -7,6 +10,10 @@ import { GST_UTILITY_DOWNLOAD_LINK } from '../../../app.constant';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * PushToPortalComponent component
+ * Handles pushtoportal functionality and user interactions
+ */
 export class PushToPortalComponent {
     /** This will hold local JSON data */
     @Input() public localeData;

@@ -9,6 +9,9 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dial
 import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxes.action";
 import { ASIDE_PANE_CONFIG } from "../../app.constant";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "other-tax",
     templateUrl: "./other-tax.component.html",
@@ -16,6 +19,10 @@ import { ASIDE_PANE_CONFIG } from "../../app.constant";
     providers: [OtherTaxComponentStore],
     standalone: false
 })
+/**
+ * OtherTaxComponent component
+ * Handles othertax functionality and user interactions
+ */
 export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
@@ -42,6 +49,10 @@ export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
     /** This will open account dropdown by default */
     public openAccountDropdown: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: OtherTaxComponentStore,
         private companyActions: CompanyActions,
@@ -73,6 +84,9 @@ export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof OtherTaxComponent
      */
     public ngAfterViewInit(): void {
+       /**
+        * Sets timeout value
+        */
        setTimeout(() => {
          this.openAccountDropdown = true;
        }, 50);
@@ -100,6 +114,9 @@ export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public getCompanyTaxes(): void {
         this.companyTaxes$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (!response) {
                 this.store.dispatch(this.companyActions.getTax());
             } else {
@@ -121,6 +138,9 @@ export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isFormSubmitted = false;
         let model = {};
         const form = this.otherTaxForm.value;
+        /**
+         * Handles if functionality
+         */
         if (form?.tax?.uniqueName && form?.calculationMethod) {
               model = form;
         }
@@ -160,6 +180,9 @@ export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof OtherTaxComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.initCalculationMethodOptions();
         }

@@ -26,6 +26,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         NewVsOldInvoicesComponent,
@@ -63,6 +66,10 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
     providers: []
 })
 
+/**
+ * NewVsOldInvoicesModule module
+ * Implements NewVsOldInvoicesModule functionality
+ */
 export class NewVsOldInvoicesModule {
 
 }

@@ -26,6 +26,9 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -37,6 +40,10 @@ import { get } from '../lodash-optimized';
 
 export class AuthenticationService {
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler,
         public httpClient: HttpClient,
         public http: HttpWrapperService,
@@ -44,6 +51,9 @@ export class AuthenticationService {
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
+    /**
+     * Handles SignupWithEmail functionality
+     */
     public SignupWithEmail(datatoSend: any): Observable<BaseResponse<string, string>> {
         return this.http.post(this.config.apiUrl + LOGIN_API.SignupWithEmail, datatoSend).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
@@ -51,6 +61,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, datatoSend)));
     }
 
+    /**
+     * Handles VerifyEmail functionality
+     */
     public VerifyEmail(model: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>> {
         return this.http.post(this.config.apiUrl + LOGIN_API.VerifyEmail, model).pipe(map((res) => {
             let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = res;
@@ -59,6 +72,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, model)));
     }
 
+    /**
+     * Handles SignupWithMobile functionality
+     */
     public SignupWithMobile(model: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
         return this.http.post(this.config.apiUrl + LOGIN_API.SignupWithMobile, model).pipe(map((res) => {
             let data: BaseResponse<string, SignupWithMobile> = res;
@@ -67,6 +83,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, model)));
     }
 
+    /**
+     * Handles VerifyOTP functionality
+     */
     public VerifyOTP(modele: VerifyMobileModel): Observable<BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>> {
         return this.http.post(this.config.apiUrl + LOGIN_API.VerifyOTP, modele).pipe(map((res) => {
             let data: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = res;
@@ -75,6 +94,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, VerifyMobileModel>(e, modele)));
     }
 
+    /**
+     * Handles SignupWithPassword functionality
+     */
     public SignupWithPassword(modele: SignUpWithPassword): Observable<BaseResponse<VerifyMobileResponseModel, SignUpWithPassword>> {
         return this.http.post(this.config.apiUrl + LOGIN_API.SignupWithPassword, modele).pipe(map((res) => {
             let data: BaseResponse<VerifyMobileResponseModel, SignUpWithPassword> = res;
@@ -83,6 +105,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, SignUpWithPassword>(e, modele)));
     }
 
+    /**
+     * Handles LoginWithPassword functionality
+     */
     public LoginWithPassword(modele: LoginWithPassword): Observable<BaseResponse<VerifyMobileResponseModel, LoginWithPassword>> {
         return this.http.post(this.config.apiUrl + LOGIN_API.LoginWithPassword, modele).pipe(map((res) => {
             let data: BaseResponse<VerifyMobileResponseModel, LoginWithPassword> = res;
@@ -91,6 +116,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, LoginWithPassword>(e, modele)));
     }
 
+    /**
+     * Handles VerifyNumber functionality
+     */
     public VerifyNumber(modele: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
         return this.http.post(this.config.apiUrl + LOGIN_API.VerifyNumber, modele).pipe(map((res) => {
             let data: BaseResponse<string, SignupWithMobile> = res;
@@ -99,6 +127,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, modele)));
     }
 
+    /**
+     * Handles VerifyNumberOTP functionality
+     */
     public VerifyNumberOTP(modele: VerifyMobileModel): Observable<BaseResponse<string, VerifyMobileModel>> {
         return this.http.put(this.config.apiUrl + LOGIN_API.VerifyNumber, modele).pipe(map((res) => {
             let data: BaseResponse<string, VerifyMobileModel> = res;
@@ -107,6 +138,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, VerifyMobileModel>(e)));
     }
 
+    /**
+     * Handles ClearSession functionality
+     */
     public ClearSession(): Observable<BaseResponse<string, string>> {
         let userName = (this.generalService.user) ? this.generalService.user?.uniqueName : "";
         return this.http.delete(this.config.apiUrl + LOGIN_API.CLEAR_SESSION?.replace(':userUniqueName', encodeURIComponent(userName))).pipe(map((res) => {
@@ -115,6 +149,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
+    /**
+     * Handles LoginWithGoogle functionality
+     */
     public LoginWithGoogle(token: string) {
         let args: any = { headers: {} };
         args.headers['cache-control'] = 'no-cache';
@@ -131,6 +168,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, string>(e, args)));
     }
 
+    /**
+     * Handles SetSettings functionality
+     */
     public SetSettings(model): Observable<BaseResponse<string, string>> {
         let uniqueName = (this.generalService.user) ? this.generalService.user?.uniqueName : "";
 
@@ -143,6 +183,9 @@ export class AuthenticationService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
+    /**
+     * Handles FetchUserDetails functionality
+     */
     public FetchUserDetails(): Observable<BaseResponse<UserDetails, string>> {
         let sessionId = (this.generalService.user) ? this.generalService.user?.uniqueName : "";
 
@@ -155,6 +198,9 @@ export class AuthenticationService {
             }), catchError((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, '')));
     }
 
+    /**
+     * Handles GetAuthKey functionality
+     */
     public GetAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
         let uniqueName = (this.generalService.user) ? this.generalService.user?.uniqueName : "";
 
@@ -167,6 +213,9 @@ export class AuthenticationService {
             }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')));
     }
 
+    /**
+     * Handles RegenerateAuthKey functionality
+     */
     public RegenerateAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
         let userEmail = (this.generalService.user) ? this.generalService.user.email : "";
 
@@ -179,6 +228,9 @@ export class AuthenticationService {
             }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')));
     }
 
+    /**
+     * Handles ReportInvalidJSON functionality
+     */
     public ReportInvalidJSON(model): Observable<BaseResponse<AuthKeyResponse, string>> {
         model.email = (this.generalService.user) ? this.generalService.user.email : "";
         model.environment = this.config.apiUrl;
@@ -192,6 +244,9 @@ export class AuthenticationService {
     }
 
     // Get User Sessions
+    /**
+     * Handles GetUserSession functionality
+     */
     public GetUserSession() {
         let userEmail = (this.generalService.user) ? this.generalService.user.email : "";
         return this.http.get(this.config.apiUrl + LOGIN_API.GET_SESSION
@@ -221,6 +276,9 @@ export class AuthenticationService {
     }
 
     // Delete All Sessions
+    /**
+     * Handles DeleteAllSession functionality
+     */
     public DeleteAllSession() {
         let userEmail = (this.generalService.user) ? this.generalService.user.email : "";
         return this.http.delete(this.config.apiUrl + LOGIN_API.DELETE_ALL_SESSION?.replace(':userEmail', userEmail)).pipe(map(res => {
@@ -230,6 +288,9 @@ export class AuthenticationService {
     }
 
     // Get Electron App Version
+    /**
+     * Handles GetElectronAppVersion functionality
+     */
     public GetElectronAppVersion() {
         let args: any = { headers: {} };
         args.headers['cache-control'] = 'no-cache';
@@ -243,6 +304,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, args)));
     }
 
+    /**
+     * Handles forgotPassword functionality
+     */
     public forgotPassword(userId): Observable<BaseResponse<string, any>> {
         let userName = userId;
         return this.http.put(this.config.apiUrl + LOGIN_API.FORGOT_PASSWORD?.replace(':userEmail', userName), {}).pipe(map((res) => {
@@ -252,6 +316,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
     }
 
+    /**
+     * Resets password to default state
+     */
     public resetPassword(model): Observable<BaseResponse<string, any>> {
         let objToSend = model;
         return this.http.put(this.config.apiUrl + LOGIN_API.RESET_PASSWORD, objToSend).pipe(map((res) => {
@@ -261,6 +328,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
     }
 
+    /**
+     * Handles renewSession functionality
+     */
     public renewSession(): Observable<BaseResponse<any, any>> {
         let userName = (this.generalService.user) ? this.generalService.user?.uniqueName : "";
         return this.http.put(this.config.apiUrl + LOGIN_API.RENEW_SESSION?.replace(':userUniqueName', encodeURIComponent(userName)), null).pipe(map((res) => {
@@ -269,6 +339,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
     }
 
+    /**
+     * Saves gmailauthcode data
+     */
     public saveGmailAuthCode(data) {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + GMAIL_API.GENERATE_GMAIL_TOKEN?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data).pipe(map((res) => {
@@ -277,6 +350,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
     }
 
+    /**
+     * Saves gmailtoken data
+     */
     public saveGmailToken(data) {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + GMAIL_API.SAVE_GMAIL_TOKEN?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data).pipe(map((res) => {
@@ -285,6 +361,9 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
     }
 
+    /**
+     * Retrieves allusersubsciptionplans data
+     */
     public getAllUserSubsciptionPlans(countryCode): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + LOGIN_API.GET_USER_SUBSCRIPTION_PLAN_API;
         url = url?.replace(":countryCode", countryCode);

@@ -1,10 +1,21 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsUtilityService service
+ * Provides settingsutility related business logic and data operations
+ */
 export class SettingsUtilityService {
     /** @ignore */
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() { }
 
     /**
@@ -17,16 +28,37 @@ export class SettingsUtilityService {
      */
     public getCreateWarehouseRequestObject(formControls: any): any {
         return {
+            /**
+             * Handles name functionality
+             */
             name: (formControls.name) ? formControls.name?.value : '',
             addresses: [{
+                /**
+                 * Handles address functionality
+                 */
                 address: (formControls.address) ? formControls.address?.value : '',
+                /**
+                 * Handles stateCode functionality
+                 */
                 stateCode: (formControls.state) ? formControls.state?.value : '',
                 isDefault: true
             }],
             isDefault: false,
+            /**
+             * Handles countryCode functionality
+             */
             countryCode: (formControls.country) ? formControls.country?.value : '',
+            /**
+             * Handles currencyCode functionality
+             */
             currencyCode: (formControls?.baseCurrency) ? formControls?.baseCurrency?.value : '',
+            /**
+             * Handles callingCode functionality
+             */
             callingCode: (formControls.phoneCode) ? formControls.phoneCode?.value : '',
+            /**
+             * Handles mobileNumber functionality
+             */
             mobileNumber: (formControls.contactNo) ? formControls.contactNo?.value : ''
         };
     }
@@ -42,12 +74,18 @@ export class SettingsUtilityService {
     public getFormattedWarehouseData(warehouses: Array<any>): any {
         let defaultWarehouse: any = {};
         const formattedWarehouses = warehouses.map((warehouse: any) => {
+            /**
+             * Handles if functionality
+             */
             if (warehouse.isDefault) {
                 defaultWarehouse = warehouse;
             }
             return { ...warehouse, label: warehouse?.name, value: warehouse?.uniqueName };
         });
 
+        /**
+         * Handles if functionality
+         */
         if(!defaultWarehouse?.uniqueName && formattedWarehouses?.length > 0) {
             defaultWarehouse = formattedWarehouses[0];
         }
@@ -90,6 +128,9 @@ export class SettingsUtilityService {
      */
     public getFormattedBranchAddresses(response: Array<any>): Array<any> {
         const formattedCompanyAddresses = [];
+        /**
+         * Handles if functionality
+         */
         if (response) {
             (Array.isArray(response) ? response : []).forEach(address => {
                 formattedCompanyAddresses.push({
@@ -120,6 +161,9 @@ export class SettingsUtilityService {
         return {
             name: branchDetails.name,
             alias: branchDetails.alias,
+            /**
+             * Handles linkAddresses functionality
+             */
             linkAddresses: (branchDetails.addresses && branchDetails.addresses.length > 0) ? branchDetails.addresses.map(address => ({ uniqueName: address?.uniqueName, isDefault: address.isDefault })) : []
         };
     }
@@ -134,6 +178,9 @@ export class SettingsUtilityService {
      */
     private getLinkedEntities(address: any): Array<any> {
         const linkedEntities = [];
+        /**
+         * Handles if functionality
+         */
         if (address.branches && address.branches.length) {
             (Array.isArray(address.branches) ? address.branches : []).forEach(branch => {
                 linkedEntities.push({
@@ -142,6 +189,9 @@ export class SettingsUtilityService {
                 })
             });
         }
+        /**
+         * Handles if functionality
+         */
         if (address.warehouses && address.warehouses.length) {
             (Array.isArray(address.warehouses) ? address.warehouses : []).forEach(warehouse => {
                 linkedEntities.push({

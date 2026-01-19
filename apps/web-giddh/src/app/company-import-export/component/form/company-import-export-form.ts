@@ -20,6 +20,9 @@ import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'company-import-export-form-component',
     templateUrl: 'company-import-export-form.html',
@@ -27,6 +30,10 @@ import { cloneDeep } from '../../../lodash-optimized';
     standalone: false
 })
 
+/**
+ * CompanyImportExportFormComponent class
+ * Implements CompanyImportExportFormComponent functionality
+ */
 export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -76,6 +83,10 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private companyImportExportService: CompanyImportExportService,
@@ -88,8 +99,14 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -102,6 +119,9 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         this.universalDate$.subscribe((dateObj) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
@@ -120,6 +140,9 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -130,6 +153,9 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
                 const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
@@ -137,6 +163,9 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                     this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -145,12 +174,21 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles selectedDate functionality
+     */
     public selectedDate(value: any) {
         this.from = dayjs(value.picker.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         this.to = dayjs(value.picker.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
     }
 
+    /**
+     * Handles fileSelected functionality
+     */
     public fileSelected(file: File) {
+        /**
+         * Handles if functionality
+         */
         if (file && file[0]) {
             this.selectedFile = file[0];
         } else {
@@ -158,15 +196,30 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Saves  data
+     */
     public save() {
+        /**
+         * Handles if functionality
+         */
         if (this.mode === 'export') {
             this.isExportInProcess$ = of(true);
 
+            /**
+             * Handles if functionality
+             */
             if (parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
                 this.companyImportExportService.ExportRequest(this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'success') {
                         let res = { body: response?.body };
                         let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
+                        /**
+                         * Saves as data
+                         */
                         saveAs(blob, `${this.currentBranch.name}_Master_Except_Accounts_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
                         this.toaster.successToast(this.commonLocaleData?.app_messages?.data_exported);
                         this.backButtonPressed();
@@ -177,12 +230,21 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                 });
             } else {
                 this.companyImportExportService.ExportLedgersRequest(this.from, this.to, this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'success' && response?.body) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response?.body?.type === "message") {
                             this.toaster.successToast(response?.body?.file);
                         } else {
                             let res = { body: response?.body?.file };
                             let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
+                            /**
+                             * Saves as data
+                             */
                             saveAs(blob, `${this.currentBranch?.name}_Accounting_Entries_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
                             this.toaster.successToast(this.commonLocaleData?.app_messages?.data_exported);
                             this.backButtonPressed();
@@ -196,6 +258,9 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         } else {
             this.isImportInProcess$ = of(true);
 
+            /**
+             * Handles if functionality
+             */
             if (parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
                 this.companyImportExportService.ImportRequest(this.selectedFile, this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.handleImportEntriesResponse(response);
@@ -208,10 +273,16 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles backButtonPressed functionality
+     */
     public backButtonPressed() {
         this.backPressed.emit(true);
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -224,6 +295,9 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
      * @memberof CompanyImportExportFormComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -238,16 +312,25 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
      * @memberof CompanyImportExportFormComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -273,6 +356,9 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
      * @memberof CompanyImportExportFormComponent
      */
     private handleImportEntriesResponse(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (response?.status === 'success') {
             this.toaster.successToast(response?.body);
             this.backButtonPressed();

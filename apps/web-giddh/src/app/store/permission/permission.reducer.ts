@@ -7,6 +7,10 @@ import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { cloneDeep, filter, findIndex, forEach, sortBy } from '../../lodash-optimized';
 
+/**
+ * PermissionState interface definition
+ * Defines the structure and contract for PermissionState objects
+ */
 export interface PermissionState {
     roles: IRoleCommonResponseAndRequest[];
     newRole: object;
@@ -28,6 +32,9 @@ export const initialState: PermissionState = {
 };
 
 export function PermissionReducer(state = initialState, action: CustomActions): PermissionState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
@@ -39,6 +46,9 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             let newState = cloneDeep(state);
             let res = action.payload as BaseResponse<IRoleCommonResponseAndRequest[],
                 string>;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.roles = res.body;
                 newState.roles = sortBy(newState.roles, [(o) => o.name]);
@@ -60,6 +70,9 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             let newState = cloneDeep(state);
             newState.addUpdateRoleInProcess = false;
             let res = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.roles.push(res.body);
             }
@@ -71,6 +84,9 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
         case PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE: {
             let newState = cloneDeep(state);
             let roleIndx = newState?.roles?.findIndex((role) => role?.uniqueName === action.payload.roleUniqueName);
+            /**
+             * Handles if functionality
+             */
             if (roleIndx > -1) {
                 newState.roles[roleIndx] = action.payload;
                 return { ...state, ...newState, addUpdateRoleInProcess: false };
@@ -83,6 +99,9 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
         }
         case PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE: {
             // filter out deleted role from permission role list, when status is success
+            /**
+             * Handles if functionality
+             */
             if (action.payload?.status === 'success') {
                 return {
                     ...state,
@@ -97,6 +116,9 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
         case PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE: {
             let newState = cloneDeep(state);
             let res = action.payload as BaseResponse<string[], string>;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.pages = res.body;
                 return Object.assign({}, state, newState);
@@ -106,6 +128,9 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
         case PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE: {
             let newState = cloneDeep(state);
             let res = action.payload as BaseResponse<GetAllPermissionResponse[], string>;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.permissions = res.body;
                 return Object.assign({}, state, newState);
@@ -128,6 +153,9 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
         }
         case AccountsAction.SHARE_ENTITY_RESPONSE: {
             let res = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 return Object.assign({}, state, {
                     createPermissionInProcess: false, createPermissionSuccess: true

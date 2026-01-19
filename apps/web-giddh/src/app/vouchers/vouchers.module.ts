@@ -96,6 +96,9 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
 import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
 import { ResizableDirective } from "../shared/directives/resizable.directive";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         MainComponent,
@@ -201,6 +204,10 @@ import { ResizableDirective } from "../shared/directives/resizable.directive";
     ],
     providers: [TitleCasePipe, InvoiceUiDataService, SalesPersonService]
 })
+/**
+ * VouchersModule module
+ * Implements VouchersModule functionality
+ */
 export class VouchersModule {
 
 }

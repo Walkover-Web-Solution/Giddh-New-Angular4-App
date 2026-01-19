@@ -16,6 +16,9 @@ import { environment } from '../../environments/environment.generated';
 import { cloneDeep } from '../lodash-optimized';
 
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
@@ -24,6 +27,10 @@ import { cloneDeep } from '../lodash-optimized';
     standalone: false
 })
 
+/**
+ * OnboardingComponent component
+ * Handles onboarding functionality and user interactions
+ */
 export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Template reference for aside menu */
     @ViewChild('asideMenuTemplate') public asideMenuTemplate: TemplateRef<any>;
@@ -54,6 +61,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds help documentation url for syncing with Tally */
     public syncWithTallyHelpDocUrl: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private router: Router,
         private generalService: GeneralService,
@@ -68,11 +79,17 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.companyCountry = res.country;
                 this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
@@ -80,12 +97,18 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 this.isGoCardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         });
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.asideMenuDialogRef?.close();
             }
@@ -94,6 +117,9 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.initInventorySettingObj();
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         this.generalService.IAmLoaded.next(true);
     }
@@ -111,7 +137,13 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles selectConfigureBank functionality
+     */
     public selectConfigureBank() {
+        /**
+         * Handles if functionality
+         */
         if (this.companyCountry) {
             this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/payment'));
             this.router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
@@ -124,18 +156,30 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles scheduleNow functionality
+     */
     public scheduleNow() {
         this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
     }
 
+    /**
+     * Handles sidebarStatusChange functionality
+     */
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
         this.store.dispatch(this.generalActions.setSideMenuBarState(event));
     }
 
+    /**
+     * Initializes inventorysettingobj
+     */
     public initInventorySettingObj() {
         this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
+            /**
+             * Handles if functionality
+             */
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
@@ -143,6 +187,9 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
+    /**
+     * Opens createaccountasidepan
+     */
     public openCreateAccountAsidepan(): void {
         this.openAccountAsidePaneDialog();
     }

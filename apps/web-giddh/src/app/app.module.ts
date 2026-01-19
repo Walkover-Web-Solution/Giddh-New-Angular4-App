@@ -47,6 +47,9 @@ whiteLabelConfig = whiteLabelConfig?.status === 'error' ? null : whiteLabelConfi
 // FetchWhiteLabel returns an async function that fetches white-label data from an API, stores it in localStorage, and caches it in whiteLabelConfig.
 export function fetchWhiteLabel(): () => Promise<void> {
     return async () => {
+        /**
+         * Handles if functionality
+         */
         if (!whiteLabelConfig) {
             try {
                 const response = await fetch(`${Configuration.ApiUrl}white-label`);
@@ -75,16 +78,25 @@ let CONDITIONAL_IMPORTS = [];
 function handleSessionDataRetrieval(sessionData: string | null, localData: string | null, config: any): string | null {
     // Check for query parameters first - this takes precedence over stored data
     const queryResult = handleQueryParameterProcessing(localData);
+    /**
+     * Handles if functionality
+     */
     if (queryResult) {
         return queryResult;
     }
 
     // Handle new tab scenario: only localStorage data exists
+    /**
+     * Handles if functionality
+     */
     if (!sessionData && localData) {
         return handleNewTabScenario(localData, config);
     }
 
     // Normal scenario: merge sessionStorage and localStorage
+    /**
+     * Handles if functionality
+     */
     if (sessionData && localData) {
         return mergeSessionAndLocalData(sessionData, localData, config);
     }
@@ -101,6 +113,9 @@ function handleQueryParameterProcessing(localData: string | null): string | null
     const queryCompanyUniqueName = urlParams.get('companyUniqueName');
     const queryBranchUniqueName = urlParams.get('branchUniqueName');
 
+    /**
+     * Handles if functionality
+     */
     if (!queryCompanyUniqueName || !localData) {
         return null;
     }
@@ -110,6 +125,9 @@ function handleQueryParameterProcessing(localData: string | null): string | null
         company.uniqueName === queryCompanyUniqueName
     );
 
+    /**
+     * Handles if functionality
+     */
     if (!targetCompany) {
         return null;
     }
@@ -123,10 +141,16 @@ function handleQueryParameterProcessing(localData: string | null): string | null
 function processQueryCompanySwitch(localObj: any, targetCompany: any, queryCompanyUniqueName: string, queryBranchUniqueName: string | null): string {
     // Validate branch belongs to company
     let validatedBranchUniqueName = '';
+    /**
+     * Handles if functionality
+     */
     if (queryBranchUniqueName) {
         const targetBranch = targetCompany.branches?.find((branch: any) =>
             branch.uniqueName === queryBranchUniqueName
         );
+        /**
+         * Handles if functionality
+         */
         if (targetBranch) {
             validatedBranchUniqueName = queryBranchUniqueName;
         }
@@ -153,6 +177,9 @@ function processQueryCompanySwitch(localObj: any, targetCompany: any, queryCompa
         lastAccessedAt: Date.now()
     };
 
+    /**
+     * Handles if functionality
+     */
     if (validatedBranchUniqueName) {
         updatedLocalData.lastActiveBranchUniqueName = validatedBranchUniqueName;
     }
@@ -161,6 +188,9 @@ function processQueryCompanySwitch(localObj: any, targetCompany: any, queryCompa
     localStorage.setItem('session', JSON.stringify(updatedLocalData));
 
     // Trigger company/branch switch event
+    /**
+     * Handles triggerCompanySwitchEvent functionality
+     */
     triggerCompanySwitchEvent(queryCompanyUniqueName, validatedBranchUniqueName, targetCompany);
 
     return JSON.stringify(updatedLocalData);
@@ -170,6 +200,9 @@ function processQueryCompanySwitch(localObj: any, targetCompany: any, queryCompa
  * Trigger company switch event for API calls
  */
 function triggerCompanySwitchEvent(companyUniqueName: string, branchUniqueName: string, company: any): void {
+    /**
+     * Sets timeout value
+     */
     setTimeout(() => {
         try {
             const event = new CustomEvent('giddh-query-params-company-switch', {
@@ -195,6 +228,9 @@ function handleNewTabScenario(localData: string, config: any): string {
         localObj.activeCompany.uniqueName &&
         localObj.companyUniqueName;
 
+    /**
+     * Handles if functionality
+     */
     if (hasValidCompanyData) {
         return initializeValidCompanyData(localObj, config);
     } else {
@@ -209,7 +245,13 @@ function initializeValidCompanyData(localObj: any, config: any): string {
     const tabSpecificData: any = {};
 
     (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
+        /**
+         * Handles if functionality
+         */
         if (localObj.hasOwnProperty(tabKey)) {
+            /**
+             * Handles if functionality
+             */
             if (tabKey !== 'currentBranchUniqueName') {
                 tabSpecificData[tabKey] = localObj[tabKey];
             }
@@ -218,6 +260,9 @@ function initializeValidCompanyData(localObj: any, config: any): string {
 
     tabSpecificData.currentBranchUniqueName = localObj.lastActiveBranchUniqueName || '';
 
+    /**
+     * Handles if functionality
+     */
     if (Object.keys(tabSpecificData).length > 0) {
         sessionStorage.setItem('session', JSON.stringify(tabSpecificData));
     }
@@ -233,6 +278,9 @@ function initializeValidCompanyData(localObj: any, config: any): string {
  * Initialize fallback company data when no valid company exists
  */
 function initializeFallbackCompanyData(localObj: any, localData: string): string {
+    /**
+     * Handles if functionality
+     */
     if (localObj.companies && localObj.companies.length > 0) {
         const firstCompany = localObj.companies[0];
         const fallbackTabData = {
@@ -241,6 +289,9 @@ function initializeFallbackCompanyData(localObj: any, localData: string): string
             todaySelected: false,
             activeCompany: firstCompany,
             companyUser: null,
+            /**
+             * Handles currentBranchUniqueName functionality
+             */
             currentBranchUniqueName: (localObj.companyUniqueName === firstCompany.uniqueName)
                 ? (localObj.lastActiveBranchUniqueName || '')
                 : ''
@@ -285,6 +336,9 @@ function mergeSessionAndLocalData(sessionData: string, localData: string, config
 
     // Override with tab-specific data from sessionStorage
     (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
+        /**
+         * Handles if functionality
+         */
         if (sessionObj.hasOwnProperty(tabKey)) {
             merged[tabKey] = sessionObj[tabKey];
         }
@@ -313,8 +367,14 @@ const createHybridStorage = () => {
     };
 
     return {
+        /**
+         * Retrieves item data
+         */
         getItem: (key: string): string | null => {
             try {
+                /**
+                 * Handles if functionality
+                 */
                 if (!['session', 'permission', 'branchConsolidated'].includes(key)) {
                     return sessionStorage.getItem(key) || localStorage.getItem(key);
                 }
@@ -322,16 +382,25 @@ const createHybridStorage = () => {
                 const sessionData = sessionStorage.getItem(key);
                 const localData = localStorage.getItem(key);
 
+                /**
+                 * Handles if functionality
+                 */
                 if (key === 'session') {
                     return handleSessionDataRetrieval(sessionData, localData, config);
                 }
 
                 // For permission (always from localStorage)
+                /**
+                 * Handles if functionality
+                 */
                 if (key === 'permission') {
                     return localData;
                 }
 
                 // For branchConsolidated (prefer sessionStorage, fallback to localStorage)
+                /**
+                 * Handles if functionality
+                 */
                 if (key === 'branchConsolidated') {
                     return sessionData || localData;
                 }
@@ -341,18 +410,30 @@ const createHybridStorage = () => {
                 return localStorage.getItem(key);
             }
         },
+        /**
+         * Sets item value
+         */
         setItem: (key: string, value: string): void => {
             try {
+                /**
+                 * Handles if functionality
+                 */
                 if (!['session', 'permission', 'branchConsolidated'].includes(key)) {
                     sessionStorage.setItem(key, value);
                     return;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (key === 'session') {
                     const sessionData = JSON.parse(value);
                     const tabSpecificData: any = {};
                     const persistentData: any = {};
                     // Split data based on configuration
                     Object.keys(sessionData).forEach(dataKey => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (config.tabSpecific.session.includes(dataKey)) {
                             tabSpecificData[dataKey] = sessionData[dataKey];
                         } else {
@@ -360,6 +441,9 @@ const createHybridStorage = () => {
                         }
                     });
                     // Store tab-specific data in sessionStorage
+                    /**
+                     * Handles if functionality
+                     */
                     if (Object.keys(tabSpecificData).length > 0) {
                         const existingSessionData = (() => {
                             try {
@@ -372,6 +456,9 @@ const createHybridStorage = () => {
                         sessionStorage.setItem('session', JSON.stringify({ ...existingSessionData, ...tabSpecificData }));
                         // IMPORTANT: Also update localStorage with latest company selection for new tabs
                         // When company changes, update localStorage so new tabs inherit the latest company
+                        /**
+                         * Handles if functionality
+                         */
                         if (tabSpecificData.companyUniqueName || tabSpecificData.activeCompany) {
                             const existingLocalData = (() => {
                                 try {
@@ -383,16 +470,28 @@ const createHybridStorage = () => {
                             })();
                             // Update localStorage with latest company info and last active branch as fallback
                             const updatedLocalData = { ...existingLocalData };
+                            /**
+                             * Handles if functionality
+                             */
                             if (tabSpecificData.companyUniqueName) {
                                 updatedLocalData.companyUniqueName = tabSpecificData.companyUniqueName;
                             }
+                            /**
+                             * Handles if functionality
+                             */
                             if (tabSpecificData.activeCompany) {
                                 updatedLocalData.activeCompany = tabSpecificData.activeCompany;
                             }
+                            /**
+                             * Handles if functionality
+                             */
                             if (tabSpecificData.companyUser) {
                                 updatedLocalData.companyUser = tabSpecificData.companyUser;
                             }
                             // Store last active branch as fallback for new tabs (different from currentBranchUniqueName)
+                            /**
+                             * Handles if functionality
+                             */
                             if (tabSpecificData.currentBranchUniqueName) {
                                 updatedLocalData.lastActiveBranchUniqueName = tabSpecificData.currentBranchUniqueName;
                             }
@@ -405,6 +504,9 @@ const createHybridStorage = () => {
                         }
                     }
                     // Store persistent data in localStorage
+                    /**
+                     * Handles if functionality
+                     */
                     if (Object.keys(persistentData).length > 0) {
                         const existingLocalData = (() => {
                             try {
@@ -430,10 +532,16 @@ const createHybridStorage = () => {
                 localStorage.setItem(key, value);
             }
         },
+        /**
+         * Deletes item
+         */
         removeItem: (key: string): void => {
             sessionStorage.removeItem(key);
             localStorage.removeItem(key);
         },
+        /**
+         * Handles clear functionality
+         */
         clear: (): void => {
             // Only clear app-specific keys
             ['session', 'permission', 'branchConsolidated'].forEach(appKey => {
@@ -442,6 +550,9 @@ const createHybridStorage = () => {
             });
         },
         length: 0,
+        /**
+         * Handles key functionality
+         */
         key: (index: number): string | null => null
     };
 };
@@ -453,27 +564,42 @@ function migrateExistingData(): void {
     try {
         const migrationKey = 'giddh_hybrid_migration_completed';
         // Check if migration already completed
+        /**
+         * Handles if functionality
+         */
         if (localStorage.getItem(migrationKey)) {
             return;
         }
         // Migrate session data
         const existingSession = localStorage.getItem('session');
+        /**
+         * Handles if functionality
+         */
         if (existingSession) {
             const sessionData = JSON.parse(existingSession);
             const tabSpecificKeys = ['companyUniqueName', 'activeCompany', 'companyUser', 'applicationDate', 'todaySelected', 'currentBranchUniqueName'];
             // Keep tab-specific data in current tab's sessionStorage
             const tabSpecificData: any = {};
             (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(key => {
+                /**
+                 * Handles if functionality
+                 */
                 if (sessionData.hasOwnProperty(key)) {
                     tabSpecificData[key] = sessionData[key];
                 }
             });
+            /**
+             * Handles if functionality
+             */
             if (Object.keys(tabSpecificData).length > 0) {
                 sessionStorage.setItem('session', JSON.stringify(tabSpecificData));
             }
         }
         // Migrate branchConsolidated to sessionStorage
         const existingBranch = localStorage.getItem('branchConsolidated');
+        /**
+         * Handles if functionality
+         */
         if (existingBranch) {
             sessionStorage.setItem('branchConsolidated', existingBranch);
         }
@@ -484,6 +610,9 @@ function migrateExistingData(): void {
 }
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
     // Run migration on first load
+    /**
+     * Handles migrateExistingData functionality
+     */
     migrateExistingData();
     return localStorageSync({
         keys: ['session', 'permission', 'branchConsolidated'],
@@ -492,6 +621,9 @@ export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionRedu
     })(reducer);
 }
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
+/**
+ * Handles if functionality
+ */
 if (!environment.production) {
     CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
@@ -501,6 +633,9 @@ let giddhRegion = document.cookie
     .find(cookie => cookie.startsWith('giddh_region='))
     ?.split('=')[1];
 giddhRegion = giddhRegion?.toUpperCase();
+/**
+ * Handles if functionality
+ */
 if (giddhRegion === "UK") {
     localStorage.setItem("Country-Region", "GB");
 } else if (giddhRegion === "AE") {
@@ -516,10 +651,16 @@ export function getServiceConfig(): any {
     const environmentService = new EnvironmentService();
     const whiteLabelService = new WhiteLabelService(environmentService);
     // Set the white label configuration if it exists
+    /**
+     * Handles if functionality
+     */
     if (whiteLabelConfig) {
         whiteLabelService.setWhiteLabelConfig(whiteLabelConfig);
     }
     // Apply dynamic theme if white label configuration exists
+    /**
+     * Handles if functionality
+     */
     if (whiteLabelConfig?.body?.giddhWhiteLabel?.theme) {
         const dynamicThemeService = new DynamicThemeService();
         dynamicThemeService.applyThemeFromWhiteLabel(whiteLabelConfig);
@@ -571,6 +712,9 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         ...CONDITIONAL_IMPORTS
     ],
     providers: [
+        /**
+         * Handles provideHttpClient functionality
+         */
         provideHttpClient(withInterceptorsFromDi()),
         {
             provide: APP_INITIALIZER,
@@ -604,4 +748,8 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         CustomPreloadingStrategy
     ]
 })
+/**
+ * AppModule module
+ * Implements AppModule functionality
+ */
 export class AppModule { }

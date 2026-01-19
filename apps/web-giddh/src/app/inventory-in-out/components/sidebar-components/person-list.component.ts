@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'person-list',
     standalone: false,
@@ -39,6 +42,10 @@ import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
     </ul>
   `
 })
+/**
+ * PersonListComponent component
+ * Handles personlist functionality and user interactions
+ */
 export class PersonListComponent {
     @Input() public personList: InventoryUser[];
 }

@@ -9,6 +9,10 @@ import { SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '.
 import { UNAUTHORISED } from '../../../app.constant';
 import { cloneDeep, findIndex, map, remove } from '../../../lodash-optimized';
 
+/**
+ * ReceiptState interface definition
+ * Defines the structure and contract for ReceiptState objects
+ */
 export interface ReceiptState {
     vouchers: ReciptResponse;
     lastVouchers: ReciptResponse;
@@ -58,6 +62,9 @@ const initialState: ReceiptState = {
 };
 
 export function Receiptreducer(state: ReceiptState = initialState, action: CustomActions): ReceiptState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
 
         case INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT: {
@@ -70,11 +77,17 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState[res.request && res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
                 newState.isGetAllRequestSuccess = true;
                 newState.hasVoucherListPermissions = true;
             } else if (res?.status === 'error' && res.statusCode === UNAUTHORISED) {
+                /**
+                 * Handles if functionality
+                 */
                 if(!newState['vouchers']) {
                     newState['vouchers'] = {};
                 }
@@ -96,8 +109,14 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, ReciptDeleteRequest> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let indx = (res.request.invoiceNumber) ? newState.vouchers?.items?.findIndex(f => f.voucherNumber === res.request.invoiceNumber) : newState.vouchers?.items?.findIndex(f => f?.uniqueName === res.request?.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (indx > -1) {
                     newState.vouchers?.items.splice(indx, 1);
                     newState.isDeleteSuccess = true;
@@ -115,8 +134,14 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, ReciptRequest> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.vouchers?.items.map(a => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (a.voucherNumber === res.request.voucher.voucherDetails.voucherNumber) {
                         a = res.request;
                     }
@@ -129,6 +154,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE: {
+            /**
+             * Handles if functionality
+             */
             if (state.vouchers && action.payload.body) {
                 let vouchers = { ...state.vouchers };
                 let result = action.payload;
@@ -137,6 +165,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                     vouchers: {
                         ...vouchers,
                         items: vouchers?.items.map(m => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (result.body?.type !== VoucherTypeEnum.purchase && (m.voucherNumber === result.body?.number) ||
                                 result.body?.type === VoucherTypeEnum.purchase && (m?.uniqueName === result.body?.uniqueName)) {
                                 m.grandTotal.amountForAccount = result.body?.grandTotal.amountForAccount;
@@ -144,6 +175,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                                 m.grandTotal.amountForAccount = result.body?.voucherDetails.grandTotal;
                             }
 
+                            /**
+                             * Handles if functionality
+                             */
                             if (result && result.body && (result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash || result.body.type === VoucherTypeEnum.creditNote || result.body.type === VoucherTypeEnum.debitNote) && result.body.number == m.voucherNumber) {
                                 m.account = result.body.account;
                             } else if (result && result.body && result.body.type === VoucherTypeEnum.purchase && result.body?.uniqueName == m?.uniqueName) {
@@ -195,6 +229,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<any, any> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 newState.base64Data = res;
                 return Object.assign({}, state, newState);
@@ -221,8 +258,14 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 let indx = newState.vouchers?.items?.findIndex((o) => o.voucherNumber === res.request);
+                /**
+                 * Handles if functionality
+                 */
                 if (indx > -1) {
                     newState.vouchers?.items.splice(indx, 1);
                 }
@@ -242,6 +285,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let newState = cloneDeep(state);
             let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
             newState.voucherDetailsInProcess = false;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.voucher = res.body;
                 newState.invoiceDataHasError = false;
@@ -254,6 +300,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.voucher = res.body;
                 newState.invoiceDataHasError = false;
@@ -270,6 +319,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.isInvoiceGenerated = true;
                 newState.ledgers.results = remove(newState.vouchers.results, (item: ILedgersInvoiceResult) => {
@@ -305,6 +357,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, SalesRegisteDetailedResponse> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.isGetSalesDetailsInProcess = false;
                 newState.isGetSalesDetailsSuccess = true;
@@ -324,6 +379,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_REGISTERED_DETAILS_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<string, PurchaseRegisteDetailedResponse> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 newState.isGetPurchaseDetailsInProcess = false;
                 newState.isGetPurchaseDetailsSuccess = true;

@@ -9,17 +9,29 @@
 import { INameUniqueName } from './Inventory';
 import { ICommonItem } from './Company';
 
+/**
+ * Permission interface definition
+ * Defines the structure and contract for Permission objects
+ */
 export interface Permission {
     code: string;
     isSelected?: boolean;
 }
 
+/**
+ * Scope interface definition
+ * Defines the structure and contract for Scope objects
+ */
 export interface Scope {
     name: string;
     permissions: Permission[];
     selectAll?: boolean;
 }
 
+/**
+ * CreateNewRoleResponse interface definition
+ * Defines the structure and contract for CreateNewRoleResponse objects
+ */
 export interface CreateNewRoleResponse {
     isFixed: boolean;
     scopes: Scope[];
@@ -27,6 +39,10 @@ export interface CreateNewRoleResponse {
     name: string;
 }
 
+/**
+ * CreateNewRoleRequest interface definition
+ * Defines the structure and contract for CreateNewRoleRequest objects
+ */
 export interface CreateNewRoleRequest {
     name: string;
     scopes: Scope[];
@@ -34,6 +50,10 @@ export interface CreateNewRoleRequest {
     uniqueName?: string;
 }
 
+/**
+ * IRoleCommonResponseAndRequest interface definition
+ * Defines the structure and contract for IRoleCommonResponseAndRequest objects
+ */
 export interface IRoleCommonResponseAndRequest {
     name: string;
     scopes: Scope[];
@@ -41,6 +61,10 @@ export interface IRoleCommonResponseAndRequest {
     uniqueName?: string;
 }
 
+/**
+ * ShareRequestForm class
+ * Implements ShareRequestForm functionality
+ */
 export class ShareRequestForm {
     public emailId: string;
     public from: string; // dd-MM-yyyy format
@@ -63,6 +87,10 @@ export class ShareRequestForm {
     public isLoggedInUser?: boolean;
 }
 
+/**
+ * IUpdatePermissionResponse interface definition
+ * Defines the structure and contract for IUpdatePermissionResponse objects
+ */
 export interface IUpdatePermissionResponse extends INameUniqueName {
     name: string;
     uniqueName: string;
@@ -78,6 +106,10 @@ export interface IUpdatePermissionResponse extends INameUniqueName {
     role: any;
 }
 
+/**
+ * Entity interface definition
+ * Defines the structure and contract for Entity objects
+ */
 export interface Entity extends INameUniqueName {
     entity: string;
 }

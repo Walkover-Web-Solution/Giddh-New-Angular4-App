@@ -4,9 +4,16 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { get  } from './lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * VersionCheckService service
+ * Provides versioncheck related business logic and data operations
+ */
 export class VersionCheckService {
 
     public onVersionChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -14,6 +21,10 @@ export class VersionCheckService {
     // this will be replaced by actual hash post-build.js
     private currentHash = '{{POST_BUILD_ENTERS_HASH_HERE}}';
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private http: HttpClient) {
     }
 
@@ -25,10 +36,16 @@ export class VersionCheckService {
     public initVersionCheck(url: string, frequency = 1000 * 60 * 1) { // will check in every 1 minutes
         this.checkVersion(url);
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.checkVersion(url);
         }, 2000);
 
+        /**
+         * Sets interval value
+         */
         setInterval(() => {
             this.checkVersion(url);
         }, frequency);
@@ -47,6 +64,9 @@ export class VersionCheckService {
                     const hashChanged = this.hasHashChanged(this.currentHash, hash);
 
                     // If new version, do something
+                    /**
+                     * Handles if functionality
+                     */
                     if (hashChanged) {
                         // ENTER YOUR CODE TO DO SOMETHING UPON VERSION CHANGE
                         // for an example: location.reload();
@@ -71,6 +91,9 @@ export class VersionCheckService {
      * @returns {boolean}
      */
     private hasHashChanged(currentHash: string, newHash: string) {
+        /**
+         * Handles if functionality
+         */
         if (!currentHash || currentHash === '{{POST_BUILD_ENTERS_HASH_HERE}}') {
             return false;
         }

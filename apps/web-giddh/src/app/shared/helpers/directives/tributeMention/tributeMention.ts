@@ -1,11 +1,18 @@
 import {Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import Tribute from 'tributejs';
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
   selector: '[appTributeMention]',
   exportAs: 'appTributeMention',
   standalone: false
 })
+/**
+ * TributeMentionDirective class
+ * Implements TributeMentionDirective functionality
+ */
 export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
   /** Tribute.js configuration options.*/
@@ -17,6 +24,10 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
   /** Holds the Tribute instance. */
   private tributeInstance!: Tribute<any>;
 
+  /**
+   * Creates an instance of class
+   * Initializes component dependencies and sets up initial state
+   */
   constructor(private hostElement: ElementRef) { }
 
   /**
@@ -36,6 +47,9 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
    * @memberof TributeMentionDirective
    */
   public ngOnChanges(changes: SimpleChanges): void {
+    /**
+     * Handles if functionality
+     */
     if (
       changes.mentionList &&
       changes.mentionList.currentValue !== changes.mentionList.previousValue
@@ -56,10 +70,22 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
       requireLeadingSpace: false,
       positionMenu: true,
       ...this.tributeConfig,
+      /**
+       * Handles lookup functionality
+       */
       lookup: (item: any) => item.label,
+      /**
+       * Handles menuItemTemplate functionality
+       */
       menuItemTemplate: (item: any) =>
         `<div class="mention-item">${item.original.label}</div>`,
+      /**
+       * Handles selectTemplate functionality
+       */
       selectTemplate: (item: any) =>{
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.hostElement.nativeElement.value = this.hostElement.nativeElement.value.trim();
         }, 50);
@@ -74,6 +100,9 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
       this.mentionSelected.emit(event?.detail?.item?.original ?? "");
     });
     this.hostElement.nativeElement.addEventListener('keyup', (event: any) => {
+      /**
+       * Handles if functionality
+       */
       if (this.hostElement.nativeElement.value.endsWith(this.tributeConfig.trigger)) {
         this.open(false);
       }
@@ -87,6 +116,9 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
    * @memberof TributeMentionDirective
    */
   private destroyTribute(): void {
+    /**
+     * Handles if functionality
+     */
     if (this.tributeInstance) {
         this.tributeInstance.detach(this.hostElement.nativeElement);
     }
@@ -109,18 +141,30 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
    * @memberof TributeMentionDirective
    */
   public open(openByFocus: boolean = true): void {
+    /**
+     * Handles if functionality
+     */
     if (!this.tributeInstance) {
       return;
     }
+    /**
+     * Handles if functionality
+     */
     if (!this.hostElement.nativeElement.value?.trim() && openByFocus) {
       this.hostElement.nativeElement.value = this.tributeConfig.trigger;
     }
 
     this.hostElement.nativeElement.dispatchEvent(new InputEvent('input', { bubbles: true }));
 
+    /**
+     * Sets timeout value
+     */
     setTimeout(() => {
       this.hostElement.nativeElement.focus();
         const fileFormatPrefix = this.hostElement.nativeElement.value;
+        /**
+         * Handles if functionality
+         */
         if (this.tributeInstance && fileFormatPrefix.lastIndexOf(this.tributeConfig.trigger) > fileFormatPrefix.lastIndexOf(this.tributeConfig.suggestionSuffix)) {
             this.tributeInstance['showMenuFor'](this.hostElement.nativeElement);
         }

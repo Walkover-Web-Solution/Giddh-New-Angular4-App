@@ -11,6 +11,10 @@ import { AmountClassMulticurrency, OtherSalesItemClass, VoucherTypeEnum } from '
 import { INameUniqueName } from './Inventory';
 import { PAGINATION_LIMIT } from '../../app.constant';
 
+/**
+ * IInvoiceResult interface definition
+ * Defines the structure and contract for IInvoiceResult objects
+ */
 export interface IInvoiceResult {
     companyName: string;
     uniqueName: string;
@@ -25,6 +29,10 @@ export interface IInvoiceResult {
     dueDate?: string;
 }
 
+/**
+ * CommonPaginatedRequest class
+ * Implements CommonPaginatedRequest functionality
+ */
 export class CommonPaginatedRequest {
     public from?: string;
     public to?: string;
@@ -40,6 +48,10 @@ export class CommonPaginatedRequest {
     public branchUniqueName?: string;
 }
 
+/**
+ * InvoiceFilterClassForInvoicePreview class
+ * Implements InvoiceFilterClassForInvoicePreview functionality
+ */
 export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest {
     public balanceMoreThan?: boolean;
     public balanceLessThan?: boolean;
@@ -87,6 +99,10 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
     public voucherDate?: any;
 }
 
+/**
+ * InvoiceFilterClass class
+ * Implements InvoiceFilterClass functionality
+ */
 export class InvoiceFilterClass extends CommonPaginatedRequest {
     public totalIsMore?: boolean;
     public totalIsLess?: boolean;
@@ -97,6 +113,10 @@ export class InvoiceFilterClass extends CommonPaginatedRequest {
     public entryTotalBy?: string;
 }
 
+/**
+ * ILedgersInvoiceResult interface definition
+ * Defines the structure and contract for ILedgersInvoiceResult objects
+ */
 export interface ILedgersInvoiceResult {
     account: INameUniqueName;
     transactions: ILedgerTransactionItem[];
@@ -115,17 +135,29 @@ export interface ILedgersInvoiceResult {
     totalTooltipText?: string;
 }
 
+/**
+ * IBulkInvoiceGenerationFalingError interface definition
+ * Defines the structure and contract for IBulkInvoiceGenerationFalingError objects
+ */
 export interface IBulkInvoiceGenerationFalingError {
     failedEntries: string[];
     successEntries?: string[];
     reason: string;
 }
 
+/**
+ * GetAllLedgersForInvoiceResponse interface definition
+ * Defines the structure and contract for GetAllLedgersForInvoiceResponse objects
+ */
 export interface GetAllLedgersForInvoiceResponse extends IPagination {
     size: number;
     results: ILedgersInvoiceResult[];
 }
 
+/**
+ * GetAllLedgersOfInvoicesResponse class
+ * Implements GetAllLedgersOfInvoicesResponse functionality
+ */
 export class GetAllLedgersOfInvoicesResponse {
     public count: number;
     public page: number;
@@ -146,6 +178,10 @@ export class GenerateBulkInvoiceRequest {
     public entries: string[];
 }
 
+/**
+ * Template interface definition
+ * Defines the structure and contract for Template objects
+ */
 export interface Template {
     uniqueName: string;
     template: string;
@@ -155,6 +191,10 @@ export interface Template {
     name: string;
 }
 
+/**
+ * TemplateData interface definition
+ * Defines the structure and contract for TemplateData objects
+ */
 export interface TemplateData {
     email?: any;
     emailVerified?: any;
@@ -171,6 +211,10 @@ export interface TemplateData {
     entries?: any;
 }
 
+/**
+ * Sections interface definition
+ * Defines the structure and contract for Sections objects
+ */
 export interface Sections {
     logo: boolean;
     company: boolean;
@@ -184,15 +228,27 @@ export interface Sections {
     signatureType: string;
 }
 
+/**
+ * CompanyIdentities interface definition
+ * Defines the structure and contract for CompanyIdentities objects
+ */
 export interface CompanyIdentities {
     data: string;
 }
 
+/**
+ * Company interface definition
+ * Defines the structure and contract for Company objects
+ */
 export interface Company {
     name: string;
     data: any[];
 }
 
+/**
+ * InvoiceDetails interface definition
+ * Defines the structure and contract for InvoiceDetails objects
+ */
 export interface InvoiceDetails {
     invoiceNumber: string;
     invoiceDate: any;
@@ -200,16 +256,28 @@ export interface InvoiceDetails {
     shippingDate?: any;
 }
 
+/**
+ * Logo interface definition
+ * Defines the structure and contract for Logo objects
+ */
 export interface Logo {
     path: string;
 }
 
+/**
+ * TotalAmount interface definition
+ * Defines the structure and contract for TotalAmount objects
+ */
 export interface TotalAmount {
     subTotal?: any;
     taxTotal?: any;
     grandTotal?: any;
 }
 
+/**
+ * Signature interface definition
+ * Defines the structure and contract for Signature objects
+ */
 export interface Signature {
     name: string;
     data: string;
@@ -226,6 +294,10 @@ export class PreviewInvoiceRequest {
     public uniqueNames: string[];
 }
 
+/**
+ * PreviewInvoiceResponseClass class
+ * Implements PreviewInvoiceResponseClass functionality
+ */
 export class PreviewInvoiceResponseClass {
     public logo: string;
     public company: Company;
@@ -251,6 +323,10 @@ export class PreviewInvoiceResponseClass {
     public uniqueName?: string;
 }
 
+/**
+ * TotaltaxBreakdown interface definition
+ * Defines the structure and contract for TotaltaxBreakdown objects
+ */
 export interface TotaltaxBreakdown {
     amount: number;
     visibleTaxRate: number;
@@ -261,6 +337,10 @@ export interface TotaltaxBreakdown {
     errorMessage: string;
 }
 
+/**
+ * RoundOff interface definition
+ * Defines the structure and contract for RoundOff objects
+ */
 export interface RoundOff {
     transaction: Transaction;
     uniqueName: string;
@@ -268,6 +348,10 @@ export interface RoundOff {
     balanceType: string;
 }
 
+/**
+ * Account interface definition
+ * Defines the structure and contract for Account objects
+ */
 export interface Account {
     name: string;
     uniqueName: string;
@@ -279,17 +363,29 @@ export interface Account {
     billingDetails: IGstDetails;
 }
 
+/**
+ * ICommonItemOfTransaction interface definition
+ * Defines the structure and contract for ICommonItemOfTransaction objects
+ */
 export interface ICommonItemOfTransaction {
     amount: number;
     accountUniqueName: string;
     accountName: string;
 }
 
+/**
+ * Transaction interface definition
+ * Defines the structure and contract for Transaction objects
+ */
 export interface Transaction extends ICommonItemOfTransaction {
     discount: any[];
     description: string;
 }
 
+/**
+ * IInvoiceTransaction interface definition
+ * Defines the structure and contract for IInvoiceTransaction objects
+ */
 export interface IInvoiceTransaction extends ICommonItemOfTransaction {
     hsnNumber?: any;
     sacNumber?: any;
@@ -299,6 +395,10 @@ export interface IInvoiceTransaction extends ICommonItemOfTransaction {
     rate?: any;
 }
 
+/**
+ * Tax interface definition
+ * Defines the structure and contract for Tax objects
+ */
 export interface Tax extends ICommonItemOfTransaction {
     hasError: boolean;
     visibleTaxRate: number;
@@ -306,12 +406,20 @@ export interface Tax extends ICommonItemOfTransaction {
     errorMessage: string;
 }
 
+/**
+ * IInvoiceTax interface definition
+ * Defines the structure and contract for IInvoiceTax objects
+ */
 export interface IInvoiceTax extends ICommonItemOfTransaction {
     rate: number;
     uniqueName: string;
     type?: string;
 }
 
+/**
+ * GstEntry interface definition
+ * Defines the structure and contract for GstEntry objects
+ */
 export interface GstEntry {
     uniqueName: string;
     discounts: ICommonItemOfTransaction[];
@@ -323,6 +431,10 @@ export interface GstEntry {
     entryDate?: any;
 }
 
+/**
+ * IGstDetails interface definition
+ * Defines the structure and contract for IGstDetails objects
+ */
 export interface IGstDetails {
     gstNumber?: any;
     address: string[];
@@ -332,12 +444,20 @@ export interface IGstDetails {
     stateName?: any;
 }
 
+/**
+ * GstTaxesTotal interface definition
+ * Defines the structure and contract for GstTaxesTotal objects
+ */
 export interface GstTaxesTotal {
     uniqueName: string;
     name: string;
     total: number;
 }
 
+/**
+ * GstDetails interface definition
+ * Defines the structure and contract for GstDetails objects
+ */
 export interface GstDetails {
     gstEntries: GstEntry[];
     companyGstDetails: IGstDetails;
@@ -365,16 +485,28 @@ export class GenerateInvoiceRequestClass {
     public voucher?: any;
 }
 
+/**
+ * GenBulkInvoiceGroupByObj class
+ * Implements GenBulkInvoiceGroupByObj functionality
+ */
 export class GenBulkInvoiceGroupByObj {
     public accUniqueName: any;
     public uniqueName: any;
 }
 
+/**
+ * GenBulkInvoiceFinalObj class
+ * Implements GenBulkInvoiceFinalObj functionality
+ */
 export class GenBulkInvoiceFinalObj {
     public accountUniqueName: string;
     public entries: string[];
 }
 
+/**
+ * GenerateBulkInvoiceObject class
+ * Implements GenerateBulkInvoiceObject functionality
+ */
 export class GenerateBulkInvoiceObject {
     public entryUniqueNames: string[];
 }
@@ -391,6 +523,10 @@ export class GetInvoiceTemplateDetailsResponse {
 }
 
 // check if use other wise remove
+/**
+ * InvoiceTemplateDetailsResponse interface definition
+ * Defines the structure and contract for InvoiceTemplateDetailsResponse objects
+ */
 export interface InvoiceTemplateDetailsResponse {
     sample?: any;
     color: string;
@@ -408,6 +544,10 @@ export interface InvoiceTemplateDetailsResponse {
     name: string;
 }
 
+/**
+ * ISection interface definition
+ * Defines the structure and contract for ISection objects
+ */
 export interface ISection {
     header: {
         data: any;
@@ -420,17 +560,29 @@ export interface ISection {
     };
 }
 
+/**
+ * IContentCommon interface definition
+ * Defines the structure and contract for IContentCommon objects
+ */
 export interface IContentCommon {
     display: boolean;
     label: string;
 }
 
+/**
+ * IContent interface definition
+ * Defines the structure and contract for IContent objects
+ */
 export interface IContent extends IContentCommon {
     field: string;
     width?: string;
 }
 
 //////////// NEW //////////////
+/**
+ * CreatedBy interface definition
+ * Defines the structure and contract for CreatedBy objects
+ */
 export interface CreatedBy {
     name: string;
     email: string;
@@ -438,6 +590,10 @@ export interface CreatedBy {
     mobileNo: string;
 }
 
+/**
+ * UpdatedBy interface definition
+ * Defines the structure and contract for UpdatedBy objects
+ */
 export interface UpdatedBy {
     name: string;
     email: string;
@@ -445,6 +601,10 @@ export interface UpdatedBy {
     mobileNo: string;
 }
 
+/**
+ * CustomTemplateResponse class
+ * Implements CustomTemplateResponse functionality
+ */
 export class CustomTemplateResponse {
     public createdBy: CreatedBy;
     public uniqueName: string;
@@ -481,12 +641,20 @@ export class CustomTemplateResponse {
 }
 
 
+/**
+ * EwayBillLogin class
+ * Implements EwayBillLogin functionality
+ */
 export class EwayBillLogin {
     public userName: string;
     public password: string;
     public gstIn: string;
 }
 
+/**
+ * GenerateEwayBill class
+ * Implements GenerateEwayBill functionality
+ */
 export class GenerateEwayBill {
     public supplyType: string;
     public subSupplyType: string;
@@ -506,6 +674,10 @@ export class GenerateEwayBill {
     public uniqueName: string;
 }
 
+/**
+ * UpdateEwayVehicle class
+ * Implements UpdateEwayVehicle functionality
+ */
 export class UpdateEwayVehicle {
     public ewbNo: string;
     public vehicleNo: string;
@@ -520,12 +692,20 @@ export class UpdateEwayVehicle {
     public vehicleType: string;
 }
 
+/**
+ * Account interface definition
+ * Defines the structure and contract for Account objects
+ */
 export interface Account {
     uniqueName: string;
     accountType?: any;
     name: string;
 }
 
+/**
+ * SelectedInvoices interface definition
+ * Defines the structure and contract for SelectedInvoices objects
+ */
 export interface SelectedInvoices {
     account: Account;
     balanceDue: number;
@@ -539,6 +719,10 @@ export interface SelectedInvoices {
     voucherNumber: string;
 }
 
+/**
+ * ItemList interface definition
+ * Defines the structure and contract for ItemList objects
+ */
 export interface ItemList {
     itemNo: string;
     productId: string;
@@ -555,6 +739,10 @@ export interface ItemList {
     cessAdvol: string;
 }
 
+/**
+ * IEwayBillGenerateResponse interface definition
+ * Defines the structure and contract for IEwayBillGenerateResponse objects
+ */
 export interface IEwayBillGenerateResponse {
     ewayBillDate: string;
     genMode: string;
@@ -600,6 +788,10 @@ export interface IEwayBillGenerateResponse {
     vehiclListDetails?: any;
 }
 
+/**
+ * Result interface definition
+ * Defines the structure and contract for Result objects
+ */
 export interface Result {
     ewbNo: string;
     ewayBillDate: string;
@@ -612,6 +804,10 @@ export interface Result {
     isValidated?: boolean;
 }
 
+/**
+ * IEwayBillAllList interface definition
+ * Defines the structure and contract for IEwayBillAllList objects
+ */
 export interface IEwayBillAllList {
     page: number;
     count: number;
@@ -623,6 +819,10 @@ export interface IEwayBillAllList {
     toDate?: any;
 }
 
+/**
+ * IAllTransporterDetails interface definition
+ * Defines the structure and contract for IAllTransporterDetails objects
+ */
 export interface IAllTransporterDetails {
     page: number;
     count: number;
@@ -632,17 +832,29 @@ export interface IAllTransporterDetails {
     size: number;
 }
 
+/**
+ * IEwayBillTransporter interface definition
+ * Defines the structure and contract for IEwayBillTransporter objects
+ */
 export interface IEwayBillTransporter {
     transporterId: string;
     transporterName: string;
 }
 
+/**
+ * IEwayBillCancel interface definition
+ * Defines the structure and contract for IEwayBillCancel objects
+ */
 export interface IEwayBillCancel {
     ewbNo: string;
     cancelRsnCode: string;
     cancelRmrk: string;
 }
 
+/**
+ * IEwayBillfilter class
+ * Implements IEwayBillfilter functionality
+ */
 export class IEwayBillfilter {
     sort?: string;
     sortBy?: string;
@@ -657,6 +869,10 @@ export class IEwayBillfilter {
     failedRequestLog?: boolean;
 }
 
+/**
+ * InvoicePreviewDetailsVm class
+ * Implements InvoicePreviewDetailsVm functionality
+ */
 export class InvoicePreviewDetailsVm {
     uniqueName: string;
     voucherNumber: string;
@@ -671,6 +887,10 @@ export class InvoicePreviewDetailsVm {
     balanceDue?: AmountClassMulticurrency;
 }
 
+/**
+ * InvoicePaymentRequest class
+ * Implements InvoicePaymentRequest functionality
+ */
 export class InvoicePaymentRequest {
     accountUniqueName: string;
     action?: string;

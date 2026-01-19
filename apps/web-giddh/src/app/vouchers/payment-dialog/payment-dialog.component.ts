@@ -11,6 +11,9 @@ import { SearchService } from '../../services/search.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePaymentRequest } from '../../models/api-models/Invoice';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-payment-dialog',
     templateUrl: './payment-dialog.component.html',
@@ -18,6 +21,10 @@ import { InvoicePaymentRequest } from '../../models/api-models/Invoice';
     providers: [VoucherComponentStore],
     standalone: false
 })
+/**
+ * PaymentDialogComponent component
+ * Handles paymentdialog functionality and user interactions
+ */
 export class PaymentDialogComponent implements OnInit, OnDestroy {
     /** Holds current voucher details */
     @Input() public voucherDetails: any;
@@ -63,6 +70,10 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     /** Hold true when submit form */
     public showError: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: VoucherComponentStore,
         private settingsTagService: SettingsTagService,
@@ -92,8 +103,14 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
 
         this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.briefAccounts$ = observableOf(response);
+                /**
+                 * Handles if functionality
+                 */
                 if (response.length === 1) {
                     this.setDepositAccountUniqueName(0, response[0]);
                 }
@@ -101,12 +118,18 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.company.baseCurrency = response.baseCurrency;
                 this.company.baseCurrencySymbol = response.baseCurrencySymbol;
                 this.company.inputMaskFormat = response.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isMulticurrencyAccount) {
                     this.getExchangeRate(this.voucherDetails?.account?.currency?.code, this.company.baseCurrency);
                 }
@@ -115,12 +138,18 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
 
         /** Exchange rate */
         this.componentStore.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.paymentForm.get('exchangeRate')?.patchValue(response);
             }
         });
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.length > 0) {
                 let arr: any[] = [];
                 (Array.isArray(response?.body) ? response?.body : []).forEach(tag => {
@@ -160,10 +189,16 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      */
     public getEmptyDepositAccountError(isAccount: boolean, index: number, checkBothField: boolean = false): boolean {
         let deposits = this.paymentForm?.get('deposits') as FormArray;
+        /**
+         * Handles if functionality
+         */
         if (checkBothField) {
             const hasError = deposits.controls.some((control, index) => {
                 const amount = control?.get("amount")?.value;
                 const accountUniqueName = control?.get("accountUniqueName")?.value;
+                /**
+                 * Handles if functionality
+                 */
                 if (((amount && !accountUniqueName) || (!amount && accountUniqueName)) || ((!amount && !accountUniqueName) && index === 0)) {
                     return true;
                 }
@@ -172,6 +207,9 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
             return hasError;
         } else {
             let currentDepositFormGroup = deposits.at(index) as FormGroup;
+            /**
+             * Handles return functionality
+             */
             return (isAccount && (currentDepositFormGroup?.get("amount").value > 0) && (!currentDepositFormGroup?.get("accountUniqueName").value) || (!isAccount && (!(currentDepositFormGroup?.get("amount").value > 0)) && currentDepositFormGroup?.get("accountUniqueName").value)) 
             || (!(deposits.at(0)?.get("amount").value > 0) && !deposits.at(0)?.get("accountUniqueName").value);
         }
@@ -192,6 +230,9 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      */
     public deleteDepositRow(entryIndex: number): void {
         const deposits = this.paymentForm.get('deposits') as FormArray;
+        /**
+         * Handles if functionality
+         */
         if (deposits?.length === 1) {
             deposits.reset();
             return;
@@ -216,16 +257,31 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof PaymentDialogComponent
      */
     public onSelectPaymentMode(event: any, isSelectAccount: boolean, index: number): void {
+        /**
+         * Handles if functionality
+         */
         if (isSelectAccount) {
+            /**
+             * Handles if functionality
+             */
             if (event && event.value) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency?.code) {
                     this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
                 } else {
                     this.assignAmount(this.voucherDetails?.balanceDue?.amountForCompany, event?.additional?.currency?.symbol, index);
                 }
                 this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.body) {
                         const parentGroups = response.body.parentGroups;
+                        /**
+                         * Handles if functionality
+                         */
                         if (parentGroups && parentGroups[1] === 'bankaccounts') {
                             this.isBankSelected = true;
                         } else {
@@ -260,6 +316,9 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     private setDepositAccountUniqueName(index: number, event: any): void {
         let deposits = this.paymentForm.get('deposits')['controls'] as FormArray;
         let currentDepositFormGroup = deposits.at(index) as FormGroup;
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             currentDepositFormGroup.get("accountUniqueName")?.patchValue(event.value);
             currentDepositFormGroup.get("paymentMode")?.patchValue(event.additional?.currency?.code);
@@ -279,6 +338,9 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      */
     private assignAmount(amount: number, currencySymbol: string, depositIndex: number = 0): void {
         this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
+            /**
+             * Handles if functionality
+             */
             if (control.get('amount').value && depositIndex !== index) {
                 amount -= Number(control.get('amount').value);
             }
@@ -309,6 +371,9 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof PaymentDialogComponent
      */
     public getExchangeRate(fromCurrency: string, toCurrency: string): void {
+        /**
+         * Handles if functionality
+         */
         if (fromCurrency && toCurrency) {
             let date = dayjs().format(GIDDH_DATE_FORMAT);
             this.componentStore.getExchangeRate({ fromCurrency, toCurrency, date });
@@ -322,18 +387,30 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      */
     public savePayment(): void {
         this.showError = true;
+        /**
+         * Handles if functionality
+         */
         if (this.getEmptyDepositAccountError(null, null, true)) {
             return;
         }
 
         let newFormObj = cloneDeep(this.paymentForm?.value);
         newFormObj.date = dayjs(newFormObj.date).format(GIDDH_DATE_FORMAT);
+        /**
+         * Handles if functionality
+         */
         if (newFormObj.chequeClearanceDate) {
             newFormObj.chequeClearanceDate = dayjs(newFormObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
         }
         const deposits = [];
         this.paymentForm.get('deposits')['controls']?.forEach(control => {
+            /**
+             * Handles if functionality
+             */
             if (control.get("accountUniqueName").value?.length && (control.get("amount").value > 0)) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherDetails?.account?.currency?.code === control.get("paymentMode").value) {
                     deposits.push({ amountForAccount: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
                 } else {

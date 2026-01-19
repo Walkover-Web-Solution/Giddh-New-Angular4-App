@@ -8,10 +8,21 @@ import { GeneralService } from "../../../services/general.service";
 import { SALES_BIFURCATION_API } from "./sales-bifurcation-details.api";
 import { get } from '../../../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SalesBifurcationDetailsService service
+ * Provides salesbifurcationdetails related business logic and data operations
+ */
 export class SalesBifurcationDetailsService {
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private http: HttpWrapperService,
         private errorHandler: GiddhErrorHandler,
@@ -45,6 +56,9 @@ export class SalesBifurcationDetailsService {
                 data.queryString = params;
                 return data;
             }),
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, null, params)));
     }
 

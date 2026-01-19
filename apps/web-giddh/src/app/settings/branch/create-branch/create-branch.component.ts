@@ -27,12 +27,19 @@ import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration } from '../../../
 import { ServiceConfig } from '../../../services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'create-branch',
     templateUrl: './create-branch.component.html',
     styleUrls: ['./create-branch.component.scss'],
     standalone:false
 })
+/**
+ * CreateBranchComponent component
+ * Handles createbranch functionality and user interactions
+ */
 export class CreateBranchComponent implements OnInit, OnDestroy {
     /** Hold Mat Select Reference */
     @ViewChild('trigger') trigger: MatSelect;
@@ -106,6 +113,10 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     /** Filtered addresses to show in dropdown */
     public filteredAddresses: any[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
@@ -140,6 +151,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     */
     public getBranchWiseData(): void {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body) {
                 const branches = response.body;
                 this.allBranches = branches.results?.filter(branch => !branch?.isCompany);
@@ -159,6 +173,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -166,6 +183,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
 
         document.querySelector('body').classList.add('setting-sidebar-open');
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.name) {
                 this.companyDetails = {
                     name: response.name,
@@ -177,6 +197,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                         currencyName: response.countryV2 && response.countryV2?.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -185,11 +208,23 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         });
         this.getBranchWiseData();
         this.branchesDropdown?.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(search => {
             let branchesClone = cloneDeep(this.allBranches);
+            /**
+             * Handles if functionality
+             */
             if (search || search === "") {
                 branchesClone = this.allBranches?.filter(branch => branch.name?.toLowerCase()?.includes(search?.toLowerCase()));
                 this.branches = branchesClone;
@@ -202,14 +237,23 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
 
         this.imgPath = Configuration.isElectron ? 'assets/images/branch-image.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/branch-image.svg';
         this.branchForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
         this.addressQuery.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(query => {
+            /**
+             * Handles if functionality
+             */
             if (query && query.length) {
                 this.addresses = this.addressesConstantList?.filter(address => address.label.toUpperCase().indexOf(query.toUpperCase()) > -1);
             }
+            /**
+             * Handles if functionality
+             */
             if (query === '') {
                 this.addresses = this.addressesConstantList;
             }
@@ -239,6 +283,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public closeAddressAsidePane(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             event.preventDefault();
         }
@@ -255,6 +302,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         (Array.isArray(this.addresses) ? this.addresses : []).forEach(address => {
+            /**
+             * Handles if functionality
+             */
             if (!selectedAddresses?.includes(address?.uniqueName)) {
                 address.isDefault = false;
             }
@@ -268,6 +318,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public selectAddress(option: any): void {
+        /**
+         * Handles if functionality
+         */
         if (option.isDefault) {
             option.isDefault = false;
         }
@@ -285,14 +338,23 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public setDefault(option: any, event: any): void {
         event.stopPropagation();
         event.preventDefault();
+        /**
+         * Handles if functionality
+         */
         if (!option.isDefault) {
             (Array.isArray(this.addresses) ? this.addresses : []).forEach(address => {
+                /**
+                 * Handles if functionality
+                 */
                 if (address?.value !== option?.value) {
                     address.isDefault = false;
                 }
             });
         }
         option.isDefault = !option.isDefault;
+        /**
+         * Handles if functionality
+         */
         if (option.isDefault && ((this.branchForm.get('address')?.value === '') || (this.branchForm.get('address')?.value.findIndex(i => i.uniqueName === option.uniqueName) === -1))) {
             this.branchForm.get('address')?.patchValue([...this.branchForm.get('address')?.value, option]);
         }
@@ -311,6 +373,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             parentBranchUniqueName: formValue.parentBranchUniqueName,
             linkAddresses: []
         };
+        /**
+         * Handles if functionality
+         */
         if (formValue.address?.length) {
             requestObj.linkAddresses = formValue.address.map(filteredAddress => ({
                 uniqueName: filteredAddress?.uniqueName,
@@ -319,7 +384,13 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         }
 
         this.settingsProfileService.createNewBranch(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.status === 'success') {
                     this.toastService.successToast(this.localeData?.branch_created);
                     this.branchForm.reset();
@@ -340,6 +411,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public handleFormClear(): void {
         (Array.isArray(this.addresses) ? this.addresses : []).forEach(address => {
+            /**
+             * Handles if functionality
+             */
             if (address) {
                 address.isDefault = false;
             }
@@ -356,9 +430,15 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public loadStates(countryCode: string): void {
         this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
+                /**
+                 * Handles if functionality
+                 */
                 if (result.stateList?.length) {
                     Object.keys(result.stateList).forEach(key => {
                         this.addressConfiguration.stateList.push({
@@ -398,6 +478,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         };
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success' && response?.body) {
                 this.closeAddressAsidePane();
                 this.addresses.push({
@@ -428,7 +511,13 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
         this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success') {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
                     // Tax field found, support for the country taxation
@@ -447,6 +536,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public loadLinkedEntities(successCallback: Function): void {
         this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
@@ -454,7 +546,13 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     label: result.name,
                     value: result?.uniqueName
                 }));
+                /**
+                 * Handles if functionality
+                 */
                 if (successCallback) {
+                    /**
+                     * Handles successCallback functionality
+                     */
                     successCallback();
                 }
             }
@@ -490,6 +588,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     private getFilteredAddressesForHideSelected(): any[] {
+        /**
+         * Handles if functionality
+         */
         if (!this.hideSelectedOptions || !this.addresses) {
             return this.addresses || [];
         }
@@ -520,6 +621,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     private loadAddresses(method: string, params?: any): void {
         this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.body && response.status === 'success') {
                 this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {
@@ -563,11 +667,23 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
 
         this.hideLinkEntity = true;
 
+        /**
+         * Handles if functionality
+         */
         if (this.addresses?.length > 1) {
             this.hideLinkEntity = false;
         } else {
+            /**
+             * Handles combineLatest functionality
+             */
             combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response[0] && response[1]) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response[0]?.results?.length > 1 || response[1]?.length > 1) {
                         this.hideLinkEntity = false;
                     }
@@ -586,6 +702,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.branchForm.get('address')?.patchValue(this.branchForm.get('address').value.filter(address => address !== element));
 
         this.addresses = this.addresses.map(address => {
+            /**
+             * Handles if functionality
+             */
             if (address?.uniqueName === element?.uniqueName) {
                 address.isDefault = false;
             }
@@ -602,6 +721,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public selectEntity(option: any): void {
+        /**
+         * Handles if functionality
+         */
         if (option?.isDefault) {
             option.isDefault = false;
         }

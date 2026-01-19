@@ -4,6 +4,9 @@ import { SubscriptionUpgradeButtonComponent } from "./subscription-upgrade-butto
 import { MatButtonModule } from "@angular/material/button";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         SubscriptionUpgradeButtonComponent
@@ -18,5 +21,9 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
     ]
 })
 
+/**
+ * SubscriptionUpgradeButtonModule module
+ * Implements SubscriptionUpgradeButtonModule functionality
+ */
 export class SubscriptionUpgradeButtonModule {
 }

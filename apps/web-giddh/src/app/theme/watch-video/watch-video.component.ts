@@ -3,6 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { VIDEOLINK } from './video-link.const';
 import { DomSanitizer } from '@angular/platform-browser';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'watch-video',
     templateUrl: './watch-video.component.html',
@@ -10,6 +13,10 @@ import { DomSanitizer } from '@angular/platform-browser';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * WatchVideoComponent component
+ * Handles watchvideo functionality and user interactions
+ */
 export class WatchVideoComponent implements OnInit, OnDestroy {
     /** Static counter for component instances */
     private static instanceCounter: number = 0;
@@ -38,6 +45,10 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
     /** Holds Translated text to display on button */
     public translatedText: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public dialog: MatDialog,
         private sanitizer: DomSanitizer,
@@ -76,9 +87,15 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
     private detectDialogContext(): boolean {
         let element = this.elementRef.nativeElement;
 
+        /**
+         * Handles while functionality
+         */
         while (element && element.parentElement) {
             element = element.parentElement;
 
+            /**
+             * Handles if functionality
+             */
             if (element.classList.contains('mat-dialog-container') ||
                 element.classList.contains('cdk-overlay-pane') ||
                 element.classList.contains('mat-dialog-content') ||
@@ -98,6 +115,9 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
      * @memberof WatchVideoComponent
      */
     @HostListener('window:keydown', ['$event'])
+    /**
+     * Handles globalkeydown event
+     */
     public handleGlobalKeydown(event: KeyboardEvent): void {
         // Check for Alt+H shortcut using multiple detection methods
         const isHKey = event.key === 'h' ||
@@ -106,8 +126,14 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
                       event.keyCode === 72 ||
                       event.which === 72;
 
+        /**
+         * Handles if functionality
+         */
         if (event.altKey && isHKey) {
             // Only proceed if this is the highest priority instance
+            /**
+             * Handles if functionality
+             */
             if (this.shouldHandleShortcut()) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -123,6 +149,9 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
      */
     public openVideoTutorialDialog(): void {
         // Don't open if dialog is already open
+        /**
+         * Handles if functionality
+         */
         if (WatchVideoComponent.isVideoDialogOpen) {
             return;
         }
@@ -162,6 +191,9 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
         });
 
         // If no visible instances, allow this one
+        /**
+         * Handles if functionality
+         */
         if (visibleInstances.length === 0) {
             return true;
         }
@@ -170,8 +202,14 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
         const dialogInstances = visibleInstances.filter(instance => instance.detectDialogContext());
         const isThisInDialog = this.detectDialogContext();
 
+        /**
+         * Handles if functionality
+         */
         if (dialogInstances.length > 0) {
             // If this is a dialog instance, check if it's the most recent one
+            /**
+             * Handles if functionality
+             */
             if (isThisInDialog) {
                 const highestDialogId = Math.max(...dialogInstances.map(instance => instance.instanceId));
                 return this.instanceId === highestDialogId;
@@ -203,6 +241,9 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
     * @memberof WatchVideoComponent
     */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translatedText = this.localeData[this.moduleName];
         }

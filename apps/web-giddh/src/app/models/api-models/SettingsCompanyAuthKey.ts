@@ -1,3 +1,7 @@
+/**
+ * ICompanyAuthKey interface definition
+ * Defines the structure and contract for ICompanyAuthKey objects
+ */
 export interface ICompanyAuthKey {
     emailId: string;
     from: string;
@@ -23,6 +27,10 @@ export interface ICompanyAuthKey {
     authKey: string;
 }
 
+/**
+ * CreateCompanyAuthKeyRequest class
+ * Implements CreateCompanyAuthKeyRequest functionality
+ */
 export class CreateCompanyAuthKeyRequest {
     public roleName: string;
     public from: string; // dd-MM-yyyy format
@@ -38,6 +46,10 @@ export class CreateCompanyAuthKeyRequest {
     public dateRange?: any;
 }
 
+/**
+ * UpdateCompanyAuthKeyRequest class
+ * Implements UpdateCompanyAuthKeyRequest functionality
+ */
 export class UpdateCompanyAuthKeyRequest {
     public roleName: string;
     public roleUniqueName: string;

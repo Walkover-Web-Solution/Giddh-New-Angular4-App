@@ -12,12 +12,19 @@ import { IOption } from '../../app.constant';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'other-settings',
     templateUrl: './other-settings.component.html',
     styleUrls: ['./other-settings.component.scss'],
     standalone: false
 })
+/**
+ * OtherSettingsComponent component
+ * Handles othersettings functionality and user interactions
+ */
 export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Stores the company number system */
     public numberSystemSource: IOption[] = [];
@@ -86,6 +93,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds ledger view enum */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
     /**
@@ -96,6 +107,9 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -110,6 +124,9 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
             this.saveProfile.emit(this.updatedData);
         });
         const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem?.value === this.profileData.balanceDisplayFormat);
+        /**
+         * Handles if functionality
+         */
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
         }
@@ -125,6 +142,9 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if(response) {
                 this.activeTheme = response?.value;
                 this.currentThemeLabel = this.availableThemes.find(theme => theme.value === this.activeTheme)?.label;
@@ -132,9 +152,15 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.commonLocaleData = response;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.showLanguageChangeMessage) {
                     this.toasterService.clearAllToaster();
                     this.toasterService.successToast(this.commonLocaleData?.app_language_selected);
@@ -152,6 +178,9 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem?.value === changes?.profileData?.currentValue?.balanceDisplayFormat);
+        /**
+         * Handles if functionality
+         */
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
         }
@@ -207,6 +236,9 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public selectLocale(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
             this.showLanguageChangeMessage = true;

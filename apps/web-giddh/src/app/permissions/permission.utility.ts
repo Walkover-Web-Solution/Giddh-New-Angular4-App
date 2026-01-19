@@ -1,6 +1,14 @@
 import { Permission, Scope } from '../models/api-models/Permission';
 
+/**
+ * NewRoleClass class
+ * Implements NewRoleClass functionality
+ */
 export class NewRoleClass {
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public name: string,
         public scopes: Scope[],
@@ -11,7 +19,15 @@ export class NewRoleClass {
     }
 }
 
+/**
+ * NewPermissionObj class
+ * Implements NewPermissionObj functionality
+ */
 export class NewPermissionObj {
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public code: string,
         public isSelected: boolean
@@ -19,15 +35,27 @@ export class NewPermissionObj {
     }
 }
 
+/**
+ * IPageStr interface definition
+ * Defines the structure and contract for IPageStr objects
+ */
 export interface IPageStr {
     [index: number]: string;
 }
 
+/**
+ * IPage interface definition
+ * Defines the structure and contract for IPage objects
+ */
 export interface IPage {
     name: string;
     isSelected: boolean;
 }
 
+/**
+ * GetAllPermissionResponse interface definition
+ * Defines the structure and contract for GetAllPermissionResponse objects
+ */
 export interface GetAllPermissionResponse {
     name: string;
     scopes: Scope[];
@@ -36,11 +64,19 @@ export interface GetAllPermissionResponse {
     isUpdateCase?: boolean;
 }
 
+/**
+ * Pages interface definition
+ * Defines the structure and contract for Pages objects
+ */
 export interface Pages {
     name: string;
     permissions: Permission[];
 }
 
+/**
+ * NewRoleFormClass class
+ * Implements NewRoleFormClass functionality
+ */
 export class NewRoleFormClass implements INewRoleFormObj {
     public name: string;
     public isFresh: boolean;
@@ -49,6 +85,10 @@ export class NewRoleFormClass implements INewRoleFormObj {
     public pageList?: any;
 }
 
+/**
+ * INewRoleFormObj interface definition
+ * Defines the structure and contract for INewRoleFormObj objects
+ */
 export interface INewRoleFormObj {
     name: string;
     isFresh: boolean;

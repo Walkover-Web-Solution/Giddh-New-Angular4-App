@@ -7,6 +7,10 @@ export const ADVANCE_RECEIPT_REPORT_FILTERS = {
 }
 
 /** Interface for advance search voucher field */
+/**
+ * AdjustmentVoucher interface definition
+ * Defines the structure and contract for AdjustmentVoucher objects
+ */
 export interface AdjustmentVoucher {
     vouchers: Array<any>;
     selectedValue: string;
@@ -14,6 +18,10 @@ export interface AdjustmentVoucher {
 }
 
 /** Interface for amount search voucher field */
+/**
+ * AmountFilter interface definition
+ * Defines the structure and contract for AmountFilter objects
+ */
 export interface AmountFilter {
     filterValues: Array<any>;
     selectedValue: string;
@@ -21,6 +29,10 @@ export interface AmountFilter {
 }
 
 /** Receipt modal for advance search */
+/**
+ * ReceiptAdvanceSearchModel interface definition
+ * Defines the structure and contract for ReceiptAdvanceSearchModel objects
+ */
 export interface ReceiptAdvanceSearchModel {
     adjustmentVoucherDetails: AdjustmentVoucher;
     totalAmountFilter: AmountFilter;
@@ -28,6 +40,10 @@ export interface ReceiptAdvanceSearchModel {
 }
 
 /** Payment modal for advance search */
+/**
+ * PaymentAdvanceSearchModel interface definition
+ * Defines the structure and contract for PaymentAdvanceSearchModel objects
+ */
 export interface PaymentAdvanceSearchModel {
     totalAmountFilter: AmountFilter;
     unusedAmountFilter: AmountFilter;
@@ -40,6 +56,10 @@ export const PAYMENT_REPORT_FILTERS = {
     VENDOR_FILTER: 'vendorName'
 }
 
+/**
+ * DurationEnum enumeration
+ * Defines constant values for DurationEnum
+ */
 export enum DurationEnum {
     Monthly = 'monthly',
     Quarterly = 'quarterly',
@@ -47,6 +67,10 @@ export enum DurationEnum {
 }
 
 /** Group by enum */
+/**
+ * GroupBy enumeration
+ * Defines constant values for GroupBy
+ */
 export enum GroupBy {
     Duration = 'duration',
     SalesPerson = 'salesPerson'

@@ -18,6 +18,9 @@ import { OrganizationType } from '../../models/user-login-state';
 import { AccountingGroupEnum } from '../../shared/Enums/common.enum';
 import { cloneDeep, forEach, get, set } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'revenue-expense-list',
     templateUrl: './revenue-expense-list.component.html',
@@ -25,6 +28,10 @@ import { cloneDeep, forEach, get, set } from '../../lodash-optimized';
     providers: [ProjectWiseAccountingComponentStore],
     standalone: false
 })
+/**
+ * RevenueExpenseListComponent component
+ * Handles revenueexpenselist functionality and user interactions
+ */
 export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -105,6 +112,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** True if is company */
     public isCompany: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private generalService: GeneralService,
         private route: ActivatedRoute,
@@ -124,6 +135,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.initAccountEntryListForm();
         this.componentStore.patchState({ isFetchingProjects: true });
         this.componentStore.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -132,13 +146,25 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                 this.defaultParamsValue.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([
             this.route.params.pipe(takeUntil(this.destroyed$)), // Route parameters
             this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)) // Active company data
         ])
             .pipe(
+                /**
+                 * Handles debounceTime functionality
+                 */
                 debounceTime(500),
+                /**
+                 * Handles filter functionality
+                 */
                 filter(([params, activeCompany]) => !!(params.uniqueName && activeCompany)),
+                /**
+                 * Handles tap functionality
+                 */
                 tap(([params, activeCompany]) => {
                     this.defaultParamsValue.projectUniqueName = params.uniqueName;
                     this.defaultParamsValue.companyUniqueName = activeCompany.uniqueName;
@@ -148,14 +174,26 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     this.accountSearchRequest.group = this.defaultParamsValue.category === this.projectWiseAccountingType.Income ? this.incomeGroup : this.expenseGroup;
                     this.activeCompany = activeCompany;
                 }),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)
             )
             .subscribe(() => {
                 this.selectedTabIndex = this.defaultParamsValue.category === this.projectWiseAccountingType.Income ? 0 : this.defaultParamsValue.category === this.projectWiseAccountingType.Expenses ? 1 : 2;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.selectedTabIndex <= 1) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.totalResults) {
                         this.getEntryList();
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.accountSearchRequest.isLoading) {
                         this.searchAccount();
                     }
@@ -164,9 +202,15 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             });
 
         this.componentStore.accountSearch$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
+            /**
+             * Handles if functionality
+             */
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
                 accountSearchResponse.results?.forEach(result => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (result?.uniqueName) {
                         this.accountSearchResponse.push({
                             value: result.uniqueName,
@@ -184,6 +228,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.entrySearch$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe(entrySearchResponse => {
+            /**
+             * Handles if functionality
+             */
             if (entrySearchResponse) {
                 const accountUniqueName = entrySearchResponse.accountUniqueName;
                 this.accountAndEntryList[accountUniqueName].nextPageAvailable = entrySearchResponse.body.nextPageAvailable;
@@ -199,6 +246,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.entryCreateSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(entryCreateSuccess => {
+            /**
+             * Handles if functionality
+             */
             if (entryCreateSuccess) {
                 this.accountEntryListForm.get('entryList')['controls'].push(this.initEntryListForm(this.createAccountEntryForm.value));
                 this.totalResults += 1;
@@ -208,6 +258,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.entryList$.pipe(takeUntil(this.destroyed$)).subscribe(entryList => {
+            /**
+             * Handles if functionality
+             */
             if (entryList) {
                 this.entryList.clear();
                 this.totalResults = entryList.totalItems;
@@ -226,10 +279,16 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.entryDeleteSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(entryDeleteSuccess => {
+            /**
+             * Handles if functionality
+             */
             if (entryDeleteSuccess) {
                 this.totalResults -= 1;
                 this.entryList.removeAt(entryDeleteSuccess.index);
                 this.getProjectEntryListRequest.page = this.generalService.adjustPageIndex(this.totalResults, this.getProjectEntryListRequest.page, this.getProjectEntryListRequest.count);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.entryList.length === 0) {
                     this.getEntryList();
                 }
@@ -238,6 +297,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.entryUpdateSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(entryUpdateSuccess => {
+            /**
+             * Handles if functionality
+             */
             if (entryUpdateSuccess) {
                 this.entryList.at(entryUpdateSuccess.index).get('defaultEntryUniqueName').patchValue(entryUpdateSuccess.entryUniqueName);
                 this.getRevenueExpense();
@@ -245,6 +307,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
             }
@@ -267,6 +332,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.selectMethod = [
                 { label: this.localeData?.percentage, value: 'PERCENTAGE' },
@@ -372,9 +440,15 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public handleSearchAccountScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.accountSearchRequest.isLoading) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.defaultCount === this.accountSearchRequest.count) {
             this.searchAccount(this.accountSearchRequest.q, this.accountSearchRequest.page + 1);
         }
@@ -386,9 +460,15 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public handleSearchEntryScrollEnd(accountUniqueName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.entrySearchRequest.isLoading) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.accountAndEntryList[accountUniqueName]?.nextPageAvailable) {
             this.searchEntry(this.entrySearchRequest.q, this.accountAndEntryList[accountUniqueName].page + 1, accountUniqueName);
         }
@@ -402,6 +482,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public searchAccount(query: string = '', page: number = 1): void {
+        /**
+         * Handles if functionality
+         */
         if (page === 1) {
             this.accountSearchResponse = [];
         }
@@ -422,11 +505,17 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public searchEntry(query: string = '', page: number = 1, accountUniqueName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (page === 1 && this.accountAndEntryList[accountUniqueName]) {
             this.accountAndEntryList[accountUniqueName].data = [];
         }
         this.entrySearchRequest.q = query;
         this.entrySearchRequest.isLoading = true;
+        /**
+         * Handles if functionality
+         */
         if (this.accountAndEntryList[accountUniqueName]) {
             this.accountAndEntryList[accountUniqueName].page = page;
         }
@@ -443,6 +532,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public currentEntry(accountUniqueName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (accountUniqueName && !this.accountAndEntryList[accountUniqueName]?.data?.length && this.accountAndEntryList[accountUniqueName].nextPageAvailable) {
             this.searchEntry('', 1, accountUniqueName);
         }
@@ -455,6 +547,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public selectAccount(accountUniqueName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (accountUniqueName && this.accountAndEntryList[accountUniqueName] && !this.accountAndEntryList[accountUniqueName].data.length && this.accountAndEntryList[accountUniqueName].nextPageAvailable) {
             this.searchEntry(this.accountAndEntryList[accountUniqueName].query, 1, accountUniqueName);
         }
@@ -477,7 +572,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -493,16 +594,25 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -519,6 +629,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      */
     public createEntry(value: number): void {
         this.isCreateAccountValidForm = this.createAccountEntryForm.valid;
+        /**
+         * Handles if functionality
+         */
         if (this.isCreateAccountValidForm && value > 0) {
             let payload = cloneDeep(this.createAccountEntryForm.value);
             delete payload['account'];
@@ -548,6 +661,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.deleteEntry(index);
             }
@@ -562,6 +678,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      */
     public deleteEntry(index: number): void {
         const entryUniqueName = this.entryList.at(index).value.defaultEntryUniqueName;
+        /**
+         * Handles if functionality
+         */
         if (entryUniqueName) {
             const requestObject = {
                 index: index,

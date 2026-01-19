@@ -18,11 +18,17 @@ const initialState = {
 
 export function SessionReducer(state: any = initialState, action: CustomActions): any {
     let newState = cloneDeep(state);
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case SessionActions.GET_ALL_SESSION_RESPONSE:
             newState.Usersession = action.payload.body;
             return Object.assign({}, state, newState);
         case SessionActions.DELETE_SESSION_RESPONSE:
+            /**
+             * Handles if functionality
+             */
             if (action.payload?.status === 'success') {
                 const deletedSessionIndex = action.payload.queryString.sessionIndex;
                 newState.Usersession.splice(deletedSessionIndex, 1);

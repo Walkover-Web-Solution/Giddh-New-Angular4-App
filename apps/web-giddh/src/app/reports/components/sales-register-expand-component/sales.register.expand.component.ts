@@ -22,12 +22,19 @@ import { PageEvent } from '@angular/material/paginator';
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
 import { forEach, includes, map, set } from '../../../lodash-optimized';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
     styleUrls: ['./sales.register.expand.component.scss'],
     standalone: false
 })
+/**
+ * SalesRegisterExpandComponent component
+ * Handles salesregisterexpand functionality and user interactions
+ */
 export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public SalesRegisteDetailedItems: SalesRegisteDetailedResponse;
     public from: string;
@@ -98,6 +105,10 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(ServiceConfig) private serviceConfig,
         private store: Store<AppState>,
@@ -115,6 +126,9 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), skip(1), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
@@ -123,18 +137,30 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         this.getDetailedsalesRequestFilter.q = '';
 
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            /**
+             * Handles if functionality
+             */
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
 
         this.isGetSalesDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
+            /**
+             * Handles if functionality
+             */
             if (success) {
                 this.isDefaultLoaded = true;
             }
         });
 
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
+            /**
+             * Handles if functionality
+             */
             if (params.from && params.to) {
                 this.from = params.from;
                 this.to = params.to;
@@ -151,6 +177,9 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
 
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj && this.isDefaultLoaded) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -163,29 +192,56 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         });
 
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.SalesRegisteDetailedItems = res;
                 this.dataSource.data = this.SalesRegisteDetailedItems.items.map((obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
                     return obj;
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherNumberInput?.value) {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                             this.invoiceSearch.nativeElement.focus();
                         }
                     }, 200);
                 }
             }
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => { this.detectChange() }, 200);
 
         });
 
         this.voucherNumberInput?.valueChanges?.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(searching => {
+            /**
+             * Handles if functionality
+             */
             if (searching !== null && searching !== undefined) {
                 this.showClearFilter = true;
                 this.getDetailedsalesRequestFilter.sort = null;
@@ -291,23 +347,41 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         ];
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
             }
         });
 
         this.router.events.pipe(
+            /**
+             * Handles filter functionality
+             */
             filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/sales-register') || event.url.includes('/reports/sales-detailed-expand')))),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)).subscribe(() => {
                 // Reset the chosen financial year when user leaves the module
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
             });
     }
 
+    /**
+     * Retrieves detailedsalesreport data
+     */
     public getDetailedSalesReport(SalesDetailedfilter) {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => { this.detectChange() }, 200);
         this.store.dispatch(this.invoiceReceiptActions.GetSalesRegistedDetails(SalesDetailedfilter));
     }
+    /**
+     * Handles sortbyApi functionality
+     */
     public sortbyApi(ord, key) {
         this.showClearFilter = true;
         this.getDetailedsalesRequestFilter.sortBy = key;
@@ -333,8 +407,14 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         this.expand = !this.expand;
     }
 
+    /**
+     * Retrieves datetodmy data
+     */
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
+        /**
+         * Handles if functionality
+         */
         if (date?.length === 3) {
             this.translationComplete(true);
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
@@ -345,12 +425,21 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         }
 
     }
+    /**
+     * Retrieves currentmonthyear data
+     */
     public getCurrentMonthYear() {
+        /**
+         * Handles if functionality
+         */
         if (this.from && this.to) {
             let currentYearFrom = this.from.split('-')[2];
             let currentYearTo = this.to.split('-')[2];
             let idx = this.from.split('-');
             this.monthYear = [];
+            /**
+             * Handles if functionality
+             */
             if (currentYearFrom === currentYearTo) {
                 (Array.isArray(this.monthNames) ? this.monthNames : []).forEach(element => {
                     this.monthYear.push(element + ' ' + currentYearFrom);
@@ -361,12 +450,18 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
 
     }
 
+    /**
+     * Retrieves datefrommonth data
+     */
     public getDateFromMonth(selectedMonth) {
         let mdyFrom = this.from.split('-');
         let mdyTo = this.to.split('-');
 
         let startDate;
 
+        /**
+         * Handles if functionality
+         */
         if (mdyFrom[1] > selectedMonth) {
             startDate = '01-' + (selectedMonth - 1) + '-' + mdyTo[2];
         } else {
@@ -378,6 +473,9 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         let month = (dt.getMonth() + 1)?.toString(),
             year = dt.getFullYear();
 
+        /**
+         * Handles if functionality
+         */
         if (parseInt(month) < 10) {
             month = '0' + month;
         }
@@ -386,11 +484,23 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
 
         return { firstDay, lastDay };
     }
+    /**
+     * Toggles search state
+     */
     public toggleSearch(fieldName: string) {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'invoiceNumber') {
             this.showSearchInvoiceNo = true;
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                     this.invoiceSearch.nativeElement.focus();
                 }
@@ -400,12 +510,21 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         }
         this.detectChange();
     }
+    /**
+     * Handles clickedOutsideEvent functionality
+     */
     public clickedOutsideEvent() {
 
         this.showSearchInvoiceNo = false;
 
     }
+    /**
+     * Handles detectChange functionality
+     */
     detectChange() {
+        /**
+         * Handles if functionality
+         */
         if (!this._cd['destroyed']) {
             this._cd.detectChanges();
         }
@@ -418,8 +537,14 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
      * @memberof SalesRegisterExpandComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.customiseColumns = this.customiseColumns?.map(column => {
+                /**
+                 * Handles if functionality
+                 */
                 if (column.isCommonLocaleData) {
                     column.label = this.commonLocaleData[column.value];
                 } else {
@@ -502,7 +627,13 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
      * @memberof SalesRegisterExpandComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -518,16 +649,25 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
      * @memberof SalesRegisterExpandComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -559,6 +699,9 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
       * @memberof SalesRegisterExpandComponent
       */
     public handlePageChange(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.getDetailedsalesRequestFilter.page = this.getDetailedsalesRequestFilter.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.getDetailedsalesRequestFilter.count = event.pageSize;

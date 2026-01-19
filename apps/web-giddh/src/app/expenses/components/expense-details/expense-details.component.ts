@@ -21,6 +21,9 @@ import { CommonService } from '../../../services/common.service';
 import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-expense-details',
     templateUrl: './expense-details.component.html',
@@ -28,6 +31,10 @@ import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
     standalone:false
 })
 
+/**
+ * ExpenseDetailsComponent component
+ * Handles expensedetails functionality and user interactions
+ */
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of approve confirm dialog */
     @ViewChild("approveConfirm") public approveConfirm;
@@ -143,6 +150,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds Aside Menu State For Other Taxes DialogRef */
     public asideMenuStateForOtherTaxesDialogRef: any;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private ledgerActions: LedgerActions,
@@ -203,6 +214,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         let imgPrefix = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/';
         this.imageURL = [];
 
+        /**
+         * Handles if functionality
+         */
         if (imgs) {
             (Array.isArray(imgs) ? imgs : []).forEach(imgUniqueName => {
                 const image = {
@@ -220,6 +234,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public toggleEntryAgainst(): void {
+        /**
+         * Handles switch functionality
+         */
         switch (this.entryAgainstObject.against) {
             case 'Entry against Debtor':
                 this.entryAgainstObject.base = 'Debtor Name';
@@ -281,6 +298,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public showApproveConfirmPopup(ref: TemplateRef<any>): void {
+        /**
+         * Handles if functionality
+         */
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
             this.showEntryAgainstRequired = true;
             return;
@@ -300,6 +320,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public hideApproveConfirmPopup(isApproved: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (!isApproved) {
             this.approveEntryModalRef.close();
             this.selectedEntryForApprove = null;
@@ -315,6 +338,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public approveEntry(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
             this.showEntryAgainstRequired = true;
             this.hideApproveConfirmPopup(false);
@@ -330,6 +356,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
         let ledgerRequest = cloneDeep(this.updateLedgerComponentInstance.saveLedgerTransaction());
         // check if there any validation error occurs from ledger component then don't do any thing just return
+        /**
+         * Handles if functionality
+         */
         if (!ledgerRequest) {
             this.approveEntryRequestInProcess = false;
             return;
@@ -341,11 +370,17 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         delete ledgerRequest['pettyCashEntryStatus'];
         delete ledgerRequest['othersCategory'];
 
+        /**
+         * Handles if functionality
+         */
         if (this.accountEntryPettyCash && this.accountEntryPettyCash.attachedFileUniqueNames && this.accountEntryPettyCash.attachedFileUniqueNames.length) {
             ledgerRequest.attachedFile = this.accountEntryPettyCash.attachedFileUniqueNames[0];
         } else {
             ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0]?.uniqueName : '';
         }
+        /**
+         * Handles if functionality
+         */
         if (this.accountEntryPettyCash && this.accountEntryPettyCash.attachedFile) {
             ledgerRequest.attachedFileName = this.accountEntryPettyCash.attachedFile;
         } else {
@@ -354,6 +389,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.expenseService.actionPettycashReports(actionType, { ledgerRequest }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.approveEntryRequestInProcess = false;
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.hideApproveConfirmPopup(false);
                 this.toaster.showSnackBar("success", res?.body);
@@ -374,6 +412,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public prepareApproveRequestObject(pettyCashEntryObj: PettyCashResonse): void {
+        /**
+         * Handles if functionality
+         */
         if (pettyCashEntryObj && this.actionPettyCashRequestBody) {
             this.actionPettyCashRequestBody.ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse?.length > 0) ? this.DownloadAttachedImgResponse[0]?.uniqueName : '';
             this.actionPettyCashRequestBody.ledgerRequest.attachedFileName = (this.DownloadAttachedImgResponse?.length > 0) ? this.DownloadAttachedImgResponse[0]?.name : '';
@@ -387,6 +428,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes['selectedRowItem'] && changes['selectedRowItem'].currentValue !== changes['selectedRowItem'].previousValue) {
             this.selectedItem = changes['selectedRowItem'].currentValue;
             this.getPettyCashEntry(this.selectedItem?.uniqueName);
@@ -402,6 +446,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public onSelectEntryAgainstAccount(option: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (option && option.value) {
             this.showEntryAgainstRequired = false;
             this.accountEntryPettyCash.particular.uniqueName = option.value;
@@ -416,6 +463,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public uploadFile(): void {
         const selectedFile: any = document.getElementById("signatureImg-edit");
+        /**
+         * Handles if functionality
+         */
         if (selectedFile?.files?.length) {
             const file = selectedFile?.files[0];
 
@@ -424,9 +474,15 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.imgUploadInprogress = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === 'success') {
                         this.signatureSrc = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName;
                         let img = {
+                            /**
+                             * Handles src functionality
+                             */
                             src: (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName
                         }
                         this.DownloadAttachedImgResponse.push(response?.body);
@@ -472,9 +528,15 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     private prepareEntryAgainstObject(res: PettyCashResonse): void {
         this.cashOrBankEntry = res?.particular ? this.isCashBankAccount(res.particular) : false;
         this.pettyCashEntryType = res?.pettyCashEntryStatus?.entryType;
+        /**
+         * Handles if functionality
+         */
         if (res?.pettyCashEntryStatus?.entryType === 'sales') {
             this.entryAgainstObject.base = this.cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
             this.entryAgainstObject.against = this.cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.loadDefaultCashBankAccountsSuggestions();
             } else {
@@ -484,6 +546,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
             this.entryAgainstObject.base = this.cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
             this.entryAgainstObject.against = this.cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expenses';
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.loadDefaultCashBankAccountsSuggestions();
             } else {
@@ -509,6 +574,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     private isCashBankAccount(particular: any): boolean {
+        /**
+         * Handles if functionality
+         */
         if (particular) {
             return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && parent?.uniqueName === 'loanandoverdraft'));
         }
@@ -521,13 +589,22 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public handleAccountScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.pettyCashEntryType === 'sales') {
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.handleCashBankScrollEnd();
             } else {
                 this.handleDebtorScrollEnd();
             }
         } else if (this.pettyCashEntryType === 'expense') {
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.handleCashBankScrollEnd();
             } else {
@@ -545,13 +622,22 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public onAccountSearchQueryChanged(query: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.pettyCashEntryType === 'sales') {
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.onCashBankAccountSearchQueryChanged(query);
             } else {
                 this.onDebtorAccountSearchQueryChanged(query);
             }
         } else if (this.pettyCashEntryType === 'expense') {
+            /**
+             * Handles if functionality
+             */
             if (this.cashOrBankEntry) {
                 this.onCashBankAccountSearchQueryChanged(query);
             } else {
@@ -572,6 +658,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onDebtorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.debtorAccountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultDebtorScrollApiCall &&
             (query || (this.defaultDebtorAccountSuggestions && this.defaultDebtorAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -581,6 +670,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 group: 'sundrydebtors'
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -588,6 +680,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.debtorsAccountsOptions = searchResults;
                     } else {
@@ -599,7 +694,13 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                     this.entryAgainstObject.dropDownOption = [...this.debtorsAccountsOptions];
                     this.debtorAccountsSearchResultsPaginationData.page = data.body.page;
                     this.debtorAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultDebtorAccountPaginationData.page = this.debtorAccountsSearchResultsPaginationData.page;
@@ -612,6 +713,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.debtorAccountsSearchResultsPaginationData.page = this.defaultDebtorAccountPaginationData.page;
             this.debtorAccountsSearchResultsPaginationData.totalPages = this.defaultDebtorAccountPaginationData.totalPages;
             this.preventDefaultDebtorScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultDebtorScrollApiCall = false;
             }, 500);
@@ -625,11 +729,17 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public handleDebtorScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.debtorAccountsSearchResultsPaginationData.page < this.debtorAccountsSearchResultsPaginationData.totalPages) {
             this.onDebtorAccountSearchQueryChanged(
                 this.debtorAccountsSearchResultsPaginationData.query,
                 this.debtorAccountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.debtorAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -675,6 +785,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onCreditorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.creditorAccountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultCreditorScrollApiCall &&
             (query || (this.defaultCreditorAccountSuggestions && this.defaultCreditorAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -684,6 +797,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 group: 'sundrycreditors'
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -691,6 +807,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.creditorsAccountsOptions = searchResults;
                     } else {
@@ -702,7 +821,13 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                     this.entryAgainstObject.dropDownOption = [...this.creditorsAccountsOptions];
                     this.creditorAccountsSearchResultsPaginationData.page = data.body.page;
                     this.creditorAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultCreditorAccountPaginationData.page = this.creditorAccountsSearchResultsPaginationData.page;
@@ -715,6 +840,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.creditorAccountsSearchResultsPaginationData.page = this.defaultCreditorAccountPaginationData.page;
             this.creditorAccountsSearchResultsPaginationData.totalPages = this.defaultCreditorAccountPaginationData.totalPages;
             this.preventDefaultCreditorScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultCreditorScrollApiCall = false;
             }, 500);
@@ -728,11 +856,17 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public handleCreditorScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.creditorAccountsSearchResultsPaginationData.page < this.creditorAccountsSearchResultsPaginationData.totalPages) {
             this.onDebtorAccountSearchQueryChanged(
                 this.creditorAccountsSearchResultsPaginationData.query,
                 this.creditorAccountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.creditorAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -778,15 +912,24 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onCashBankAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.cashBankAccountsSearchResultsPaginationData.query = query;
+        /**
+         * Handles if functionality
+         */
         if (!this.preventDefaultCashBankScrollApiCall &&
             (query || (this.defaultCashBankAccountSuggestions && this.defaultCashBankAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
+                /**
+                 * Handles group functionality
+                 */
                 group: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('cash, bankaccounts, loanandoverdraft') : encodeURIComponent('cash, bankaccounts')
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -794,6 +937,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                             label: result.name
                         }
                     }) || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (page === 1) {
                         this.cashAndBankAccountsOptions = searchResults;
                     } else {
@@ -805,7 +951,13 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                     this.entryAgainstObject.dropDownOption = [...this.cashAndBankAccountsOptions];
                     this.cashBankAccountsSearchResultsPaginationData.page = data.body.page;
                     this.cashBankAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    /**
+                     * Handles if functionality
+                     */
                     if (successCallback) {
+                        /**
+                         * Handles successCallback functionality
+                         */
                         successCallback(data.body.results);
                     } else {
                         this.defaultCashBankAccountPaginationData.page = this.cashBankAccountsSearchResultsPaginationData.page;
@@ -818,6 +970,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.cashBankAccountsSearchResultsPaginationData.page = this.defaultCashBankAccountPaginationData.page;
             this.cashBankAccountsSearchResultsPaginationData.totalPages = this.defaultCashBankAccountPaginationData.totalPages;
             this.preventDefaultCashBankScrollApiCall = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.preventDefaultCashBankScrollApiCall = false;
             }, 500);
@@ -831,11 +986,17 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public handleCashBankScrollEnd(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.cashBankAccountsSearchResultsPaginationData.page < this.cashBankAccountsSearchResultsPaginationData.totalPages) {
             this.onCashBankAccountSearchQueryChanged(
                 this.cashBankAccountsSearchResultsPaginationData.query,
                 this.cashBankAccountsSearchResultsPaginationData.page + 1,
                 (response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.cashBankAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
@@ -890,6 +1051,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     private getPettyCashEntry(uniqueName: string): void {
         this.isPettyCashEntryLoading = true;
         this.expenseService.getPettycashEntry(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.uniqueName !== this.accountEntryPettyCash?.uniqueName) {
                 this.actionPettyCashRequestBody = null;
                 this.accountEntryPettyCash = response?.body;
@@ -910,6 +1074,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     private processNextRecord(event?: any): void {
         this.dialogRef?.close();
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.previewNextItem.emit(true);
         }

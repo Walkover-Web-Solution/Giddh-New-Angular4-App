@@ -29,6 +29,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
 import { cloneDeep, find, forEach, get, includes, indexOf, keys, map, slice } from '../../../lodash-optimized';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -36,6 +39,10 @@ import { cloneDeep, find, forEach, get, includes, indexOf, keys, map, slice } fr
     providers: [ReportsComponentStore, SalesPersonComponentStore],
     standalone: false
 })
+/**
+ * ReportsDetailsComponent component
+ * Handles reportsdetails functionality and user interactions
+ */
 export class ReportsDetailsComponent implements OnInit, OnDestroy {
     /** Directive to get reference of datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
@@ -128,6 +135,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
+/**
+ * Creates an instance of component
+ * Initializes component dependencies and sets up initial state
+ */
 constructor(
         private router: Router,
         private activeRoute: ActivatedRoute,
@@ -144,8 +155,14 @@ constructor(
         private salesPersonStore: SalesPersonComponentStore) {
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     ngOnInit() {
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            /**
+             * Handles if functionality
+             */
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
@@ -153,24 +170,39 @@ constructor(
 
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.router.events.pipe(
+            /**
+             * Handles filter functionality
+             */
             filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/sales-register') || event.url.includes('/reports/sales-detailed-expand')))),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)).subscribe(() => {
                 // Reset the chosen financial year when user leaves the module
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
             });
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
 
         this.salesRegisterList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.salesRegisterTotal = new ReportsModel();
                 this.salesRegisterTotal.particular = this.getCustomParticular();
@@ -181,6 +213,9 @@ constructor(
 
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch?.name,
@@ -195,8 +230,14 @@ constructor(
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch || !this.currentBranch?.uniqueName) {
                     let currentBranchUniqueName;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -210,6 +251,9 @@ constructor(
                     }
                 } else {
                     const selectedBranch = cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
+                    /**
+                     * Handles if functionality
+                     */
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
@@ -219,6 +263,9 @@ constructor(
                     }
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -233,7 +280,13 @@ constructor(
 
         /** Search for sales person dropdown */
         this.salesPerson.valueChanges.pipe(debounceTime(700),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!search) {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
                         this.filteredSalesPersonList = res as IOption[];
@@ -248,12 +301,18 @@ constructor(
 
         /** Search for account dropdown */
         this.account.valueChanges.pipe(debounceTime(700),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 this.getAccounts(search ? search : '');
             });
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
                 this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -267,6 +326,9 @@ constructor(
      * @param response
      */
     public handleGroupByChange(response: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (response?.value === GroupBy.SalesPerson) {
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
@@ -277,16 +339,25 @@ constructor(
         }
     }
 
+    /**
+     * Handles goToDashboard functionality
+     */
     public goToDashboard() {
         this.router.navigate(['/pages/reports']);
     }
 
+    /**
+     * Handles filterReportResp functionality
+     */
     public filterReportResp(response) {
         let reportModelArray = [];
         let index = 1;
         let indexMonths = 0;
         let weekCount = 1;
         let reportsModelCombined: ReportsModel = new ReportsModel();
+        /**
+         * Handles forEach functionality
+         */
         forEach(response, (item) => {
             let reportsModel: ReportsModel = new ReportsModel();
             reportsModel.sales = item.creditTotal;
@@ -306,6 +377,9 @@ constructor(
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
             let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
+            /**
+             * Handles if functionality
+             */
             if (item?.salesPerson?.name) {
                 this.setSalesRegisterTotal(item);
                 reportsModel.particular = item.salesPerson.name
@@ -330,6 +404,9 @@ constructor(
                 reportsModelCombined.interval = this.interval;
                 reportsModelCombined.selectedMonth = this.selectedMonth;
                 reportModelArray.push(reportsModel);
+                /**
+                 * Handles if functionality
+                 */
                 if (indexMonths % 3 === 0) {
                     reportsModelCombined.particular = this.commonLocaleData?.app_quarter + ' ' + indexMonths / 3;
                     reportsModelCombined.reportType = 'combined';
@@ -349,16 +426,25 @@ constructor(
 
     // new Date("dateString") is browser-dependent and discouraged, so we'll write
     // a simple parse function for U.S. date format (which does no error checking)
+    /**
+     * Handles parseDate functionality
+     */
     public parseDate(mdy) {
         return new Date(mdy[2], mdy[1], mdy[0]);
     }
 
+    /**
+     * Handles datediff functionality
+     */
     public datediff(first, second) {
         // Take the difference between the dates and divide by milliseconds per day.
         // Round to nearest whole number to deal with DST.
         return Math.round((second - first) / (1000 * 60 * 60 * 24));
     }
 
+    /**
+     * Sets currentfy value
+     */
     public setCurrentFY() {
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
@@ -368,6 +454,9 @@ constructor(
         let currentAccountUniqueNames = [];
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params?.interval || params?.selectedMonth) {
                 this.selectedType = params.interval;
                 this.interval = params.interval;
@@ -388,27 +477,45 @@ constructor(
             currentGroupBy = registerReportFilters?.groupBy || GroupBy.Duration;
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
                 this.financialOptions = activeCompany.financialYears?.map(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response) {
                         return { label: response.uniqueName, value: response.uniqueName };
                     }
                 });
                 let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
+                /**
+                 * Handles if functionality
+                 */
                 if (financialYearChosenInReportUniqueName) {
                     // User is navigating back from details page hence show the selected filter as pre-filled
                     uniqueNameToSearch = financialYearChosenInReportUniqueName;
                 } else {
+                    /**
+                     * Handles uniqueNameToSearch functionality
+                     */
                     uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
                 }
                 selectedFinancialYear = this.financialOptions?.find(option => option?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
                     this.activeFinacialYr = this.selectedCompany.financialYears[0];
                     selectedFinancialYear = this.selectedCompany.financialYears[0];
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (selectedFinancialYear) {
                     this.currentActiveFinacialYear = cloneDeep(selectedFinancialYear);
                 }
@@ -426,25 +533,43 @@ constructor(
         });
     }
 
+    /**
+     * Handles selectFinancialYearOption functionality
+     */
     public selectFinancialYearOption(event: IOption) {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             let financialYear = this.selectedCompany.financialYears?.find(option => option?.uniqueName === event?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
     }
+    /**
+     * Handles populateRecords functionality
+     */
     public populateRecords(interval, month?) {
         this.interval = interval;
         this.reportForm.get('interval').patchValue(interval);
+        /**
+         * Handles if functionality
+         */
         if (interval === this.durationEnum.Weekly && !month) {
             this.populateRecords(this.durationEnum.Monthly);
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.activeFinacialYr && this.reportForm.get('groupBy')?.value === GroupBy.Duration) {
             let startDate = this.activeFinacialYr.financialYearStarts?.toString();
             let endDate = this.activeFinacialYr.financialYearEnds?.toString();
             this.dateRange.from = dayjs(startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            /**
+             * Handles if functionality
+             */
             if (month) {
                 this.selectedMonth = month;
                 let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
@@ -455,7 +580,13 @@ constructor(
             }
             this.selectedType = interval?.charAt(0)?.toUpperCase() + interval?.slice(1);
 
+            /**
+             * Handles if functionality
+             */
             if (this.currentOrganizationType === OrganizationType.Branch) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch) {
                     this.currentBranch = {};
                 }
@@ -469,19 +600,34 @@ constructor(
         }
     }
 
+    /**
+     * Handles formatParticular functionality
+     */
     public formatParticular(mdyTo, mdyFrom, index, monthNames) {
         return this.commonLocaleData?.app_quarter + ' ' + index + " (" + monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2] + "-" + monthNames[parseInt(mdyTo[1]) - 1] + " " + mdyTo[2] + ")";
     }
 
+    /**
+     * Handles bsValueChange functionality
+     */
     public bsValueChange(event: any) {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             let request: ReportsRequestModel = {
                 to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
                 from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
                 interval: this.durationEnum.Monthly,
+                /**
+                 * Handles branchUniqueName functionality
+                 */
                 branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
             }
             this.companyService.getSalesRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'error') {
                     this._toaster.errorToast(res?.message);
                 } else {
@@ -494,14 +640,23 @@ constructor(
         }
     }
 
+    /**
+     * Retrieves datefrommonth data
+     */
     public getDateFromMonth(selectedMonth) {
         let firstDay = '', lastDay = '';
+        /**
+         * Handles if functionality
+         */
         if (this.activeFinacialYr) {
             let mdyFrom = this.activeFinacialYr.financialYearStarts?.split('-');
             let mdyTo = this.activeFinacialYr.financialYearEnds?.split('-');
 
             let startDate;
 
+            /**
+             * Handles if functionality
+             */
             if (mdyFrom[1] > selectedMonth) {
                 startDate = '01-' + (selectedMonth - 1) + '-' + mdyTo[2];
             } else {
@@ -513,6 +668,9 @@ constructor(
             let month = (dt.getMonth() + 1)?.toString(),
                 year = dt.getFullYear();
 
+            /**
+             * Handles if functionality
+             */
             if (parseInt(month) < 10) {
                 month = '0' + month;
             }
@@ -574,6 +732,9 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
             this.setCurrentFY();
@@ -602,6 +763,9 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     public getSelectedDuration(): string {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedType?.toLowerCase() === "monthly") {
             return this.commonLocaleData?.app_duration?.monthly;
         } else if (this.selectedType?.toLowerCase() === "quarterly") {
@@ -619,6 +783,9 @@ constructor(
     public export(): void {
         let startDate = this.activeFinacialYr?.financialYearStarts?.toString();
         let endDate = this.activeFinacialYr?.financialYearEnds?.toString();
+        /**
+         * Handles if functionality
+         */
         if (this.selectedMonth) {
             let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
             startDate = startEndDate.firstDay;
@@ -633,6 +800,9 @@ constructor(
         exportBodyRequest.interval = this.interval;
         exportBodyRequest.branchUniqueName = this.currentBranch?.uniqueName;
         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 this._toaster.successToast(response?.body);
                 this.router.navigate(["/pages/downloads"]);
@@ -650,6 +820,9 @@ constructor(
      */
     public showColum(item: any): void {
         Object.keys(this.columnDefinitions).filter((key) => !['sales', 'particular'].includes(key)).forEach((key) => {
+            /**
+             * Handles if functionality
+             */
             if (['tcsTotal', 'tdsTotal'].includes(key)) {
                 this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.salesRegisterTotal[key];
             } else {
@@ -657,6 +830,9 @@ constructor(
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (item?.salesPerson?.name) {
             this.columnDefinitions['cumulative'][1] = true;
         }
@@ -672,6 +848,9 @@ constructor(
         let from = item.from;
         let to = item.to;
 
+        /**
+         * Handles if functionality
+         */
         if (from != null && to != null) {
             this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranch?.uniqueName, interval: item.interval, selectedMonth: item.selectedMonth, salesPersonUniqueName: item.salesPerson?.uniqueName } });
         }
@@ -720,7 +899,13 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -736,16 +921,25 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -766,11 +960,17 @@ constructor(
         from: string = dayjs(this.dateRange?.from).format(GIDDH_DATE_FORMAT),
         to: string = dayjs(this.dateRange?.to).format(GIDDH_DATE_FORMAT)
     ): void {
+        /**
+         * Handles if functionality
+         */
         if (!from || !to) {
             return;
         }
 
         let requestObject = this.reportForm.value;
+        /**
+         * Handles if functionality
+         */
         if (this.reportForm?.get('groupBy')?.value === GroupBy.SalesPerson) {
             requestObject.interval = undefined;
         }
@@ -789,6 +989,9 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     public getCustomParticular(): string {
+        /**
+         * Handles if functionality
+         */
         if (this.reportForm?.get('groupBy')?.value === GroupBy.Duration) {
             return this.activeFinacialYr?.uniqueName;
         } else {

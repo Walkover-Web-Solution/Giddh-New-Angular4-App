@@ -6,6 +6,9 @@ import { filter, skip, take } from "rxjs";
 import { Router } from "@angular/router";
 import { ASIDE_PANE_CONFIG } from "../../app.constant";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-triggers',
     templateUrl: './triggers.component.html',
@@ -14,6 +17,10 @@ import { ASIDE_PANE_CONFIG } from "../../app.constant";
     standalone: false
 })
 
+/**
+ * TriggersComponent component
+ * Handles triggers functionality and user interactions
+ */
 export class TriggersComponent implements OnInit {
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -22,16 +29,26 @@ export class TriggersComponent implements OnInit {
     /** This will hold the loading state */
     public isLoading: boolean = true;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private dialog: MatDialog,
         private componentStore: TriggerComponentStore,
         private router: Router
     ) { 
         this.componentStore.triggerList$.pipe(skip(1), filter(Boolean), take(1)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res?.results?.length) {
                 this.router.navigate(["/pages/settings/trigger/basic"]);
             } else {
                 this.componentStore.triggerAdvanceList$.pipe(skip(1), filter(Boolean), take(1)).subscribe((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res?.items?.length) {
                         this.router.navigate(["/pages/settings/trigger/advance"]);
                     } else {
@@ -69,6 +86,9 @@ export class TriggersComponent implements OnInit {
             data: { isTrigger: true }
         });
         dialogRef.afterClosed().subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.router.navigate(["/pages/settings/trigger/basic"]);
             }

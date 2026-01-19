@@ -9,6 +9,10 @@ import { ToasterService } from "../../../services/toaster.service";
 import { GstReconcileService } from "../../../services/gst-reconcile.service";
 import { LocaleService } from "../../../services/locale.service";
 
+/**
+ * GstSettingState interface definition
+ * Defines the structure and contract for GstSettingState objects
+ */
 export interface GstSettingState {
     isLoading: boolean;
     deleteLutNumberIsSuccess: boolean;
@@ -25,15 +29,29 @@ const DEFAULT_STATE: GstSettingState = {
     updateLutNumberResponse: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * GstSettingComponentStore store
+ * Manages gstsettingcomponent state using NgRx ComponentStore
+ */
 export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
         private gstReconcileService: GstReconcileService,
         private localeService: LocaleService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -47,9 +65,15 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
 
     readonly getLutNumberList = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ isLoading: true });
                 return this.gstReconcileService.getLutNumberList().pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -65,6 +89,9 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -74,11 +101,20 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
 
     readonly deleteLutNumber = this.effect((data: Observable<{ lutNumberUniqueName: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isLoading: true, deleteLutNumberIsSuccess: false });
                 return this.gstReconcileService.deleteLutNumber(req.lutNumberUniqueName).pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({ isLoading: false, deleteLutNumberIsSuccess: true });
@@ -92,6 +128,9 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
                             return this.patchState({ isLoading: false, deleteLutNumberIsSuccess: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -101,11 +140,20 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
 
     readonly createLutNumber = this.effect((data: Observable<{ q: any, index: number }>) => {
         return data.pipe(
+            /**
+             * Handles mergeMap functionality
+             */
             mergeMap((req) => {
                 this.patchState({ isLoading: true, lutNumberResponse: null });
                 return this.gstReconcileService.createLutNumber(req.q).pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     lutNumberResponse: { message: null, successMessage: res.body, lutIndex: req.index, lutNumberItem: req.q }, isLoading: false
@@ -123,6 +171,9 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -131,11 +182,20 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
 
     readonly updateLutNumber = this.effect((data: Observable<{ q: any, index: number }>) => {
         return data.pipe(
+            /**
+             * Handles mergeMap functionality
+             */
             mergeMap((req) => {
                 this.patchState({ isLoading: true, lutNumberResponse: null });
                 return this.gstReconcileService.updateLutNumber(req.q).pipe(
+                    /**
+                     * Handles tapResponse functionality
+                     */
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     lutNumberResponse: { message: null, successMessage: res.body, lutIndex: req.index, lutNumberItem: req.q }, isLoading: false
@@ -153,6 +213,9 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

@@ -3,6 +3,9 @@ import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { LoaderComponent } from "./loader.component";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         LoaderComponent
@@ -19,6 +22,10 @@ import { LoaderComponent } from "./loader.component";
     ]
 })
 
+/**
+ * LoaderModule module
+ * Implements LoaderModule functionality
+ */
 export class LoaderModule {
 
 }

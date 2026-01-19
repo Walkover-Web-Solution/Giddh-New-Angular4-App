@@ -28,6 +28,9 @@ export class ReportResponseHelper {
         }
     ): void {
         component.isLoading = false;
+        /**
+         * Handles if functionality
+         */
         if (response && response.body && response.status === 'success') {
             component.isDataAvailable = (response.body.results?.length) ? true : false;
             component.dataSource = response.body.results;
@@ -36,6 +39,9 @@ export class ReportResponseHelper {
             component.stockReportRequest.totalPages = response.body.totalPages;
             component.stockReportRequest.count = response.body.count;
             
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.fromDate && response?.body?.toDate) {
                 component.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 component.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -48,6 +54,9 @@ export class ReportResponseHelper {
                 component.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + 
                     " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                 
+                /**
+                 * Handles if functionality
+                 */
                 if (component.todaySelected) {
                     component.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
                 } else {

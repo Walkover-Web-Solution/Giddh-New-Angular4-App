@@ -21,6 +21,9 @@ import { cloneDeep } from "../../lodash-optimized";
 import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { ServiceConfig } from "../../services/service.config";
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "preview",
     templateUrl: "./preview.component.html",
@@ -28,6 +31,10 @@ import { ServiceConfig } from "../../services/service.config";
     providers: [ContactComponentStore],
     standalone:false
 })
+/**
+ * ContactPreviewComponent component
+ * Handles contactpreview functionality and user interactions
+ */
 export class ContactPreviewComponent implements OnInit, OnDestroy {
     /** Reference to the virtual scroll viewport used for scrolling contact lists */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
@@ -169,6 +176,10 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     /** Holds true if master is open */
     public isMasterOpen: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private router: Router,
         public dialog: MatDialog,
@@ -194,6 +205,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map((branch: any) => ({
                     label: branch?.name,
@@ -209,10 +223,16 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     isCompany: true,
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
@@ -227,6 +247,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     this.currentBranchData = cloneDeep(this.currentBranch);
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -236,9 +259,15 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
 
         this.isAddAndManageOpenedFromOutside$.pipe(takeUntil(this.destroyed$)).subscribe((isAddAndManageOpenedFromOutside) => {
             this.isMasterOpen = isAddAndManageOpenedFromOutside;
+            /**
+             * Handles if functionality
+             */
             if (!isAddAndManageOpenedFromOutside) {
                 this.store.dispatch(this.accountsAction.resetActiveAccount());
                 this.lastDeletedAccountUniqueName$?.pipe(take(1)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && this.queryParams.accountUniqueName === response) {
                         this.isRefreshingAfterDelete = true;
                         this.contactList = [];
@@ -251,6 +280,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                             queryParamsHandling: 'merge', // keeps other params
                             replaceUrl: true // optionally replace history entry
                         }).then(() => {
+                            /**
+                             * Sets timeout value
+                             */
                             setTimeout(() => {
                                 this.isRefreshingAfterDelete = false;
                             }, 100);
@@ -263,12 +295,18 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.selectedContact?.uniqueName) {
                 this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact.uniqueName));
             }
         });
 
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+            /**
+             * Handles if functionality
+             */
             if (params) {
                 this.params = params;
                 this.contactActiveTab = params?.type;
@@ -279,6 +317,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams) => {
+            /**
+             * Handles if functionality
+             */
             if (queryParams && !this.isAccountUpdateInProgress) {
                 this.isSearching = false;
                 this.selectedContact = null;
@@ -290,6 +331,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.advanceFilters.to = queryParams.to ?? '';
                 this.advanceFilters.q = queryParams.search ?? '';
                 this.advanceFilters.refresh = queryParams.refresh ?? true;
+                /**
+                 * Handles if functionality
+                 */
                 if (queryParams.sort && queryParams.sortBy) {
                     this.key = queryParams.sortBy;
                     this.order = queryParams.sort;
@@ -298,12 +342,18 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     this.order = (this.contactActiveTab === "vendor") ? "desc" : "asc";
                 }
                 const searchString = queryParams.search;
+                /**
+                 * Handles if functionality
+                 */
                 if (searchString) {
                     // Update the search input to show the search term
                     this.search.patchValue(searchString, { emitEvent: false });
                     // Manually trigger the search since we disabled events
                     this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.isRefreshingAfterDelete) {
                         this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     }
@@ -312,6 +362,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.parentGroups[0]?.uniqueName) {
                 this.showBankDetailPreview = response?.parentGroups?.some(parent => parent?.uniqueName === 'sundrycreditors') ? true : false;
                 let col = response.parentGroups[0]?.uniqueName;
@@ -321,11 +374,20 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
         this.componentStore.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.uniqueName === this.AccountingGroupEnum.SundryCreditors || response.uniqueName === this.AccountingGroupEnum.SundryDebtors) {
                     this.isDebtorCreditor = true;
                 }
                 this.virtualAccountEnable$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.companyCashFreeSettings && response.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && (this.parentGroupUniqueName === this.AccountingGroupEnum.SundryDebtors)) {
                         this.showVirtualAccount = true;
                     } else {
@@ -336,6 +398,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            /**
+             * Handles if functionality
+             */
             if (search || search === '') {
                 // Reset Filter
                 this.pageNumberHistory = [1];
@@ -355,6 +420,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.isDeleteAccSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && !this.isMasterOpen) {
                 this.isRefreshingAfterDelete = true;
                 this.contactList = [];
@@ -367,6 +435,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     queryParamsHandling: 'merge', // keeps other params
                     replaceUrl: true // optionally replace history entry
                 }).then(() => {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.isRefreshingAfterDelete = false;
                     }, 100);
@@ -376,6 +447,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
 
         // Single subscription to handle all getContactsList responses
         this.componentStore.getContactsList$.pipe(skip(1), takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.handleGetAllContactResponse(res);
             }
@@ -390,9 +464,15 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
  * @memberof ContactPreviewComponent
  */
     public isGroupSelected(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.activeGroupUniqueName$ = of(event.value);
             // in case of sundrycreditors or sundrydebtors no need to show address tab
+            /**
+             * Handles if functionality
+             */
             if (event.value === this.AccountingGroupEnum.SundryCreditors || event.value === this.AccountingGroupEnum.SundryDebtors) {
                 this.isDebtorCreditor = true;
             }
@@ -428,6 +508,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         this.updateAccountInProcess$ = of(true);
         this.isAccountUpdateInProgress = true;
 
+        /**
+         * Handles if functionality
+         */
         if (isPatch) {
             this.store.dispatch(this.accountsAction.updateAccountV2Patch(accRequestObject?.value, accRequestObject.accountRequest));
         } else {
@@ -436,11 +519,23 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         }
 
         this.updateAccountIsSuccess$?.pipe(
+            /**
+             * Handles filter functionality
+             */
             filter(response => response !== null && response !== undefined),
+            /**
+             * Handles take functionality
+             */
             take(1),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(response => {
             this.updateAccountInProcess$ = of(false);
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 // Navigate to update query params, then reset the flag to allow normal API calls
                 this.router.navigate([], {
@@ -450,6 +545,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     replaceUrl: true
                 }).then(() => {
                     // Reset flag after navigation to allow query param subscription to work
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.isAccountUpdateInProgress = false;
                         // Manually trigger contact list refresh after flag is reset
@@ -493,8 +591,14 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     private handleGetAllContactResponse(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (response) {
             const currentContactList = [];
+            /**
+             * Handles if functionality
+             */
             if (this.pageNumberHistory[0] < response.page) {
                 this.pageNumberHistory.push(response.page);
             } else if (!this.pageNumberHistory.includes(response.page)) {
@@ -502,6 +606,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
             this.totalPages = response?.totalPages;
 
+            /**
+             * Handles if functionality
+             */
             if (this.totalPages === 0) {
                 this.contactList = [];
                 return;
@@ -512,8 +619,14 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 currentContactList.push(item);
             });
 
+            /**
+             * Handles if functionality
+             */
             if (this.isSearching && !this.isRefreshingAfterDelete) {
                 // Handle page number is more than total pages in query params
+                /**
+                 * Handles if functionality
+                 */
                 if (this.totalPages < this.advanceFilters.page) {
                     this.advanceFilters.page = 1;
                     this.getContactsListData(
@@ -531,6 +644,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 }
             }
 
+            /**
+             * Handles if functionality
+             */
             if ((this.isSearching || (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
                 this.contactList = currentContactList;
             } else {
@@ -539,8 +655,14 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     : [...currentContactList, ...this.contactList];
             }
             this.getAllApiCallCount++;
+            /**
+             * Handles if functionality
+             */
             if (this.contactList?.length) {
                 const exists = this.contactList.some(account => account.uniqueName === this.activeAccountUniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (exists && (!this.isSearching || this.advanceFilters.q)) {
                     this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === this.activeAccountUniqueName);
                 } else {
@@ -563,10 +685,16 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public setSelectedContact(accountUniqueName: string, isNewContactSelected: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (isNewContactSelected && this.selectedContact?.uniqueName === accountUniqueName) {
             return;
         }
         this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
+        /**
+         * Handles if functionality
+         */
         if (isNewContactSelected && this.selectedContact?.uniqueName) {
             this.accountDetails = this.selectedContact;
             this.isContactNotFound = false;
@@ -626,7 +754,13 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     ): void {
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : "false";
+        /**
+         * Handles fromDate functionality
+         */
         fromDate = (fromDate) ? fromDate : "";
+        /**
+         * Handles toDate functionality
+         */
         toDate = (toDate) ? toDate : "";
         let groupUniqueName = (this.contactActiveTab === "customer") ? this.AccountingGroupEnum.SundryDebtors : this.AccountingGroupEnum.SundryCreditors;
 

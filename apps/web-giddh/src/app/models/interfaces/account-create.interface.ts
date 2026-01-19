@@ -3,11 +3,19 @@ import { IUserInfo } from './user-info.interface';
 import { INameUniqueName } from '../api-models/Inventory';
 import { IGstDetailListItem } from './gst-detail-list-item.interface';
 
+/**
+ * ICountryClass interface definition
+ * Defines the structure and contract for ICountryClass objects
+ */
 export interface ICountryClass {
     countryName: string;
     countryCode: string;
 }
 
+/**
+ * IAccount interface definition
+ * Defines the structure and contract for IAccount objects
+ */
 export interface IAccount extends INameUniqueName {
     address?: string;
     attentionTo?: string;
@@ -27,6 +35,10 @@ export interface IAccount extends INameUniqueName {
     stateCode?: string;
 }
 
+/**
+ * IAccountCreate interface definition
+ * Defines the structure and contract for IAccountCreate objects
+ */
 export interface IAccountCreate extends IAccount, IAccountsInfo {
     createdAt?: string;
     updatedAt?: string;

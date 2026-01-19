@@ -8,11 +8,18 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../store";
 import { CommonActions } from "../../actions/common.actions";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "connect-plaid",
     templateUrl: "./connect-plaid.component.html",
     standalone: false
 })
+/**
+ * ConnectPlaidComponent component
+ * Handles connectplaid functionality and user interactions
+ */
 export class ConnectPlaidComponent implements OnInit {
     /** This will hold plaid link handler */
     private plaidLinkHandler: PlaidLinkHandler;
@@ -29,6 +36,10 @@ export class ConnectPlaidComponent implements OnInit {
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private plaidLinkService: NgxPlaidLinkService,
@@ -46,10 +57,16 @@ export class ConnectPlaidComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.common.reAuthPlaid), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.reauth && !this.isPlaidOpen) {
                 this.isPlaidOpen = true;
                 this.store.dispatch(this.commonAction.reAuthPlaid({itemId: null, reauth: false}));
                 this.getPlaidLinkToken(response?.itemId);
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.isPlaidOpen = false;
                 }, 1000);
@@ -64,11 +81,17 @@ export class ConnectPlaidComponent implements OnInit {
      */
     public getPlaidLinkToken(itemId?: any): void {
         this.settingsIntegrationService.getPlaidLinkToken(itemId).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body) {
                 this.plaidConfig.token = response.body?.link_token;
                 this.plaidLinkService
                     .createPlaid(
                         Object.assign({}, this.plaidConfig, {
+                            /**
+                             * Handles success event
+                             */
                             onSuccess: (token, metadata) => this.getPlaidSuccessPublicToken(token, metadata)
                         })
                     )
@@ -97,6 +120,9 @@ export class ConnectPlaidComponent implements OnInit {
             accounts: metadata?.accounts
         }
         this.settingsIntegrationService.savePlaidAccessToken(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body) {
                 const broadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
                 broadcast.postMessage(true);

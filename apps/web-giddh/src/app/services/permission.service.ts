@@ -11,12 +11,23 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * PermissionService service
+ * Provides permission related business logic and data operations
+ */
 export class PermissionService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -24,6 +35,9 @@ export class PermissionService {
     /*
      * Get all roles
     */
+    /**
+     * Handles GetAllRoles functionality
+     */
     public GetAllRoles(): Observable<BaseResponse<IRoleCommonResponseAndRequest[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 

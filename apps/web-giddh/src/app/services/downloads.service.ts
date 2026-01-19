@@ -10,14 +10,25 @@ import { Observable } from 'rxjs';
 import { DownloadsRequest, DownloadsResponse } from '../models/api-models/downloads';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * DownloadsService service
+ * Provides downloads related business logic and data operations
+ */
 export class DownloadsService {
 
     /** This will hold the company uniquename */
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -36,6 +47,9 @@ export class DownloadsService {
             ?.replace(':to', encodeURIComponent(downloadsRequest.to))
             ?.replace(':count', encodeURIComponent(downloadsRequest.count))
             ?.replace(':page', encodeURIComponent(downloadsRequest.page))).pipe(
+                /**
+                 * Handles map functionality
+                 */
                 map((res) => {
                     let data: BaseResponse<DownloadsResponse, DownloadsRequest> = res;
                     data.request = downloadsRequest;

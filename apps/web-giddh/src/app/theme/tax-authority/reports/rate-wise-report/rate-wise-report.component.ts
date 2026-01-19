@@ -10,6 +10,9 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.
 import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-response.interface';
 import { PageEvent } from '@angular/material/paginator';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'rate-wise-report',
     templateUrl: './rate-wise-report.component.html',
@@ -17,6 +20,10 @@ import { PageEvent } from '@angular/material/paginator';
     providers: [TaxAuthorityComponentStore],
     standalone: false
 })
+/**
+ * RateWiseReportComponent component
+ * Handles ratewisereport functionality and user interactions
+ */
 export class RateWiseReportComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -50,6 +57,10 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     /** Holds Active company details */
     public activeCompany: any = null;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private componentStore: TaxAuthorityComponentStore,
         private formBuilder: FormBuilder,
@@ -66,12 +77,18 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
         this.initSalesTaxReportForm();
         this.loadTaxDetails();
         this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+            /**
+             * Handles if functionality
+             */
             if (queryParams?.uniqueName) {
                 this.getFormControl('taxAuthorityUniqueName').patchValue(queryParams.uniqueName ?? '');
             }
         });
 
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -79,6 +96,9 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
 
         // Subscribe Export Report Success Observable
         this.componentStore.exportTaxWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.downloadReport(response.data, response.name);
             }
@@ -86,6 +106,9 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
 
         // Subscribe Sales Report List Observable
         this.componentStore.taxWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.pagination.page = response.page;
                 this.pagination.totalItems = response.totalItems;
@@ -95,6 +118,9 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
 
         // Subscribe Tax Number Observable
         this.componentStore.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.body?.length) {
                 this.getFormControl('taxNumber').patchValue(response.body[0]);
             }
@@ -117,6 +143,9 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     */
     public getSalesTaxReport(): void {
         const formValue = this.salesTaxReportForm.value;
+        /**
+         * Handles if functionality
+         */
         if (formValue.taxNumber && formValue.from && formValue.to) {
             const model: any = {
                 reportType: SalesTaxReport.TaxWise,
@@ -190,6 +219,9 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     * @memberof RateWiseReportComponent
     */
     public handlePageChange(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;

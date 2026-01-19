@@ -50,6 +50,9 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ResizableDirective } from '../shared/directives/resizable.directive';
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         ContactComponent,
@@ -116,5 +119,9 @@ import { ResizableDirective } from '../shared/directives/resizable.directive';
         GiddhNumberFormatPipe
     ]
 })
+/**
+ * ContactModule module
+ * Implements ContactModule functionality
+ */
 export class ContactModule {
 }

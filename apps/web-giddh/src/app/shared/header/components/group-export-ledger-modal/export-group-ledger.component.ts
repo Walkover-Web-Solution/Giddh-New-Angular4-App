@@ -16,6 +16,9 @@ import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'export-group-ledger',
     templateUrl: './export-group-ledger.component.html',
@@ -23,6 +26,10 @@ import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwit
     standalone: false
 })
 
+/**
+ * ExportGroupLedgerComponent component
+ * Handles exportgroupledger functionality and user interactions
+ */
 export class ExportGroupLedgerComponent implements OnInit {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -88,6 +95,10 @@ export class ExportGroupLedgerComponent implements OnInit {
     /** Holds Group uniques name from Params */
     public groupUniqueName: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService,
         private ledgerService: LedgerService,
         private toaster: ToasterService,
@@ -95,13 +106,22 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         // Set a default date
         this.dateRange.from = dayjs(dayjs().subtract(30, 'day')).format(GIDDH_DATE_FORMAT);
         this.dateRange.to = dayjs(dayjs()).format(GIDDH_DATE_FORMAT);
 
+        /**
+         * Handles if functionality
+         */
         if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
             (Array.isArray(this._permissionDataService.getData) ? this._permissionDataService.getData : []).forEach(f => {
+                /**
+                 * Handles if functionality
+                 */
                 if (f.name === 'LEDGER') {
                     let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
                     this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
@@ -112,6 +132,9 @@ export class ExportGroupLedgerComponent implements OnInit {
         }
 
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -128,6 +151,9 @@ export class ExportGroupLedgerComponent implements OnInit {
      * @memberof ExportGroupLedgerComponent
      */
     public exportLedger() {
+        /**
+         * Handles if functionality
+         */
         if (this.exportType === 'ledger') {
             this.exportRequest.from = this.fromDate;
             this.exportRequest.to = this.toDate;
@@ -140,6 +166,9 @@ export class ExportGroupLedgerComponent implements OnInit {
             this.isLoading = true;
             this.ledgerService.exportData(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === "success") {
                     this.toaster.showSnackBar("success", response?.body);
                     this.closeExportGroupAccountModal.emit(true);
@@ -153,6 +182,9 @@ export class ExportGroupLedgerComponent implements OnInit {
         }
     }
 
+    /**
+     * Handles selectdaterange event
+     */
     public onSelectDateRange(ev) {
         this.dateRange.from = dayjs(ev.picker.startDate).format(GIDDH_DATE_FORMAT);
         this.dateRange.to = dayjs(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
@@ -165,7 +197,13 @@ export class ExportGroupLedgerComponent implements OnInit {
      * @memberof ExportGroupLedgerComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -181,16 +219,25 @@ export class ExportGroupLedgerComponent implements OnInit {
      * @memberof ExportGroupLedgerComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

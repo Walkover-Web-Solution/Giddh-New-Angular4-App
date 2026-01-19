@@ -13,15 +13,31 @@ import { SettingsProfileService } from '../../../services/settings.profile.servi
 import { CustomActions } from '../../../store/custom-actions';
 import { LocaleService } from '../../../services/locale.service';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsProfileActions class
+ * Implements SettingsProfileActions functionality
+ */
 export class SettingsProfileActions {
 
     public GetSMSKey$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.settingsProfileService.GetProfileInfo()),
+            /**
+             * Handles map functionality
+             */
             map((res: any) => {
                 return this.validateResponse<any, string>(res, {
                     type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
@@ -35,16 +51,34 @@ export class SettingsProfileActions {
 
     public UpdateProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this.settingsProfileService.UpdateProfile(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.UpdateProfileResponse(response)));
             })));
 
     public GetInventoryInfo$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.settingsProfileService.GetInventoryInfo()),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
                 payload: res
@@ -55,17 +89,35 @@ export class SettingsProfileActions {
 
     public UpdateInventory$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this.settingsProfileService.UpdateInventory(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.UpdateInventoryResponse(response)));
             })));
 
     public UpdateProfileResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
@@ -77,28 +129,52 @@ export class SettingsProfileActions {
 
     public PatchProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this.settingsProfileService.PatchProfile(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.PatchProfileResponse(response)));
             })));
 
     public PatchProfileResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this.companyActions.RefreshCompanies());
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (data.request && data.request.paymentId) {
                         this.toasty.successToastWithHtml(this.localeService.translate("app_messages.welcome_onboard"));
                     } else {
                         this.toasty.successToast(this.localeService.translate("app_messages.profile_updated"));
                     }
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (data.request.isMultipleCurrency) {
                     return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
                 } else {
@@ -110,9 +186,18 @@ export class SettingsProfileActions {
 
     public UpdateInventoryResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
@@ -122,8 +207,17 @@ export class SettingsProfileActions {
             })));
 
     public branchProfileResponse$: Observable<Action> = createEffect(() => this.action$.pipe(
+        /**
+         * Handles ofType functionality
+         */
         ofType(SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO),
+        /**
+         * Handles switchMap functionality
+         */
         switchMap(() => this.settingsProfileService.getBranchInfo()),
+        /**
+         * Handles map functionality
+         */
         map(res => this.validateResponse<any, string>(res, {
             type: SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO_RESPONSE,
             payload: res
@@ -132,6 +226,10 @@ export class SettingsProfileActions {
             payload: res
         }))));
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private action$: Actions,
         private toasty: ToasterService,
         private localeService: LocaleService,
@@ -140,12 +238,18 @@ export class SettingsProfileActions {
         private companyActions: CompanyActions) {
     }
 
+    /**
+     * Handles GetProfileInfo functionality
+     */
     public GetProfileInfo(): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO,
         };
     }
 
+    /**
+     * Handles UpdateProfile functionality
+     */
     public UpdateProfile(value): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE,
@@ -153,6 +257,9 @@ export class SettingsProfileActions {
         };
     }
 
+    /**
+     * Handles UpdateProfileResponse functionality
+     */
     public UpdateProfileResponse(value): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE,
@@ -160,18 +267,27 @@ export class SettingsProfileActions {
         };
     }
 
+    /**
+     * Handles PatchProfile functionality
+     */
     public PatchProfile(value): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE,
             payload: value
         };
     }
+    /**
+     * Resets patchprofile to default state
+     */
     public resetPatchProfile(): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.RESET_PATCH_PROFILE,
         };
     }
 
+    /**
+     * Handles PatchProfileResponse functionality
+     */
     public PatchProfileResponse(value): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE,
@@ -179,6 +295,9 @@ export class SettingsProfileActions {
         };
     }
 
+    /**
+     * Handles SetMultipleCurrency functionality
+     */
     public SetMultipleCurrency(response: CompanyResponse, isMultipleCurrency: boolean): CustomActions {
         return {
             type: CompanyActions.SET_MULTIPLE_CURRENCY_FIELD,
@@ -187,13 +306,25 @@ export class SettingsProfileActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+        /**
+         * Handles if functionality
+         */
         if (response) {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'error') {
+                /**
+                 * Handles if functionality
+                 */
                 if (showToast) {
                     this.toasty.errorToast(response.message);
                 }
                 return errorAction;
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (showToast && typeof response.body === 'string') {
                     this.toasty.successToast(response.body);
                 }
@@ -202,12 +333,18 @@ export class SettingsProfileActions {
         return successAction;
     }
 
+    /**
+     * Handles GetInventoryInfo functionality
+     */
     public GetInventoryInfo(): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO,
         };
     }
 
+    /**
+     * Handles UpdateInventory functionality
+     */
     public UpdateInventory(value): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY,
@@ -215,6 +352,9 @@ export class SettingsProfileActions {
         };
     }
 
+    /**
+     * Handles UpdateInventoryResponse functionality
+     */
     public UpdateInventoryResponse(value): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE,

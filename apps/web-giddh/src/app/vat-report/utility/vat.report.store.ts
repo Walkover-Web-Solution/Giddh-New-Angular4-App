@@ -7,6 +7,10 @@ import { GstReconcileService } from "../../services/gst-reconcile.service";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
 
+/**
+ * VatReportState interface definition
+ * Defines the structure and contract for VatReportState objects
+ */
 export interface VatReportState {
     liabilityPaymentListInProgress: boolean;
     liabilityPaymentList: any;
@@ -29,15 +33,29 @@ const DEFAULT_STATE: VatReportState = {
     getObligationListInProgress: false
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * VatReportComponentStore store
+ * Manages vatreportcomponent state using NgRx ComponentStore
+ */
 export class VatReportComponentStore extends ComponentStore<VatReportState> {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private vatService: VatService,
         private gstReconcileService: GstReconcileService,
         private store: Store<AppState>
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
     public liabilityPaymentListInProgress$ = this.select(state => state.liabilityPaymentListInProgress);
@@ -56,11 +74,20 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     */
     readonly getLiabilityPaymentList = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ liabilityPaymentList: null, liabilityPaymentListInProgress: true });
                 return this.vatService.getPaymentLiabilityList(req.payload, req.searchForm, req.isPaymentMode).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({ liabilityPaymentList: res, liabilityPaymentListInProgress: false });
                             } else {
@@ -73,6 +100,9 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
                             return this.patchState({ liabilityPaymentList: null, liabilityPaymentListInProgress: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -86,11 +116,20 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     */
     readonly getTaxNumber = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 this.patchState({ taxNumber: null, getTaxNumberInProgress: true });
                 return this.gstReconcileService.getTaxDetails().pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({ taxNumber: res, getTaxNumberInProgress: false });
                             } else {
@@ -103,6 +142,9 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
                             return this.patchState({ taxNumber: null, getTaxNumberInProgress: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -116,11 +158,20 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     */
     readonly getHMRCAuthorization = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ connectToHMRCUrl: null, getHMRCInProgress: true });
                 return this.vatService.getHMRCAuthorization(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({ connectToHMRCUrl: res, getHMRCInProgress: false });
                             } else {
@@ -133,6 +184,9 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
                             return this.patchState({ connectToHMRCUrl: null, getHMRCInProgress: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -146,11 +200,20 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
      */
     readonly getVatObligations = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ obligationList: null, getObligationListInProgress: true });
                 return this.vatService.getVatObligations(req.companyUniqueName, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: any) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === "success") {
                                 return this.patchState({ obligationList: res, getObligationListInProgress: false });
                             } else {
@@ -163,6 +226,9 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
                             return this.patchState({ obligationList: null, getObligationListInProgress: false });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

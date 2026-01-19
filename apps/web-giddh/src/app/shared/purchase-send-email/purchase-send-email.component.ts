@@ -10,6 +10,9 @@ import { Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'purchase-send-email-modal',
     templateUrl: './purchase-send-email.component.html',
@@ -17,6 +20,10 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
     standalone: false
 })
 
+/**
+ * PurchaseSendEmailModalComponent component
+ * Handles purchasesendemailmodal functionality and user interactions
+ */
 export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
     /* Taking input module name for send email */
     @Input() public module: string;
@@ -32,6 +39,10 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public purchaseOrderService: PurchaseOrderService, 
         private toaster: ToasterService, 
@@ -49,6 +60,9 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSendEmailModalComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.sendEmailRequest && this.sendEmailRequest.email) {
             this.emailId = this.sendEmailRequest.email;
         }
@@ -63,9 +77,18 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
         let getRequest = { companyUniqueName: this.sendEmailRequest?.companyUniqueName, accountUniqueName: this.sendEmailRequest?.accountUniqueName, uniqueName: this.sendEmailRequest?.uniqueName };
         let postRequest = { emailId: [this.emailId] };
 
+        /**
+         * Handles if functionality
+         */
         if (this.module === "purchase-order") {
             this.purchaseOrderService.sendEmail(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res.status === 'success') {
                         this.toaster.successToast(res.body);
                         this.hideModal();
@@ -75,6 +98,9 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
                 }
             });
         } else if (this.module === "purchase-bill") {
+            /**
+             * Handles if functionality
+             */
             if (this.generalService.voucherApiVersion === 2) {
                 this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.sendEmailRequest?.accountUniqueName, {
                     email: { to: [this.emailId] },
@@ -85,7 +111,13 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
                 this.hideModal();
             } else {
                 this.purchaseRecordService.sendEmail(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (res.status === 'success') {
                             this.toaster.successToast(res.body);
                             this.hideModal();

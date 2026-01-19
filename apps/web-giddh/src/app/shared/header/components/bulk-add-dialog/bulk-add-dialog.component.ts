@@ -10,6 +10,9 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'bulk-add-dialog',
     templateUrl: './bulk-add-dialog.component.html',
@@ -17,6 +20,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
     providers: [AccountAddNewDetailsComponentStore],
     standalone: false
 })
+/**
+ * BulkAddDialogComponent component
+ * Handles bulkadddialog functionality and user interactions
+ */
 export class BulkAddDialogComponent implements OnInit {
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -32,6 +39,10 @@ export class BulkAddDialogComponent implements OnInit {
     };
     public bulkAddAccountForm: FormGroup;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
@@ -50,11 +61,17 @@ export class BulkAddDialogComponent implements OnInit {
     public ngOnInit(): void {
         this.initNewForm();
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.branches = response?.filter(branch => !branch.consolidatedBranch);
                 const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
                 formArray?.clear();
                 (Array.isArray(this.branches) ? this.branches : []).forEach((item) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (item?.name) {
                         formArray?.push(this.openingBulkGet(
                             {
@@ -64,11 +81,17 @@ export class BulkAddDialogComponent implements OnInit {
                         ));
                     }
                 });
+                /**
+                 * Handles if functionality
+                 */
                 if (this.data?.saveBulkData?.length) {
                     // Then, merge the data by matching uniqueName
                     this.mergeFormArrayWithData(this.data?.saveBulkData);
                 }
                 this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     // Find the current checked out branch
                     this.company.branch = response.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
@@ -92,6 +115,9 @@ export class BulkAddDialogComponent implements OnInit {
             const formArrayBranch = formGroup.get('branch')?.value;
             const matchingBranch = branchData.find(branch => branch.branch.uniqueName === formArrayBranch.uniqueName);
 
+            /**
+             * Handles if functionality
+             */
             if (matchingBranch) {
                 formGroup.patchValue({
                     openingBalance: matchingBranch.openingBalance,
@@ -146,6 +172,9 @@ export class BulkAddDialogComponent implements OnInit {
     public openingBalanceTypeChanged(type: string, index: number): void {
         const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
         const item = formArray.at(index) as FormGroup;
+        /**
+         * Handles if functionality
+         */
         if (Number(item.get('openingBalance')?.value) >= 0 || Number(item.get('foreignOpeningBalance')?.value) >= 0) {
             item.get('openingBalanceType')?.patchValue(type);
         }
@@ -157,6 +186,9 @@ export class BulkAddDialogComponent implements OnInit {
      * @memberof BulkAddDialogComponent
      */
     public saveOpeningBalance(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.bulkAddAccountForm.valid) {
             const branchesWithOpeningBalance = this.bulkAddAccountForm?.value.customFields.filter(branch => (branch.openingBalance !== "" && branch.openingBalance !== null || branch.foreignOpeningBalance !== "" && branch.foreignOpeningBalance !== null));
             this.bulkAddAccountForm.value.customFields = branchesWithOpeningBalance;

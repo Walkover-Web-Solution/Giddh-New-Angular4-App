@@ -2,9 +2,16 @@ import { Injectable } from '@angular/core';
 import { PURCHASE_ORDER_ACTIONS } from './purchase-order.const';
 import { CustomActions } from '../../store/custom-actions';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * PurchaseOrderActions class
+ * Implements PurchaseOrderActions functionality
+ */
 export class PurchaseOrderActions {
 
     /**

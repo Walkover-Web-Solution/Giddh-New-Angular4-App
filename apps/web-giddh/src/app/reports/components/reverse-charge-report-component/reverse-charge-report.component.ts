@@ -19,6 +19,9 @@ import { Router } from '@angular/router';
 import { FormControl } from "@angular/forms";
 import { cloneDeep, find, map, remove } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'reverse-charge-report',
     templateUrl: './reverse-charge-report.component.html',
@@ -27,6 +30,10 @@ import { cloneDeep, find, map, remove } from '../../../lodash-optimized';
     changeDetection: ChangeDetectionStrategy.Default
 })
 
+/**
+ * ReverseChargeReport component
+ * Handles reversechargereport functionality and user interactions
+ */
 export class ReverseChargeReport implements OnInit, OnDestroy {
     /* This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
@@ -119,6 +126,10 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     /** TrackBy function for table performance optimization */
     public trackByFn = this.changeDetectionService.trackByFn;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private toasty: ToasterService,
@@ -140,6 +151,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -151,12 +165,21 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
 
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.universalDate && !this.todaySelected) {
                             this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
                             this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -176,12 +199,18 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         });
 
         this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
@@ -197,10 +226,16 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -215,6 +250,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                     this.reverseChargeReportGetRequest.branchUniqueName = this.currentBranch?.uniqueName;
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -223,6 +261,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         });
 
         this.searchedName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            /**
+             * Handles if functionality
+             */
             if (search || search === '') {
                 this.reverseChargeReportPostRequest.supplierName = search;
                 this.isSearching = true;
@@ -233,6 +274,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         });
 
         this.searchedInvoiceNo.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            /**
+             * Handles if functionality
+             */
             if (search || search === '') {
                 this.reverseChargeReportPostRequest.invoiceNumber = search;
                 this.isSearching = true;
@@ -243,6 +287,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         });
 
         this.searchedCountry.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            /**
+             * Handles if functionality
+             */
             if (search || search === '') {
                 this.reverseChargeReportPostRequest.supplierCountry = search;
                 this.isSearching = true;
@@ -272,6 +319,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
  * @memberof ReverseChargeReport
  */
     public pageChanged(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.reverseChargeReportResults.results = [];
             this.reverseChargeReportGetRequest.page = event.pageIndex + 1;
@@ -289,9 +339,15 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public getReverseChargeReport(resetPage: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompany) {
             this.isLoading = true;
 
+            /**
+             * Handles if functionality
+             */
             if (resetPage) {
                 this.reverseChargeReportGetRequest.page = 1;
             }
@@ -299,10 +355,16 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.reverseChargeReportResults = [];
 
             this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     this.reverseChargeReportResults = res.body;
                     // Update MatTableDataSource for proper Angular Material integration
                     this.dataSource.data = res.body?.items || [];
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.todaySelected) {
                         this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT) };
                         this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -330,7 +392,13 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public columnSearch(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.timeout) {
+            /**
+             * Handles clearTimeout functionality
+             */
             clearTimeout(this.timeout);
         }
 
@@ -357,6 +425,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public isDateFilterApplied(): boolean {
+        /**
+         * Handles if functionality
+         */
         if ((this.isSearchApplied() ||
             this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT))
             || (this.reverseChargeReportGetRequest.to && this.reverseChargeReportGetRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))
@@ -375,6 +446,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     private isSearchApplied(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType) {
             this.isSearching = true;
             return true;
@@ -408,6 +482,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.searchedInvoiceNo.setValue(null);
         this.searchedCountry.setValue(null);
         this.isSearching = false;
+        /**
+         * Handles if functionality
+         */
         if (!this.todaySelected) {
             this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
             this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -424,7 +501,13 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -440,16 +523,25 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -486,6 +578,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public toggleSearch(fieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === "name") {
             this.showNameSearch = true;
         } else if (fieldName === "invoiceNo") {
@@ -505,23 +600,41 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (searchedFieldName === "name") {
+            /**
+             * Handles if functionality
+             */
             if (this.searchedName.value !== null && this.searchedName.value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'invoiceNo') {
+            /**
+             * Handles if functionality
+             */
             if (this.searchedInvoiceNo.value !== null && this.searchedInvoiceNo.value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'country') {
+            /**
+             * Handles if functionality
+             */
             if (this.searchedCountry.value !== null && this.searchedCountry.value !== '') {
                 return;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (searchedFieldName === "name") {
                 this.showNameSearch = false;
             } else if (searchedFieldName === 'invoiceNo') {
@@ -539,6 +652,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public sortChange(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.reverseChargeReportGetRequest.sort = event.direction ? event.direction : 'asc';
             this.reverseChargeReportGetRequest.sortBy = event.active;

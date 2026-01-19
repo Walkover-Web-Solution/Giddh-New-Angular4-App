@@ -34,6 +34,9 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     multi: true
 };
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'tax-control',
     templateUrl: 'tax-control.component.html',
@@ -42,6 +45,10 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     standalone: false
 })
 
+/**
+ * TaxControlComponent component
+ * Handles taxcontrol functionality and user interactions
+ */
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     /** True if field is readonly */
     @Input() public readonly: boolean = false;
@@ -101,18 +108,31 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private cdr: ChangeDetectorRef,
         private store: Store<AppState>,
         private generalService: GeneralService
     ) { }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (this.taxes) {
             this.prepareTaxObject();
             this.change();
@@ -120,10 +140,19 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges) {
         // change
+        /**
+         * Handles if functionality
+         */
         if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
             this.date = (typeof changes['date'].currentValue === "object") ? dayjs(changes['date'].currentValue).format(GIDDH_DATE_FORMAT) : changes['date'].currentValue;
+            /**
+             * Handles if functionality
+             */
             if (dayjs(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid()) {
                 this.taxSum = 0;
                 this.prepareTaxObject();
@@ -131,20 +160,35 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue))) {
             this.prepareTaxObject();
+            /**
+             * Handles if functionality
+             */
             if (!isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
                 this.change();
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
             this.calculateInclusiveOrExclusiveTaxes();
         }
+        /**
+         * Handles if functionality
+         */
         if (changes['calculateTaxInclusively'] && changes['calculateTaxInclusively'].currentValue !== changes['calculateTaxInclusively'].previousValue) {
             this.change();
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('taxes' in changes && changes && (Array.isArray(changes.taxes.currentValue))) {
             this.prepareTaxObject();
             this.change();
@@ -157,10 +201,16 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * prepare taxObject as per needed
      */
     public prepareTaxObject() {
+        /**
+         * Handles if functionality
+         */
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
             this.taxes = this.taxes?.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
             this.taxes = this.taxes?.filter(f => !this.exceptTaxTypes.includes(f.taxType));
         }
@@ -169,10 +219,16 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             let index = this.taxRenderData?.findIndex(f => f?.uniqueName === tax?.uniqueName);
 
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
+            /**
+             * Handles if functionality
+             */
             if (index > -1) {
                 this.taxRenderData[index].isChecked =
                     this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(item => item === tax?.uniqueName) :
                         this.taxRenderData[index].isChecked ? this.taxRenderData[index].isChecked : false;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
                     this.taxRenderData[index].amount =
                         (dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)) || dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT)) ?
@@ -185,15 +241,24 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 taxObj.uniqueName = tax?.uniqueName;
                 taxObj.type = tax.taxType;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.date) {
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
                     let exactDate = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
+                    /**
+                     * Handles if functionality
+                     */
                     if (exactDate?.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
                         let filteredTaxObject = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
+                        /**
+                         * Handles if functionality
+                         */
                         if (filteredTaxObject?.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
@@ -209,11 +274,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 this.taxRenderData.push(taxObj);
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (this.taxRenderData?.length) {
             this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
         }
     }
 
+    /**
+     * Handles trackByFn functionality
+     */
     public trackByFn(index, tax) {
         return tax?.uniqueName; // or item.id
     }
@@ -225,6 +296,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     public toggleTaxMenu(isOpen: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             !this.taxMenu.menuOpen && this.taxMenu?.openMenu();
         } else {
@@ -232,6 +306,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.taxAmountSumEvent.unsubscribe();
         this.isApplicableTaxesEvent.unsubscribe();
@@ -251,7 +328,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         this.taxSum = this.calculateSum();
         this.calculateInclusiveOrExclusiveTaxes();
         this.selectedTaxes = this.generateSelectedTaxes();
+        /**
+         * Handles if functionality
+         */
         if (this.allowedSelection > 0) {
+            /**
+             * Handles if functionality
+             */
             if (this.selectedTaxes?.length >= this.allowedSelection) {
                 this.taxRenderData.map(m => {
                     m.isDisabled = !m.isChecked;
@@ -265,12 +348,21 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type?.length) {
             (Array.isArray(this.allowedSelectionOfAType.type) ? this.allowedSelectionOfAType.type : []).forEach(taxType => {
                 const selectedTaxes = this.taxRenderData?.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
+                /**
+                 * Handles if functionality
+                 */
                 if (selectedTaxes?.length >= this.allowedSelectionOfAType.count) {
                     this.taxRenderData.map((taxesApplied => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (taxType === taxesApplied.type && !taxesApplied.isChecked) {
                             taxesApplied.isDisabled = true;
                         }
@@ -278,6 +370,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                     }));
                 } else {
                     this.taxRenderData.map((taxesApplied => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (taxType === taxesApplied.type && taxesApplied.isDisabled) {
                             taxesApplied.isDisabled = false;
                         }
@@ -285,13 +380,22 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                     }));
                 }
             });
+            /**
+             * Handles if functionality
+             */
             if (this.isAdvanceReceipt) {
                 // In case of advance receipt only a single tax is allowed in addition to CESS
                 // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
                 // except CESS taxes
                 const atleastSingleTaxSelected: boolean = this.taxRenderData?.filter((tax) => tax.isChecked && tax.type !== 'gstcess')?.length !== 0;
+                /**
+                 * Handles if functionality
+                 */
                 if (atleastSingleTaxSelected) {
                     this.taxRenderData.map((taxesApplied => {
+                        /**
+                         * Handles if functionality
+                         */
                         if ('gstcess' !== taxesApplied.type && !taxesApplied.isChecked) {
                             taxesApplied.isDisabled = true;
                         }
@@ -300,25 +404,43 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 }
             }
         }
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.taxRenderData?.length) {
                 this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
             }
         }, 100);
+        /**
+         * Handles if functionality
+         */
         if (!preventEmit) {
             /** Should emit only conditionally, done to avoid
              * recursive call to change method in case of inclusive tax calculation for stock
             */
             this.taxAmountSumEvent.emit(this.taxSum);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.taxRenderData?.length > 0) {
             this.selectedTaxEvent.emit(this.selectedTaxes);
         }
     }
 
+    /**
+     * Handles focuslastdiv event
+     */
     public onFocusLastDiv(el) {
         el.stopPropagation();
         el.preventDefault();
+        /**
+         * Handles if functionality
+         */
         if (!this.taxMenu?.menuOpen) {
             this.hideOtherPopups.emit(true);
             return;
@@ -331,6 +453,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
             });
         let index = focussable?.indexOf(document.activeElement);
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
@@ -354,6 +479,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     public enableAllTheTaxes(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.taxRenderData?.length) {
             (Array.isArray(this.taxRenderData) ? this.taxRenderData : []).forEach(tax => tax.isDisabled = false);
         }
@@ -385,6 +513,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     private calculateInclusiveOrExclusiveTaxes(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.calculateTaxInclusively) {
             // Inclusive tax rate
             this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);

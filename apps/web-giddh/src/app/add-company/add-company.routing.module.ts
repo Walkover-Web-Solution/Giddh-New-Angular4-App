@@ -3,6 +3,9 @@ import { RouterModule } from "@angular/router";
 import { AddCompanyComponent } from "./add-company.component";
 import { PageLeaveConfirmationGuard } from "../decorators/page-leave-confirmation-guard";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -11,5 +14,9 @@ import { PageLeaveConfirmationGuard } from "../decorators/page-leave-confirmatio
     ],
     exports: [RouterModule]
 })
+/**
+ * AddCompanyRoutingModule module
+ * Implements AddCompanyRoutingModule functionality
+ */
 export class AddCompanyRoutingModule {
 }

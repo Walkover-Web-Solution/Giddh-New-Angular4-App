@@ -23,6 +23,9 @@ import { ArrayDataSource } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'primary-sidebar',
     templateUrl: './primary-sidebar.component.html',
@@ -31,6 +34,10 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
     standalone: false
 })
 
+/**
+ * PrimarySidebarComponent component
+ * Handles primarysidebar functionality and user interactions
+ */
 export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
@@ -116,6 +123,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** DataSource for the tree */
     public dataSource = new ArrayDataSource([]);
     /** Function to check if a node has children */
+    /**
+     * Handles hasChild functionality
+     */
     public hasChild = (_: number, node: any) => node.expandable;
     /** Handle cdk tree control */
     public treeControl = new FlatTreeControl<any>(
@@ -123,6 +133,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         node => node.expandable
     );
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -141,14 +155,26 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.ledgerAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            /**
+             * Handles if functionality
+             */
             if (organization && organization.details && organization.details.branchDetails) {
                 this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
                 this.generalService.currentOrganizationType = organization.type;
                 this.currentOrganizationType = organization.type;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response) {
                             this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
+                            /**
+                             * Handles if functionality
+                             */
                             if (!this.activeCompanyForDb) {
                                 this.activeCompanyForDb = new CompAidataModel();
                             }
@@ -171,11 +197,23 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
+    /**
+     * Handles keyboardupevent event
+     */
     public handleKeyboardUpEvent(event: KeyboardEvent) {
+        /**
+         * Handles if functionality
+         */
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             event.preventDefault();
             event.stopPropagation();
+            /**
+             * Handles if functionality
+             */
             if (this.companyList?.length > 0) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.commandkDialogRef && this.dialog.getDialogById(this.commandkDialogRef.id)) {
                     this.commandkDialogRef.close()
                 }
@@ -192,22 +230,40 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.isGoToBranch?.currentValue) {
             this.openCompanyBranchDropdown();
         }
+        /**
+         * Handles if functionality
+         */
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
             this.getVisibleMenuItems();
         }
 
          // Additional check: Try to load menu items if we have apiMenuItems but no allItems yet
+        /**
+         * Handles if functionality
+         */
         if ('apiMenuItems' in changes && changes.apiMenuItems.currentValue.length && (!this.allItems || this.allItems.length === 0)) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.localeData?.page_heading && this.apiMenuItems.length > 0) {
                     this.getVisibleMenuItems();
                 }
             }, 100);
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('showCommandDialog' in changes && changes.showCommandDialog.previousValue !== changes.showCommandDialog.currentValue && changes.showCommandDialog.currentValue) {
             this.showNavigationModal();
         }
@@ -239,6 +295,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         })
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -247,11 +306,17 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            /**
+             * Handles if functionality
+             */
             if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
                 this.selectedCompanyDetails = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
 
                 this.activeCompanyForDb = new CompAidataModel();
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
                     this.activeCompanyForDb.uniqueName = this.generalService.currentBranchUniqueName;
@@ -259,9 +324,18 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.activeCompanyForDb.name = selectedCmp.name;
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     this.dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').subscribe(accountList => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (accountList?.length) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (window.innerWidth > 1440 && window.innerHeight > 717) {
                                 this.accountItemsFromIndexDB = accountList.slice(0, 7);
                             } else {
@@ -274,11 +348,20 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.isCompanyWithoutBranch = response?.length === 1;
                 this.currentCompanyBranches = response;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -291,6 +374,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
+            /**
+             * Handles if functionality
+             */
             if (!companies || companies?.length === 0) {
                 return;
             }
@@ -299,8 +385,17 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.companyList = orderedCompanies;
         });
         this.updateIndexDbSuccess$.subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+                    /**
+                     * Handles firstValueFrom functionality
+                     */
                     firstValueFrom(this.dbService.getItemDetails(this.activeCompanyForDb.uniqueName)).then(dbResult => {
                         this.findListFromDb(dbResult);
                         this.generalActions.updateUiFromDb();
@@ -310,6 +405,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            /**
+             * Handles if functionality
+             */
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.previousUrl = this.currentUrl; // store old before updating
                 this.currentUrl = this.getCleanCurrentUrl(); // always clean
@@ -317,6 +415,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 const baseUrl = this.currentUrl;
                 this.isActiveRoute = baseUrl;
                 (Array.isArray(this.allItems) ? this.allItems : []).forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
                         return true;
                     }
@@ -327,6 +428,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('sidebar-menu', response?.value).subscribe(response => {
                     this.localeData = response;
@@ -337,16 +441,28 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
         // if invalid menu item clicked then navigate to default route and remove invalid entry from db
         this.generalService.invalidMenuClicked.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data) {
                 this.onItemSelected(data.next, data);
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.router.url.includes("/ledger")) {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+                /**
+                 * Handles if functionality
+                 */
                 if (account) {
                     this.activeAccount = account;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (account && !this.isItemAdded) {
                     this.isItemAdded = true;
                     // save data to db
@@ -361,6 +477,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             });
 
             this.ledgerAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+                /**
+                 * Handles if functionality
+                 */
                 if (account && account.uniqueName === this.activeAccount?.uniqueName) {
                     let item: any = {};
                     item.uniqueName = account?.uniqueName;
@@ -371,6 +490,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((accountDetails) => {
+            /**
+             * Handles if functionality
+             */
             if (accountDetails) {
                 this.genericAsideMenuAccountDialogRef?.close();
             }
@@ -406,6 +528,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleNewTeamCreationEmitter(e: any): void {
+        /**
+         * Handles if functionality
+         */
         if (e[0] === "group") {
             this.genericAsideMenuAccountDialogRef?.close();
             this.showManageGroupsModal(e[1]?.name);
@@ -423,19 +548,34 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public findListFromDb(dbResult: ICompAidata): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.activeCompanyForDb) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.activeCompanyForDb?.uniqueName) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (dbResult) {
+            /**
+             * Handles if functionality
+             */
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
                 this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
             } else {
                 this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
         } else {
+            /**
+             * Handles if functionality
+             */
             if (!this.activeCompanyForDb) {
                 this.activeCompanyForDb = new CompAidataModel();
             }
@@ -480,9 +620,21 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean): void {
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (item && item.type === 'MENU') {
+                /**
+                 * Handles if functionality
+                 */
                 if (item.additional && item.additional.tab) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (item.uniqueName.includes('?')) {
                         // Clean URL by removing query parameters
                         item.uniqueName = item.uniqueName.split('?')[0];
@@ -502,6 +654,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 // Get the redirect URL and clean it if it contains query parameters
                 let redirectUrl = this.previousUrl || this.currentUrl || '/';
                 // If redirectUrl contains query parameters, extract only the base path
+                /**
+                 * Handles if functionality
+                 */
                 if (redirectUrl.includes('?')) {
                     redirectUrl = redirectUrl.split('?')[0];
                 }
@@ -526,6 +681,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public analyzeAccounts(event: any, acc): void {
+        /**
+         * Handles if functionality
+         */
         if (event.shiftKey || event.ctrlKey || event.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
             this.onItemSelected(acc, null, true);
             return;
@@ -542,6 +700,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleItemClick(item: AllItem): void {
+        /**
+         * Handles if functionality
+         */
         if (item?.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
@@ -569,6 +730,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
+        /**
+         * Handles if functionality
+         */
         if (entity === 'menus') {
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
@@ -576,9 +740,18 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedLedgerName = item?.uniqueName;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
             // First ensure company exists in DB
+            /**
+             * Handles firstValueFrom functionality
+             */
             firstValueFrom(this.dbService.getItemDetails(this.activeCompanyForDb.uniqueName)).then(dbResult => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!dbResult) {
                     // Create fresh data structure if company doesn't exist
                     this.activeCompanyForDb.aidata = {
@@ -616,6 +789,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.getVisibleMenuItems();
         }
@@ -639,6 +815,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             flattenedItems.push(menu);
 
             childMenus?.forEach(item => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item?.additional?.queryParams?.voucherVersion) {
                     delete item?.additional?.queryParams?.voucherVersion;
                 }
@@ -692,6 +871,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public closeAccountAsidePane(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.genericAsideMenuAccountDialogRef?.close();
         }
@@ -703,6 +885,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public hidePrimarySidebarCompanyList(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.showCompanyBranchSwitch) {
             this.showCompanyBranchSwitch = false;
         }
@@ -714,6 +899,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     * @memberof PrimarySidebarComponent
     */
     public closeEvent(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.commandkDialogRef.close();
         }, 600);
@@ -728,7 +916,13 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getParentNode(node: any): any {
         const nodeIndex = this.allItems.indexOf(node);
+        /**
+         * Handles for functionality
+         */
         for (let i = nodeIndex - 1; i >= 0; i--) {
+          /**
+           * Handles if functionality
+           */
           if (this.allItems[i].level === node.level - 1) {
             return this.allItems[i];
           }
@@ -745,7 +939,13 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public shouldRender(node: any): boolean {
         let parent = this.getParentNode(node);
+        /**
+         * Handles while functionality
+         */
         while (parent) {
+            /**
+             * Handles if functionality
+             */
             if (!parent.isExpanded) {
                 return false;
             }
@@ -762,11 +962,20 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
       * @memberof PrimarySidebarComponent
       */
       public toggleNode(node: any): void {
+        /**
+         * Handles if functionality
+         */
         if (node.expandable || (node?.level === 0)) {
+          /**
+           * Handles if functionality
+           */
           if (node.isExpanded) {
             node.isExpanded = false;
           } else {
             (Array.isArray(this.allItems) ? this.allItems : []).forEach(item => {
+              /**
+               * Handles if functionality
+               */
               if (item.level === 0 && item !== node) {
                 item.isExpanded = false;
               }

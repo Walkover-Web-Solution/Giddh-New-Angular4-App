@@ -12,12 +12,19 @@ import { Configuration, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-gid
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'reconcile',
     templateUrl: './reconcilation.component.html',
     styleUrls: ['./reconcilation.component.scss'],
     standalone: false
 })
+/**
+ * ReconcileComponent component
+ * Handles reconcile functionality and user interactions
+ */
 export class ReconcileComponent implements OnInit, OnDestroy {
     @Input() public data: GstReconcileInvoiceDetails = null;
     @Input() public currentPeriod: any = null;
@@ -48,6 +55,10 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     /** Hold table page index number */
     public pageIndex: number = 0;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         @Inject(ServiceConfig) private serviceConfig,
@@ -57,11 +68,17 @@ export class ReconcileComponent implements OnInit, OnDestroy {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$),
+            /**
+             * Handles publishReplay functionality
+             */
             publishReplay(1), refCount());
         this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$), publishReplay(1), refCount());
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.fireGstReconcileRequest(GstReconcileActionsEnum.notfoundonportal);
@@ -74,10 +91,16 @@ export class ReconcileComponent implements OnInit, OnDestroy {
      * @memberof ReconcileComponent
      */
     public reconcileTabChanged(event: MatTabChangeEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
             let action = '';
+            /**
+             * Handles switch functionality
+             */
             switch (event.tab.textLabel) {
                 case this.localeData?.filing?.missing_in_gstn:
                     action = 'notfoundonportal';
@@ -110,6 +133,9 @@ export class ReconcileComponent implements OnInit, OnDestroy {
      * @returns
      */
     public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false, count: number = PAGINATION_LIMIT) {
+        /**
+         * Handles if functionality
+         */
         if (!this.currentPeriod) {
             return;
         }
@@ -125,6 +151,9 @@ export class ReconcileComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.reconcileActions.GstReconcileInvoiceRequest(request));
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -142,9 +171,15 @@ export class ReconcileComponent implements OnInit, OnDestroy {
             count: PAGINATION_LIMIT
         }
 
+        /**
+         * Handles switch functionality
+         */
         switch (this.reconcileActiveTab) {
             case GstReconcileActionsEnum.notfoundongiddh:
                 this.gstNotFoundOnGiddhData$.pipe(take(1)).subscribe(data => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data && data.data) {
                         page.pageNumber = data.data.page;
                         page.count = data.data.count;
@@ -153,6 +188,9 @@ export class ReconcileComponent implements OnInit, OnDestroy {
                 break;
             case GstReconcileActionsEnum.notfoundonportal:
                 this.gstNotFoundOnPortalData$.pipe(take(1)).subscribe(data => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data && data.data) {
                         page.pageNumber = data.data.page;
                         page.count = data.data.count;
@@ -161,6 +199,9 @@ export class ReconcileComponent implements OnInit, OnDestroy {
                 break;
             case GstReconcileActionsEnum.matched:
                 this.gstMatchedData$.pipe(take(1)).subscribe(data => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data && data.data) {
                         page.pageNumber = data.data.page;
                         page.count = data.data.count;
@@ -169,6 +210,9 @@ export class ReconcileComponent implements OnInit, OnDestroy {
                 break;
             case GstReconcileActionsEnum.partiallymatched:
                 this.gstPartiallyMatchedData$.pipe(take(1)).subscribe(data => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data && data.data) {
                         page.pageNumber = data.data.page;
                         page.count = data.data.count;
@@ -188,6 +232,9 @@ export class ReconcileComponent implements OnInit, OnDestroy {
      * @memberof ReconcileComponent
      */
     public reconcilePageChanged(event: any, action: string): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.pageIndex = event.pageIndex;
             const pageIndex = event.pageIndex + 1;

@@ -4,6 +4,10 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
 import { cloneDeep } from '../../lodash-optimized';
 
+/**
+ * GstReconcileState interface definition
+ * Defines the structure and contract for GstReconcileState objects
+ */
 export interface GstReconcileState {
     isGenerateOtpInProcess: boolean;
     isGenerateOtpSuccess: boolean;
@@ -15,11 +19,19 @@ export interface GstReconcileState {
     gstReconcileData: GstReconcileDataState;
 }
 
+/**
+ * ReconcileActionState reducer
+ * Handles reconcileactionstate state transitions and updates
+ */
 export class ReconcileActionState {
     public count: number = 0;
     public data: GstReconcileInvoiceDetails = new GstReconcileInvoiceDetails();
 }
 
+/**
+ * GstReconcileDataState interface definition
+ * Defines the structure and contract for GstReconcileDataState objects
+ */
 interface GstReconcileDataState {
     notFoundOnGiddh: ReconcileActionState;
     notFoundOnPortal: ReconcileActionState;
@@ -47,6 +59,9 @@ const initialState: GstReconcileState = {
 
 export function GstReconcileReducer(state: GstReconcileState = initialState, action: CustomActions): GstReconcileState {
 
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case GST_RECONCILE_ACTIONS.GST_RECONCILE_OTP_REQUEST:
             return {
@@ -88,12 +103,21 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
             let newState: GstReconcileState = cloneDeep(state);
             newState.isGstReconcileInvoiceInProcess = false;
 
+            /**
+             * Handles if functionality
+             */
             if (response?.status === 'success') {
                 newState.isGstReconcileInvoiceSuccess = true;
                 newState.gstFoundOnGiddh = true;
 
                 // check if single action data is required
+                /**
+                 * Handles if functionality
+                 */
                 if (response.queryString.action) {
+                    /**
+                     * Handles switch functionality
+                     */
                     switch (response.queryString.action) {
                         case GstReconcileActionsEnum.notfoundongiddh:
                             newState.gstReconcileData.notFoundOnGiddh = {
@@ -159,6 +183,9 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
                 }
 
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.code === 'GST_AUTH_ERROR') {
                     newState.isGstReconcileInvoiceSuccess = false;
                     newState.gstFoundOnGiddh = true;

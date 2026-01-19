@@ -21,6 +21,9 @@ import { GeneralActions } from "../../actions/general/general.actions";
 import { ActivatedRoute } from "@angular/router";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "ai-ocr-list",
     templateUrl: "./ai-ocr-list.component.html",
@@ -29,6 +32,10 @@ import { VoucherTypeEnum } from "../../models/api-models/Sales";
     providers: [AiOcrStore],
     standalone:false
 })
+/**
+ * AiOcrListComponent component
+ * Handles aiocrlist functionality and user interactions
+ */
 export class AiOcrListComponent implements OnInit, OnDestroy {
     /** Holds table sorting reference */
     @ViewChild(MatSort) sortBy: MatSort;
@@ -97,6 +104,10 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     /** This will use for transaction type */
     public transactionOptions: Array<{ label: string; value: string }> = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -117,12 +128,21 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.initForm();
         this.route.params.pipe(delay(100), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 // End previous route scope and clear any existing interval before starting new scope
                 this.routeScope$.next();
                 this.routeScope$.complete();
                 this.routeScope$ = new Subject<void>();
+                /**
+                 * Handles if functionality
+                 */
                 if (this.completedIntervalId) {
+                    /**
+                     * Handles clearInterval functionality
+                     */
                     clearInterval(this.completedIntervalId);
                     this.completedIntervalId = null;
                 }
@@ -140,7 +160,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     ];
                 /** Subscribe to main page OCR data only */
                 this.aiOcrService.mainPageOcrData$.pipe(
+                    /**
+                     * Handles takeUntil functionality
+                     */
                     takeUntil(this.destroyed$),
+                    /**
+                     * Handles takeUntil functionality
+                     */
                     takeUntil(this.routeScope$),
                 ).subscribe((data) => {
                     this.updateDataSource(data);
@@ -148,6 +174,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
 
 
                 this.aiOcrService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res) {
                         this.aiOcrService.mainPageOcrData$.next(null);
                         this.getAllOcrDocuments(false);
@@ -156,6 +185,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 });
 
                 this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                         this.activeCompany = response;
                     }
@@ -165,12 +197,18 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.ocrDocumentListForm?.controls["status"].valueChanges
                     .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$), takeUntil(this.routeScope$))
                     .subscribe((searchedText) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             // Switch to list mode when filtering
                             this.aiOcrService.mainPage$.next(false);
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
@@ -183,12 +221,18 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.ocrDocumentListForm?.controls["convertedStatus"].valueChanges
                     .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$), takeUntil(this.routeScope$))
                     .subscribe((searchedText) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             // Switch to list mode when filtering
                             this.aiOcrService.mainPage$.next(false);
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
@@ -201,12 +245,18 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.ocrDocumentListForm?.controls["uploadedBy"].valueChanges
                     .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$), takeUntil(this.routeScope$))
                     .subscribe((searchedText) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
 
                             this.aiOcrService.mainPage$.next(false);
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
@@ -219,12 +269,18 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.ocrDocumentListForm?.controls["fileName"].valueChanges
                     .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$), takeUntil(this.routeScope$))
                     .subscribe((searchedText) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
 
                             this.aiOcrService.mainPage$.next(false);
                         }
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
@@ -235,8 +291,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     });
 
                 this.aiOcrService.mainPage$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!response) {
                         this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res) {
                                this.ocrDocumentsRequestParams.from = res.from;
                                 this.ocrDocumentsRequestParams.to = res.to;
@@ -246,12 +308,18 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 });
 
                 this.aiOcrService.resetData$.pipe(takeUntil(this.routeScope$), takeUntil(this.routeScope$)).subscribe((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res) {
                         this.resetFilter(res);
                     }
                 });
 
                 this.aiOcrService.selectBranch$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res) {
                         this.ocrDocumentsRequestParams.branchUniqueName = res.branchUniqueName;
                         this.ocrDocumentsRequestParams.from = res.from;
@@ -349,7 +417,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (searchedFieldName === "File Status") {
+            /**
+             * Handles if functionality
+             */
             if (
                 this.ocrDocumentListForm?.controls["status"].value !== null &&
                 this.ocrDocumentListForm?.controls["status"].value !== ""
@@ -357,6 +431,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 return;
             }
         } else if (searchedFieldName === "Uploaded By") {
+            /**
+             * Handles if functionality
+             */
             if (
                 this.ocrDocumentListForm?.controls["uploadedBy"].value !== null &&
                 this.ocrDocumentListForm?.controls["uploadedBy"].value !== ""
@@ -364,6 +441,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 return;
             }
         } else if (searchedFieldName === "File Name") {
+            /**
+             * Handles if functionality
+             */
             if (
                 this.ocrDocumentListForm?.controls["fileName"].value !== null &&
                 this.ocrDocumentListForm?.controls["fileName"].value !== ""
@@ -371,6 +451,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 return;
             }
         } else if (searchedFieldName === "Converted Status") {
+            /**
+             * Handles if functionality
+             */
             if (
                 this.ocrDocumentListForm?.controls["convertedStatus"].value !== null &&
                 this.ocrDocumentListForm?.controls["convertedStatus"].value !== ""
@@ -379,9 +462,15 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (searchedFieldName === "File Status") {
                 this.showStatus = false;
             } else if (searchedFieldName === "Uploaded By") {
@@ -401,6 +490,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public toggleSearch(fieldName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === "File Status") {
             this.showStatus = true;
         } else if (fieldName === "Uploaded By") {
@@ -419,6 +511,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public handlePageChange(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.ocrDocumentsRequestParams.count !== event.pageSize) {
             this.ocrDocumentsRequestParams.page = 1;
             this.pageIndex = 0;
@@ -461,8 +556,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     private updateDataSource(data: any): void {
+        /**
+         * Handles if functionality
+         */
         if (data?.items) {
             this.dataSource = new MatTableDataSource<any>(data.items);
+            /**
+             * Handles if functionality
+             */
             if (
                 this.dataSource?.filteredData?.length ||
                 this.ocrDocumentListForm?.controls["uploadedBy"]?.value ||
@@ -491,6 +592,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public getAllOcrDocuments(resetPage: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.ocrDocumentsRequestParams.page = 1;
         }
@@ -510,6 +614,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public sortChange(event: Sort): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.ocrDocumentsRequestParams.sort = event.direction ? event.direction : "asc";
             this.ocrDocumentsRequestParams.sortBy = event.active?.toUpperCase();
@@ -541,8 +648,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public ocrDataUpdate(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.ocrList$.pipe(
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.routeScope$),
             ).subscribe((data) => {
                 this.store.dispatch(this.generalActions.openSideMenu(true));
@@ -571,7 +684,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public ngOnDestroy(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.completedIntervalId) {
+            /**
+             * Handles clearInterval functionality
+             */
             clearInterval(this.completedIntervalId);
             this.completedIntervalId = null;
         }

@@ -10,6 +10,10 @@ import { HIGH_RATE_FIELD_PRECISION, IOption } from '../../app.constant';
 import { ITaxControlData } from '../interfaces/tax.interface';
 
 
+/**
+ * VoucherTypeEnum enumeration
+ * Defines constant values for VoucherTypeEnum
+ */
 export enum VoucherTypeEnum {
     sales = 'sales',
     purchase = 'purchase',
@@ -32,18 +36,30 @@ export enum VoucherTypeEnum {
     purchase_order = 'purchase_order'
 };
 
+/**
+ * TemplateTypeEnum enumeration
+ * Defines constant values for TemplateTypeEnum
+ */
 export enum TemplateTypeEnum {
     GstTemplateA = 'gst_template_a',
     TallyTemplate = 'tally_template',
     ThermalTemplate = 'thermal_template'
 }
 
+/**
+ * TemplateModeEnum enumeration
+ * Defines constant values for TemplateModeEnum
+ */
 export enum TemplateModeEnum {
     Create = 'create',
     Edit = 'edit',
     Update = 'update'
 }
 
+/**
+ * ActionTypeAfterVoucherGenerateOrUpdate enumeration
+ * Defines constant values for ActionTypeAfterVoucherGenerateOrUpdate
+ */
 export enum ActionTypeAfterVoucherGenerateOrUpdate {
     generate,
     generateAndClose,
@@ -125,12 +141,20 @@ export const VOUCHER_TYPE_LIST: any[] = [
     }
 ];
 
+/**
+ * IStockUnit interface definition
+ * Defines the structure and contract for IStockUnit objects
+ */
 export interface IStockUnit {
     text: string;
     id: string;
     rate?: number;
 }
 
+/**
+ * IForceClear interface definition
+ * Defines the structure and contract for IForceClear objects
+ */
 export interface IForceClear {
     status: boolean;
 }
@@ -146,6 +170,10 @@ class CompanyDetailsClass {
     public panNumber: string;
 }
 
+/**
+ * GstDetailsClass class
+ * Implements GstDetailsClass functionality
+ */
 export class GstDetailsClass {
     public index?: number;
     public gstNumber?: any;
@@ -161,6 +189,10 @@ export class GstDetailsClass {
     public stateName?: string;
     public pincode?: string;
     public taxNumber?: string;
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.address = [];
         this.index = 0;
@@ -168,14 +200,29 @@ export class GstDetailsClass {
         this.county = new CountyCode();
     }
 }
+/**
+ * CountyCode class
+ * Implements CountyCode functionality
+ */
 export class CountyCode {
     name: string;
     code: string;
 }
+/**
+ * CurrencyClass class
+ * Implements CurrencyClass functionality
+ */
 class CurrencyClass {
     public code: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(attrs?: any) {
+        /**
+         * Handles if functionality
+         */
         if (attrs) {
             this.code = attrs.currency;
         } else {
@@ -184,6 +231,10 @@ class CurrencyClass {
     }
 }
 
+/**
+ * AccountDetailsClass class
+ * Implements AccountDetailsClass functionality
+ */
 export class AccountDetailsClass {
     public name: string;
     public uniqueName: string;
@@ -202,14 +253,27 @@ export class AccountDetailsClass {
     public customerName: string;
     public mobileNumber?: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(attrs?: any) {
         this.currency = new CurrencyClass(attrs);
         this.billingDetails = new GstDetailsClass();
         this.shippingDetails = new GstDetailsClass();
+        /**
+         * Handles if functionality
+         */
         if (attrs) {
+            /**
+             * Handles if functionality
+             */
             if (attrs.currencySymbol) {
                 this.currencySymbol = attrs.currencySymbol;
             }
+            /**
+             * Handles if functionality
+             */
             if (attrs.currency) {
                 this.currencyCode = attrs.currency;
             }
@@ -218,9 +282,15 @@ export class AccountDetailsClass {
             this.mobileNumber = attrs.mobileNo || '';
             this.email = attrs.email || '';
             this.customerName = attrs.updatedBy.name || '';
+            /**
+             * Handles if functionality
+             */
             if (attrs.country) {
                 this.country = new CountryClass(attrs.country);
             }
+            /**
+             * Handles if functionality
+             */
             if (attrs.addresses?.length > 0) {
                 let str = isNull(attrs.addresses[0].address) ? '' : attrs.addresses[0].address;
                 // set billing
@@ -257,6 +327,10 @@ export class AccountDetailsClass {
     }
 }
 
+/**
+ * ICommonItemOfTransaction class
+ * Implements ICommonItemOfTransaction functionality
+ */
 class ICommonItemOfTransaction {
     public amount: number;
     public convertedAmount: number;
@@ -264,6 +338,10 @@ class ICommonItemOfTransaction {
     public accountName: string;
 }
 
+/**
+ * ITaxList interface definition
+ * Defines the structure and contract for ITaxList objects
+ */
 export interface ITaxList {
     name: string;
     uniqueName: string;
@@ -273,6 +351,10 @@ export interface ITaxList {
     type?: string;
 }
 
+/**
+ * SalesTransactionItemClass class
+ * Implements SalesTransactionItemClass functionality
+ */
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public discount: any[];
     public hsnOrSac: string;
@@ -306,7 +388,14 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public variant: IVariant;
     public taxInclusive: boolean;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
+        /**
+         * Handles super functionality
+         */
         super();
         this.amount = 0;
         this.total = 0;
@@ -318,19 +407,34 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     }
 
     // basic check for valid transaction
+    /**
+     * Handles isValid functionality
+     */
     public isValid() {
         return !!this.accountUniqueName;
     }
 
+    /**
+     * Sets amount value
+     */
     public setAmount(entry: SalesEntryClass) {
         this.taxableValue = this.getTaxableValue(entry);
         let tax = this.getTotalTaxOfEntry(entry.taxes);
         this.total = this.getTransactionTotal(tax, entry);
     }
 
+    /**
+     * Retrieves totaltaxofentry data
+     */
     public getTotalTaxOfEntry(taxArr: ITaxControlData[]): number {
         let count: number = 0;
+        /**
+         * Handles if functionality
+         */
         if (taxArr?.length > 0) {
+            /**
+             * Handles forEach functionality
+             */
             forEach(taxArr, (item: ITaxControlData) => {
                 count += item.amount;
             });
@@ -340,12 +444,24 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         }
     }
 
+    /**
+     * Handles checkForInfinity functionality
+     */
     public checkForInfinity(value): number {
+        /**
+         * Handles return functionality
+         */
         return (value === Infinity) ? 0 : value;
     }
 
+    /**
+     * Retrieves transactiontotal data
+     */
     public getTransactionTotal(tax: number, entry: SalesEntryClass): number {
         let count: number = 0;
+        /**
+         * Handles if functionality
+         */
         if (tax > 0) {
             let a = this.getTaxableValue(entry) * (tax / 100);
             a = this.checkForInfinity(a);
@@ -365,6 +481,9 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
      */
     public getTaxableValue(entry: SalesEntryClass): number {
         let count: number = 0;
+        /**
+         * Handles if functionality
+         */
         if (this.quantity && this.rate) {
             this.amount = this.rate * this.quantity;
             count = this.checkForInfinity((this.rate * this.quantity) - entry.discountSum);
@@ -375,6 +494,10 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     }
 }
 
+/**
+ * SalesEntryClass class
+ * Implements SalesEntryClass functionality
+ */
 export class SalesEntryClass {
     public uniqueName: string;
     public discounts: LedgerDiscountClass[];
@@ -406,6 +529,10 @@ export class SalesEntryClass {
     public discountFixedValueModal?: number;
     public discountPercentageModal?: number;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.transactions = [new SalesTransactionItemClass()];
         this.entryDate = dayjs().toDate();
@@ -423,6 +550,9 @@ export class SalesEntryClass {
         this.purchaseOrderItemMapping = { uniqueName: '', entryUniqueName: '' };
     }
 
+    /**
+     * Handles staticDefaultDiscount functionality
+     */
     public staticDefaultDiscount(): LedgerDiscountClass {
         return {
             discountType: 'FIX_AMOUNT',
@@ -434,17 +564,32 @@ export class SalesEntryClass {
     }
 }
 
+/**
+ * CountryClass class
+ * Implements CountryClass functionality
+ */
 class CountryClass {
     public countryName: string;
     public countryCode: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(attrs?: any) {
+        /**
+         * Handles if functionality
+         */
         if (attrs) {
             return Object.assign({}, this, attrs);
         }
     }
 }
 
+/**
+ * OtherSalesItemClass class
+ * Implements OtherSalesItemClass functionality
+ */
 export class OtherSalesItemClass {
     public shippingDate: any;
     public shippedVia: string;
@@ -456,6 +601,10 @@ export class OtherSalesItemClass {
     public message2?: string;
     public slogan?: any;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() { }
 }
 
@@ -536,6 +685,10 @@ export interface PurchaseRecordRequest extends GenericRequest {
     purchaseBillCompany?: any;
 }
 
+/**
+ * VoucherDetailsClass class
+ * Implements VoucherDetailsClass functionality
+ */
 export class VoucherDetailsClass {
     public voucherNumber?: string;
     public proformaNumber?: string;
@@ -574,6 +727,10 @@ export class VoucherDetailsClass {
     public gainLoss?: number;
     public voucherUniqueName?: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.customerName = null;
         this.grandTotal = 0;
@@ -594,32 +751,56 @@ export class VoucherDetailsClass {
 }
 
 /** Model invoice linking request */
+/**
+ * IInvoiceLinkingRequest class
+ * Implements IInvoiceLinkingRequest functionality
+ */
 export class IInvoiceLinkingRequest {
     public linkedInvoices: ILinkedInvoice[];
 }
 
 /** Model linked invoice */
+/**
+ * ILinkedInvoice class
+ * Implements ILinkedInvoice functionality
+ */
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
     public invoiceNumber?: string;
     public voucherType: string;
 }
 
+/**
+ * TemplateDetailsClass class
+ * Implements TemplateDetailsClass functionality
+ */
 export class TemplateDetailsClass {
     public logoPath?: string;
     public other: OtherSalesItemClass;
     public templateUniqueName?: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.other = new OtherSalesItemClass();
     }
 }
 
+/**
+ * AmountMulticurrency class
+ * Implements AmountMulticurrency functionality
+ */
 export class AmountMulticurrency {
     public amountForAccount: number;
     public amountForCompany: number;
 }
 
+/**
+ * VoucherClass class
+ * Implements VoucherClass functionality
+ */
 export class VoucherClass {
     public voucherDetails: VoucherDetailsClass;
     public companyDetails: CompanyDetailsClass;
@@ -647,6 +828,10 @@ export class VoucherClass {
     public einvoiceGenerated?: boolean;
     public generateEInvoice?: boolean = undefined;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.accountDetails = new AccountDetailsClass();
         this.entries = [new SalesEntryClass()];
@@ -655,17 +840,29 @@ export class VoucherClass {
     }
 }
 
+/**
+ * SalesOtherTaxesCalculationMethodEnum enumeration
+ * Defines constant values for SalesOtherTaxesCalculationMethodEnum
+ */
 export enum SalesOtherTaxesCalculationMethodEnum {
     OnTaxableAmount = 'OnTaxableAmount',
     OnTotalAmount = 'OnTotalAmount'
 }
 
+/**
+ * SalesOtherTaxesModal class
+ * Implements SalesOtherTaxesModal functionality
+ */
 export class SalesOtherTaxesModal {
     appliedOtherTax: INameUniqueName;
     tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
     itemLabel: string;
 }
 
+/**
+ * SalesAddBulkStockItems class
+ * Implements SalesAddBulkStockItems functionality
+ */
 export class SalesAddBulkStockItems {
     name: string;
     uniqueName: string;
@@ -680,21 +877,37 @@ export class SalesAddBulkStockItems {
     variants?: Array<IOption>;
 }
 
+/**
+ * CodeStockMulticurrency class
+ * Implements CodeStockMulticurrency functionality
+ */
 export class CodeStockMulticurrency {
     code: string;
     uniqueName: any;
 }
 
+/**
+ * Currency class
+ * Implements Currency functionality
+ */
 export class Currency {
     code: string;
 }
 
+/**
+ * StateCode class
+ * Implements StateCode functionality
+ */
 export class StateCode {
     name: string;
     code: string;
     stateGstCode?: string;
 }
 
+/**
+ * SalesEntryClassMulticurrency class
+ * Implements SalesEntryClassMulticurrency functionality
+ */
 export class SalesEntryClassMulticurrency {
     public date: string;
     public description: string;
@@ -708,6 +921,10 @@ export class SalesEntryClassMulticurrency {
     public discounts: DiscountMulticurrency[];
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.transactions = [];
         this.date = '';
@@ -723,12 +940,20 @@ export class SalesEntryClassMulticurrency {
     }
 }
 
+/**
+ * TransactionClassMulticurrency class
+ * Implements TransactionClassMulticurrency functionality
+ */
 export class TransactionClassMulticurrency {
     public account: INameUniqueName;
     public amount: AmountClassMulticurrency;
     public stock?: SalesAddBulkStockItems;
     public description?: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.account = new class implements INameUniqueName {
             name: 'sales';
@@ -738,17 +963,29 @@ export class TransactionClassMulticurrency {
     }
 }
 
+/**
+ * AmountClassMulticurrency class
+ * Implements AmountClassMulticurrency functionality
+ */
 export class AmountClassMulticurrency {
     public amountForAccount: number;
     public amountForCompany: number;
     public type?: string;
     public accountUniqueName?: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.type = 'DEBIT';
     }
 }
 
+/**
+ * DiscountMulticurrency class
+ * Implements DiscountMulticurrency functionality
+ */
 export class DiscountMulticurrency {
     public calculationMethod: string;
     public uniqueName: string;
@@ -757,6 +994,10 @@ export class DiscountMulticurrency {
     public particular: string;
     public name: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(ledgerDiscountClass: LedgerDiscountClass) {
         this.calculationMethod = ledgerDiscountClass.discountType;
         this.uniqueName = ledgerDiscountClass.discountUniqueName;
@@ -768,30 +1009,54 @@ export class DiscountMulticurrency {
     }
 }
 
+/**
+ * PaymentReceiptTransaction class
+ * Implements PaymentReceiptTransaction functionality
+ */
 export class PaymentReceiptTransaction {
     account: PaymentReceiptAccount;
     amount: PaymentReceiptAmount;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.account = new PaymentReceiptAccount();
         this.amount = new PaymentReceiptAmount();
     }
 }
 
+/**
+ * PaymentReceiptAccount class
+ * Implements PaymentReceiptAccount functionality
+ */
 export class PaymentReceiptAccount {
     uniqueName: string;
     name: string;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.uniqueName = "";
         this.name = "";
     }
 }
 
+/**
+ * PaymentReceiptAmount class
+ * Implements PaymentReceiptAmount functionality
+ */
 export class PaymentReceiptAmount {
     amountForAccount: number;
 }
 
+/**
+ * PaymentReceiptEntry class
+ * Implements PaymentReceiptEntry functionality
+ */
 export class PaymentReceiptEntry {
     transactions: PaymentReceiptTransaction[];
     date: any;
@@ -799,12 +1064,20 @@ export class PaymentReceiptEntry {
     chequeClearanceDate: any;
     taxes: ITaxControlData[] = [];
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.transactions = [new PaymentReceiptTransaction()];
         this.taxes = [];
     }
 }
 
+/**
+ * PaymentReceipt class
+ * Implements PaymentReceipt functionality
+ */
 export class PaymentReceipt {
     account: AccountDetailsClass;
     accountDetails: any;
@@ -818,6 +1091,10 @@ export class PaymentReceipt {
     uniqueName?: any;
     templateDetails?: TemplateDetailsClass;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.account = new AccountDetailsClass();
         this.accountDetails = new AccountDetailsClass();

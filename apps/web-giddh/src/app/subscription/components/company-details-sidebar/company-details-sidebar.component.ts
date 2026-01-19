@@ -5,6 +5,9 @@ import { SettingsProfileService } from '../../../services/settings.profile.servi
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'company-details-sidebar',
     styleUrls: ['./company-details-sidebar.component.scss'],
@@ -12,6 +15,10 @@ import { ReplaySubject } from 'rxjs';
     standalone: false
 })
 
+/**
+ * CompanyDetailsSidebarComponent component
+ * Handles companydetailssidebar functionality and user interactions
+ */
 export class CompanyDetailsSidebarComponent implements OnInit {
     @Input() public selectedCompany: any;
     /* This will hold local JSON data */
@@ -26,11 +33,21 @@ export class CompanyDetailsSidebarComponent implements OnInit {
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private settingsProfileService: SettingsProfileService) {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedCompany) {
             this.getCompanyDetails();
         }
@@ -43,6 +60,9 @@ export class CompanyDetailsSidebarComponent implements OnInit {
      */
     public getCompanyDetails(): void {
         this.settingsProfileService.getCompanyDetails(this.selectedCompany?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "success" && response.body) {
                 this.selectedCompany = response.body;
             }

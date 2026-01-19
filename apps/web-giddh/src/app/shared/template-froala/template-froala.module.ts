@@ -18,6 +18,9 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
   imports: [
         CommonModule,
@@ -46,4 +49,8 @@ import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.mod
     declarations: [TemplateFroalaComponent],
     providers: [TitleCasePipe]
 })
+/**
+ * FroalaTemplateEditorModule module
+ * Implements FroalaTemplateEditorModule functionality
+ */
 export class FroalaTemplateEditorModule { }

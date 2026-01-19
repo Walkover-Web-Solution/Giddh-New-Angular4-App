@@ -35,6 +35,10 @@ interface CachedGeolocationData {
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * GeolocationService service
+ * Provides geolocation related business logic and data operations
+ */
 export class GeolocationService {
 
     /** API endpoint for IP geolocation */
@@ -62,11 +66,20 @@ export class GeolocationService {
      */
     public getCountryData(): Observable<GeolocationResponse | null> {
         // Check cache first
+        /**
+         * Handles if functionality
+         */
         if (this.hasValidCache()) {
             const cachedData = this.getCachedData();
+            /**
+             * Handles if functionality
+             */
             if (cachedData) {
                 // Use setTimeout to make it async even for cached data
                 return new Observable(observer => {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         observer.next(cachedData.data);
                         observer.complete();
@@ -77,11 +90,20 @@ export class GeolocationService {
 
         // Make API call if no valid cache
         return this.http.get<GeolocationResponse>(this.API_URL).pipe(
+            /**
+             * Handles tap functionality
+             */
             tap((data) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (data) {
                     this.setCachedData(data);
                 }
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((error) => {
 
                 return of(null);
@@ -124,6 +146,9 @@ export class GeolocationService {
         // Direct country code mapping - handles all duplicate dial codes correctly
         const country = COUNTRIES_DATA.find(c => c.code === countryCode);
         
+        /**
+         * Handles if functionality
+         */
         if (country) {
             return country;
         }
@@ -135,6 +160,9 @@ export class GeolocationService {
         };
 
         const mappedCode = countryCodeMappings[countryCode];
+        /**
+         * Handles if functionality
+         */
         if (mappedCode) {
             return COUNTRIES_DATA.find(c => c.code === mappedCode) || null;
         }
@@ -151,6 +179,9 @@ export class GeolocationService {
     public hasValidCache(): boolean {
         try {
             const cachedData = this.getCachedData();
+            /**
+             * Handles if functionality
+             */
             if (!cachedData) {
                 return false;
             }
@@ -186,6 +217,9 @@ export class GeolocationService {
     private getCachedData(): CachedGeolocationData | null {
         try {
             const cached = localStorage.getItem(this.CACHE_KEY);
+            /**
+             * Handles if functionality
+             */
             if (!cached) {
                 return null;
             }
@@ -193,6 +227,9 @@ export class GeolocationService {
             const parsedData: CachedGeolocationData = JSON.parse(cached);
             
             // Validate cache structure
+            /**
+             * Handles if functionality
+             */
             if (!parsedData.data || !parsedData.timestamp || !parsedData.expiryDate) {
                 this.clearCache();
                 return null;

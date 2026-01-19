@@ -1,3 +1,7 @@
+/**
+ * BaseResponse class
+ * Implements BaseResponse functionality
+ */
 export class BaseResponse<TResponce, TRequest> {
     public status?: string;
     public code?: string;
@@ -11,6 +15,10 @@ export class BaseResponse<TResponce, TRequest> {
     public errorDetails?: string[];
 }
 
+/**
+ * PagedResponse interface definition
+ * Defines the structure and contract for PagedResponse objects
+ */
 export interface PagedResponse {
     count: number;
     page: number;
@@ -18,6 +26,10 @@ export interface PagedResponse {
     totalItems: number;
 }
 
+/**
+ * CommonPaginatedResponse class
+ * Implements CommonPaginatedResponse functionality
+ */
 export class CommonPaginatedResponse<T> {
     public count: number;
     public page: number;

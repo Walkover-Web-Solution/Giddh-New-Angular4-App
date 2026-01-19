@@ -17,6 +17,9 @@ import { SettingsUtilityService } from '../../settings/services/settings-utility
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { IOption } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-bulk-update',
     templateUrl: './bulk-update.component.html',
@@ -24,6 +27,10 @@ import { IOption } from '../../app.constant';
     providers: [VoucherComponentStore],
     standalone: false
 })
+/**
+ * BulkUpdateComponent component
+ * Handles bulkupdate functionality and user interactions
+ */
 export class BulkUpdateComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -64,6 +71,10 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     /** Holds Default Template Name as label value */
     public signatureName: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
@@ -87,6 +98,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         this.commonLocaleData = this.inputData?.commonLocaleData;
 
         this.isPOVoucher = this.inputData?.voucherType ===  VoucherTypeEnum.purchaseOrder;
+        /**
+         * Handles if functionality
+         */
         if (this.isPOVoucher) {
             this.bulkUpdateForm = this.formBuilder.group({
                 action: [''],
@@ -129,6 +143,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.slogan, value: 'slogan' },
             ];
 
+            /**
+             * Handles if functionality
+             */
             if ((this.inputData?.voucherType === VoucherTypeEnum.creditNote) || (this.inputData?.voucherType === VoucherTypeEnum.debitNote)) {
                 this.fieldOptions = this.fieldOptions?.filter(item => item?.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
             }
@@ -136,8 +153,14 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
             this.getCreatedTemplates();
 
             this.componentStore.uploadImageBase64Response$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     this.bulkUpdateForm.get("imageSignatureUniqueName")?.patchValue("");
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.uniqueName) {
                         this.signatureSrc = response.path;
                         this.bulkUpdateForm.get("imageSignatureUniqueName")?.patchValue(response.uniqueName);
@@ -149,6 +172,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         }
 
         this.componentStore.bulkUpdateVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.onCancel(true);
             }
@@ -164,6 +190,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     private getWarehouses(): void {
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.componentStore.warehouseList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let warehouseResults = response.results?.filter(warehouse => !warehouse.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
@@ -191,23 +220,38 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     private getCreatedTemplates(): void {
         let voucherType = (this.inputData?.voucherType === VoucherTypeEnum.creditNote) || (this.inputData?.voucherType === VoucherTypeEnum.debitNote) ? 'voucher' : 'invoice';
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (!response) {
                 this.componentStore.getCreatedTemplates(voucherType);
             } else {
                 const defaultTemplate = response.find(template => (template.isDefault || template.isDefaultForVoucher));
                 const sections = defaultTemplate.sections;
+                /**
+                 * Handles if functionality
+                 */
                 if (sections?.footer?.data) {
                     this.showNotesAtLastPage = sections.footer.data.showNotesAtLastPage?.display;
                 }
 
                 let customDefault = response.filter(custom => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (voucherType === 'invoice') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (custom.isDefault) {
                             return custom;
                         } else {
                             return;
                         }
                     } else {
+                        /**
+                         * Handles if functionality
+                         */
                         if (custom.isDefaultForVoucher) {
                             return custom;
                         } else {
@@ -217,6 +261,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
 
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (customDefault) {
                     this.defaultTemplates = customDefault[0];
                 }
@@ -238,7 +285,13 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof BulkUpdateComponent
      */
     public checkDefaultTemplateSignature(defaultTemplate: CustomTemplateResponse): void {
+        /**
+         * Handles if functionality
+         */
         if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data) {
+            /**
+             * Handles if functionality
+             */
             if (defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.imageSignature.display && defaultTemplate.sections.footer.data.slogan && !defaultTemplate.sections.footer.data.slogan.display) {
                 this.isDefaultTemplateSignatureImage = true;
             } else if (defaultTemplate && defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.slogan && defaultTemplate.sections.footer.data.slogan.display && !defaultTemplate.sections.footer.data.imageSignature.display) {
@@ -256,6 +309,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      */
     public uploadImage(): void {
         const selectedFile: any = document.getElementById("bulkUploadfileInput");
+        /**
+         * Handles if functionality
+         */
         if (selectedFile?.files?.length) {
             const file = selectedFile?.files[0];
             this.generalService.getSelectedFileBase64(file, (base64) => {
@@ -290,6 +346,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof BulkUpdateComponent
      */
     public resetFormData(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isPOVoucher) {
             this.bulkUpdateForm.get("purchaseDate")?.patchValue("");
             this.bulkUpdateForm.get("dueDate")?.patchValue("");
@@ -316,6 +375,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     public handleSelectedFieldSelect(): void {
         const selectedValue = this.bulkUpdateForm.get('selectedField')?.value;
 
+        /**
+         * Handles if functionality
+         */
         if (selectedValue === 'pdfTemplate' && this.templatesList?.length) {
             this.bulkUpdateForm.get("templateUniqueName")?.patchValue(this.templatesList[0].value);
             this.templateName = this.templatesList[0].label;
@@ -331,7 +393,13 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof BulkUpdateComponent
      */
     public updateBulkInvoice(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.bulkUpdateForm.get("selectedField")?.value && this.inputData?.voucherType && this.inputData?.voucherUniqueNames) {
+            /**
+             * Handles switch functionality
+             */
             switch (this.bulkUpdateForm.get("selectedField")?.value) {
                 case 'pdfTemplate':
                     this.bulkUpdateRequest({ templateUniqueName: this.bulkUpdateForm.get("templateUniqueName")?.value }, 'templates');
@@ -342,13 +410,22 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                     break;
 
                 case 'signature':
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.bulkUpdateForm.get("signatureOption")?.value === 'image') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.isDefaultTemplateSignatureImage) {
                             this.confirmImageSlogan();
                         } else {
                             this.onConfirmationUpdateImageSlogan();
                         }
                     } else {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.isDefaultTemplateSignatureImage) {
                             this.confirmImageSlogan();
                         } else {
@@ -360,6 +437,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                 case 'dueDate':
                     let dueDate = "";
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.bulkUpdateForm.get("dueDate")?.value) {
                         dueDate = dayjs(this.bulkUpdateForm.get("dueDate")?.value).format(GIDDH_DATE_FORMAT);
                     }
@@ -384,6 +464,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof BulkUpdateComponent
      */
     public updateBulkPO(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.validateBulkUpdateFields()) {
             return
         }
@@ -415,7 +498,13 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof BulkUpdateComponent
      */
     public onConfirmationUpdateImageSlogan(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.bulkUpdateForm.get("signatureOption")?.value === 'image') {
+            /**
+             * Handles if functionality
+             */
             if (this.bulkUpdateForm.get("imageSignatureUniqueName")?.value) {
                 this.bulkUpdateRequest({ imageSignatureUniqueName: this.bulkUpdateForm.get("imageSignatureUniqueName")?.value }, 'imagesignature');
             } else {
@@ -454,6 +543,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.onConfirmationUpdateImageSlogan();
             } else {
@@ -471,8 +563,17 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         let isValid = true;
         const form = this.bulkUpdateForm.value;
 
+        /**
+         * Handles if functionality
+         */
         if (form.action) {
+            /**
+             * Handles if functionality
+             */
             if (form.action === BULK_UPDATE_FIELDS.purchasedate) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!form.purchaseDate) {
                     isValid = false;
                     this.toasterService.showSnackBar('error', this.localeData?.po_date_error);
@@ -480,6 +581,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                     this.bulkUpdateForm.get('purchaseDate').patchValue(dayjs(form.purchaseDate).format(GIDDH_DATE_FORMAT));
                 }
             } else if (form.action === BULK_UPDATE_FIELDS.duedate) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!form.dueDate) {
                     isValid = false;
                     this.toasterService.showSnackBar('error', this.localeData?.po_expirydate_error);
@@ -487,6 +591,9 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                     this.bulkUpdateForm.get('dueDate').patchValue(dayjs(form.dueDate).format(GIDDH_DATE_FORMAT));
                 }
             } else if (form.action === BULK_UPDATE_FIELDS.warehouse) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!form.warehouseUniqueName) {
                     isValid = false;
                     this.toasterService.showSnackBar('error', this.localeData?.po_warehouse_error);

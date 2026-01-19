@@ -6,6 +6,9 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'upload-success',
     
@@ -13,6 +16,10 @@ import { GeneralService } from '../../services/general.service';
     templateUrl: './upload-success.component.html',
 })
 
+/**
+ * UploadSuccessComponent component
+ * Handles uploadsuccess functionality and user interactions
+ */
 export class UploadSuccessComponent implements OnInit, OnDestroy {
     @Input() public UploadExceltableResponse: UploadExceltableResponse;
     /* This will hold local JSON data */
@@ -28,6 +35,10 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
     public importedCountMessage: string = "";
     public failedReportMessage: string = "";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private activateRoute: ActivatedRoute, 
         private generalService: GeneralService
@@ -35,13 +46,28 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles if functionality
+         */
         if (this.UploadExceltableResponse) {
             this.isAre = Number(this.UploadExceltableResponse.successCount) > 1 ? this.localeData?.are : this.localeData?.is;
         }
         this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.type) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res.type === 'trial-balance' || res.type === 'entries') {
                         this.selectedType = res.type;
                     } else {
@@ -62,19 +88,31 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles downloadImportFile functionality
+     */
     public downloadImportFile() {
         // rows less than 400 download report
+        /**
+         * Handles if functionality
+         */
         if (!this.UploadExceltableResponse.message && this.UploadExceltableResponse.response) {
             let blob = this.generalService.base64ToBlob(this.UploadExceltableResponse.response, 'application/vnd.ms-excel', 512);
             return saveAs(blob, this.localeData?.import_report_csv_downloaded_filename);
         }
 
         // rows grater than 400 show import report screen
+        /**
+         * Handles if functionality
+         */
         if (this.UploadExceltableResponse.message) {
             this.onShowReport.emit(true);
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

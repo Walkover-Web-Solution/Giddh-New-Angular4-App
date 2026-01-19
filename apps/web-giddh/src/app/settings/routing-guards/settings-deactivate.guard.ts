@@ -14,6 +14,10 @@ import { SettingsComponent } from '../settings.component';
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * SettingsDeactivateGuard guard
+ * Implements SettingsDeactivateGuard functionality
+ */
 export class SettingsDeactivateGuard  {
 
     /**

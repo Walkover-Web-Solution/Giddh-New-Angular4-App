@@ -33,6 +33,9 @@ import { MatInputModule } from "@angular/material/input";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         VatReportComponent,
@@ -75,5 +78,9 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         VatReportFiltersComponent
     ]
 })
+/**
+ * VatReportModule module
+ * Implements VatReportModule functionality
+ */
 export class VatReportModule {
 }

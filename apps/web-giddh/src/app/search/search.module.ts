@@ -26,6 +26,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -65,5 +68,9 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         HamburgerMenuModule
     ]
 })
+/**
+ * SearchModule module
+ * Implements SearchModule functionality
+ */
 export class SearchModule {
 }

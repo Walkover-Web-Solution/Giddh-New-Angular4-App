@@ -13,11 +13,18 @@ import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep, each, forEach } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'trial-balance',
     templateUrl: './trial-balance.component.html',
     standalone: false
 })
+/**
+ * TrialBalanceComponent component
+ * Handles trialbalance functionality and user interactions
+ */
 export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -38,6 +45,10 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     /** True if show Tally Report options */
     public showReportTallyOption: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private cd: ChangeDetectorRef,
@@ -55,6 +66,9 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input()
     public set selectedCompany(value: CompanyResponse) {
         this._selectedCompany = value;
+        /**
+         * Handles if functionality
+         */
         if (value && value.activeFinancialYear && !this.isDateSelected) {
             this.request = {
                 refresh: false,
@@ -64,12 +78,24 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
             let d = cloneDeep(p) as AccountDetails;
+            /**
+             * Handles if functionality
+             */
             if (d) {
                 this.expandAll = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (d.message) {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.toaster.clearAllToaster();
                         this.toaster.infoToast(d.message);
@@ -89,22 +115,37 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles InitData functionality
+     */
     public InitData(d: ChildGroup[]) {
+        /**
+         * Handles each functionality
+         */
         each(d, (grp: ChildGroup) => {
             grp.isVisible = false;
             grp.isCreated = false;
             grp.isIncludedInSearch = true;
+            /**
+             * Handles each functionality
+             */
             each(grp.accounts, (acc: Account) => {
                 acc.isIncludedInSearch = true;
                 acc.isCreated = false;
                 acc.isVisible = false;
             });
+            /**
+             * Handles if functionality
+             */
             if (grp.childGroups) {
                 this.InitData(grp.childGroups);
             }
         });
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         this.cd.detectChanges();
     }
@@ -120,6 +161,9 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
+        /**
+         * Handles if functionality
+         */
         if (this.isV2) {
             this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
         } else {
@@ -127,19 +171,34 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles expandAllEvent functionality
+     */
     public expandAllEvent() {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.cd.detectChanges();
         }, 1);
     }
 
+    /**
+     * Handles searchChanged functionality
+     */
     public searchChanged(event: string) {
         this.search = event;
+        /**
+         * Handles if functionality
+         */
         if (!this.search) {
             this.expandAll = false;
         }

@@ -19,9 +19,15 @@ process.env.NODE_ENV = 'development';
 
 app.on("ready", () => {
     ipcMain.on("log.error", (event: any, arg: any) => {
+        /**
+         * Handles log functionality
+         */
         log(arg);
     });
 
+    /**
+     * Sets menu value
+     */
     setMenu();
     windowManager = new WindowManager();
     windowManager.openWindows();
@@ -45,6 +51,9 @@ ipcMain.on("take-server-environment", (event, arg) => {
 });
 
 ipcMain.on("authenticate", (event, arg) => {
+    /**
+     * Handles if functionality
+     */
     if (arg === "google") {
         // Create custom OAuth with prompt=select_account by modifying the internal URL
         const myApiOauth = new ElectronGoogleOAuth2(GoogleLoginElectronConfig.clientId,
@@ -59,9 +68,15 @@ ipcMain.on("authenticate", (event, arg) => {
 
         // Force account selection by overriding the internal auth URL generation
         const originalMethod = (myApiOauth as any).getAuthUrl || (myApiOauth as any).buildAuthUrl;
+        /**
+         * Handles if functionality
+         */
         if (originalMethod) {
             (myApiOauth as any).getAuthUrl = function() {
                 let url = originalMethod.call(this);
+                /**
+                 * Handles if functionality
+                 */
                 if (url && !url.includes('prompt=')) {
                     const separator = url.includes('?') ? '&' : '?';
                     url += separator + 'prompt=select_account';
@@ -70,6 +85,9 @@ ipcMain.on("authenticate", (event, arg) => {
             };
             (myApiOauth as any).buildAuthUrl = function() {
                 let url = originalMethod.call(this);
+                /**
+                 * Handles if functionality
+                 */
                 if (url && !url.includes('prompt=')) {
                     const separator = url.includes('?') ? '&' : '?';
                     url += separator + 'prompt=select_account';
@@ -82,9 +100,15 @@ ipcMain.on("authenticate", (event, arg) => {
             .then(token => {
 
                 // Validate token structure
+                /**
+                 * Handles if functionality
+                 */
                 if (!token) {
                     const errorResponse = { error: 'No token received from Google OAuth' };
                     event.returnValue = errorResponse;
+                    /**
+                     * Handles if functionality
+                     */
                     if (event.reply) {
                         event.reply('take-your-gmail-token', errorResponse);
                     } else if (event.sender.send) {
@@ -95,9 +119,15 @@ ipcMain.on("authenticate", (event, arg) => {
 
                 // Check if token has access_token property
                 const tokenAny = token as any;
+                /**
+                 * Handles if functionality
+                 */
                 if (!token.access_token && !tokenAny.accessToken) {
                     const errorResponse = { error: 'Invalid token format - missing access_token' };
                     event.returnValue = errorResponse;
+                    /**
+                     * Handles if functionality
+                     */
                     if (event.reply) {
                         event.reply('take-your-gmail-token', errorResponse);
                     } else if (event.sender.send) {
@@ -116,6 +146,9 @@ ipcMain.on("authenticate", (event, arg) => {
                 };
 
                 event.returnValue = normalizedToken;
+                /**
+                 * Handles if functionality
+                 */
                 if (event.reply) {
                     event.reply('take-your-gmail-token', normalizedToken);
                 } else if (event.sender.send) {
@@ -125,6 +158,9 @@ ipcMain.on("authenticate", (event, arg) => {
             .catch(error => {
                 const errorResponse = { error: error.message || 'Google authentication failed' };
                 event.returnValue = errorResponse;
+                /**
+                 * Handles if functionality
+                 */
                 if (event.reply) {
                     event.reply('take-your-gmail-token', errorResponse);
                 } else if (event.sender.send) {
@@ -135,6 +171,9 @@ ipcMain.on("authenticate", (event, arg) => {
 });
 
 ipcMain.on("authenticate-send-email", (event, arg) => {
+    /**
+     * Handles if functionality
+     */
     if (arg === "google") {
         const myApiOauth = new ElectronGoogleOAuth2(GoogleLoginElectronConfig.clientId,
             GoogleLoginElectronConfig.clientSecret,
@@ -147,9 +186,15 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
         );
         myApiOauth.openAuthWindowAndGetTokens()
             .then(token => {
+                /**
+                 * Handles if functionality
+                 */
                 if (!token) {
                     const errorResponse = { error: 'No token received from Google OAuth' };
                     event.returnValue = errorResponse;
+                    /**
+                     * Handles if functionality
+                     */
                     if (event.reply) {
                         event.reply('take-your-gmail-token-send-email', errorResponse);
                     } else if (event.sender.send) {
@@ -159,9 +204,15 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
                 }
 
                 const tokenAny = token as any;
+                /**
+                 * Handles if functionality
+                 */
                 if (!token.access_token && !tokenAny.accessToken) {
                     const errorResponse = { error: 'Invalid token format - missing access_token' };
                     event.returnValue = errorResponse;
+                    /**
+                     * Handles if functionality
+                     */
                     if (event.reply) {
                         event.reply('take-your-gmail-token-send-email', errorResponse);
                     } else if (event.sender.send) {
@@ -179,6 +230,9 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
                 };
 
                 event.returnValue = normalizedToken;
+                /**
+                 * Handles if functionality
+                 */
                 if (event.reply) {
                     event.reply('take-your-gmail-token-send-email', normalizedToken);
                 } else if (event.sender.send) {
@@ -188,6 +242,9 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
             .catch(error => {
                 const errorResponse = { error: error.message || 'Google authentication failed' };
                 event.returnValue = errorResponse;
+                /**
+                 * Handles if functionality
+                 */
                 if (event.reply) {
                     event.reply('take-your-gmail-token-send-email', errorResponse);
                 } else if (event.sender.send) {

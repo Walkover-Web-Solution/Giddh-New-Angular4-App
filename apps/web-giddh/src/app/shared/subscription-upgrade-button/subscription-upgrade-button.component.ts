@@ -4,12 +4,19 @@ import { RestrictedModules } from '../../app.constant';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'restricted-module-message',
     styleUrls: [`./subscription-upgrade-button.component.scss`],
     templateUrl: './subscription-upgrade-button.component.html',
     standalone: false
 })
+/**
+ * SubscriptionUpgradeButtonComponent component
+ * Handles subscriptionupgradebutton functionality and user interactions
+ */
 export class SubscriptionUpgradeButtonComponent implements OnDestroy {
     /** Type of restricted module to check */
     @Input() public restrictedModule: RestrictedModules;
@@ -28,10 +35,17 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private router: Router,
         private store: Store<AppState>
     ) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -46,9 +60,15 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
      */
     public onUpgrade(): void {
         const subscriptionId = this.activeCompany?.subscription?.subscriptionId;
+        /**
+         * Handles if functionality
+         */
         if (!subscriptionId) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.useRouterLink) {
             this.router.navigate(['/pages/user-details/subscription/buy-plan/', subscriptionId]);
         } else {
@@ -64,6 +84,9 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
      * @memberof SubscriptionUpgradeButtonComponent
      */
     public shouldShowMessage(): boolean {
+        /**
+         * Handles if functionality
+         */
         if (this.restrictedModule === this.restrictedModules.Users) {
             return this.isUserRestricted;
         } else {

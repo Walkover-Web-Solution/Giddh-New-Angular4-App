@@ -13,12 +13,19 @@ import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accou
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep, each, filter, findIndex, forEach, includes, keys } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'profit-loss',
     templateUrl: './profit-loss.component.html',
     providers: [ProjectWiseAccountingComponentStore],
     standalone: false
 })
+/**
+ * ProfitLossComponent component
+ * Handles profitloss functionality and user interactions
+ */
 export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -42,6 +49,9 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input()
     public set selectedCompany(value: CompanyResponse) {
         this._selectedCompany = value;
+        /**
+         * Handles if functionality
+         */
         if (value && value.activeFinancialYear && !this.isDateSelected) {
 
             let index = this.findIndex(value.activeFinancialYear, value.financialYears);
@@ -67,6 +77,10 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     /** True if show Tally Report options */
     public showReportTallyOption: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>, 
         public tlPlActions: TBPlBsActions, 
@@ -77,13 +91,22 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([
             this.store.pipe(select(state => state.tlPl.pl.data)),
             this.componentStore.profitAndLossData$
         ])
             .pipe(takeUntil(this.destroyed$))
             .subscribe(([storeResponse, profitAndLossResponse]) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (storeResponse || profitAndLossResponse) {
                     this.tlPlService.isReportTailed$.next(true);
                     this.expandAll = false;
@@ -103,17 +126,29 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     public modifyResponse(response: ProfitLossData): void {
         let data = cloneDeep(response) as ProfitLossData;
         let cogs;
+        /**
+         * Handles if functionality
+         */
         if (data?.incomeStatement?.costOfGoodsSold) {
             cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as ProfitLossDateRangeResponse<GetCogsResponse>;
         } else {
             cogs = null;
         }
+        /**
+         * Handles if functionality
+         */
         if (data?.message) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.toaster.clearAllToaster();
                 this.toaster.infoToast(data.message);
             }, 100);
         }
+        /**
+         * Handles if functionality
+         */
         if (cogs) {
             let cogsGrp: ChildGroup = new ChildGroup();
             cogsGrp.isCreated = true;
@@ -134,6 +169,9 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             cogsGrp.childGroups = [];
 
             Object.keys(cogs).forEach((cogsKey, i) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (i === 0) {
                     Object.keys(cogs[cogsKey])?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(item => {
                         let childGroup = new ChildGroup();
@@ -155,6 +193,9 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                         childGroup.accounts = [];
                         childGroup.childGroups = [];
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (['purchasesStockAmount', 'manufacturingExpenses'].includes(item)) {
                             childGroup.groupName = `+ ${childGroup.groupName}`;
                         } else if (['closingInventory', 'debitNoteStockAmount'].includes(item)) {
@@ -168,6 +209,9 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             this.cogsData = cogsGrp;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (data && data.expArr) {
             this.initData(data.expArr, "expenses");
             (Array.isArray(data.expArr) ? data.expArr : []).forEach(group => {
@@ -184,6 +228,9 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             });
         }
+        /**
+         * Handles if functionality
+         */
         if (data && data.incArr) {
             this.initData(data.incArr, "income");
             (Array.isArray(data.incArr) ? data.incArr : []).forEach(group => {
@@ -201,10 +248,16 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (data?.incomeStatement?.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]]?.type === "DEBIT" && data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount) {
             data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount = "-" + data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (data?.incomeStatement?.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]]?.type === "DEBIT" && data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount) {
             data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount = "-" + data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount;
         }
@@ -231,12 +284,18 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                 account.isVisible = false;
                 account.category = category;
             });
+            /**
+             * Handles if functionality
+             */
             if (childGroup.childGroups) {
                 this.initData(childGroup.childGroups, category);
             }
         });
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         this.cd.detectChanges();
     }
@@ -252,12 +311,21 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
+        /**
+         * Handles if functionality
+         */
         if (this.isDateSelected) {
             delete request['selectedFinancialYearOption'];
         }
+        /**
+         * Handles if functionality
+         */
         if (!request.tagName) {
             delete request.tagName;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.projectUniqueName) {
             const requestObject = {
                 companyUniqueName: this.selectedCompany.uniqueName,
@@ -271,15 +339,30 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles findIndex functionality
+     */
     public findIndex(activeFY, financialYears) {
         let tempFYIndex = 0;
+        /**
+         * Handles each functionality
+         */
         each(financialYears, (fy: any, index: number) => {
+            /**
+             * Handles if functionality
+             */
             if (fy?.uniqueName === activeFY?.uniqueName) {
+                /**
+                 * Handles if functionality
+                 */
                 if (index === 0) {
                     tempFYIndex = index;
                 } else {
@@ -290,14 +373,26 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         return tempFYIndex;
     }
 
+    /**
+     * Handles expandAllEvent functionality
+     */
     public expandAllEvent() {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.cd.detectChanges();
         }, 1);
     }
 
+    /**
+     * Handles searchChanged functionality
+     */
     public searchChanged(event: string) {
         this.search = event;
+        /**
+         * Handles if functionality
+         */
         if (!this.search) {
             this.expandAll = false;
         }

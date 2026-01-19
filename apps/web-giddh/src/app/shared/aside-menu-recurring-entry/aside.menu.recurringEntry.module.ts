@@ -10,6 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [AsideMenuRecurringEntryComponent],
     imports: [
@@ -30,5 +33,9 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
     ],
     exports: [AsideMenuRecurringEntryComponent]
 })
+/**
+ * AsideMenuRecurringEntryModule module
+ * Implements AsideMenuRecurringEntryModule functionality
+ */
 export class AsideMenuRecurringEntryModule {
 }

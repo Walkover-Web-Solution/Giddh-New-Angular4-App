@@ -12,6 +12,10 @@ import { Directive, HostListener, ElementRef, OnDestroy, AfterViewInit } from '@
     selector: '[appEnterNext]',
     standalone: true
 })
+/**
+ * EnterNextDirective directive
+ * Implements EnterNextDirective functionality
+ */
 export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
@@ -56,12 +60,21 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      * @memberof EnterNextDirective
      */
     @HostListener('keydown', ['$event'])
+    /**
+     * Handles keydown event
+     */
     public onKeyDown(event: KeyboardEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event.key !== 'Enter') {
             return;
         }
 
         // Check for mat-select dropdown state before processing
+        /**
+         * Handles if functionality
+         */
         if (this.isMatSelectClosed()) {
             return; // Allow default behavior to open dropdown
         }
@@ -101,15 +114,27 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
         const element = this.el.nativeElement;
 
         // For reactive-dropdown-field components, listen for autocomplete option selection
+        /**
+         * Handles if functionality
+         */
         if (element.tagName === 'REACTIVE-DROPDOWN-FIELD') {
             // Use a more direct approach - listen for the autocomplete panel closing
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 const matAutocomplete = element.querySelector('mat-autocomplete');
+                /**
+                 * Handles if functionality
+                 */
                 if (matAutocomplete) {
                     // Listen for option selection events on the autocomplete
                     const options = matAutocomplete.querySelectorAll('mat-option');
                     options.forEach(option => {
                         option.addEventListener('click', () => {
+                            /**
+                             * Sets timeout value
+                             */
                             setTimeout(() => {
                                 this.focusNextElement();
                             }, 100);
@@ -135,6 +160,9 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
                          element.querySelector('mat-select') ||
                          element.closest('mat-select');
 
+        /**
+         * Handles if functionality
+         */
         if (!matSelect) {
             return false;
         }
@@ -154,6 +182,9 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      */
     private focusNextElement(): void {
         const container = this.getFormElement();
+        /**
+         * Handles if functionality
+         */
         if (!container) {
             return;
         }
@@ -161,12 +192,18 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
         const focusableElements = this.getFocusableElements(container);
         const currentInput = this.findCurrentInput();
 
+        /**
+         * Handles if functionality
+         */
         if (!currentInput) {
             this.focusFirstAvailableElement(focusableElements);
             return;
         }
 
         const currentIndex = focusableElements.indexOf(currentInput);
+        /**
+         * Handles if functionality
+         */
         if (currentIndex > -1) {
             this.focusNextAvailableElement(focusableElements, currentIndex);
         }
@@ -181,11 +218,17 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      * @memberof EnterNextDirective
      */
     private getFormElement(): HTMLElement | null {
+        /**
+         * Handles if functionality
+         */
         if (!this.formElement) {
             // First try to find a form
             this.formElement = this.el.nativeElement.closest('form');
 
             // If no form found, try to find dialog container
+            /**
+             * Handles if functionality
+             */
             if (!this.formElement) {
                 this.formElement = this.el.nativeElement.closest('[mat-dialog-content]') ||
                                  this.el.nativeElement.closest('.dialog-body') ||
@@ -219,6 +262,9 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
     private findCurrentInput(): HTMLElement | null {
         const hostElement = this.el.nativeElement;
 
+        /**
+         * Handles if functionality
+         */
         if (this.isFocusableElement(hostElement)) {
             return hostElement;
         }
@@ -238,6 +284,9 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      */
     private focusFirstAvailableElement(elements: HTMLElement[]): void {
         const firstElement = elements.find(element => this.isElementAvailableForFocus(element));
+        /**
+         * Handles if functionality
+         */
         if (firstElement) {
             this.focusElement(firstElement);
         }
@@ -252,7 +301,13 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      * @memberof EnterNextDirective
      */
     private focusNextAvailableElement(elements: HTMLElement[], currentIndex: number): void {
+        /**
+         * Handles for functionality
+         */
         for (let i = currentIndex + 1; i < elements.length; i++) {
+            /**
+             * Handles if functionality
+             */
             if (this.isElementAvailableForFocus(elements[i])) {
                 this.focusElement(elements[i]);
                 return;
@@ -268,6 +323,9 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      * @memberof EnterNextDirective
      */
     private focusElement(element: HTMLElement): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isFocusableElement(element)) {
             element.focus();
             return;
@@ -275,6 +333,9 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
         // Handle custom Angular components, include readonly inputs
         const focusableChild = element.querySelector('input:not([disabled]), input[readonly]:not([disabled]), select:not([disabled]), textarea:not([disabled])') as HTMLElement;
+        /**
+         * Handles if functionality
+         */
         if (focusableChild && this.isElementVisible(focusableChild)) {
             focusableChild.focus();
         }
@@ -302,6 +363,9 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      */
     private isElementVisible(element: HTMLElement): boolean {
         // Quick checks first for performance
+        /**
+         * Handles if functionality
+         */
         if (element.offsetParent === null) {
             return false;
         }
@@ -319,22 +383,37 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      * @memberof EnterNextDirective
      */
     private isElementAvailableForFocus(element: HTMLElement): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!this.isElementVisible(element)) {
             return false;
         }
 
         // Optimized type checking with early returns
+        /**
+         * Handles if functionality
+         */
         if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
             return !element.disabled;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (element instanceof HTMLSelectElement || element instanceof HTMLButtonElement) {
             return !element.disabled;
         }
 
         // Handle custom components efficiently
         const focusableChild = element.querySelector('input, select, textarea') as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+        /**
+         * Handles if functionality
+         */
         if (focusableChild) {
+            /**
+             * Handles if functionality
+             */
             if (focusableChild instanceof HTMLSelectElement || focusableChild instanceof HTMLButtonElement) {
                 return !focusableChild.disabled && this.isElementVisible(focusableChild);
             }

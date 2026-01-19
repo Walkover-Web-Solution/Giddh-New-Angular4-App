@@ -28,6 +28,9 @@ import { CreateBranchTransferComponent } from './create-branch-transfer/create-b
 import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-transfer.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { GiddhNumberFormatModule } from '../../../shared/helpers/pipes/number-format/number-format.module';
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -60,4 +63,8 @@ import { GiddhNumberFormatModule } from '../../../shared/helpers/pipes/number-fo
     ],
     declarations: [MainComponent, AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent]
 })
+/**
+ * BranchTransferModule module
+ * Implements BranchTransferModule functionality
+ */
 export class BranchTransferModule { }

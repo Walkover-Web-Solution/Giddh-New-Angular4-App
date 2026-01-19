@@ -4,10 +4,17 @@ import { ReplaySubject, takeUntil } from "rxjs";
 import { AppState } from "../../../../store";
 import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: '[entryAmount]',
     standalone:false
 })
+/**
+ * EntryAmountDirective directive
+ * Implements EntryAmountDirective functionality
+ */
 export class EntryAmountDirective implements OnChanges, OnDestroy {
     @Input() public calculateAmount: boolean = true;
     /** Default rate */
@@ -21,10 +28,17 @@ export class EntryAmountDirective implements OnChanges, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of directive
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>
     ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.balanceDecimalPlaces) {
                 this.balanceDecimalPlaces = response.balanceDecimalPlaces;
             } else {
@@ -39,6 +53,9 @@ export class EntryAmountDirective implements OnChanges, OnDestroy {
      * @memberof EntryAmountDirective
      */
     public ngOnChanges(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.calculateAmount) {
             const qtyRate = Number(this.quantity) * Number(this.rate);
             const amount = giddhRoundOff(qtyRate, this.balanceDecimalPlaces);

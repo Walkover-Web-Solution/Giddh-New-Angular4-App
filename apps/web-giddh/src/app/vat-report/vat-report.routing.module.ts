@@ -9,6 +9,9 @@ import { LiabilityReportComponent } from './liability-report/liability-report.co
 import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
 import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabilities-payments.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -60,5 +63,9 @@ import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabiliti
     ],
     exports: [RouterModule]
 })
+/**
+ * VatReportRoutingModule module
+ * Implements VatReportRoutingModule functionality
+ */
 export class VatReportRoutingModule {
 }

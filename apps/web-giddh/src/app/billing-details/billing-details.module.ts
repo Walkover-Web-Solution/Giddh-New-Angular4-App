@@ -18,6 +18,9 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -40,5 +43,9 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
     ],
     declarations: [BillingDetailComponent]
 })
+/**
+ * BillingDetailModule module
+ * Implements BillingDetailModule functionality
+ */
 export class BillingDetailModule {
 }

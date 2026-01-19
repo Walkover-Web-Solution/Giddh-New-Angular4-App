@@ -5,6 +5,10 @@ import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { each } from '../../lodash-optimized';
 
+/**
+ * SearchState interface definition
+ * Defines the structure and contract for SearchState objects
+ */
 export interface SearchState {
     value?: AccountFlat[];
     searchLoader: boolean;
@@ -41,12 +45,18 @@ export const initialState: SearchState = {
 };
 
 export function searchReducer(state = initialState, action: CustomActions): SearchState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
         }
         case SearchActions.SEARCH_RESPONSE: {
             let searchResp: BaseResponse<any, SearchRequest> = action.payload;
+            /**
+             * Handles if functionality
+             */
             if (searchResp?.status === 'success') {
                 return Object.assign({}, state, {
                     searchPaginationInfo: {
@@ -95,6 +105,9 @@ export function searchReducer(state = initialState, action: CustomActions): Sear
 
 const flattenSearchGroupsAndAccounts = (accountList, groupName) => {
     let uniqueList: AccountFlat[] = [];
+    /**
+     * Handles each functionality
+     */
     each(accountList, (account) => {
         let accountFlat: AccountFlat = {
             parent: groupName,

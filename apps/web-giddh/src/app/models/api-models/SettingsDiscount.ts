@@ -1,5 +1,9 @@
 import { AccountResponse } from './Account';
 
+/**
+ * IDiscountList interface definition
+ * Defines the structure and contract for IDiscountList objects
+ */
 export interface IDiscountList {
     name: string;
     uniqueName: string;
@@ -11,6 +15,10 @@ export interface IDiscountList {
     particular?: string;
 }
 
+/**
+ * LedgerDiscountClass class
+ * Implements LedgerDiscountClass functionality
+ */
 export class LedgerDiscountClass {
     public discountUniqueName?: string;
     public discountType: 'FIX_AMOUNT' | 'PERCENTAGE';
@@ -23,6 +31,10 @@ export class LedgerDiscountClass {
     public calculationMethod?: "FIX_AMOUNT" | "PERCENTAGE";
 }
 
+/**
+ * CreateDiscountRequest class
+ * Implements CreateDiscountRequest functionality
+ */
 export class CreateDiscountRequest {
     public name: string;
     public type: 'FIX_AMOUNT' | 'PERCENTAGE';
@@ -31,6 +43,10 @@ export class CreateDiscountRequest {
     public discountUniqueName?: string;
 }
 
+/**
+ * IDiscountUtilRequest interface definition
+ * Defines the structure and contract for IDiscountUtilRequest objects
+ */
 export interface IDiscountUtilRequest {
     discountsList: Array<any>;
     discountAccountsDetails: Array<LedgerDiscountClass>;

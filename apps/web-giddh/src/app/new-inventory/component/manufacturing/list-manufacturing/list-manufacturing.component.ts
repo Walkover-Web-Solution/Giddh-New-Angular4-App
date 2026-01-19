@@ -24,6 +24,9 @@ import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { takeUntil } from 'rxjs/operators';
 import { cloneDeep, find, forEach, map } from '../../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'list-manufacturing',
 
@@ -32,6 +35,10 @@ import { cloneDeep, find, forEach, map } from '../../../../lodash-optimized';
     styleUrls: ['./list-manufacturing.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+/**
+ * ListManufacturingComponent component
+ * Handles listmanufacturing functionality and user interactions
+ */
 export class ListManufacturingComponent implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
@@ -122,6 +129,10 @@ export class ListManufacturingComponent implements OnInit {
     /** Holds Current Page Number */
     public currentPage: number = 0;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private dialog: MatDialog,
         private generalService: GeneralService,
@@ -146,6 +157,9 @@ export class ListManufacturingComponent implements OnInit {
     public ngOnInit(): void {
 
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -158,6 +172,9 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.count = PAGINATION_LIMIT;
         this.manufacturingSearchRequest.page = this.currentPage;
 
+        /**
+         * Handles if functionality
+         */
         if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
             this.getAllWarehouses();
         }
@@ -165,9 +182,18 @@ export class ListManufacturingComponent implements OnInit {
         // Refresh the manufactured stock list
 
         this.store.pipe(select(state => state.inventory.manufacturingStockList), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.results) {
                     this.stockList = [];
+                    /**
+                     * Handles forEach functionality
+                     */
                     forEach(response.results, (unit: any) => {
                         this.stockList.push({
                             label: ` ${unit.name} (${unit?.uniqueName})`,
@@ -182,8 +208,14 @@ export class ListManufacturingComponent implements OnInit {
         });
 
         this.store.pipe(select(state => state.session?.filters), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && !this.storeFilters?.length) {
                 this.storeFilters = response;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.storeFilters[this.currentUrl]) {
                     this.initialLoad = true;
                     this.manufacturingSearchRequest = this.storeFilters[this.currentUrl].manufacturingSearchRequest;
@@ -206,9 +238,18 @@ export class ListManufacturingComponent implements OnInit {
 
         // Refresh report data according to universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.initialLoad) {
                         this.manufacturingSearchRequest.dateRange = this.universalDate;
                         this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -224,10 +265,16 @@ export class ListManufacturingComponent implements OnInit {
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (!this.activeCompany) {
                 this.activeCompany = activeCompany;
 
                 this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.length) {
                         this.currentCompanyBranches = response.map(branch => ({
                             label: branch?.name,
@@ -243,10 +290,16 @@ export class ListManufacturingComponent implements OnInit {
                         });
                         this.isCompany = this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches?.length > 2;
                         let currentBranchUniqueName;
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.currentBranch?.uniqueName) {
                             // Assign the current branch only when it is not selected. This check is necessary as
                             // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                             // branches are loaded
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.currentOrganizationType === OrganizationType.Branch) {
                                 currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                                 this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -264,6 +317,9 @@ export class ListManufacturingComponent implements OnInit {
 
                         this.changeDetectionRef.detectChanges();
                     } else {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.generalService.companyUniqueName) {
                             // Avoid API call if new user is onboarded
                             this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -285,6 +341,9 @@ export class ListManufacturingComponent implements OnInit {
         this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
 
         this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            /**
+             * Handles if functionality
+             */
             if (warehouses?.results?.length) {
                 this.warehouses = [];
                 warehouses?.results?.forEach(warehouse => {
@@ -304,11 +363,17 @@ export class ListManufacturingComponent implements OnInit {
         this.variantList = [];
         this.selectedVariantName = "";
         this.ledgerService.loadStockVariants(this.manufacturingSearchRequest.product).pipe(takeUntil(this.destroyed$)).subscribe(variants => {
+            /**
+             * Handles if functionality
+             */
             if (variants?.length) {
                 variants?.forEach(variant => {
                     this.variantList.push({ label: variant?.name, value: variant?.uniqueName });
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (variants?.length === 1) {
                     this.selectedVariantName = variants[0].name;
                     this.manufacturingSearchRequest.productVariant = variants[0].uniqueName;
@@ -367,6 +432,9 @@ export class ListManufacturingComponent implements OnInit {
         this.showHideClearFilterButton();
         this.setFiltersInStore();
         this.manufacturingService.GetMfReport(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success" && response?.body?.results?.length) {
                 let reportData = [];
 
@@ -416,6 +484,9 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -430,16 +501,25 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -460,6 +540,9 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.branchUniqueName = selectedEntity?.value;
         this.manufacturingSearchRequest.warehouseUniqueName = "";
         this.selectedWarehouseName = "";
+        /**
+         * Handles if functionality
+         */
         if ((this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && this.allWarehouses?.length) {
             this.warehouses = this.allWarehouses[selectedEntity?.value];
         }
@@ -473,14 +556,26 @@ export class ListManufacturingComponent implements OnInit {
      */
     public getAllWarehouses(): void {
         this.store.pipe(select(state => state.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
+            /**
+             * Handles if functionality
+             */
             if (branches) {
+                /**
+                 * Handles if functionality
+                 */
                 if (branches.results?.length) {
                     this.allWarehouses = [];
                     (Array.isArray(branches.results) ? branches.results : []).forEach(branch => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.allWarehouses[branch?.uniqueName]) {
                             this.allWarehouses[branch?.uniqueName] = [];
                         }
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (branch?.warehouses?.length > 0) {
                             (Array.isArray(branch?.warehouses) ? branch?.warehouses : []).forEach(warehouse => {
                                 this.allWarehouses[branch?.uniqueName].push({ label: warehouse?.name, value: warehouse?.uniqueName, additional: warehouse?.taxNumber });
@@ -502,6 +597,9 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.operatorFilters = [
                 { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
@@ -532,6 +630,9 @@ export class ListManufacturingComponent implements OnInit {
     public showHideClearFilterButton(): void {
         this.showClearButton = false;
 
+        /**
+         * Handles if functionality
+         */
         if ((this.universalDate && (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || ((this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && this.manufacturingSearchRequest.branchUniqueName && this.manufacturingSearchRequest.branchUniqueName !== this.currentBranch.uniqueName) || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
             this.showClearButton = true;
         }
@@ -546,6 +647,9 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     private setFiltersInStore(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.storeFilters) {
             this.storeFilters = [];
         }
@@ -561,6 +665,9 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public handlePageEvent(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.manufacturingSearchRequest.count !== event.pageSize) {
             this.currentPage = 0;
             this.manufacturingSearchRequest.page = 1;

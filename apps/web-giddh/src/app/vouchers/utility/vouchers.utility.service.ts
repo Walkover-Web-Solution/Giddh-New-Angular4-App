@@ -8,16 +8,32 @@ import * as dayjs from "dayjs";
 import * as cleaner from 'fast-clean';
 import { ReceiptItem } from "../../models/api-models/recipt";
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable(
     {
         providedIn: 'root'
     }
 )
+/**
+ * VouchersUtilityService service
+ * Provides vouchersutility related business logic and data operations
+ */
 export class VouchersUtilityService {
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
 
+    /**
+     * Shows taxtypebycountry element
+     */
     public showTaxTypeByCountry(countryCode: string, companyCountryCode: string): TaxType {
+        /**
+         * Handles if functionality
+         */
         if (companyCountryCode === countryCode) {
+            /**
+             * Handles if functionality
+             */
             if (countryCode === TaxSupportedCountries.IN) {
                 return TaxType.GST;
             } else if (countryCode === TaxSupportedCountries.UAE) {
@@ -31,9 +47,15 @@ export class VouchersUtilityService {
             return null;
         }
     }
+    /**
+     * Retrieves vouchertype data
+     */
     public getVoucherType(voucherType: string, isCashVoucher?: any, accountUniqueName: string = '', isLastInvoiceCopied: boolean = false): any {
         let isSalesInvoice;
         let isCashInvoice;
+        /**
+         * Handles if functionality
+         */
         if (isCashVoucher === undefined) {
             isSalesInvoice = voucherType === VoucherTypeEnum.sales;
             isCashInvoice = this.voucherTypes.includes(voucherType);
@@ -51,7 +73,13 @@ export class VouchersUtilityService {
         let isPaymentInvoice = voucherType === VoucherTypeEnum.payment;
 
         // special case when we double click on account name and that accountUniqueName is cash then we have to mark as Cash Invoice
+        /**
+         * Handles if functionality
+         */
         if (isSalesInvoice && !isLastInvoiceCopied) {
+            /**
+             * Handles if functionality
+             */
             if (accountUniqueName === 'cash') {
                 isSalesInvoice = false;
                 isCashInvoice = true;
@@ -61,14 +89,23 @@ export class VouchersUtilityService {
         return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder, isReceiptInvoice, isPaymentInvoice };
     }
 
+    /**
+     * Handles parseVoucherType functionality
+     */
     public parseVoucherType(voucherType: string): string {
         return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType?.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
     }
 
+    /**
+     * Creates new querystring
+     */
     public createQueryString(url: string, model: any): string {
         url += '?';
         Object.keys(model).forEach((key, index) => {
             const delimiter = index === 0 ? '' : '&'
+            /**
+             * Handles if functionality
+             */
             if (model[key] !== undefined) {
                 url += `${delimiter}${key}=${model[key]}`
             }
@@ -88,7 +125,13 @@ export class VouchersUtilityService {
     public getSearchRequestObject(voucherType: string, query: string, page: number = 1, searchType: string): any {
         let withStocks: boolean;
         let group: string;
+        /**
+         * Handles if functionality
+         */
         if (searchType === SearchType.CUSTOMER) {
+            /**
+             * Handles if functionality
+             */
             if (![VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.payment].includes(voucherType as VoucherTypeEnum)) {
                 group = 'sundrydebtors';
             } else {
@@ -111,6 +154,9 @@ export class VouchersUtilityService {
             count: API_BULK_FETCH_LIMIT,
             group: encodeURIComponent(group)
         };
+        /**
+         * Handles if functionality
+         */
         if (withStocks) {
             requestObject['withStocks'] = withStocks;
         }
@@ -128,6 +174,9 @@ export class VouchersUtilityService {
     public getVoucherNameByType(voucherType: string, localeData: any, isCopyVoucher: boolean = false): string {
         let voucherName = "";
 
+        /**
+         * Handles switch functionality
+         */
         switch (voucherType) {
             case VoucherTypeEnum.proforma:
                 voucherName = localeData?.invoice_types?.proforma;
@@ -197,7 +246,13 @@ export class VouchersUtilityService {
         return voucherName;
     }
 
+    /**
+     * Retrieves parentgroupforaccountcreate data
+     */
     public getParentGroupForAccountCreate(voucherType: string): string {
+        /**
+         * Handles if functionality
+         */
         if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.payment) {
             return 'sundrycreditors';
         } else {
@@ -205,15 +260,24 @@ export class VouchersUtilityService {
         }
     }
 
+    /**
+     * Retrieves defaultaddress data
+     */
     public getDefaultAddress(accountData: any): any {
         let defaultAddress = null;
         let defaultAddressIndex = null;
 
+        /**
+         * Handles if functionality
+         */
         if (accountData.addresses?.length === 1) {
             defaultAddress = accountData.addresses[0];
             defaultAddressIndex = 0;
         } else {
             accountData.addresses?.forEach((address, index) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (address.isDefault) {
                     defaultAddress = address;
                     defaultAddressIndex = index;
@@ -221,6 +285,9 @@ export class VouchersUtilityService {
             });
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!defaultAddress?.state?.code && defaultAddress?.stateCode) {
             defaultAddress.state = {
                 code: defaultAddress.stateCode,
@@ -240,6 +307,9 @@ export class VouchersUtilityService {
      * @memberof VouchersUtilityService
      */
     public prepareVoucherForm(voucherType: string, formConfiguration?: any): VoucherForm {
+        /**
+         * Handles if functionality
+         */
         if (formConfiguration) {
             return formConfiguration.find(form => form.type === voucherType);
         } else {
@@ -247,6 +317,9 @@ export class VouchersUtilityService {
         }
     }
 
+    /**
+     * Retrieves vouchertotals data
+     */
     public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean, exchangeRate: number): any {
         let voucherTotals = {
             totalAmount: 0,
@@ -265,6 +338,9 @@ export class VouchersUtilityService {
         entries?.forEach(entry => {
             voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount) || 0);
             voucherTotals.totalDiscount += (Number(entry.totalDiscount) || 0);
+            /**
+             * Handles if functionality
+             */
             if (entry.transactions[0]?.taxableValue) {
                 voucherTotals.totalTaxableValue += Number(entry.transactions[0]?.taxableValue?.amountForAccount) || 0;
             } else {
@@ -273,12 +349,18 @@ export class VouchersUtilityService {
             voucherTotals.totalTaxWithoutCess += (Number(entry.totalTaxWithoutCess) || 0);
             voucherTotals.totalCess += (Number(entry.totalCess) || 0);
 
+            /**
+             * Handles if functionality
+             */
             if (entry.grandTotal) {
                 voucherTotals.grandTotal += (Number(entry.grandTotal?.amountForAccount) || 0);
             } else {
                 voucherTotals.grandTotal += (Number(entry.total?.amountForAccount) || 0);
             }
 
+            /**
+             * Handles if functionality
+             */
             if (entry.otherTax?.type === OtherTaxTypeEnum.TCS) {
                 voucherTotals.tcsTotal += (Number(entry.otherTax?.amount) || 0);
             } else if (entry.otherTax?.type === OtherTaxTypeEnum.TDS) {
@@ -298,10 +380,22 @@ export class VouchersUtilityService {
         return voucherTotals;
     }
 
+    /**
+     * Handles convertDateToString functionality
+     */
     public convertDateToString(value: any): string {
+        /**
+         * Handles if functionality
+         */
         if (value) {
             // To check val is DD-MM-YY format already so it will be string then return val
+            /**
+             * Handles if functionality
+             */
             if (typeof value === 'string') {
+                /**
+                 * Handles if functionality
+                 */
                 if (value.includes('-')) {
                     return value;
                 } else {
@@ -319,7 +413,13 @@ export class VouchersUtilityService {
         }
     }
 
+    /**
+     * Handles cleanVoucherObject functionality
+     */
     public cleanVoucherObject(invoiceForm: any): any {
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm) {
             invoiceForm.deposits?.forEach((response) => {
                 delete response.currencySymbol;
@@ -352,7 +452,13 @@ export class VouchersUtilityService {
                     delete tax.taxDetail;
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!entry.taxes) {
                         entry.taxes = [];
                     }
@@ -363,10 +469,16 @@ export class VouchersUtilityService {
                     });
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!entry.transactions[0]?.stock?.uniqueName) {
                     delete entry.transactions[0].stock;
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (entry.transactions[0].stock) {
                     delete entry.transactions[0].stock.maxQuantity;
                 }
@@ -398,26 +510,47 @@ export class VouchersUtilityService {
         });
     }
 
+    /**
+     * Retrieves address data
+     */
     private getAddress(address: any): string {
+        /**
+         * Handles return functionality
+         */
         return (typeof address === "string") ? address : address[0];
     }
 
+    /**
+     * Handles formatBillingShippingAddress functionality
+     */
     public formatBillingShippingAddress(invoiceForm: any): any {
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm?.account?.billingDetails?.address?.length) {
             invoiceForm.account.billingDetails.address = [this.getAddress(invoiceForm.account.billingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.account.billingDetails.address = invoiceForm.account.billingDetails.address[0]?.split('<br />');
         }
 
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm?.account?.shippingDetails?.address?.length) {
             invoiceForm.account.shippingDetails.address = [this.getAddress(invoiceForm.account.shippingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.account.shippingDetails.address = invoiceForm.account.shippingDetails.address[0]?.split('<br />');
         }
 
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm?.company?.billingDetails?.address?.length) {
             invoiceForm.company.billingDetails.address = [this.getAddress(invoiceForm.company.billingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.company.billingDetails.address = invoiceForm.company.billingDetails.address[0]?.split('<br />');
         }
 
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm?.company?.shippingDetails?.address?.length) {
             invoiceForm.company.shippingDetails.address = [this.getAddress(invoiceForm.company.shippingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.company.shippingDetails.address = invoiceForm.company.shippingDetails.address[0]?.split('<br />');
@@ -426,9 +559,15 @@ export class VouchersUtilityService {
         return invoiceForm;
     }
 
+    /**
+     * Handles formatVoucherObject functionality
+     */
     public formatVoucherObject(invoiceForm: any): any {
         invoiceForm.date = this.convertDateToString(invoiceForm.date);
         invoiceForm.dueDate = this.convertDateToString(invoiceForm.dueDate);
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm.templateDetails?.other?.shippingDate) {
             invoiceForm.templateDetails.other.shippingDate = this.convertDateToString(invoiceForm.templateDetails.other.shippingDate);
         }
@@ -437,8 +576,17 @@ export class VouchersUtilityService {
         return invoiceForm;
     }
 
+    /**
+     * Calculates inclusiverate value
+     */
     public calculateInclusiveRate(entry: any, companyTaxes: any[], balanceDecimalPlaces: any, entryTotal: number = null): number {
+        /**
+         * Handles if functionality
+         */
         if (entryTotal === null) {
+            /**
+             * Handles if functionality
+             */
             if (entry.transactions[0].stock?.uniqueName) {
                 entryTotal = giddhRoundOff(Number(entry.transactions[0].stock?.quantity) * Number(entry.transactions[0].stock?.rate?.rateForAccount));
             } else {
@@ -462,6 +610,9 @@ export class VouchersUtilityService {
         let taxTotal: number = 0;
         entry?.taxes?.forEach(selectedTax => {
             companyTaxes?.forEach(tax => {
+                /**
+                 * Handles if functionality
+                 */
                 if (tax.uniqueName === selectedTax?.uniqueName) {
                     taxTotal = Number(tax.taxDetail[0].taxValue);
                 }
@@ -471,7 +622,13 @@ export class VouchersUtilityService {
         return giddhRoundOff(((entryTotal + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) / (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), balanceDecimalPlaces);
     }
 
+    /**
+     * Handles copyAccountStateToCounty functionality
+     */
     public copyAccountStateToCounty(invoiceForm: any): any {
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm.account?.billingDetails?.state?.code) {
             invoiceForm.account.billingDetails.county = {
                 name: invoiceForm.account.billingDetails.state?.name,
@@ -479,6 +636,9 @@ export class VouchersUtilityService {
             };
         }
 
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm.account?.shippingDetails?.state?.code) {
             invoiceForm.account.shippingDetails.county = {
                 name: invoiceForm.account.shippingDetails.state?.name,
@@ -489,7 +649,13 @@ export class VouchersUtilityService {
         return invoiceForm;
     }
 
+    /**
+     * Handles copyCompanyStateToCounty functionality
+     */
     public copyCompanyStateToCounty(invoiceForm: any): any {
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm.company?.billingDetails?.state?.code) {
             invoiceForm.company.billingDetails.county = {
                 name: invoiceForm.company.billingDetails.state?.name,
@@ -497,6 +663,9 @@ export class VouchersUtilityService {
             };
         }
 
+        /**
+         * Handles if functionality
+         */
         if (invoiceForm.company?.shippingDetails?.state?.code) {
             invoiceForm.company.shippingDetails.county = {
                 name: invoiceForm.company.shippingDetails.state?.name,
@@ -527,6 +696,9 @@ export class VouchersUtilityService {
             const state = add?.state?.name || add?.stateName || add?.county?.name || "";
             const taxNumber = !selectedAddress?.taxNumber ? "" : selectedAddress?.taxNumber;
 
+            /**
+             * Handles if functionality
+             */
             if (address === selectedAddressAddress && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === taxNumber)) {
                 selectedAddressIndex = index;
             }
@@ -546,6 +718,9 @@ export class VouchersUtilityService {
      * @memberof VouchersUtilityService
      */
     public getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean, localeData: any): string {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case VoucherTypeEnum.sales: return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
             case VoucherTypeEnum.purchase: return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
@@ -570,12 +745,18 @@ export class VouchersUtilityService {
             let grandTotalAmountForCompany,
                 grandTotalAmountForAccount;
 
+            /**
+             * Handles if functionality
+             */
             if (item.amount) {
                 grandTotalAmountForCompany = Number(item.amount.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.amount.amountForAccount) || 0;
             }
 
             let grandTotalConversionRate = 0;
+            /**
+             * Handles if functionality
+             */
             if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
@@ -596,6 +777,9 @@ export class VouchersUtilityService {
      * @memberof VouchersUtilityService
      */
     public getEInvoiceTooltipText(item: ReceiptItem, localeData: any): string {
+        /**
+         * Handles switch functionality
+         */
         switch (item?.status?.toLowerCase()) {
             case EInvoiceStatus.YetToBePushed:
                 return localeData?.e_invoice_statuses.yet_to_be_pushed;

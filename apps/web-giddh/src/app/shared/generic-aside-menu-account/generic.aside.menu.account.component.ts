@@ -9,12 +9,19 @@ import { PageLeaveUtilityService } from '../../services/page-leave-utility.servi
 import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
 import { IOption } from '../../app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'generic-aside-menu-account',
     styleUrls: [`./generic.aside.menu.account.component.scss`],
     templateUrl: './generic.aside.menu.account.component.html',
     standalone: false
 })
+/**
+ * GenericAsideMenuAccountComponent component
+ * Handles genericasidemenuaccount functionality and user interactions
+ */
 export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public selectedGrpUniqueName: string;
     /** This will hold group unique name */
@@ -85,6 +92,10 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     private hasUnsavedChanges: boolean = false;
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
@@ -95,16 +106,28 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         this.updateAccountInProcess$ = this.store.pipe(select(state => state.sales.updateAccountInProcess), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles if functionality
+         */
         if (this.allGroups) {
             this.activeGroupUniqueName = "";
             this.isCustomerCreation = undefined;
         }
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
+            /**
+             * Handles if functionality
+             */
             if (activeTab === 1) {
                 this.isMasterOpen = true;
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isMasterOpen) {
                     this.isMasterOpen = false;
                 }
@@ -112,17 +135,26 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges && !response) {
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             }
 
             this.hasUnsavedChanges = response;
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
     }
 
+    /**
+     * Handles addNewAcSubmit functionality
+     */
     public addNewAcSubmit(accRequestObject: AddAccountRequest) {
         this.store.dispatch(this.accountsAction.resetActiveGroup());
         this.addEvent.emit(accRequestObject);
@@ -136,6 +168,9 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
      * @memberof GenericAsideMenuAccountComponent
      */
     public updateAccount(accRequestObject: UpdateAccountRequest, usePatchApi: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (usePatchApi) {
             this.updateViaPatchApi.emit(accRequestObject);
         } else {
@@ -143,8 +178,17 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
+    /**
+     * Closes asidepane
+     */
     public closeAsidePane(event) {
+        /**
+         * Handles if functionality
+         */
         if (event) {
+            /**
+             * Handles if functionality
+             */
             if (this.hasUnsavedChanges) {
                 this.confirmPageLeave(() => {
                     this.store.dispatch(this.accountsAction.resetActiveGroup());
@@ -167,14 +211,26 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         this.backButtonPressedEvent.emit();
     }
 
+    /**
+     * Handles isGroupSelected functionality
+     */
     public isGroupSelected(event) {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.activeGroupUniqueName = event.value;
         }
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(s: SimpleChanges) {
         
+        /**
+         * Handles if functionality
+         */
         if ('selectedGrpUniqueName' in s && s.selectedGrpUniqueName.currentValue !== s.selectedGrpUniqueName.previousValue) {
             this.isCustomerCreation = true;
             this.activeGroupUniqueName = s.selectedGrpUniqueName.currentValue;
@@ -182,11 +238,17 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
             this.flatAccountWGroupsList = undefined;
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('selectedGroupUniqueName' in s && s.selectedGroupUniqueName.currentValue !== s.selectedGroupUniqueName.previousValue) {
             // get groups list
             this.isServiceCreation = true;
             this.flatAccountWGroupsList$ = of(null);
             this.flatAccountWGroupsList = undefined;
+            /**
+             * Handles if functionality
+             */
             if (this.selectedGroupUniqueName === VoucherTypeEnum.purchaseOrder || this.selectedGroupUniqueName === VoucherTypeEnum.debitNote || this.selectedGroupUniqueName === VoucherTypeEnum.purchase) {
                 this.activeGroupUniqueName = 'operatingcost';
             } else if (this.selectedGroupUniqueName === 'receipt' || this.selectedGroupUniqueName === 'payment') {
@@ -196,8 +258,14 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if ('selectedAccountUniqueName' in s) {
             let value = s.selectedAccountUniqueName;
+            /**
+             * Handles if functionality
+             */
             if (value.currentValue && value.currentValue !== value.previousValue) {
                 this.store.dispatch(this.accountsAction.resetActiveAccount());
                 this.store.dispatch(this.accountsAction.getAccountDetails(s.selectedAccountUniqueName.currentValue));
@@ -205,6 +273,9 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -217,6 +288,9 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
      * @memberof GenericAsideMenuAccountComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.actionAccount = this.selectedAccountUniqueName ? this.commonLocaleData?.app_update_account : this.commonLocaleData?.app_create_account;
         }
@@ -233,8 +307,14 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         document.querySelector("generic-aside-menu-account")?.classList?.add("page-leave-confirmation-showing");
         this.pageLeaveUtilityService.confirmPageLeave(action => {
             document.querySelector("generic-aside-menu-account")?.classList?.remove("page-leave-confirmation-showing");
+            /**
+             * Handles if functionality
+             */
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                /**
+                 * Handles callback functionality
+                 */
                 callback();
             }
         });

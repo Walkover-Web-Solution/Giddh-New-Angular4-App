@@ -1,14 +1,25 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from '../../lodash-optimized';
+/**
+ * Dayjs interface definition
+ * Defines the structure and contract for Dayjs objects
+ */
 type Dayjs = any;
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-datepicker-wrapper',
     templateUrl: './datepicker.wrapper.component.html',
     standalone: false
 })
 
+/**
+ * DatepickerWrapperComponent component
+ * Handles datepickerwrapper functionality and user interactions
+ */
 export class DatepickerWrapperComponent implements OnInit, OnChanges {
     public dayjs = dayjs;
 
@@ -50,6 +61,10 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     /** Confirmation message to be shown when show confirmation on change is enabled */
     @Input() public confirmationMessage: string = '';
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {}
 
     /**
@@ -59,10 +74,16 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
      */
     public ngOnInit(): void {
 
+        /**
+         * Handles if functionality
+         */
         if (!this.inputStartDate) {
             this.inputStartDate = dayjs().startOf('day');
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!this.inputEndDate) {
             this.inputEndDate = dayjs().endOf('day');
         }
@@ -80,12 +101,21 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
      * @memberof DatepickerWrapperComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles for functionality
+         */
         for (let change in changes) {
+            /**
+             * Handles if functionality
+             */
             if (change === "inputStartDate" && changes[change].currentValue) {
                 this.inputStartDate = changes[change].currentValue;
                 this.minDate = cloneDeep(this.inputStartDate);
                 this.minDate.subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
             }
+            /**
+             * Handles if functionality
+             */
             if (change === "inputEndDate" && changes[change].currentValue) {
                 this.inputEndDate = changes[change].currentValue;
                 this.maxDate = cloneDeep(this.inputEndDate);

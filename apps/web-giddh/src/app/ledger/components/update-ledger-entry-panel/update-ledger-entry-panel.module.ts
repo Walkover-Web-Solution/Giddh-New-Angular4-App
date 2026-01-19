@@ -30,6 +30,9 @@ import { NgxMaskModule } from '../../../shared/helpers/directives/ngx-mask';
 import { NumberToWordsModule } from '../../../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         UpdateLedgerEntryPanelComponent,
@@ -71,4 +74,8 @@ import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })
+/**
+ * UpdateLedgerEntryPanelModule module
+ * Implements UpdateLedgerEntryPanelModule functionality
+ */
 export class UpdateLedgerEntryPanelModule { }

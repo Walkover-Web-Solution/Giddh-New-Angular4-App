@@ -59,12 +59,18 @@ export const ROUTES: Routes = [
             { path: 'inventory/v2', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule) },
             {
                 path: 'inventory-in-out',
+                /**
+                 * Loads children data
+                 */
                 loadChildren: () =>  import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule),
                 data: { preload: true }
             },
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             {
                 path: 'trial-balance-and-profit-loss',
+                /**
+                 * Loads children data
+                 */
                 loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule),
                 data: { preload: true }
             },
@@ -72,6 +78,9 @@ export const ROUTES: Routes = [
             { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
             {
                 path: 'ledger/:accountUniqueName',
+                /**
+                 * Loads children data
+                 */
                 loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),
                 data: { preload: true }
             },
@@ -79,23 +88,35 @@ export const ROUTES: Routes = [
             { path: 'settings', loadChildren: () => import('./settings/settings.module').then(module => module.SettingsModule) },
             {
                 path: 'manufacturing',
+                /**
+                 * Loads children data
+                 */
                 loadChildren: () => import('./manufacturing/manufacturing.module').then(module => module.ManufacturingModule),
                 data: { preload: true }
             },
             {
                 path: 'journal-voucher',
+                /**
+                 * Loads children data
+                 */
                 loadChildren: () => import('./accounting/accounting.module').then(module => module.AccountingModule),
                 data: { preload: true }
             },
             { path: 'contact', loadChildren: () => import('./contact/contact.module').then(module => module.ContactModule) },
             {
                 path: 'new-vs-old-invoices',
+                /**
+                 * Loads children data
+                 */
                 loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule)
             },
             { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule) },
             { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
             {
                 path: 'company-import-export',
+                /**
+                 * Loads children data
+                 */
                 loadChildren: () => import('./company-import-export/company-import-export.module').then(module => module.CompanyImportExportModule)
             },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule) },

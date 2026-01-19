@@ -35,6 +35,9 @@ import { ServiceConfig } from "../services/service.config";
 declare var initSendOTP: any;
 declare var window: any;
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'add-company',
     templateUrl: './add-company.component.html',
@@ -44,6 +47,10 @@ declare var window: any;
     standalone:false
 })
 
+/**
+ * AddCompanyComponent component
+ * Handles addcompany functionality and user interactions
+ */
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('stepper') stepperIcon: any;
     /** Mobile number field instance */
@@ -233,6 +240,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds user module restriction */
     public remainingUsers: number = 0;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toaster: ToasterService,
@@ -274,6 +285,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getCurrency();
 
         this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.subscriptionId) {
                 this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
                 this.getCountryListBySubscriptionId(res?.subscriptionId);
@@ -284,9 +298,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
+            /**
+             * Handles if functionality
+             */
             if (!this.isNewUserLoggedIn) {
                 this.getBillingDetails();
                 this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data?.companyName) {
                         this.firstStepForm.get('name')?.patchValue(data.companyName);
                     }
@@ -307,11 +327,17 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
         mappings.valueChanges.pipe(debounceTime(1000), takeUntil(this.destroyed$), distinctUntilChanged((prev, current) => current?.[this.permissionRoleIndex]?.emailId === prev?.[this.permissionRoleIndex]?.emailId)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (this.permissionRoleIndex === null || this.permissionRoleIndex === undefined) {
                 return;
             }
             const index = this.permissionRoleIndex;
             let change = mappings.at(index);
+            /**
+             * Handles if functionality
+             */
             if (change?.get('emailId')?.value && change?.get('emailId')?.status === 'VALID') {
                 this.updateSelectRoleValue(index, 'super_admin');
             } else {
@@ -320,9 +346,18 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.store.pipe(select(response => response.common.onboardingform), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.fields) {
                     Object.keys(response.fields)?.forEach(key => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response.fields[key]) {
                             this.formFields[response.fields[key].name] = [];
                             this.formFields[response.fields[key].name] = response.fields[key];
@@ -330,9 +365,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                     });
                     this.changeDetection.detectChanges();
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (response.applicableTaxes) {
                     this.taxesList = [];
                     Object.keys(response.applicableTaxes)?.forEach(key => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response.applicableTaxes[key]) {
                             this.taxesList.push({
                                 label: response.applicableTaxes[key]?.name,
@@ -349,6 +390,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.user), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.user?.contactNo) {
                 this.showMobileField = false;
                 this.mobileNo = response.user.contactNo;
@@ -361,6 +405,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.moduleRestrictionStatus) {
                 const module = response.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === RestrictedModules.Users
@@ -411,6 +458,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public getCountryListBySubscriptionId(subscriptionId: any): void {
         this.companyService.countryListBySubscriptionId(subscriptionId).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.countries = [];
                 Object.keys(response?.body)?.forEach(key => {
@@ -436,26 +486,47 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public initMobileNumberField(): void {
         let configuration = {
+            /**
+             * Handles widgetId functionality
+             */
             widgetId: (this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID_NEW),
+            /**
+             * Handles tokenAuth functionality
+             */
             tokenAuth: (this.serviceConfig.OTP_TOKEN_AUTH || OTP_WIDGET_TOKEN_NEW),
             exposeMethods: true,
+            /**
+             * Handles success functionality
+             */
             success: (data: any) => { },
+            /**
+             * Handles failure functionality
+             */
             failure: (error: any) => {
                 this.toaster.showSnackBar("error", error?.message);
             }
         };
 
         /* OTP LOGIN */
+        /**
+         * Handles if functionality
+         */
         if (window['initSendOTP'] === undefined) {
             let scriptTag = document.createElement('script');
             scriptTag.src = Configuration.isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             scriptTag.onload = () => {
+                /**
+                 * Initializes sendotp
+                 */
                 initSendOTP(configuration);
             };
             document.body.appendChild(scriptTag);
         } else {
+            /**
+             * Initializes sendotp
+             */
             initSendOTP(configuration);
         }
     }
@@ -470,6 +541,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isMobileNumberVerified = false;
         let mobileNo = this.firstStepForm.value.mobile;
         mobileNo = mobileNo?.replace("+", "");
+        /**
+         * Handles if functionality
+         */
         if (!mobileNo || this.isMobileNumberInvalid) {
             this.toaster.showSnackBar("error", this.localeData?.enter_valid_mobile_number);
             return;
@@ -564,6 +638,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public verifyOtp(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.firstStepForm.get('mobileOtp')?.value?.trim()) {
             this.toaster.showSnackBar("error", this.localeData?.enter_valid_otp);
             return;
@@ -646,6 +723,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.firstStepForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
@@ -667,6 +747,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             roleUniqueName: [''],
             entity: ['company']
         });
+        /**
+         * Handles if functionality
+         */
         if (isSuperAdmin) {
             mappingForm.get('roleUniqueName').setValidators(Validators.required);
             mappingForm.get('roleUniqueName').updateValueAndValidity();
@@ -684,6 +767,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public removeUser(index: number, isSuperAdmin: boolean = false): void {
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
+        /**
+         * Handles if functionality
+         */
         if (index === 0 && !isSuperAdmin) {
             mappings.reset(); // Reset the control at index 0
         } else {
@@ -707,7 +793,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public getStepperIcon(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.stepperIcon) {
                 this.stepperIcon._getIndicatorType = () => 'number';
                 // Force change detection to update the stepper
@@ -723,10 +815,22 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public validateGstNumber(): void {
         let isValid: boolean = false;
+        /**
+         * Handles if functionality
+         */
         if (this.secondStepForm.get('gstin')?.value) {
+            /**
+             * Handles if functionality
+             */
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                /**
+                 * Handles for functionality
+                 */
                 for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    /**
+                     * Handles if functionality
+                     */
                     if (regex.test(this.secondStepForm.get('gstin')?.value)) {
                         isValid = true;
                     }
@@ -735,6 +839,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 isValid = true;
             }
 
+            /**
+             * Handles if functionality
+             */
             if (!isValid) {
                 let text = this.localeData?.invalid_tax;
                 text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
@@ -744,17 +851,26 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isGstinValid = false;
             } else {
                 this.isGstinValid = true;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.selectedCountryCode === 'IN') {
                     this.getGstConfirmationPopup();
                 }
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.secondStepForm.get('gstin')?.value?.length >= 2) {
             this.states?.find((state) => {
                 let code = this.secondStepForm.get('gstin')?.value?.substr(0, 2);
                 let matchCode = state.stateGstCode == code;
                 this.disabledState = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (matchCode) {
                     this.disabledState = true;
                     this.selectedState = state.label;
@@ -779,8 +895,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public getGstConfirmationPopup(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.secondStepForm.get('gstin')?.value) {
             this.commonService.getGstInformationDetails(this.secondStepForm.get('gstin')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                /**
+                 * Handles if functionality
+                 */
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
                         width: '40%',
@@ -793,6 +915,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                     });
                     dialogRef.afterClosed().subscribe(response => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response) {
                             let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
                             this.firstStepForm.get('name')?.patchValue(result.body?.lgnm);
@@ -824,13 +949,25 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public getStates() {
         this.store.pipe(select(state => state.general.states), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.states = [];
                 this.countyList = [];
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response.stateList) {
                     Object.keys(response.stateList).forEach(key => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (key) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response.stateList[key].stateGstCode !== null) {
                                 this.stateGstCode[response.stateList[key].stateGstCode] = [];
                                 this.stateGstCode[response.stateList[key].stateGstCode] = response.stateList[key].code;
@@ -844,6 +981,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                     });
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response.countyList) {
                     this.countyList = response.countyList?.map(county => {
                         return { label: county.name, value: county.code };
@@ -860,6 +1000,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public getCountry(): void {
         this.store.pipe(select(response => response.common.countries), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.countries = [];
                 Object.keys(response).forEach(key => {
@@ -884,6 +1027,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public getCurrency(): void {
         this.store.pipe(select(state => state.session.currencies), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.currencies = [];
                 Object.keys(response).forEach(key => {
@@ -900,6 +1046,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public selectCurrency(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.firstStepForm.controls['currency'].setValue({ label: event?.label, value: event?.value });
             this.changeDetection.detectChanges();
@@ -923,6 +1072,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public selectCountry(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.selectedCountry = event.label;
             this.selectedCountryCode = event.value;
@@ -933,6 +1085,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.disabledState = false;
             this.businessTypeList = [];
 
+            /**
+             * Handles if functionality
+             */
             if (!this.registeredTypeCountryList.includes(event.value)) {
                 this.isOtherCountry = true;
                 this.secondStepForm.controls['businessType'].setValue(this.businessTypes.Unregistered);
@@ -946,6 +1101,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.company.baseCurrency = event?.additional?.currency?.code;
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
 
+            /**
+             * Handles if functionality
+             */
             if (this.showMobileField && this.firstStepForm.value.mobile) {
                 let mobileValue = this.firstStepForm.value.mobile;
 
@@ -957,6 +1115,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 const currentDialCode = event?.additional?.callingCode || '';
 
                 // Add current country code to the number
+                /**
+                 * Handles if functionality
+                 */
                 if (mobileValue && currentDialCode) {
                     mobileValue = `+${currentDialCode}${mobileValue}`;
                 }
@@ -996,19 +1157,31 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public nextStepForm(): void {
         this.isFormSubmitted = false;
         this.firstStepForm.get('mobile')?.patchValue(this.firstStepForm.get('mobile')?.value.replace(/\+/g, ''));
+        /**
+         * Handles if functionality
+         */
         if ((this.selectedStep === 0 && this.firstStepForm.invalid) || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
+            /**
+             * Handles if functionality
+             */
             if (!this.firstStepForm.invalid && this.showMobileField && !this.isMobileNumberVerified) {
                 this.toaster.showSnackBar("error", this.localeData?.verify_number);
             }
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.selectedStep === 1 && this.secondStepForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.isNewUserLoggedIn && this.selectedStep === 2 && this.thirdStepForm.invalid) {
             this.isFormSubmitted = true;
             return;
@@ -1036,6 +1209,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     private getRandomString(companyName: string, country: string): string {
+        /**
+         * Handles if functionality
+         */
         if (companyName) {
             let date, dateString, randomGenerate, strings;
             companyName = this.removeSpecialCharacters(companyName);
@@ -1134,6 +1310,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public onSubmit(): void {
         this.isFormSubmitted = false;
+        /**
+         * Handles if functionality
+         */
         if (this.companyForm.invalid || (!this.isGstinValid && this.secondStepForm.controls['businessType'].value === BusinessTypes.Registered)) {
             this.isFormSubmitted = true;
             return;
@@ -1142,7 +1321,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         let number = "";
         let countryCode = "";
 
+        /**
+         * Handles if functionality
+         */
         if (!this.showMobileField) {
+            /**
+             * Handles if functionality
+             */
             if (this.mobileNo) {
                 let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber("+" + this.mobileNo);
                 number = parsedMobileNo?.nationalNumber ?? this.mobileNo;
@@ -1170,20 +1355,32 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.company.permission = this.thirdStepForm.value.permissionRoles;
         this.company.creatorSuperAdmin = this.thirdStepForm.value.creatorSuperAdmin;
         this.isLoading = true;
+        /**
+         * Handles if functionality
+         */
         if (this.thirdStepForm.value.creatorSuperAdmin && !this.thirdStepForm.value.permissionRoles[0]?.emailId) {
             delete this.company.permission;
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.isNewUserLoggedIn) {
             delete this.company.permission;
             delete this.company.creatorSuperAdmin;
         }
         this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.nextStepForm();
+        /**
+         * Handles if functionality
+         */
         if (PRODUCTION_ENV && this.companiesList?.length === 0) {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
                 this.generalService.companyUniqueName = response?.body?.uniqueName;
@@ -1192,6 +1389,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isCompanyCreated = true;
                 this.firstStepForm.markAsPristine();
 
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.store.dispatch(this.loginAction.ChangeCompany(response?.body?.uniqueName));
                     this.route.navigate(['/pages', 'onboarding']);
@@ -1212,6 +1412,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public selectBusinessType(value: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value) {
             this.secondStepForm.controls['businessType'].setValue(value);
             this.secondStepForm.get('gstin').removeValidators(Validators.required);
@@ -1219,8 +1422,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.secondStepForm.get('county').removeValidators(Validators.required);
             this.secondStepForm.get('address').removeValidators(Validators.required);
 
+            /**
+             * Handles if functionality
+             */
             if (value === this.businessTypes.Registered) {
                 this.secondStepForm.get('gstin').setValidators(Validators.required);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.countyList?.length) {
                     this.secondStepForm.get('county').setValidators(Validators.required);
                 } else {
@@ -1248,6 +1457,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public selectBusinessNature(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.secondStepForm.controls['businessNature'].setValue(event.value);
             this.changeDetection.detectChanges();
@@ -1262,8 +1474,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public prepareTaxDetail(form: any): any {
+        /**
+         * Handles if functionality
+         */
         if (form?.value) {
             this.addressesObj.taxNumber = form.value.secondStepForm.gstin;
+            /**
+             * Handles if functionality
+             */
             if (this.countyList?.length) {
                 this.addressesObj.county = { code: form.value.secondStepForm.county?.value };
             } else {
@@ -1296,6 +1514,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;
@@ -1324,10 +1545,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public logoutUser(): void {
         this.store.dispatch(this.verifyActions.hideVerifyBox());
         this.dialog?.closeAll();
+        /**
+         * Handles if functionality
+         */
         if (Configuration.isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (val) {
                     this.socialAuthService.signOut().then().catch((err) => {
                     });
@@ -1376,6 +1603,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
         permissionRolesArray?.controls.forEach((permissionGroup: FormGroup) => {
             const roleUniqueNameControl = permissionGroup.get('roleUniqueName');
+            /**
+             * Handles if functionality
+             */
             if (isSuperAdmin) {
                 roleUniqueNameControl.clearValidators();
             } else {
@@ -1383,10 +1613,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             roleUniqueNameControl.updateValueAndValidity();
         });
+        /**
+         * Handles if functionality
+         */
         if (isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === this.remainingUsers)) {
             this.removeUser(this.thirdStepForm.get('permissionRoles').value.length - 1, isSuperAdmin);
         }
         // If there is 1 remaining user and the user is a SuperAdmin, hide the form. If there is 1 remaining user and the user is not a SuperAdmin, show the form.
+        /**
+         * Handles if functionality
+         */
         if (!isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === 0)) {
             this.addNewUser();
         }
@@ -1399,6 +1635,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.businessTypeList = [
                 {
@@ -1443,6 +1682,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public getPermissionRoles(): void {
         this.permissionRoles$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.permissionRoles = response?.map(role => ({
                     label: role.name,
@@ -1492,6 +1734,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public handleAddNewUser(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.canAddNewUser()) {
             this.addNewUser();
         }

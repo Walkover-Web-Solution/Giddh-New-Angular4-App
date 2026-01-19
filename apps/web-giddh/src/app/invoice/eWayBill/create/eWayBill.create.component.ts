@@ -19,12 +19,19 @@ import { PageEvent } from '@angular/material/paginator';
 import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-e-way-bill-create',
     templateUrl: './eWayBill.create.component.html',
     styleUrls: [`./eWayBill.create.component.scss`],
     standalone:false
 })
+/**
+ * EWayBillCreateComponent component
+ * Handles ewaybillcreate functionality and user interactions
+ */
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
@@ -114,6 +121,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Displayed columns for transporter table */
     public displayedColumns: string[] = ['transporterName', 'transporterId', 'actions'];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
         private _cdRef: ChangeDetectorRef, private toaster: ToasterService, private generalService: GeneralService,
@@ -139,6 +150,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public toggleEwayBillCredentialsPopup(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.eWayBillCredentialsDialogRef) {
             this.eWayBillCredentialsDialogRef.close();
             this.eWayBillCredentialsDialogRef = null;
@@ -150,7 +164,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['pages', 'home']);
             return;
@@ -158,8 +178,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.transporterFilterRequest.page = 1;
         this.transporterFilterRequest.count = PAGINATION_LIMIT;
         this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.isUserlogedIn = true;
+                /**
+                 * Handles if functionality
+                 */
                 if (res.body && res.body?.gstIn) {
                     this.invoiceBillingGstinNo = this.generateEwayBillform.toGstIn = res.body.gstIn;
                 }
@@ -175,11 +201,17 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
 
         this.transporterList$.subscribe(transporters => {
+            /**
+             * Handles if functionality
+             */
             if (transporters) {
                 this.transporterDataSource.data = transporters;
             }
         });
         this.store.pipe(select(state => state.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
+            /**
+             * Handles if functionality
+             */
             if (p && p.length) {
                 let transporterDropdown = null;
                 let transporterArr = null;
@@ -192,45 +224,72 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
         this.invoiceNumber = this.selectedInvoices?.length ? this.selectedInvoices[0]?.voucherNumber : '';
         this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : null;
+        /**
+         * Handles if functionality
+         */
         if (this.invoiceBillingGstinNo) {
             this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
         } else {
             this.generateEwayBillform.toGstIn = 'URP';
         }
+        /**
+         * Handles if functionality
+         */
         if (this.selectedInvoices?.length === 0) {
             this.redirectToSalesInvoice();
         }
         this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.generateEwayBillForm.reset();
             }
         });
         this.updateTransporterSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.generateNewTransporterForm.reset();
             }
         });
 
         this.store.pipe(select(state => state.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$)).subscribe(p => {
+            /**
+             * Handles if functionality
+             */
             if (p) {
                 this.clearTransportForm();
             }
         });
     }
 
+    /**
+     * Handles clearTransportForm functionality
+     */
     public clearTransportForm() {
         this.generateNewTransporter.transporterId = this.generateNewTransporter.transporterName = null;
     }
 
     // generate Eway
+    /**
+     * Handles submitewaybill event
+     */
     public onSubmitEwaybill(generateBillform: NgForm) {
         this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res?.status === 'success') {
                 this.isUserlogedIn = true;
             } else {
                 this.isUserlogedIn = false;
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (this.isUserlogedIn) {
             this.generateBill = generateBillform?.value;
             this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice
@@ -239,6 +298,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
             this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
 
+            /**
+             * Handles if functionality
+             */
             if (generateBillform.valid) {
                 this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
             }
@@ -248,6 +310,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.detectChanges();
     }
 
+    /**
+     * Handles cancelgeneratebill event
+     */
     public onCancelGenerateBill() {
         this.generateEwayBillform.toPinCode = this.voucherDetails?.account?.billingDetails?.pincode || '';
         this.generateEwayBillform.transDistance = null;
@@ -259,12 +324,21 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.generateEwayBillform.transactionType = '1';
     }
 
+    /**
+     * Handles selectTransporter functionality
+     */
     public selectTransporter(e) {
         this.showClear = true;
         this.generateEwayBillform.transporterName = e.label;
     }
 
+    /**
+     * Handles keydownPressed functionality
+     */
     public keydownPressed(e) {
+        /**
+         * Handles if functionality
+         */
         if (e.code === 'ArrowDown') {
             this.keydownClassAdded = true;
         } else if (e.code === 'Enter' && this.keydownClassAdded) {
@@ -282,18 +356,27 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public openTransporterDialog(): void {
         this.transporterDialogRef = this.dialog.open(this.transporterTemplate, ASIDE_PANE_CONFIG);
+        /**
+         * Handles if functionality
+         */
         if (this.generateNewTransporterForm) {
             this.generateNewTransporterForm.reset();
         }
         this.transportEditMode = false;
     }
 
+    /**
+     * Handles generateTransporter functionality
+     */
     public generateTransporter(generateTransporterForm: NgForm) {
         this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm?.value));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
 
+    /**
+     * Updates existing transporter
+     */
     public updateTransporter(generateTransporterForm: NgForm) {
         this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm?.value));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
@@ -301,17 +384,29 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.detectChanges();
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles editTransporter functionality
+     */
     public editTransporter(trans: any) {
         this.seTransporterDetail(trans);
         this.transportEditMode = true;
     }
 
+    /**
+     * Handles seTransporterDetail functionality
+     */
     public seTransporterDetail(trans) {
+        /**
+         * Handles if functionality
+         */
         if (trans !== undefined && trans) {
             this.generateNewTransporter.transporterId = trans.transporterId;
             this.generateNewTransporter.transporterName = trans.transporterName;
@@ -320,6 +415,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.detectChanges();
     }
 
+    /**
+     * Deletes transporter
+     */
     public deleteTransporter(trans: IEwayBillTransporter) {
         this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
@@ -343,8 +441,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         });
         this.invoiceRemoveConfirmationDialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response === this.commonLocaleData?.app_yes) {
                 this.selectedInvoices?.splice(0, 1);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.selectedInvoices?.length === 0) {
                     this.redirectToSalesInvoice();
                 }
@@ -352,7 +456,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles detectChanges functionality
+     */
     detectChanges() {
+        /**
+         * Handles if functionality
+         */
         if (!this._cdRef['destroyed']) {
             this._cdRef.detectChanges();
         }
@@ -366,6 +476,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public handlePageEvent(event: PageEvent): void {
         // For transporter list, we always use event.pageIndex + 1 since page size is fixed at 1
+        /**
+         * Handles if functionality
+         */
         if (this.transporterFilterRequest.count !== event.pageSize) {
             this.transporterFilterRequest.page = 1;
         } else {
@@ -388,16 +501,31 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
 
+    /**
+     * Handles selectedModeOfTrans functionality
+     */
     public selectedModeOfTrans(mode: string) {
+        /**
+         * Handles if functionality
+         */
         if (mode !== 'road') {
             this.isTransModeRoad = true;
         } else {
             this.isTransModeRoad = false;
         }
     }
+    /**
+     * Handles subTypeElementSelected functionality
+     */
     public subTypeElementSelected(event) {
         this.TransporterDocType = this.ModifiedTransporterDocType;
+        /**
+         * Handles if functionality
+         */
         if (event) {
+            /**
+             * Handles if functionality
+             */
             if (event.label === this.localeData?.subsupply_types_list?.supply || event.label === this.localeData?.subsupply_types_list?.export) {
                 this.TransporterDocType = this.TransporterDocType?.filter((item) => item?.value !== 'CHL');
             } else if (event.label === this.localeData?.subsupply_types_list?.job_work) {
@@ -415,6 +543,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.SubsupplyTypesList = [
                 { value: '1', label: this.localeData?.subsupply_types_list?.supply },
@@ -456,9 +587,18 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles prefillSubType functionality
+     */
     private prefillSubType(): void {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
+                /**
+                 * Handles if functionality
+                 */
                 if (activeCompany.baseCurrency === this.selectedInvoices[0]?.account?.currency?.code) {
                     this.generateEwayBillform.subSupplyType = '1';
                     this.selectedSubType = this.localeData?.subsupply_types_list?.supply;
@@ -470,10 +610,19 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles prefillDocType functionality
+     */
     private prefillDocType(): void {
         this.store.pipe(select(state => state.receipt.voucher), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
+            /**
+             * Handles if functionality
+             */
             if (voucher) {
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!voucher?.account?.billingDetails?.pincode) {
                     this.toaster.errorToast(this.localeData?.pincode_required);
                     this.redirectToSalesInvoice();
@@ -485,12 +634,18 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
                 voucher?.entries?.forEach(entry => {
                     entry?.taxes?.forEach(tax => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (tax.taxPercent !== 0) {
                             hasNonNilRatedTax = true;
                         }
                     });
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (hasNonNilRatedTax) {
                     this.generateEwayBillform.docType = 'INV';
                     this.selectedDocType = this.localeData?.modified_transporter_doc_type?.invoice;
@@ -501,6 +656,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
                 this.generateEwayBillform.toPinCode = voucher?.account?.billingDetails?.pincode;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.invoiceBillingGstinNo) {
                     this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
                 } else {
@@ -521,6 +679,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     private redirectToSalesInvoice(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             this.router.navigate(['/pages/vouchers/preview/sales/list']);
         } else {

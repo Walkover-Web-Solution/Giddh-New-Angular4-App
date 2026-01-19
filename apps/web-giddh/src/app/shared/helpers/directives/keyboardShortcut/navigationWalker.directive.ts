@@ -15,6 +15,10 @@ const keyMaps = {
     exportAs: 'navigationWalker',
     standalone: false
 })
+/**
+ * NavigationWalkerDirective directive
+ * Implements NavigationWalkerDirective functionality
+ */
 export class NavigationWalkerDirective implements OnInit, OnDestroy {
 
     @Input() public navigationWalker: { horizontal: string, vertical: string, ignore: string };
@@ -33,6 +37,9 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
         return this.horizontalTreeWalker[this.horizontalIndex].currentNode;
     }
 
+    /**
+     * Handles listener functionality
+     */
     private listener: () => void;
     private horizontalTreeWalker: TreeWalker[] = [];
     private horizontalIndex = -1;
@@ -41,16 +48,29 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
     private result: any[] = [];
     private ignoredEl: any[] = [];
 
+    /**
+     * Creates an instance of directive
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _el: ElementRef, private _renderer: Renderer2) {
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         // create horizontal and vertical walkers and set current nodes
         this.add(this._el?.nativeElement);
     }
 
     @HostListener('window:keydown', ['$event, ElementRef'])
+    /**
+     * Handles keydown event
+     */
     public handleKeyDown(event: KeyboardEvent) {
+        /**
+         * Handles if functionality
+         */
         if (!this.enabled
             || event.shiftKey || event.ctrlKey || event.altKey
             || !this._el?.nativeElement.contains(event.target)) {
@@ -61,11 +81,17 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
             return s.contains(event.target);
         });
 
+        /**
+         * Handles if functionality
+         */
         if (ignoredEl) {
             return;
         }
 
         // Select nodes according to key pressed.
+        /**
+         * Handles if functionality
+         */
         if (event.keyCode === keyMaps.down) {
             this.nextVertical(event);
             this.onDown.emit(this.result);
@@ -156,6 +182,9 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
      * remove last horizontal walkers
      */
     public removeHorizontal() {
+        /**
+         * Handles if functionality
+         */
         if (this.horizontalIndex === 0) {
             return;
         }
@@ -167,42 +196,69 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
      * remove last vertical walkers
      */
     public removeVertical(focus = true) {
+        /**
+         * Handles if functionality
+         */
         if (this.verticalIndex === 0) {
             return;
         }
         this.verticalTreeWalker.pop();
         this.verticalIndex--;
+        /**
+         * Handles if functionality
+         */
         if (focus) {
             this.focusNode(this.verticalTreeWalker[this.verticalIndex].currentNode);
         }
     }
 
+    /**
+     * Handles nextHorizontal functionality
+     */
     public nextHorizontal() {
         this.result[this.horizontalIndex].previousHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).currentNode;
         this.result[this.horizontalIndex].currentHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).nextNode();
     }
 
+    /**
+     * Handles previousHorizontal functionality
+     */
     public previousHorizontal() {
         this.result[this.horizontalIndex].previousHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).currentNode;
         this.result[this.horizontalIndex].currentHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).previousNode();
     }
 
+    /**
+     * Handles nextVertical functionality
+     */
     public nextVertical(event?, node?) {
         this.result[this.verticalIndex].previousVertical = (this.verticalTreeWalker[this.verticalIndex]).currentNode;
         this.result[this.verticalIndex].currentVertical = node || (this.verticalTreeWalker[this.verticalIndex]).nextNode();
         this.focusNode(this.result[this.verticalIndex].currentVertical, event);
     }
 
+    /**
+     * Sets enabled value
+     */
     public setEnabled(value: boolean) {
         this.enabled = value;
     }
 
+    /**
+     * Creates new treewalker
+     */
     private createTreeWalker(attr: string, ignore?: string, el?): TreeWalker {
         return document.createTreeWalker(
             el || this._el?.nativeElement,
             NodeFilter.SHOW_ELEMENT,
             {
+                /**
+                 * Handles acceptNode functionality
+                 */
                 acceptNode: (node: any) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (ignore && node.attributes.getNamedItem(ignore)) {
                         this.ignoredEl.push(node);
                         return NodeFilter.FILTER_REJECT;
@@ -215,13 +271,25 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
         );
     }
 
+    /**
+     * Handles focusNode functionality
+     */
     private focusNode(node = this.result[this.verticalIndex].currentVertical, event?: KeyboardEvent) {
+        /**
+         * Handles if functionality
+         */
         if (!node) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (event) {
             event.preventDefault();
         }
+        /**
+         * Handles if functionality
+         */
         if (this.listener) {
             this.listener();
         }
@@ -230,13 +298,25 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
         this.listener = this._renderer.listen(node, 'blur', () => this.resetCurrentNode());
     }
 
+    /**
+     * Resets currentnode to default state
+     */
     private resetCurrentNode() {
+        /**
+         * Handles while functionality
+         */
         while (this.verticalIndex > 0) {
             this.removeVertical(false);
         }
+        /**
+         * Handles while functionality
+         */
         while (this.horizontalIndex > 0) {
             this.removeHorizontal();
         }
+        /**
+         * Handles while functionality
+         */
         while (this.result?.length > 1) {
             this.result.pop();
         }
@@ -251,6 +331,9 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
      * @memberof NavigationWalkerDirective
      */
     public ngOnDestroy(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.listener) {
             this.listener();
         }

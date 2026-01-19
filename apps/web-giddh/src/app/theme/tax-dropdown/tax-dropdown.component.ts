@@ -10,12 +10,19 @@ import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { isEqual } from "../../lodash-optimized";
 import { KeyboardNavigationHelper } from '../helpers/keyboard-navigation.helper';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "tax-dropdown",
     templateUrl: "./tax-dropdown.component.html",
     styleUrls: ["./tax-dropdown.component.scss"],
     standalone: false
 })
+/**
+ * TaxDropdownComponent component
+ * Handles taxdropdown functionality and user interactions
+ */
 export class TaxDropdownComponent implements OnChanges {
     @Input() public taxesList: any[] = [];
     /** List of selected taxes */
@@ -57,6 +64,10 @@ export class TaxDropdownComponent implements OnChanges {
     /** Stores last saved form values when menu opens */
     private lastSavedFormValues: any = null;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: FormBuilder,
         private store: Store<AppState>
@@ -66,6 +77,9 @@ export class TaxDropdownComponent implements OnChanges {
         });
 
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.balanceDecimalPlaces) {
                 this.balanceDecimalPlaces = response.balanceDecimalPlaces;
             } else {
@@ -81,8 +95,17 @@ export class TaxDropdownComponent implements OnChanges {
      * @memberof TaxDropdownComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (this.calculateTaxInclusively) {
+            /**
+             * Handles if functionality
+             */
             if (changes?.amount?.firstChange && ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)))) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.taxesList?.length) {
                     this.addTaxesInFormAndEnableDisableTaxes();
                 }
@@ -90,13 +113,22 @@ export class TaxDropdownComponent implements OnChanges {
                 this.addTaxesInForm();
             }
         } else {
+            /**
+             * Handles if functionality
+             */
             if ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)) || (!isEqual(changes?.amount?.currentValue, changes?.amount?.previousValue))) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.taxesList?.length) {
                     this.addTaxesInFormAndEnableDisableTaxes();
                 }
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (changes?.calculateTax?.currentValue) {
             this.calculateTaxAmount(true);
         }
@@ -157,16 +189,28 @@ export class TaxDropdownComponent implements OnChanges {
     public enableDisableTaxes(): void {
         const selectedTaxTypes = [];
         let taxes = this.taxForm.get('taxes') as FormArray;
+        /**
+         * Handles for functionality
+         */
         for (let i = 0; i < taxes.length; i++) {
             taxes.controls[i]?.enable();
             taxes.controls[i]?.get('disableForDate')?.patchValue(false);
 
+            /**
+             * Handles if functionality
+             */
             if (taxes.controls[i]?.get('isChecked')?.value) {
                 selectedTaxTypes[taxes.controls[i]?.get('taxType')?.value] = taxes.controls[i]?.get('uniqueName')?.value;
             }
         }
 
+        /**
+         * Handles for functionality
+         */
         for (let i = 0; i < taxes.length; i++) {
+            /**
+             * Handles if functionality
+             */
             if (selectedTaxTypes[taxes.controls[i]?.get('taxType')?.value] && selectedTaxTypes[taxes.controls[i]?.get('taxType')?.value] !== taxes.controls[i]?.get('uniqueName')?.value) {
                 taxes.controls[i]?.disable();
                 taxes.controls[i]?.get('disableForDate')?.patchValue(false);
@@ -190,9 +234,18 @@ export class TaxDropdownComponent implements OnChanges {
         this.totalTaxAmount = 0;
 
         const taxes = this.taxForm.get('taxes') as FormArray;
+        /**
+         * Handles for functionality
+         */
         for (let i = 0; i < taxes.length; i++) {
+            /**
+             * Handles if functionality
+             */
             if (taxes.controls[i]?.get('isChecked')?.value) {
                 const taxRate = Number(taxes.controls[i].get('taxDetail')?.value?.taxValue);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.calculateTaxInclusively && !calculateTax) {
                     // Inclusive tax rate
                     this.totalTaxAmount += (Number(this.amount) * (taxRate / 100))
@@ -247,13 +300,22 @@ export class TaxDropdownComponent implements OnChanges {
      * @memberof TaxDropdownComponent
      */
     public handleMenuClosed(reason: MenuCloseReason): void {
+        /**
+         * Handles if functionality
+         */
         if (!reason) return;
         
         const isClosedByEscape = reason === 'keydown';
+        /**
+         * Handles if functionality
+         */
         if (isClosedByEscape && this.lastSavedFormValues) {
             const taxesArray = this.taxForm.get('taxes') as FormArray;
             this.lastSavedFormValues.taxes?.forEach((tax: any) => {
                 const index = taxesArray?.controls?.findIndex(control => control.value.uniqueName === tax.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (index > -1) {
                     taxesArray.controls[index].patchValue(tax);
                 }
@@ -280,6 +342,9 @@ export class TaxDropdownComponent implements OnChanges {
      */
     protected emitCloseTaxDropdown(): void {
         // Always emit close event for focus management
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             const triggerElement = this.taxInput?.nativeElement || null;
             const syntheticEvent = {
@@ -289,6 +354,9 @@ export class TaxDropdownComponent implements OnChanges {
         }, 50);
     }
 
+    /**
+     * Handles tabnavigation event
+     */
     public handleTabNavigation(event: KeyboardEvent): void {
         KeyboardNavigationHelper.handleTabNavigation(event);
     }
@@ -299,7 +367,13 @@ export class TaxDropdownComponent implements OnChanges {
      * @memberof TaxDropdownComponent
      */
     public focusTaxDropdown(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.taxInput?.nativeElement) {
                 this.taxInput.nativeElement.focus();
             }

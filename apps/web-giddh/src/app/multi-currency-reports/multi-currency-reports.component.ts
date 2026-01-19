@@ -4,6 +4,9 @@ import { GeneralService } from '../services/general.service';
 import { ReportType } from './multi-currency.const';
 import { ActivatedRoute, Router } from '@angular/router';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'multi-currency-report',
     templateUrl: './multi-currency-reports.component.html',
@@ -11,6 +14,10 @@ import { ActivatedRoute, Router } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone:false
 })
+/**
+ * MultiCurrencyReportsComponent component
+ * Handles multicurrencyreports functionality and user interactions
+ */
 export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
     /** Flag to determine if the Trial Balance (TB) can be loaded */
     public CanTBLoad: boolean = true;
@@ -31,6 +38,10 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
     /** Holds active selected Tab Index  */
     public selectedTabIndex: number = 0;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private generalService: GeneralService,
         private activatedRoute: ActivatedRoute,
@@ -45,6 +56,9 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            /**
+             * Handles if functionality
+             */
             if (val.tabIndex) {
                 this.selectedTabIndex = Number(val.tabIndex);
                 this.tabChanged(this.selectedTabIndex);

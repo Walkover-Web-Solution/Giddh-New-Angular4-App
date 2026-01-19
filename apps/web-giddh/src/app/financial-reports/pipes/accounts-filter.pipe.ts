@@ -3,11 +3,18 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Account } from '../../models/api-models/Search';
 import { filter } from '../../lodash-optimized';
 
+/**
+ * Handles Pipe functionality
+ */
 @Pipe({
     name: 'accountsFilter',
     pure: true,
     standalone: false
 })
+/**
+ * AccountsFilterPipe pipe
+ * Implements AccountsFilterPipe functionality
+ */
 export class AccountsFilterPipe implements PipeTransform {
 
     /**
@@ -18,6 +25,9 @@ export class AccountsFilterPipe implements PipeTransform {
      * @memberof AccountsFilterPipe
      */
     transform(accounts: Array<Account>, showOnlyVisible?: boolean): Array<Account> {
+        /**
+         * Handles if functionality
+         */
         if (showOnlyVisible) {
             return accounts?.filter(account => account.isVisible);
         }

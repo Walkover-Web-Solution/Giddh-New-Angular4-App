@@ -14,6 +14,9 @@ const DIRECTIONAL_KEYS = [
 
 const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META];
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "items-list-popup",
     
@@ -23,6 +26,10 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+/**
+ * AdvanceListItemsPopupComponent component
+ * Handles advancelistitemspopup functionality and user interactions
+ */
 export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /** Reference to the main element. */
@@ -102,6 +109,10 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private inventoryService: InventoryService,
         private changeDetection: ChangeDetectorRef
@@ -124,7 +135,13 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         };
         // listen on input for search
         this.searchSubject.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(300), 
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe((term: string) => {
             this.apiRequestParams.page = 1;
@@ -134,6 +151,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         });
         
         // Initialize search only once
+        /**
+         * Handles if functionality
+         */
         if (!this.isInitialized) {
             this.isInitialized = true;
             this.searchSubject.next("");
@@ -146,6 +166,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * @memberof AdvanceListItemsPopupComponent
      */
     public ngAfterViewInit(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.focusInSearchBox();
             this.doingUIErrands();
@@ -158,6 +181,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * @memberof AdvanceListItemsPopupComponent
      */
     public doingUIErrands(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.wrapper && this.parentEle) {
             this.initSetParentWidth();
         }
@@ -179,16 +205,28 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * @memberof AdvanceListItemsPopupComponent
      */
     public initSetParentWidth(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.setParentWidth && this.mainEle && this.parentEle) {
             const box = this.parentEle.getBoundingClientRect();
             this.ItemWidth = Math.max(box.width, this.ItemWidth);
             
+            /**
+             * Handles if functionality
+             */
             if (this.mainEle?.nativeElement) {
                 this.mainEle.nativeElement.style.width = `${box.width}px`;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.searchWrapEle?.nativeElement) {
                 this.searchWrapEle.nativeElement.style.width = `${box.width}px`;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.wrapper?.nativeElement && box.width > 300) {
                 this.wrapper.nativeElement.classList.add('wider');
             }
@@ -202,6 +240,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * @memberof AdvanceListItemsPopupComponent
      */
     public itemSelected(item: any, event?: any): void {              
+        /**
+         * Handles if functionality
+         */
         if (event && (event.ctrlKey || event.metaKey)){
             this.closeDailogEmitter.emit();
             return ;
@@ -210,6 +251,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         }
         
         this.selectedItemEmitter.emit({ item: item, type: this.apiData?.type });
+        /**
+         * Handles if functionality
+         */
         if (this.searchEle?.nativeElement) {
             this.searchEle.nativeElement.value = null;
         }
@@ -221,10 +265,16 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * @memberof AdvanceListItemsPopupComponent
      */
     public searchItems(resetItems: boolean): void | boolean {
+        /**
+         * Handles if functionality
+         */
         if (this.isLoading) {
             return false;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (resetItems) {
             this.searchedItems = [];
             this.lastScrollTop = 0; // Reset scroll position for new search
@@ -232,6 +282,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
 
         this.isLoading = true;
 
+        /**
+         * Handles if functionality
+         */
         if (this.apiRequestParams?.type === 'users') {
             this.inventoryService.getFlattenAccountsList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
@@ -242,6 +295,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
                 this.searchedItems = result.searchedItems;
                 this.noResultsFound = result.noResultsFound;
                 this.allowLoadMore = result.allowLoadMore;
+                /**
+                 * Handles if functionality
+                 */
                 if (result.highlightedItem !== undefined) this.highlightedItem = result.highlightedItem;
             });
         } else if (this.apiRequestParams?.type === 'stocks') {
@@ -254,6 +310,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
                 this.searchedItems = result.searchedItems;
                 this.noResultsFound = result.noResultsFound;
                 this.allowLoadMore = result.allowLoadMore;
+                /**
+                 * Handles if functionality
+                 */
                 if (result.highlightedItem !== undefined) this.highlightedItem = result.highlightedItem;
             });
         }
@@ -266,8 +325,14 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * @memberof AdvanceListItemsPopupComponent
      */
     private captureValueFromList(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.searchedItems && this.searchedItems.length > 0) {
             let item = this.searchedItems[this.highlightedItem] || this.searchedItems[0];
+            /**
+             * Handles if functionality
+             */
             if (item) {
                 this.itemSelected(item);
             }
@@ -292,17 +357,26 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
     public handleKeydown(e: any): void {
         let key = e.which || e.keyCode;
 
+        /**
+         * Handles if functionality
+         */
         if (key === TAB) {
             e.preventDefault();
             e.stopImmediatePropagation();
         }
 
         // prevent caret movement and handle keyboard navigation
+        /**
+         * Handles if functionality
+         */
         if (this.isOpen && [UP_ARROW, DOWN_ARROW]?.indexOf(key) !== -1) {
             e.preventDefault();
            this.handleKeyboardNavigation(key);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.isOpen && (key === ENTER)) {
             e.preventDefault();
             e.stopPropagation();
@@ -310,11 +384,20 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         }
 
         // closing list on esc press
+        /**
+         * Handles if functionality
+         */
         if (key === ESCAPE) {
+            /**
+             * Handles if functionality
+             */
             if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
                 e.preventDefault();
                 e.stopPropagation();
                 // first escape
+                /**
+                 * Handles if functionality
+                 */
                 if (this.searchEle?.nativeElement?.value) {
                     this.searchEle.nativeElement.value = null;
                     // reset search/query and refresh results when clearing via ESC
@@ -326,7 +409,13 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.isOpen && key === BACKSPACE) {
+            /**
+             * Handles if functionality
+             */
             if (!this.searchEle?.nativeElement?.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
                 this.removeItemFromSelectedGroups();
             }
@@ -340,6 +429,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * @memberof AdvanceListItemsPopupComponent
      */
     public removeItemFromSelectedGroups(item?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (item) {
             this.listOfSelectedGroups = this.listOfSelectedGroups.filter(o => item.uniqueName !== o?.uniqueName);
         } else {
@@ -356,6 +448,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      */
     public handleKeyboardNavigation(key: number): void {
 
+        /**
+         * Handles if functionality
+         */
         if (!this.virtualScrollViewport || !this.searchedItems || this.searchedItems.length === 0) {
             return;
         }
@@ -369,6 +464,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         const visibleItems = Math.ceil(viewport.clientHeight / itemHeight); // number of items visible in viewport
 
         // Update highlighted item
+        /**
+         * Handles if functionality
+         */
         if (key === DOWN_ARROW) {
             this.highlightedItem = Math.min(this.highlightedItem + 1, this.searchedItems.length - 1);
         } else if (key === UP_ARROW) {
@@ -378,6 +476,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         let targetIndex = itemsAbove;
 
         // If highlighted item is above viewport, scroll up
+        /**
+         * Handles if functionality
+         */
         if (this.highlightedItem < itemsAbove) {
             targetIndex = this.highlightedItem;
         }
@@ -399,6 +500,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
     public initSearch(e: KeyboardEvent, term: string): void {
         let key = e.which || e.keyCode;
         // preventing search operation on arrows key
+        /**
+         * Handles if functionality
+         */
         if (this.isOpen && SPECIAL_KEYS?.indexOf(key) !== -1) {
             return;
         }
@@ -406,6 +510,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         term = term ? term.trim() : "";
         
         // Only emit if term is different from current query to prevent duplicates
+        /**
+         * Handles if functionality
+         */
         if (this.apiRequestParams.query !== term) {
             this.searchSubject.next(term);
         }
@@ -418,6 +525,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * @memberof AdvanceListItemsPopupComponent
      */
     public focusInSearchBox(e?: KeyboardEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.searchEle) {
             this.searchEle.nativeElement.focus();
         }
@@ -431,8 +541,14 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      */
     public handleHighLightedItemEvent(item: any): void {
         // Update highlighted item index based on the item
+        /**
+         * Handles if functionality
+         */
         if (item && this.searchedItems) {
             const index = this.searchedItems.findIndex(searchItem => searchItem === item);
+            /**
+             * Handles if functionality
+             */
             if (index !== -1) {
                 this.highlightedItem = index;
             }
@@ -476,6 +592,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
     public onScrolledIndexChange(index: number): void {
         // Load more data when approaching the end
         const threshold = 3; // Load more when 3 items from the end
+        /**
+         * Handles if functionality
+         */
         if (this.searchedItems && index >= this.searchedItems.length - threshold && this.allowLoadMore && !this.isLoading) {
             this.loadMoreData();
         }
@@ -494,6 +613,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         // Track current scroll position
         this.lastScrollTop = element.scrollTop;
         
+        /**
+         * Handles if functionality
+         */
         if (element.scrollTop + element.clientHeight >= element.scrollHeight - threshold && this.allowLoadMore && !this.isLoading) {
             this.loadMoreData();
         }
@@ -507,7 +629,13 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      */
     private loadMoreData(): void {
 
+        /**
+         * Handles if functionality
+         */
         if (this.allowLoadMore && !this.isLoading) {
+            /**
+             * Handles if functionality
+             */
             if (this.apiRequestParams.page < this.apiRequestParams.totalPages) {
                 this.apiRequestParams.page++;
                 this.searchItems(false);
@@ -535,9 +663,18 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * @memberof AdvanceListItemsPopupComponent
      */
     public onPasteInSearch(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.searchEle && this.searchEle.nativeElement) {
                 let term = this.searchEle.nativeElement?.value;
+                /**
+                 * Handles term functionality
+                 */
                 term = (term) ? term.trim() : "";
                 this.searchSubject.next(term);
             }
@@ -550,6 +687,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * Gets the viewport height for virtual scroll
      */
     public getViewportHeight(): number {
+        /**
+         * Handles if functionality
+         */
         if (!this.searchedItems || this.searchedItems.length === 0) {
             return this.ItemHeight;
         }
@@ -564,6 +704,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * Gets the href for an item
      */
     public getItemHref(item: any): string | null {
+        /**
+         * Handles return functionality
+         */
         return (item.type === 'MENU' || item.type === 'ACCOUNT') ? item.route : null;
     }
 
@@ -571,6 +714,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * Gets the icon class for an item type
      */
     public getItemIconClass(type: string): string {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case 'MENU':
                 return 'icon-bar';
@@ -594,6 +740,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
      * Refreshes the virtual scroll viewport while preserving scroll position
      */
     private refreshVirtualScrollViewport(preserveScrollPosition: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (this.virtualScrollViewport) {
             // Use tracked scroll position or get current position
             const currentScrollTop = preserveScrollPosition ? 
@@ -602,6 +751,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
             this.virtualScrollViewport.checkViewportSize();
             
             // Don't reset the rendered range when loading more data
+            /**
+             * Handles if functionality
+             */
             if (!preserveScrollPosition) {
                 const itemCount = Math.min(this.searchedItems?.length || 0, this.visibleItems);
                 this.virtualScrollViewport.setRenderedRange({ start: 0, end: itemCount });
@@ -610,8 +762,17 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
             this.changeDetection.detectChanges();
             
             // Restore scroll position if needed (with slight delay for DOM updates)
+            /**
+             * Handles if functionality
+             */
             if (preserveScrollPosition && currentScrollTop > 0) {
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.virtualScrollViewport) {
                         this.virtualScrollViewport.getElementRef().nativeElement.scrollTop = currentScrollTop;
                         // Update tracked position

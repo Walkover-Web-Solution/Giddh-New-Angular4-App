@@ -1,6 +1,10 @@
 import { InjectionToken } from '@angular/core';
 import { environment } from '../../environments/environment.generated';
 
+/**
+ * IServiceConfigArgs interface definition
+ * Defines the structure and contract for IServiceConfigArgs objects
+ */
 export interface IServiceConfigArgs {
     apiUrl: string;
     appUrl: string

@@ -22,6 +22,10 @@ import {
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * EmailForwardingService service
+ * Provides emailforwarding related business logic and data operations
+ */
 export class EmailForwardingService {
     /** Current company unique name */
     private companyUniqueName: string;
@@ -55,11 +59,17 @@ export class EmailForwardingService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
 
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, string> = res;
                 data.request = '';
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', ''))
         );
     }
@@ -79,11 +89,17 @@ export class EmailForwardingService {
             .replace(':uniqueName', encodeURIComponent(uniqueName));
 
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<EmailForwardingResponse, string> = res;
                 data.request = uniqueName;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<EmailForwardingResponse, string>(e, uniqueName, ''))
         );
     }
@@ -104,11 +120,17 @@ export class EmailForwardingService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
 
         return this.http.get(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<EmailForwardingResponse[], string> = res;
                 data.request = '';
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<EmailForwardingResponse[], string>(e, '', ''))
         );
     }
@@ -128,11 +150,17 @@ export class EmailForwardingService {
             .replace(':uniqueName', encodeURIComponent(uniqueName));
 
         return this.http.delete(url).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<string, string> = res;
                 data.request = uniqueName;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<string, string>(e, uniqueName, ''))
         );
     }
@@ -153,11 +181,17 @@ export class EmailForwardingService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
 
         return this.http.post(url, requestData).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<EmailForwardingResponse, EmailForwardingRequest> = res;
                 data.request = requestData;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<EmailForwardingResponse, EmailForwardingRequest>(e, requestData, ''))
         );
     }
@@ -181,11 +215,17 @@ export class EmailForwardingService {
             .replace(':uniqueName', encodeURIComponent(uniqueName));
 
         return this.http.put(url, requestData).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<EmailForwardingResponse, EmailForwardingRequest> = res;
                 data.request = requestData;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<EmailForwardingResponse, EmailForwardingRequest>(e, requestData, ''))
         );
     }

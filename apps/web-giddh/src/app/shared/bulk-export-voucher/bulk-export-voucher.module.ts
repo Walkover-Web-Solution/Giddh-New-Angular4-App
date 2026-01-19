@@ -10,6 +10,9 @@ import { BulkExportVoucherComponent } from "./bulk-export-voucher.component";
 
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         BulkExportVoucherComponent
@@ -30,5 +33,9 @@ import { BulkExportVoucherComponent } from "./bulk-export-voucher.component";
     providers: [
     ]
 })
+/**
+ * BulkExportVoucherModule module
+ * Implements BulkExportVoucherModule functionality
+ */
 export class BulkExportVoucherModule {
 }

@@ -1,6 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
 
+/**
+ * Separators enumeration
+ * Defines constant values for Separators
+ */
 export enum Separators {
     SEPARATOR = 'separator',
     COMMA_SEPARATOR = 'comma_separator',
@@ -12,7 +16,14 @@ export enum Separators {
     NOT_SEPARATED = 'not_separated'
 }
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * MaskApplierService service
+ * Provides maskapplier related business logic and data operations
+ */
 export class MaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
     public hiddenInput: IConfig['hiddenInput'];
@@ -33,6 +44,9 @@ export class MaskApplierService {
 
     private _shift!: Set<number>;
 
+    /**
+     * Handles constructor functionality
+     */
     public constructor(@Inject(config) protected _config: IConfig) {
         this._shift = new Set();
         this.clearIfNotMatch = this._config.clearIfNotMatch;
@@ -74,6 +88,9 @@ export class MaskApplierService {
      * Process input value for basic separator mask
      */
     private processSeparatorInput(inputValue: string): string {
+        /**
+         * Handles if functionality
+         */
         if (
             inputValue.includes(',') &&
             inputValue?.endsWith(',') &&
@@ -88,6 +105,9 @@ export class MaskApplierService {
      * Process input value for dot separator mask
      */
     private processDotSeparatorInput(inputValue: string): string {
+        /**
+         * Handles if functionality
+         */
         if (
             inputValue?.indexOf('.') !== -1 &&
             inputValue?.indexOf('.') === inputValue.lastIndexOf('.') &&
@@ -113,6 +133,9 @@ export class MaskApplierService {
      * Process separator formatting with validation and precision
      */
     private processSeparatorFormatting(inputValue: string, precision: number): string {
+        /**
+         * Handles if functionality
+         */
         if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:.";<>?\/]/)) {
             inputValue = inputValue.substring(0, inputValue?.length - 1);
         }
@@ -125,6 +148,9 @@ export class MaskApplierService {
      * Process dot separator formatting with validation and precision
      */
     private processDotSeparatorFormatting(inputValue: string, precision: number): string {
+        /**
+         * Handles if functionality
+         */
         if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
             inputValue = inputValue.substring(0, inputValue?.length - 1);
         }
@@ -151,12 +177,18 @@ export class MaskApplierService {
     }
 
     // tslint:disable-next-line:no-any
+    /**
+     * Handles applyMaskWithPattern functionality
+     */
     public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
         const [mask, customPattern] = maskAndPattern;
         this.customPattern = customPattern;
         return this.applyMask(inputValue, mask);
     }
 
+    /**
+     * Handles applyMask functionality
+     */
     public applyMask(
         inputValue: string,
         maskExpression: string,
@@ -164,6 +196,9 @@ export class MaskApplierService {
         cb: Function = () => {
         },
     ): string {
+        /**
+         * Handles if functionality
+         */
         if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
             return '';
         }
@@ -175,45 +210,78 @@ export class MaskApplierService {
         let stepBack: boolean = false;
         this.prefix = this.prefix || '';
 
+        /**
+         * Handles if functionality
+         */
         if (inputValue.slice(0, this.prefix?.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix?.length, inputValue?.length);
         }
         const inputArray: string[] = inputValue?.toString()?.split('');
+        /**
+         * Handles if functionality
+         */
         if (maskExpression === 'IP') {
             this.ipError = !!(inputArray?.filter((i: string) => i === '.')?.length < 3 && inputArray?.length < 7);
             maskExpression = '099.099.099.099';
         }
+        /**
+         * Handles if functionality
+         */
         if (maskExpression.startsWith('percent')) {
+            /**
+             * Handles if functionality
+             */
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
                 inputValue = this._checkInput(inputValue);
                 const precision: number = this.getPrecision(maskExpression);
                 inputValue = this.checkInputPrecision(inputValue, precision, '.');
             }
+            /**
+             * Handles if functionality
+             */
             if (inputValue?.indexOf('.') > 0 && !this.percentage(inputValue.substring(0, inputValue?.indexOf('.')))) {
                 const base: string = inputValue.substring(0, inputValue?.indexOf('.') - 1);
                 inputValue = `${base}${inputValue.substring(inputValue?.indexOf('.'), inputValue?.length)}`;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.percentage(inputValue)) {
                 result = inputValue;
             } else {
                 result = inputValue.substring(0, inputValue?.length - 1);
             }
         } else if (this.isSeparatorMask(maskExpression)) {
+            /**
+             * Handles if functionality
+             */
             if (this.hasInvalidCharacters(inputValue)) {
                 inputValue = this._checkInput(inputValue);
             }
             let precision: number = this.getPrecision(maskExpression);
             let strForSep: string;
+            /**
+             * Handles if functionality
+             */
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
                 inputValue = this.processSeparatorInput(inputValue);
             }
+            /**
+             * Handles if functionality
+             */
             if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 inputValue = this.processDotSeparatorInput(inputValue);
             }
+            /**
+             * Handles if functionality
+             */
             if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
                 inputValue = this.processCommaSeparatorInput(inputValue);
             }
 
+            /**
+             * Handles if functionality
+             */
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
                 result = this.processSeparatorFormatting(inputValue, precision);
             } else if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
@@ -244,10 +312,16 @@ export class MaskApplierService {
             let shiftStep: number = result?.length - inputValue?.length;
 
             // position shifting issue fixed for custom separators
+            /**
+             * Handles if functionality
+             */
             if (!(maskExpression.startsWith(Separators.IND_COMMA_SEPARATED) ||
                 maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED) ||
                 maskExpression.startsWith(Separators.INT_COMMA_SEPARATED) ||
                 maskExpression.startsWith(Separators.INT_SPACE_SEPARATED))) {
+                /**
+                 * Handles if functionality
+                 */
                 if (shiftStep > 0 && result[position] !== ',') {
                     backspaceShift = true;
                     let _shift: number = 0;
@@ -269,6 +343,9 @@ export class MaskApplierService {
                 }
             } else {
                 let shiftCustomOperator: string;
+                /**
+                 * Handles switch functionality
+                 */
                 switch (maskExpression) {
                     case Separators.IND_COMMA_SEPARATED:
                     case Separators.INT_COMMA_SEPARATED:
@@ -288,6 +365,9 @@ export class MaskApplierService {
                 let inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || [])?.length;
 
                 // if new separator character added to result then shift cursor by special character length
+                /**
+                 * Handles if functionality
+                 */
                 if (resultSpecialCharLength > inputSpecialCharLength) {
                     this._shift.add(position + (resultSpecialCharLength - inputSpecialCharLength));
                     position += resultSpecialCharLength - inputSpecialCharLength;
@@ -302,15 +382,24 @@ export class MaskApplierService {
             }
 
         } else {
+            /**
+             * Handles for functionality
+             */
             for (
                 // tslint:disable-next-line
                 let i: number = 0, inputSymbol: string = inputArray[0];
                 i < inputArray?.length;
                 i++, inputSymbol = inputArray[i]
             ) {
+                /**
+                 * Handles if functionality
+                 */
                 if (cursor === maskExpression?.length) {
                     break;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '?') {
                     result += inputSymbol;
                     cursor += 2;
@@ -340,7 +429,13 @@ export class MaskApplierService {
                         this.maskAvailablePatterns[maskExpression[cursor]] &&
                         this.maskAvailablePatterns[maskExpression[cursor]].symbol === inputSymbol)
                 ) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (maskExpression[cursor] === 'H') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (Number(inputSymbol) > 2) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
@@ -351,14 +446,26 @@ export class MaskApplierService {
                             continue;
                         }
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (maskExpression[cursor] === 'h') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (result === '2' && Number(inputSymbol) > 3) {
                             cursor += 1;
                             i--;
                             continue;
                         }
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (maskExpression[cursor] === 'm') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (Number(inputSymbol) > 5) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
@@ -369,7 +476,13 @@ export class MaskApplierService {
                             continue;
                         }
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (maskExpression[cursor] === 's') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (Number(inputSymbol) > 5) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
@@ -380,7 +493,13 @@ export class MaskApplierService {
                             continue;
                         }
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (maskExpression[cursor - 1] === 'd') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 31 || inputValue[cursor] === '/') {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
@@ -391,12 +510,21 @@ export class MaskApplierService {
                             continue;
                         }
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (maskExpression[cursor] === 'M') {
+                        /**
+                         * Handles if functionality
+                         */
                         if (
                             (inputValue[cursor - 1] === '/' &&
                                 (Number(inputValue.slice(cursor, cursor + 2)) > 12 ||
                                     inputValue[cursor + 1] === '/')) ||
                             (Number(inputValue.slice(cursor - 1, cursor + 1)) > 12 ||
+                                /**
+                                 * Handles Number functionality
+                                 */
                                 Number(inputValue.slice(0, 2)) > 31 ||
                                 (Number(inputValue[cursor - 1]) > 1 && inputValue[cursor - 2] === '/'))
                         ) {
@@ -452,6 +580,9 @@ export class MaskApplierService {
                 }
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (
             result?.length + 1 === maskExpression?.length &&
             this.maskSpecialCharacters?.indexOf(maskExpression[maskExpression?.length - 1]) !== -1
@@ -461,32 +592,56 @@ export class MaskApplierService {
 
         let newPosition: number = position + 1;
 
+        /**
+         * Handles while functionality
+         */
         while (this._shift.has(newPosition)) {
             shift++;
             newPosition++;
         }
 
         let actualShift: number = this._shift.has(position) ? shift : 0;
+        /**
+         * Handles if functionality
+         */
         if (stepBack) {
             actualShift--;
         }
+        /**
+         * Handles cb functionality
+         */
         cb(actualShift, backspaceShift);
+        /**
+         * Handles if functionality
+         */
         if (shift < 0) {
             this._shift.clear();
         }
         let res: string = this.suffix ? `${this.prefix}${result}${this.suffix}` : `${this.prefix}${result}`;
+        /**
+         * Handles if functionality
+         */
         if (result?.length === 0) {
             res = `${this.prefix}${result}`;
         }
         return res;
     }
 
+    /**
+     * Handles _findSpecialChar functionality
+     */
     public _findSpecialChar(inputSymbol: string): undefined | string {
         return this.maskSpecialCharacters.find((val: string) => val === inputSymbol);
     }
 
+    /**
+     * Handles _checkSymbolMask functionality
+     */
     protected _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
         this.maskAvailablePatterns = this.customPattern ? this.customPattern : this.maskAvailablePatterns;
+        /**
+         * Handles return functionality
+         */
         return (
             this.maskAvailablePatterns[maskSymbol] &&
             this.maskAvailablePatterns[maskSymbol].pattern &&
@@ -494,15 +649,24 @@ export class MaskApplierService {
         );
     }
 
+    /**
+     * Handles separator functionality
+     */
     private separator = (str: string, char: string, decimalChar: string, precision: number) => {
         str += '';
         const x: string[] = str.split(decimalChar);
         const decimals: string = x?.length > 1 ? `${decimalChar}${x[1]}` : '';
         let res: string = x[0];
         const rgx: RegExp = /(\d+)(\d{3})/;
+        /**
+         * Handles while functionality
+         */
         while (rgx.test(res)) {
             res = res?.replace(rgx, '$1' + char + '$2');
         }
+        /**
+         * Handles if functionality
+         */
         if (precision === undefined) {
             return res + decimals;
         } else if (precision === 0) {
@@ -527,11 +691,17 @@ export class MaskApplierService {
         const baseNum: string = x[0];
         let lastThree: string = baseNum.substring(baseNum?.length - 3);
         const otherNumbers: string = baseNum.substring(0, baseNum?.length - 3);
+        /**
+         * Handles if functionality
+         */
         if (otherNumbers !== '') {
             lastThree = char + lastThree;
         }
         const res: string = (indFormat ? otherNumbers?.replace(/\B(?=(\d{2})+(?!\d))/g, char) :
             otherNumbers?.replace(/\B(?=(\d{3})+(?!\d))/g, char)) + lastThree;
+        /**
+         * Handles if functionality
+         */
         if (precision === undefined) {
             return res + decimals;
         } else if (precision === 0) {
@@ -540,25 +710,43 @@ export class MaskApplierService {
         return res + decimals.substr(0, precision + 1);
     };
 
+    /**
+     * Handles percentage functionality
+     */
     private percentage = (str: string): boolean => {
         return Number(str) >= 0 && Number(str) <= 100;
     };
 
+    /**
+     * Retrieves precision data
+     */
     private getPrecision = (maskExpression: string): number => {
         const x: string[] = maskExpression.split('.');
+        /**
+         * Handles if functionality
+         */
         if (x?.length > 1) {
             return Number(x[x?.length - 1]);
         }
         return Infinity;
     };
 
+    /**
+     * Handles checkInputPrecision functionality
+     */
     private checkInputPrecision = (inputValue: string, precision: number, decimalMarker: string): string => {
+        /**
+         * Handles if functionality
+         */
         if (precision < Infinity) {
             let precisionRegEx: RegExp;
 
             // Sanitize precision to prevent ReDoS attacks
             const safePrecision = Math.max(0, Math.min(20, parseInt(String(precision), 10) || 0));
 
+            /**
+             * Handles if functionality
+             */
             if (decimalMarker === '.') {
                 precisionRegEx = new RegExp(`\\.\\d{${safePrecision}}.*$`);
             } else if (decimalMarker === ',') {
@@ -566,6 +754,9 @@ export class MaskApplierService {
             }
 
             const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
+            /**
+             * Handles if functionality
+             */
             if (precisionMatch && precisionMatch[0]?.length - 1 > precision) {
                 inputValue = inputValue.substring(0, inputValue?.length - 1);
             } else if (precision === 0 && inputValue?.endsWith(decimalMarker)) {
@@ -582,15 +773,27 @@ export class MaskApplierService {
      * @param decimalMarker symbol
      */
     private checkInputPrecisionForCustomInput = (inputValue: string, precision: number, decimalMarker: string): string => {
+        /**
+         * Handles if functionality
+         */
         if (precision < Infinity) {
             let precisionRegEx: RegExp;
 
             const splitter = inputValue.split(decimalMarker);
+            /**
+             * Handles if functionality
+             */
             if (precision === 0) {
                 inputValue = splitter[0];
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (splitter[1]) {
                     // decimal points are grater then allowed then replace
+                    /**
+                     * Handles if functionality
+                     */
                     if (splitter[1]?.length > precision) {
                         splitter[1] = splitter[1].substr(0, precision);
                         inputValue = splitter.join('.');

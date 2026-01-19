@@ -3,9 +3,18 @@ import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
 
 export const emailValidator = (control: UntypedFormControl) => {
     return new Promise<any>((resolve, reject) => {
+        /**
+         * Handles if functionality
+         */
         if (!EMAIL_VALIDATION_REGEX.test(control?.value)) {
+            /**
+             * Handles resolve functionality
+             */
             resolve({ notValid: true });
         } else {
+            /**
+             * Handles resolve functionality
+             */
             resolve(null);
         }
     });
@@ -13,9 +22,18 @@ export const emailValidator = (control: UntypedFormControl) => {
 
 export const mobileValidator = (control: UntypedFormControl) => {
     return new Promise<any>((resolve, reject) => {
+        /**
+         * Handles if functionality
+         */
         if (!EMAIL_VALIDATION_REGEX.test(control?.value)) {
+            /**
+             * Handles resolve functionality
+             */
             resolve({ notValid: true });
         } else {
+            /**
+             * Handles resolve functionality
+             */
             resolve(null);
         }
     });
@@ -25,9 +43,18 @@ export const uniqueNameValidator = (control: UntypedFormControl) => {
     return new Promise<any>((resolve, reject) => {
         let pattern = /^[a-z0-9]*$/;
         let val = control?.value?.toLowerCase();
+        /**
+         * Handles if functionality
+         */
         if (!pattern.test(val)) {
+            /**
+             * Handles resolve functionality
+             */
             resolve({ notValidUniqueName: true });
         } else {
+            /**
+             * Handles resolve functionality
+             */
             resolve(null);
         }
     });
@@ -35,6 +62,9 @@ export const uniqueNameValidator = (control: UntypedFormControl) => {
 
 export const digitsOnly: ValidatorFn = (control: AbstractControl): { [key: string]: boolean } => {
     let v: string = control?.value;
+    /**
+     * Handles if functionality
+     */
     if (control.dirty) {
         return /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(v) ? null : { digits: true };
     }
@@ -42,6 +72,9 @@ export const digitsOnly: ValidatorFn = (control: AbstractControl): { [key: strin
 
 export const decimalDigits: ValidatorFn = (control: AbstractControl): { [key: string]: boolean } => {
     let v = control?.value;
+    /**
+     * Handles if functionality
+     */
     if (control.dirty && v) {
         return /^[+-]?[0-9]{1,9}(?:\.[0-9]{1,3})?$/.test(v) ? null : { digits: true };
     } else {
@@ -50,8 +83,14 @@ export const decimalDigits: ValidatorFn = (control: AbstractControl): { [key: st
 };
 
 export const equalSigns = (ocVal: string) => {
+    /**
+     * Handles return functionality
+     */
     return (c: UntypedFormControl) => {
         let v = c?.value;
+        /**
+         * Handles if functionality
+         */
         if (v && ocVal) {
             return Math.sign(v) !== Math.sign(parseFloat(ocVal)) ? null : { invalidSign: true };
         }
@@ -65,7 +104,13 @@ export const stockManufacturingDetailsValidator = (control: AbstractControl) => 
     const manufacturingQuantity = control.get('manufacturingQuantity');
     const manufacturingUnitCode = control.get('manufacturingUnitCode');
 
+    /**
+     * Handles if functionality
+     */
     if (manufacturingQuantity && manufacturingUnitCode) {
+        /**
+         * Handles if functionality
+         */
         if (!linkedStocks?.controls?.length) {
             return { notAllowed: true };
         } else {
@@ -79,6 +124,9 @@ export const stockManufacturingDetailsValidator = (control: AbstractControl) => 
 export const dateValidator = (control: UntypedFormControl) => {
     let datePattern = /^\d{1,2}\-\d{1,2}\-\d{4}$/;
 
+    /**
+     * Handles if functionality
+     */
     if (!datePattern.test(control?.value)) {
         return { invalidDate: true };
     }

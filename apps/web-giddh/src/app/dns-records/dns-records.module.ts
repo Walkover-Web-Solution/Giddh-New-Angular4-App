@@ -9,6 +9,9 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { MatCardModule } from '@angular/material/card';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -22,4 +25,8 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
     ],
     declarations: [DnsRecordsComponent]
 })
+/**
+ * DnsRecordsModule module
+ * Implements DnsRecordsModule functionality
+ */
 export class DnsRecordsModule { }

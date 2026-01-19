@@ -10,6 +10,9 @@ import { GeneralService } from "../../services/general.service";
 import { IOption } from "../../app.constant";
 import { cloneDeep, find, forEach, get, map, set } from '../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "create-edit",
     templateUrl: "./create-edit.component.html",
@@ -17,6 +20,10 @@ import { cloneDeep, find, forEach, get, map, set } from '../../lodash-optimized'
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * CustomFieldsCreateEditComponent component
+ * Handles customfieldscreateedit functionality and user interactions
+ */
 export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     /** Instance of custom field create/edit form */
     @ViewChild('customFieldCreateEditForm', { static: false }) public customFieldCreateEditForm: NgForm;
@@ -62,6 +69,10 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of company */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private changeDetector: ChangeDetectorRef,
@@ -81,6 +92,9 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            /**
+             * Handles if functionality
+             */
             if (params?.customFieldUniqueName) {
                 this.customFieldUniqueName = params?.customFieldUniqueName;
                 this.getCustomField(params?.customFieldUniqueName);
@@ -88,6 +102,9 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
         });
 
         this.selectedModules.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedModules => {
+            /**
+             * Handles if functionality
+             */
             if (selectedModules) {
                 let modules: any[] = [];
                 (Array.isArray(this.selectedModules.value) ? this.selectedModules.value : []).forEach(uniqueName => {
@@ -116,13 +133,22 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsCreateEditComponent
      */
     public getCustomField(customFieldUniqueName: string): void {
+        /**
+         * Handles if functionality
+         */
         if (!customFieldUniqueName) {
             return;
         }
 
         this.toggleLoader(true);
         this.customFieldsService.get(customFieldUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.status === 'success') {
                     this.customFieldRequest = cloneDeep(response.body);
                     this.selectFieldType({ label: this.customFieldRequest.fieldType?.name, value: this.customFieldRequest.fieldType?.type });
@@ -143,6 +169,9 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsCreateEditComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.fieldTypes = [
                 { label: this.commonLocaleData?.app_datatype_list?.string, value: FieldTypes.String },
@@ -150,6 +179,9 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
                 { label: this.commonLocaleData?.app_datatype_list?.boolean, value: FieldTypes.Boolean },
                 { label: this.commonLocaleData?.app_datatype_list?.barcode, value: FieldTypes.Barcode }
             ];
+            /**
+             * Handles if functionality
+             */
             if (this.voucherApiVersion === 2) {
                 this.fieldModules = [
                     { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
@@ -171,6 +203,9 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
      */
     public selectFieldType(field: any): void {
         const fieldType = field?.value;
+        /**
+         * Handles if functionality
+         */
         if (fieldType === FieldTypes.String || fieldType === FieldTypes.Number || fieldType === FieldTypes.Barcode) {
             this.visibleFields = {
                 fieldInfo: true,
@@ -195,11 +230,17 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsCreateEditComponent
      */
     public createCustomField(customFieldCreateEditForm: NgForm): void {
+        /**
+         * Handles if functionality
+         */
         if (customFieldCreateEditForm.invalid) {
             return;
         }
         this.toggleLoader(true);
         this.customFieldsService.create([this.customFieldRequest]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.custom_field_created);
                 this.redirectToGetAllPage();
@@ -218,12 +259,18 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsCreateEditComponent
      */
     public updateCustomField(customFieldCreateEditForm: NgForm): void {
+        /**
+         * Handles if functionality
+         */
         if (customFieldCreateEditForm.invalid) {
             return;
         }
         this.toggleLoader(true);
 
         this.customFieldsService.update(this.customFieldRequest, this.customFieldUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.custom_field_updated);
                 this.redirectToGetAllPage();

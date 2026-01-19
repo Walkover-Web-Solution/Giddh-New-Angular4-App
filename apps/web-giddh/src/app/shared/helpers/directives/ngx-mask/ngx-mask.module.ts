@@ -4,10 +4,17 @@ import { MaskDirective } from './mask.directive';
 import { MaskPipe } from './mask.pipe';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     exports: [MaskDirective, MaskPipe],
     declarations: [MaskDirective, MaskPipe],
 })
+/**
+ * NgxMaskModule module
+ * Implements NgxMaskModule functionality
+ */
 export class NgxMaskModule {
     public static forRoot(configValue?: optionsConfig | (() => optionsConfig)): ModuleWithProviders<NgxMaskModule> {
         return {

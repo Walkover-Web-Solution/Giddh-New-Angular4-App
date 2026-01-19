@@ -7,6 +7,9 @@ import { debounceTime, takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, IOption, MOBILE_REGEX_PATTERN } from "../../../app.constant";
 import { cloneDeep } from "../../../lodash-optimized";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "select-multiple-fields",
     templateUrl: "./select-multiple-fields.component.html",
@@ -21,6 +24,10 @@ import { cloneDeep } from "../../../lodash-optimized";
     ],
     standalone: false
 })
+/**
+ * SelectMultipleFieldsComponent component
+ * Handles selectmultiplefields functionality and user interactions
+ */
 export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChanges {
     /** Trigger instance for auto complete */
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
@@ -97,8 +104,14 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     /** Next observable */
     public next$: Subject<void> = new Subject();
     /** Function to be called when the control value changes */
+    /**
+     * Handles change event
+     */
     private onChange: (value: any) => void = () => { };
     /** Function to be called when the control is touched */
+    /**
+     * Handles touched event
+     */
     private onTouched: () => void = () => { };
     /** Holds value */
     public value: any[] = [];
@@ -110,6 +123,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     }
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private changeDetection: ChangeDetectorRef
     ) { }
@@ -121,8 +138,14 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public ngOnInit(): void {
         this.searchFormControl.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe(search => {
+            /**
+             * Handles if functionality
+             */
             if (typeof search === 'string') {
                 this.lastSearchString = search;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.enableDynamicSearch) {
                     this.dynamicSearchedQuery.emit(search);
                 } else {
@@ -140,6 +163,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public writeValue(value: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value !== undefined && value !== null) {
             this.value = value;
         } else {
@@ -155,8 +181,14 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.options) {
             // Apply filtering when options change to respect hideSelectedOptions
+            /**
+             * Handles if functionality
+             */
             if (!this.enableDynamicSearch) {
                 this.filterOptions(this.lastSearchString || "");
             } else {
@@ -164,13 +196,22 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                 this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(changes.options.currentValue));
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (changes?.selectedValues && changes.selectedValues.currentValue) {
+            /**
+             * Handles if functionality
+             */
             if (typeof changes.selectedValues.currentValue === "string") {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue?.split(","));
             } else {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue);
             }
             // Refresh filtered options when selected values change
+            /**
+             * Handles if functionality
+             */
             if (!this.enableDynamicSearch && this.options) {
                 this.filterOptions("");
             } else if (this.enableDynamicSearch && this.options) {
@@ -196,7 +237,13 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public ngAfterViewInit(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.autoFocus && this.selectField) {
                 this.selectField.nativeElement.focus();
             }
@@ -216,12 +263,18 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             const matchesSearch = typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1;
             let value = option?.value;
             let label = option?.label;
+            /**
+             * Handles if functionality
+             */
             if (this.isSuffixPrefixUsed) {
                 value = this.chipPrefix + option?.value + this.chipSuffix;
                 label = this.chipPrefix + option?.label + this.chipSuffix;
             }
             const isNotSelected = !this.hideSelectedOptions || !(this.selectedValues?.includes(value) || this.selectedValues?.includes(label));
 
+            /**
+             * Handles if functionality
+             */
             if (matchesSearch && isNotSelected) {
                 filteredOptions.push({ label: option.label, value: option?.value, additional: option });
             }
@@ -238,14 +291,26 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public selectOption(option: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.lastSearchString?.length) {
             this.searchFormControl.setValue("");
         }
         const selectOptionValue = option?.option?.value?.label;
         this.writeValue([...this.value, option?.option?.value?.value]);
+        /**
+         * Handles if functionality
+         */
         if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue + this.chipSuffix)) {
             this.chipListUniqueName.push(option.option.value.value);
+            /**
+             * Handles if functionality
+             */
             if (!this.isSuffixPrefixUsed) {
+                 /**
+                  * Handles if functionality
+                  */
                  if (Array.isArray(this.selectedValues)) {
                      this.selectedValues.push(option.option.value.value);
                 } else if (typeof this.selectedValues === 'string') {
@@ -265,13 +330,22 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public removeOption(index: number): void {
+        /**
+         * Handles if functionality
+         */
         if (index >= 0) {
             this.chipListUniqueName.splice(index, 1);
             this.chipList.splice(index, 1);
             this.value.splice(index, 1);
             this.writeValue(this.value);
             // Close the autocomplete dropdown if it's open
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.trigger && this.trigger.panelOpen) {
                     this.closePanel();
                 }
@@ -299,14 +373,23 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public addChip(event: any): void {
         const input = event?.input;
+        /**
+         * Handles if functionality
+         */
         if (this.allowAddChip) {
             const value = event?.value?.trim();
+            /**
+             * Handles if functionality
+             */
             if (value && (!this.validations?.length || (this.validations?.includes("email") && this.validateEmail(value)) || (this.validations?.includes("mobile") && this.validateMobile(value))) && !this.chipList.includes(value)) {
                 this.chipList?.push(value);
                 this.writeValue([...this.value, value]);
             }
             this.emitList();
         }
+        /**
+         * Handles if functionality
+         */
         if (input) {
             input.value = '';
             this.filterOptions("");
@@ -345,6 +428,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     private getFilteredOptionsForDynamicSearch(options: any[]): IOption[] {
+        /**
+         * Handles if functionality
+         */
         if (!this.hideSelectedOptions || !options) {
             return cloneDeep(options) || [];
         }
@@ -352,6 +438,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         return options.filter(option => {
             let value = option?.value;
             let label = option?.label;
+            /**
+             * Handles if functionality
+             */
             if (this.isSuffixPrefixUsed) {
                 value = this.chipPrefix + option?.value + this.chipSuffix;
                 label = this.chipPrefix + option?.label + this.chipSuffix;
@@ -370,6 +459,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         this.selectedOption.emit(this.chipList);
         this.selectedOptionUniqueName.emit(this.chipListUniqueName);
         // Refresh filtered options to hide newly selected items
+        /**
+         * Handles if functionality
+         */
         if (!this.enableDynamicSearch) {
             this.filterOptions(this.lastSearchString || "");
         } else if (this.options) {
@@ -386,6 +478,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
    * @memberof SelectMultipleFieldsComponent
    */
     public closeDropdownPanel(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.currentTarget?.activeElement?.className?.indexOf("select-multiple-field-input") > -1) {
             /*
                 Don't close the panel if the user clicks at the corner of the input field,
@@ -441,9 +536,15 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public panelOpened(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.enableDynamicSearch) {
             this.dynamicSearchedQuery.emit("");
             // Also filter options to hide selected items for dynamic search
+            /**
+             * Handles if functionality
+             */
             if (this.options) {
                 this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(this.options));
             }

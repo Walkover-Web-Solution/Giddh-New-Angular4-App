@@ -1,6 +1,10 @@
 import { LedgerViewEnum } from "../../models/api-models/Ledger";
 
 /** Settings integration tabs */
+/**
+ * SettingsIntegrationTab enumeration
+ * Defines constant values for SettingsIntegrationTab
+ */
 export enum SettingsIntegrationTab {
     Communication = 0,
     Email = 1,
@@ -10,6 +14,10 @@ export enum SettingsIntegrationTab {
 }
 
 /** Settings integration tabs V1 */
+/**
+ * SettingsIntegrationTabV1 enumeration
+ * Defines constant values for SettingsIntegrationTabV1
+ */
 export enum SettingsIntegrationTabV1 {
     Email = 0,
     Collection = 1,
@@ -18,6 +26,10 @@ export enum SettingsIntegrationTabV1 {
 }
 
 /** Country interface for Organization profile */
+/**
+ * Country interface definition
+ * Defines the structure and contract for Country objects
+ */
 export interface Country {
     countryName: string;
     countryCode: string;
@@ -26,6 +38,10 @@ export interface Country {
 }
 
 /** Organization (company or branch) profile interface for Settings > Profile */
+/**
+ * OrganizationProfile interface definition
+ * Defines the structure and contract for OrganizationProfile objects
+ */
 export interface OrganizationProfile {
     name: string;
     uniqueName: string;
@@ -51,6 +67,10 @@ export interface OrganizationProfile {
 }
 
 /** Form type in setting aside component */
+/**
+ * SettingsAsideFormType enumeration
+ * Defines constant values for SettingsAsideFormType
+ */
 export enum SettingsAsideFormType {
     CreateAddress = 'createAddress',
     EditAddress = 'editAddress',
@@ -60,6 +80,10 @@ export enum SettingsAsideFormType {
 }
 
 /** Aside configuration for settings */
+/**
+ * SettingsAsideConfiguration interface definition
+ * Defines the structure and contract for SettingsAsideConfiguration objects
+ */
 export interface SettingsAsideConfiguration {
     type: SettingsAsideFormType;
     stateList?: Array<any>;
@@ -72,6 +96,10 @@ export interface SettingsAsideConfiguration {
 }
 
 /** Amount Limit Duration options for integration of bank account */
+/**
+ * SettingsAmountLimitDuration enumeration
+ * Defines constant values for SettingsAmountLimitDuration
+ */
 export enum SettingsAmountLimitDuration {
     Daily = 'DAILY',
     Weekly = 'WEEKLY',

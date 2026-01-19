@@ -5,6 +5,9 @@ import { TranslateDirectiveModule } from "../theme/translate/translate.directive
 import { DownloadComponent } from "./download.component";
 import { DownloadRoutingModule } from "./download.routing.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         DownloadComponent
@@ -17,6 +20,10 @@ import { DownloadRoutingModule } from "./download.routing.module";
     ]
 })
 
+/**
+ * DownloadModule module
+ * Implements DownloadModule functionality
+ */
 export class DownloadModule {
 
 }

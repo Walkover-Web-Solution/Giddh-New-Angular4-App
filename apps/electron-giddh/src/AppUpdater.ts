@@ -5,12 +5,19 @@ let updater;
 export default class AppUpdaterV1 {
     public isUpdateDownloaded: boolean = false;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         const log = require('electron-log');
         log.transports.file.level = 'debug';
         autoUpdater.logger = log;
         autoUpdater.autoDownload = false;
         autoUpdater.on('update-available', () => {
+            /**
+             * Handles if functionality
+             */
             if (updater) {
                 // Manual check from menu - show confirmation dialog
                 dialog.showMessageBox({
@@ -19,6 +26,9 @@ export default class AppUpdaterV1 {
                     message: 'Found updates, do you want update now?',
                     buttons: ['Sure', 'No']
                 }).then((resp) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (resp.response === 0) {
                         autoUpdater.downloadUpdate();
                         updater.label = 'Downloading updates. . . . .';
@@ -34,6 +44,9 @@ export default class AppUpdaterV1 {
             }
         });
         autoUpdater.on('update-not-available', () => {
+            /**
+             * Handles if functionality
+             */
             if (updater) {
                 dialog.showMessageBox({
                     title: 'No Updates',
@@ -56,6 +69,9 @@ export default class AppUpdaterV1 {
                 detail: 'A new version has been downloaded. Restart the application to apply the updates.'
             }
             dialog.showMessageBox(dialogOpts).then((returnValue) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (returnValue.response === 0) {
                     // User clicked "Restart"
                     autoUpdater.quitAndInstall();

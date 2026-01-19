@@ -7,6 +7,9 @@ import { saveAs } from 'file-saver';
 import { GeneralService } from '../../services/general.service';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'download-voucher',
     templateUrl: './download-voucher.component.html',
@@ -14,6 +17,10 @@ import { InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
     providers: [VoucherComponentStore],
     standalone: false
 })
+/**
+ * DownloadVoucherComponent component
+ * Handles downloadvoucher functionality and user interactions
+ */
 export class DownloadVoucherComponent implements OnInit, OnDestroy {
     /** Last vouchers get in progress Observable */
     public isVoucherFileDownloading$: Observable<any> = this.componentStore.isVoucherFileDownloading$;
@@ -38,6 +45,10 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     /** Hold Download file type */
     public fileType: "base64" | "pdf";
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
@@ -52,6 +63,9 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
      * @memberof DownloadVoucherComponent
      */
     public ngOnInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.inputData) {
             this.localeData = this.inputData.localeData;
             this.commonLocaleData = this.inputData.commonLocaleData;
@@ -67,15 +81,33 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.downloadVoucherFileResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let voucherNumber = (this.selectedItem?.voucherNumber) ? this.selectedItem?.voucherNumber : this.commonLocaleData?.app_not_available;
+                /**
+                 * Handles if functionality
+                 */
                 if ((this.dataToSend.copyTypes?.length || this.dataToSend.typeOfInvoice?.length) > 1 || this.downloadForm?.get('isAttachment').value) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.fileType === "base64") {
+                        /**
+                         * Saves as data
+                         */
                         saveAs((this.generalService.base64ToBlob(response?.attachments[0]?.encodedData, '', 512)), response?.attachments[0]?.name);
                     } else {
+                        /**
+                         * Saves as data
+                         */
                         saveAs(response, `${voucherNumber}.` + 'zip');
                     }
                 } else {
+                    /**
+                     * Saves as data
+                     */
                     saveAs(response, `${voucherNumber}.` + 'pdf');
                 }
                 this.dialogRef.close();
@@ -91,6 +123,9 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
      */
     public invoiceTypeChanged(event: any): void {
         let value = event.source.value;
+        /**
+         * Handles if functionality
+         */
         if (event?.checked) {
             this.invoiceType.push(value);
         } else {
@@ -108,7 +143,13 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         let voucherType = this.selectedItem && this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem?.voucherType;
         let downloadOption = "";
         this.fileType = "pdf";
+        /**
+         * Handles if functionality
+         */
         if (this.downloadForm?.get('isAttachment').value) {
+            /**
+             * Handles if functionality
+             */
             if (this.invoiceType?.length > 0) {
                 downloadOption = "ALL";
             } else {
@@ -118,6 +159,9 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         } else {
             downloadOption = "VOUCHER";
         }
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.voucherApiVersion === 2) {
             this.dataToSend = {
                 copyTypes: this.invoiceType,

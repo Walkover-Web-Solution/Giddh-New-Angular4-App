@@ -12,6 +12,9 @@ import { takeUntil } from 'rxjs/operators';
 import { RecurringVoucherService } from '../../services/recurring-voucher.service';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-aside-recurring-entry',
     templateUrl: './aside.menu.recurringEntry.component.html',
@@ -19,6 +22,10 @@ import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
     standalone: false
 })
 
+/**
+ * AsideMenuRecurringEntryComponent component
+ * Handles asidemenurecurringentry functionality and user interactions
+ */
 export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDestroy {
     public IsNotExpirable: boolean;
     public today: Date = new Date();
@@ -46,6 +53,10 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>,
         private _fb: UntypedFormBuilder,
         private _toaster: ToasterService,
@@ -62,16 +73,28 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
             const { cronEndDate } = this.form?.value;
             const end = dayjs(cronEndDate);
             const next = dayjs(p);
+            /**
+             * Handles if functionality
+             */
             if (end.isValid() && next.isAfter(end)) {
                 this.form.controls.cronEndDate?.patchValue('');
             }
         });
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes.voucherNumber) {
             this.form.controls.voucherNumber?.patchValue(this.voucherNumber);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.invoice) {
             this.form?.patchValue({
                 voucherNumber: this.invoice.voucherNumber,
@@ -79,16 +102,25 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
                 nextCronDate: this.invoice.nextCronDate && dayjs(this.invoice.nextCronDate, GIDDH_DATE_FORMAT).toDate(),
                 cronEndDate: this.invoice.cronEndDate && dayjs(this.invoice.cronEndDate, GIDDH_DATE_FORMAT).toDate()
             });
+            /**
+             * Handles if functionality
+             */
             if (!this.invoice.cronEndDate) {
                 this.isExpirableChanged({ checked: true });
             }
         }
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(state => state.invoice.recurringInvoiceData), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = response.isRequestInFlight;
             this.isDeleteLoading = response.isDeleteRequestInFlight;
+            /**
+             * Handles if functionality
+             */
             if (response.isRequestSuccess) {
                 this.closeAsidePane(null);
                 this.store.dispatch(this._invoiceActions.resetRecurringInvoiceRequest());
@@ -96,18 +128,30 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
         });
     }
 
+    /**
+     * Closes asidepane
+     */
     public closeAsidePane(event: RecurringInvoice) {
         this.closeAsideEvent.emit(event);
         this.ngOnDestroy();
     }
 
+    /**
+     * Deletes invoice
+     */
     public deleteInvoice() {
         this.isDeleteLoading = true;
 
         this.recurringVoucherService.deleteRecurringVouchers(this.invoice?.uniqueName).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isDeleteLoading = null;
                 this.closeAsidePane(null);
+                /**
+                 * Handles if functionality
+                 */
                 if (response.status === "success") {
                     this._toaster.successToast(response.body);
                 } else {
@@ -117,8 +161,14 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
         });
     }
 
+    /**
+     * Handles isExpirableChanged functionality
+     */
     public isExpirableChanged({ checked }) {
         this.IsNotExpirable = checked;
+        /**
+         * Handles if functionality
+         */
         if (checked) {
             this.form.controls.cronEndDate.setValidators([]);
         } else {
@@ -127,29 +177,50 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
         this.form.controls.cronEndDate.updateValueAndValidity();
     }
 
+    /**
+     * Saves recurringinvoice data
+     */
     public saveRecurringInvoice() {
         let convertCronEndDate = dayjs(this.form.controls.cronEndDate?.value).format(GIDDH_DATE_FORMAT);
         let convertNextCronDate = dayjs(this.form.controls.nextCronDate?.value).format(GIDDH_DATE_FORMAT);
+        /**
+         * Handles if functionality
+         */
         if (this.mode === 'update') {
+            /**
+             * Handles if functionality
+             */
             if (this.form.controls.cronEndDate.invalid) {
                 this._toaster.errorToast(this.localeData?.recurring_date_error);
                 return;
             }
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.form.invalid) {
                 this._toaster.errorToast(this.localeData?.recurring_all_field_required);
                 return;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.form.controls.cronEndDate.valid && this.form.controls.voucherNumber.valid && this.form.controls.duration.valid && !this.isLoading) {
             this.isLoading = true;
             const cronEndDate = this.IsNotExpirable ? '' : convertCronEndDate;
             const nextCronDate = convertNextCronDate;
             const invoiceModel: RecurringInvoice = { ...this.invoice, ...this.form?.value, cronEndDate, nextCronDate };
+            /**
+             * Handles if functionality
+             */
             if (this.voucherType) {
                 invoiceModel.voucherType = this.voucherType;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.mode === 'update') {
                 this.store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
             } else {
@@ -161,6 +232,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -173,6 +247,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
      * @memberof AsideMenuRecurringEntryComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.intervalOptions = [
                 { label: this.localeData?.interval_options?.weekly, value: 'weekly' },

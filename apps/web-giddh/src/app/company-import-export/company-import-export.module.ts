@@ -10,6 +10,9 @@ import { SharedModule } from '../shared/shared.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { CompanyImportExportFormComponent } from './component/form/company-import-export-form';
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CompanyImportExportRoutingModule,
@@ -32,5 +35,9 @@ import { CompanyImportExportFormComponent } from './component/form/company-impor
     ],
     providers: [],
 })
+/**
+ * CompanyImportExportModule module
+ * Implements CompanyImportExportModule functionality
+ */
 export class CompanyImportExportModule {
 }

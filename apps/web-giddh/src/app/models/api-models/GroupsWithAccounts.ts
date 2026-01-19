@@ -18,6 +18,10 @@ export class GroupsWithAccountsResponse implements IGroupsWithAccounts {
     public groups: IGroupsWithAccounts[];
 
     // tslint:disable-next-line:no-empty
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
     }
 }

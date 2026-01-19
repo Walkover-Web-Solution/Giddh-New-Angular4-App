@@ -38,12 +38,19 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'invetory-stock-report',
     templateUrl: './inventory.stockreport.component.html',
     styleUrls: ['./inventory.stockreport.component.scss'],
     standalone: false
 })
+/**
+ * InventoryStockReportComponent component
+ * Handles inventorystockreport functionality and user interactions
+ */
 export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
     /** Dialog reference for advance search modal */
@@ -211,23 +218,53 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         },
         ranges: {
             'Last 1 Day': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(1, 'day'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ],
             'Last 7 Days': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(6, 'day'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ],
             'Last 30 Days': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(29, 'day'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ],
             'Last 6 Months': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(6, 'month'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ],
             'Last 1 Year': [
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs().subtract(12, 'month'),
+                /**
+                 * Handles dayjs functionality
+                 */
                 dayjs()
             ]
         },
@@ -283,6 +320,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
         this.updateStockSuccess$ = this.store.pipe(select(s => s.inventory.UpdateStockSuccess), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.inventory.activeStockUniqueName), takeUntil(this.destroyed$)).subscribe(activeStockUniqueName => {
+            /**
+             * Handles if functionality
+             */
             if (activeStockUniqueName) {
                 this.stockUniqueName = activeStockUniqueName;
             }
@@ -290,14 +330,32 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.currentOrganizationType = this.generalService.currentOrganizationType;
     }
 
+    /**
+     * Handles findStockNameFromId functionality
+     */
     public findStockNameFromId(grps: IGroupsWithStocksHierarchyMinItem[], stockUniqueName: string): string {
+        /**
+         * Handles if functionality
+         */
         if (grps && grps.length > 0) {
+            /**
+             * Handles for functionality
+             */
             for (let key of grps) {
+                /**
+                 * Handles if functionality
+                 */
                 if (key.stocks && key.stocks.length > 0) {
 
                     let index = key.stocks.findIndex(p => p?.uniqueName === stockUniqueName);
+                    /**
+                     * Handles if functionality
+                     */
                     if (index === -1) {
                         let result = this.findStockNameFromId(key.childStockGroups, stockUniqueName);
+                        /**
+                         * Handles if functionality
+                         */
                         if (result !== '') {
                             return result;
                         } else {
@@ -309,6 +367,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                     }
                 } else {
                     let result = this.findStockNameFromId(key.childStockGroups, stockUniqueName);
+                    /**
+                     * Handles if functionality
+                     */
                     if (result !== '') {
                         return result;
                     } else {
@@ -321,7 +382,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         return '';
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
+        /**
+         * Handles if functionality
+         */
         if (this.invViewService.getActiveGroupUniqueName() || this.invViewService.getActiveStockUniqueName()) {
             this.groupUniqueName = this.invViewService.getActiveGroupUniqueName();
             this.stockUniqueName = this.invViewService.getActiveStockUniqueName();
@@ -339,8 +406,14 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             this.stockUniqueName = viewActiveStock?.stockUniqueName;
             this.selectedEntity = 'allEntity';
             this.selectedTransactionType = 'all';
+            /**
+             * Handles if functionality
+             */
             if (this.groupUniqueName) {
                 this.store.dispatch(this.sideBarAction.SetActiveStock(this.stockUniqueName));
+                /**
+                 * Handles if functionality
+                 */
                 if (this.groupUniqueName && this.stockUniqueName) {
                     this.initReport();
                     this.store.pipe(select(p => {
@@ -351,7 +424,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
 
         this.stockReport$.subscribe((res: any) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
+                /**
+                 * Handles if functionality
+                 */
                 if (res.isStockNotFound) {
                     this.stockReport = undefined;
                     this.stockNotFoundMessage = res.message;
@@ -364,6 +443,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
 
         this.universalDate$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
                 this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
@@ -378,6 +460,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.selectedCmp = activeCompany;
                 this.getAllBranch();
@@ -385,13 +470,25 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
 
         this.accountUniqueNameInput.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(s => {
             this.isFilterCorrect = true;
             this.stockReportRequest.accountName = s;
             this.getStockReport(true);
+            /**
+             * Handles if functionality
+             */
             if (s === '') {
                 this.showAccountSearch = false;
             }
@@ -407,6 +504,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.resetFilter(false);
 
         this.updateStockSuccess$.subscribe(stock => {
+            /**
+             * Handles if functionality
+             */
             if (stock) {
                 this.initReport();
             }
@@ -420,10 +520,19 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * @memberof InventoryStockReportComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes.currentBranchAndWarehouse && !isEqual(changes.currentBranchAndWarehouse.previousValue, changes.currentBranchAndWarehouse.currentValue)) {
+            /**
+             * Handles if functionality
+             */
             if (this.currentBranchAndWarehouse) {
                 this.stockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
                 this.stockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.isCompany ? undefined : this.currentBranchAndWarehouse.branch;
+                /**
+                 * Handles if functionality
+                 */
                 if (!changes.currentBranchAndWarehouse.firstChange) {
                     // Make a manual service call only when it is not first change
                     this.getStockReport(true);
@@ -432,6 +541,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         }
     }
 
+    /**
+     * Initializes report
+     */
     public initReport() {
         this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
         this.stockReportRequest.stockUniqueName = this.stockUniqueName;
@@ -439,16 +551,28 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.store.dispatch(this.stockReportActions.GetStocksReport(cloneDeep(this.stockReportRequest)));
     }
 
+    /**
+     * Retrieves stockreport data
+     */
     public getStockReport(resetPage: boolean) {
         this.stockReportRequest.from = this.fromDate || null;
         this.stockReportRequest.to = this.toDate || null;
         this.invViewService.setActiveDate(this.stockReportRequest.from, this.stockReportRequest.to);
+        /**
+         * Handles if functionality
+         */
         if (resetPage) {
             this.stockReportRequest.page = 1;
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.stockReportRequest.stockGroupUniqueName || !this.stockReportRequest.stockUniqueName) {
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.stockReportRequest.expression || !this.stockReportRequest.param || !this.stockReportRequest.val) {
             delete this.stockReportRequest.expression;
             delete this.stockReportRequest.param;
@@ -463,9 +587,18 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public getAllBranch() {
         // tslint:disable-next-line:no-shadowed-variable
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
+            /**
+             * Handles if functionality
+             */
             if (entities) {
+                /**
+                 * Handles if functionality
+                 */
                 if (entities.length) {
                     const branches = cloneDeep(entities);
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.selectedCmp && branches?.findIndex(p => p?.uniqueName === this.selectedCmp?.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         branches.push(this.selectedCmp);
@@ -482,6 +615,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         })), takeUntil(this.destroyed$)).subscribe();
     }
 
+    /**
+     * Initializes vouchertype
+     */
     public initVoucherType() {
         // initialization for voucher type array inially all selected
         this.stockReportRequest.voucherTypes = [];
@@ -491,38 +627,65 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles nextPage functionality
+     */
     public nextPage() {
         this.stockReportRequest.page++;
         this.getStockReport(false);
     }
 
+    /**
+     * Handles prevPage functionality
+     */
     public prevPage() {
         this.stockReportRequest.page--;
         this.getStockReport(false);
     }
 
+    /**
+     * Closes fromdate
+     */
     public closeFromDate(e: any) {
+        /**
+         * Handles if functionality
+         */
         if (this.showFromDatePicker) {
             this.showFromDatePicker = false;
         }
     }
 
+    /**
+     * Closes todate
+     */
     public closeToDate(e: any) {
+        /**
+         * Handles if functionality
+         */
         if (this.showToDatePicker) {
             this.showToDatePicker = false;
         }
     }
 
+    /**
+     * Handles selectedDate functionality
+     */
     public selectedDate(value?: any, from?: string) { //from like advance search
         this.fromDate = dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT);
         this.toDate = dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.pickerSelectedFromDate = value.picker.startDate;
         this.pickerSelectedToDate = value.picker.endDate;
+        /**
+         * Handles if functionality
+         */
         if (!from) {
             this.isFilterCorrect = true;
             this.getStockReport(true);
@@ -548,7 +711,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.getStockReport(false);
     }
 
+    /**
+     * Handles sortButtonClicked functionality
+     */
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.sort !== type || this.stockReportRequest.sortBy !== columnName) {
             this.stockReportRequest.sort = type;
             this.stockReportRequest.sortBy = columnName;
@@ -557,32 +726,59 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.isFilterCorrect = true;
     }
 
+    /**
+     * Handles filterByCheck functionality
+     */
     public filterByCheck(type: string, event: boolean) {
         let idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
+        /**
+         * Handles if functionality
+         */
         if (idx !== -1) {
             this.initVoucherType();
         }
+        /**
+         * Handles if functionality
+         */
         if (event && type) {
             this.stockReportRequest.voucherTypes.push(type);
         } else {
             let index = this.stockReportRequest.voucherTypes?.indexOf(type);
+            /**
+             * Handles if functionality
+             */
             if (index !== -1) {
                 this.stockReportRequest.voucherTypes.splice(index, 1);
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.voucherTypes?.length > 0 && this.stockReportRequest.voucherTypes?.length < this.VOUCHER_TYPES.length) {
             idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
+            /**
+             * Handles if functionality
+             */
             if (idx !== -1) {
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
             }
             idx = this.stockReportRequest.voucherTypes?.indexOf('NONE');
+            /**
+             * Handles if functionality
+             */
             if (idx !== -1) {
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.voucherTypes?.length === this.VOUCHER_TYPES.length) {
             this.stockReportRequest.voucherTypes = ['ALL'];
         }
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.voucherTypes?.length === 0) {
             this.stockReportRequest.voucherTypes = ['NONE'];
         }
@@ -590,15 +786,30 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.isFilterCorrect = true;
     }
 
+    /**
+     * Handles clickedOutside functionality
+     */
     public clickedOutside(event, el, fieldName: string) {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === 'account') {
+            /**
+             * Handles if functionality
+             */
             if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
                 return;
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.childOf(event.target, el)) {
             return;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (fieldName === 'account') {
                 this.showAccountSearch = false;
             }
@@ -606,32 +817,56 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     /* tslint:disable */
+    /**
+     * Handles childOf functionality
+     */
     public childOf(c, p) {
+        /**
+         * Handles while functionality
+         */
         while ((c = c.parentNode) && c !== p) {
         }
         return !!c;
     }
 
+    /**
+     * Handles downloadStockReports functionality
+     */
     public downloadStockReports(type: string) {
         this.stockReportRequest.reportDownloadType = type;
         this._toasty.infoToast('Upcoming feature');
     }
 
     // From Entity Dropdown
+    /**
+     * Handles selectEntity functionality
+     */
     public selectEntity(option: IOption) {
         this._toasty.infoToast('Upcoming feature');
     }
 
     // From inventory type Dropdown
+    /**
+     * Handles selectTransactionType functionality
+     */
     public selectTransactionType(inventoryType) {
         this.stockReportRequest.transactionType = inventoryType;
         this.getStockReport(true);
     }
 
     // focus on click search box
+    /**
+     * Shows accountsearchbox element
+     */
     public showAccountSearchBox() {
         this.showAccountSearch = !this.showAccountSearch;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.accountName && this.accountName.nativeElement) {
                 this.accountName.nativeElement.focus();
                 this.accountName.nativeElement.value = null;
@@ -640,6 +875,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     //******* Advance search modal *******//
+    /**
+     * Resets filter to default state
+     */
     public resetFilter(isReset?: boolean) {
         this.isFilterCorrect = false;
         this.stockReportRequest.sort = null;
@@ -649,6 +887,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.stockReportRequest.val = null;
         this.stockReportRequest.param = null;
         this.stockReportRequest.expression = null;
+        /**
+         * Handles if functionality
+         */
         if (this.accountName && this.accountName.nativeElement) {
             this.accountName.nativeElement.value = null;
         }
@@ -657,14 +898,23 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.advanceSearchForm.controls['filterAmount'].setValue(null);
         //Reset Date with universal date
         this.universalDate$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: response[0], endDate: response[1], chosenLabel: response[2] };
                 this.selectedRangeLabel = "";
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.length > 0) {
                     this.selectedRangeLabel = response[2];
                 }
                 this.toggleGiddhDatepicker(false);
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.length > 0) {
                     this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
                     this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -672,6 +922,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                     this.toDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
                     this.pickerSelectedFromDate = this.fromDate;
                     this.pickerSelectedToDate = this.toDate;
+                    /**
+                     * Handles if functionality
+                     */
                     if (!isReset) {
                         this.isFilterCorrect = true;
                         this.getStockReport(true);
@@ -681,6 +934,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
         //Reset Date
 
+        /**
+         * Handles if functionality
+         */
         if (isReset) {
             this.getStockReport(true);
         }
@@ -706,9 +962,15 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * @memberof InventoryStockReportComponent
      */
     public advanceSearchAction(type?: string): void {
+        /**
+         * Handles if functionality
+         */
         if (type === 'cancel') {
             this.advanceSearchModalShow = true;
             this.clearModal();
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchDialogRef) {
                 this.advanceSearchDialogRef.close();
                 this.advanceSearchDialogRef = null;
@@ -719,6 +981,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.isFilterCorrect) {
             this.datePickerOptions = {
                 ...this.datePickerOptions, startDate: dayjs(this.pickerSelectedFromDate).toDate(),
@@ -726,6 +991,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             };
 
             this.advanceSearchModalShow = false;
+            /**
+             * Handles if functionality
+             */
             if (this.advanceSearchDialogRef) {
                 this.advanceSearchDialogRef.close();
                 this.advanceSearchDialogRef = null;
@@ -734,11 +1002,20 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         }
     }
 
+    /**
+     * Handles clearModal functionality
+     */
     public clearModal() {
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.param || this.stockReportRequest.val || this.stockReportRequest.expression) {
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
             this.getStockReport(true);
         }
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName?.nativeElement.value) {
             // do something...
         } else {
@@ -750,6 +1027,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * onDDElementSelect
      */
     public clearShSelect(type?: string) {
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
                 this.filterCategory = null;
@@ -767,8 +1047,14 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.mapAdvFilters();
     }
 
+    /**
+     * Handles ddelementselect event
+     */
     public onDDElementSelect(event: IOption, type?: string) {
 
+        /**
+         * Handles switch functionality
+         */
         switch (type) {
             case 'filterCategory':  // inwards/outwards/opening/closing
                 this.filterCategory = event.value;
@@ -781,6 +1067,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                 break;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (type === 'filterCategory' && event.label === 'Closing Stock') {
             this.stockReportRequest.param = 'qty_closing';
             this.filterCategoryType = null;
@@ -791,11 +1080,20 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.mapAdvFilters(this.stockReportRequest.param);
     }
 
+    /**
+     * Handles downloadAllInventoryReports functionality
+     */
     public downloadAllInventoryReports(reportType: string, reportFormat: string) {
         let obj = new InventoryDownloadRequest();
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.stockGroupUniqueName) {
             obj.stockGroupUniqueName = this.stockReportRequest.stockGroupUniqueName;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest) {
             obj.stockUniqueName = this.stockReportRequest.stockUniqueName;
         }
@@ -807,6 +1105,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         obj.branchUniqueName = this.currentBranchAndWarehouse.branch;
         this.inventoryService.downloadAllInventoryReports(obj).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.status === 'success') {
                     this._toasty.infoToast(res?.body);
                 } else {
@@ -815,21 +1116,39 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             });
     }
 
+    /**
+     * Handles mapAdvFilters functionality
+     */
     public mapAdvFilters(param?: string) {
+        /**
+         * Handles if functionality
+         */
         if (!param) {
+            /**
+             * Handles if functionality
+             */
             if (this.filterCategoryType && this.filterCategory) { // creating value for key parma like "qty_cr", "amt_cr"
                 this.stockReportRequest.param = this.filterCategoryType + '_' + this.filterCategory;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.filterValueCondition) { // expressions less_than, greator_than etc
             this.stockReportRequest.expression = this.filterValueCondition;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.advanceSearchForm.controls['filterAmount'].value && !this.advanceSearchForm.controls['filterAmount'].invalid) {
             this.stockReportRequest.val = parseFloat(this.advanceSearchForm.controls['filterAmount'].value);
         } else {
             this.stockReportRequest.val = null;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || (this.accountName && this.accountName.nativeElement && this.accountName.nativeElement.value) || this.stockReportRequest.param || this.stockReportRequest.expression || this.stockReportRequest.val) {
             this.isFilterCorrect = true;
         } else {
@@ -844,6 +1163,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * @memberof InventoryStockReportComponent
      */
     public hideModal(isNoteCreatedSuccessfully?: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (isNoteCreatedSuccessfully) {
             this.getStockReport(true);
         }
@@ -856,6 +1178,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * @memberof InventoryStockReportComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -876,10 +1201,16 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * @memberof AuditLogsFormComponent
      */
     public dateSelectedCallback(value?: any, from?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
             this.pickerSelectedToDate = this.toDate;
+            /**
+             * Handles if functionality
+             */
             if (!from) {
                 this.isFilterCorrect = true;
                 this.getStockReport(true);

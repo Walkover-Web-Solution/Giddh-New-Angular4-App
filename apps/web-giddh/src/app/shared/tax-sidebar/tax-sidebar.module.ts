@@ -5,6 +5,9 @@ import { TranslateDirectiveModule } from '../../theme/translate/translate.direct
 import { TaxSidebarComponent } from './tax-sidebar.component';
 import { MatListModule } from '@angular/material/list';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [TaxSidebarComponent],
     imports: [
@@ -15,5 +18,9 @@ import { MatListModule } from '@angular/material/list';
     ],
     exports: [TaxSidebarComponent]
 })
+/**
+ * TaxSidebarModule module
+ * Implements TaxSidebarModule functionality
+ */
 export class TaxSidebarModule {
 }

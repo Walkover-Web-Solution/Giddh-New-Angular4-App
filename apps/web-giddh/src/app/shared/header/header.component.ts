@@ -45,6 +45,10 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { ServiceConfig } from '../../services/service.config';
 
+/**
+ * SubscriptionErrorFlags interface definition
+ * Defines the structure and contract for SubscriptionErrorFlags objects
+ */
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
     isLiabilitiesExpired: boolean;
@@ -53,6 +57,9 @@ interface SubscriptionErrorFlags {
     isTransactionLimitExceeded: boolean;
 };
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -60,6 +67,10 @@ interface SubscriptionErrorFlags {
     standalone:false
 })
 
+/**
+ * HeaderComponent component
+ * Handles header functionality and user interactions
+ */
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
     public userIsSuperUser: boolean = true; // Protect permission module
     public session$: Observable<userLoginStateEnum>;
@@ -269,6 +280,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     // tslint:disable-next-line:no-empty
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private commonService: CommonService,
         private loginAction: LoginActions,
@@ -313,17 +328,32 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            /**
+             * Handles if functionality
+             */
             if (event instanceof NavigationStart) {
+                /**
+                 * Handles if functionality
+                 */
                 if ((event.url.includes("/pages/settings") || event.url.includes("/gstfiling") || event.url.includes("/billing-detail")) && !this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!event.url.includes("/pages/settings") && !event.url.includes("/gstfiling") && !event.url.includes("/billing-detail") && this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.removeSessionStorage("previousPage");
                 }
                 this.addClassInBodyIfPageHasTabs();
             }
+            /**
+             * Handles if functionality
+             */
             if (event instanceof NavigationEnd) {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
@@ -340,11 +370,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.addClassInBodyIfPageHasTabs();
                 this.checkIfPageHasTabs();
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.lastSessionRenewalTime || (this.lastSessionRenewalTime && this.lastSessionRenewalTime.diff(dayjs(), 'hours') >= 2)) {
                     this.checkAndRenewUserSession();
                 }
@@ -352,14 +388,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.toggleSidebarPane(false, false);
                 this.saveLastState();
             }
+            /**
+             * Handles if functionality
+             */
             if (event instanceof NavigationStart) {
                 this.navigationEnd = false;
             }
+            /**
+             * Handles if functionality
+             */
             if (event instanceof NavigationError || event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.navigationEnd = true;
             }
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isElectron) {
                     this.toggleSidebarPane(false, false);
                 }
@@ -370,7 +418,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(s => s.general.currentPage), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLedgerAccSelected = false;
             let currentPageResponse = clone(response);
+            /**
+             * Handles if functionality
+             */
             if (currentPageResponse) {
+                /**
+                 * Handles if functionality
+                 */
                 if (currentPageResponse && currentPageResponse.url && currentPageResponse.url.includes('ledger/')) {
                     this.isLedgerAccSelected = true;
                 } else {
@@ -380,8 +434,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
         this.user$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.user], (user) => {
+            /**
+             * Handles if functionality
+             */
             if (user && user.user && user.user.name && user.user.name.length > 1) {
                 let name = user.user.name;
+                /**
+                 * Handles if functionality
+                 */
                 if (user.user.name.match(/\s/g)) {
                     this.userFullName = name;
                     let formattedName = name.split(' ');
@@ -395,14 +455,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         })), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            /**
+             * Handles if functionality
+             */
             if (organization && organization.details && organization.details.branchDetails) {
                 this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
                 this.generalService.currentOrganizationType = organization.type;
                 this.currentOrganizationType = organization.type;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response) {
                             this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
+                            /**
+                             * Handles if functionality
+                             */
                             if (!this.activeCompanyForDb) {
                                 this.activeCompanyForDb = new CompAidataModel();
                             }
@@ -418,8 +490,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.currentOrganizationType === OrganizationType.Branch) {
                 const unarchivedBranches = response.filter(branch => !branch.isArchived);
+                /**
+                 * Handles if functionality
+                 */
                 if (!unarchivedBranches?.length) {
                     const type = OrganizationType.Company;
                     const organization: Organization = {
@@ -438,12 +516,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.store.pipe(select(state => state.settings.updateProfileSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.getCurrentCompanyData();
             }
         });
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
+            /**
+             * Handles if functionality
+             */
             if (!companies || companies?.length === 0) {
                 return;
             }
@@ -456,17 +540,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            /**
+             * Handles if functionality
+             */
             if (selectedCmp) {
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.voucherApiVersion === 2) {
                     this.showDepreciationMessage = false;
                     document.querySelector("body")?.classList?.remove("depreciation-message");
                 }
                 this.activeCompanyForDb = new CompAidataModel();
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
                     this.activeCompanyForDb.uniqueName = this.generalService.currentBranchUniqueName;
@@ -482,6 +575,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.createNewCompanyUser = res;
             }
@@ -489,12 +585,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
 
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.length) {
                 this.currentCompanyBranches = response;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch =>
                         (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -508,6 +613,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.broadcast = new BroadcastChannel("subscription");
         this.broadcast.onmessage = (event) => {
+            /**
+             * Handles if functionality
+             */
             if (event?.data?.activeCompany !== undefined && event?.data?.activeCompany !== null) {
                 this.getCurrentCompanyData();
             }
@@ -515,6 +623,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.projectBroadcast = new BroadcastChannel("project-wise-accounting");
         this.projectBroadcast.onmessage = (event) => {
+            /**
+             * Handles if functionality
+             */
             if (event?.data?.success) {
                 this.gotToBranchTab();
             }
@@ -522,12 +633,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.aiOcrBroadcast = new BroadcastChannel("ai-ocr");
         this.aiOcrBroadcast.onmessage = (event) => {
+            /**
+             * Handles if functionality
+             */
             if (event?.data?.success) {
                 this.gotToBranchTab();
             }
         };
 
         this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
                 this.getCurrentCompanyData();
@@ -541,9 +658,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.loadCompanyBranches();
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -551,11 +674,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 let branches = [];
                 this.store.pipe(filter(Boolean), select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
                     branches = data || [];
                 });
+                /**
+                 * Handles reassignNavigationalArray functionality
+                 */
                 reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, response);
                 this.apiMenuItems = response;
                 this.changeDetection.detectChanges();
@@ -567,6 +696,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
 
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.expandSidebar(true);
 
@@ -577,6 +709,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
+            /**
+             * Handles if functionality
+             */
             if (this.generalService.companyUniqueName) {
                 this.store.dispatch(this._generalActions.getSideMenuItems());
             }
@@ -587,12 +722,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.store.dispatch(this.companyActions.GetApplicationDate());
         this.user$.pipe(take(1)).subscribe((u) => {
+            /**
+             * Handles if functionality
+             */
             if (u) {
                 let userEmail = u.email;
                 this.userEmail = clone(userEmail);
                 let userEmailDomain = userEmail?.replace(/.*@/, '');
                 this.userIsCompanyUser = userEmailDomain && this.companyDomains?.indexOf(userEmailDomain) !== -1;
                 let name = u.name;
+                /**
+                 * Handles if functionality
+                 */
                 if (u.name.match(/\s/g)) {
                     this.userFullName = name;
                     let formattedName = name.split(' ');
@@ -604,7 +745,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.isSubscribedPlanHaveAdditionalCharges) {
+            /**
+             * Handles if functionality
+             */
             if (!this.isMobileSite) {
                 this.openCrossedTxLimitModel(this.crossedTxLimitModel);
             }
@@ -616,6 +763,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             const lastState = s?.toLowerCase();
 
             let lastStateHaveParams: boolean = lastState.includes('?');
+            /**
+             * Handles if functionality
+             */
             if (lastStateHaveParams) {
                 let tempParams = lastState.substr(lastState.lastIndexOf('?'));
                 let urlParams = new URLSearchParams(tempParams);
@@ -625,21 +775,36 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
 
                 let route = NAVIGATION_ITEM_LIST.find((page) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (!page?.additional) {
                         return;
                     }
+                    /**
+                     * Handles return functionality
+                     */
                     return (page?.uniqueName.substring(7, page?.uniqueName?.length)?.indexOf(lastState?.replace(tempParams, '')) > -1
                         && page.additional.tabIndex === Number(queryParams.tabindex));
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (route) {
                     return;
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (lastState.includes('ledger/')) {
                     let isDestroyed: Subject<boolean> = new Subject<boolean>();
                     isDestroyed.next(false);
                     this.activeAccount$.pipe(takeUntil(isDestroyed)).subscribe(acc => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (acc) {
                             this.isLedgerAccSelected = true;
                             const lastStateArray = lastState.split('/');
@@ -663,6 +828,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
+                /**
+                 * Handles if functionality
+                 */
                 if (state.breakpoints[ACCOUNTING_BREAKPOINTS.SIDEBAR_COMFORTABLE]) {
                     this.expandSidebar(true);
                 } else {
@@ -671,6 +839,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             });
 
         this.isAddAndManageOpenedFromOutside$.subscribe(isMasterOpen => {
+            /**
+             * Handles if functionality
+             */
             if (isMasterOpen) {
                 this.openDialogManageGroupsAccounts();
             } else {
@@ -682,12 +853,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.companyService.CurrencyList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success' && response.body) {
                 this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
             }
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('header', response?.value).subscribe(response => {
                     this.localeData = response;
@@ -697,9 +874,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.commonLocaleData = response;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isTodaysDateSelected) {
                     this.selectedDateRangeUi = this.commonLocaleData?.app_today;
                 }
@@ -714,17 +897,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getCurrentCompanyData(): void {
         this.settingsProfileService.GetProfileInfo().pipe(take(1)).subscribe((response: any) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "success" && response.body) {
                 this.planVersion = response.body.planVersion;
                 this.store.dispatch(this.settingsProfileAction.handleCompanyProfileResponse(response));
                 let res = response.body;
                 this.store.dispatch(this.companyActions.setActiveCompanyData(res));
 
+                /**
+                 * Handles if functionality
+                 */
                 if (res?.countryV2 !== null && res?.countryV2 !== undefined) {
                     this.getStates(res?.countryV2.alpha2CountryCode);
                     this.store.dispatch(this.commonActions.resetOnboardingForm());
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (res.subscription) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (res?.baseCurrency) {
 
                         this.companyCountry.baseCurrency = res?.baseCurrency;
@@ -735,6 +930,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
                     this.subscribedPlan = res.subscription;
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.subscribedPlan?.expiry) {
                         let expiry = (this.subscribedPlan?.expiry)?.split("-")?.reverse()?.join("-");
                         this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
@@ -751,6 +949,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.isUKCompany = res.country === "United Kingdom";
                 this.obligation = res.obligationsAlert && Object.keys(res.obligationsAlert).length ? res.obligationsAlert : null;
                 this.liabilities = res.liabilitiesAlert && Object.keys(res.liabilitiesAlert).length ? res.liabilitiesAlert : null;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
                     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
                 }
@@ -765,6 +966,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addListenerErrorMessage(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isErrorMessageListenerAdded) {
             this.isErrorMessageListenerAdded = true;
             const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
@@ -782,10 +986,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         /* TO SHOW NOTIFICATIONS */
         // Initialize Headway widget in both web and Electron environments
         // Ensure HW_config is properly set
+        /**
+         * Handles if functionality
+         */
         if (!window['HW_config']) {
             window['HW_config'] = {
                 selector: ".notification",
@@ -794,6 +1004,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             };
         }
 
+        /**
+         * Handles if functionality
+         */
         if (window['Headway'] === undefined) {
             let scriptTag = document.createElement('script');
             scriptTag.src = './assets/js/headway-widget.js';
@@ -802,7 +1015,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             scriptTag.async = true;
             scriptTag.onload = () => {
                 // Initialize Headway after script loads
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (window['Headway']) {
                         window['Headway'].init();
                     }
@@ -814,14 +1033,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         /* TO SHOW NOTIFICATIONS */
 
+        /**
+         * Handles if functionality
+         */
         if (this.selectedPlanStatus === 'expired') {// active expired
+            /**
+             * Handles if functionality
+             */
             if (!this.isMobileSite) {
                 this.openExpiredPlanModel(this.expiredPlanModel);
             }
         }
 
         this.session$.subscribe((s) => {
+            /**
+             * Handles if functionality
+             */
             if (s === userLoginStateEnum.notLoggedIn) {
+                /**
+                 * Handles if functionality
+                 */
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
@@ -832,10 +1063,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 this.zone.run(() => {
                     this.store.pipe(
+                        /**
+                         * Handles select functionality
+                         */
                         select(state => state.session.user),
+                        /**
+                         * Handles take functionality
+                         */
                         take(1), // take only the first emission
+                        /**
+                         * Handles tap functionality
+                         */
                         tap(response => {
                             const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                            /**
+                             * Handles if functionality
+                             */
                             if (hasSubscriptionPermission) {
                                 this.router.navigate(['/pages/user-details/subscription']);
                             } else {
@@ -845,6 +1088,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     ).subscribe();
                 });
             } else if (s === userLoginStateEnum.userLoggedIn) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.getUtmParameter("companyUniqueName")) {
                     this.store.dispatch(this.companyActions.resetActiveCompanyData());
                     this.generalService.companyUniqueName = this.generalService.getUtmParameter("companyUniqueName");
@@ -872,8 +1118,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // Get universal date
         this.store.pipe(select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj && dateObj.length) {
                 this.isTodaysDateSelected = !dateObj[3];  //entry-setting API date response in case of today fromDate/toDate will be null
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isTodaysDateSelected) {
                     let today = cloneDeep([dayjs(), dayjs()]);
                     this.selectedDateRange = { startDate: dayjs(today[0]), endDate: dayjs(today[1]) };
@@ -885,6 +1137,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
 
                 this.store.pipe(select(state => state.settings?.financialYears), takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.financialYears?.length > 0) {
                         let activeFinancialYear = {
                             uniqueName: response.financialYears[response.financialYears.length - 1]?.uniqueName,
@@ -893,8 +1148,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             financialYearEnds: dayjs(response.financialYears[response.financialYears.length - 1]?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
                         };
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.isTodaysDateSelected) {
                             (Array.isArray(response.financialYears) ? response.financialYears : []).forEach(key => {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (this.selectedDateRange?.endDate >= dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
                                         uniqueName: key?.uniqueName,
@@ -906,6 +1167,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             });
                         }
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.selectedCompanyDetails) {
                             this.selectedCompanyDetails.activeFinancialYear = activeFinancialYear;
                             this.store.dispatch(this.commonActions.setActiveFinancialYear(this.selectedCompanyDetails));
@@ -916,6 +1180,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         })), takeUntil(this.destroyed$)).subscribe();
     }
 
+    /**
+     * Handles ngAfterViewChecked functionality
+     */
     public ngAfterViewChecked() {
         this.changeDetection.detectChanges();
     }
@@ -927,8 +1194,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleHelpSupportPane(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.toggleSidebarPane(false, false);
+            /**
+             * Handles if functionality
+             */
             if (this.asideHelpSupportDialogRef?.id && this.dialog.getDialogById(this.asideHelpSupportDialogRef?.id)) {
                 this.asideHelpSupportDialogRef?.close();
             } else {
@@ -956,19 +1229,31 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
+            /**
+             * Handles if functionality
+             */
             if (show) {
                 this.asideHelpSupportDialogRef?.close();
             }
             this.asideSettingMenuState = show;
 
+            /**
+             * Handles if functionality
+             */
             if (this.asideSettingMenuState) {
                 document.querySelector('body')?.classList?.add('aside-setting');
             } else {
                 document.querySelector('body')?.classList?.remove('aside-setting');
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.asideSettingMenuState) {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
             } else {
@@ -999,7 +1284,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
         this.oldSelectedPage = cloneDeep(this.selectedPage);
         this.isLedgerAccSelected = false;
+        /**
+         * Handles if functionality
+         */
         if (e) {
+            /**
+             * Handles if functionality
+             */
             if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
                 return;
             }
@@ -1015,7 +1306,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         menu.time = +new Date();
 
         let o: IUlist = find(NAVIGATION_ITEM_LIST, (item) => {
+            /**
+             * Handles if functionality
+             */
             if (queryParamsObj) {
+                /**
+                 * Handles if functionality
+                 */
                 if (item.additional) {
                     return item?.uniqueName?.toLowerCase() === pageName?.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
                 }
@@ -1023,11 +1320,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return item?.uniqueName.toLocaleLowerCase() === pageName?.toLowerCase();
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (o) {
             menu = { ...menu, ...o };
         } else {
             try {
                 menu.name = pageName.split('/pages/')[1]?.toLowerCase();
+                /**
+                 * Handles if functionality
+                 */
                 if (!menu.name) {
                     menu.name = pageName.split('/')[1]?.toLowerCase();
                 }
@@ -1038,12 +1341,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             menu.uniqueName = pageName?.toLowerCase();
             menu.type = 'MENU';
 
+            /**
+             * Handles if functionality
+             */
             if (queryParamsObj) {
                 menu.additional = queryParamsObj;
             }
         }
         this.setCurrentPageTitle(menu);
 
+        /**
+         * Handles if functionality
+         */
         if (menu.additional) {
             this.router.navigate([pageName], { queryParams: menu.additional });
         } else {
@@ -1051,17 +1360,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * Handles analyzeOtherMenus functionality
+     */
     public analyzeOtherMenus(name: string, additional: any = null) {
         name = `/pages/${name}`;
         this.analyzeMenus(null, name, additional);
     }
+    /**
+     * Shows managegroupsmodal element
+     */
     public showManageGroupsModal(search: any = "") {
         this.toggleHelpSupportPane(false);
         this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(search));
     }
 
+    /**
+     * Hides managegroupsmodal element
+     */
     public hideManageGroupsModal() {
         this.store.pipe(select(c => c.session.lastState), take(1)).subscribe((s: string) => {
+            /**
+             * Handles if functionality
+             */
             if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1) && this.selectedLedgerName) {
                 this.store.dispatch(this.ledgerAction.GetLedgerAccount(this.selectedLedgerName));
             }
@@ -1069,6 +1390,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsDialogRef?.close();
     }
 
+    /**
+     * Handles hide event
+     */
     public onHide() {
         this.store.dispatch(this.companyActions.ResetCompanyPopup());
     }
@@ -1089,10 +1413,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.manageGroupsAccountsDialogRef.afterOpened().subscribe(() => {
             const instance = this.manageGroupsAccountsDialogRef.componentInstance;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (instance.header?.nativeElement) {
                     instance.headerRect = instance.header.nativeElement.getBoundingClientRect();
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (instance.myModel?.nativeElement) {
                     instance.myModelRect = instance.myModel.nativeElement.getBoundingClientRect();
                 }
@@ -1112,9 +1445,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public sideBarStateChange(event: boolean) {
         this.isGoToBranch = false;
+        /**
+         * Handles if functionality
+         */
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
         }
+        /**
+         * Handles if functionality
+         */
         if (event) {
             document.querySelector('body').classList.add('hide-scroll-body')
         } else {
@@ -1123,41 +1462,68 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.menuStateChange.emit(event);
     }
 
+    /**
+     * Closes sidebarmobile
+     */
     public closeSidebarMobile(e) {
         let excludeElements = ['icon-bar', 'hamburger-menu', 'refresh-manually', 'icon-down-new'];
         let elementClass = e?.target?.className?.toString();
         let validElement = true;
 
         (Array.isArray(excludeElements) ? excludeElements : []).forEach(className => {
+            /**
+             * Handles if functionality
+             */
             if (elementClass?.indexOf(className) > -1) {
                 validElement = false;
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (validElement && this.isMobileSite) {
             this.sideMenu.isopen = false;
             this.menuStateChange.emit(false);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings") || document.getElementsByClassName("voucher-preview-edit")?.length > 0)) {
             this.collapseSidebar(true);
         }
     }
 
+    /**
+     * Handles forceCloseSidebar functionality
+     */
     public forceCloseSidebar(event) {
+        /**
+         * Handles if functionality
+         */
         if (event.target.parentElement.classList.contains('wrapAcList')) {
             return;
         }
         this.flyAccounts.next(false);
     }
 
+    /**
+     * Closes sidebar
+     */
     public closeSidebar(targetId) {
+        /**
+         * Handles if functionality
+         */
         if (targetId === 'accountSearch' || targetId === 'expandAllGroups' || targetId === 'toggleAccounts') {
             return;
         }
         this.flyAccounts.next(false);
     }
 
+    /**
+     * Opens daterangepicker
+     */
     public openDateRangePicker() {
         this.isTodaysDateSelected = false;
     }
@@ -1169,9 +1535,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public navigateToSubItemLink(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.trigger?.closeMenu();
+            /**
+             * Handles if functionality
+             */
             if (this.voucherApiVersion === 2) {
+                /**
+                 * Handles if functionality
+                 */
                 if (event === 'receiptnote') {
                     this.router.navigate(['/pages/inventory/v2/branch-transfer/receipt-note/create']);
                 } else if (event === 'deliverychallan') {
@@ -1180,6 +1555,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.router.navigate(['/pages' + event]);
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (event === 'deliverychallan' || event === 'receiptnote') {
                     this.router.navigate(['/pages/inventory/report/' + event]);
                 } else {
@@ -1189,12 +1567,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.broadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles filterCompanyList functionality
+     */
     public filterCompanyList(ev) {
         let companies: CompanyResponse[] = [];
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
@@ -1215,6 +1599,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
             branches = response || [];
         });
+        /**
+         * Handles if functionality
+         */
         if (branchName) {
             this.currentCompanyBranches = branches?.filter(branch => {
                 return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
@@ -1224,17 +1611,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * Closes usermenu
+     */
     public closeUserMenu(ev) {
         ev.isopen = false;
         this.companyMenu.isopen = false;
     }
 
+    /**
+     * Opens expiredplanmodel
+     */
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
         this.dialogRefExpirePlanRef = this.dialog.open(template, {
             panelClass: 'mat-dialog-md'
         });
     }
 
+    /**
+     * Opens crossedtxlimitmodel
+     */
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
         this.dialogRefCrossLimitRef = this.dialog.open(template, {
             panelClass: 'mat-dialog-md'
@@ -1260,6 +1656,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.dialogRefExpirePlanRef?.close();
         this.dialogRefCrossLimitRef?.close();
         document.querySelector('body').classList.remove('modal-open');
+        /**
+         * Handles if functionality
+         */
         if (this.planVersion === 2 || this.subscribedPlan?.status === 'expired') {
             this.router.navigate(['/pages/user-details/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);
         } else {
@@ -1317,6 +1716,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isGoToBranch = true;
     }
 
+    /**
+     * Handles mouseEnteredOnCompanyName functionality
+     */
     public mouseEnteredOnCompanyName(i: number) {
         this.hoveredIndx = i;
     }
@@ -1332,26 +1734,50 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         const targetElement = event.toElement || event.relatedTarget;
     }
 
+    /**
+     * Handles companyshown event
+     */
     public onCompanyShown(sublist, navigator) {
+        /**
+         * Handles if functionality
+         */
         if (sublist.children[1]) {
             navigator.add(sublist.children[1]);
             navigator.nextVertical();
         }
     }
 
+    /**
+     * Handles switchCompanyMenuShown functionality
+     */
     public switchCompanyMenuShown() {
+        /**
+         * Handles if functionality
+         */
         if (this.searchCmpTextBox && this.searchCmpTextBox.nativeElement) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => this.searchCmpTextBox.nativeElement.focus(), 200);
         }
     }
 
 
+    /**
+     * Handles adjustNavigationBar functionality
+     */
     private adjustNavigationBar() {
         this.sideBarStateChange(this.isLargeWindow);
     }
 
+    /**
+     * Retrieves readablenamefromurl data
+     */
     private getReadableNameFromUrl(url) {
         let name = '';
+        /**
+         * Handles switch functionality
+         */
         switch (url) {
             case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
                 name = this.localeData?.settings_permission;
@@ -1368,7 +1794,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         return name;
     }
 
+    /**
+     * Retrieves states data
+     */
     public getStates(countryCode) {
+        /**
+         * Handles if functionality
+         */
         if (countryCode !== undefined && countryCode !== null && countryCode !== "") {
             let statesRequest = new StatesRequest();
             statesRequest.country = countryCode;
@@ -1376,9 +1808,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * Sets currentpage value
+     */
     public setCurrentPage() {
         let currentUrl = this.router.url;
 
+        /**
+         * Handles if functionality
+         */
         if (currentUrl.includes('/ledger')) {
             let currentPageObj = new CurrentPage();
             currentPageObj.name = "";
@@ -1387,6 +1825,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
         } else {
             NAVIGATION_ITEM_LIST.find((page) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (page?.uniqueName === decodeURI(currentUrl)) {
                     this.setCurrentPageTitle(page);
                     return true;
@@ -1395,6 +1836,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * Sets currentpagetitle value
+     */
     public setCurrentPageTitle(menu) {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = menu?.name;
@@ -1403,11 +1847,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
+    /**
+     * Sets currentaccountnameinheading value
+     */
     public setCurrentAccountNameInHeading() {
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
+            /**
+             * Handles if functionality
+             */
             if (acc) {
                 this.isLedgerAccSelected = true;
                 this.selectedLedgerName = acc.uniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isMobileSite) {
                     this.selectedPage = acc.name;
                 } else {
@@ -1435,10 +1888,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     private checkIfCompanyTcsTdsApplicable(): void {
         const request: OnboardingFormRequest = {
+            /**
+             * Handles country functionality
+             */
             country: (this.activeCompany && this.activeCompany.countryV2) ? this.activeCompany.countryV2.alpha2CountryCode : '',
             formName: 'otherTaxes'
         };
         this.commonService.getOnboardingForm(request).pipe(take(1)).subscribe((response) => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === 'success' && response.body) {
                 this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(response.body.isTcsTdsApplicable))
             } else {
@@ -1463,7 +1922,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public addClassInBodyIfPageHasTabs(): void {
         this.toggleHelpSupportPane(false);
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data")?.length > 0) {
                 document.querySelector('body').classList.add('on-setting-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
@@ -1489,9 +1954,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
 
+            /**
+             * Handles if functionality
+             */
             if (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0) {
                 this.collapseSidebar(true);
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.sideMenu.isopen) {
                     this.sideMenu.isExpanded = true;
                     this.expandSidebar(true);
@@ -1507,6 +1978,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public expandSidebar(forceExpand: boolean = false): void {
+        /**
+         * Handles if functionality
+         */
         if (forceExpand) {
             this.sideBarStateChange(true);
             this.sidebarForcelyExpanded = true;
@@ -1522,17 +1996,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
         this.isGoToBranch = false;
+        /**
+         * Handles if functionality
+         */
         if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings"))) {
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
             forceCollapse = true;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (forceCollapse) {
             this.sideMenu.isExpanded = false;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (!this.sideMenu.isopen) {
                 this.sideMenu.isExpanded = false;
             } else {
@@ -1540,6 +2026,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!this.sideMenu.isExpanded || forceCollapse) {
             this.sidebarForcelyExpanded = false;
             this.isSidebarExpanded = false;
@@ -1554,6 +2043,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
@@ -1568,16 +2060,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1613,6 +2114,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleBodyScroll(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.isMobileSite) {
             document.querySelector('body').classList.add('prevent-body-scroll');
         } else {
@@ -1626,6 +2130,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public loadCompanyBranches(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.companyUniqueName) {
             // Avoid API call if new user is onboarded
             this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -1640,7 +2147,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     @HostListener('window:orientationchange', ['$event'])
+    /**
+     * Handles orientationchange event
+     */
     onOrientationChange(event) {
+        /**
+         * Handles if functionality
+         */
         if (window['Headway'] !== undefined) {
             window['Headway']?.init();
         }
@@ -1653,7 +2166,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     @HostListener('window:resize', ['$event'])
+    /**
+     * Handles windowResize functionality
+     */
     windowResize(event) {
+        /**
+         * Handles if functionality
+         */
         if (window['Headway'] !== undefined) {
             window['Headway']?.init();
         }
@@ -1665,6 +2184,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public navigateToPreviousRoute(): void {
+        /**
+         * Handles if functionality
+         */
         if (document.referrer) {
             this.location.back();
         } else {
@@ -1680,6 +2202,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     private getElectronMacAppVersion(): void {
         this.authService.getElectronMacAppVersion().pipe(take(1)).subscribe((res: string) => {
+            /**
+             * Handles if functionality
+             */
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
@@ -1698,6 +2223,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let currentUrl = this.router.url;
 
         NAVIGATION_ITEM_LIST.find((page) => {
+            /**
+             * Handles if functionality
+             */
             if (page?.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
                 this.pageHasTabs = true;
                 return true;
@@ -1712,9 +2240,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public checkAndRenewUserSession(): void {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe((user) => {
+            /**
+             * Handles if functionality
+             */
             if (user && user.session) {
                 let sessionExpiresAt: any = dayjs(user.session.expiresAt, GIDDH_DATE_FORMAT + " h:m:s");
 
+                /**
+                 * Handles if functionality
+                 */
                 if (sessionExpiresAt.diff(dayjs(), 'hours') < 24) {
                     this.lastSessionRenewalTime = dayjs();
                     this.store.dispatch(this.loginAction.renewSession());
@@ -1749,6 +2283,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getSubscriptionEndedNote(): string {
+        /**
+         * Handles if functionality
+         */
         if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && this.selectedPlanStatus === 'expired' && this.subscribedPlan?.paymentPending && !this.isCurrentSubscriptionTrialOrCancelled) {
             return this.localeData?.subscription_expire_renewal_message ?? "";
         }
@@ -1812,6 +2349,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public showGstIcon(): boolean {
+        /**
+         * Handles return functionality
+         */
         return (this.currentPageUrl?.indexOf('pages/gstfiling') > -1 ||
             this.currentPageUrl?.indexOf('pages/reports/reverse-charge') > -1 ||
             this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1 ||
@@ -1835,6 +2375,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public toggleSidebar(isMobileSidebar: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.asideSettingMenuState) {
             this.toggleSidebarPane(false, isMobileSidebar);
         } else {
@@ -1865,6 +2408,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = decodeURI(lastState);
+        /**
+         * Handles if functionality
+         */
         if (lastState !== '/pages/user-details/subscription/buy-plan') {
             this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
@@ -1877,6 +2423,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     */
     public showNavigationModal(): void {
         this.showCommandDialog = true;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.showCommandDialog = false;
         }, 600);
@@ -1898,11 +2447,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.setOrganizationDetails(OrganizationType.Company, details);
         localStorage.removeItem('isNewArchitecture');
+        /**
+         * Handles if functionality
+         */
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else {
             // check if logged in via social accounts
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (val) {
                     this.socialAuthService.signOut().then(() => {
                         this.store.dispatch(this.loginAction.ClearSession());
@@ -1952,6 +2507,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public openNotifications(): void {
+        /**
+         * Handles if functionality
+         */
         if (window['Headway']) {
             window['Headway'].show();
         }

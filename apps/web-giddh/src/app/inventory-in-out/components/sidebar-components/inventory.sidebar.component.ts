@@ -9,6 +9,9 @@ import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'invetory-sidebar',
     templateUrl: './inventory.sidebar.component.html',
@@ -25,6 +28,10 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
     `]
 })
 
+/**
+ * InventoryInOutSidebarComponent component
+ * Handles inventoryinoutsidebar functionality and user interactions
+ */
 export class InventoryInOutSidebarComponent implements OnInit, OnDestroy {
     public stocksList$: Observable<IStocksItem[]>;
     public inventoryUsers$: Observable<InventoryUser[]>;
@@ -47,19 +54,31 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy {
     }
 
     @HostListener('window:resize')
+    /**
+     * Handles resizeEvent functionality
+     */
     public resizeEvent() {
         this.sidebarRect = window.screen.height;
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.dispatch(this._inventoryAction.GetStock());
         this.store.pipe(take(1)).subscribe(state => {
+            /**
+             * Handles if functionality
+             */
             if (state.inventory.groupsWithStocks === null) {
                 this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
             }
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

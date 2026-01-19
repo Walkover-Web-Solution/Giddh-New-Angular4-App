@@ -11,6 +11,10 @@ import { OnBoardingType } from '../../app.constant';
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ItemOnBoardingActions class
+ * Implements ItemOnBoardingActions functionality
+ */
 export class ItemOnBoardingActions {
     /** Action type to set the on boarding type of any item */
     public static readonly SET_ON_BOARDING_TYPE: string = 'SET_ON_BOARDING_TYPE';

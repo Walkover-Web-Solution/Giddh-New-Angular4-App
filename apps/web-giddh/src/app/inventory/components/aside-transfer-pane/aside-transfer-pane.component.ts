@@ -12,6 +12,9 @@ import { GeneralService } from '../../../services/general.service';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-transfer-pane',
     templateUrl: './aside-transfer-pane.component.html',
@@ -19,6 +22,10 @@ import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-u
     standalone: false
 })
 
+/**
+ * AsideTransferPaneComponent component
+ * Handles asidetransferpane functionality and user interactions
+ */
 export class AsideTransferPaneComponent implements OnInit, OnDestroy {
     public stockList$: Observable<IStocksItem[]>;
     public stockUnits$: Observable<StockUnitRequest[]>;
@@ -30,6 +37,10 @@ export class AsideTransferPaneComponent implements OnInit, OnDestroy {
     public entrySuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _store: Store<AppState>,
         private _inventoryAction: InventoryAction,
         private _inventoryEntryAction: InventoryEntryActions,
@@ -51,6 +62,9 @@ export class AsideTransferPaneComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this._store.dispatch(this._inventoryAction.GetStock());
         // dispatch stockunit request
@@ -68,6 +82,9 @@ export class AsideTransferPaneComponent implements OnInit, OnDestroy {
         this._store.pipe(select(p => p.inventoryInOutState.userSuccess), takeUntil(this.destroyed$)).subscribe(p => p && this.closeAsidePane(p));
 
         this.createStockSuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.selectedAsideView = 'mainview';
                 let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
@@ -75,6 +92,9 @@ export class AsideTransferPaneComponent implements OnInit, OnDestroy {
             }
         });
         this.entrySuccess$.subscribe(s => {
+            /**
+             * Handles if functionality
+             */
             if (s) {
                 this.selectedAsideView = 'mainview';
                 let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
@@ -83,23 +103,41 @@ export class AsideTransferPaneComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles cancel event
+     */
     public onCancel() {
         this.closeAsidePane();
     }
+    /**
+     * Handles selectView functionality
+     */
     public selectView(view: string) {
         this.selectedAsideView = view;
     }
+    /**
+     * Handles backButtonPressed functionality
+     */
     public backButtonPressed() {
         this.selectedAsideView = 'mainview';
     }
+    /**
+     * Closes asidepane
+     */
     public closeAsidePane(event?) {
         this.closeAsideEvent.emit();
     }
 
+    /**
+     * Handles save event
+     */
     public onSave(entry: InventoryEntry, reciever?: InventoryUser) {
         this._store.dispatch(this._inventoryEntryAction.addNewEntry(entry, reciever));
     }
 
+    /**
+     * Creates new account
+     */
     public createAccount(value) {
         this._store.dispatch(this._inventoryUserAction.addNewUser(value.name));
     }

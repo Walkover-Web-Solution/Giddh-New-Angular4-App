@@ -19,6 +19,9 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { DecimalDigitsModule } from '../../../helpers/directives/decimalDigits/decimalDigits.module';
 import { KeyboardNavigationModule } from '../../../helpers/directives/enter-next/keyboard-navigation.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
     exports: [AccountAddNewDetailsComponent],
@@ -43,4 +46,8 @@ import { KeyboardNavigationModule } from '../../../helpers/directives/enter-next
     ],
     providers: [SalesPersonService]
 })
+/**
+ * AccountAddNewDetailsModule module
+ * Implements AccountAddNewDetailsModule functionality
+ */
 export class AccountAddNewDetailsModule { }

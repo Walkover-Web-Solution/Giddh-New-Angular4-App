@@ -5,11 +5,18 @@ import { SearchRequest } from '../models/api-models/Search';
 import { SearchActions } from '../actions/search.actions';
 import { remove } from '../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'search',
     templateUrl: './search.component.html',
     standalone: false
 })
+/**
+ * SearchComponent component
+ * Handles search functionality and user interactions
+ */
 export class SearchComponent implements OnDestroy {
     public searchRequestEmitter = new EventEmitter<SearchRequest>();
     public _searchRequest: SearchRequest;
@@ -22,6 +29,10 @@ export class SearchComponent implements OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private searchActions: SearchActions) {
         document.querySelector("body")?.classList?.add("search-filter");
     }
@@ -36,15 +47,24 @@ export class SearchComponent implements OnDestroy {
         this._searchRequest = search;
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         document.querySelector("body")?.classList?.remove("search-filter");
         this.store.dispatch(this.searchActions.ResetSearchState());
     }
 
+    /**
+     * Handles paginationChanged functionality
+     */
     public paginationChanged(ev) {
         this.pageChangeEvent = ev;
     }
 
+    /**
+     * Handles FilterByAPIEvent functionality
+     */
     public FilterByAPIEvent(ev) {
         this.filterEventQuery = ev; // this key is an input in search-sidebar component
     }

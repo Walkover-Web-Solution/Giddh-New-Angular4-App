@@ -23,12 +23,19 @@ import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
 import { forEach, includes, map, set } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "purchase-register-expand",
     templateUrl: "./purchase.register.expand.component.html",
     styleUrls: ["./purchase.register.expand.component.scss"],
     standalone: false
 })
+/**
+ * PurchaseRegisterExpandComponent component
+ * Handles purchaseregisterexpand functionality and user interactions
+ */
 export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
     public from: string;
@@ -96,6 +103,10 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -108,20 +119,41 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions
     ) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select((appState) => appState.receipt.PurchaseRegisteDetailedResponse),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         );
         this.isGetPurchaseDetailsInProcess$ = this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select((p) => p.receipt.isGetPurchaseDetailsInProcess),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         );
         this.isGetPurchaseDetailsSuccess$ = this.store.pipe(
+            /**
+             * Handles select functionality
+             */
             select((p) => p.receipt.isGetPurchaseDetailsSuccess),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         );
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), skip(1), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
@@ -130,22 +162,40 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedPurchaseRequestFilter.q = "";
         this.store
             .pipe(
+                /**
+                 * Handles select functionality
+                 */
                 select((appState) => appState.company),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)
             )
             .subscribe((companyData: CurrentCompanyState) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (companyData) {
                     this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
                 }
             });
 
         this.isGetPurchaseDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
+            /**
+             * Handles if functionality
+             */
             if (success) {
                 this.isDefaultLoaded = true;
             }
         });
 
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
+            /**
+             * Handles if functionality
+             */
             if (params.from && params.to) {
                 this.from = params.from;
                 this.to = params.to;
@@ -162,6 +212,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
+            /**
+             * Handles if functionality
+             */
             if (dateObj && this.isDefaultLoaded) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -176,20 +229,35 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.purchaseRegisteDetailedResponse$
             .pipe(takeUntil(this.destroyed$))
             .subscribe((res: PurchaseRegisteDetailedResponse) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (res) {
                     this.PurchaseRegisteDetailedItems = res;
                     this.dataSource.data = this.PurchaseRegisteDetailedItems.items.map((obj: any) => {
                         obj.date = this.getDateToDMY(obj.date);
                         return obj;
                     });
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.voucherNumberInput?.value) {
+                        /**
+                         * Sets timeout value
+                         */
                         setTimeout(() => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                                 this.invoiceSearch.nativeElement.focus();
                             }
                         }, 200);
                     }
                 }
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.detectChange();
                 }, 200);
@@ -198,6 +266,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.voucherNumberInput?.valueChanges
             ?.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((searching) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (searching !== null && searching !== undefined) {
                     this.showClearFilter = true;
                     this.getDetailedPurchaseRequestFilter.sort = null;
@@ -303,25 +374,43 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         ];
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
             }
         });
         this.router.events.pipe(
+            /**
+             * Handles filter functionality
+             */
             filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/purchase-register') || event.url.includes('/reports/purchase-detailed-expand')))),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)).subscribe(() => {
                 // Reset the chosen financial year when user leaves the module
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
             });
     }
 
+    /**
+     * Retrieves detailedpurchasereport data
+     */
     public getDetailedPurchaseReport(PurchaseDetailedfilter) {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.detectChange();
         }, 200);
         this.store.dispatch(this.invoiceReceiptActions.GetPurchaseRegistedDetails(PurchaseDetailedfilter));
     }
 
+    /**
+     * Handles sortbyApi functionality
+     */
     public sortbyApi(ord, key) {
         this.showClearFilter = true;
         this.getDetailedPurchaseRequestFilter.sortBy = key;
@@ -355,8 +444,14 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.expand = !this.expand;
     }
 
+    /**
+     * Retrieves datetodmy data
+     */
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split("-");
+        /**
+         * Handles if functionality
+         */
         if (date?.length === 3) {
             this.translationComplete(true);
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
@@ -367,12 +462,21 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Retrieves currentmonthyear data
+     */
     public getCurrentMonthYear() {
+        /**
+         * Handles if functionality
+         */
         if (this.from && this.to) {
             let currentYearFrom = this.from.split("-")[2];
             let currentYearTo = this.to.split("-")[2];
             let idx = this.from.split("-");
             this.monthYear = [];
+            /**
+             * Handles if functionality
+             */
             if (currentYearFrom === currentYearTo) {
                 (Array.isArray(this.monthNames) ? this.monthNames : []).forEach((element) => {
                     this.monthYear.push(element + " " + currentYearFrom);
@@ -382,12 +486,18 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Retrieves datefrommonth data
+     */
     public getDateFromMonth(selectedMonth) {
         let mdyFrom = this.from.split("-");
         let mdyTo = this.to.split("-");
 
         let startDate;
 
+        /**
+         * Handles if functionality
+         */
         if (mdyFrom[1] > selectedMonth) {
             startDate = "01-" + (selectedMonth - 1) + "-" + mdyTo[2];
         } else {
@@ -400,6 +510,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             year = dt.getFullYear();
 
         // GET THE FIRST AND LAST DATE OF THE MONTH.
+        /**
+         * Handles if functionality
+         */
         if (parseInt(month) < 10) {
             month = "0" + month;
         }
@@ -409,10 +522,22 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         return { firstDay, lastDay };
     }
 
+    /**
+     * Toggles search state
+     */
     public toggleSearch(fieldName: string) {
+        /**
+         * Handles if functionality
+         */
         if (fieldName === "invoiceNumber") {
             this.showSearchInvoiceNo = true;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                     this.invoiceSearch.nativeElement.focus();
                 }
@@ -423,11 +548,20 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.detectChange();
     }
 
+    /**
+     * Handles clickedOutsideEvent functionality
+     */
     public clickedOutsideEvent() {
         this.showSearchInvoiceNo = false;
     }
 
+    /**
+     * Handles detectChange functionality
+     */
     detectChange() {
+        /**
+         * Handles if functionality
+         */
         if (!this._cd["destroyed"]) {
             this._cd.detectChanges();
         }
@@ -440,8 +574,14 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.customiseColumns = this.customiseColumns?.map((column) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (column.isCommonLocaleData) {
                     column.label = this.commonLocaleData[column.value];
                 } else {
@@ -538,7 +678,13 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (this.universalDatepickerTrigger) {
+            /**
+             * Handles if functionality
+             */
             if (isOpen) {
                 this.universalDatepickerTrigger.openMenu();
             } else {
@@ -554,16 +700,25 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
 
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -595,6 +750,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public handlePageChange(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.getDetailedPurchaseRequestFilter.page = this.getDetailedPurchaseRequestFilter.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.getDetailedPurchaseRequestFilter.count = event.pageSize;

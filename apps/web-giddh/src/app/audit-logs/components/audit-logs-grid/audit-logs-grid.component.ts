@@ -7,12 +7,19 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { cloneDeep } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'audit-logs-grid',
     templateUrl: './audit-logs-grid.component.html',
     styleUrls: [`./audit-logs-grid.component.scss`],
     standalone: false
 })
+/**
+ * AuditLogsGridComponent component
+ * Handles auditlogsgrid functionality and user interactions
+ */
 export class AuditLogsGridComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -32,6 +39,10 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
     /** Holds table displayed columns name for account details */
     public accountDisplayedColumns: string[] = ['openingBalanceDate', 'openingBalance', 'email', 'name', 'uniqueName'];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private store: Store<AppState>, private auditLogsActions: AuditLogsActions) {
         this.loadMoreInProcess$ = this.store.pipe(select(p => p.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
         this.logs$ = this.store.pipe(select(p => p.auditlog.logs), takeUntil(this.destroyed$));
@@ -52,11 +63,17 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Loads morelogs data
+     */
     public loadMoreLogs() {
         this.store.pipe(select(p => p.auditlog), take(1)).subscribe((r) => {
             let request = cloneDeep(r.currentLogsRequest);

@@ -15,6 +15,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         CommonModule,
@@ -36,4 +39,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     ],
     declarations: [MainComponent, CreateRecipeComponent, ListRecipeComponent]
 })
+/**
+ * RecipeModule module
+ * Implements RecipeModule functionality
+ */
 export class RecipeModule { }

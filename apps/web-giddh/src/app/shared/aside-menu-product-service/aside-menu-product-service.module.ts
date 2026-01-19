@@ -15,6 +15,9 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatDialogModule } from "@angular/material/dialog";
 import { KeyboardShortutModule } from "../helpers/directives/keyboardShortcut/keyboardShortut.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         AsideMenuProductServiceComponent
@@ -40,6 +43,10 @@ import { KeyboardShortutModule } from "../helpers/directives/keyboardShortcut/ke
         AsideMenuProductServiceComponent
     ]
 })
+/**
+ * AsideMenuProductServiceModule module
+ * Implements AsideMenuProductServiceModule functionality
+ */
 export class AsideMenuProductServiceModule {
 
 }

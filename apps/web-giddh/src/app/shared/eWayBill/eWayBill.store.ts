@@ -4,15 +4,33 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { Observable } from "rxjs";
 
+/**
+ * EWayBillComponentState interface definition
+ * Defines the structure and contract for EWayBillComponentState objects
+ */
 export interface EWayBillComponentState {}
 
 export const DEFAULT_E_WAY_BILL_STATE: EWayBillComponentState = {}
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * EWayBillComponentStore store
+ * Manages ewaybillcomponent state using NgRx ComponentStore
+ */
 export class EWayBillComponentStore extends ComponentStore<EWayBillComponentState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_E_WAY_BILL_STATE);
     }
 

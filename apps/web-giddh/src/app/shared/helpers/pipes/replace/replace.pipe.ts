@@ -13,6 +13,10 @@ import { Pipe, PipeTransform } from "@angular/core";
     pure: true,
     standalone: false
 })
+/**
+ * ReplacePipe pipe
+ * Implements ReplacePipe functionality
+ */
 export class ReplacePipe implements PipeTransform {
 
     /**

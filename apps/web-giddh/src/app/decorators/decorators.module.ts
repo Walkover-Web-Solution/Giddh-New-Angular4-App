@@ -5,10 +5,17 @@ import { UserAuthenticated } from './UserAuthenticated';
 import { NewUserAuthGuard } from './newUserGuard';
 import { PageLeaveConfirmationGuard } from './page-leave-confirmation-guard';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [],
     exports: []
 })
+/**
+ * DecoratorsModule module
+ * Implements DecoratorsModule functionality
+ */
 export class DecoratorsModule {
     public static forRoot(): ModuleWithProviders<DecoratorsModule> {
         return {

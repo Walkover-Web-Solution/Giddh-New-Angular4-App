@@ -6,12 +6,19 @@ import { isEqual } from "../../lodash-optimized";
 import { GeneralService } from "../../services/general.service";
 import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "discount-dropdown",
     templateUrl: "./discount-dropdown.component.html",
     styleUrls: ["./discount-dropdown.component.scss"],
     standalone: false
 })
+/**
+ * DiscountDropdownComponent component
+ * Handles discountdropdown functionality and user interactions
+ */
 export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     /** Element ref for mat menu */
     @ViewChild('menuTrigger') public menuTrigger: MatMenuTrigger;
@@ -56,6 +63,10 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
 
     public isMenuOpened: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: FormBuilder,
         private generalService: GeneralService
@@ -74,18 +85,27 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnInit(): void {
         this.discountForm.get('discounts')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.allowDiscountValueChanges) {
                 this.calculateDiscountAmount();
             }
         });
 
         this.discountForm.get('percentage')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.allowDiscountValueChanges) {
                 this.calculateDiscountAmount();
             }
         });
 
         this.discountForm.get('fixedValue')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.allowDiscountValueChanges) {
                 this.calculateDiscountAmount();
             }
@@ -99,9 +119,18 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof DiscountDropdownComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ((!isEqual(changes?.selectedDiscountsList?.currentValue, changes?.selectedDiscountsList?.previousValue)) || (!isEqual(changes?.amount?.currentValue, changes?.amount?.previousValue))) {
             const hasManualDiscount = this.selectedDiscountsList?.filter(selectedDiscount => !selectedDiscount?.uniqueName);
+            /**
+             * Handles if functionality
+             */
             if (hasManualDiscount?.length && hasManualDiscount[0]) {
+                /**
+                 * Handles if functionality
+                 */
                 if (hasManualDiscount[0]?.calculationMethod === 'FIX_AMOUNT') {
                     this.discountForm.get('fixedValue').patchValue(hasManualDiscount[0]?.discountValue);
                 } else {
@@ -110,6 +139,9 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.addDiscountsInForm();
         }
+        /**
+         * Handles if functionality
+         */
         if (changes?.discountsList?.currentValue) {
             this.addDiscountsInForm();
         }
@@ -174,8 +206,17 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
         this.totalDiscountAmount += this.discountForm.get('percentage')?.value ? ((Number(this.discountForm.get('percentage')?.value) / 100) * Number(this.amount)) : 0;
 
         const discounts = this.discountForm.get('discounts') as FormArray;
+        /**
+         * Handles for functionality
+         */
         for (let i = 0; i < discounts.length; i++) {
+            /**
+             * Handles if functionality
+             */
             if (discounts.controls[i]?.get('isActive')?.value) {
+                /**
+                 * Handles if functionality
+                 */
                 if (discounts.controls[i].get('discountType')?.value === 'FIX_AMOUNT') {
                     this.totalDiscountAmount += Number(discounts.controls[i].get('discountValue')?.value);
                 } else {
@@ -197,6 +238,9 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
         const discounts = this.discountForm.get('discounts') as FormArray;
         let selectedDiscounts = discounts.value?.filter(discount => discount.isActive);
 
+        /**
+         * Handles if functionality
+         */
         if (this.discountForm.get('fixedValue')?.value) {
             selectedDiscounts.unshift(this.getFixedDiscountObject(this.discountForm.get('fixedValue')?.value, 'FIX_AMOUNT'));
         } else if (this.discountForm.get('percentage')?.value) {
@@ -256,6 +300,9 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             discounts: this.discountForm.get('discounts')?.value
         };
 
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.isMenuOpened = true;
         }, 100);
@@ -268,9 +315,15 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof DiscountDropdownComponent
      */
     public handleMenuClosed(reason: MenuCloseReason): void {
+        /**
+         * Handles if functionality
+         */
         if (!reason) return;
         this.isMenuOpened = false;
         const isClosedByEscape = reason === 'keydown';   
+        /**
+         * Handles if functionality
+         */
         if (isClosedByEscape && this.lastSavedFormValues) {
             this.allowDiscountValueChanges = false;
             this.discountForm.patchValue({
@@ -280,6 +333,9 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             
             const discountsArray = this.discountForm.get('discounts') as FormArray;
             this.lastSavedFormValues.discounts?.forEach((discount: any, index: number) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (discountsArray.controls[index]) {
                     discountsArray.controls[index].patchValue(discount);
                 }
@@ -298,6 +354,9 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      */
     protected emitCloseDiscountDropdown(): void {
         // Always emit close event for focus management
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             const triggerElement = this.discountInput?.nativeElement || null;
             const syntheticEvent = {
@@ -324,7 +383,13 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof DiscountDropdownComponent
      */
     public focusDiscountDropdown(): void {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
+            /**
+             * Handles if functionality
+             */
             if (this.discountInput?.nativeElement) {
                 this.discountInput.nativeElement.focus();
             }

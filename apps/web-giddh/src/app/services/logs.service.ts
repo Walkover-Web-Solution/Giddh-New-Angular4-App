@@ -10,12 +10,23 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { get } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * LogsService service
+ * Provides logs related business logic and data operations
+ */
 export class LogsService {
     private companyUniqueName: string;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
@@ -26,12 +37,18 @@ export class LogsService {
     public GetAuditLogs(model: LogsRequest, page: number = 1): Observable<BaseResponse<LogsResponse, LogsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + LOGS_API.AUDIT_LOGS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', page?.toString()), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<LogsResponse, LogsRequest> = res;
                 data.request = model;
                 data.queryString = { page };
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(e, model, { page })));
     }
 
@@ -43,6 +60,9 @@ export class LogsService {
     */
     public getAuditLogFormFilters(): Observable<BaseResponse<any, any>> {
         return this.http.get(`${this.config.apiUrl}${LOGS_API.GET_AUDIT_LOG_FORM_FILTERS}`).pipe(
+            /**
+             * Handles catchError functionality
+             */
             catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
@@ -56,11 +76,17 @@ export class LogsService {
     public getAuditLogs(model: GetAuditLogsRequest): Observable<BaseResponse<AuditLogsResponse, GetAuditLogsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + LOGS_API.GET_AUDIT_LOGS_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 let data: BaseResponse<AuditLogsResponse, GetAuditLogsRequest> = res;
                 data.request = model;
                 return data;
             }),
+            /**
+             * Handles catchError functionality
+             */
             catchError((e) => this.errorHandler.HandleCatch<AuditLogsResponse, GetAuditLogsRequest>(e, model)));
     }
 

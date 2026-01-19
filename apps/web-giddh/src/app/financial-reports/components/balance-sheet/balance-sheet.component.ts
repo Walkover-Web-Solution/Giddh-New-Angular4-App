@@ -20,12 +20,19 @@ import { BalanceSheetGridComponent } from './components/balance-sheet-grid/balan
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep, each, findIndex, forEach } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'balance-sheet',
     templateUrl: './balance-sheet.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * BalanceSheetComponent component
+ * Handles balancesheet functionality and user interactions
+ */
 export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -44,6 +51,9 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     @Input()
     public set selectedCompany(value: CompanyResponse) {
         this._selectedCompany = value;
+        /**
+         * Handles if functionality
+         */
         if (value && value.activeFinancialYear && value.financialYears && !this.isDateSelected) {
             let index = this.findIndex(value.activeFinancialYear, value.financialYears);
             this.request = {
@@ -69,6 +79,10 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     /** True if show Tally Report options */
     public showReportTallyOption: boolean;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>, 
         public tlPlActions: TBPlBsActions, 
@@ -77,16 +91,28 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
         private tlPlService: TlPlService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.bs.showLoader), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.tlPl.bs.data), takeUntil(this.destroyed$)).subscribe((p) => {
+            /**
+             * Handles if functionality
+             */
             if (p) {
                 this.tlPlService.isReportTailed$.next(true);
                 this.expandAll = false;
                 let data = cloneDeep(p) as BalanceSheetData;
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.message) {
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.toaster.clearAllToaster();
                         this.toaster.infoToast(data.message);
                     }, 100);
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.liabilities) {
                     this.InitData(data.liabilities);
                     (Array.isArray(data.liabilities) ? data.liabilities : []).forEach(g => {
@@ -95,6 +121,9 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
                         g.isIncludedInSearch = true;
                     });
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.assets) {
                     this.InitData(data.assets);
                     (Array.isArray(data.assets) ? data.assets : []).forEach(g => {
@@ -110,22 +139,37 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles InitData functionality
+     */
     public InitData(d: ChildGroup[]) {
+        /**
+         * Handles each functionality
+         */
         each(d, (grp: ChildGroup) => {
             grp.isVisible = false;
             grp.isCreated = false;
             grp.isIncludedInSearch = true;
+            /**
+             * Handles each functionality
+             */
             each(grp.accounts, (acc: Account) => {
                 acc.isIncludedInSearch = true;
                 acc.isCreated = false;
                 acc.isVisible = false;
             });
+            /**
+             * Handles if functionality
+             */
             if (grp.childGroups) {
                 this.InitData(grp.childGroups);
             }
         });
     }
 
+    /**
+     * Handles ngAfterViewInit functionality
+     */
     public ngAfterViewInit() {
         this.cd.detectChanges();
     }
@@ -144,15 +188,30 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
         this.store.dispatch(this.tlPlActions.GetBalanceSheet(cloneDeep(request)));
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles findIndex functionality
+     */
     public findIndex(activeFY, financialYears) {
         let tempFYIndex = 0;
+        /**
+         * Handles each functionality
+         */
         each(financialYears, (fy: any, index: number) => {
+            /**
+             * Handles if functionality
+             */
             if (fy?.uniqueName === activeFY?.uniqueName) {
+                /**
+                 * Handles if functionality
+                 */
                 if (index === 0) {
                     tempFYIndex = index;
                 } else {
@@ -163,14 +222,26 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
         return tempFYIndex;
     }
 
+    /**
+     * Handles expandAllEvent functionality
+     */
     public expandAllEvent() {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.cd.detectChanges();
         }, 1);
     }
 
+    /**
+     * Handles searchChanged functionality
+     */
     public searchChanged(event: string) {
         this.search = event;
+        /**
+         * Handles if functionality
+         */
         if (!this.search) {
             this.expandAll = false;
         }

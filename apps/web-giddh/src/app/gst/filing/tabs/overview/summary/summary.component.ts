@@ -13,12 +13,19 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * SequenceConfig interface definition
+ * Defines the structure and contract for SequenceConfig objects
+ */
 interface SequenceConfig {
     name: string;
     gstReturnType: string;
     index: number;
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'overview-summary',
@@ -26,6 +33,10 @@ interface SequenceConfig {
     styleUrls: ['summary.component.scss'],
     standalone: false
 })
+/**
+ * OverviewSummaryComponent component
+ * Handles overviewsummary functionality and user interactions
+ */
 export class OverviewSummaryComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: any = null;
     @Input() public selectedGst: string = null;
@@ -56,6 +67,10 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     /** Holds table displayed columns name */
     public displayedColumns: string[] = ['description', 'total_transactions', 'taxable_amount', 'igst', 'cgst', 'sgst', 'cess'];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.gstr1OverviewData$ = this.store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
@@ -68,13 +83,22 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
         this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.gstr1OverviewData$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data && this.selectedGst === GstReport.Gstr1) {
                 this.gstrOverviewData = this.transformedSummaryData(data);
             }
         });
         this.gstr2OverviewData$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (data && this.selectedGst === GstReport.Gstr2) {
                 this.gstrOverviewData = this.transformedSummaryData(data);
             }
@@ -86,6 +110,9 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
         request.gstin = this.activeCompanyGstNumber;
 
         this.store.pipe(select(state => state.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (!response && (this.selectedGst === GstReport.Gstr1 || this.selectedGst === GstReport.Gstr2)) {
                 this.store.dispatch(this.gstAction.GetOverView(this.selectedGst, request));
             }
@@ -99,6 +126,9 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
      * @returns
      */
     private transformedSummaryData(data: GstOverViewResult): GstOverViewResult {
+        /**
+         * Handles if functionality
+         */
         if (!data?.summary?.length) return data;
         const results = { ...data };
         results.summary = results.summary.flatMap((item, index) => [
@@ -121,6 +151,9 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
      * @memberof OverviewSummaryComponent
      */
     public viewTransactions(obj: GstOverViewSummary) {
+        /**
+         * Handles if functionality
+         */
         if (obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers') {
             return;
         }
@@ -137,11 +170,17 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
         this.route.navigate(['pages', 'gstfiling', 'filing-return', (obj.gstReturnType === 'hsnsac' ? 'hsn-summary' : 'transaction')], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param?.status, selectedGst: this.activeCompanyGstNumber } });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles mapResponseData functionality
+     */
     public mapResponseData(data: GstOverViewSummary[], sequencingList: SequenceConfig[]): GstOverViewSummary[] {
         let manipulatedData: GstOverViewSummary[] = cloneDeep(data);
 

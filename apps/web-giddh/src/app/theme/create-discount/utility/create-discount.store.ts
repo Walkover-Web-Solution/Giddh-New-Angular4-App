@@ -8,6 +8,10 @@ import { SettingsDiscountService } from "../../../services/settings.discount.ser
 import { CreateDiscountRequest } from "../../../models/api-models/SettingsDiscount";
 import { LocaleService } from "../../../services/locale.service";
 
+/**
+ * CreateDiscountState interface definition
+ * Defines the structure and contract for CreateDiscountState objects
+ */
 export interface CreateDiscountState {
     discountsAccountList: any[];
     createDiscountInProgress: boolean;
@@ -20,15 +24,29 @@ const DEFAULT_STATE: CreateDiscountState = {
     createDiscountInProgress: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * CreateDiscountComponentStore store
+ * Manages creatediscountcomponent state using NgRx ComponentStore
+ */
 export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountState> {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toaster: ToasterService,
         private salesService: SalesService,
         private settingsDiscountService: SettingsDiscountService,
         private localeService: LocaleService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -38,8 +56,14 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
 
     readonly getDiscountsAccountList = this.effect((data: Observable<void>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(() => {
                 return this.salesService.getAccountsWithCurrency('discount').pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -53,6 +77,9 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -61,11 +88,20 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
 
     readonly saveDiscount = this.effect((data: Observable<{ model: CreateDiscountRequest }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
 
                 return this.settingsDiscountService.CreateDiscount(req as any).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap({
+                        /**
+                         * Handles next functionality
+                         */
                         next: (res: BaseResponse<any, CreateDiscountRequest>) => {
                             this.toaster.showSnackBar('success', res.body);
                             this.patchState({
@@ -73,6 +109,9 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
                                 createDiscountSuccess: true
                             });
                         },
+                        /**
+                         * Handles error functionality
+                         */
                         error: (error: any) => {
                             this.toaster.showSnackBar('error', error);
                             this.patchState({
@@ -81,6 +120,9 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
                             });
                         }
                     }),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError(() => EMPTY)
                 );
             })
@@ -89,9 +131,15 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
 
     readonly updateDiscount = this.effect((data: Observable<{ model: CreateDiscountRequest }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
                 return this.settingsDiscountService.UpdateDiscount(req as any).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
                             this.toaster.showSnackBar('success', this.localeService.translate("app_messages.discount_updated"));
@@ -109,6 +157,9 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
                            });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

@@ -4,10 +4,17 @@ import { AppState } from '../../../../store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+/**
+ * Handles Directive functionality
+ */
 @Directive({
     selector: '[decimalDigitsDirective]',
     standalone: false
 })
+/**
+ * DecimalDigitsDirective directive
+ * Implements DecimalDigitsDirective functionality
+ */
 export class DecimalDigitsDirective implements OnDestroy {
     @Input() public decimalPoints: number = 2;
     @Input() public OnlyNumber: boolean = true;
@@ -36,9 +43,16 @@ export class DecimalDigitsDirective implements OnDestroy {
     ];
 
     // tslint:disable-next-line:member-ordering
+    /**
+     * Creates an instance of directive
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private elemRef: ElementRef, private store: Store<AppState>) {
 
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(res => {
+            /**
+             * Handles if functionality
+             */
             if (res && res.balanceDecimalPlaces) {
                 this.giddhDecimalPlaces = res.balanceDecimalPlaces;
             } else {
@@ -48,9 +62,18 @@ export class DecimalDigitsDirective implements OnDestroy {
     }
 
     @HostListener('keydown', ['$event'])
+    /**
+     * Handles keydown event
+     */
     public onKeyDown(event) {
         let e = event as KeyboardEvent;
+        /**
+         * Handles if functionality
+         */
         if (this.OnlyNumber) {
+            /**
+             * Handles if functionality
+             */
             if (this.navigationKeys?.indexOf(e.key) > -1 ||
                 // Allow: Ctrl+A
                 (e.key === 'a' && e.ctrlKey === true) || // Allow: Ctrl+A
@@ -70,6 +93,9 @@ export class DecimalDigitsDirective implements OnDestroy {
             }
 
             // Ensure that it is a number and stop the keypress
+            /**
+             * Handles if functionality
+             */
             if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
                 e.preventDefault();
             }
@@ -77,28 +103,49 @@ export class DecimalDigitsDirective implements OnDestroy {
     }
 
     @HostListener('keypress', ['$event'])
+    /**
+     * Handles keypress event
+     */
     public onKeyPress(event) {
         let e = event as any;
 
         let valInFloat: number = parseFloat(e.target?.value);
 
+        /**
+         * Handles if functionality
+         */
         if (this.minValue) {
             // (isNaN(valInFloat) && e.key === "0") - When user enters value for first time valInFloat will be NaN, e.key condition is
             // because I didn't want user to enter anything below 1.
             // NOTE: You might want to remove it if you want to accept 0
+            /**
+             * Handles if functionality
+             */
             if (valInFloat < parseFloat(this.minValue)) {
                 e.preventDefault();
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.maxValue) {
+            /**
+             * Handles if functionality
+             */
             if (valInFloat > parseFloat(this.maxValue)) {
                 e.preventDefault();
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.giddhDecimalPlaces) {
             let currentCursorPos: number = -1;
+            /**
+             * Handles if functionality
+             */
             if (typeof this.elemRef?.nativeElement.selectionStart === 'number') {
                 currentCursorPos = this.elemRef?.nativeElement.selectionStart;
             } else {
@@ -114,6 +161,9 @@ export class DecimalDigitsDirective implements OnDestroy {
             // currentCursorPos > e.target.value.indexOf(".") because we must allow user's to enter value before dot(.)
             // Checking Backspace etc.. keys because firefox doesn't pressing them while chrome does by default
             // tslint:disable-next-line:radix
+            /**
+             * Handles if functionality
+             */
             if (dotLength > 1 || (dotLength === 1 && e.key === '.') || (currentCursorPos === 0 && e.key === '.') || (decimalLength > (this.giddhDecimalPlaces - 1) &&
                 currentCursorPos > e.target?.value?.indexOf('.')) && ['Backspace', 'ArrowLeft', 'ArrowRight']?.indexOf(e.key) === -1) {
                 e.preventDefault();
@@ -122,16 +172,28 @@ export class DecimalDigitsDirective implements OnDestroy {
     }
 
     @HostListener('paste', ['$event'])
+    /**
+     * Handles paste event
+     */
     public onPaste(event) {
+        /**
+         * Handles if functionality
+         */
         if ('decimaldigitsdirective' in event.target.attributes) {
             let cl = event.clipboardData.getData('text/plain');
             cl = cl.trim();
+            /**
+             * Handles if functionality
+             */
             if (cl.includes('\'') || cl.includes(',') || cl.includes(' ')) {
                 cl = cl?.replace(/'/g, '');
                 cl = cl?.replace(/,/g, '');
                 cl = cl?.replace(/ /g, '');
 
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (!new RegExp('^(\\d+)((\\.)\\d{1,' + this.giddhDecimalPlaces + '})?$', 'g').test(cl)) {
                     cl = 0;
                 }
@@ -145,9 +207,18 @@ export class DecimalDigitsDirective implements OnDestroy {
     }
 
     @HostListener('drop', ['$event'])
+    /**
+     * Handles drop event
+     */
     public onDrop(event) {
+        /**
+         * Handles if functionality
+         */
         if ('decimaldigitsdirective' in event.target.attributes) {
             let cl = event.dataTransfer.getData('text/plain');
+            /**
+             * Handles if functionality
+             */
             if (!new RegExp('^(\\d+)((\\.)\\d{1,' + this.giddhDecimalPlaces + '})?$', 'g').test(cl)) {
                 cl = 0;
             }
@@ -159,6 +230,9 @@ export class DecimalDigitsDirective implements OnDestroy {
         return;
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

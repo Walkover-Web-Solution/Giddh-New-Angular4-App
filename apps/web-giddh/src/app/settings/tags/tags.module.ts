@@ -10,6 +10,9 @@ import { NoDataModule } from '../../shared/no-data/no-data.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         SettingsTagsComponent
@@ -31,4 +34,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     ]
 })
 
+/**
+ * TagsModule module
+ * Implements TagsModule functionality
+ */
 export class TagsModule { }

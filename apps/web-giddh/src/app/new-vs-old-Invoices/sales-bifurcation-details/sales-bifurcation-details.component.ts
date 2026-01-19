@@ -10,6 +10,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { Configuration } from '../../app.constant';
 import { environment } from '../../../environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'sales-bifurcation-details',
     templateUrl: './sales-bifurcation-details.component.html',
@@ -18,6 +21,10 @@ import { environment } from '../../../environments/environment.generated';
     standalone:false
 })
 
+/**
+ * SalesBifurcationDetailsComponent component
+ * Handles salesbifurcationdetails functionality and user interactions
+ */
 export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -73,6 +80,10 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
     public goToLedgerDateRangeTo: any;
 
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesBifurcationDetailsData: any,
         public dialogRef: MatDialogRef<any>,
@@ -97,8 +108,14 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.requestParams.salesFrom = this.salesBifurcationDetailsData?.salesFrom;
 
         this.salesBifurcationDetailsList$.pipe(
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(data => {
+            /**
+             * Handles if functionality
+             */
             if (this.salesBifurcationDetailsData?.subType === this.salesBifurcationDetailsActionEnum.Client) {
                 this.salesBifurcationDetailsClientList = data?.clientDetails;
             } else {
@@ -109,10 +126,22 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.initApiCall();
 
         this.searchValue?.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText) {
                 this.showClearFilter = true;
                 this.requestParams.q = searchedText;
@@ -221,6 +250,9 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
      * @memberof SalesBifurcationDetailsComponent
      */
     public sendEmailSuccess(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.requestParams.q = '';
             this.requestParams.page = 1;

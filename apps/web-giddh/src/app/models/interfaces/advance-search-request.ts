@@ -2,6 +2,10 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { PAGINATION_LIMIT } from "../../app.constant";
 
+/**
+ * AdvanceSearchRequest class
+ * Implements AdvanceSearchRequest functionality
+ */
 export class AdvanceSearchRequest {
     public dataToSend: AdvanceSearchModel = new AdvanceSearchModel();
     public q: string = '';
@@ -13,11 +17,18 @@ export class AdvanceSearchRequest {
     public reversePage: boolean = false;
     public paginationToken?: string = '';
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.dataToSend = new AdvanceSearchModel();
     }
 
     get from(): string {
+        /**
+         * Handles if functionality
+         */
         if (this.dataToSend.bsRangeValue && this.dataToSend.bsRangeValue.length > 0) {
             return dayjs(this.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT);
         }
@@ -25,6 +36,9 @@ export class AdvanceSearchRequest {
     }
 
     get to(): string {
+        /**
+         * Handles if functionality
+         */
         if (this.dataToSend.bsRangeValue && this.dataToSend.bsRangeValue.length > 1) {
             return dayjs(this.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT);
         }
@@ -32,12 +46,19 @@ export class AdvanceSearchRequest {
     }
 
     set to(val) {
+        /**
+         * Handles if functionality
+         */
         if (val) {
             this.dataToSend.bsRangeValue[1] = val;
         }
     }
 }
 
+/**
+ * AdvanceSearchModel class
+ * Implements AdvanceSearchModel functionality
+ */
 export class AdvanceSearchModel {
     public bsRangeValue: any[];
     public uniqueNames: string[] = [];
@@ -63,12 +84,20 @@ export class AdvanceSearchModel {
     public includeSalesPersons: boolean = true;
     public salesPersonUniqueNames: string[];
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.inventory = new AdvanceSearchRequestInventory();
     }
 
 }
 
+/**
+ * AdvanceSearchRequestInventory class
+ * Implements AdvanceSearchRequestInventory functionality
+ */
 export class AdvanceSearchRequestInventory {
     public includeInventory: false;
     public inventories: string[];

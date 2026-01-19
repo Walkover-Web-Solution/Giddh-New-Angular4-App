@@ -4,6 +4,10 @@ import { AgingDropDownoptions, DueAmountReportRequest, DueAmountReportResponse, 
 import { AgingReportActions } from '../../actions/aging-report.actions';
 import { cloneDeep } from '../../lodash-optimized';
 
+/**
+ * AgingReportState interface definition
+ * Defines the structure and contract for AgingReportState objects
+ */
 export interface AgingReportState {
     setDueRangeRequestInFlight: boolean;
     setDueRangeOpen: boolean;
@@ -36,6 +40,9 @@ export const initialState: AgingReportState = {
 };
 
 export function agingReportReducer(state = initialState, action: CustomActions): AgingReportState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case AgingReportActions.CREATE_DUE_DAY_RANGE: {
             return Object.assign({}, state, { setDueRangeRequestInFlight: true });
@@ -49,6 +56,9 @@ export function agingReportReducer(state = initialState, action: CustomActions):
         case AgingReportActions.CREATE_DUE_DAY_RANGE_RESPONSE: {
             let data = action.payload as BaseResponse<string, DueRangeRequest>;
 
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'error') {
                 return Object.assign({}, state, { setDueRangeRequestInFlight: false });
             }
@@ -62,6 +72,9 @@ export function agingReportReducer(state = initialState, action: CustomActions):
         }
         case AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE: {
             let data = action.payload as BaseResponse<string[], string>;
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'error') {
                 return state;
             }
@@ -75,10 +88,16 @@ export function agingReportReducer(state = initialState, action: CustomActions):
         }
         case AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE: {
             // no payload means error from server
+            /**
+             * Handles if functionality
+             */
             if (action.payload) {
                 let data: DueAmountReportResponse = cloneDeep(action.payload) as DueAmountReportResponse;
                 let noData = false;
                 let getAgingReportRequestInFlight = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (data.results?.length < 1) {
                     noData = true;
                 }

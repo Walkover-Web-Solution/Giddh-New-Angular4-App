@@ -10,12 +10,20 @@ import { ChildGroup } from '../../models/api-models/Search';
  * Used by grid-row, balance-sheet-grid-row, and profit-loss-grid-row components
  */
 @Directive()
+/**
+ * FinancialGridRowBase class
+ * Implements FinancialGridRowBase functionality
+ */
 export abstract class FinancialGridRowBase implements OnInit, OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     
     protected destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         protected cd: ChangeDetectorRef,
         protected financialReportsComponentStore: FinancialReportsComponentStore,
@@ -28,6 +36,9 @@ export abstract class FinancialGridRowBase implements OnInit, OnChanges, OnDestr
      */
     public ngOnInit(): void {
         this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            /**
+             * Handles if functionality
+             */
             if (res) {
                 this.tlPlService.isReportTailed$.next(true);
             }
@@ -39,9 +50,15 @@ export abstract class FinancialGridRowBase implements OnInit, OnChanges, OnDestr
      * Triggers change detection when groupDetail or search changes
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
             this.cd.detectChanges();
         }
+        /**
+         * Handles if functionality
+         */
         if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
             this.cd.detectChanges();
         }

@@ -14,14 +14,25 @@ import { Store } from '@ngrx/store';
 import { LoginActions } from '../actions/login.action';
 import { clone, forEach, get, has, includes, keys, set } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * GiddhHttpInterceptor interceptor
+ * Implements GiddhHttpInterceptor functionality
+ */
 export class GiddhHttpInterceptor implements HttpInterceptor {
 
     private isOnline: boolean = true;
     public dayjs = dayjs;
 
+    /**
+     * Creates an instance of interceptor
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private loadingService: LoaderService,
@@ -38,17 +49,29 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         });
     }
 
+    /**
+     * Handles intercept functionality
+     */
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // Use hybrid storage approach to get session data
         var session = this.getSessionFromHybridStorage();
+        /**
+         * Handles if functionality
+         */
         if (session?.user?.session?.expiresAt && this.generalService.user) {
             let sessionExpiresAt: any = dayjs((session.user.session.expiresAt), GIDDH_DATE_FORMAT + " h:m:s");
+            /**
+             * Handles if functionality
+             */
             if (sessionExpiresAt && sessionExpiresAt.diff(dayjs(), 'hours') < 0) {
                 this.store.dispatch(this.loginAction.LogOut());
                 return;
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
             request = this.addBranchUniqueName(request);
         }
@@ -60,6 +83,9 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             url: updatedUrl
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.isOnline) {
             /** Holds api call retry limit */
             let retryLimit: number = 1;
@@ -68,10 +94,19 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
 
             return next.handle(request).pipe(
                 // retryWhen operator should come before catchError operator as it is more specific
+                /**
+                 * Handles retryWhen functionality
+                 */
                 retryWhen(errors => errors.pipe(
                     // inside the retryWhen, use a tap operator to throw an error 
                     // if you don't want to retry
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(error => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (!error.headers.get("retry-after") || retryAttempts >= retryLimit) {
                             throw error;
                         } else {
@@ -80,15 +115,24 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                     })
                 )),
                 // now catch all other errors
+                /**
+                 * Handles catchError functionality
+                 */
                 catchError((error) => {
                     return throwError(error);
                 })
             );
         } else {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.toasterService.warningToast("Please check your internet connection.", "Internet disconnected");
             }, 100);
             this.loadingService.hide();
+            /**
+             * Handles if functionality
+             */
             if (request.body && request.body.handleNetworkDisconnection) {
                 return of(new HttpResponse({ status: 200, body: { status: 'no-network' } }));
             } else {
@@ -111,6 +155,9 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             const localData = localStorage.getItem('session');
 
             // Handle new tab scenario: only localStorage data exists
+            /**
+             * Handles if functionality
+             */
             if (!sessionData && localData) {
                 // New tab - initialize with localStorage data
                 const localObj = JSON.parse(localData);
@@ -120,18 +167,27 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                                           localObj.activeCompany.uniqueName && 
                                           localObj.companyUniqueName;
                 
+                /**
+                 * Handles if functionality
+                 */
                 if (hasValidCompanyData) {
                     // Extract tab-specific data and store in sessionStorage for this tab
                     const tabSpecificKeys = ['companyUniqueName', 'activeCompany', 'companyUser', 'applicationDate', 'todaySelected', 'currentBranchUniqueName'];
                     const tabSpecificData: any = {};
                     
                     (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(tabKey => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (localObj.hasOwnProperty(tabKey)) {
                             tabSpecificData[tabKey] = localObj[tabKey];
                         }
                     });
                     
                     // Store tab-specific data in sessionStorage for future use
+                    /**
+                     * Handles if functionality
+                     */
                     if (Object.keys(tabSpecificData).length > 0) {
                         sessionStorage.setItem('session', JSON.stringify(tabSpecificData));
                     }
@@ -141,6 +197,9 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                     // No valid company data in localStorage - check if user has companies available
 
                     // If user has companies available, try to use the first one as fallback
+                    /**
+                     * Handles if functionality
+                     */
                     if (localObj.companies && localObj.companies.length > 0) {
                         const firstCompany = localObj.companies[0];
 
@@ -190,6 +249,9 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             }
 
             // Normal scenario: merge sessionStorage and localStorage
+            /**
+             * Handles if functionality
+             */
             if (sessionData && localData) {
                 const sessionObj = JSON.parse(sessionData);
                 const localObj = JSON.parse(localData);
@@ -200,6 +262,9 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                 
                 // Override with tab-specific data from sessionStorage
                 (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(tabKey => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (sessionObj.hasOwnProperty(tabKey)) {
                         merged[tabKey] = sessionObj[tabKey];
                     }
@@ -209,9 +274,15 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             }
 
             // Fallback to available data
+            /**
+             * Handles if functionality
+             */
             if (sessionData) {
                 return JSON.parse(sessionData);
             }
+            /**
+             * Handles if functionality
+             */
             if (localData) {
                 return JSON.parse(localData);
             }
@@ -239,6 +310,9 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
      * @memberof GiddhHttpInterceptor
      */
     private addBranchUniqueName(request: HttpRequest<any>): HttpRequest<any> {
+        /**
+         * Handles if functionality
+         */
         if (!request.params.has('branchUniqueName') && !request.url.includes('branchUniqueName') && !request.url.includes('.json')) {
             request = request.clone({
                 params: request.params.append('branchUniqueName', encodeURIComponent(this.generalService.currentBranchUniqueName))
@@ -256,6 +330,9 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
      * @memberof GiddhHttpInterceptor
      */
     private addLanguage(request: HttpRequest<any>): HttpRequest<any> {
+        /**
+         * Handles if functionality
+         */
         if (!request.params.has('lang') && !request.url.includes('.json')) {
             request = request.clone({
                 params: request.params.append('lang', (this.localeService.language || "en"))

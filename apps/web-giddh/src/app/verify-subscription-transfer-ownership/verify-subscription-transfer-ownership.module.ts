@@ -10,6 +10,9 @@ import { LoaderModule } from '../loader/loader.module';
 import { SnackBarModule } from '../theme/snackbar/snackbar.module';
 import { CommonModule } from '@angular/common';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         TranslateDirectiveModule,
@@ -29,4 +32,8 @@ import { CommonModule } from '@angular/common';
         VerifySubscriptionTransferOwnershipComponent
     ]
 })
+/**
+ * VerifySubscriptionTransferOwnershipModule module
+ * Implements VerifySubscriptionTransferOwnershipModule functionality
+ */
 export class VerifySubscriptionTransferOwnershipModule { }

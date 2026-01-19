@@ -39,6 +39,9 @@ import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/b
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         MultiCurrencyReportsComponent,
@@ -89,5 +92,9 @@ import { MatMenuModule } from '@angular/material/menu';
         FormFieldsModule
     ],
 })
+/**
+ * MultiCurrencyReportsModule module
+ * Implements MultiCurrencyReportsModule functionality
+ */
 export class MultiCurrencyReportsModule {
 }

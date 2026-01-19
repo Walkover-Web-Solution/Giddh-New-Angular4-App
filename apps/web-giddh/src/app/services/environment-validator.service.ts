@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.generated';
 
+/**
+ * ValidationResult interface definition
+ * Defines the structure and contract for ValidationResult objects
+ */
 export interface ValidationResult {
     isValid: boolean;
     errors: string[];
     warnings: string[];
 }
 
+/**
+ * EnvironmentRule interface definition
+ * Defines the structure and contract for EnvironmentRule objects
+ */
 export interface EnvironmentRule {
     key: string;
     required: boolean;
@@ -23,6 +31,10 @@ export interface EnvironmentRule {
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * EnvironmentValidatorService service
+ * Provides environmentvalidator related business logic and data operations
+ */
 export class EnvironmentValidatorService {
 
     private readonly validationRules: EnvironmentRule[] = [
@@ -97,6 +109,10 @@ export class EnvironmentValidatorService {
         }
     ];
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         // Auto-validate on service initialization
         this.validateEnvironmentOnStartup();
@@ -114,29 +130,44 @@ export class EnvironmentValidatorService {
             const value = environment[rule.key as keyof typeof environment];
 
             // Check required fields
+            /**
+             * Handles if functionality
+             */
             if (rule.required && this.isEmpty(value)) {
                 errors.push(`Missing required environment variable: ${rule.key} (${rule.description})`);
                 return;
             }
 
             // Skip validation if value is empty and not required
+            /**
+             * Handles if functionality
+             */
             if (this.isEmpty(value)) {
                 return;
             }
 
             // Type validation
             const typeValidation = this.validateType(value, rule);
+            /**
+             * Handles if functionality
+             */
             if (!typeValidation.isValid) {
                 errors.push(`Invalid ${rule.type} for ${rule.key}: ${typeValidation.error}`);
             }
 
             // Pattern validation
+            /**
+             * Handles if functionality
+             */
             if (rule.pattern && typeof value === 'string' && !rule.pattern.test(value)) {
                 warnings.push(`${rule.key} format may be incorrect (${rule.description})`);
             }
         });
 
         // Production-specific validation
+        /**
+         * Handles if functionality
+         */
         if (environment.production) {
             this.validateProductionRequirements(errors, warnings);
         }
@@ -157,23 +188,35 @@ export class EnvironmentValidatorService {
     private validateEnvironmentOnStartup(): void {
         const result = this.validateEnvironment();
 
+        /**
+         * Handles if functionality
+         */
         if (result.errors.length > 0) {
             console.group('🚨 Environment Validation Errors');
             (Array.isArray(result.errors) ? result.errors : []).forEach(error => console.error(`❌ ${error}`));
             console.groupEnd();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (result.warnings.length > 0) {
             console.group('⚠️ Environment Validation Warnings');
             (Array.isArray(result.warnings) ? result.warnings : []).forEach(warning => console.warn(`⚠️ ${warning}`));
             console.groupEnd();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (result.isValid && result.warnings.length === 0) {
 
         }
 
         // Log environment summary in development
+        /**
+         * Handles if functionality
+         */
         if (!environment.production) {
             this.logEnvironmentSummary();
         }
@@ -193,16 +236,25 @@ export class EnvironmentValidatorService {
 
         (Array.isArray(productionRequired) ? productionRequired : []).forEach(key => {
             const value = environment[key as keyof typeof environment];
+            /**
+             * Handles if functionality
+             */
             if (this.isEmpty(value)) {
                 errors.push(`Production environment missing: ${key}`);
             }
         });
 
         // Check for test/development values in production
+        /**
+         * Handles if functionality
+         */
         if (typeof environment.RAZORPAY_KEY === 'string' && environment.RAZORPAY_KEY.includes('test')) {
             warnings.push('Using test Razorpay key in production environment');
         }
 
+        /**
+         * Handles if functionality
+         */
         if (typeof environment.GOOGLE_CLIENT_ID === 'string' && environment.GOOGLE_CLIENT_ID.includes('localhost')) {
             warnings.push('Google Client ID appears to be configured for localhost in production');
         }
@@ -213,7 +265,13 @@ export class EnvironmentValidatorService {
      */
     private validateCrossReferences(errors: string[], warnings: string[]): void {
         // Electron-specific validation
+        /**
+         * Handles if functionality
+         */
         if (environment.isElectron) {
+            /**
+             * Handles if functionality
+             */
             if (typeof environment.AppUrl === 'string' && environment.AppUrl.includes('localhost')) {
                 // This is expected for Electron development
             } else if (typeof environment.AppUrl === 'string' && !environment.AppUrl.startsWith('file://')) {
@@ -222,10 +280,16 @@ export class EnvironmentValidatorService {
         }
 
         // API URL consistency
+        /**
+         * Handles if functionality
+         */
         if (typeof environment.ApiUrl === 'string' && typeof environment.UkApiUrl === 'string') {
             const apiDomain = this.extractDomain(environment.ApiUrl);
             const ukApiDomain = this.extractDomain(environment.UkApiUrl);
 
+            /**
+             * Handles if functionality
+             */
             if (apiDomain && ukApiDomain && !ukApiDomain.includes(apiDomain.split('.').slice(-2).join('.'))) {
                 warnings.push('UK API URL domain does not match main API domain pattern');
             }
@@ -236,32 +300,53 @@ export class EnvironmentValidatorService {
      * Validate value type
      */
     private validateType(value: any, rule: EnvironmentRule): { isValid: boolean; error?: string } {
+        /**
+         * Handles switch functionality
+         */
         switch (rule.type) {
             case 'string':
+                /**
+                 * Handles if functionality
+                 */
                 if (typeof value !== 'string') {
                     return { isValid: false, error: `Expected string, got ${typeof value}` };
                 }
                 break;
 
             case 'boolean':
+                /**
+                 * Handles if functionality
+                 */
                 if (typeof value !== 'boolean') {
                     return { isValid: false, error: `Expected boolean, got ${typeof value}` };
                 }
                 break;
 
             case 'url':
+                /**
+                 * Handles if functionality
+                 */
                 if (typeof value !== 'string') {
                     return { isValid: false, error: `Expected URL string, got ${typeof value}` };
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isValidUrl(value)) {
                     return { isValid: false, error: `Invalid URL format: ${value}` };
                 }
                 break;
 
             case 'email':
+                /**
+                 * Handles if functionality
+                 */
                 if (typeof value !== 'string') {
                     return { isValid: false, error: `Expected email string, got ${typeof value}` };
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isValidEmail(value)) {
                     return { isValid: false, error: `Invalid email format: ${value}` };
                 }
@@ -328,6 +413,9 @@ export class EnvironmentValidatorService {
     getValidationStatus(): { status: 'healthy' | 'warning' | 'error'; message: string } {
         const result = this.validateEnvironment();
 
+        /**
+         * Handles if functionality
+         */
         if (result.errors.length > 0) {
             return {
                 status: 'error',
@@ -335,6 +423,9 @@ export class EnvironmentValidatorService {
             };
         }
 
+        /**
+         * Handles if functionality
+         */
         if (result.warnings.length > 0) {
             return {
                 status: 'warning',

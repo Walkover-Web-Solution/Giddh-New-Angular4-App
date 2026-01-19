@@ -1,6 +1,10 @@
 import { CustomActions } from '../custom-actions';
 import { PURCHASE_ORDER_ACTIONS } from '../../actions/purchase-order/purchase-order.const';
 
+/**
+ * PurchaseOrderState interface definition
+ * Defines the structure and contract for PurchaseOrderState objects
+ */
 export interface PurchaseOrderState {
     listFilters: any;
     selectedPo: [];
@@ -14,6 +18,9 @@ export const initialState: PurchaseOrderState = {
 }
 
 export function purchaseOrderReducer(state: PurchaseOrderState = initialState, action: CustomActions): PurchaseOrderState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case PURCHASE_ORDER_ACTIONS.SET_FILTERS:
             return { ...state, listFilters: { getRequest: action.payload.getRequest, postRequest: action.payload.postRequest }, selectedPo: action.payload.selectedPo };

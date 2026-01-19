@@ -10,6 +10,10 @@ import { LocaleService } from "../services/locale.service";
 import { AppState } from "../store";
 import { SearchService } from "../services/search.service";
 
+/**
+ * ProjectAccountingState interface definition
+ * Defines the structure and contract for ProjectAccountingState objects
+ */
 export interface ProjectAccountingState {
     isFetchingProjects: boolean;
     projectsList: any;
@@ -50,15 +54,29 @@ export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
     totalRevenueAndExpense: 0
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * ProjectWiseAccountingComponentStore store
+ * Manages projectwiseaccountingcomponent state using NgRx ComponentStore
+ */
 export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectAccountingState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private toasterService: ToasterService,
         private projectAccountingService: ProjectAccountingService,
         private searchService: SearchService,
         private store: Store<AppState>) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_PROJECT_ACCOUNTING_STATE);
     }
 
@@ -89,11 +107,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly createNewProject = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isSavingProject: true, saveProjectSuccess: null });
                 return this.projectAccountingService.createNewProject(req.request, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ isSavingProject: false, saveProjectSuccess: { body: res.body, isCreateFlow: req.request.isCreateFlow } });
                             } else {
@@ -106,6 +133,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ isSavingProject: false, saveProjectSuccess: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -117,11 +147,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly getAllProjects = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isFetchingProjects: true, projectsList: null });
                 return this.projectAccountingService.getAllProjects(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ isFetchingProjects: false, projectsList: res.body });
                             } else {
@@ -134,6 +173,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ isFetchingProjects: false, projectsList: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -145,11 +187,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly getProjectById = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isFetchingProjects: true, projectDetails: null });
                 return this.projectAccountingService.getProjectById(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ isFetchingProjects: false, projectDetails: res.body });
                             } else {
@@ -162,6 +213,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ isFetchingProjects: false, projectDetails: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -173,11 +227,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly deleteProject = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ removeProjectSuccess: null });
                 return this.projectAccountingService.removeProject(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Project delete successfully');
                                 this.patchState({ removeProjectSuccess: req.projectUniqueName });
@@ -191,6 +254,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ removeProjectSuccess: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -202,11 +268,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly getProjectProfit = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles mergeMap functionality
+             */
             mergeMap((req) => {
                 this.patchState({ projectProfitDetails: null });
                 return this.projectAccountingService.getProjectProfit(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ projectProfitDetails: { profitAndLoss: res.body, uniqueName: req.projectUniqueName } });
                             } else {
@@ -219,6 +294,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ projectProfitDetails: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -231,11 +309,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly createNewEntry = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isEntryProgress: true, entryCreateSuccess: null });
                 return this.projectAccountingService.createEntry(req.request, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ isEntryProgress: false, entryCreateSuccess: res.body });
                             } else {
@@ -248,6 +335,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ isEntryProgress: false, entryCreateSuccess: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -260,11 +350,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly deleteEntry = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isEntryProgress: true, entryDeleteSuccess: null });
                 return this.projectAccountingService.removeEntry(req.request, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Entry delete successfully');
                                 this.patchState({ isEntryProgress: false, entryDeleteSuccess: { index: req.index, body: res.body } });
@@ -278,6 +377,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ isEntryProgress: false, entryDeleteSuccess: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -289,11 +391,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly updateEntry = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isEntryProgress: true, entryUpdateSuccess: null });
                 return this.projectAccountingService.updateEntry(req.request, req.payload).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Entry update successfully');
                                 this.patchState({ isEntryProgress: false, entryUpdateSuccess: { body: res.body, entryUniqueName: req.request.entryUniqueName, index: req.index } });
@@ -307,6 +418,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ isEntryProgress: false, entryUpdateSuccess: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -318,11 +432,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly searchEntry = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ entrySearch: null });
                 return this.projectAccountingService.searchEntry(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ entrySearch: { body: res.body, accountUniqueName: req.accountUniqueName } });
                             } else {
@@ -335,6 +458,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ entrySearch: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -346,11 +472,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly getProjectAccount = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ accountSearch: null });
                 return this.searchService.searchAccountV3(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ accountSearch: res.body });
                             } else {
@@ -363,6 +498,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ accountSearch: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -374,11 +512,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly getAllEnteryList = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isFetchingProjects: true, entryList: null });
                 return this.projectAccountingService.getAllEntryList(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ isFetchingProjects: false, entryList: res.body });
                             } else {
@@ -391,6 +538,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ isFetchingProjects: false, entryList: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -402,11 +552,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly getProjectProfitAndLoss = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ isFetchingProfitAndLoss: true, profitAndLossData: null });
                 return this.projectAccountingService.getProjectProfitAndLoss(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ isFetchingProfitAndLoss: false, profitAndLossData: res.body });
                             } else {
@@ -419,6 +578,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ isFetchingProfitAndLoss: false, profitAndLossData: null });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -430,11 +592,20 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly getTotalRevenueAndExpense = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ totalRevenueAndExpense: 0 });
                 return this.projectAccountingService.getTotalRevenueAndExpense(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({ totalRevenueAndExpense: res.body });
                             } else {
@@ -447,6 +618,9 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                             return this.patchState({ totalRevenueAndExpense: 0 });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

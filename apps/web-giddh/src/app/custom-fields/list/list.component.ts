@@ -11,6 +11,10 @@ import { FieldModules } from "../custom-fields.constant";
 import { GeneralService } from "../../services/general.service";
 import { map } from '../../lodash-optimized';
 
+/**
+ * CustomFieldsInterface interface definition
+ * Defines the structure and contract for CustomFieldsInterface objects
+ */
 export interface CustomFieldsInterface {
     fieldName: string;
     fieldType: any;
@@ -18,6 +22,9 @@ export interface CustomFieldsInterface {
     uniqueName: string;
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "list",
     templateUrl: "./list.component.html",
@@ -25,6 +32,10 @@ export interface CustomFieldsInterface {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * CustomFieldsListComponent component
+ * Handles customfieldslist functionality and user interactions
+ */
 export class CustomFieldsListComponent implements OnInit, OnDestroy {
     /** List of columns in table */
     public displayedColumns: string[] = ['serialNo', 'fieldName', 'fieldType', 'isMandatory', 'action'];
@@ -55,6 +66,10 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of company */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private changeDetectorRef: ChangeDetectorRef,
@@ -93,7 +108,13 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      */
     public getCustomFields(): void {
         this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (response.status === 'success') {
                     this.customFieldsList = response.body;
                     this.dataSource = response.body?.results?.map((result, index) => {
@@ -128,8 +149,14 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.customFieldsService.delete(customFieldUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.status === "success") {
                         this.toasterService.showSnackBar("success", this.localeData?.custom_field_deleted);
                         this.getCustomFields();
@@ -160,7 +187,13 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsListComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
+            /**
+             * Handles if functionality
+             */
             if (this.voucherApiVersion === 2) {
                 this.fieldModules = [
                     { label: this.localeData?.modules?.account, value: FieldModules.Account },

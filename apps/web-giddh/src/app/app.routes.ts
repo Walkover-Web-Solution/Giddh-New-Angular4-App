@@ -58,6 +58,9 @@ export const ROUTES: Routes = [
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
             {
                 path: 'daybook',
+                /**
+                 * Loads children data
+                 */
                 loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule),
                 canActivate: [NeedsAuthorization]
             },

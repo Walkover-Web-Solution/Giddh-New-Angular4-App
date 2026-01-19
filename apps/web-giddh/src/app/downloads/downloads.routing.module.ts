@@ -4,6 +4,9 @@ import { NeedsAuthentication } from "../decorators/needsAuthentication";
 import { DownloadsComponent } from "./downloads.component";
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -22,6 +25,10 @@ import { DownloadsComponent } from "./downloads.component";
     exports: [RouterModule]
 })
 
+/**
+ * DownloadsRoutingModule module
+ * Implements DownloadsRoutingModule functionality
+ */
 export class DownloadsRoutingModule {
 
 }

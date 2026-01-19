@@ -1,9 +1,16 @@
 import { Injectable } from "@angular/core";
 import { AdjustedVoucherType } from "../../../app.constant";
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'any'
 })
+/**
+ * AdjustmentUtilityService service
+ * Provides adjustmentutility related business logic and data operations
+ */
 export class AdjustmentUtilityService {
 
     /**
@@ -15,6 +22,9 @@ export class AdjustmentUtilityService {
      * @memberof AdjustmentUtilityService
      */
     public getVoucherAdjustmentObject(data: any, adjustedVoucherType: string): any {
+        /**
+         * Handles if functionality
+         */
         if (data?.adjustments?.length > 0) {
             data.voucherAdjustments = { adjustments: this.formatAdjustmentsObject(data.adjustments) };
             delete data.adjustments;
@@ -22,6 +32,9 @@ export class AdjustmentUtilityService {
             let totalAdjustmentAmount = 0;
             let totalAdjustmentCompanyAmount = 0;
             data.voucherAdjustments?.adjustments?.forEach(adjustment => {
+                /**
+                 * Handles if functionality
+                 */
                 if (((adjustedVoucherType === AdjustedVoucherType.SalesInvoice || adjustedVoucherType === AdjustedVoucherType.Sales) && adjustment.voucherType === AdjustedVoucherType.DebitNote) || ((adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || adjustedVoucherType === AdjustedVoucherType.Purchase) && adjustment.voucherType === AdjustedVoucherType.CreditNote)) {
                     totalAdjustmentAmount -= Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForAccount : 0);
                     totalAdjustmentCompanyAmount -= Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForCompany : 0);
@@ -62,6 +75,9 @@ export class AdjustmentUtilityService {
      * @memberof AdjustmentUtilityService
      */
     public getAdjustmentObject(data: any): any {
+        /**
+         * Handles if functionality
+         */
         if (data?.voucherAdjustments?.adjustments?.length > 0) {
             data.voucherAdjustments.adjustments.map(adjustment => {
                 adjustment.amount = adjustment.adjustmentAmount;
@@ -71,11 +87,17 @@ export class AdjustmentUtilityService {
                 return adjustment;
             });
 
+            /**
+             * Handles if functionality
+             */
             if (data.transactions?.length > 0) {
                 data.transactions[0].adjustments = data.voucherAdjustments.adjustments;
             }
         } else if (data?.transactions?.length > 0) {
             data?.transactions?.forEach(transaction => {
+                /**
+                 * Handles if functionality
+                 */
                 if (transaction?.voucherAdjustments?.adjustments?.length > 0) {
                     transaction.voucherAdjustments.adjustments.map(adjustment => {
                         adjustment.amount = adjustment.adjustmentAmount;
@@ -103,6 +125,9 @@ export class AdjustmentUtilityService {
      * @memberof AdjustmentUtilityService
      */
     public getAdjustmentObjectVoucherModule(data: any): any {
+        /**
+         * Handles if functionality
+         */
         if (data?.voucherAdjustments?.adjustments?.length > 0) {
             data.voucherAdjustments.adjustments.map(adjustment => {
                 adjustment.amount = adjustment.adjustmentAmount;
@@ -161,7 +186,13 @@ export class AdjustmentUtilityService {
      * Normalize parent groups to ensure they are unique names
      */
     private normalizeParentGroups(data: any): void {
+        /**
+         * Handles if functionality
+         */
         if (data?.particularAccount?.parentGroups?.length > 0) {
+            /**
+             * Handles if functionality
+             */
             if (data?.particularAccount?.parentGroups[0]?.uniqueName) {
                 data.particularAccount.parentGroups = data?.particularAccount?.parentGroups?.map(group => group?.uniqueName);
             }
@@ -183,6 +214,9 @@ export class AdjustmentUtilityService {
         data?.ledgerAccount?.parentGroups?.forEach(group => {
             const groupName = group?.uniqueName;
 
+            /**
+             * Handles if functionality
+             */
             if (constants.salesParentGroups.includes(groupName)) {
                 types.isSalesLedger = true;
             } else if (constants.purchaseParentGroups.includes(groupName)) {
@@ -212,6 +246,9 @@ export class AdjustmentUtilityService {
         };
 
         data?.particularAccount?.parentGroups?.forEach(groupUniqueName => {
+            /**
+             * Handles if functionality
+             */
             if (constants.salesParentGroups.includes(groupUniqueName)) {
                 types.isSalesAccount = true;
             } else if (constants.purchaseParentGroups.includes(groupUniqueName)) {
@@ -232,6 +269,9 @@ export class AdjustmentUtilityService {
      * Build invoice request based on account types and voucher data
      */
     private buildInvoiceRequest(data: any, constants: any, ledgerTypes: any, accountTypes: any): any {
+        /**
+         * Handles if functionality
+         */
         if (ledgerTypes.isSalesLedger || ledgerTypes.isPurchaseLedger) {
             return this.buildSalesOrPurchaseLedgerRequest(data, constants, ledgerTypes, accountTypes);
         } else if (ledgerTypes.isFixedAssetsLedger) {
@@ -249,6 +289,9 @@ export class AdjustmentUtilityService {
      * Build request for sales or purchase ledger
      */
     private buildSalesOrPurchaseLedgerRequest(data: any, constants: any, ledgerTypes: any, accountTypes: any): any {
+        /**
+         * Handles if functionality
+         */
         if (accountTypes.isDebtorCreditorAccount) {
             return {
                 accountUniqueName: data?.particularAccount?.uniqueName,
@@ -266,6 +309,9 @@ export class AdjustmentUtilityService {
      * Build request for fixed assets ledger
      */
     private buildFixedAssetsLedgerRequest(data: any, constants: any, accountTypes: any): any {
+        /**
+         * Handles if functionality
+         */
         if (accountTypes.isDebtorCreditorAccount) {
             return {
                 accountUniqueName: data?.particularAccount?.uniqueName,
@@ -287,6 +333,9 @@ export class AdjustmentUtilityService {
         request.accountUniqueName = data?.ledgerAccount?.uniqueName;
         request.voucherType = data?.voucherType;
 
+        /**
+         * Handles if functionality
+         */
         if (accountTypes.isSalesAccount) {
             request.noteVoucherType = this.isDebitOrCreditNote(data, constants) ? "sales" : undefined;
         } else if (accountTypes.isPurchaseAccount) {
@@ -308,6 +357,9 @@ export class AdjustmentUtilityService {
      * Build request for cash/bank ledger
      */
     private buildCashBankLedgerRequest(data: any, constants: any, accountTypes: any): any {
+        /**
+         * Handles if functionality
+         */
         if (accountTypes.isDebtorCreditorAccount) {
             return {
                 accountUniqueName: data?.particularAccount?.uniqueName,
@@ -338,6 +390,9 @@ export class AdjustmentUtilityService {
     private getSalesOrPurchaseNoteVoucherType(data: any, constants: any, ledgerTypes: any): string | undefined {
         const isNote = this.isDebitOrCreditNote(data, constants);
 
+        /**
+         * Handles if functionality
+         */
         if (isNote && ledgerTypes.isSalesLedger) {
             return "sales";
         } else if (isNote && ledgerTypes.isPurchaseLedger) {
@@ -351,6 +406,9 @@ export class AdjustmentUtilityService {
      * Get note voucher type for fixed assets
      */
     private getFixedAssetsNoteVoucherType(data: any, constants: any): string | undefined {
+        /**
+         * Handles if functionality
+         */
         if (data?.voucherType === constants.creditNoteVoucher) {
             return "sales";
         } else if (data?.voucherType === constants.debitNoteVoucher) {
@@ -389,7 +447,13 @@ export class AdjustmentUtilityService {
     public getAdjustedCustomer(data: any): any {
         const debtorCreditorParentGroups = ['sundrydebtors', 'sundrycreditors'];
 
+        /**
+         * Handles if functionality
+         */
         if (data?.particularAccount?.parentGroups?.length > 0) {
+            /**
+             * Handles if functionality
+             */
             if (data?.particularAccount?.parentGroups[0]?.uniqueName) {
                 data.particularAccount.parentGroups = data?.particularAccount?.parentGroups?.map(group => group?.uniqueName);
             }
@@ -398,6 +462,9 @@ export class AdjustmentUtilityService {
         let isDebtorCreditorLedger = false;
 
         data?.ledgerAccount?.parentGroups?.forEach(group => {
+            /**
+             * Handles if functionality
+             */
             if (debtorCreditorParentGroups.includes(group?.uniqueName)) {
                 isDebtorCreditorLedger = true;
             }
@@ -406,6 +473,9 @@ export class AdjustmentUtilityService {
         let isDebtorCreditorAccount = false;
 
         data?.particularAccount?.parentGroups?.forEach(groupUniqueName => {
+            /**
+             * Handles if functionality
+             */
             if (debtorCreditorParentGroups.includes(groupUniqueName)) {
                 isDebtorCreditorAccount = true;
             }
@@ -416,6 +486,9 @@ export class AdjustmentUtilityService {
             customerUniquename: ''
         };
 
+        /**
+         * Handles if functionality
+         */
         if (isDebtorCreditorLedger) {
             request.customerName = data?.ledgerAccount?.name;
             request.customerUniquename = data?.ledgerAccount?.uniqueName;

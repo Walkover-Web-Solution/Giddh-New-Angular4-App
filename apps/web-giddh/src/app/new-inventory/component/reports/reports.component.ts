@@ -26,6 +26,9 @@ import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, filter, find, map } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-reports',
     templateUrl: './reports.component.html',
@@ -35,6 +38,10 @@ import { cloneDeep, filter, find, map } from '../../../lodash-optimized';
     standalone:false
 
 })
+/**
+ * ReportsComponent component
+ * Handles reports functionality and user interactions
+ */
 export class ReportsComponent implements OnInit, OnDestroy {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
     /** Instance of sort header */
@@ -137,6 +144,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
     private filtersSubject$ = new Subject<any>();
     /** Subject for dynamic columns changes */
     private dynamicColumnsSubject$ = new Subject<any>();
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -150,6 +161,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
         private inventoryStore: InventoryComponentStore
     ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
@@ -158,8 +172,14 @@ export class ReportsComponent implements OnInit, OnDestroy {
         this.currentUrl = this.router.url;
 
         this.store.pipe(select(state => state.session?.filters), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && !this.storeFilters?.length) {
                 this.storeFilters = response;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.storeFilters[this.currentUrl]) {
                     this.initialLoad = true;
                     this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
@@ -168,6 +188,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
                     this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.stockReportRequest?.from) {
                         this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                         this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -193,6 +216,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -202,9 +228,15 @@ export class ReportsComponent implements OnInit, OnDestroy {
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
+            /**
+             * Handles if functionality
+             */
             if (this.reportType === InventoryReportType.stock || this.reportType === InventoryReportType.variant) {
                 this.getCustomFields();
                 this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response) {
                         const results = response.map(result => {
                             return {
@@ -218,11 +250,17 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     }
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (response?.type?.toUpperCase() === 'FIXEDASSETS') {
                 this.moduleType = 'FIXED_ASSETS';
             } else {
                 this.moduleType = response?.type?.toUpperCase();
             }
+            /**
+             * Handles if functionality
+             */
             if (this.storeFilters && this.storeFilters[this.currentUrl]) {
                 this.showContent = false;
                 this.changeDetection.detectChanges();
@@ -238,6 +276,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
                 this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
                 this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.stockReportRequest?.from) {
                     this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -247,24 +288,39 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     this.balanceStockReportRequest.to = this.toDate;
                     this.fromToDate = { from: this.fromDate, to: this.toDate };
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isCompany) {
                     this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                     this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 }
 
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.showContent = true;
                     this.changeDetection.detectChanges();
                 }, 100);
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isCompany) {
                     this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                     this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 }
                 this.initialLoad = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (lastReportType) {
                     this.showContent = false;
                     this.changeDetection.detectChanges();
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.showContent = true;
                         this.changeDetection.detectChanges();
@@ -273,6 +329,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
             }
 
             this.customiseColumns = cloneDeep(INVENTORY_COMMON_COLUMNS);
+            /**
+             * Handles if functionality
+             */
             if (this.reportType === InventoryReportType.group) {
                 this.customiseColumns.splice(0, 0, {
                     "value": "group_name",
@@ -281,6 +340,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 });
                 this.moduleName = InventoryModuleName.group;
             }
+            /**
+             * Handles if functionality
+             */
             if (this.reportType === InventoryReportType.stock) {
                 this.customiseColumns.splice(0, 0,
                     {
@@ -302,6 +364,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 this.moduleName = InventoryModuleName.stock;
 
             }
+            /**
+             * Handles if functionality
+             */
             if (this.reportType === InventoryReportType.variant) {
                 this.customiseColumns.splice(0, 0,
                     {
@@ -327,28 +392,52 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 )
                 this.moduleName = InventoryModuleName.variant;
             }
+            /**
+             * Handles if functionality
+             */
             if (lastReportType) {
                 this.translationComplete(true);
             }
         });
 
         // Use combineLatest to ensure both data are processed when they emit at the same time
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([this.filtersSubject$, this.dynamicColumnsSubject$]).pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(300),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$)
         ).subscribe(([filtersData, dynamicColumnsData]) => {
             // Only proceed if at least one event has actual data (not the initial null)
+            /**
+             * Handles if functionality
+             */
             if (!filtersData && !dynamicColumnsData) {
                 return;
             }
 
             // Handle both events with their latest data
+            /**
+             * Handles if functionality
+             */
             if (filtersData) {
                 this.handleFiltersChange(filtersData);
             }
+            /**
+             * Handles if functionality
+             */
             if (dynamicColumnsData) {
                 this.handleDynamicColumnsChange(dynamicColumnsData);
             }
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.getReport(true);
             }, 100);
@@ -363,7 +452,13 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     private handleFiltersChange(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.initialLoad) {
+            /**
+             * Handles if functionality
+             */
             if (!this.storeFilters) {
                 this.storeFilters = [];
             }
@@ -389,6 +484,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     private handleDynamicColumnsChange(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
             this.displayedColumns = event
                 .filter(item => item?.checked)
@@ -429,20 +527,32 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     public getReport(fetchBalance: boolean = true): void {
+        /**
+         * Handles if functionality
+         */
         if (this.todaySelected) {
             this.stockReportRequest.from = '';
             this.stockReportRequest.to = '';
             this.balanceStockReportRequest.from = '';
             this.balanceStockReportRequest.to = '';
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.reportType) {
             return;
         }
         this.cancelApi$.next(false);
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.cancelApi$ = new ReplaySubject(1);
             this.dataSource = [];
             this.isLoading = true;
+            /**
+             * Handles if functionality
+             */
             if (this.reportType === InventoryReportType.group) {
                 let stockReportRequest = this.getStockReportRequestObject();
                 let queryParams = {
@@ -466,6 +576,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
                         this.dataSource = response.body.results;
@@ -473,6 +586,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                         this.stockReportRequest.totalItems = response.body.totalItems;
                         this.stockReportRequest.totalPages = response.body.totalPages;
                         this.stockReportRequest.count = response.body.count;
+                        /**
+                         * Handles if functionality
+                         */
                         if (response?.body?.fromDate && response?.body?.toDate) {
                             this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                             this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -480,6 +596,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                             this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                             this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
                             this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.todaySelected) {
                                 this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
                             } else {
@@ -496,6 +615,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     this.changeDetection.detectChanges();
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (this.reportType === InventoryReportType.stock) {
 
                 let stockReportRequest = this.getStockReportRequestObject();
@@ -510,6 +632,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getItemWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
                         this.dataSource = response.body.results;
@@ -517,6 +642,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                         this.stockReportRequest.totalItems = response.body.totalItems;
                         this.stockReportRequest.totalPages = response.body.totalPages;
                         this.stockReportRequest.count = response.body.count;
+                        /**
+                         * Handles if functionality
+                         */
                         if (response?.body?.fromDate && response?.body?.toDate) {
                             this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                             this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -524,6 +652,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                             this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                             this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
                             this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.todaySelected) {
                                 this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
                             } else {
@@ -539,6 +670,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 });
             }
 
+            /**
+             * Handles if functionality
+             */
             if (this.reportType === InventoryReportType.variant) {
                 let stockReportRequest = this.getStockReportRequestObject();
                 let queryParams = {
@@ -552,6 +686,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
                         this.dataSource = response.body.results;
@@ -559,6 +696,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                         this.stockReportRequest.totalItems = response.body.totalItems;
                         this.stockReportRequest.totalPages = response.body.totalPages;
                         this.stockReportRequest.count = response.body.count;
+                        /**
+                         * Handles if functionality
+                         */
                         if (response?.body?.fromDate && response?.body?.toDate) {
                             this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                             this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -567,6 +707,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                             this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
                             this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
 
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.todaySelected) {
                                 this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
                             } else {
@@ -581,9 +724,15 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     this.changeDetection.detectChanges();
                 });
             }
+            /**
+             * Handles if functionality
+             */
             if (fetchBalance) {
                 let balanceReportRequest = cloneDeep(this.balanceStockReportRequest);
                 let queryParams = {}
+                /**
+                 * Handles if functionality
+                 */
                 if (this.reportType === InventoryReportType.group) {
                     queryParams = {
                         from: balanceReportRequest.from ?? '',
@@ -603,6 +752,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 balanceReportRequest.to = undefined;
                 balanceReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response && response.body && response.status === 'success') {
                         this.stockTransactionReportBalance = response.body;
                     } else {
@@ -634,6 +786,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     public handlePageEvent(event: PageEvent): void {
+        /**
+         * Handles if functionality
+         */
         if (this.stockReportRequest.count !== event.pageSize) {
             this.stockReportRequest.page = 1;
         } else {
@@ -704,7 +859,13 @@ export class ReportsComponent implements OnInit, OnDestroy {
         stockReportRequest.param = undefined;
         stockReportRequest.val = undefined;
 
+        /**
+         * Handles if functionality
+         */
         if (this.reportType === InventoryReportType.group) {
+            /**
+             * Handles if functionality
+             */
             if (element?.stockGroupHasChild) {
                 currentUrl = '/pages/inventory/v2/reports/' + this.moduleType?.toLowerCase() + '/group/' + element?.stockGroup?.uniqueName;
                 this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
@@ -736,9 +897,15 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.translationLoaded = true;
             this.customiseColumns = this.customiseColumns?.map(column => {
+                /**
+                 * Handles switch functionality
+                 */
                 switch (column.value) {
                     case 'opening_amount':
                         column.label = this.localeData?.reports.opening_stock_value;
@@ -760,6 +927,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     public editGroup(element: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.moduleType?.toUpperCase() === 'FIXED_ASSETS') {
             this.moduleType = 'fixedassets';
         }
@@ -773,6 +943,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     public editStock(element: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.moduleType?.toUpperCase() === 'FIXED_ASSETS') {
             this.moduleType = 'fixedassets';
         }
@@ -786,6 +959,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     public editVariant(element: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.moduleType?.toUpperCase() === 'FIXED_ASSETS') {
             this.moduleType = 'fixedassets';
         }

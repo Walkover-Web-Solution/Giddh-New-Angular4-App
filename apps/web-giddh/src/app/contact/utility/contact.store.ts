@@ -9,6 +9,10 @@ import { select, Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { GetContactsParams } from "../../models/api-models/Contact";
 
+/**
+ * ContactState interface definition
+ * Defines the structure and contract for ContactState objects
+ */
 export interface ContactState {
     sendBulkEmailIsSuccess: boolean;
     getLastAccountsInProgress: boolean;
@@ -27,17 +31,31 @@ export const DEFAULT_CONTACT_STATE: ContactState = {
     exportAccountStatementResponse: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable(
     {
         providedIn: 'root'
     }
 )
+/**
+ * ContactComponentStore store
+ * Manages contactcomponent state using NgRx ComponentStore
+ */
 export class ContactComponentStore extends ComponentStore<ContactState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private toasterService: ToasterService,
         private contactService: ContactService,
         private store: Store<AppState>
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_CONTACT_STATE);
     }
 
@@ -67,17 +85,29 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
      */
     readonly sendBulkEmailTemplate = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ sendBulkEmailIsSuccess: false });
                 return this.contactService.sendBulkEmailTemplate(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 res?.body && this.toasterService.showSnackBar('success', res?.body);
                                 return this.patchState({
                                     sendBulkEmailIsSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -94,6 +124,9 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -122,6 +155,9 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
      */
     readonly getContactsList = this.effect((data$: Observable<GetContactsParams>) => {
         return data$.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(params => {
                 // Optionally patch state to indicate loading if needed
                 this.patchState({ getLastAccountsInProgress: true, contactsList: [] });
@@ -138,14 +174,23 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                     params.postData,
                     params.branchUniqueName
                 ).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({
                                     contactsList: res?.body ?? [],
                                     getLastAccountsInProgress: false
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -164,6 +209,9 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -173,22 +221,37 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
 
     readonly getAccountStatementList = this.effect((data$: Observable<any>) => {
         return data$.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(req => {
                 // Optionally patch state to indicate loading if needed
                 this.patchState({ getAccountStatementInProgress: true, accountStatementList: [] });
                 return this.contactService.getAccountStatementList(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 this.patchState({
                                     accountStatementList: res?.body ?? []
                                 });
+                                /**
+                                 * Sets timeout value
+                                 */
                                 setTimeout(() => {
                                     this.patchState({
                                         getAccountStatementInProgress: false
                                     });
                                 }, 400);
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -207,6 +270,9 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -220,13 +286,22 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
      */
     readonly exportAccountStatement = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({
                     exportAccountStatementResponse: null
                 });
                 return this.contactService.exportAccountStatement(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 this.patchState({
                                     exportAccountStatementResponse: res.body
@@ -245,6 +320,9 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

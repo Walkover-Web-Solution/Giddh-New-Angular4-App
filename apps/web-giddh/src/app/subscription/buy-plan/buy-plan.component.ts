@@ -25,6 +25,9 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { Configuration, IOption, PaymentProvider } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -33,6 +36,10 @@ import { ServiceConfig } from '../../services/service.config';
     standalone:false
 })
 
+/**
+ * BuyPlanComponent component
+ * Handles buyplan functionality and user interactions
+ */
 export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Stepper Form instance */
     @ViewChild('stepper') stepperIcon: any;
@@ -240,6 +247,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** This will hold option selected state */
     public optionSelected: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public dialog: MatDialog,
         private readonly componentStore: BuyPlanComponentStore,
@@ -283,6 +294,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.getActiveCompany();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+            /**
+             * Handles if functionality
+             */
             if (params?.id) {
                 this.subscriptionId = params.id;
                 this.viewSubscriptionComponentStore.viewSubscriptionsById(this.subscriptionId);
@@ -291,6 +305,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams: any) => {
+            /**
+             * Handles if functionality
+             */
             if (queryParams?.renew) {
                 this.isRenewPlan = true;
             } else if (queryParams?.trial) {
@@ -299,7 +316,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.razorpaySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.subscriptionId && this.isChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {
@@ -309,12 +332,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.setBroadcastEvent();
                 const value = response?.region?.code !== 'IND' ? 1 : response?.duration === 'MONTHLY' ? 1 : 10;
+                /**
+                 * Handles if functionality
+                 */
                 if (response.dueAmount >= value) {
                     this.initializePayment(response, 'generateOrderId');
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.subscriptionId && this.isChangePlan) {
                         this.router.navigate(['/pages/user-details/subscription']);
                     } else {
@@ -325,8 +357,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && Object.keys(response)?.length) {
                 this.calculationResponse = response;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.promoCode) {
                     this.toasterService.showSnackBar('success', this.localeData?.promocode_message);
                     this.promoCodeResponse[0] = response;
@@ -338,6 +376,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
                 this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
                 this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (result) {
                         this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
                         this.selectedPlan = { ...this.selectedPlan, ...response };
@@ -345,6 +386,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 });
             } else {
                 this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (result) {
                         this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
                         this.selectedPlan = { ...this.selectedPlan, ...this.calculationResponse };
@@ -355,6 +399,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.getCountryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.countrySource = [];
                 Object.keys(response).forEach(key => {
@@ -365,7 +412,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.countrySource$ = observableOf(this.countrySource);
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isSubscriptionRegion) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.countrySource?.length) {
                         this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
                     }
@@ -378,6 +431,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.commonCountrySource = [];
                 Object.keys(response).forEach(key => {
@@ -396,15 +452,27 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
+            /**
+             * Handles if functionality
+             */
             if (!this.isNewUserLoggedIn) {
                 this.getBillingDetails();
                 this.getBillingDetails$.pipe(delay(1000), takeUntil(this.destroyed$)).subscribe(data => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data && data?.uniqueName) {
                         this.getBillingData = true;
                         this.setFormValues(data);
                         this.selectedCountry = data.country?.name;
                         this.selectedState = data?.state ? data.state?.name : data.county?.name;
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.secondStepForm.get('taxNumber')?.value && this.secondStepForm.get('taxNumber')?.value?.length >= 2) {
+                            /**
+                             * Sets timeout value
+                             */
                             setTimeout(() => {
                                 this.validateGstNumber();
                             }, 50);
@@ -416,6 +484,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
+            /**
+             * Handles if functionality
+             */
             if (event?.data?.success) {
                 const model = {
                     orderId: this.paypalCaptureOrderId,
@@ -426,6 +497,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
 
         this.paypalCaptureOrderIdSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.callBackEvent = true;
                 this.paypalCallBackEvent(this.createSubscriptionSuccess);
@@ -433,12 +507,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.handleCreateSubscriptionResponse(response);
             }
         });
 
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.paypalApprovalLink) {
                 this.paypalCaptureOrderId = response.paypalOrderId;
                 this.openWindow(response.paypalApprovalLink);
@@ -451,6 +531,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.updatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.setBroadcastEvent();
                 this.responseSubscriptionId = response.subscriptionId;
@@ -461,6 +544,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
+                /**
+                 * Handles if functionality
+                 */
                 if (this.subscriptionId && this.isChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {
@@ -470,9 +556,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.setBroadcastEvent();
                 this.isLoading = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (this.subscriptionId && this.isChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {
@@ -491,13 +583,25 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 window.location.origin
             ];
 
+            /**
+             * Handles if functionality
+             */
             if (!allowedOrigins.includes(event.origin)) {
                 console.warn('Blocked message from untrusted origin:', event.origin);
                 return;
             }
 
+            /**
+             * Handles if functionality
+             */
             if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
+                /**
+                 * Handles if functionality
+                 */
                 if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.upgradePlan && this.upgradeRegion === 'GBR') {
                         const reqObj = {
                             subscriptionId: this.upgradeSubscriptionId,
@@ -505,7 +609,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         }
                         this.componentStore.activatePlan(reqObj);
                         this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response) {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (this.subscriptionId && this.isChangePlan) {
                                     this.router.navigate(['/pages/user-details/subscription']);
                                 } else {
@@ -514,7 +624,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             }
                         });
                     } else {
+                        /**
+                         * Sets timeout value
+                         */
                         setTimeout(() => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.subscriptionId && this.isChangePlan) {
                                 this.router.navigate(['/pages/user-details/subscription']);
                             } else {
@@ -527,10 +643,22 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.firstStepForm?.get('promoCode').valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700),
+            /**
+             * Handles distinctUntilChanged functionality
+             */
             distinctUntilChanged(),
+            /**
+             * Handles takeUntil functionality
+             */
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            /**
+             * Handles if functionality
+             */
             if (searchedText === "" || searchedText === undefined) {
                 this.promoCodeResponse = [];
                 this.firstStepForm?.get('promoCode').setValue("");
@@ -540,6 +668,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.changePlanDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.upgrade) {
                 this.upgradePlan = response?.upgrade;
                 this.upgradeSubscriptionId = response?.subscriptionId;
@@ -547,9 +678,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
             }
             const value = response?.region?.code !== 'IND' ? 1 : this.firstStepForm.get('duration')?.value === 'MONTHLY' ? 1 : 10;
+            /**
+             * Handles if functionality
+             */
             if (response?.payuHtml) {
                 this.openPayUPayment(response.payuHtml);
             } else if (response && response.dueAmount >= value) {
+                /**
+                 * Handles if functionality
+                 */
                 if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && response?.region?.code !== 'IND') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
@@ -563,7 +700,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.initializePayment(response, 'changePlan');
                 }
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.region?.code !== 'IND') {
                         this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
                         this.router.navigate(['/pages/user-details/subscription']);
@@ -576,6 +719,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
+            /**
+             * Handles if functionality
+             */
             if (this.subscriptionId && response?.region) {
                 this.newUserSelectCountry({
                     "label": response.region?.code + " - " + response.region?.name,
@@ -638,6 +784,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.secondStepForm.get('taxNumber')?.valueChanges.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(value => {
+            /**
+             * Handles if functionality
+             */
             if (value) {
                 this.optionSelected = false;
             }
@@ -661,12 +810,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public paypalCallBackEvent(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.subscriptionId && this.isChangePlan) {
             this.router.navigate(['/pages/user-details/subscription']);
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.payType === 'trial') {
                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.region?.code === 'GBR') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
@@ -675,6 +833,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         duration: response?.duration,
                         promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                     };
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.callBackEvent) {
                         this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
                     } else {
@@ -683,6 +844,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        /**
+         * Handles if functionality
+         */
         if (this.upgradePlan && this.upgradeRegion === 'GBR') {
             const reqObj = {
                 subscriptionId: this.upgradeSubscriptionId,
@@ -690,7 +854,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
             this.componentStore.activatePlan(reqObj);
             this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.subscriptionId && this.isChangePlan) {
                         this.router.navigate(['/pages/user-details/subscription']);
                     } else {
@@ -699,6 +869,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.subscriptionId && this.isChangePlan) {
                 this.router.navigate(['/pages/user-details/subscription']);
             } else {
@@ -717,6 +890,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.generalService.getClientIp()
             .pipe(takeUntil(this.destroyed$))
             .subscribe(result => {
+                /**
+                 * Handles if functionality
+                 */
                 if (result) {
                     const { alpha3CountryCode, alpha2CountryCode, countryName } = this.determineCountryCodes(result);
                     const isRegionCode = this.isRegionCountryCode(alpha3CountryCode);
@@ -765,7 +941,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         let alpha2CountryCode = '';
         let countryName = 'Global';
 
+        /**
+         * Handles if functionality
+         */
         if (result) {
+            /**
+             * Handles switch functionality
+             */
             switch (result.countryCode) {
                 case 'IN':
                     alpha3CountryCode = 'IND';
@@ -783,6 +965,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     countryName = result.countryName;
                     break;
                 default:
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.isGulfCountry(result.countryCode)) {
                         alpha3CountryCode = 'GLF';
                         alpha2CountryCode = 'GL';
@@ -816,6 +1001,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public toggleDuration(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.firstStepForm.get('duration').setValue(event?.value);
             this.setPlans(true);
@@ -841,6 +1029,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public closeWindow(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.openedWindow) {
             this.openedWindow.close();
             this.openedWindow = null;
@@ -910,6 +1101,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public backToPreviousPage(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.firstStepForm?.get('promoCode')?.value) {
             this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
         }
@@ -923,6 +1117,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private getActiveCompany(): void {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.company.addresses = response.addresses;
                 this.activeCompany = response;
@@ -937,7 +1134,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public applyPromoCode(type: string): void {
         let request;
+        /**
+         * Handles if functionality
+         */
         if (this.firstStepForm.get('promoCode')?.value) {
+            /**
+             * Handles if functionality
+             */
             if (type === 'add') {
                 request = {
                     promoCode: this.firstStepForm.get('promoCode')?.value,
@@ -969,6 +1172,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     private getCompanyProfile(): void {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
+            /**
+             * Handles if functionality
+             */
             if (profile && Object.keys(profile).length) {
                 this.company.countryName = profile.country;
                 this.company.countryCode = profile.countryCode || profile.countryV2.alpha2CountryCode;
@@ -990,6 +1196,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private showTaxTypeByCountry(countryCode: string): void {
         this.company.taxType = this.subscriptionService.showTaxTypeByCountry(countryCode, this.activeCompany?.countryV2?.alpha2CountryCode);
+        /**
+         * Handles if functionality
+         */
         if (this.company.taxType) {
             this.getOnboardingForm(countryCode);
         }
@@ -1003,6 +1212,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     * @memberof BuyPlanComponent
     */
     private getOnboardingForm(countryCode: string): void {
+        /**
+         * Handles if functionality
+         */
         if (this.onboardingFormRequest.country !== countryCode) {
             this.onboardingFormRequest.formName = 'onboarding';
             this.onboardingFormRequest.country = countryCode;
@@ -1018,9 +1230,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private getOnboardingFormData(): void {
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.formFields = [];
                 Object.keys(response.fields).forEach(key => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response?.fields[key]) {
                         this.formFields[response.fields[key]?.name] = [];
                         this.formFields[response.fields[key]?.name] = response.fields[key];
@@ -1047,13 +1265,25 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getStates(): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
 
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.states = [];
                 this.countyList = [];
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response.stateList) {
                     Object.keys(response.stateList).forEach(key => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (key) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (response.stateList[key].stateGstCode !== null) {
                                 this.stateGstCode[response.stateList[key].stateGstCode] = [];
                                 this.stateGstCode[response.stateList[key].stateGstCode] = response.stateList[key].code;
@@ -1067,6 +1297,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (response.countyList) {
                     this.countyList = response.countyList?.map(county => {
                         return { label: county.name, value: county.code };
@@ -1083,11 +1316,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     public validateGstNumber(): void {
         let isValid: boolean = false;
+        /**
+         * Handles if functionality
+         */
         if (this.secondStepForm.get('taxNumber')?.value) {
+            /**
+             * Handles if functionality
+             */
             if (this.formFields['taxName']) {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                    /**
+                     * Handles for functionality
+                     */
                     for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                         let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                        /**
+                         * Handles if functionality
+                         */
                         if (regex.test(this.secondStepForm.get('taxNumber')?.value)) {
                             isValid = true;
                         }
@@ -1095,6 +1343,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else {
                     isValid = true;
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (!isValid) {
                     let text = this.commonLocaleData?.app_invalid_tax_name;
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
@@ -1109,11 +1360,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.changeDetection.detectChanges();
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.secondStepForm.get('taxNumber')?.value?.length >= 2) {
             this.states?.find((state) => {
                 let code = this.secondStepForm.get('taxNumber')?.value?.substr(0, 2);
                 let matchCode = state.stateGstCode == code;
                 this.disabledState = false;
+                /**
+                 * Handles if functionality
+                 */
                 if (matchCode) {
                     this.disabledState = true;
                     this.selectedState = state.label;
@@ -1128,6 +1385,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.isGstinValid = false;
             this.selectedState = '';
             this.selectedStateCode = '';
+            /**
+             * Handles if functionality
+             */
             if (!this.optionSelected) {
                 this.secondStepForm.controls['state'].setValue(null);
             }
@@ -1155,10 +1415,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public selectPlan(plan: any): void {
         this.firstStepForm.get('planUniqueName').setValue(plan?.uniqueName);
+        /**
+         * Handles if functionality
+         */
         if (this.firstStepForm?.get('promoCode')?.value) {
             this.applyPromoCode('add');
         }
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result) {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
                 this.isUserManualChangePlan = this.selectedPlan?.uniqueName !== this.viewSubscriptionData?.planUniqueName;
@@ -1176,24 +1442,39 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
+        /**
+         * Handles if functionality
+         */
         if (this.selectedStep === 0 && this.firstStepForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.selectedStep === 1 && this.secondStepForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
 
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result) {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
             }
         });
+        /**
+         * Handles if functionality
+         */
         if (this.firstStepForm?.get('promoCode')?.value) {
             this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
         }
@@ -1221,6 +1502,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.length) {
                 this.allPlans = response;
                 this.monthlyPlans = response?.filter(plan =>
@@ -1232,7 +1516,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 );
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.subscriptionId) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.yearlyPlans?.length) {
                         this.firstStepForm.get('duration').patchValue('YEARLY');
                     } else {
@@ -1241,6 +1531,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else if (this.viewSubscriptionData?.period) {
                     this.firstStepForm.get('duration').patchValue(this.viewSubscriptionData?.period);
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.yearlyPlans?.length) {
                         this.firstStepForm.get('duration').patchValue('YEARLY');
                     } else {
@@ -1250,6 +1543,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.setPlans();
             } else {
                 this.inputData = [];
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.countryList?.open();
                 }, 100);
@@ -1265,6 +1561,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private setPlans(isToggle: boolean = false): void {
         this.inputData = [];
+        /**
+         * Handles if functionality
+         */
         if (!this.subscriptionId) {
             const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
             this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
@@ -1300,6 +1599,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             isCalculating = inProgress;
         });
 
+        /**
+         * Handles if functionality
+         */
         if (isCalculating) {
             return;
         }
@@ -1310,12 +1612,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             countryCode: this.isNewUserLoggedIn ? this.selectedPlan?.entityCode : this.secondStepForm.get('country').value?.value
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.isChangePlan || this.isRenewPlan) {
             reqObj['subscriptionId'] = this.subscriptionId;
         }
+        /**
+         * Handles if functionality
+         */
         if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
+        /**
+         * Handles if functionality
+         */
         if (!this.removePromoCode && !this.thirdStepForm.get('paymentProvider')?.value) {
             // Clear the payment provider initially
             this.thirdStepForm.get('paymentProvider')?.patchValue(null);
@@ -1327,32 +1638,59 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         const filterProviders = (providers: string[]) => {
             this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider.value));
+            /**
+             * Handles if functionality
+             */
             if (this.filteredPaymentProviders?.length === 1) {
                 this.thirdStepForm.get('paymentProvider')?.patchValue(providers[0]);
             }
         };
 
+        /**
+         * Handles if functionality
+         */
         if (entityCode === 'GBR') {
+            /**
+             * Handles if functionality
+             */
             if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Exclude Razorpay for monthly GBR
                 this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for yearly GBR
+                /**
+                 * Handles filterProviders functionality
+                 */
                 filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode !== 'IND') {
+            /**
+             * Handles if functionality
+             */
             if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Only PayPal for non-IND countries with monthly duration
+                /**
+                 * Handles filterProviders functionality
+                 */
                 filterProviders([PaymentProvider.PAYPAL]);
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for non-IND countries with yearly duration
+                /**
+                 * Handles filterProviders functionality
+                 */
                 filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
             // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
+            /**
+             * Handles filterProviders functionality
+             */
             filterProviders((duration === 'YEARLY' || duration === 'MONTHLY' || duration === 'DAILY') ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY && (duration === 'MONTHLY' || duration === 'DAILY')) {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD');
         } else {
@@ -1368,13 +1706,22 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public newUserSelectCountry(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
             this.newUserSelectedCountry = event.label;
             this.newUserSelectedCountryValue = event.value;
 
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.getAllPlans();
+                /**
+                 * Handles if functionality
+                 */
                 if (this.isSubscriptionRegion) {
                     this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
                 }
@@ -1389,6 +1736,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public selectCountry(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.selectedCountry = event.label;
             this.secondStepForm.controls['country'].setValue(event);
@@ -1419,6 +1769,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public onSubmit(type: string): void {
         this.payType = type;
         this.isFormSubmitted = false;
+        /**
+         * Handles if functionality
+         */
         if (this.subscriptionForm.invalid) {
             this.isFormSubmitted = true;
             return;
@@ -1446,10 +1799,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             subscriptionId: null
         }
 
+        /**
+         * Handles if functionality
+         */
         if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && this.selectedPlan?.entityCode !== 'GBR') {
             request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.subscriptionForm.value.secondStepForm.country.value === 'GB') {
             request.billingAccount['county'] = {
                 name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
@@ -1462,6 +1821,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             };
         }
         request['payNow'] = (type === 'trial') ? false : true;
+        /**
+         * Handles if functionality
+         */
         if (this.subscriptionId && this.isChangePlan) {
             request.subscriptionId = this.subscriptionId;
             this.subscriptionRequest = request;
@@ -1478,6 +1840,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     * @memberof BuyPlanComponent
     */
     public selectState(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.value) {
             this.optionSelected = true;
             this.selectedState = event.label;
@@ -1557,6 +1922,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const origWindowOpen = window.open.bind(window);
         window.open = (...args: any[]) => {
             const win = origWindowOpen(...args);
+            /**
+             * Handles if functionality
+             */
             if (!win) {
                 that.handleRazorpayFailure(type);
             }
@@ -1583,6 +1951,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             order_id: request.razorpayOrderId,
             customer_id: request.razorpayCustomerId,
             recurring: "1",
+            /**
+             * Handles r event
+             */
             handler: (response: any) => {
                 that.updateSubscriptionPayment(response, false, request);
                 that.razorpayRetryCount = 0;
@@ -1600,6 +1971,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             const isChangePlan = this.isChangePlan ? (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') : (request?.duration === 'MONTHLY' || request?.duration === 'DAILY');
             this.razorpay = new window['Razorpay']((isChangePlan && request?.region?.code !== 'GBR')
                 ? razorpayRecurringSubscriptionConfig : options);
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => { this.razorpay?.open(); }, 100);
         } catch { }
     }
@@ -1614,9 +1988,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private handleRazorpayFailure(type: string): void {
         this.razorpay?.close();
+        /**
+         * Handles if functionality
+         */
         if (this.razorpayRetryCount < this.maxRazorpayRetryCount) {
             this.razorpayRetryCount++;
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
+                /**
+                 * Handles if functionality
+                 */
                 if (type === 'generateOrderId') {
                     this.componentStore.generateOrderBySubscriptionId(this.generateOrderIdRequest);
                 } else if (type === 'changePlan') {
@@ -1638,6 +2021,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public updateSubscriptionPayment(payResponse: any, zeroAmount: boolean = false, subscription?: any): void {
         let request;
+        /**
+         * Handles if functionality
+         */
         if (payResponse) {
             request = {
                 paymentId: !zeroAmount ? payResponse.razorpay_payment_id : null,
@@ -1649,10 +2035,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 subscriptionId: subscription?.subscriptionId,
                 planUniqueName: subscription?.planDetails?.uniqueName
             };
+            /**
+             * Handles if functionality
+             */
             if (request.subscriptionId) {
                 this.subscriptionId = request.subscriptionId;
             }
             let data = { ...request, ...this.subscriptionRequest };
+            /**
+             * Handles if functionality
+             */
             if (request.paymentId && (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && payResponse?.region?.code !== 'GBR') {
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId, orderId: request.razorpayOrderId });
             } else {
@@ -1685,9 +2077,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['taxNumber'].setValue(data.taxNumber);
         this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
         this.secondStepForm.controls['address'].setValue(data?.address);
+        /**
+         * Handles if functionality
+         */
         if (data?.country) {
             this.secondStepForm.controls['country'].setValue({ label: data.country.name, value: data.country.code, additional: data.country });
         }
+        /**
+         * Handles if functionality
+         */
         if (data?.state) {
             this.secondStepForm.controls['state'].setValue({ label: data.state.name, value: data.state.code, additional: data.state });
         } else {
@@ -1716,6 +2114,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
    * @memberof BuyPlanComponent
    */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.allPaymentProviders = [
                 {
@@ -1764,12 +2165,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 window.location.origin
             ];
 
+            /**
+             * Handles if functionality
+             */
             if (!allowedOrigins.includes(event.origin)) {
                 console.warn('Blocked PayU message from untrusted origin:', event.origin);
                 window.removeEventListener("message", handlePayUMessage);
                 return;
             }
 
+            /**
+             * Handles if functionality
+             */
             if (event.data?.status?.toLocaleLowerCase() === 'success' && event.data.transactionId) {
                 const model = {
                     payuTransactionId: event.data.transactionId,
@@ -1799,6 +2206,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.createSubscriptionSuccess = response;
         this.subscriptionId = response.subscriptionId;
 
+        /**
+         * Handles if functionality
+         */
         if (response?.paypalOrderId) {
             this.handlePaypalOrderResponse(response);
         } else if (response?.payuHtml) {
@@ -1812,7 +2222,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * Handle PayPal order response
      */
     private handlePaypalOrderResponse(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if ((response?.duration === 'MONTHLY' || response?.duration === 'DAILY')) {
+            /**
+             * Handles if functionality
+             */
             if (response?.paypalOrderId && this.payType === 'buy') {
                 this.openWindow(response.paypalApprovalLink);
             } else {
@@ -1826,6 +2242,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * Handle non-PayPal response scenarios
      */
     private handleNonPaypalResponse(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (response?.paypalOrderId && this.payType === 'buy') {
             this.openWindow(response.paypalApprovalLink);
         } else {
@@ -1837,11 +2256,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * Process subscription flow based on duration and region
      */
     private processSubscriptionFlow(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isMonthlyOrDailyNonGBR(response)) {
             this.handleMonthlyDailyFlow(response);
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.subscriptionId && this.isChangePlan) {
             this.router.navigate(['/pages/user-details/subscription']);
         } else {
@@ -1853,6 +2278,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * Check if subscription is monthly/daily and not GBR region
      */
     private isMonthlyOrDailyNonGBR(response: any): boolean {
+        /**
+         * Handles return functionality
+         */
         return (response?.duration === 'MONTHLY' || response?.duration === 'DAILY') && response?.region?.code !== 'GBR';
     }
 
@@ -1860,6 +2288,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * Handle monthly/daily subscription flow
      */
     private handleMonthlyDailyFlow(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (response.razorpayCustomerId && this.payType === 'buy') {
             this.initializePayment(response, 'createSubscription');
         } else {
@@ -1871,6 +2302,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * Handle payment type flow (trial vs buy)
      */
     private handlePaymentTypeFlow(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (this.payType === 'trial') {
             this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
         } else {
@@ -1885,6 +2319,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const isMonthlyDailyNonIND = this.isMonthlyDailyNonIndia(response);
         const isYearlyIndiaActive = this.isYearlyIndiaActive(response);
 
+        /**
+         * Handles if functionality
+         */
         if (isMonthlyDailyNonIND) {
             this.handleMonthlyDailyNonIndiaFlow(response);
         } else if (isYearlyIndiaActive) {
@@ -1898,6 +2335,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * Check if subscription is monthly/daily and not India region
      */
     private isMonthlyDailyNonIndia(response: any): boolean {
+        /**
+         * Handles return functionality
+         */
         return (this.firstStepForm.get('duration')?.value === 'MONTHLY' ||
                 this.firstStepForm.get('duration')?.value === 'DAILY') &&
                 response?.region?.code !== 'IND';
@@ -1916,6 +2356,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * Handle monthly/daily non-India flow
      */
     private handleMonthlyDailyNonIndiaFlow(response: any): void {
+        /**
+         * Handles if functionality
+         */
         if (response?.status?.toLowerCase() === 'active') {
             this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
         } else {

@@ -13,11 +13,18 @@ import { GeneralService } from '../../../services/general.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { findIndex } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     templateUrl: './permission-list.html',
     standalone: false,
     styleUrls: ['./permission.component.scss']
 })
+/**
+ * PermissionListComponent component
+ * Handles permissionlist functionality and user interactions
+ */
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
@@ -44,6 +51,10 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     /* Holds Permission Confirmation Dialog Reference */
     public permissionConfirmationDialogRef: MatDialogRef<any>;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         public route: ActivatedRoute,
@@ -55,9 +66,15 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     ) {
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+            /**
+             * Handles if functionality
+             */
             if (params && params["tab"] && params["tab"] === "settings") {
                 this.showBackButton = true;
                 this.showPopup = true;
@@ -67,8 +84,14 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
 
         // This module should be accessible to superuser only
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 let superAdminIndx = activeCompany.userEntityRoles?.findIndex((entity) => entity?.role?.uniqueName === 'super_admin');
+                /**
+                 * Handles if functionality
+                 */
                 if (superAdminIndx === -1) {
                     this.redirectToDashboard();
                 }
@@ -83,6 +106,9 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
         this.store.pipe(select(p => p.permission.roles), takeUntil(this.destroyed$)).subscribe((roles: IRoleCommonResponseAndRequest[]) => {
             this.allRoles = roles;
+            /**
+             * Handles if functionality
+             */
             if (this.allRoles?.length > 0) {
                 this.showBackButton = true;
             }
@@ -95,16 +121,25 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
      * @memberof PermissionListComponent
      */
     public ngAfterViewInit(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.showPopup) {
             this.openPermissionDialog();
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles redirectToDashboard functionality
+     */
     public redirectToDashboard() {
         this._toasty.errorToast('You do not have permission to access this module');
         this._generalService.invalidMenuClicked.next({
@@ -121,17 +156,26 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public closePopupEvent(userAction) {
         this.showPopup = false;
         this.permissionDialogRef.close();
+        /**
+         * Handles if functionality
+         */
         if (userAction === 'save') {
             this.router.navigate(['/pages', 'permissions', 'details']);
         }
     }
 
+    /**
+     * Updates existing role
+     */
     public updateRole(role: NewRoleClass) {
         let data = new NewRoleClass(role?.name, role?.scopes, role?.isFixed, role?.uniqueName, true);
         this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
         this.router.navigate(['/pages/permissions/details']);
     }
 
+    /**
+     * Deletes role
+     */
     public deleteRole(role: IRoleCommonResponseAndRequest): void {
         this.selectedRoleForDelete = role;
         this.permissionConfirmationDialogRef = this.dialog.open(this.permissionConfirmationDialog, {
@@ -141,6 +185,9 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
 
+    /**
+     * Deletes confirmedrole
+     */
     public deleteConfirmedRole() {
         this.permissionConfirmationDialogRef.close();
         this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));

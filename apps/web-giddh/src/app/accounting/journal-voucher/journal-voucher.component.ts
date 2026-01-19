@@ -149,11 +149,18 @@ export const PAGE_SHORTCUT_MAPPING = [
 /** Pages which have Voucher and Invoice as options */
 export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note'];
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     templateUrl: './journal-voucher.component.html',
     styleUrls: ['./journal-voucher.component.scss'],
     standalone:false
 })
+/**
+ * JournalVoucherComponent component
+ * Handles journalvoucher functionality and user interactions
+ */
 export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     public gridType: string = 'voucher';
@@ -186,6 +193,10 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public showDiscountAndTax: boolean;
 
     /** @ignore */
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private tallyModuleService: TallyModuleService,
@@ -193,6 +204,9 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         private generalService: GeneralService
     ) {
         this.tallyModuleService.selectedPageInfo.pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+            /**
+             * Handles if functionality
+             */
             if (data) {
                 this.gridType = data.gridType;
                 this.selectedPage = data.page;
@@ -201,10 +215,19 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     }
 
     @HostListener('document:keyup', ['$event'])
+    /**
+     * Handles keyboardevent event
+     */
     public handleKeyboardEvent(event: KeyboardEvent) {
+        /**
+         * Handles if functionality
+         */
         if (event.ctrlKey && event.key?.toLowerCase() === 'a') { // Ctrl + A
             event.preventDefault();
             event.stopPropagation();
+            /**
+             * Handles if functionality
+             */
             if (this.gridType === 'voucher') {
                 this.saveEntryInVoucher = true;
                 this.saveEntryInInvoice = false;
@@ -212,6 +235,9 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 this.saveEntryInVoucher = false;
                 this.saveEntryInInvoice = true;
             }
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.saveEntryInVoucher = false;
                 this.saveEntryInInvoice = false;
@@ -253,12 +279,18 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
             // }, 100);
         } else {
             let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (event.altKey) {
                     return page.key === event.key && page.altKey;
                 } else {
                     return page.key === event.key && !page.altKey;
                 }
             });
+            /**
+             * Handles if functionality
+             */
             if (selectedPageIndx > -1) {
                 this.tallyModuleService.setVoucher(PAGE_SHORTCUT_MAPPING[selectedPageIndx].inputForFn);
             } else if (event.key === FUNCTIONAL_KEYS.F2) { // F2
@@ -275,11 +307,17 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;

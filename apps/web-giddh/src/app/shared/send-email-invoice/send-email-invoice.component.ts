@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { GeneralService } from '../../services/general.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-send-email-invoice-component',
     templateUrl: './send-email-invoice.component.html',
@@ -9,6 +12,10 @@ import { GeneralService } from '../../services/general.service';
     standalone: false
 })
 
+/**
+ * SendEmailInvoiceComponent component
+ * Handles sendemailinvoice functionality and user interactions
+ */
 export class SendEmailInvoiceComponent implements OnInit {
     @Input() voucherType: VoucherTypeEnum;
     @Input() selectedItem: { voucherNumber: string, uniqueName: string, account: { email: string }, voucherUniqueName?: string };
@@ -34,18 +41,31 @@ export class SendEmailInvoiceComponent implements OnInit {
     /** Download copy options array */
     public downloadCopy: string[] = ['Original'];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private generalService: GeneralService
     ) {
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
+        /**
+         * Handles if functionality
+         */
         if (this.voucherApiVersion === 2) {
             this.invoiceType.push('Original');
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
             this.emailAddresses = this.selectedItem.account.email;
         }
@@ -59,6 +79,9 @@ export class SendEmailInvoiceComponent implements OnInit {
      */
     public invoiceTypeChanged(event): void {
         let value = event?.source?.value;
+        /**
+         * Handles if functionality
+         */
         if (event?.checked) {
             this.invoiceType.push(value);
         } else {
@@ -66,10 +89,19 @@ export class SendEmailInvoiceComponent implements OnInit {
         }
     }
 
+    /**
+     * Handles sendEmail functionality
+     */
     sendEmail() {
+        /**
+         * Handles if functionality
+         */
         if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             this.successEvent.emit(this.emailAddresses);
         } else {
+            /**
+             * Handles if functionality
+             */
             if (this.voucherApiVersion === 2) {
                 this.successEvent.emit({ email: this.emailAddresses, invoiceType: this.invoiceType, uniqueName: this.selectedItem?.uniqueName });
             } else {
@@ -79,12 +111,21 @@ export class SendEmailInvoiceComponent implements OnInit {
         this.cancel();
     }
 
+    /**
+     * Handles cancel functionality
+     */
     cancel() {
         this.cancelEvent.emit(true);
         this.resetModal();
     }
 
+    /**
+     * Resets modal to default state
+     */
     resetModal() {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
             this.emailAddresses = this.selectedItem.account.email;
         }

@@ -13,6 +13,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [InventoryAddStockComponent],
     imports: [
@@ -33,4 +36,8 @@ import { MatButtonModule } from '@angular/material/button';
     ],
     exports: [InventoryAddStockComponent]
 })
+/**
+ * InventoryAddStockModule module
+ * Implements InventoryAddStockModule functionality
+ */
 export class InventoryAddStockModule {}

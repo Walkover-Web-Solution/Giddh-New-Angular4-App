@@ -32,6 +32,9 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
 import { MatMenuModule } from '@angular/material/menu';
 import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         MainComponent,
@@ -72,4 +75,8 @@ import { FinancialReportsModule } from '../financial-reports/financial-reports.m
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]
 })
+/**
+ * ProjectWiseAccountingModule module
+ * Implements ProjectWiseAccountingModule functionality
+ */
 export class ProjectWiseAccountingModule { }

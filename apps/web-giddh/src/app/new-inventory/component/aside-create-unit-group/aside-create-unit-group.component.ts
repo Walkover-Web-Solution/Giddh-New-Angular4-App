@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-create-unit-group',
     
@@ -7,6 +10,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
     standalone: false,
     styleUrls: ['./aside-create-unit-group.component.scss']
 })
+/**
+ * AsideCreateUnitGroupComponent component
+ * Handles asidecreateunitgroup functionality and user interactions
+ */
 export class AsideCreateUnitGroupComponent {
     /* Aside pane state*/
     public asideMenuState: string = 'out';

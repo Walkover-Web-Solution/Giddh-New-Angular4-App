@@ -7,6 +7,9 @@ import { AccountsAction } from '../../../../../actions/accounts.actions';
 import { AccountRequestV2 } from '../../../../../models/api-models/Account';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'ledger-aside-pane-account',
     styleUrls: ['./ledger-aside.pane.account.component.scss'],
@@ -14,6 +17,10 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * LedgerAsidePaneAccountComponent component
+ * Handles ledgerasidepaneaccount functionality and user interactions
+ */
 export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
@@ -34,6 +41,10 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
@@ -51,15 +62,27 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
         this.select2Options.placeholder = this.commonLocaleData?.app_select_group;
     }
 
+    /**
+     * Handles addNewAcSubmit functionality
+     */
     public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
     }
 
+    /**
+     * Closes asidepane
+     */
     public closeAsidePane(event) {
         this.closeAsideEvent.emit(event);
     }
 
+    /**
+     * Handles isGroupSelected functionality
+     */
     public isGroupSelected(event) {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.activeGroupUniqueName = event.value;
             let accountCategory = event?.additional[0]?.category || '';
@@ -68,6 +91,9 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

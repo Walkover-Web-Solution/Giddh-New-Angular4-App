@@ -26,6 +26,10 @@ export class EnvironmentService {
 
     private readonly _environment = environment;
 
+    /**
+     * Creates an instance of service
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         this.validateEnvironment();
     }
@@ -111,6 +115,9 @@ export class EnvironmentService {
      * Get asset path based on environment (Electron vs Web)
      */
     getAssetPath(relativePath: string): string {
+        /**
+         * Handles if functionality
+         */
         if (this.isElectron) {
             return `assets/${relativePath}`;
         }
@@ -135,6 +142,9 @@ export class EnvironmentService {
      * Get API URL based on region (UK vs Default)
      */
     getApiUrlByRegion(region?: string): string {
+        /**
+         * Handles if functionality
+         */
         if (region === 'GB' || localStorage.getItem('Country-Region') === 'GB') {
             return this.ukApiUrl;
         }
@@ -145,6 +155,9 @@ export class EnvironmentService {
      * Check if a feature is enabled based on environment
      */
     isFeatureEnabled(feature: string): boolean {
+        /**
+         * Handles switch functionality
+         */
         switch (feature) {
             case 'devModule':
                 return this.showDevModule;
@@ -188,6 +201,9 @@ export class EnvironmentService {
             return !value || value === '';
         });
 
+        /**
+         * Handles if functionality
+         */
         if (missingVariables.length > 0) {
 
         }
@@ -207,6 +223,9 @@ export class EnvironmentService {
         ];
 
         (Array.isArray(urls) ? urls : []).forEach(({ name, value }) => {
+            /**
+             * Handles if functionality
+             */
             if (value && !this.isValidUrl(value)) {
 
             }

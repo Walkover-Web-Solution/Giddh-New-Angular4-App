@@ -26,6 +26,9 @@ export const initialState: PurchaseRecordState = {
  * @returns {PurchaseRecordState}
  */
 export function purchaseRecordReducer(state: PurchaseRecordState = initialState, action: CustomActions): PurchaseRecordState {
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case PURCHASE_RECORD_ACTIONS.UPDATE_SUCCESS:
             return { ...state, updatedRecordDetails: action.payload };

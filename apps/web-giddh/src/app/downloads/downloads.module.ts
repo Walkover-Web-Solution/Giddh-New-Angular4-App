@@ -20,6 +20,9 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatInputModule } from "@angular/material/input";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         DownloadsComponent,
@@ -48,4 +51,8 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
     ]
 })
 
+/**
+ * DownloadsModule module
+ * Implements DownloadsModule functionality
+ */
 export class DownloadsModule { }

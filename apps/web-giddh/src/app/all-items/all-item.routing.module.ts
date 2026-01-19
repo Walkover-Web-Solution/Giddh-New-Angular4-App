@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AllGiddhItemComponent } from './all-item.component';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([ { path: '',
@@ -18,5 +21,9 @@ import { AllGiddhItemComponent } from './all-item.component';
 
 
 })
+/**
+ * AllItemRoutingModule module
+ * Implements AllItemRoutingModule functionality
+ */
 export class AllItemRoutingModule {
 }

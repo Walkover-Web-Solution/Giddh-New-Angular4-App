@@ -10,6 +10,9 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'group-add',
     templateUrl: 'group-add.component.html',
@@ -17,6 +20,10 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
     standalone: false
 })
 
+/**
+ * GroupAddComponent component
+ * Handles groupadd functionality and user interactions
+ */
 export class GroupAddComponent implements OnInit, OnDestroy {
     /** Localized text data specific to this component */
     @Input() public localeData: any = {};
@@ -39,6 +46,10 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     /** Subject for managing component destruction and unsubscribing from observables */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
@@ -51,6 +62,9 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         this.isCreateGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.initForm();
 
@@ -59,12 +73,18 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         });
 
         this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
+            /**
+             * Handles if functionality
+             */
             if (!this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
                 this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
             }
         });
 
         this.isCreateGroupSuccess$.subscribe(a => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.groupDetailForm?.markAsPristine();
                 this.groupDetailForm.reset({
@@ -74,6 +94,9 @@ export class GroupAddComponent implements OnInit, OnDestroy {
                     closingBalanceTriggerAmount: 0,
                     closingBalanceTriggerAmountType: 'CREDIT'
                 });
+                /**
+                 * Sets timeout value
+                 */
                 setTimeout(() => {
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 }, 500);
@@ -83,12 +106,18 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         this.groupDetailForm.get('name').valueChanges.pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(name => {
             let val: string = name;
             val = uniqueNameInvalidStringReplace(val);
+            /**
+             * Handles if functionality
+             */
             if (val) {
                 this.groupDetailForm?.patchValue({ uniqueName: val });
             } else {
                 this.groupDetailForm?.patchValue({ uniqueName: '' });
             }
         });
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.autoFocus?.nativeElement.focus();
         }, 50);
@@ -110,6 +139,9 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles addNewGroup functionality
+     */
     public addNewGroup() {
         let activeGrpUniqueName: string;
         let uniqueName = this.groupDetailForm.get('uniqueName');
@@ -126,12 +158,21 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.groupWithAccountsAction.createGroup(grpObject));
     }
 
+    /**
+     * Handles closingBalanceTypeChanged functionality
+     */
     public closingBalanceTypeChanged(type: string) {
+        /**
+         * Handles if functionality
+         */
         if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

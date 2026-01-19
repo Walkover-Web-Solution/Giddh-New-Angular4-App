@@ -15,6 +15,10 @@ export const BULK_UPDATE_FIELDS = {
     'create_purchase_bill': 'create_purchase_bill'
 }
 
+/**
+ * PurchaseOrderStatus interface definition
+ * Defines the structure and contract for PurchaseOrderStatus objects
+ */
 export interface PurchaseOrderStatus {
     value: string;
     label: string;

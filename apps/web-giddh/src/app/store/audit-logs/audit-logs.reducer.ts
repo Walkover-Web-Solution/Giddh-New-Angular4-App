@@ -6,6 +6,10 @@ import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { cloneDeep } from '../../lodash-optimized';
 
+/**
+ * AuditLogsState interface definition
+ * Defines the structure and contract for AuditLogsState objects
+ */
 export interface AuditLogsState {
     logs: ILogsItem[];
     totalPages: number;
@@ -36,6 +40,9 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
     let data: BaseResponse<LogsResponse, LogsRequest> = null;
     let auditLogsData: BaseResponse<AuditLogsResponse, GetAuditLogsRequest> = null;
     let newState: AuditLogsState = null;
+    /**
+     * Handles switch functionality
+     */
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
@@ -47,6 +54,9 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
         case AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE: {
             data = action.payload as BaseResponse<LogsResponse, LogsRequest>;
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 newState = cloneDeep(state);
                 newState.currentPage = 1;
@@ -67,6 +77,9 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
         case AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE: {
             data = action.payload as BaseResponse<LogsResponse, LogsRequest>;
+            /**
+             * Handles if functionality
+             */
             if (data?.status === 'success') {
                 newState = cloneDeep(state);
                 newState.currentPage = data.queryString.page;
@@ -92,6 +105,9 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
         case AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2: {
             auditLogsData = action.payload as BaseResponse<AuditLogsResponse, GetAuditLogsRequest>;
+            /**
+             * Handles if functionality
+             */
             if (auditLogsData?.status === 'success') {
                 newState = cloneDeep(state);
                 newState.currentPage = auditLogsData.body?.page;

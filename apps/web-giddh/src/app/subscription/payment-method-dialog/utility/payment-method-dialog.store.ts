@@ -6,6 +6,10 @@ import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
 
+/**
+ * PaymentState interface definition
+ * Defines the structure and contract for PaymentState objects
+ */
 export interface PaymentState {
     providerList: any
     saveProviderSuccess: any;
@@ -22,13 +26,27 @@ export const DEFAULT_PAYMENT_STATE: PaymentState = {
     setDetaultPaymentMethodIsSuccess: null
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * PaymentMethodDialogComponentStore store
+ * Manages paymentmethoddialogcomponent state using NgRx ComponentStore
+ */
 export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentState> implements OnDestroy {
 
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_PAYMENT_STATE);
     }
 
@@ -39,11 +57,20 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
      */
     readonly getPaymentMethodListBySubscriptionId = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ providerListInProgress: true });
                 return this.subscriptionService.getPaymentProviderListBySubscriptionID(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res.status === "success") {
                                 return this.patchState({
                                     providerList: res?.body ?? [],
@@ -65,6 +92,9 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -78,15 +108,27 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
    */
     readonly savePaymentMethod = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 return this.subscriptionService.savePaymentProviderBySubscriptionID(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     saveProviderSuccess: res?.body ?? [],
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -102,6 +144,9 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -115,17 +160,29 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
      */
     readonly deletePaymentMethod = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ deletePaymentSuccess: false });
                 return this.subscriptionService.deletePaymentMethod(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 res.body && this.toasterService.showSnackBar('success', res.body);
                                 return this.patchState({
                                     deletePaymentSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -141,6 +198,9 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -154,17 +214,29 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
      */
     readonly setDefaultPaymentMethod = this.effect((data: Observable<any>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ setDetaultPaymentMethodIsSuccess: false });
                 return this.subscriptionService.setDetaultPaymentMethod(req).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 res.body && this.toasterService.showSnackBar('success', res.body);
                                 return this.patchState({
                                     setDetaultPaymentMethodIsSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -180,6 +252,9 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

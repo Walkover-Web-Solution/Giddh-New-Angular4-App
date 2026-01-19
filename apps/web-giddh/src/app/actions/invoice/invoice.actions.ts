@@ -37,17 +37,33 @@ import { GeneralService } from '../../services/general.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { forEach, isArray } from '../../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * InvoiceActions actions
+ * Defines invoice related action creators for state management
+ */
 export class InvoiceActions {
 
     // get all ledgers for invoice
 
     public GetAllLedgersForInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.GetAllLedgersForInvoice(action.payload.model, action.payload?.body)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(res, {
                 type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE,
                 payload: res
@@ -60,8 +76,17 @@ export class InvoiceActions {
 
     public PreviewInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.PREVIEW_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload?.body)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(res, {
                 type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
                 payload: res
@@ -74,8 +99,17 @@ export class InvoiceActions {
 
     public PreviewOfGeneratedInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.GetGeneratedInvoicePreview(action.payload.accountUniqueName, action.payload.invoiceNumber)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<PreviewInvoiceResponseClass, string>(res, {
                 type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
                 payload: res
@@ -88,8 +122,17 @@ export class InvoiceActions {
 
     public UpdateGeneratedInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload?.body)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<string, GenerateInvoiceRequestClass>(res, {
                 type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
                 payload: res
@@ -102,8 +145,17 @@ export class InvoiceActions {
 
     public GenerateInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.GENERATE_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload?.body)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<GenerateInvoiceRequestClass, string>(res, {
                 type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
                 payload: res
@@ -114,25 +166,49 @@ export class InvoiceActions {
 
     public GenerateBulkInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload?.body, action.payload.requestedFrom)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.GenerateBulkInvoiceResponse(response);
             })));
 
     public GenerateBulkInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else if (data?.status === 'einvoice-confirm') {
                     return this.setBulkGenerateConfirm(data);
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (typeof data?.body === 'string') {
                         this._toasty.successToast(data?.body);
                     } else if (isArray(data?.body) && data?.body?.length > 0) {
+                        /**
+                         * Handles forEach functionality
+                         */
                         forEach(data?.body, (item: IBulkInvoiceGenerationFalingError) => {
                             this._toasty.warningToast(item.reason);
                         });
@@ -145,17 +221,35 @@ export class InvoiceActions {
 
     public DeleteInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.DELETE_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.DeleteInvoice(action.payload.model, action.payload.accountUniqueName)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.DeleteInvoiceResponse(response);
             })));
 
     public DeleteInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -168,17 +262,35 @@ export class InvoiceActions {
 
     public ActionOnInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.PerformActionOnInvoice(action.payload.invoiceUniqueName, action.payload.action)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.ActionOnInvoiceResponse(response);
             })));
 
     public ActionOnInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -189,8 +301,17 @@ export class InvoiceActions {
 
     public GetTemplateDetailsOfInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.GetInvoiceTemplateDetails(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<InvoiceTemplateDetailsResponse, string>(res, {
                 type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
                 payload: res
@@ -205,8 +326,17 @@ export class InvoiceActions {
 
     public getInvoiceSetting$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.GET_INVOICE_SETTING),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.GetInvoiceSetting()),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<InvoiceSetting, string>(res, {
                 type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
                 payload: res
@@ -221,8 +351,17 @@ export class InvoiceActions {
 
     public DeleteWebhook$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.DELETE_WEBHOOK),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.DeleteInvoiceWebhook(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<string, string>(res, {
                 type: INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE,
                 payload: res
@@ -237,8 +376,17 @@ export class InvoiceActions {
 
     public UpdateInvoiceEmail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.UPDATE_INVOICE_EMAIL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.UpdateInvoiceEmail(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<string, string>(res, {
                 type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE,
                 payload: res
@@ -253,8 +401,17 @@ export class InvoiceActions {
 
     public SaveInvoiceWebhook$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.SAVE_INVOICE_WEBHOOK),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.SaveInvoiceWebhook(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<string, string>(res, {
                 type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE,
                 payload: res
@@ -269,8 +426,17 @@ export class InvoiceActions {
 
     public updateInvoiceSetting$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.UPDATE_INVOICE_SETTING),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.UpdateInvoiceSetting(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<string, string>(res, {
                 type: INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE,
                 payload: res
@@ -285,8 +451,17 @@ export class InvoiceActions {
 
     public GetRazorPayDetail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.GET_RAZORPAY_DETAIL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.GetRazorPayDetail()),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
                 type: INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE,
                 payload: res
@@ -301,8 +476,17 @@ export class InvoiceActions {
 
     public UpdateRazorPayDetail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.UpdateRazorPayDetail(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
                 type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
                 payload: res
@@ -317,8 +501,17 @@ export class InvoiceActions {
 
     public DeleteRazorPayDetail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.DELETE_RAZORPAY_DETAIL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.DeleteRazorPayDetail()),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<string, string>(res, {
                 type: INVOICE.SETTING.DELETE_RAZORPAY_DETAIL_RESPONSE,
                 payload: res
@@ -333,8 +526,17 @@ export class InvoiceActions {
 
     public DeleteInvoiceEmail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.DELETE_INVOICE_EMAIL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.DeleteInvoiceEmail(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<string, string>(res, {
                 type: INVOICE.SETTING.DELETE_INVOICE_EMAIL_RESPONSE,
                 payload: res
@@ -349,8 +551,17 @@ export class InvoiceActions {
 
     public SaveRazorPayDetail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.SETTING.SAVE_RAZORPAY_DETAIL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.SaveRazorPayDetail(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
                 type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE,
                 payload: res
@@ -361,22 +572,43 @@ export class InvoiceActions {
 
     public DownloadInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.DownloadInvoice(action.payload.accountUniqueName, action.payload.dataToSend).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.DownloadInvoiceResponse(response)));
             })));
 
     public DownloadInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     let type = 'pdf';
                     let req = data.queryString.dataToSend;
+                    /**
+                     * Handles if functionality
+                     */
                     if (req?.typeOfInvoice?.length > 1) {
                         type = 'zip';
                     }
@@ -388,25 +620,52 @@ export class InvoiceActions {
 
     public DownloadExportedInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.exportCsvInvoiceDownload(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.DownloadExportedInvoiceResponse(response)));
             })));
 
     public SendInvoiceOnMail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.SEND_MAIL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.SendInvoiceOnMail(action.payload.accountUniqueName, action.payload.dataToSend).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.SendInvoiceOnMailResponse(response)));
             })));
 
     public SendInvoiceOnMailResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.SEND_MAIL_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -417,17 +676,35 @@ export class InvoiceActions {
 
     public SendInvoiceOnSms$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.SEND_SMS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.SendInvoiceOnSms(action.payload.accountUniqueName, action.payload.dataToSend, action.payload.voucherNumber).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.SendInvoiceOnSmsResponse(response)));
             })));
 
     public SendInvoiceOnSmsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.SEND_SMS_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -440,17 +717,35 @@ export class InvoiceActions {
 
     public addEwayBillTransporter$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.addEwayTransporter(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.addEwayBillTransporterResponse(response)));
             })));
 
     public addEwayBillTransporterResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -461,17 +756,35 @@ export class InvoiceActions {
 
     public updateEwayBillTransporter$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.UPDATE_TRANSPORTER),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.UpdateGeneratedTransporter(action.payload.currentTransportId, action.payload.transportObj).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.updateEwayBillTransporterResponse(response)));
             })));
 
     public updateEwayBillTransporterResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -482,15 +795,33 @@ export class InvoiceActions {
 
     public UpdateEwayVehicle$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.updateEwayVehicle(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.UpdateEwayVehicleResponse(response))));
 
     public LoginEwaybillUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.LoginEwaybillUser(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.LoginEwaybillUserResponse(response)));
             })));
 
@@ -498,9 +829,18 @@ export class InvoiceActions {
 
     public LoginEwaybillUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -512,16 +852,31 @@ export class InvoiceActions {
 
     public isLoggedInUserEwayBill$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.IsUserLoginEwayBill().pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.isLoggedInUserEwayBillResponse(response)));
             })));
     // Is logged in user in Eway Bill response
 
     public isLoggedInUserEwayBillResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 return { type: 'EmptyAction' };
@@ -530,9 +885,18 @@ export class InvoiceActions {
 
     public GenerateNewEwaybill$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.GenerateNewEwaybill(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.GenerateNewEwaybillResponse(response)));
             })));
 
@@ -540,9 +904,18 @@ export class InvoiceActions {
 
     public GenerateNewEwaybillResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -557,9 +930,18 @@ export class InvoiceActions {
 
     public cancelEwayBill$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.CANCEL_EWAYBILL),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this._invoiceService.cancelEwayBill(action.payload).pipe(
+                    /**
+                     * Handles map functionality
+                     */
                     map(response => this.cancelEwayBillResponse(response)));
             })));
 
@@ -567,12 +949,24 @@ export class InvoiceActions {
 
     public cancelEwayBillResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (data?.status === 'success') {
                         this._toasty.successToast(data?.body);
                     }
@@ -582,9 +976,18 @@ export class InvoiceActions {
 
     public UpdateEwayVehicleResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -599,9 +1002,21 @@ export class InvoiceActions {
 
     public getALLEwaybillList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsList()),
+            /**
+             * Handles map functionality
+             */
             map((response: BaseResponse<IEwayBillAllList, any>) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'success') {
                     // this.showToaster('');
                 } else {
@@ -614,12 +1029,24 @@ export class InvoiceActions {
 
     public getALLEwaybillListResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<IEwayBillAllList, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.status === 'success' && data?.body?.results?.length === 0) {
                     this._toasty.errorToast(this.localeService.translate("app_no_entries_found"));
                 }
@@ -628,9 +1055,21 @@ export class InvoiceActions {
 
     public getALLTransporterList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.getAllTransporterList(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map((response: BaseResponse<IEwayBillTransporter, any>) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'success') {
                     // this.showToaster('');
                 } else {
@@ -643,9 +1082,18 @@ export class InvoiceActions {
 
     public getALLTransporterListResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<IEwayBillTransporter, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
@@ -655,17 +1103,35 @@ export class InvoiceActions {
 
     public deleteTransporter$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.deleteTransporterById(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.deleteTransporteResponse(response);
             })));
 
     public deleteTransporterResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -676,8 +1142,17 @@ export class InvoiceActions {
 
     public GetAllEwayfilterRequest$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(EWAYBILL_ACTIONS.GET_All_FILTERED_LIST_EWAYBILLS),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsfilterList(action.payload?.body)),
+            /**
+             * Handles map functionality
+             */
             map((response: BaseResponse<IEwayBillAllList, IEwayBillfilter>) => {
                 return this.GetAllEwayfilterResponse(response);
             })));
@@ -686,17 +1161,35 @@ export class InvoiceActions {
 
     public GetSampleTemplates$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceTemplatesService.getTemplates()),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.getSampleTemplateResponse(response);
             })));
 
     public getSampleTemplateResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
@@ -707,17 +1200,35 @@ export class InvoiceActions {
 
     public getAllCreatedTemplates$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceTemplatesService.getAllCreatedTemplates(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.getAllCreatedTemplatesResponse(response);
             })));
 
     public getAllCreatedTemplatesResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data && data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
@@ -728,17 +1239,35 @@ export class InvoiceActions {
 
     public setTemplateAsDefault$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload?.templateUniqueName, action.payload?.templateType)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.setTemplateAsDefaultResponse(response);
             })));
 
     public setTemplateAsDefaultResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -751,17 +1280,35 @@ export class InvoiceActions {
 
     public deleteTemplate$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._invoiceTemplatesService.deleteTemplate(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.deleteTemplateResponse(response);
             })));
 
     public deleteTemplateResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data?.message, data?.code);
                 } else {
@@ -773,8 +1320,17 @@ export class InvoiceActions {
 
     public GetAllRecurringInvoices$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._recurringService.getRecurringVouchers(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<RecurringInvoice[], string>(res, this.GetAllRecurringInvoicesResponse(res?.body), true, this.noPermissionsRecurringInvoice()))));
     /**
      * SAVE Recurring Voucher
@@ -782,8 +1338,17 @@ export class InvoiceActions {
 
     public SaveRecurrigVoucher$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.RECURRING.CREATE_RECURRING_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._recurringService.createRecurringVouchers(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res?.body), true, this.createRecurringInvoiceResponse(res?.body), this.localeService.translate("app_messages.recurring_invoice_created")))));
 
     /**
@@ -792,21 +1357,43 @@ export class InvoiceActions {
 
     public UpdateRecurringVouchers$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE.RECURRING.UPDATE_RECURRING_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._recurringService.updateRecurringVouchers(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res?.body), true,
                 this.updateRecurringInvoiceResponse(null), this.localeService.translate("app_messages.recurring_invoice_updated")))));
 
     public GenerateBulkEInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.bulkUpdateInvoice.bulkUpdateInvoice(action.payload.model, action.payload.actionType)),
+            /**
+             * Handles map functionality
+             */
             map(res => this.validateResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(res, {
                 type: INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE_RESPONSE
             }, true, {
                 type: INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE_RESPONSE
             }))));
 
+    /**
+     * Creates an instance of actions
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private action$: Actions,
         private _invoiceService: InvoiceService,
@@ -820,11 +1407,17 @@ export class InvoiceActions {
     ) {
     }
 
+    /**
+     * Handles downloadFile functionality
+     */
     public downloadFile(data: Response, type: string, fileName) {
         let blob = this.generalService.base64ToBlob(data, 'application/' + type, 512);
         return saveAs(blob, `${fileName}.` + type);
     }
 
+    /**
+     * Handles GetAllRecurringInvoices functionality
+     */
     public GetAllRecurringInvoices(filter?, page: number = 1, count: number = PAGINATION_LIMIT): CustomActions {
         return {
             type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA,
@@ -832,6 +1425,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GetAllRecurringInvoicesResponse functionality
+     */
     public GetAllRecurringInvoicesResponse(model: RecurringInvoice[]): CustomActions {
         return {
             type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA_RESPONSE,
@@ -839,6 +1435,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GetAllLedgersForInvoice functionality
+     */
     public GetAllLedgersForInvoice(model: CommonPaginatedRequest, data: InvoiceFilterClass): CustomActions {
         return {
             type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE,
@@ -846,6 +1445,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GetAllLedgersForInvoiceResponse functionality
+     */
     public GetAllLedgersForInvoiceResponse(model: GetAllLedgersForInvoiceResponse): CustomActions {
         return {
             type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE,
@@ -853,6 +1455,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles PreviewInvoice functionality
+     */
     public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): CustomActions {
         return {
             type: INVOICE_ACTIONS.PREVIEW_INVOICE,
@@ -860,6 +1465,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles PreviewInvoiceResponse functionality
+     */
     public PreviewInvoiceResponse(model: PreviewInvoiceResponseClass): CustomActions {
         return {
             type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
@@ -867,6 +1475,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles PreviewOfGeneratedInvoice functionality
+     */
     public PreviewOfGeneratedInvoice(accountUniqueName: string, invoiceNumber: string): CustomActions {
         return {
             type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE,
@@ -874,6 +1485,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles PreviewOfGeneratedInvoiceResponse functionality
+     */
     public PreviewOfGeneratedInvoiceResponse(model: PreviewInvoiceResponseClass): CustomActions {
         return {
             type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
@@ -881,6 +1495,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles UpdateGeneratedInvoice functionality
+     */
     public UpdateGeneratedInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): CustomActions {
         return {
             type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE,
@@ -888,6 +1505,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GenerateInvoice functionality
+     */
     public GenerateInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): CustomActions {
         return {
             type: INVOICE_ACTIONS.GENERATE_INVOICE,
@@ -895,6 +1515,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GenerateInvoiceResponse functionality
+     */
     public GenerateInvoiceResponse(model: GenerateInvoiceRequestClass): CustomActions {
         return {
             type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
@@ -902,6 +1525,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GenerateBulkInvoice functionality
+     */
     public GenerateBulkInvoice(reqObj: { combined: boolean }, model: any, requestedFrom?: string): CustomActions {
         return {
             type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE,
@@ -909,6 +1535,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GenerateBulkInvoiceResponse functionality
+     */
     public GenerateBulkInvoiceResponse(model: any): CustomActions {
         return {
             type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
@@ -916,6 +1545,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GetTemplateDetailsOfInvoice functionality
+     */
     public GetTemplateDetailsOfInvoice(model: string): CustomActions {
         return {
             type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS,
@@ -923,6 +1555,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GetTemplateDetailsOfInvoiceResponse functionality
+     */
     public GetTemplateDetailsOfInvoiceResponse(model: BaseResponse<GetInvoiceTemplateDetailsResponse, string>): CustomActions {
         return {
             type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
@@ -930,6 +1565,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles DeleteInvoice functionality
+     */
     public DeleteInvoice(model: object, accountUniqueName): CustomActions {
         return {
             type: INVOICE_ACTIONS.DELETE_INVOICE,
@@ -937,6 +1575,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles DeleteInvoiceResponse functionality
+     */
     public DeleteInvoiceResponse(model): CustomActions {
         return {
             type: INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE,
@@ -944,6 +1585,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles ActionOnInvoice functionality
+     */
     public ActionOnInvoice(invoiceUniqueName: string, action: object): CustomActions {
         return {
             type: INVOICE_ACTIONS.ACTION_ON_INVOICE,
@@ -951,6 +1595,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles ActionOnInvoiceResponse functionality
+     */
     public ActionOnInvoiceResponse(model: any): CustomActions {
         return {
             type: INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE,
@@ -970,6 +1617,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles ModifiedInvoiceStateData functionality
+     */
     public ModifiedInvoiceStateData(model: string[]): CustomActions {
         return {
             type: INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA,
@@ -977,6 +1627,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles InvoiceGenerationCompleted functionality
+     */
     public InvoiceGenerationCompleted(): CustomActions {
         return {
             type: INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED,
@@ -984,6 +1637,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles ResetInvoiceData functionality
+     */
     public ResetInvoiceData(): CustomActions {
         return {
             type: INVOICE_ACTIONS.RESET_INVOICE_DATA,
@@ -991,12 +1647,18 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Retrieves templatestate data
+     */
     public getTemplateState(): CustomActions {
         return {
             type: INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES
         };
     }
 
+    /**
+     * Retrieves allcreatedtemplates data
+     */
     public getAllCreatedTemplates(templateType: any): CustomActions {
         return {
             type: INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES,
@@ -1004,6 +1666,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Retrieves allcreatedtemplatesresponse data
+     */
     public getAllCreatedTemplatesResponse(response: any): CustomActions {
         return {
             type: INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE,
@@ -1011,6 +1676,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Sets templateasdefault value
+     */
     public setTemplateAsDefault(templateUniqueName: string, templateType: string): CustomActions {
         return {
             type: INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT,
@@ -1018,6 +1686,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Sets templateasdefaultresponse value
+     */
     public setTemplateAsDefaultResponse(response: any): CustomActions {
         return {
             type: INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE,
@@ -1025,6 +1696,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Deletes template
+     */
     public deleteTemplate(templateUniqueName: string): CustomActions {
         return {
             type: INVOICE.TEMPLATE.DELETE_TEMPLATE,
@@ -1032,6 +1706,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Deletes templateresponse
+     */
     public deleteTemplateResponse(response: any): CustomActions {
         return {
             type: INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE,
@@ -1039,6 +1716,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Retrieves sampletemplateresponse data
+     */
     public getSampleTemplateResponse(response): CustomActions {
         return {
             type: INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE,
@@ -1046,12 +1726,18 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Retrieves invoicesetting data
+     */
     public getInvoiceSetting(): CustomActions {
         return {
             type: INVOICE.SETTING.GET_INVOICE_SETTING
         };
     }
 
+    /**
+     * Deletes webhook
+     */
     public deleteWebhook(uniqueName: string): CustomActions {
         return {
             type: INVOICE.SETTING.DELETE_WEBHOOK,
@@ -1059,6 +1745,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Updates existing invoiceemail
+     */
     public updateInvoiceEmail(emailId: string): CustomActions {
         return {
             type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL,
@@ -1066,6 +1755,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Saves invoicewebhook data
+     */
     public saveInvoiceWebhook(webhook: object): CustomActions {
         return {
             type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK,
@@ -1073,6 +1765,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Updates existing invoicesetting
+     */
     public updateInvoiceSetting(form: object): CustomActions {
         return {
             type: INVOICE.SETTING.UPDATE_INVOICE_SETTING,
@@ -1080,12 +1775,18 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Retrieves razorpaydetail data
+     */
     public getRazorPayDetail(): CustomActions {
         return {
             type: INVOICE.SETTING.GET_RAZORPAY_DETAIL
         };
     }
 
+    /**
+     * Updates existing razorpaydetail
+     */
     public updateRazorPayDetail(form: object): CustomActions {
         return {
             type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL,
@@ -1093,12 +1794,18 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Deletes razorpaydetail
+     */
     public deleteRazorPayDetail(): CustomActions {
         return {
             type: INVOICE.SETTING.DELETE_RAZORPAY_DETAIL
         };
     }
 
+    /**
+     * Deletes invoiceemail
+     */
     public deleteInvoiceEmail(emailId: string): CustomActions {
         return {
             type: INVOICE.SETTING.DELETE_INVOICE_EMAIL,
@@ -1106,6 +1813,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles SaveRazorPayDetail functionality
+     */
     public SaveRazorPayDetail(form: object): CustomActions {
         return {
             type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL,
@@ -1113,6 +1823,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles DownloadInvoice functionality
+     */
     public DownloadInvoice(accountUniqueName: string, dataToSend: { voucherNumber: string[], typeOfInvoice?: string[], voucherType?: string }): CustomActions {
         return {
             type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
@@ -1120,6 +1833,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles DownloadInvoiceResponse functionality
+     */
     public DownloadInvoiceResponse(model: BaseResponse<string, string>): CustomActions {
         return {
             type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE,
@@ -1127,6 +1843,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles DownloadExportedInvoice functionality
+     */
     public DownloadExportedInvoice(model: any): CustomActions {
         return {
             type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED,
@@ -1134,6 +1853,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles DownloadExportedInvoiceResponse functionality
+     */
     public DownloadExportedInvoiceResponse(model: BaseResponse<string, string>): CustomActions {
         return {
             type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED_RESPONSE,
@@ -1141,6 +1863,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles SendInvoiceOnMail functionality
+     */
     public SendInvoiceOnMail(accountUniqueName: string, dataToSend: any): CustomActions {
         return {
             type: INVOICE_ACTIONS.SEND_MAIL,
@@ -1148,6 +1873,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles SendInvoiceOnMailResponse functionality
+     */
     public SendInvoiceOnMailResponse(model: BaseResponse<string, string>): CustomActions {
         return {
             type: INVOICE_ACTIONS.SEND_MAIL_RESPONSE,
@@ -1155,6 +1883,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Creates new recurringinvoice
+     */
     public createRecurringInvoice(model: RecurringInvoice): CustomActions {
         return {
             type: INVOICE.RECURRING.CREATE_RECURRING_INVOICE,
@@ -1162,6 +1893,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Creates new recurringinvoiceresponse
+     */
     public createRecurringInvoiceResponse(model: RecurringInvoice): CustomActions {
         return {
             type: INVOICE.RECURRING.CREATE_RECURRING_INVOICE_RESPONSE,
@@ -1169,6 +1903,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Updates existing recurringinvoice
+     */
     public updateRecurringInvoice(model: RecurringInvoice): CustomActions {
         return {
             type: INVOICE.RECURRING.UPDATE_RECURRING_INVOICE,
@@ -1176,6 +1913,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Updates existing recurringinvoiceresponse
+     */
     public updateRecurringInvoiceResponse(model: RecurringInvoice): CustomActions {
         return {
             type: INVOICE.RECURRING.UPDATE_RECURRING_INVOICE_RESPONSE,
@@ -1183,12 +1923,18 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Resets recurringinvoicerequest to default state
+     */
     public resetRecurringInvoiceRequest(): CustomActions {
         return {
             type: INVOICE.RECURRING.RESET_RECURRING_INVOICE_REQUEST
         };
     }
 
+    /**
+     * Handles SendInvoiceOnSms functionality
+     */
     public SendInvoiceOnSms(accountUniqueName: string, dataToSend: { numbers: string[] }, voucherNumber): CustomActions {
         return {
             type: INVOICE_ACTIONS.SEND_SMS,
@@ -1196,6 +1942,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles SendInvoiceOnSmsResponse functionality
+     */
     public SendInvoiceOnSmsResponse(model: BaseResponse<string, string>): CustomActions {
         return {
             type: INVOICE_ACTIONS.SEND_SMS_RESPONSE,
@@ -1203,6 +1952,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles LoginEwaybillUser functionality
+     */
     public LoginEwaybillUser(model: BaseResponse<string, string>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER,
@@ -1210,6 +1962,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles LoginEwaybillUserResponse functionality
+     */
     public LoginEwaybillUserResponse(model: BaseResponse<string, string>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE,
@@ -1217,12 +1972,18 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles isLoggedInUserEwayBill functionality
+     */
     public isLoggedInUserEwayBill(): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL
         };
     }
 
+    /**
+     * Handles isLoggedInUserEwayBillResponse functionality
+     */
     public isLoggedInUserEwayBillResponse(model: BaseResponse<string, string>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL_RESPONSE,
@@ -1230,6 +1991,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GenerateNewEwaybill functionality
+     */
     public GenerateNewEwaybill(model: BaseResponse<string, string>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.GENERATE_EWAYBILL,
@@ -1237,6 +2001,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GenerateNewEwaybillResponse functionality
+     */
     public GenerateNewEwaybillResponse(model: BaseResponse<string, string>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE,
@@ -1244,12 +2011,18 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Retrieves allewaybilllist data
+     */
     public getALLEwaybillList(): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS
         };
     }
 
+    /**
+     * Retrieves allewaybilllistresponse data
+     */
     public getALLEwaybillListResponse(response: BaseResponse<IEwayBillAllList, any>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE,
@@ -1258,6 +2031,9 @@ export class InvoiceActions {
     }
 
     // TRANSPORTER API
+    /**
+     * Handles addEwayBillTransporter functionality
+     */
     public addEwayBillTransporter(model: IEwayBillTransporter): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.ADD_TRANSPORTER,
@@ -1265,6 +2041,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles addEwayBillTransporterResponse functionality
+     */
     public addEwayBillTransporterResponse(model: BaseResponse<string, string>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE,
@@ -1272,6 +2051,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Updates existing ewaybilltransporter
+     */
     public updateEwayBillTransporter(currentTransportId, transportObj: IEwayBillTransporter): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.UPDATE_TRANSPORTER,
@@ -1279,6 +2061,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Updates existing ewaybilltransporterresponse
+     */
     public updateEwayBillTransporterResponse(model: BaseResponse<string, any>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE,
@@ -1286,6 +2071,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Retrieves alltransporterlist data
+     */
     public getALLTransporterList(model?: IEwayBillfilter): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER,
@@ -1293,6 +2081,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Retrieves alltransporterlistresponse data
+     */
     public getALLTransporterListResponse(response: BaseResponse<any, any>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE,
@@ -1300,6 +2091,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Deletes transporter
+     */
     public deleteTransporter(transporterId: string): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.DELETE_TRANSPORTER,
@@ -1307,6 +2101,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Deletes transporteresponse
+     */
     public deleteTransporteResponse(response: any): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE,
@@ -1314,6 +2111,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles UpdateEwayVehicle functionality
+     */
     public UpdateEwayVehicle(model: UpdateEwayVehicle): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE,
@@ -1321,6 +2121,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles UpdateEwayVehicleResponse functionality
+     */
     public UpdateEwayVehicleResponse(response: any): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE,
@@ -1328,6 +2131,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles cancelEwayBill functionality
+     */
     public cancelEwayBill(EwaycancelReq: IEwayBillCancel): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.CANCEL_EWAYBILL,
@@ -1335,6 +2141,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles cancelEwayBillResponse functionality
+     */
     public cancelEwayBillResponse(response: any): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE,
@@ -1342,6 +2151,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GetAllEwayfilterRequest functionality
+     */
     public GetAllEwayfilterRequest(model: IEwayBillfilter): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.GET_All_FILTERED_LIST_EWAYBILLS,
@@ -1349,6 +2161,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Handles GetAllEwayfilterResponse functionality
+     */
     public GetAllEwayfilterResponse(model: BaseResponse<IEwayBillAllList, IEwayBillfilter>): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.GET_All_FILTERED_LIST_EWAYBILLS_RESPONSE,
@@ -1361,12 +2176,21 @@ export class InvoiceActions {
         showToast: boolean = false,
         errorAction: CustomActions = { type: 'EmptyAction' },
         message?: string): CustomActions {
+        /**
+         * Handles if functionality
+         */
         if (response?.status === 'error') {
+            /**
+             * Handles if functionality
+             */
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }
             return errorAction;
         } else {
+            /**
+             * Handles if functionality
+             */
             if (showToast && typeof response?.body === 'string') {
                 this._toasty.successToast(response?.body);
             } else if (message) {
@@ -1377,6 +2201,9 @@ export class InvoiceActions {
 
     }
 
+    /**
+     * Resets transporterlistresponse to default state
+     */
     public resetTransporterListResponse(): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.RESET_ALL_TRANSPORTER_RESPONSE
@@ -1432,6 +2259,9 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Sets bulkgenerateconfirm value
+     */
     public setBulkGenerateConfirm(body: any): CustomActions {
         return {
             type: INVOICE_ACTIONS.SHOW_BULK_GENERATE_VOUCHER_CONFIRMATION,

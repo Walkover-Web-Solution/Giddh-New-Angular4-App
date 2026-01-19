@@ -1,9 +1,22 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 // tslint:disable-next-line:pipe-naming
+/**
+ * Handles Pipe functionality
+ */
 @Pipe({ name: 'highlight', standalone: false })
+/**
+ * HighlightPipe pipe
+ * Implements HighlightPipe functionality
+ */
 export class HighlightPipe implements PipeTransform {
+    /**
+     * Handles transform functionality
+     */
     public transform(text: string, search): string {
+        /**
+         * Handles if functionality
+         */
         if (search && text) {
             // Sanitize search input to prevent ReDoS attacks
             const sanitizedSearch = String(search).slice(0, 100); // Limit length
@@ -14,6 +27,9 @@ export class HighlightPipe implements PipeTransform {
                 return t?.length > 0 && t.length <= 50; // Limit individual term length
             }).slice(0, 10); // Limit number of terms
 
+            /**
+             * Handles if functionality
+             */
             if (!terms || terms.length === 0) {
                 return text;
             }

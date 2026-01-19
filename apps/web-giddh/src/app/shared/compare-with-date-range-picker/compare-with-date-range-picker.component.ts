@@ -13,7 +13,15 @@ import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { TextFieldComponent } from '../../theme/form-fields/text-field/text-field.component';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 
+/**
+ * compareType interface definition
+ * Defines the structure and contract for compareType objects
+ */
 type compareType = 'month' | 'quarter' | 'year' | 'period' | null;
+/**
+ * CompareTypeEnum enumeration
+ * Defines constant values for CompareTypeEnum
+ */
 enum CompareTypeEnum {
   month = 'month',
   quarter = 'quarter',
@@ -21,6 +29,10 @@ enum CompareTypeEnum {
   period = 'period',
   none = 'none'
 };
+/**
+ * DateCheckResult interface definition
+ * Defines the structure and contract for DateCheckResult objects
+ */
 interface DateCheckResult {
   isMonthSelected: boolean;
   isYearSelected: boolean;
@@ -29,6 +41,9 @@ interface DateCheckResult {
   dayCount: number;
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
   selector: 'giddh-compare-with-date-range-picker',
   templateUrl: './compare-with-date-range-picker.component.html',
@@ -44,6 +59,10 @@ interface DateCheckResult {
     MatDividerModule
   ]
 })
+/**
+ * CompareWithDateRangePickerComponent component
+ * Handles comparewithdaterangepicker functionality and user interactions
+ */
 export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
   /** Holds trigger */
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
@@ -76,6 +95,10 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
   /** Emits on date change event */
   @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * Creates an instance of component
+   * Initializes component dependencies and sets up initial state
+   */
   constructor(
     private formBuilder: FormBuilder,
     private toaster: ToasterService
@@ -93,14 +116,23 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    */
   public ngOnInit(): void {
     this.compareOptionsForm.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+      /**
+       * Handles if functionality
+       */
       if (value?.compareValue?.[0] == 'undefined') {
         return;
       }
 
       const compareValue = value.compareValue?.[0] ?? value.compareValue;
+      /**
+       * Handles if functionality
+       */
       if (compareValue > 0) {
         this.setCompareWithField(compareValue, value.compareType?.[0]);
         // Execute if value set by list option 
+        /**
+         * Handles if functionality
+         */
         if (value.compareValue?.[0]) {
           this.showCustomInput = false;
         }
@@ -108,12 +140,18 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
         this.compareWithField.setValue('None');
       }
 
+      /**
+       * Handles if functionality
+       */
       if (compareValue > 36) {
         this.toaster.showSnackBar('warning', this.localeData?.up_to_36_periods_can_be_compared);
         this.compareOptionsForm.get('compareValue').patchValue([36]);
         return;
       }
 
+      /**
+       * Handles if functionality
+       */
       if (this.compareOptionsForm.valid && compareValue > 0) {
         this.onChange.emit({
           compareValue: +compareValue,
@@ -135,9 +173,15 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof CompareWithDateRangePickerComponent
    */
   public ngOnChanges(changes: SimpleChanges): void {
+    /**
+     * Handles if functionality
+     */
     if (('startDate' in changes) || ('endDate' in changes) || ('universalDateRangeLabel' in changes)) {
       const startDateObj = dayjs(this.startDate, GIDDH_DATE_FORMAT);
       const endDateObj = dayjs(this.endDate, GIDDH_DATE_FORMAT);
+      /**
+       * Handles if functionality
+       */
       if (startDateObj.isValid() && endDateObj.isValid()) { 
         this.setCompareValues();
       }
@@ -151,6 +195,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof CompareWithDateRangePickerComponent
    */
   public translationComplete(event: boolean): void {
+    /**
+     * Handles if functionality
+     */
     if (event) {
       this.compareWithField.setValue(this.localeData?.none);
     }
@@ -163,6 +210,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    */
   private setCompareValues(): void {
     this.dateRangeInfo = this.checkDateSelectionRange(this.startDate, this.endDate);
+    /**
+     * Handles if functionality
+     */
     if (this.dateRangeInfo.isMonthSelected && !this.isSelectedRangeThisQuarterToDate() && !this.isSelectedRangeThisFinancialYearToDate()) {
       this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.month]);
     } else if (this.dateRangeInfo.isQuarterSelected && !this.isSelectedRangeThisFinancialYearToDate()) {
@@ -174,6 +224,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
     }
 
     const compareValue = this.compareOptionsForm.get('compareValue')?.value?.[0] ?? this.compareOptionsForm.get('compareValue')?.value;
+    /**
+     * Handles if functionality
+     */
     if (compareValue > 0) {
       this.setCompareWithField(compareValue, this.compareOptionsForm.get('compareType')?.value?.[0]);
     }
@@ -198,6 +251,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof CompareWithDateRangePickerComponent
    */
   public getTranslatedType(type: compareType): string {
+    /**
+     * Handles switch functionality
+     */
     switch (type) {
       case 'month':
         return this.localeData?.compare_types?.month;
@@ -219,6 +275,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof CompareWithDateRangePickerComponent
    */
   public toggleMenu(isOpen: boolean = true) {
+    /**
+     * Handles if functionality
+     */
     if (isOpen) {
       this.trigger?.openMenu();
     } else {
@@ -243,6 +302,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof CompareWithDateRangePickerComponent
    */
   public hasDisable(value: string): boolean {
+    /**
+     * Handles switch functionality
+     */
     switch (value.toLowerCase()) {
       case 'month':
         return !this.dateRangeInfo.isMonthSelected;
@@ -270,12 +332,18 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
     const endDate = dayjs(endDateInput, GIDDH_DATE_FORMAT);
 
     let dayCount = 0;
+    /**
+     * Handles if functionality
+     */
     if (startDate.isValid() && endDate.isValid() && endDate.isSameOrAfter(startDate, 'day')) {
       const diffInMilliseconds = endDate.valueOf() - startDate.valueOf();
       const millisecondsInDay = 24 * 60 * 60 * 1000;
       dayCount = Math.round(diffInMilliseconds / millisecondsInDay) + 1;
     }
 
+    /**
+     * Handles if functionality
+     */
     if (!startDate.isValid() || !endDate.isValid()) {
       return this.resetDateRangeObject();
     }
@@ -295,6 +363,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       isMonthSelected: isSameMonth || (!isSameMonth && !isYearSelected && !isSameQuarter && dayCount <= 31),
       isQuarterSelected: isSameQuarter || (!isSameQuarter && !isYearSelected && dayCount <= 90),
       isYearSelected: isYearSelected || (!isYearSelected && dayCount <= 365),
+      /**
+       * Handles isRandomDateSelected functionality
+       */
       isRandomDateSelected: (!isSameMonth && !isYearSelected && !isSameQuarter) || this.isSelectedRangeThisQuarterToDate() || this.isSelectedRangeThisFinancialYearToDate(),
       dayCount: dayCount,
     };
@@ -342,6 +413,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof CompareWithDateRangePickerComponent
    */
   public focusCustomInput(): void {
+    /**
+     * Sets timeout value
+     */
     setTimeout(() => {
       this.customInput?.textField?.nativeElement?.focus();
     }, 200);

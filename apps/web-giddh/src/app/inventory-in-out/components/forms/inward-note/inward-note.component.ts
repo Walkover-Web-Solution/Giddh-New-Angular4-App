@@ -13,6 +13,9 @@ import { ReplaySubject } from 'rxjs';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep, forEach, without } from '../../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'inward-note',
     templateUrl: './inward-note.component.html',
@@ -20,6 +23,10 @@ import { cloneDeep, forEach, without } from '../../../../lodash-optimized';
     standalone: false
 })
 
+/**
+ * InwardNoteComponent component
+ * Handles inwardnote functionality and user interactions
+ */
 export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public onCancel = new EventEmitter();
     @Output() public onSave = new EventEmitter<InventoryEntry>();
@@ -43,6 +50,10 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private _fb: UntypedFormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
         private _zone: NgZone) {
         this.initializeForm(true);
@@ -76,6 +87,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         return this.form.get('isManufactured') as UntypedFormControl;
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.manufacturingDetails.disable();
         this.isManufactured.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
@@ -84,6 +98,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Initializes ializeform
+     */
     public initializeForm(initialRequest: boolean = false) {
         this.form = this._fb.group({
             inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
@@ -103,11 +120,17 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                 linkedStockUnitCode: [''],
             }, { validator: stockManufacturingDetailsValidator })
         });
+        /**
+         * Handles if functionality
+         */
         if (initialRequest) {
             this.addTransactionItem();
         }
     }
 
+    /**
+     * Initializes ialimanufacturingdetails
+     */
     public initialIManufacturingDetails() {
         // initialize our controls
         return this._fb.group({
@@ -117,12 +140,18 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Handles modeChanged functionality
+     */
     public modeChanged(mode: 'sender' | 'product') {
         this.mode = mode;
         this.form.reset();
         this.inventoryEntryDate?.patchValue(dayjs().format(GIDDH_DATE_FORMAT));
         this.transactions.controls = this.transactions.controls?.filter(trx => false);
 
+        /**
+         * Handles if functionality
+         */
         if (this.mode === 'sender') {
             this.stock.setValidators(Validators.required);
             this.inventoryUser.clearValidators();
@@ -135,20 +164,38 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         this.addTransactionItem();
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes.stockList && this.stockList) {
             this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
+        /**
+         * Handles if functionality
+         */
         if (changes.stockUnits && this.stockUnits) {
             this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
         }
+        /**
+         * Handles if functionality
+         */
         if (changes.userList && this.userList) {
             this.userListOptions = this.userList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
     }
 
+    /**
+     * Handles addTransactionItem functionality
+     */
     public addTransactionItem(control?: AbstractControl) {
 
+        /**
+         * Handles if functionality
+         */
         if (control && (control.invalid || this.stock.invalid || this.inventoryUser.invalid)) {
             return;
         }
@@ -172,16 +219,25 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         items.push(transaction);
     }
 
+    /**
+     * Deletes transactionitem
+     */
     public deleteTransactionItem(index: number) {
         const items = this.form.get('transactions') as UntypedFormArray;
         items.removeAt(index);
     }
 
+    /**
+     * Handles userChanged functionality
+     */
     public userChanged(option: IOption, index: number) {
         const items = this.form.get('transactions') as UntypedFormArray;
         const user = this.userList.find(p => p?.uniqueName === option?.value);
         const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
 
+        /**
+         * Handles if functionality
+         */
         if (index >= 0) {
             const control = items.at(index);
             control?.patchValue({
@@ -193,12 +249,18 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles stockChanged functionality
+     */
     public async stockChanged(option: IOption, index: number) {
         const items = this.transactions;
         const stockItem = this.stockList.find(p => p?.uniqueName === option?.value);
         const stock = stockItem ? { uniqueName: stockItem?.uniqueName } : null;
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
 
+        /**
+         * Handles if functionality
+         */
         if (stockItem && this.mode === 'sender') {
             this.stock.disable();
             try {
@@ -207,6 +269,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                     this.stock.enable();
                 });
 
+                /**
+                 * Handles if functionality
+                 */
                 if (stockDetails.body && stockDetails.body.manufacturingDetails) {
                     let mfd = stockDetails.body.manufacturingDetails;
                     this.isManufactured?.patchValue(true);
@@ -232,6 +297,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
 
+        /**
+         * Handles if functionality
+         */
         if (index >= 0) {
             const control = items.at(index);
             control?.patchValue({ ...control?.value, stock, stockUnit });
@@ -247,12 +315,21 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         const manufacturingDetailsContorl = this.manufacturingDetails;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
         let count = 0;
+        /**
+         * Handles forEach functionality
+         */
         forEach(control.controls, (o) => {
+            /**
+             * Handles if functionality
+             */
             if (o?.value.stockUniqueName === uniqueName) {
                 count++;
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (count > 1) {
             this._toasty.errorToast('Stock already added.');
             this.disableStockButton = true;
@@ -265,19 +342,34 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Handles addItemInLinkedStocks functionality
+     */
     public addItemInLinkedStocks(item, i?: number, lastIdx?) {
         const manufacturingDetailsContorl = this.manufacturingDetails;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
         let frmgrp = this.initialIManufacturingDetails();
+        /**
+         * Handles if functionality
+         */
         if (item) {
+            /**
+             * Handles if functionality
+             */
             if (item.controls) {
                 let isValid = this.validateLinkedStock(item.value);
+                /**
+                 * Handles if functionality
+                 */
                 if (!isValid) {
                     return this._toasty.errorToast('All fields are required.');
                 }
 
             } else {
                 let isValid = this.validateLinkedStock(item);
+                /**
+                 * Handles if functionality
+                 */
                 if (isValid) {
                     frmgrp?.patchValue(item);
                     control.controls[i] = frmgrp;
@@ -285,13 +377,22 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                     return this._toasty.errorToast('All fields are required.');
                 }
             }
+            /**
+             * Handles if functionality
+             */
             if (i === lastIdx) {
                 control.controls.push(this.initialIManufacturingDetails());
             }
         }
     }
 
+    /**
+     * Deletes iteminlinkedstocks
+     */
     public removeItemInLinkedStocks(i: number) {
+        /**
+         * Handles if functionality
+         */
         if (this.editLinkedStockIdx === i) {
             this.editModeForLinkedStokes = false;
             this.editLinkedStockIdx = null;
@@ -308,7 +409,13 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         return !(!item.quantity || !item.stockUniqueName || !item.stockUnitCode);
     }
 
+    /**
+     * Saves  data
+     */
     public save() {
+        /**
+         * Handles if functionality
+         */
         if (this.form.valid) {
             let rawValues = this.transactions.getRawValue();
 
@@ -322,6 +429,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                 transactions: rawValues,
             };
 
+            /**
+             * Handles if functionality
+             */
             if (this.mode === 'sender') {
                 value.transactions = value.transactions.map(trx => {
                     let linkedStocks: any = this.removeBlankLinkedStock(this.manufacturingDetails.controls.linkedStocks);
@@ -339,6 +449,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Retrieves stockdetails data
+     */
     public async getStockDetails(stockItem: IStocksItem) {
         return await this._inventoryService.GetStockDetails(stockItem.stockGroup?.uniqueName, stockItem?.uniqueName).toPromise();
     }
@@ -350,7 +463,13 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         const manufacturingDetailsContorl = this.manufacturingDetails;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
         let rawArr = control.getRawValue();
+        /**
+         * Handles forEach functionality
+         */
         forEach(rawArr, (o, i) => {
+            /**
+             * Handles if functionality
+             */
             if (!o.quantity || !o.stockUniqueName || !o.stockUnitCode) {
                 rawArr = without(rawArr, o);
                 control.removeAt(i);

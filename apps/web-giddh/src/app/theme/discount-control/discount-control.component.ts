@@ -5,6 +5,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'discount-control-component',
     templateUrl: './discount-control-component.html',
@@ -12,6 +15,10 @@ import { takeUntil } from 'rxjs/operators';
     standalone: false
 })
 
+/**
+ * DiscountControlComponent component
+ * Handles discountcontrol functionality and user interactions
+ */
 export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
 
     public get defaultDiscount(): LedgerDiscountClass {
@@ -47,15 +54,25 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     /** List of discounts */
     @Input() public discountsList: any[] = [];
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>
     ) {
 
     }
 
+    /**
+     * Handles focuslastdiv event
+     */
     public onFocusLastDiv(el) {
         el.stopPropagation();
         el.preventDefault();
+        /**
+         * Handles if functionality
+         */
         if (!this.discountMenu) {
             this.discountMenu = true;
             this.hideOtherPopups.emit(true);
@@ -68,6 +85,9 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
             });
         let index = focussable?.indexOf(document.activeElement);
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
@@ -76,9 +96,15 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         return false;
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.prepareDiscountList();
 
+        /**
+         * Handles if functionality
+         */
         if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
             this.discountFixedValueModal = this.defaultDiscount.amount;
         } else {
@@ -90,22 +116,40 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         });
     }
 
+    /**
+     * Handles ngOnChanges functionality
+     */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
             this.prepareDiscountList();
+            /**
+             * Handles if functionality
+             */
             if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
                 this.discountFixedValueModal = this.defaultDiscount.amount;
             } else {
                 this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
             }
+            /**
+             * Handles if functionality
+             */
             if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
                 this.change();
             }
         }
+        /**
+         * Handles if functionality
+         */
         if ('discountFixedValueModal' in changes && changes.discountFixedValueModal.currentValue && changes.discountFixedValueModal.currentValue !== changes.discountFixedValueModal.previousValue) {
             this.discountFixedValueModal = changes.discountFixedValueModal.currentValue;
             this.assignDiscount('FIX_AMOUNT', changes.discountFixedValueModal.currentValue, changes.discountFixedValueModal.firstChange, true);
         }
+        /**
+         * Handles if functionality
+         */
         if ('discountPercentageModal' in changes && changes.discountPercentageModal.currentValue && changes.discountPercentageModal.currentValue !== changes.discountPercentageModal.previousValue) {
             this.discountPercentageModal = changes.discountPercentageModal.currentValue;
             this.assignDiscount('PERCENTAGE', changes.discountPercentageModal.currentValue, changes.discountPercentageModal.firstChange, true);
@@ -116,6 +160,9 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * prepare discount obj
      */
     public prepareDiscountList() {
+        /**
+         * Handles if functionality
+         */
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         }
@@ -129,8 +176,14 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      */
     private processDiscountList(): void {
         (Array.isArray(this.discountsList) ? this.discountsList : []).forEach(acc => {
+            /**
+             * Handles if functionality
+             */
             if (this.discountAccountsDetails) {
                 let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
+                /**
+                 * Handles if functionality
+                 */
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
@@ -160,6 +213,9 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         this.assignDiscount(type, event.target?.value, false, true);
     }
 
+    /**
+     * Handles assignDiscount functionality
+     */
     public assignDiscount(type: any, value: any, isFirstChange: boolean = false, isActive?: boolean): void {
         this.defaultDiscount.amount = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountValue = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
@@ -167,11 +223,17 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
 
         this.discountTotalUpdated.emit({ discount: this.defaultDiscount.amount, isActive: isActive, discountType: type, isFirstChange: isFirstChange });
 
+        /**
+         * Handles if functionality
+         */
         if (!value) {
             this.discountFromVal = true;
             this.discountFromPer = true;
             return;
         }
+        /**
+         * Handles if functionality
+         */
         if (type === 'PERCENTAGE') {
             this.discountFromPer = true;
             this.discountFromVal = false;
@@ -188,20 +250,35 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         this.discountTotalUpdated.emit({ discount: discount, isActive: event });
     }
 
+    /**
+     * Handles trackByFn functionality
+     */
     public trackByFn(index) {
         return index;
     }
 
+    /**
+     * Hides discountmenu element
+     */
     public hideDiscountMenu() {
         this.discountMenu = false;
     }
 
+    /**
+     * Handles discountInputBlur functionality
+     */
     public discountInputBlur(event) {
+        /**
+         * Handles if functionality
+         */
         if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
             this.hideDiscountMenu();
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

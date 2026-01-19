@@ -27,6 +27,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -69,5 +72,9 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
+/**
+ * HomeModule module
+ * Implements HomeModule functionality
+ */
 export class HomeModule {
 }

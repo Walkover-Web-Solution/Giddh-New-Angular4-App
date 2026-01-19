@@ -3,6 +3,10 @@ import { ICompAidata, Igtbl, IUlist } from '../interfaces/ulist.interface';
 import { orderBy } from '../../lodash-optimized';
 import { DEFAULT_MENUS } from '../default-menus';
 
+/**
+ * UlistDbModel class
+ * Implements UlistDbModel functionality
+ */
 export class UlistDbModel implements IUlist {
     public id: number;
     public name: string;
@@ -10,26 +14,49 @@ export class UlistDbModel implements IUlist {
     public time?: number;
     public parentGroups?: any;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         //
     }
 }
 
+/**
+ * CompAidataModel class
+ * Implements CompAidataModel functionality
+ */
 export class CompAidataModel implements ICompAidata {
     public name: string;
     public uniqueName: string;
     public aidata: Igtbl;
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
         //
     }
 }
 
+/**
+ * AppDatabase class
+ * Implements AppDatabase functionality
+ */
 class AppDatabase extends Dexie {
     public companies: Dexie.Table<ICompAidata, number>;
     public clonedMenus: IUlist[] = [...DEFAULT_MENUS];
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor() {
+        /**
+         * Handles super functionality
+         */
         super('_giddh');
         this.version(1).stores({
             companies: '&uniqueName'
@@ -38,29 +65,50 @@ class AppDatabase extends Dexie {
         this.companies.mapToClass(CompAidataModel);
     }
 
+    /**
+     * Handles forceDeleteDB functionality
+     */
     public forceDeleteDB() {
         this.delete();
     }
 
+    /**
+     * Handles clearAllData functionality
+     */
     public clearAllData() {
         this.companies.clear();
     }
 
+    /**
+     * Retrieves itembykey data
+     */
     public getItemByKey(key: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.companies.get(key)
                 .then((res) => {
+                    /**
+                     * Handles resolve functionality
+                     */
                     resolve(res);
                 }).catch(err => {
+                    /**
+                     * Handles reject functionality
+                     */
                     reject(err);
                 });
         });
     }
 
+    /**
+     * Handles insertFreshData functionality
+     */
     public insertFreshData(item: ICompAidata): Promise<any> {
         return this.companies.put(item);
     }
 
+    /**
+     * Retrieves allitems data
+     */
     public getAllItems(key: any, entity: string): Promise<any[]> {
         return this.companies.get(key).then((res: CompAidataModel) => {
             return res?.aidata[entity];
@@ -81,6 +129,9 @@ class AppDatabase extends Dexie {
      */
     public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen, isCompany: boolean): Promise<any> {
         return this.companies.get(key).then((res: CompAidataModel) => {
+            /**
+             * Handles if functionality
+             */
             if (!res) {
                 return Promise.reject('Company data not found in database. Please ensure company is initialized first.');
             }
@@ -88,6 +139,9 @@ class AppDatabase extends Dexie {
             let arr: IUlist[] = res?.aidata[entity];
             const limit = 5;
 
+            /**
+             * Handles if functionality
+             */
             if (entity === 'menus') {
                 arr = this.processMenuEntity(arr, model, fromInvalidState, isSmallScreen, isCompany, limit);
             } else {
@@ -108,6 +162,9 @@ class AppDatabase extends Dexie {
      * Process menu entity with complex logic for menu management
      */
     private processMenuEntity(arr: IUlist[], model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen: any, isCompany: boolean, limit: number): IUlist[] {
+        /**
+         * Handles if functionality
+         */
         if (fromInvalidState) {
             return this.handleInvalidStateMenu(arr, model, fromInvalidState);
         } else {
@@ -134,6 +191,9 @@ class AppDatabase extends Dexie {
     private handleRegularMenuAddition(arr: IUlist[], model: IUlist, isSmallScreen: any, isCompany: boolean, limit: number): IUlist[] {
         const duplicateIndex = this.findDuplicateMenuIndex(arr, model);
 
+        /**
+         * Handles if functionality
+         */
         if (duplicateIndex === -1) {
             return this.addNewMenuItem(arr, model, isSmallScreen, isCompany, limit);
         } else {
@@ -146,7 +206,13 @@ class AppDatabase extends Dexie {
      */
     private findDuplicateMenuIndex(arr: IUlist[], model: IUlist): number {
         return arr?.findIndex(s => {
+            /**
+             * Handles if functionality
+             */
             if (model.additional) {
+                /**
+                 * Handles if functionality
+                 */
                 if (s.additional) {
                     return s?.uniqueName === model?.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
                 }
@@ -162,6 +228,9 @@ class AppDatabase extends Dexie {
     private addNewMenuItem(arr: IUlist[], model: IUlist, isSmallScreen: any, isCompany: boolean, limit: number): IUlist[] {
         const indDefaultIndex = this.findDefaultMenuIndex(model);
 
+        /**
+         * Handles if functionality
+         */
         if (indDefaultIndex > -1) {
             return this.addFromDefaultMenu(arr, model, indDefaultIndex, isSmallScreen, isCompany, limit);
         } else {
@@ -174,7 +243,13 @@ class AppDatabase extends Dexie {
      */
     private findDefaultMenuIndex(model: IUlist): number {
         return this.clonedMenus?.findIndex((item) => {
+            /**
+             * Handles if functionality
+             */
             if (model.additional) {
+                /**
+                 * Handles if functionality
+                 */
                 if (item.additional) {
                     return item?.uniqueName === model?.uniqueName && item.name === model.name && item.additional.tabIndex === model.additional.tabIndex;
                 }
@@ -190,10 +265,16 @@ class AppDatabase extends Dexie {
     private addFromDefaultMenu(arr: IUlist[], model: IUlist, indDefaultIndex: number, isSmallScreen: any, isCompany: boolean, limit: number): IUlist[] {
         let index = arr?.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
 
+        /**
+         * Handles if functionality
+         */
         if (isSmallScreen && index > limit) {
             index = this.smallScreenHandler(index, isCompany);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             arr[index] = Object.assign({}, model, {
                 isRemoved: false,
@@ -216,6 +297,9 @@ class AppDatabase extends Dexie {
     private addToCustomPosition(arr: IUlist[], model: IUlist, isSmallScreen: any, isCompany: boolean, limit: number): IUlist[] {
         let sorted: IUlist[] = orderBy(this.clonedMenus.filter(f => !f.isRemoved), ['pIndex'], ['desc']);
 
+        /**
+         * Handles if functionality
+         */
         if (sorted?.length === 0) {
             sorted = DEFAULT_MENUS;
             this.clonedMenus = DEFAULT_MENUS;
@@ -224,11 +308,17 @@ class AppDatabase extends Dexie {
         let index = arr?.findIndex(a => sorted[0].pIndex === a.pIndex);
         let originalIndex = -1;
 
+        /**
+         * Handles if functionality
+         */
         if (isSmallScreen && index > limit) {
             originalIndex = index;
             index = this.smallScreenHandler(index, isCompany);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (index > -1) {
             arr[originalIndex] = arr[index];
             arr[index] = Object.assign({}, model, {
@@ -243,6 +333,9 @@ class AppDatabase extends Dexie {
         }
 
         this.clonedMenus = this.clonedMenus.map(m => {
+            /**
+             * Handles if functionality
+             */
             if (m.pIndex === sorted[0].pIndex) {
                 m.isRemoved = true;
             }
@@ -258,10 +351,16 @@ class AppDatabase extends Dexie {
     private updateExistingMenuItem(arr: IUlist[], model: IUlist, duplicateIndex: number, isSmallScreen: any, isCompany: boolean, limit: number): IUlist[] {
         let originalDuplicateIndex = duplicateIndex;
 
+        /**
+         * Handles if functionality
+         */
         if (isSmallScreen && duplicateIndex > limit) {
             duplicateIndex = this.smallScreenHandler(duplicateIndex, isCompany);
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.clonedMenus?.length === 0) {
             this.clonedMenus = DEFAULT_MENUS;
         }
@@ -282,6 +381,9 @@ class AppDatabase extends Dexie {
         let isFound = false;
 
         arr.map((item: IUlist) => {
+            /**
+             * Handles if functionality
+             */
             if (item?.uniqueName === model?.uniqueName) {
                 isFound = true;
                 item = Object.assign(item, model);
@@ -291,6 +393,9 @@ class AppDatabase extends Dexie {
             }
         });
 
+        /**
+         * Handles if functionality
+         */
         if (!isFound) {
             arr.push(model);
         }
@@ -310,12 +415,18 @@ class AppDatabase extends Dexie {
      */
     public removeItem(key: any, entity: string, uniqueName: string, isCompany: boolean): Promise<ICompAidata> {
         return this.companies.get(key).then((res: CompAidataModel) => {
+            /**
+             * Handles if functionality
+             */
             if (!res) {
                 return;
             }
             let arr: IUlist[] = res?.aidata[entity];
             // for accounts and groups
             arr = arr?.filter((item: IUlist) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (item?.uniqueName !== uniqueName) {
                     return item;
                 }
@@ -332,10 +443,16 @@ class AppDatabase extends Dexie {
         });
     }
 
+    /**
+     * Retrieves slicedresult data
+     */
     private getSlicedResult(arr: IUlist[], limit: number = 5): any[] {
         return arr.slice(0, limit);
     }
 
+    /**
+     * Handles smallScreenHandler functionality
+     */
     private smallScreenHandler(index, isCompany: boolean) {
         const limit = isCompany ? 17 : 7
         /*

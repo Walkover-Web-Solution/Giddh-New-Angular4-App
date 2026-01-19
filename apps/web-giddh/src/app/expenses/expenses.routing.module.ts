@@ -3,6 +3,9 @@ import { RouterModule } from '@angular/router';
 import { ExpensesComponent } from './expenses.component';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -16,5 +19,9 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
     ],
     exports: [RouterModule]
 })
+/**
+ * ExpensesRoutingModule module
+ * Implements ExpensesRoutingModule functionality
+ */
 export class ExpensesRoutingModule {
 }

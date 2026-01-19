@@ -12,6 +12,10 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { cloneDeep, isNull, range } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
 
+/**
+ * IGstObj interface definition
+ * Defines the structure and contract for IGstObj objects
+ */
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -20,6 +24,9 @@ export interface IGstObj {
     isDefault: boolean;
 }
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'financial-year',
     templateUrl: './financial-year.component.html',
@@ -27,6 +34,10 @@ export interface IGstObj {
     standalone: false
 })
 
+/**
+ * FinancialYearComponent component
+ * Handles financialyear functionality and user interactions
+ */
 export class FinancialYearComponent implements OnInit, OnDestroy {
     public financialYearObj: IFinancialYearResponse;
     public currentCompanyName: string;
@@ -56,14 +67,24 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     /** Holds true to show change financial year period dropdown */
     public fyPeriodDropdownIsOpen: boolean = false;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private store: Store<AppState>,
         private settingsFinancialYearActions: SettingsFinancialYearActions
     ) {
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany) {
                 this.currentCompanyName = activeCompany.name;
                 this.financialOptions = activeCompany.financialYears?.map(element => {
@@ -73,12 +94,18 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.settings.refreshCompany), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
             }
         });
     }
 
+    /**
+     * Sets yearrange value
+     */
     public setYearRange() {
         let endYear = dayjs().year();
         let startYear = dayjs().subtract(7, 'year').year();
@@ -88,13 +115,22 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Retrieves initialfinancialyeardata data
+     */
     public getInitialFinancialYearData() {
         this.setYearRange();
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.financialYears], (o) => {
             this.setYearRange();
+            /**
+             * Handles if functionality
+             */
             if (o) {
                 this.financialYearObj = cloneDeep(o);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.FYPeriodOptions?.length) {
                     this.setLabelSelectedFYPeriod();
                 }
@@ -104,6 +140,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 (Array.isArray(o.financialYears) ? o.financialYears : []).forEach((fyear) => {
                     let year = dayjs(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
                     let yearIndx = yearOptions?.findIndex((y: any) => y?.value === year);
+                    /**
+                     * Handles if functionality
+                     */
                     if (yearIndx !== -1) {
                         yearOptions.splice(yearIndx, 1);
                     }
@@ -123,6 +162,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
      * @memberof FinancialYearComponent
      */
     private formatDateInFinancialYear(yearOptions: IOption[]): IOption[] {
+        /**
+         * Handles if functionality
+         */
         if (yearOptions.length === 0 || !this.selectedFYPeriod) {
             return [];
         }
@@ -141,6 +183,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
      * @memberof FinancialYearComponent
      */
     public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
+        /**
+         * Handles if functionality
+         */
         if (financialYear) {
             let year = cloneDeep(financialYear);
             let dataToSend = {
@@ -148,6 +193,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 uniqueName: year?.uniqueName
             };
             financialYear.isLocked = !financialYear.isLocked;
+            /**
+             * Handles if functionality
+             */
             if (financialYear.isLocked) {
                 this.store.dispatch(this.settingsFinancialYearActions.LockFinancialYear(dataToSend));
             } else {
@@ -156,22 +204,43 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles selectYear functionality
+     */
     public selectYear(data) {
         this.selectedYear = data?.value;
     }
 
+    /**
+     * Handles selectFYPeriod functionality
+     */
     public selectFYPeriod(ev) {
         this.selectedFYPeriod = ev ? ev?.value : null;
     }
 
+    /**
+     * Updates existing fyperiod
+     */
     public updateFYPeriod() {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedFYPeriod) {
             this.store.dispatch(this.settingsFinancialYearActions.UpdateFinancialYearPeriod(this.selectedFYPeriod));
         }
     }
 
+    /**
+     * Handles addFY functionality
+     */
     public addFY() {
+        /**
+         * Handles if functionality
+         */
         if (this.selectedYear) {
+            /**
+             * Handles if functionality
+             */
             if (this.selectedYear < dayjs().year()) {
                 this.store.dispatch(this.settingsFinancialYearActions.addFinancialYear(this.selectedYear));
             } else {
@@ -197,6 +266,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
      * @memberof FinancialYearComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.options.placeholder = this.commonLocaleData?.app_select_option;
 
@@ -206,6 +278,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.financial_year_period_options?.july_july, value: 'JULY-JULY' }
             ];
 
+            /**
+             * Handles if functionality
+             */
             if (this.financialYearObj?.financialYearPeriod) {
                 this.setLabelSelectedFYPeriod();
             }

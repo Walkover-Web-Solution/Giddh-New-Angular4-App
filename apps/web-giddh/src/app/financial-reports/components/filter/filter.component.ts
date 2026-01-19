@@ -27,6 +27,9 @@ import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, find, findIndex, get, map, orderBy } from '../../../lodash-optimized';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
 selector: 'financial-filter',
     templateUrl: './filter.component.html',
@@ -35,6 +38,10 @@ selector: 'financial-filter',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * FinancialReportsFilterComponent component
+ * Handles financialreportsfilter functionality and user interactions
+ */
 export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
     public selectedDateOption: string = '0';
@@ -116,6 +123,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     /** Holds voucher api version */
     public voucherApiVersion: number;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private fb: UntypedFormBuilder,
         private cd: ChangeDetectorRef,
@@ -156,6 +167,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      */
     @Input()
     public set selectedCompany(value: CompanyResponse) {
+        /**
+         * Handles if functionality
+         */
         if (!value) {
             return;
         }
@@ -164,6 +178,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             return { label: q?.uniqueName, value: q?.uniqueName };
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.filterForm.get('selectedDateOption')?.value === '0' && value.activeFinancialYear) {
             this.filterForm?.patchValue({
                 to: value.activeFinancialYear.financialYearEnds,
@@ -173,17 +190,29 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
         this.getTags();
+        /**
+         * Handles if functionality
+         */
         if (!this.isProjectWiseAccounting) {
             this.componentStore.reconcileDateRange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
                     const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
                     const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
@@ -202,8 +231,17 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             });
 
             this.tlPlService.isReportTailed$.pipe(
+                /**
+                 * Handles filter functionality
+                 */
                 filter(response => response !== null && response !== undefined),
+                /**
+                 * Handles debounceTime functionality
+                 */
                 debounceTime(200),
+                /**
+                 * Handles takeUntil functionality
+                 */
                 takeUntil(this.destroyed$)
             ).subscribe(() => {
                 this.getReconcileDateRange();
@@ -212,10 +250,16 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
+        /**
+         * Handles if functionality
+         */
         if (!this.showLabels) {
             this.filterForm?.patchValue({ selectedDateOption: '0' });
         }
         this.accountSearchControl.valueChanges.pipe(
+            /**
+             * Handles debounceTime functionality
+             */
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.search = newValue;
@@ -224,6 +268,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             });
 
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
+            /**
+             * Handles if functionality
+             */
             if (a) {
                 this.universalDateICurrent = false;
                 // assign dates
@@ -234,12 +281,18 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 });
 
                 // if filter type is not date picker then set filter as datepicker
+                /**
+                 * Handles if functionality
+                 */
                 if (this.filterForm.get('selectedDateOption')?.value === '0') {
                     this.filterForm?.patchValue({
                         selectedDateOption: '1'
                     });
                 }
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.cd['destroyed']) {
                     this.cd.detectChanges();
                 }
@@ -253,12 +306,18 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
                 this.activeCompany = activeCompany;
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response?.length) {
                 this.filterForm.get('branchUniqueName').setValue("");
                 this.forceClear$ = observableOf({ status: true });
@@ -277,10 +336,16 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -298,6 +363,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.filterForm.updateValueAndValidity();
                 this.cd.detectChanges();
             } else {
+                /**
+                 * Handles if functionality
+                 */
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -307,11 +375,20 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         this.isReconciled = false;
     }
 
+    /**
+     * Sets currentfy value
+     */
     public setCurrentFY() {
         // set financial years based on company financial year
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany && this.universalDateICurrent) {
                 let activeFinancialYear = activeCompany.activeFinancialYear;
+                /**
+                 * Handles if functionality
+                 */
                 if (activeFinancialYear) {
                     // assign dates
                     this.filterForm?.patchValue({
@@ -323,19 +400,34 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handles selectedDate functionality
+     */
     public selectedDate(value: any) {
         this.filterForm.controls['from'].setValue(dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT));
         this.filterForm.controls['to'].setValue(dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT));
     }
 
+    /**
+     * Handles selectFinancialYearOption functionality
+     */
     public selectFinancialYearOption(v: IOption) {
+        /**
+         * Handles if functionality
+         */
         if (v.value) {
             let financialYear = this._selectedCompany.financialYears.find(p => p?.uniqueName === v.value);
+            /**
+             * Handles if functionality
+             */
             if (this.showConfirmationOnDateChange && !this.isSameDateRange(financialYear?.financialYearStarts, financialYear?.financialYearEnds)) {
                 //show confirmation dialog
                 const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
@@ -345,8 +437,14 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                     }
                 });
                 dialogRef.afterClosed().subscribe((response) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response === this.commonLocaleData?.app_yes) {
                         const index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
+                        /**
+                         * Handles if functionality
+                         */
                         if (financialYear) {
                             this.filterForm?.patchValue({
                                 to: financialYear.financialYearEnds,
@@ -367,6 +465,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 });
             } else {
                 const index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
+                /**
+                 * Handles if functionality
+                 */
                 if (financialYear) {
                     this.filterForm?.patchValue({
                         to: financialYear.financialYearEnds,
@@ -398,12 +499,18 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     private isSameDateRange(from: string, to: string): boolean {
+        /**
+         * Handles if functionality
+         */
         if (!from || !to) {
             return false;
         }
         return this.filterForm.get('from')?.value === from && this.filterForm.get('to')?.value === to;
     }
 
+    /**
+     * Handles filterData functionality
+     */
     public filterData() {
         this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
         this.onPropertyChanged.emit(this.filterForm?.value);
@@ -413,6 +520,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         this.getReconcileDateRange();
     }
 
+    /**
+     * Handles refreshData functionality
+     */
     public refreshData() {
         this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
         let data = cloneDeep(this.filterForm?.value);
@@ -423,9 +533,18 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         this.emitExpand(false);
     }
 
+    /**
+     * Sets fyfirsttime value
+     */
     public setFYFirstTime(selectedFY: string) {
+        /**
+         * Handles if functionality
+         */
         if (selectedFY) {
             let inx = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === selectedFY);
+            /**
+             * Handles if functionality
+             */
             if (inx !== -1) {
                 this.filterForm?.patchValue({
                     fy: inx === 0 ? 0 : inx * -1
@@ -441,6 +560,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      */
     public getTags(): void {
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response && response.status === "success") {
                 this.tags = orderBy(response?.body, 'name')?.map(tag => {
                     return { label: tag?.name, value: tag?.name };
@@ -457,11 +579,17 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public emitExpand(event: boolean) {
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.expandAllChange.emit(event);
         }, 10);
     }
 
+    /**
+     * Handles tagselected event
+     */
     public onTagSelected(ev) {
         this.selectedTag = ev?.value;
         this.filterForm.get('tagName')?.patchValue(ev?.value);
@@ -476,12 +604,21 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public dateOptionIsSelected(event: IOption): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
+            /**
+             * Handles if functionality
+             */
             if (event.value === '0') {
                 this.selectFinancialYearOption(this.financialOptions[0]);
             } else {
                 const fromDate = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
                 const toDate = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
+                /**
+                 * Handles if functionality
+                 */
                 if (this.showConfirmationOnDateChange && !this.isSameDateRange(fromDate, toDate)) {
                     const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                         panelClass: ['mat-dialog-sm'],
@@ -490,6 +627,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                         }
                     });
                     dialogRef.afterClosed().subscribe((response) => {
+                        /**
+                         * Handles if functionality
+                         */
                         if (response === this.commonLocaleData?.app_yes) {
                             this.filterForm?.patchValue({
                                 from: fromDate,
@@ -524,6 +664,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
         this.generalService.currentBranchUniqueName = selectedEntity?.value;
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.expandAllChange.emit(false);
         }, 10);
@@ -538,6 +681,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean, element?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (isOpen && this.universalDatepickerTrigger) {
             this.universalDatepickerTrigger?.openMenu();
         } else if (!isOpen && this.universalDatepickerTrigger) {
@@ -552,16 +698,25 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public dateSelectedCallback(value?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
+        /**
+         * Handles if functionality
+         */
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
 
         this.toggleGiddhDatepicker(false);
+        /**
+         * Handles if functionality
+         */
         if (value && value.startDate && value.endDate) {
             const isDifferentDate = !this.isSameDateRange(value.startDate, value.endDate);
 
@@ -571,6 +726,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
+            /**
+             * Handles if functionality
+             */
             if (isDifferentDate) {
                 this.showTallyReportOptions(false);
                 this.filterData();
@@ -595,6 +753,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public showTallyReportOptions(showReconcileOptions?: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (showReconcileOptions !== undefined) {
             this.isReconciled = showReconcileOptions;
         } else {
@@ -609,10 +770,16 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public getReconcileDateRange(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.isProjectWiseAccounting) {
             return;
         }
         let reportType = ReportType.TRIAL_BALANCE;
+        /**
+         * Handles if functionality
+         */
         if (this.BsExportXLS) {
             reportType = ReportType.BALANCE_SHEET;
         } else if (this.plBsExportXLS) {
@@ -628,6 +795,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      */
     public goToReconcileDateRange(): void {
         this.componentStore.reconcileDateRange$.pipe(take(1)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
                 const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
@@ -654,6 +824,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public translationComplete(event: boolean): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             this.cd.detectChanges();
             this.dateOptions = [

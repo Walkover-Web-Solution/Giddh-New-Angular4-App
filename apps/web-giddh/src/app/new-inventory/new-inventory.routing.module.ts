@@ -72,35 +72,60 @@ const routes: Routes = [
     },
     {
         path: "stock",
+        /**
+         * Loads children data
+         */
         loadChildren: () => import('./component/stock-create-edit/stock-create-edit.module').then(module => module.StockCreateEditModule)
     },
     {
         path: "group",
+        /**
+         * Loads children data
+         */
         loadChildren: () => import('./component/create-update-group/create-update-group.module').then(module => module.GroupCreateEditModule)
     },
     {
         path: "recipe",
+        /**
+         * Loads children data
+         */
         loadChildren: () => import('./component/recipe/recipe.module').then(module => module.RecipeModule)
     },
     {
         path: "price",
+        /**
+         * Loads children data
+         */
         loadChildren: () => import('./component/custom-price/custom-price.module').then(module => module.CustomPriceModule)
     },
     {
         path: "manufacturing",
+        /**
+         * Loads children data
+         */
         loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
     },
     {
         path: "branch-transfer",
+        /**
+         * Loads children data
+         */
         loadChildren: () => import('./component/branch-transfer/branch-transfer.module').then(module => module.BranchTransferModule)
     },
 ];
 
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [],
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
+/**
+ * NewInventoryRoutingModule module
+ * Implements NewInventoryRoutingModule functionality
+ */
 export class NewInventoryRoutingModule {
 }

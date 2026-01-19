@@ -12,6 +12,9 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Configuration, ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'aside-setting',
     templateUrl: './aside-setting.component.html',
@@ -19,6 +22,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     standalone: false
 })
 
+/**
+ * AsideSettingComponent component
+ * Handles asidesetting functionality and user interactions
+ */
 export class AsideSettingComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -57,6 +64,10 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     /** Observable for branch list */
     public branchList$: Observable<any>;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(@Inject(ServiceConfig) private serviceConfig, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService, private changeDetectorRef: ChangeDetectorRef, private ngZone: NgZone) {
     }
 
@@ -68,6 +79,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -75,6 +89,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.setLanguage = true;
                 this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
@@ -86,18 +103,27 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         });
 
         this.store.select(state => state.settings.branches).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
             }
         });
 
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            /**
+             * Handles if functionality
+             */
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            /**
+             * Handles if functionality
+             */
             if (activeCompany && this.localeData && !this.setLanguage) {
                 this.selectedCompany = activeCompany;
                 this.translationComplete(true);
@@ -107,6 +133,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.showHideSettingsHeading(this.router.url);
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            /**
+             * Handles if functionality
+             */
             if ((!isElectron && event instanceof NavigationEnd) || (isElectron && (event instanceof NavigationStart || event instanceof NavigationEnd))) {
                 this.showHideSettingsHeading(event.url);
                 this.routerUrl = event.url?.split('?')[0];
@@ -122,10 +151,16 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public closeAsidePane(event?): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             event.preventDefault();
             event.stopPropagation();
         }
+        /**
+         * Sets timeout value
+         */
         setTimeout(() => {
             this.closeAsideEvent.emit(true);
         }, 0);
@@ -140,6 +175,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      */
     public handleNavigation(event: any, link: string): void {
         // Prevent event bubbling and default behavior
+        /**
+         * Handles if functionality
+         */
         if (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -160,9 +198,15 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     @HostListener('click', ['$event'])
+    /**
+     * Handles hostclick event
+     */
     public onHostClick(event: any): void {
         // Handle regular navigation items with data-link attribute
         const navigationTarget = event.target.closest('.navigation-item');
+        /**
+         * Handles if functionality
+         */
         if (navigationTarget && navigationTarget.dataset.link) {
             event.preventDefault();
             event.stopPropagation();
@@ -175,6 +219,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             this.ngZone.run(() => {
                 this.router.navigate([navigationTarget.dataset.link]).then(() => {
                     // Force change detection after navigation completes
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.changeDetectorRef.detectChanges();
                     }, 50);
@@ -184,6 +231,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         }
 
         // Don't interfere with mat-menu triggers (tags menu)
+        /**
+         * Handles if functionality
+         */
         if (event.target.closest('[matMenuTriggerFor]')) {
             return;
         }
@@ -195,6 +245,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public goToPreviousPage(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
             this.router.navigateByUrl(this.generalService.getSessionStorage("previousPage"));
         } else {
@@ -209,6 +262,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public closeAsidePaneIfMobile(event?: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.target?.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/invoice/preview/settings/sales") && !this.router.url.includes("/pages/vouchers/preview/sales/settings")) {
             this.closeAsideEvent.emit(event);
         }
@@ -231,13 +287,25 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public translationComplete(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (event) {
             let settingsPageTabs = this.localeData?.tabs;
+            /**
+             * Handles if functionality
+             */
             if (settingsPageTabs) {
                 let loop = 0;
                 let organizationIndex = 0;
                 this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), take(1)).subscribe((organization: Organization) => {
+                    /**
+                     * Handles if functionality
+                     */
                     if (organization) {
+                        /**
+                         * Handles if functionality
+                         */
                         if (organization.type === OrganizationType.Branch) {
                             organizationIndex = 1;
                         } else if ((organization.type === OrganizationType.Company || this.isConsolidatedBranch) || !organization.type) {
@@ -262,6 +330,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public showHideSettingsHeading(url: string): void {
+        /**
+         * Handles if functionality
+         */
         if (!url.includes("/pages/settings")) {
             this.showSettingHeading = true;
         } else {
@@ -277,9 +348,15 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      */
     public toggleTagMenu(menuStatus: boolean): void {
         this.isTagMenuOpened = menuStatus;
+        /**
+         * Handles if functionality
+         */
         if (menuStatus) {
             document.querySelector("body")?.classList?.add("tags-menu-open");
         } else {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 document.querySelector("body")?.classList?.remove("tags-menu-open");
             }, 500);

@@ -1,3 +1,7 @@
+/**
+ * TransporterModes interface definition
+ * Defines the structure and contract for TransporterModes objects
+ */
 export interface TransporterModes {
     value: string;
     label: string;

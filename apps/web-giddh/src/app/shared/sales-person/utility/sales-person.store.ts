@@ -8,6 +8,10 @@ import { SalesPersonService } from "./sales-person.service";
 import { HttpMethod, IOption } from "../../../app.constant";
 import { SalesPersonCreateUpdate, SalesPersonDeleteArchivedModel, SalesPersonErrorDetailsEnum } from "./sales-person.constant";
 
+/**
+ * SalesPersonState interface definition
+ * Defines the structure and contract for SalesPersonState objects
+ */
 export interface SalesPersonState {
     salesPersonSaveInProgress: boolean;
     createUpdateSalesPersonSuccess: boolean;
@@ -30,13 +34,27 @@ export const DEFAULT_STATE: SalesPersonState = {
     openTransferAndArchiveDialog: false
 };
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable()
+/**
+ * SalesPersonComponentStore store
+ * Manages salespersoncomponent state using NgRx ComponentStore
+ */
 export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> implements OnDestroy {
+    /**
+     * Creates an instance of store
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private toasterService: ToasterService,
         private localeService: LocaleService,
         private salesPersonService: SalesPersonService
     ) {
+        /**
+         * Handles super functionality
+         */
         super(DEFAULT_STATE);
     }
 
@@ -66,13 +84,25 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
      */
     readonly getAllSalesPerson = this.effect((data: Observable<{ isDropdown: boolean, params: any }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap(({ isDropdown, params }) => {
                 this.patchState({ salesPersonListInProgress: true });
                 return this.salesPersonService.salesPerson(HttpMethod.GET, isDropdown, null, params).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 let response = res?.body;
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (isDropdown) {
                                     response = res?.body?.results?.map((item: any) => ({
                                         label: item.name,
@@ -84,6 +114,9 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                     salesPersonListInProgress: false,
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -101,6 +134,9 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -114,12 +150,24 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
      */
     readonly createUpdateSalesPerson = this.effect((data: Observable<{ model: SalesPersonCreateUpdate, uniqueName: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((req) => {
                 this.patchState({ salesPersonSaveInProgress: true, createUpdateSalesPersonSuccess: false });
                 return this.salesPersonService.salesPerson(req.uniqueName ? HttpMethod.PUT : HttpMethod.POST, req.model, req.uniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (req.uniqueName) {
                                     this.patchState({
                                         salesPersonSaveInProgress: false,
@@ -132,6 +180,9 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                     });
                                 }
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
@@ -147,6 +198,9 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -160,18 +214,33 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
      */
     readonly deleteSalesPerson = this.effect((data: Observable<string>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((uniqueName) => {
                 this.patchState({ deleteSalesPersonSuccess: false });
                 return this.salesPersonService.salesPerson(HttpMethod.DELETE, {}, uniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
                                 this.patchState({
                                     deleteSalesPersonSuccess: true
                                 });
                             } else {
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (res.message) {
+                                    /**
+                                     * Handles if functionality
+                                     */
                                     if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                                         // Show error message only if linked with entry/voucher
                                         this.toasterService.showSnackBar('error', res.message);
@@ -196,6 +265,9 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })
@@ -209,11 +281,20 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
      */
     readonly archiveUnarchiveSalesPerson = this.effect((data: Observable<{ model: SalesPersonDeleteArchivedModel, uniqueName: string }>) => {
         return data.pipe(
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((model) => {
                 this.patchState({ archiveSalesPersonSuccess: false });
                 return this.salesPersonService.salesPersonArchive(model.model, model.uniqueName).pipe(
+                    /**
+                     * Handles tap functionality
+                     */
                     tap(
                         (res: BaseResponse<any, any>) => {
+                            /**
+                             * Handles if functionality
+                             */
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
                                 this.patchState({
@@ -233,6 +314,9 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                             });
                         }
                     ),
+                    /**
+                     * Handles catchError functionality
+                     */
                     catchError((err) => EMPTY)
                 );
             })

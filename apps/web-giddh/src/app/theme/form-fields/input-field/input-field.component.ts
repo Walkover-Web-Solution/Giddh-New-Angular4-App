@@ -6,6 +6,9 @@ import { Subject } from "rxjs";
 const noop = () => {
 };
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: "input-field",
     styleUrls: ["./input-field.component.scss"],
@@ -20,6 +23,10 @@ const noop = () => {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * InputFieldComponent component
+ * Handles inputfield functionality and user interactions
+ */
 export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAccessor {
     /** Instance of input field */
     @ViewChild('textField', { static: false }) public textField: ElementRef;
@@ -98,8 +105,14 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** Used for change detection */
     public stateChanges = new Subject<void>();
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
+    /**
+     * Handles touchedcallback event
+     */
     private onTouchedCallback: () => void = noop;
     /** Callback function to notify parent component of value changes */
+    /**
+     * Handles changecallback event
+     */
     private onChangeCallback: (_: any) => void = noop;
     /** It will show Icon prefix in the text field */
     @Input() public matPrefixIcon: string = "";
@@ -116,11 +129,18 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** Emits validation status on blur or model change */
     @Output() public patternValidation: EventEmitter<{isValid: boolean, value: string}> = new EventEmitter<{isValid: boolean, value: string}>();
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         @Optional() @Self() public ngControl: NgControl,
         private elementRef: ElementRef<HTMLElement>,
         private changeDetectionRef: ChangeDetectorRef
     ) {
+        /**
+         * Handles if functionality
+         */
         if (this.ngControl !== null) {
             this.ngControl.valueAccessor = this;
         }
@@ -132,11 +152,20 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        /**
+         * Handles if functionality
+         */
         if (changes?.defaultValue) {
             this.ngModel = this.defaultValue;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (this.autoFocus) {
+            /**
+             * Sets timeout value
+             */
             setTimeout(() => {
                 this.inputFocus();
             }, 20);
@@ -179,6 +208,9 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     set value(value: any) {
+        /**
+         * Handles if functionality
+         */
         if (value !== undefined && value !== null) {
             this.ngModel = value;
             this.onChangeCallback(value);
@@ -203,6 +235,9 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     public writeValue(value: any): void {
+        /**
+         * Handles if functionality
+         */
         if (value !== undefined && value !== null) {
             this.value = value;
             this.changeDetectionRef.detectChanges();
@@ -250,6 +285,9 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      */
     public handleInput(event?: any): void {
         // Use the actual input value for real-time validation
+        /**
+         * Handles if functionality
+         */
         if (event && event.target) {
             this.validateMinMaxWithValue(event.target.value);
         }
@@ -283,6 +321,9 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     private validatePatternOnBlur(): void {
+        /**
+         * Handles if functionality
+         */
         if (this.pattern && this.ngModel) {
             const regex = new RegExp(this.pattern);
             const isValid = regex.test(this.ngModel);
@@ -306,13 +347,22 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     private validateMinMaxWithValue(value: any): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.ngControl?.control || !value) return;
         
         const numValue = parseFloat(value);
+        /**
+         * Handles if functionality
+         */
         if (isNaN(numValue)) return;
         
         let errors: any = null;
         
+        /**
+         * Handles if functionality
+         */
         if (this.min !== null && numValue < Number(this.min)) {
             errors = { min: { actual: numValue, min: Number(this.min) } };
         } else if (this.max !== null && numValue > Number(this.max)) {
@@ -367,6 +417,9 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
         const hasEnterNextDirective = hostElement.hasAttribute('appEnterNext');
         
         // If appEnterNext directive is present, allow it to handle the event
+        /**
+         * Handles if functionality
+         */
         if (hasEnterNextDirective) {
             // Don't prevent default or stop propagation - let the directive handle it
             return;

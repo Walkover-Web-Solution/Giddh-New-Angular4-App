@@ -4,6 +4,9 @@ import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } fr
 import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'search-filter',
     
@@ -11,6 +14,10 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
     styleUrls: ['./search-filter.component.scss']
 })
 
+/**
+ * SearchFilterComponent component
+ * Handles searchfilter functionality and user interactions
+ */
 export class SearchFilterComponent implements OnInit {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -53,6 +60,9 @@ export class SearchFilterComponent implements OnInit {
         this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as UntypedFormArray;
     }
 
+    /**
+     * Handles ngOnInit functionality
+     */
     public ngOnInit() {
         this.queryTypes = [
             { label: this.localeData?.query_types.closing_balance, value: 'closingBalance' },
@@ -73,7 +83,13 @@ export class SearchFilterComponent implements OnInit {
         ];
     }
 
+    /**
+     * Handles filterData functionality
+     */
     public filterData() {
+        /**
+         * Handles if functionality
+         */
         if (this.searchQueryForm.invalid) {
             return;
         }
@@ -81,11 +97,20 @@ export class SearchFilterComponent implements OnInit {
         this.searchQuery.emit(this.searchQueryForm?.value.searchQuery);
     }
 
+    /**
+     * Creates new csv
+     */
     public createCSV() {
         this.createCsv.emit(this.searchQueryForm?.value.searchQuery);
     }
 
+    /**
+     * Handles addSearchRow functionality
+     */
     public addSearchRow() {
+        /**
+         * Handles if functionality
+         */
         if (this.searchDataSet?.controls?.length > 3 || this.searchQueryForm.invalid) {
             return;
         }
@@ -98,6 +123,9 @@ export class SearchFilterComponent implements OnInit {
         }));
     }
 
+    /**
+     * Resets query to default state
+     */
     public resetQuery() {
         this.searchDataSet.controls = [];
         this.addSearchRow();
@@ -105,6 +133,9 @@ export class SearchFilterComponent implements OnInit {
         this.isFiltered.emit(false);
     }
 
+    /**
+     * Deletes searchrow
+     */
     public removeSearchRow() {
         let arr = this.searchQueryForm.controls['searchQuery'] as UntypedFormArray;
         arr.removeAt(-1);

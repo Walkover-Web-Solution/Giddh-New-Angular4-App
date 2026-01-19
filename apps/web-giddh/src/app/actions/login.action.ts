@@ -36,9 +36,16 @@ import { COUNTRY_REGION_MAP } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
 import { findIndex, get, sortBy, startsWith } from '../lodash-optimized';
 
+/**
+ * Handles Injectable functionality
+ */
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * LoginActions class
+ * Implements LoginActions functionality
+ */
 export class LoginActions {
 
     public static RESET_SOCIAL_LOGOUT_ATTEMPT = 'RESET_SOCIAL_LOGOUT_ATTEMPT';
@@ -100,24 +107,48 @@ export class LoginActions {
 
     public signupWithGoogle$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) =>
                 this.auth.LoginWithGoogle(action.payload)
             ),
+            /**
+             * Handles map functionality
+             */
             map(response => {
                 return this.signupWithGoogleResponse(response);
             })));
 
     public signupWithGoogleResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, string> = action?.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (response) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.status === 'error') {
                         this._toaster.errorToast(action.payload.message, action.payload.code);
                         return { type: 'EmptyAction' };
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.body && response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
                         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
                         return {
@@ -135,14 +166,32 @@ export class LoginActions {
 
     public signupWithEmail$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.SignupWithEmailRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.SignupWithEmail(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.SignupWithEmailResponce(response))));
 
     public signupWithEmailResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.SignupWithEmailResponce),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
@@ -153,17 +202,35 @@ export class LoginActions {
 
     public verifyEmail$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.VerifyEmailRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) =>
                 this.auth.VerifyEmail(action.payload as VerifyEmailModel)
             ),
+            /**
+             * Handles map functionality
+             */
             map(response => this.VerifyEmailResponce(response))));
 
     public verifyEmailResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.VerifyEmailResponce),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action?.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
@@ -173,14 +240,32 @@ export class LoginActions {
 
     public signupWithMobile$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.SignupWithMobileRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.SignupWithMobile(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.SignupWithMobileResponce(response))));
 
     public signupWithMobileResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.SignupWithMobileResponce),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
@@ -191,7 +276,13 @@ export class LoginActions {
 
     public loginSuccessByURL$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.LoginSuccessBYUrl),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action) => {
                 console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList());
@@ -203,6 +294,9 @@ export class LoginActions {
                 let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
                 let isMenuUpdated = localStorage.getItem('isMenuUpdated');
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!JSON.parse(isNewMenuSetted) || (JSON.parse(isNewMenuSetted) && !isMenuUpdated)) {
                     this._dbService.clearAllData();
                     localStorage.setItem('isNewMenuSetted', true.toString());
@@ -213,14 +307,29 @@ export class LoginActions {
                 let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
                 let companies = results[1] as BaseResponse<CompanyResponse[], string>;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
                         this.store.pipe(
+                            /**
+                             * Handles select functionality
+                             */
                             select(state => state.session.user),
+                            /**
+                             * Handles take functionality
+                             */
                             take(1), // take only the first emission
+                            /**
+                             * Handles tap functionality
+                             */
                             tap(response => {
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/user-details/subscription']);
                                 } else {
@@ -231,9 +340,15 @@ export class LoginActions {
                     });
                     return { type: 'EmptyAction' };
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (stateDetail.body && stateDetail?.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
+                        /**
+                         * Handles if functionality
+                         */
                         if (stateDetail.body.branchUniqueName) {
                             const details = {
                                 branchDetails: {
@@ -248,6 +363,9 @@ export class LoginActions {
                             this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
+                        /**
+                         * Handles if functionality
+                         */
                         if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
                             return this.finalThingTodo(stateDetail, companies);
                         } else {
@@ -267,7 +385,13 @@ export class LoginActions {
 
     public loginSuccess$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.LoginSuccess),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList(), [action.payload]);
@@ -279,6 +403,9 @@ export class LoginActions {
                 let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
                 let isMenuUpdated = localStorage.getItem('isMenuUpdated');
 
+                /**
+                 * Handles if functionality
+                 */
                 if (!JSON.parse(isNewMenuSetted) || (JSON.parse(isNewMenuSetted) && !isMenuUpdated)) {
                     this._dbService.clearAllData();
                     localStorage.setItem('isNewMenuSetted', true.toString());
@@ -289,14 +416,29 @@ export class LoginActions {
                 let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
                 let companies = results[1] as BaseResponse<CompanyResponse[], string>;
 
+                /**
+                 * Handles if functionality
+                 */
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
                         this.store.pipe(
+                            /**
+                             * Handles select functionality
+                             */
                             select(state => state.session.user),
+                            /**
+                             * Handles take functionality
+                             */
                             take(1), // take only the first emission
+                            /**
+                             * Handles tap functionality
+                             */
                             tap(response => {
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/user-details/subscription']);
                                 } else {
@@ -308,10 +450,16 @@ export class LoginActions {
 
                     return { type: 'EmptyAction' };
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (stateDetail.body && stateDetail?.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
                         this._generalService.voucherApiVersion = stateDetail.body.voucherVersion || 2;
+                        /**
+                         * Handles if functionality
+                         */
                         if (stateDetail.body.branchUniqueName) {
                             const details = {
                                 branchDetails: {
@@ -326,6 +474,9 @@ export class LoginActions {
                             this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
+                        /**
+                         * Handles if functionality
+                         */
                         if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
                             return this.finalThingTodo(stateDetail, companies, results[2]);
                         } else {
@@ -345,18 +496,33 @@ export class LoginActions {
 
     public logoutSuccess$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.LogOut),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
                     window.location.href = this._generalService.getGiddhRegionUrl();
                 } else if (Configuration.isElectron) {
                     this._router.navigate(['/login']).then(() => {
                         // Wait for navigation to complete before reloading
+                        /**
+                         * Sets timeout value
+                         */
                         setTimeout(() => {
                             window.location.reload();
                         }, 500);
                     }).catch(() => {
                         // Fallback if navigation fails
+                        /**
+                         * Sets timeout value
+                         */
                         setTimeout(() => {
                             window.location.href = '/login';
                         }, 100);
@@ -369,17 +535,35 @@ export class LoginActions {
 
     public verifyMobile$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.VerifyMobileRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) =>
                 this.auth.VerifyOTP(action.payload as VerifyMobileModel)
             ),
+            /**
+             * Handles map functionality
+             */
             map(response => this.VerifyMobileResponce(response))));
 
     public verifyMobileResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.VerifyMobileResponce),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action?.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
@@ -389,17 +573,35 @@ export class LoginActions {
 
     public verifyTwoWayAuth$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.VerifyTwoWayAuthRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) =>
                 this.auth.VerifyOTP(action.payload as VerifyMobileModel)
             ),
+            /**
+             * Handles map functionality
+             */
             map(response => this.VerifyTwoWayAuthResponse(response))));
 
     public verifyTwoWayAuthResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.VerifyTwoWayAuthResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action?.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
@@ -409,7 +611,13 @@ export class LoginActions {
 
     public ClearSession$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.ClearSession),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => {
                 return this.auth.ClearSession();
             }), map(data => {
@@ -418,9 +626,21 @@ export class LoginActions {
 
     public CHANGE_COMPANY$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(CompanyActions.CHANGE_COMPANY),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload.cmpUniqueName, action.payload.fetchLastState)),
+            /**
+             * Handles map functionality
+             */
             map(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if ((response?.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body?.lastState.split('/')[0]) === -1) || (response?.status === 'error' || response.code === 'NOT_FOUND')) {
                     let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
                     dummyResponse.body = new StateDetailsResponse();
@@ -432,8 +652,14 @@ export class LoginActions {
                     });
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
+                /**
+                 * Handles if functionality
+                 */
                 if (response.body?.companyUniqueName) {
                     this._generalService.currentBranchUniqueName = response?.body?.branchUniqueName || '';
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.body?.branchUniqueName) {
                         const details = {
                             branchDetails: {
@@ -447,23 +673,41 @@ export class LoginActions {
                         };
                         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                     }
+                    /**
+                     * Handles if functionality
+                     */
                     if (response.body?.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body?.lastState.split('/')[0]) !== -1) {
                         this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
                             this.finalNavigate(response.body?.lastState);
                         });
                     } else {
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
+                            /**
+                             * Handles if functionality
+                             */
                             if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children?.length > 0) {
                                 let path = [];
                                 let parament = {};
                                 this.activatedRoute.firstChild.firstChild.url.pipe(take(1)).subscribe(p => {
+                                    /**
+                                     * Handles if functionality
+                                     */
                                     if (p?.length > 0) {
                                         path = [p[0].path];
                                         parament = { queryParams: p[0].parameters };
                                     }
                                 });
+                                /**
+                                 * Handles if functionality
+                                 */
                                 if (path?.length > 0 && parament) {
                                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+                                        /**
+                                         * Handles if functionality
+                                         */
                                         if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
                                             this.finalNavigate(path[0], parament);
                                         } else {
@@ -481,8 +725,17 @@ export class LoginActions {
 
     public ChangeCompanyResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(CompanyActions.CHANGE_COMPANY_RESPONSE),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'success') {
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 }
@@ -491,14 +744,32 @@ export class LoginActions {
 
     public addNewMobile$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.AddNewMobileNo),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.VerifyNumber(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.AddNewMobileNoResponce(response))));
 
     public addNewMobileResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.AddNewMobileNoResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'success') {
                     this._toaster.successToast(this.localeService.translate("app_messages.receive_otp"));
                 } else {
@@ -509,17 +780,35 @@ export class LoginActions {
 
     public verifyAddNewMobile$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.VerifyAddNewMobileNo),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) =>
                 this.auth.VerifyNumberOTP(action.payload as VerifyMobileModel)
             ),
+            /**
+             * Handles map functionality
+             */
             map(response => this.VerifyAddNewMobileNoResponce(response))));
 
     public verifyAddNewMobileResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.VerifyAddNewMobileNoResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
                 let response: BaseResponse<string, VerifyMobileModel> = action?.payload;
+                /**
+                 * Handles if functionality
+                 */
                 if (response?.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
@@ -530,14 +819,32 @@ export class LoginActions {
 
     public FectchUserDetails$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.FetchUserDetails),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.FetchUserDetails()),
+            /**
+             * Handles map functionality
+             */
             map(response => this.FetchUserDetailsResponse(response))));
 
     public FectchUserDetailsResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.FetchUserDetailsResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload && action.payload.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
@@ -546,22 +853,49 @@ export class LoginActions {
 
     public ReportInvalidJSON$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType('REPORT_INVALID_JSON'),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map((res) => {
                 return { type: 'EmptyAction' };
             })));
 
     public SignupWithPasswdRequest$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.SignupWithPasswdRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.SignupWithPasswdResponse(response))));
 
     public SignupWithPasswdResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.SignupWithPasswdResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'success') {
                     this._toaster.successToast(this.localeService.translate("app_messages.otp_sent_email"));
                 } else {
@@ -572,16 +906,40 @@ export class LoginActions {
 
     public LoginWithPasswdRequest$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.LoginWithPasswdRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.LoginWithPassword(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.LoginWithPasswdResponse(response))));
 
     public LoginWithPasswdResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.LoginWithPasswdResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'success') {
+                    /**
+                     * Handles if functionality
+                     */
                     if (action.payload.body?.statusCode === "AUTHENTICATE_TWO_WAY") {
+                        /**
+                         * Handles if functionality
+                         */
                         if (action.payload.body?.text) {
                             this._toaster.successToast(action.payload.body?.text, action.payload.code);
                         }
@@ -596,14 +954,32 @@ export class LoginActions {
 
     public forgotPasswordRequest$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.forgotPasswordRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.forgotPassword(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.forgotPasswordResponse(response))));
 
     public forgotPasswordResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.forgotPasswordResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
@@ -614,14 +990,32 @@ export class LoginActions {
 
     public resetPasswordRequest$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.resetPasswordRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.resetPassword(action.payload)),
+            /**
+             * Handles map functionality
+             */
             map(response => this.resetPasswordResponse(response))));
 
     public resetPasswordResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.resetPasswordResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
@@ -632,14 +1026,32 @@ export class LoginActions {
 
     public renewSession$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.renewSessionRequest),
+            /**
+             * Handles switchMap functionality
+             */
             switchMap((action: CustomActions) => this.auth.renewSession()),
+            /**
+             * Handles map functionality
+             */
             map(response => this.renewSessionResponse(response))));
 
     public renewSessionResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.renewSessionResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => {
+                /**
+                 * Handles if functionality
+                 */
                 if (action.payload?.status === 'success' && action.payload.body && action.payload.body.session) {
                     this._generalService.setCookie("giddh_session_id", action.payload.body.session.id, 30);
                 }
@@ -648,9 +1060,19 @@ export class LoginActions {
 
     public autoLoginwithPasswordResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
+            /**
+             * Handles ofType functionality
+             */
             ofType(LoginActions.AutoLoginWithPasswdResponse),
+            /**
+             * Handles map functionality
+             */
             map((action: CustomActions) => this.LoginSuccessByOtherUrl())));
 
+    /**
+     * Creates an instance of class
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         public _router: Router,
         private actions$: Actions,
@@ -670,18 +1092,27 @@ export class LoginActions {
     ) {
     }
 
+    /**
+     * Handles SetRedirectToledger functionality
+     */
     public SetRedirectToledger(): CustomActions {
         return {
             type: LoginActions.NEEDS_TO_REDIRECT_TO_LEDGER
         };
     }
 
+    /**
+     * Handles ResetRedirectToledger functionality
+     */
     public ResetRedirectToledger(): CustomActions {
         return {
             type: LoginActions.RESET_NEEDS_TO_REDIRECT_TO_LEDGER
         };
     }
 
+    /**
+     * Handles SignupWithEmailRequest functionality
+     */
     public SignupWithEmailRequest(value: SignupwithEmaillModel): CustomActions {
         return {
             type: LoginActions.SignupWithEmailRequest,
@@ -689,6 +1120,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles SignupWithEmailResponce functionality
+     */
     public SignupWithEmailResponce(value: BaseResponse<string, string>): CustomActions {
         return {
             type: LoginActions.SignupWithEmailResponce,
@@ -696,12 +1130,18 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles ResetSignupWithEmailState functionality
+     */
     public ResetSignupWithEmailState(): CustomActions {
         return {
             type: LoginActions.ResetSignupWithEmailState
         };
     }
 
+    /**
+     * Handles SignupWithMobileRequest functionality
+     */
     public SignupWithMobileRequest(value: SignupWithMobile): CustomActions {
         return {
             type: LoginActions.SignupWithMobileRequest,
@@ -709,6 +1149,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles SignupWithMobileResponce functionality
+     */
     public SignupWithMobileResponce(value: BaseResponse<string, SignupWithMobile>): CustomActions {
         return {
             type: LoginActions.SignupWithMobileResponce,
@@ -716,12 +1159,18 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles ResetSignupWithMobileState functionality
+     */
     public ResetSignupWithMobileState(): CustomActions {
         return {
             type: LoginActions.ResetSignupWithMobileState
         };
     }
 
+    /**
+     * Handles VerifyEmailRequest functionality
+     */
     public VerifyEmailRequest(value: VerifyEmailModel): CustomActions {
         return {
             type: LoginActions.VerifyEmailRequest,
@@ -729,6 +1178,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles VerifyEmailResponce functionality
+     */
     public VerifyEmailResponce(value: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>): CustomActions {
         return {
             type: LoginActions.VerifyEmailResponce,
@@ -736,6 +1188,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles signupWithGoogle functionality
+     */
     public signupWithGoogle(value: string): CustomActions {
         return {
             type: LoginActions.SIGNUP_WITH_GOOGLE_REQUEST,
@@ -743,6 +1198,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles signupWithGoogleResponse functionality
+     */
     public signupWithGoogleResponse(value: BaseResponse<VerifyEmailResponseModel, string>): CustomActions {
         return {
             type: LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE,
@@ -750,18 +1208,27 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Resets sociallogoutattempt to default state
+     */
     public resetSocialLogoutAttempt(): CustomActions {
         return {
             type: LoginActions.RESET_SOCIAL_LOGOUT_ATTEMPT
         };
     }
 
+    /**
+     * Handles socialLogoutAttempt functionality
+     */
     public socialLogoutAttempt(): CustomActions {
         return {
             type: LoginActions.SOCIAL_LOGOUT_ATTEMPT
         };
     }
 
+    /**
+     * Handles VerifyMobileRequest functionality
+     */
     public VerifyMobileRequest(value: VerifyMobileModel): CustomActions {
         return {
             type: LoginActions.VerifyMobileRequest,
@@ -769,6 +1236,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles VerifyMobileResponce functionality
+     */
     public VerifyMobileResponce(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): CustomActions {
         return {
             type: LoginActions.VerifyMobileResponce,
@@ -776,6 +1246,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles VerifyTwoWayAuthRequest functionality
+     */
     public VerifyTwoWayAuthRequest(value: VerifyMobileModel): CustomActions {
         return {
             type: LoginActions.VerifyTwoWayAuthRequest,
@@ -783,6 +1256,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles VerifyTwoWayAuthResponse functionality
+     */
     public VerifyTwoWayAuthResponse(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): CustomActions {
         return {
             type: LoginActions.VerifyTwoWayAuthResponse,
@@ -790,13 +1266,22 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Resets twowayauthmodal to default state
+     */
     public resetTwoWayAuthModal(): CustomActions {
         return {
             type: LoginActions.ResetTwoWayAuthModal
         };
     }
 
+    /**
+     * Handles LoginSuccess functionality
+     */
     public LoginSuccess(response?: any, isSocialLogin?: boolean): CustomActions {
+        /**
+         * Handles if functionality
+         */
         if (response && response.body && response.body.session) {
             this._generalService.setCookie("giddh_session_id", response.body.session.id, 30);
         }
@@ -806,6 +1291,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles LoginSuccessByOtherUrl functionality
+     */
     public LoginSuccessByOtherUrl(): CustomActions {
         return {
             type: LoginActions.LoginSuccessBYUrl,
@@ -813,12 +1301,18 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles LogOut functionality
+     */
     public LogOut(): CustomActions {
         return {
             type: LoginActions.LogOut
         };
     }
 
+    /**
+     * Handles SetLoginStatus functionality
+     */
     public SetLoginStatus(value: userLoginStateEnum): CustomActions {
         return {
             type: LoginActions.SetLoginStatus,
@@ -826,12 +1320,18 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles ClearSession functionality
+     */
     public ClearSession(): CustomActions {
         return {
             type: LoginActions.ClearSession
         };
     }
 
+    /**
+     * Handles ChangeCompany functionality
+     */
     public ChangeCompany(cmpUniqueName: string, fetchLastState?: boolean): CustomActions {
         return {
             type: CompanyActions.CHANGE_COMPANY,
@@ -839,6 +1339,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles ChangeCompanyResponse functionality
+     */
     public ChangeCompanyResponse(value: BaseResponse<StateDetailsResponse, string>): CustomActions {
         this.store.dispatch(this.ResetApplicationData());
         return {
@@ -847,12 +1350,18 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles ResetApplicationData functionality
+     */
     public ResetApplicationData(): CustomActions {
         return {
             type: COMMON_ACTIONS.RESET_APPLICATION_DATA
         };
     }
 
+    /**
+     * Handles AddNewMobileNo functionality
+     */
     public AddNewMobileNo(value: SignupWithMobile): CustomActions {
         return {
             type: LoginActions.AddNewMobileNo,
@@ -860,6 +1369,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles AddNewMobileNoResponce functionality
+     */
     public AddNewMobileNoResponce(value: BaseResponse<string, SignupWithMobile>): CustomActions {
         return {
             type: LoginActions.AddNewMobileNoResponse,
@@ -867,6 +1379,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles VerifyAddNewMobileNo functionality
+     */
     public VerifyAddNewMobileNo(value: VerifyMobileModel): CustomActions {
         return {
             type: LoginActions.VerifyAddNewMobileNo,
@@ -874,6 +1389,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles VerifyAddNewMobileNoResponce functionality
+     */
     public VerifyAddNewMobileNoResponce(value: BaseResponse<string, VerifyMobileModel>): CustomActions {
         return {
             type: LoginActions.VerifyAddNewMobileNoResponse,
@@ -881,12 +1399,18 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles FetchUserDetails functionality
+     */
     public FetchUserDetails(): CustomActions {
         return {
             type: LoginActions.FetchUserDetails
         };
     }
 
+    /**
+     * Handles FetchUserDetailsResponse functionality
+     */
     public FetchUserDetailsResponse(resp: BaseResponse<UserDetails, string>): CustomActions {
         return {
             type: LoginActions.FetchUserDetailsResponse,
@@ -894,6 +1418,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles SetCurrencyInStore functionality
+     */
     public SetCurrencyInStore(resp: ICurrencyResponse[]): CustomActions {
         return {
             type: LoginActions.SetCurrencyInStore,
@@ -901,6 +1428,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles SignupWithPasswdRequest functionality
+     */
     public SignupWithPasswdRequest(value: object): CustomActions {
         return {
             type: LoginActions.SignupWithPasswdRequest,
@@ -908,6 +1438,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles SignupWithPasswdResponse functionality
+     */
     public SignupWithPasswdResponse(value: BaseResponse<VerifyMobileResponseModel, SignUpWithPassword>): CustomActions {
         return {
             type: LoginActions.SignupWithPasswdResponse,
@@ -915,6 +1448,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles LoginWithPasswdRequest functionality
+     */
     public LoginWithPasswdRequest(value: LoginWithPassword): CustomActions {
         return {
             type: LoginActions.LoginWithPasswdRequest,
@@ -922,6 +1458,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles LoginWithPasswdResponse functionality
+     */
     public LoginWithPasswdResponse(value: BaseResponse<VerifyMobileResponseModel, LoginWithPassword>): CustomActions {
         return {
             type: LoginActions.LoginWithPasswdResponse,
@@ -929,6 +1468,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles forgotPasswordRequest functionality
+     */
     public forgotPasswordRequest(userId): CustomActions {
         return {
             type: LoginActions.forgotPasswordRequest,
@@ -936,6 +1478,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles forgotPasswordResponse functionality
+     */
     public forgotPasswordResponse(response): CustomActions {
         return {
             type: LoginActions.forgotPasswordResponse,
@@ -943,6 +1488,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Resets passwordrequest to default state
+     */
     public resetPasswordRequest(model): CustomActions {
         return {
             type: LoginActions.resetPasswordRequest,
@@ -950,6 +1498,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Resets passwordresponse to default state
+     */
     public resetPasswordResponse(response): CustomActions {
         return {
             type: LoginActions.resetPasswordResponse,
@@ -957,12 +1508,18 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles renewSession functionality
+     */
     public renewSession(): CustomActions {
         return {
             type: LoginActions.renewSessionRequest,
         };
     }
 
+    /**
+     * Handles renewSessionResponse functionality
+     */
     public renewSessionResponse(response): CustomActions {
         return {
             type: LoginActions.renewSessionResponse,
@@ -970,6 +1527,9 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Handles userAutoLoginResponse functionality
+     */
     public userAutoLoginResponse(response): CustomActions {
         return {
             type: LoginActions.AutoLoginWithPasswdResponse,
@@ -989,6 +1549,9 @@ export class LoginActions {
         }
     }
 
+    /**
+     * Handles doSameStuffs functionality
+     */
     private doSameStuffs(companies, isSocialLogin?: boolean) {
         let respState = new BaseResponse<StateDetailsResponse, string>();
         respState.body = new StateDetailsResponse();
@@ -996,6 +1559,9 @@ export class LoginActions {
         // now take first company from the companies
         let cArr = companies?.body?.sort((a, b) => a?.name?.length - b?.name?.length);
         let company = cArr[0];
+        /**
+         * Handles if functionality
+         */
         if (company) {
             respState.body.companyUniqueName = company?.uniqueName;
         } else {
@@ -1006,10 +1572,16 @@ export class LoginActions {
         respState.body.lastState = 'home';
         // check for entity and override last state ['GROUP', 'ACCOUNT']
         try {
+            /**
+             * Handles if functionality
+             */
             if (company && company.userEntityRoles && company.userEntityRoles.length) {
                 // find sorted userEntityRoles
                 let entitiesArr = company.userEntityRoles.sort((a, b) => a?.entity?.name?.length - b?.entity?.name?.length);
                 let entityObj = entitiesArr[0].entity;
+                /**
+                 * Handles if functionality
+                 */
                 if (entityObj.entity === 'ACCOUNT') {
                     respState.body.lastState = `ledger/${entityObj?.uniqueName}`;
                 } else if (entityObj.entity === 'GROUP') {
@@ -1050,13 +1622,22 @@ export class LoginActions {
         try {
             const search = window && window.location ? window.location.search : '';
             let raw = '';
+            /**
+             * Handles if functionality
+             */
             if (search) {
                 const params = new URLSearchParams(search);
                 raw = params.get('returnUrl') || params.get('returnurl') || '';
             }
+            /**
+             * Handles if functionality
+             */
             if (!raw) {
                 try { raw = sessionStorage.getItem('returnUrl') || ''; } catch (_) {}
             }
+            /**
+             * Handles if functionality
+             */
             if (raw && raw.trim()) {
                 const decoded = decodeURIComponent(raw);
                 const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded.startsWith('/') ? decoded.substring(1) : decoded}`;
@@ -1072,6 +1653,9 @@ export class LoginActions {
         return { type: 'EmptyAction' };
     }
 
+    /**
+     * Handles finalNavigate functionality
+     */
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         this._generalService.finalNavigate(route, parameter, isSocialLogin);
     }

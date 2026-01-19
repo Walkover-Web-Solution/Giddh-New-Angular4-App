@@ -11,6 +11,9 @@ import { TranslateDirectiveModule } from "../translate/translate.directive.modul
 import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 import { KeyboardNavigationModule } from "../../shared/helpers/directives/enter-next/keyboard-navigation.module";
 
+/**
+ * Handles NgModule functionality
+ */
 @NgModule({
     declarations: [
         OtherTaxComponent
@@ -32,6 +35,10 @@ import { KeyboardNavigationModule } from "../../shared/helpers/directives/enter-
         OtherTaxComponent
     ]
 })
+/**
+ * OtherTaxModule module
+ * Implements OtherTaxModule functionality
+ */
 export class OtherTaxModule {
 
 }

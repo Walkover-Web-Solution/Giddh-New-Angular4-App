@@ -5,6 +5,9 @@ import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'app-email-send-dialog',
     templateUrl: './email-send-dialog.component.html',
@@ -12,6 +15,10 @@ import { ToasterService } from '../../services/toaster.service';
     providers: [VoucherComponentStore],
     standalone: false
 })
+/**
+ * EmailSendDialogComponent component
+ * Handles emailsenddialog functionality and user interactions
+ */
 export class EmailSendDialogComponent implements OnInit, OnDestroy {
     /** Holds invoice type */
     @Input() public invoiceType: any;
@@ -36,6 +43,10 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
         return this.sendEmailForm.get('copyTypes') as FormArray;
     }
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(
         private formBuilder: FormBuilder,
         private componentStore: VoucherComponentStore,
@@ -52,7 +63,13 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.initializeForm();
 
+        /**
+         * Handles if functionality
+         */
         if (this.selectedItem) {
+            /**
+             * Handles if functionality
+             */
             if (this.selectedItem.account?.email) {
                 this.sendEmailForm.get('email.to').setValue(this.selectedItem.account.email);
             }
@@ -88,10 +105,16 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
     * @memberof SendEmailInvoiceComponent
     */
     public onCopyTypeChange(event: any, value: string): void {
+        /**
+         * Handles if functionality
+         */
         if (event?.checked) {
             this.copyTypes.push(this.formBuilder.control(value));
         } else {
             const index = this.copyTypes.controls.findIndex(copyType => copyType.value === value);
+            /**
+             * Handles if functionality
+             */
             if (index >= 0) {
                 this.copyTypes.removeAt(index);
             }
@@ -104,16 +127,25 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
      * @memberof EmailSendDialogComponent
      */
     public sendEmail(): void {
+        /**
+         * Handles if functionality
+         */
         if (!this.sendEmailForm.get('email.to').value) {
             this.toasterService.showSnackBar("error", this.localeData?.enter_valid_email_error);
             return;
         }
 
+        /**
+         * Handles if functionality
+         */
         if (!this.copyTypes?.value?.length && this.voucherType !== VoucherTypeEnum.purchaseOrder && this.voucherType !== VoucherTypeEnum.purchase) {
             this.toasterService.showSnackBar("error", this.localeData?.select_invoice_copy);
             return;
         }
         const emailsArray = this.sendEmailForm.get('email.to').value?.split(',').map(email => email.trim());
+        /**
+         * Handles if functionality
+         */
         if (this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             this.successEvent.emit({
                 email: emailsArray,
@@ -124,6 +156,9 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles ngOnDestroy functionality
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

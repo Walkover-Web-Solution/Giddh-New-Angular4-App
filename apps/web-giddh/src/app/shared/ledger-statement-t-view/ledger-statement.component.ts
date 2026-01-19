@@ -27,6 +27,9 @@ import { AccountResponse, AccountResponseV2 } from "../../models/api-models/Acco
 import { LedgerService } from "../../services/ledger.service";
 import { ServiceConfig } from "../../services/service.config";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+/**
+ * Handles Component functionality
+ */
 @Component({
     selector: 'ledger-statement',
     templateUrl: './ledger-statement.component.html',
@@ -35,6 +38,10 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
+/**
+ * LedgerStatementComponent component
+ * Handles ledgerstatement functionality and user interactions
+ */
 export class LedgerStatementComponent implements OnInit, OnDestroy {
     /** True if the columnar report table is shown */
     public isShowLedgerColumnarReportTable: boolean = false;
@@ -171,6 +178,10 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     /** Stores branch unique name */
     @Input() public branchUniqueName: string;
 
+    /**
+     * Creates an instance of component
+     * Initializes component dependencies and sets up initial state
+     */
     constructor(private generalService: GeneralService,
         private breakpointObserver: BreakpointObserver
         , private store: Store<AppState>,
@@ -202,7 +213,13 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP,
             BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            /**
+             * Handles if functionality
+             */
             if (result) {
+                /**
+                 * Handles if functionality
+                 */
                 if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP]) {
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]
@@ -218,6 +235,9 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
 
         /** If this is true, it means we are in branch consolidated mode.  */
         this.ledgerStatementStore.isBranchConsolidated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            /**
+             * Handles if functionality
+             */
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
@@ -227,8 +247,14 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             this.activeCompany = activeCompany;
         });
 
+        /**
+         * Handles if functionality
+         */
         if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
             this.ledgerStatementStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                /**
+                 * Handles if functionality
+                 */
                 if (response && response.length) {
                     this.currentCompanyBranches = response.map(branch => ({
                         label: branch?.name,
@@ -244,10 +270,16 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                         isCompany: true
                     });
                     let currentBranchUniqueName;
+                    /**
+                     * Handles if functionality
+                     */
                     if (!this.currentBranch?.uniqueName) {
                         // Assign the current branch only when it is not selected. This check is necessary as
                         // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                         // branches are loaded
+                        /**
+                         * Handles if functionality
+                         */
                         if (this.currentOrganizationType === OrganizationType.Branch) {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                             this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -264,6 +296,9 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                     this.trxRequest.branchUniqueName = this.currentBranch?.uniqueName;
                     this.advanceSearchRequest.branchUniqueName = this.currentBranch?.uniqueName;
                 } else {
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.generalService.companyUniqueName) {
                         // Avoid API call if new user is onboarded
                         this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
@@ -273,6 +308,9 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         }
 
         // Combine all observables in one stream
+        /**
+         * Handles combineLatest functionality
+         */
         combineLatest([
             this.ledgerStatementStore.activeAccount$.pipe(takeUntil(this.destroyed$)),
             this.ledgerStatementStore.companyProfile$.pipe(takeUntil(this.destroyed$)),
@@ -283,13 +321,22 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(([activeAccount, companyProfile, lt, txnBalance, ledgerBalanceResponse]) => {
                 // --- Logic from first observable ---
+                /**
+                 * Handles if functionality
+                 */
                 if (activeAccount && companyProfile) {
                     let profile = cloneDeep(companyProfile);
                     this.lc.activeAccount = activeAccount;
+                    /**
+                     * Handles if functionality
+                     */
                     if (activeAccount?.ledgerView) {
                         this.ledgerView = activeAccount.ledgerView;
                     }
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.isBankAccount) {
                         this.getAllBankAccounts();
                     }
@@ -301,12 +348,18 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                     this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
                     this.accountUniqueName = accountDetails?.uniqueName;
 
+                    /**
+                     * Handles if functionality
+                     */
                     if (accountDetails?.currency && profile?.baseCurrency) {
                         this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
                     } else {
                         this.isLedgerAccountAllowsMultiCurrency = false;
                     }
                     this.foreignCurrencyDetails = { code: profile?.baseCurrency, symbol: profile.baseCurrencySymbol };
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.isLedgerAccountAllowsMultiCurrency) {
                         this.baseCurrencyDetails = { code: accountDetails?.currency, symbol: accountDetails?.currencySymbol };
                         this.getCurrencyRate();
@@ -323,28 +376,46 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                 }
 
                 // --- Logic from transactionData$ ---
+                /**
+                 * Handles if functionality
+                 */
                 if (lt) {
                     this.ledgerTransactions = lt;
+                    /**
+                     * Handles if functionality
+                     */
                     if (this.ledgerView === LedgerViewEnum.TView) {
                         const debitTransactions = lt.debitTransactions ?? [];
                         const creditTransactions = lt.creditTransactions ?? [];
+                        /**
+                         * Handles uniq functionality
+                         */
                         uniq([
                             ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
                             ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
                         ]);
                     }
                     this.lc.currentPage = lt.page;
+                    /**
+                     * Sets timeout value
+                     */
                     setTimeout(() => {
                         this.paginationObject = {
                             totalItems: lt.totalPages * lt.count,
                             itemsPerPage: lt.count,
                             page: lt.page,
                             totalPages: lt.totalPages,
+                            /**
+                             * Shows pagination element
+                             */
                             showPagination: (lt.totalPages > 1) ? true : false,
                             prevToken: lt.prevToken,
                             nextToken: lt.nextToken
                         };
 
+                        /**
+                         * Handles if functionality
+                         */
                         if (!this.changeDetectorRef['destroyed']) {
                             this.changeDetectorRef.detectChanges();
                         }
@@ -352,7 +423,13 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                 }
 
                 // --- Logic from ledgerTransactionsBalance ---
+                /**
+                 * Handles if functionality
+                 */
                 if (!this.isAdvanceSearchImplemented) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (txnBalance) {
                         this.ledgerTxnBalance = txnBalance;
                         this.lc.calculateReckonging(txnBalance);
@@ -360,7 +437,13 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                 }
 
                 // --- Logic from ledgerBalanceSuccess$ ---
+                /**
+                 * Handles if functionality
+                 */
                 if (ledgerBalanceResponse) {
+                    /**
+                     * Handles if functionality
+                     */
                     if (typeof this.ledgerTxnBalance !== 'object' || this.ledgerTxnBalance === null) {
                         this.ledgerTxnBalance = {};
                     }
@@ -432,6 +515,9 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.trxRequest = new TransactionsRequest();
         this.trxRequest.paginationToken = '';
         this.lc.blankLedger = this.lc.getBlankLedger();
+        /**
+         * Handles if functionality
+         */
         if (changes.activeAccountUniqueName && changes.activeAccountUniqueName.currentValue !== changes.activeAccountUniqueName.previousValue) {
             this.trxRequest.accountUniqueName = changes.activeAccountUniqueName.currentValue;
             this.trxRequest.from = this.from;
@@ -450,12 +536,18 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     public getTransactionData() {
         this.isLoading = true; // Set loading true when data fetching starts
         this.closingBalanceBeforeReconcile = null;
+        /**
+         * Handles if functionality
+         */
         if (this.trxRequest?.accountUniqueName) {
             const fromDate = this.from;
             const toDate = this.to;
             this.trxRequest.from = fromDate;
             this.trxRequest.to = toDate;
             this.trxRequest.isTView = true;
+            /**
+             * Handles if functionality
+             */
             if (this.branchUniqueName) {
                 this.trxRequest.branchUniqueName = this.branchUniqueName;
             }
@@ -479,17 +571,32 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     public getCurrencyRate(mode: string = null) {
         let from: string;
         let to: string;
+        /**
+         * Handles if functionality
+         */
         if (mode === 'blankLedger') {
+            /**
+             * Handles from functionality
+             */
             from = (this.lc.blankLedger.selectedCurrencyToDisplay === 0 ? this.lc.blankLedger.baseCurrencyToDisplay?.code : this.lc.blankLedger.foreignCurrencyToDisplay?.code);
+            /**
+             * Handles to functionality
+             */
             to = (this.lc.blankLedger.selectedCurrencyToDisplay === 0 ? this.lc.blankLedger.foreignCurrencyToDisplay?.code : this.lc.blankLedger.baseCurrencyToDisplay?.code);
         } else {
             from = this.selectedCurrency === 0 ? this.baseCurrencyDetails?.code : this.foreignCurrencyDetails?.code;
             to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails?.code : this.baseCurrencyDetails?.code;
         }
+        /**
+         * Handles if functionality
+         */
         if (from && to) {
             let date = dayjs().format(GIDDH_DATE_FORMAT);
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
+                /**
+                 * Handles if functionality
+                 */
                 if (rate) {
                     this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate };
                 }
@@ -506,6 +613,9 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
      * @memberof LedgerStatementComponent
      */
     public pageChanged(event: any): void {
+        /**
+         * Handles if functionality
+         */
         if (typeof event === 'string') {
             this.trxRequest.paginationToken = event;
             this.getTransactionData();
