@@ -138,19 +138,55 @@ const initialState: InventoryState = {
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
+    // Handle common actions
+    const commonResult = handleInventoryCommonActions(state, action);
+    if (commonResult !== null) return commonResult;
+
+    // Handle group hierarchy actions
+    const hierarchyResult = handleGroupHierarchyActions(state, action);
+    if (hierarchyResult !== null) return hierarchyResult;
+
+    // Handle group management actions
+    const groupResult = handleGroupManagementActions(state, action);
+    if (groupResult !== null) return groupResult;
+
+    // Handle stock management actions
+    const stockResult = handleStockManagementActions(state, action);
+    if (stockResult !== null) return stockResult;
+
+    // Handle other inventory actions
+    const otherResult = handleOtherInventoryActions(state, action);
+    if (otherResult !== null) return otherResult;
+
+    return state;
+}
+
+/**
+ * Handle common inventory actions
+ */
+function handleInventoryCommonActions(state: InventoryState, action: CustomActions): InventoryState | null {
+    switch (action.type) {
+        case COMMON_ACTIONS.RESET_APPLICATION_DATA:
+            return Object.assign({}, state, initialState);
+        case InventoryActionsConst.SetActiveStock:
+            return Object.assign({}, state, { activeStockUniqueName: action.payload });
+        case InventoryActionsConst.GetGroupsWithStocksHierarchyMin:
+            return Object.assign({}, state, { getStocksInProgress: true });
+        default:
+            return null;
+    }
+}
+
+/**
+ * Handle group hierarchy actions
+ */
+function handleGroupHierarchyActions(state: InventoryState, action: CustomActions): InventoryState | null {
     let groupUniqueName = '';
     let groupArray: IGroupsWithStocksHierarchyMinItem[] = [];
     let group: StockGroupResponse = null;
     let activeGroupData: IGroupsWithStocksHierarchyMinItem;
+
     switch (action.type) {
-        case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
-            return Object.assign({}, state, initialState);
-        }
-        case InventoryActionsConst.SetActiveStock:
-            return Object.assign({}, state, { activeStockUniqueName: action.payload });
-        case InventoryActionsConst.GetGroupsWithStocksHierarchyMin: {
-            return Object.assign({}, state, { getStocksInProgress: true });
-        }
         case InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse:
             if ((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>)?.status === 'success') {
                 groupArray = prepare((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body?.results);
@@ -914,3 +950,49 @@ const addStockItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parent
     }
     return;
 };
+
+/**
+ * Handle group management actions
+ */
+function handleGroupManagementActions(state: InventoryState, action: CustomActions): InventoryState | null {
+    switch (action.type) {
+        case InventoryActionsConst.AddNewGroup:
+            return Object.assign({}, state, {
+                isAddNewGroupInProcess: true,
+                activeStockUniqueName: null,
+                createGroupSuccess: false
+            });
+        case InventoryActionsConst.GetGroupUniqueName:
+            return Object.assign({}, state, { fetchingGrpUniqueName: true, isGroupNameAvailable: null });
+        default:
+            return null;
+    }
+}
+
+/**
+ * Handle stock management actions
+ */
+function handleStockManagementActions(state: InventoryState, action: CustomActions): InventoryState | null {
+    switch (action.type) {
+        case InventoryActionsConst.CreateStock:
+            return Object.assign({}, state, { isAddNewStockInProcess: true, createStockSuccess: false });
+        case InventoryActionsConst.UpdateStock:
+            return Object.assign({}, state, { isUpdateStockInProcess: true, updateStockSuccess: false });
+        default:
+            return null;
+    }
+}
+
+/**
+ * Handle other inventory actions
+ */
+function handleOtherInventoryActions(state: InventoryState, action: CustomActions): InventoryState | null {
+    switch (action.type) {
+        case InventoryActionsConst.ShowBranchScreen:
+            return Object.assign({}, state, { showBranchScreen: action.payload });
+        case InventoryActionsConst.ShowBranchScreenSideBar:
+            return Object.assign({}, state, { showBranchScreenSidebar: action.payload });
+        default:
+            return null;
+    }
+}

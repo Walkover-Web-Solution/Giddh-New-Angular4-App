@@ -48,50 +48,156 @@ export class ContactService {
      * @memberof ContactService
      */
     public GetContacts(
-        fromDate: string, 
-        toDate: string, 
-        groupUniqueName: string, 
-        pageNumber: number, 
-        refresh: string, 
-        count: number, 
-        query?: string, 
+        fromDate: string,
+        toDate: string,
+        groupUniqueName: string,
+        pageNumber: number,
+        refresh: string,
+        count: number,
+        query?: string,
         sortBy: string = '',
-        order: string = 'asc', 
-        postData?: ContactAdvanceSearchModal, 
+        order: string = 'asc',
+        postData?: ContactAdvanceSearchModal,
         branchUniqueName?: string
     ): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
-            '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
-        query = (query) ? query : '';
-        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
-            ?.replace(':count', count?.toString())
-            ?.replace(':page', pageNumber?.toString())
-            ?.replace(':refresh', refresh)
-            ?.replace(':query', query)
-            ?.replace(':sortBy', sortBy)
-            ?.replace(':order', order)
-            ?.replace(':fromDate', fromDate)
-            ?.replace(':toDate', toDate);
+
+        const requestParams = this.buildContactRequestParams(
+            fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order
+        );
+
+        const url = this.buildContactsUrl(requestParams, branchUniqueName);
+
+        return this.executeContactsRequest(url, postData);
+    }
+
+    /**
+     * Build request parameters object for contacts API
+     */
+    private buildContactRequestParams(
+        fromDate: string,
+        toDate: string,
+        groupUniqueName: string,
+        pageNumber: number,
+        refresh: string,
+        count: number,
+        query?: string,
+        sortBy: string = '',
+        order: string = 'asc'
+    ): any {
+        return {
+            companyUniqueName: this.companyUniqueName,
+            groupUniqueName,
+            pageNumber,
+            refresh,
+            count,
+            query: query || '',
+            sortBy,
+            order,
+            fromDate,
+            toDate
+        };
+    }
+
+    /**
+     * Build complete URL for contacts API with all parameters
+     */
+    private buildContactsUrl(params: any, branchUniqueName?: string): string {
+        let url = this.buildBaseContactsUrl();
+        url = this.replaceUrlParameters(url, params);
+
         if (branchUniqueName) {
-            branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
-            url = url.concat('&branchUniqueName=', branchUniqueName);
+            url = this.appendBranchParameter(url, branchUniqueName);
         }
-        
-        if (postData && Object.keys(postData)?.length > 0) {
-            return this.http.post(url, postData).pipe(map((res) => {
-                let data: BaseResponse<any, string> = res;
-                data.request = '';
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
+
+        return url;
+    }
+
+    /**
+     * Build base URL template for contacts API
+     */
+    private buildBaseContactsUrl(): string {
+        return this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
+            '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
+    }
+
+    /**
+     * Replace URL parameters with actual values
+     */
+    private replaceUrlParameters(url: string, params: any): string {
+        return url
+            ?.replace(':companyUniqueName', encodeURIComponent(params.companyUniqueName))
+            ?.replace(':groupUniqueName', encodeURIComponent(params.groupUniqueName))
+            ?.replace(':count', params.count?.toString())
+            ?.replace(':page', params.pageNumber?.toString())
+            ?.replace(':refresh', params.refresh)
+            ?.replace(':query', params.query)
+            ?.replace(':sortBy', params.sortBy)
+            ?.replace(':order', params.order)
+            ?.replace(':fromDate', params.fromDate)
+            ?.replace(':toDate', params.toDate);
+    }
+
+    /**
+     * Append branch parameter to URL if provided
+     */
+    private appendBranchParameter(url: string, branchUniqueName: string): string {
+        const normalizedBranchName = this.normalizeBranchUniqueName(branchUniqueName);
+        return url.concat('&branchUniqueName=', normalizedBranchName);
+    }
+
+    /**
+     * Normalize branch unique name (empty if same as company)
+     */
+    private normalizeBranchUniqueName(branchUniqueName: string): string {
+        return branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
+    }
+
+    /**
+     * Execute contacts request (POST or GET based on postData)
+     */
+    private executeContactsRequest(url: string, postData?: ContactAdvanceSearchModal): Observable<BaseResponse<any, string>> {
+        if (this.shouldUsePostRequest(postData)) {
+            return this.executePostRequest(url, postData);
         } else {
-            return this.http.get(url).pipe(map((res) => {
-                let data: BaseResponse<any, string> = res;
-                data.request = '';
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
+            return this.executeGetRequest(url);
         }
+    }
+
+    /**
+     * Check if POST request should be used
+     */
+    private shouldUsePostRequest(postData?: ContactAdvanceSearchModal): boolean {
+        return postData && Object.keys(postData)?.length > 0;
+    }
+
+    /**
+     * Execute POST request for contacts
+     */
+    private executePostRequest(url: string, postData: ContactAdvanceSearchModal): Observable<BaseResponse<any, string>> {
+        return this.http.post(url, postData).pipe(
+            map((res) => this.mapContactsResponse(res)),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
+        );
+    }
+
+    /**
+     * Execute GET request for contacts
+     */
+    private executeGetRequest(url: string): Observable<BaseResponse<any, string>> {
+        return this.http.get(url).pipe(
+            map((res) => this.mapContactsResponse(res)),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
+        );
+    }
+
+    /**
+     * Map contacts response to standard format
+     */
+    private mapContactsResponse(res: any): BaseResponse<any, string> {
+        let data: BaseResponse<any, string> = res;
+        data.request = '';
+        return data;
     }
 
     public addComment(comment, accountUniqueName): Observable<BaseResponse<any, string>> {
@@ -233,7 +339,7 @@ export class ContactService {
 
     /**
      * Export account statement API call
-     * 
+     *
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof ContactService
      */

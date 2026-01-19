@@ -864,107 +864,300 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public saveLedgerTransaction() {
-        // due to date picker of Tx entry date format need to change
-        if (this.vm.selectedLedger.entryDate) {
-            let entryDate = (typeof this.vm.selectedLedger.entryDate === "object") ? dayjs(this.vm.selectedLedger.entryDate) : dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT);
-            if (!entryDate.isValid()) {
-                this.toaster.showSnackBar("error", this.localeData?.invalid_date);
-                this.loaderService.hide();
-                return;
-            } else {
-                this.vm.selectedLedger.entryDate = (typeof this.vm.selectedLedger.entryDate === "object") ? dayjs(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT) : dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-            }
-        }
-
-        if (this.vm.stockTrxEntry?.inventory && !this.selectedStockVariant.uniqueName) {
+        if (!this.validateDates()) {
             return;
         }
-        // due to date picker of Tx chequeClearance date format need to change
-        if (this.vm.selectedLedger.chequeClearanceDate) {
-            let chequeClearanceDate = (typeof this.vm.selectedLedger.chequeClearanceDate === "object") ? dayjs(this.vm.selectedLedger.chequeClearanceDate) : dayjs(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT);
-            if (!chequeClearanceDate.isValid()) {
-                this.toaster.showSnackBar("error", this.localeData?.invalid_cheque_clearance_date);
-                this.loaderService.hide();
-                return;
-            } else {
-                this.vm.selectedLedger.chequeClearanceDate = (typeof this.vm.selectedLedger.chequeClearanceDate === "object") ? dayjs(this.vm.selectedLedger.chequeClearanceDate).format(GIDDH_DATE_FORMAT) : dayjs(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-            }
-        }
-        let requestObj: LedgerResponse = this.vm.prepare4Submit();
 
-        // special case for is petty cash mode
-        // remove dummy others account from transaction.particular.uniqueName
-        // added because we want to handle others account case in petty cash entry
-        if (this.isPettyCash) {
-            let isThereOthersDummyAcc = this.vm.otherAccountList.some(d => d?.uniqueName === 'others' && d?.isDummy);
-            if (isThereOthersDummyAcc) {
-                let isThereDummyOtherTrx = requestObj.transactions.some(s => s.particular?.uniqueName === 'others');
-                if (isThereDummyOtherTrx) {
-                    this.toaster.showSnackBar("error", this.localeData?.invalid_account_transaction_error);
-                    return;
-                }
+        if (!this.validateStockVariant()) {
+            return;
+        }
+
+        const requestObj = this.prepareRequestObject();
+        if (!requestObj) {
+            return;
+        }
+
+        if (!this.validatePettyCashTransactions(requestObj)) {
+            return;
+        }
+
+        if (!this.validateRcmTaxes(requestObj)) {
+            return;
+        }
+
+        this.configureRequestObject(requestObj);
+        this.filterTransactions(requestObj);
+        this.updateInventoryDetails(requestObj);
+        this.cleanupRequestObject(requestObj);
+        this.handleVoucherAdjustments(requestObj);
+        this.finalizeRequestObject(requestObj);
+
+        return this.executeTransaction(requestObj);
+    }
+
+    /**
+     * Validate entry and cheque clearance dates
+     */
+    private validateDates(): boolean {
+        if (!this.validateEntryDate()) {
+            return false;
+        }
+        return this.validateChequeClearanceDate();
+    }
+
+    /**
+     * Validate entry date format and value
+     */
+    private validateEntryDate(): boolean {
+        if (!this.vm.selectedLedger.entryDate) {
+            return true;
+        }
+
+        const entryDate = this.parseDateValue(this.vm.selectedLedger.entryDate);
+        if (!entryDate.isValid()) {
+            this.toaster.showSnackBar("error", this.localeData?.invalid_date);
+            this.loaderService.hide();
+            return false;
+        }
+
+        this.vm.selectedLedger.entryDate = this.formatDateValue(this.vm.selectedLedger.entryDate);
+        return true;
+    }
+
+    /**
+     * Validate cheque clearance date format and value
+     */
+    private validateChequeClearanceDate(): boolean {
+        if (!this.vm.selectedLedger.chequeClearanceDate) {
+            return true;
+        }
+
+        const chequeClearanceDate = this.parseDateValue(this.vm.selectedLedger.chequeClearanceDate);
+        if (!chequeClearanceDate.isValid()) {
+            this.toaster.showSnackBar("error", this.localeData?.invalid_cheque_clearance_date);
+            this.loaderService.hide();
+            return false;
+        }
+
+        this.vm.selectedLedger.chequeClearanceDate = this.formatDateValue(this.vm.selectedLedger.chequeClearanceDate);
+        return true;
+    }
+
+    /**
+     * Parse date value from object or string format
+     */
+    private parseDateValue(dateValue: any): any {
+        return (typeof dateValue === "object") ?
+            dayjs(dateValue) :
+            dayjs(dateValue, GIDDH_DATE_FORMAT);
+    }
+
+    /**
+     * Format date value to standard format
+     */
+    private formatDateValue(dateValue: any): string {
+        return (typeof dateValue === "object") ?
+            dayjs(dateValue).format(GIDDH_DATE_FORMAT) :
+            dayjs(dateValue, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
+     * Validate stock variant selection
+     */
+    private validateStockVariant(): boolean {
+        if (this.vm.stockTrxEntry?.inventory && !this.selectedStockVariant.uniqueName) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Prepare the request object for submission
+     */
+    private prepareRequestObject(): LedgerResponse | null {
+        return this.vm.prepare4Submit();
+    }
+
+    /**
+     * Validate petty cash transactions
+     */
+    private validatePettyCashTransactions(requestObj: LedgerResponse): boolean {
+        if (!this.isPettyCash) {
+            return true;
+        }
+
+        const isThereOthersDummyAcc = this.vm.otherAccountList.some(d =>
+            d?.uniqueName === 'others' && d?.isDummy
+        );
+
+        if (isThereOthersDummyAcc) {
+            const isThereDummyOtherTrx = requestObj.transactions.some(s =>
+                s.particular?.uniqueName === 'others'
+            );
+
+            if (isThereDummyOtherTrx) {
+                this.toaster.showSnackBar("error", this.localeData?.invalid_account_transaction_error);
+                return false;
             }
         }
+        return true;
+    }
+
+    /**
+     * Validate RCM taxes requirement
+     */
+    private validateRcmTaxes(requestObj: LedgerResponse): boolean {
         if (this.isRcmEntry && (!requestObj.taxes || requestObj.taxes?.length === 0)) {
             if (this.taxControll?.taxInputElement?.nativeElement) {
-                // Taxes are mandatory for RCM and Advance Receipt entries
                 this.taxControll.taxInputElement.nativeElement?.classList?.add('error-box');
-                return;
+                return false;
             }
         }
-        if (requestObj) {
-            requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
-            requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger?.exchangeRate) : this.vm.selectedLedger?.exchangeRate;
-            requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
-            requestObj.transactions = requestObj.transactions?.filter(f => !f.isDiscount);
+        return true;
+    }
+
+    /**
+     * Configure basic request object properties
+     */
+    private configureRequestObject(requestObj: LedgerResponse): void {
+        if (!requestObj) {
+            return;
         }
+
+        requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
+        requestObj.exchangeRate = this.calculateExchangeRate();
+        requestObj.subVoucher = this.determineSubVoucher();
+        requestObj.transactions = requestObj.transactions?.filter(f => !f.isDiscount);
+    }
+
+    /**
+     * Calculate exchange rate based on currency selection
+     */
+    private calculateExchangeRate(): number {
+        return (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ?
+            (1 / this.vm.selectedLedger?.exchangeRate) :
+            this.vm.selectedLedger?.exchangeRate;
+    }
+
+    /**
+     * Determine sub voucher type
+     */
+    private determineSubVoucher(): string {
+        if (this.isRcmEntry) {
+            return SubVoucher.ReverseCharge;
+        }
+        if (this.isAdvanceReceipt) {
+            return SubVoucher.AdvanceReceipt;
+        }
+        return '';
+    }
+
+    /**
+     * Filter transactions based on voucher type and settings
+     */
+    private filterTransactions(requestObj: LedgerResponse): void {
+        this.filterTaxTransactions(requestObj);
+        this.filterRoundoffTransactions(requestObj);
+    }
+
+    /**
+     * Filter tax transactions if not tax-only mode
+     */
+    private filterTaxTransactions(requestObj: LedgerResponse): void {
         if (!this.taxOnlyTransactions && requestObj.voucherType !== "jr") {
             requestObj.transactions = requestObj.transactions?.filter(tx => !tx.isTax);
         }
-        if (this.voucherApiVersion === 2 && (requestObj.voucherGenerated || requestObj.generateInvoice) && requestObj.voucherType !== "jr") {
-            requestObj.transactions = requestObj.transactions?.filter(tx => tx.particular?.uniqueName !== "roundoff");
+    }
+
+    /**
+     * Filter roundoff transactions for API v2
+     */
+    private filterRoundoffTransactions(requestObj: LedgerResponse): void {
+        if (this.voucherApiVersion === 2 &&
+            (requestObj.voucherGenerated || requestObj.generateInvoice) &&
+            requestObj.voucherType !== "jr") {
+            requestObj.transactions = requestObj.transactions?.filter(tx =>
+                tx.particular?.uniqueName !== "roundoff"
+            );
         }
+    }
+
+    /**
+     * Update inventory details in transactions
+     */
+    private updateInventoryDetails(requestObj: LedgerResponse): void {
         requestObj.transactions.map((transaction: any) => {
             if (transaction?.inventory && this.isStockPresent) {
-                transaction.inventory.variant = this.selectedStockVariant ?? transaction.inventory.variant;
-                transaction.inventory.taxInclusive = this.vm.isInclusiveTax;
-                // Update the warehouse details in update ledger flow
-                if (transaction?.inventory.warehouse) {
-                    transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
-                    transaction.inventory.warehouse.name = this.selectedWarehouseName;
-                } else {
-                    transaction.inventory.warehouse = { name: '', uniqueName: '' };
-                    transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
-                    transaction.inventory.warehouse.name = this.selectedWarehouseName;
-                }
+                this.updateTransactionInventory(transaction);
             }
         });
+    }
 
+    /**
+     * Update individual transaction inventory details
+     */
+    private updateTransactionInventory(transaction: any): void {
+        transaction.inventory.variant = this.selectedStockVariant ?? transaction.inventory.variant;
+        transaction.inventory.taxInclusive = this.vm.isInclusiveTax;
+
+        this.updateWarehouseDetails(transaction);
+    }
+
+    /**
+     * Update warehouse details in transaction inventory
+     */
+    private updateWarehouseDetails(transaction: any): void {
+        if (transaction?.inventory.warehouse) {
+            transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
+            transaction.inventory.warehouse.name = this.selectedWarehouseName;
+        } else {
+            transaction.inventory.warehouse = {
+                name: this.selectedWarehouseName,
+                uniqueName: this.selectedWarehouse
+            };
+        }
+    }
+
+    /**
+     * Clean up request object by removing unnecessary properties
+     */
+    private cleanupRequestObject(requestObj: LedgerResponse): void {
+        this.cleanupVoucherAdjustments(requestObj);
+        this.removeTaxProperties(requestObj);
+        this.handleReferenceVoucher(requestObj);
+        this.removeSalesPerson(requestObj);
+    }
+
+    /**
+     * Clean up voucher adjustments
+     */
+    private cleanupVoucherAdjustments(requestObj: LedgerResponse): void {
         if (requestObj?.voucherAdjustments?.adjustments?.length > 0) {
-            (Array.isArray(requestObj.voucherAdjustments.adjustments) ? requestObj.voucherAdjustments.adjustments : []).forEach((adjustment: any) => {
+            (Array.isArray(requestObj.voucherAdjustments.adjustments) ?
+                requestObj.voucherAdjustments.adjustments : []
+            ).forEach((adjustment: any) => {
                 delete adjustment.balanceDue;
             });
         }
+    }
+
+    /**
+     * Remove tax-related properties
+     */
+    private removeTaxProperties(requestObj: LedgerResponse): void {
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
+    }
 
-        if (requestObj.voucherType !== VoucherTypeEnum.creditNote && requestObj.voucherType !== VoucherTypeEnum.debitNote) {
+    /**
+     * Handle reference voucher for specific voucher types
+     */
+    private handleReferenceVoucher(requestObj: LedgerResponse): void {
+        if (requestObj.voucherType !== VoucherTypeEnum.creditNote &&
+            requestObj.voucherType !== VoucherTypeEnum.debitNote) {
             if (this.voucherApiVersion === 2) {
                 requestObj.referenceVoucher = null;
             }
-        }
-        if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) || !this.isAdjustVoucherSelected) {
-            // Clear the voucher adjustments if the adjust advance receipt or adjust receipt is not selected
-            this.vm.selectedLedger.voucherAdjustments = undefined;
-            requestObj.voucherAdjustments = undefined;
-        }
-        if (this.isAdvanceReceipt) {
-            requestObj.voucherType = 'rcpt';
-            requestObj.transactions[0].amount = this.vm.advanceReceiptAmount;
-        }
-
-        if (this.voucherApiVersion === 2) {
-            requestObj = this.adjustmentUtilityService.getAdjustmentObject(requestObj);
         }
 
         if (requestObj.referenceVoucher) {
@@ -972,28 +1165,100 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             delete requestObj.referenceVoucher.date;
             delete requestObj.referenceVoucher.voucherType;
         }
+    }
 
+    /**
+     * Remove sales person property
+     */
+    private removeSalesPerson(requestObj: LedgerResponse): void {
         if (requestObj.salesPerson) {
             delete requestObj.salesPerson;
         }
+    }
 
-        // if no petty cash mode then do normal update ledger request
-        if (!this.isPettyCash) {
-            requestObj['handleNetworkDisconnection'] = true;
-            requestObj['refreshLedger'] = false;
+    /**
+     * Handle voucher adjustments based on selection flags
+     */
+    private handleVoucherAdjustments(requestObj: LedgerResponse): void {
+        const shouldClearAdjustments =
+            (this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) ||
+            (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) ||
+            !this.isAdjustVoucherSelected;
 
-            if (this.entryAccountUniqueName && this.entryAccountUniqueName !== this.changedAccountUniq) {
-                requestObj['refreshLedger'] = true;
-            }
+        if (shouldClearAdjustments) {
+            this.vm.selectedLedger.voucherAdjustments = undefined;
+            requestObj.voucherAdjustments = undefined;
+        }
+    }
 
-            if (this.baseAccountChanged) {
-                this.store.dispatch(this.ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
-            } else {
-                this.store.dispatch(this.ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName));
-            }
-        } else {
-            // for petty cash approve request, just return request object
+    /**
+     * Finalize request object with advance receipt and API v2 adjustments
+     */
+    private finalizeRequestObject(requestObj: LedgerResponse): void {
+        this.handleAdvanceReceipt(requestObj);
+        this.applyApiV2Adjustments(requestObj);
+    }
+
+    /**
+     * Handle advance receipt specific configurations
+     */
+    private handleAdvanceReceipt(requestObj: LedgerResponse): void {
+        if (this.isAdvanceReceipt) {
+            requestObj.voucherType = 'rcpt';
+            requestObj.transactions[0].amount = this.vm.advanceReceiptAmount;
+        }
+    }
+
+    /**
+     * Apply API v2 specific adjustments
+     */
+    private applyApiV2Adjustments(requestObj: LedgerResponse): LedgerResponse {
+        if (this.voucherApiVersion === 2) {
+            return this.adjustmentUtilityService.getAdjustmentObject(requestObj);
+        }
+        return requestObj;
+    }
+
+    /**
+     * Execute the transaction based on petty cash mode
+     */
+    private executeTransaction(requestObj: LedgerResponse): LedgerResponse | void {
+        if (this.isPettyCash) {
             return requestObj;
+        }
+
+        this.configureNetworkHandling(requestObj);
+        this.dispatchUpdateAction(requestObj);
+    }
+
+    /**
+     * Configure network handling and refresh flags
+     */
+    private configureNetworkHandling(requestObj: LedgerResponse): void {
+        requestObj['handleNetworkDisconnection'] = true;
+        requestObj['refreshLedger'] = false;
+
+        if (this.entryAccountUniqueName && this.entryAccountUniqueName !== this.changedAccountUniq) {
+            requestObj['refreshLedger'] = true;
+        }
+    }
+
+    /**
+     * Dispatch the appropriate update action
+     */
+    private dispatchUpdateAction(requestObj: LedgerResponse): void {
+        if (this.baseAccountChanged) {
+            this.store.dispatch(this.ledgerAction.updateTxnEntry(
+                requestObj,
+                this.firstBaseAccountSelected,
+                this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq
+            ));
+        } else {
+            this.store.dispatch(this.ledgerAction.updateTxnEntry(
+                requestObj,
+                this.firstBaseAccountSelected,
+                this.entryUniqueName
+            ));
         }
     }
 
@@ -2144,11 +2409,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             return;
         }
 
-        if (resp[1]?.body?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(resp[1]?.body?.parentGroups[1]?.uniqueName)) {
-            this.isSundryDebtorCreditor = true;
-        } else {
-            this.isSundryDebtorCreditor = false;
-        }
+        this.checkSundryDebtorCreditorStatus(resp[1]);
 
         if (this.voucherApiVersion === 2) {
             resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0], this.vm.selectedLedger.voucherGeneratedType);
@@ -2158,27 +2419,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isEinvoiceGenerated = resp[0].einvoiceGenerated;
 
         if (updateBaseAccountParticular) {
-            resp[0].particular = {
-                category: resp[1].body?.category,
-                name: resp[1].body?.name,
-                currency: {
-                    code: resp[1].body?.currency,
-                    symbol: resp[1].body?.currencySymbol
-                },
-                parentGroups: resp[1].body?.parentGroups,
-                uniqueName: resp[1].body?.uniqueName
-            };
-
-            resp[0].particularType = resp[1].body?.accountType;
-
-            if (resp[1].body?.currency !== resp[2]?.baseCurrency) {
-                let date = dayjs().format(GIDDH_DATE_FORMAT);
-                this.ledgerService.GetCurrencyRateNewApi(resp[1].body?.currency, resp[2]?.baseCurrency, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (this.vm.selectedLedger) {
-                        this.vm.selectedLedger.exchangeRate = response.body;
-                    }
-                });
-            }
+            this.updateBaseAccountParticular(resp);
         }
 
         this.baseAccountDetails = resp[0];
@@ -2199,29 +2440,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.giddhBalanceDecimalPlaces = resp[2].balanceDecimalPlaces;
         this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
 
-        // special check if we have petty cash mode and we receive an entry whose uniquename is null
-        // so it means it's other account entry of petty cash
-        // so for that we have to add a dummy account in flatten account array
-        if (this.isPettyCash) {
-            if (resp[0].othersCategory) {
-                this.checkForOtherAccount();
-            }
-            this.prepareMultiCurrencyObject(this.activeAccount);
-        }
-
-        if (this.activeAccount) {
-            if (this.activeAccount.currency && this.vm.isMultiCurrencyAvailable) {
-                this.baseCurrency = this.activeAccount.currency;
-            }
-
-            this.accountOtherApplicableDiscount = [];
-
-            if (this.activeAccount.applicableDiscounts && this.activeAccount.applicableDiscounts.length) {
-                this.accountOtherApplicableDiscount = this.activeAccount.applicableDiscounts;
-            } else if (this.activeAccount.inheritedDiscounts && this.activeAccount.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount?.length)) {
-                this.accountOtherApplicableDiscount.push(...this.activeAccount.inheritedDiscounts[0].applicableDiscounts);
-            }
-        }
+        this.setupActiveAccountAndDiscounts(resp);
 
         this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name, this.localeData);
 
@@ -3031,5 +3250,70 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             uniqueName: '',
             email: null
         };
+    }
+
+    /**
+     * Check if account is sundry debtor or creditor
+     */
+    private checkSundryDebtorCreditorStatus(accountData: any): void {
+        if (accountData?.body?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(accountData?.body?.parentGroups[1]?.uniqueName)) {
+            this.isSundryDebtorCreditor = true;
+        } else {
+            this.isSundryDebtorCreditor = false;
+        }
+    }
+
+    /**
+     * Update base account particular details and handle currency exchange
+     */
+    private updateBaseAccountParticular(resp: any[]): void {
+        resp[0].particular = {
+            category: resp[1].body?.category,
+            name: resp[1].body?.name,
+            currency: {
+                code: resp[1].body?.currency,
+                symbol: resp[1].body?.currencySymbol
+            },
+            parentGroups: resp[1].body?.parentGroups,
+            uniqueName: resp[1].body?.uniqueName
+        };
+
+        resp[0].particularType = resp[1].body?.accountType;
+
+        if (resp[1].body?.currency !== resp[2]?.baseCurrency) {
+            let date = dayjs().format(GIDDH_DATE_FORMAT);
+            this.ledgerService.GetCurrencyRateNewApi(resp[1].body?.currency, resp[2]?.baseCurrency, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (this.vm.selectedLedger) {
+                    this.vm.selectedLedger.exchangeRate = response.body;
+                }
+            });
+        }
+    }
+
+    /**
+     * Setup active account and applicable discounts
+     */
+    private setupActiveAccountAndDiscounts(resp: any[]): void {
+        // Special check for petty cash mode
+        if (this.isPettyCash) {
+            if (resp[0].othersCategory) {
+                this.checkForOtherAccount();
+            }
+            this.prepareMultiCurrencyObject(this.activeAccount);
+        }
+
+        if (this.activeAccount) {
+            if (this.activeAccount.currency && this.vm.isMultiCurrencyAvailable) {
+                this.baseCurrency = this.activeAccount.currency;
+            }
+
+            this.accountOtherApplicableDiscount = [];
+
+            if (this.activeAccount.applicableDiscounts && this.activeAccount.applicableDiscounts.length) {
+                this.accountOtherApplicableDiscount = this.activeAccount.applicableDiscounts;
+            } else if (this.activeAccount.inheritedDiscounts && this.activeAccount.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount?.length)) {
+                this.accountOtherApplicableDiscount.push(...this.activeAccount.inheritedDiscounts[0].applicableDiscounts);
+            }
+        }
     }
 }

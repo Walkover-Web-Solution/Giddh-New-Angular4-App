@@ -994,162 +994,342 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getInvoiceList(): void {
-        let voucherType = (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
-
-        if (this.voucherApiVersion === 2) {
-            if (voucherType === AdjustedVoucherType.Sales) {
-                voucherType = AdjustedVoucherType.SalesInvoice;
-            } else if (voucherType === AdjustedVoucherType.Purchase) {
-                voucherType = AdjustedVoucherType.PurchaseInvoice;
-            } else if (voucherType === AdjustedVoucherType.Payment) {
-                voucherType = VoucherTypeEnum.payment
-            } else if (voucherType === AdjustedVoucherType.Receipt) {
-                voucherType = VoucherTypeEnum.receipt
-            } else if (voucherType === AdjustedVoucherType.Journal) {
-                voucherType = AdjustedVoucherType.JournalVoucher
-            }
-
-            if (this.invoiceListRequestParams) {
-                this.invoiceListRequestParams.voucherType = voucherType;
-            }
-        }
-
-        const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
-        let requestObject;
-        if (typeof customerUniqueName === 'string') {
-            // New entry is created from ledger
-            if (this.voucherApiVersion === 2) {
-                if (!this.invoiceListRequestParams) {
-                    requestObject = {
-                        accountUniqueName: customerUniqueName,
-                        voucherType,
-                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined,
-                        number: '',
-                        page: 1
-                    }
-                } else {
-                    requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
-                    if (requestObject && this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) {
-                        requestObject.subVoucher = SubVoucher.AdvanceReceipt;
-                    }
-                }
-
-                if (requestObject) {
-                    requestObject.number = this.searchReferenceVoucher;
-
-                    if (requestObject.number) {
-                        this.resetInvoiceList();
-                    }
-
-                    requestObject.page = this.referenceVouchersCurrentPage;
-                    this.referenceVouchersCurrentPage++;
-                }
-            } else {
-                requestObject = {
-                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
-                    voucherType,
-                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
-                }
-            }
-        } else {
-            // A ledger entry is updated
-            if (this.voucherApiVersion === 2) {
-                if (!this.invoiceListRequestParams) {
-                    requestObject = {
-                        accountUniqueName: customerUniqueName[customerUniqueName?.length - 1],
-                        voucherType,
-                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined,
-                        number: '',
-                        page: 1
-                    }
-                } else {
-                    requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
-                    if (requestObject && this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) {
-                        requestObject.subVoucher = SubVoucher.AdvanceReceipt;
-                    }
-                }
-
-                if (requestObject) {
-                    requestObject.number = this.searchReferenceVoucher;
-
-                    if (requestObject.number) {
-                        this.resetInvoiceList();
-                    }
-
-                    requestObject.page = this.referenceVouchersCurrentPage;
-                    this.referenceVouchersCurrentPage++;
-                }
-            } else {
-                requestObject = {
-                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
-                    voucherType,
-                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
-                }
-            }
-        }
+        const voucherType = this.getVoucherType();
+        const requestObject = this.createRequestObject(voucherType);
 
         if (!requestObject) {
             return;
         }
 
+        this.finalizeRequestObject(requestObject);
+        this.executeInvoiceListRequest(requestObject);
+    }
+
+    /**
+     * Get the appropriate voucher type based on adjusted voucher type and API version
+     */
+    private getVoucherType(): string {
+        let voucherType = (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
+
+        if (this.voucherApiVersion === 2) {
+            voucherType = this.mapVoucherTypeForApiV2(voucherType);
+            this.updateInvoiceListRequestParams(voucherType);
+        }
+
+        return voucherType;
+    }
+
+    /**
+     * Map voucher type for API version 2
+     */
+    private mapVoucherTypeForApiV2(voucherType: string): string {
+        const voucherTypeMapping = {
+            [AdjustedVoucherType.Sales]: AdjustedVoucherType.SalesInvoice,
+            [AdjustedVoucherType.Purchase]: AdjustedVoucherType.PurchaseInvoice,
+            [AdjustedVoucherType.Payment]: VoucherTypeEnum.payment,
+            [AdjustedVoucherType.Receipt]: VoucherTypeEnum.receipt,
+            [AdjustedVoucherType.Journal]: AdjustedVoucherType.JournalVoucher
+        };
+
+        return voucherTypeMapping[voucherType] || voucherType;
+    }
+
+    /**
+     * Update invoice list request params with voucher type
+     */
+    private updateInvoiceListRequestParams(voucherType: string): void {
+        if (this.invoiceListRequestParams) {
+            this.invoiceListRequestParams.voucherType = voucherType;
+        }
+    }
+
+    /**
+     * Create request object based on customer unique name type and API version
+     */
+    private createRequestObject(voucherType: string): any {
+        const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
+
+        if (typeof customerUniqueName === 'string') {
+            return this.createRequestForStringCustomer(customerUniqueName, voucherType);
+        } else {
+            return this.createRequestForArrayCustomer(customerUniqueName, voucherType);
+        }
+    }
+
+    /**
+     * Create request object for string customer (new entry from ledger)
+     */
+    private createRequestForStringCustomer(customerUniqueName: string, voucherType: string): any {
+        if (this.voucherApiVersion === 2) {
+            return this.createApiV2RequestForString(customerUniqueName, voucherType);
+        } else {
+            return this.createApiV1RequestForString(customerUniqueName, voucherType);
+        }
+    }
+
+    /**
+     * Create API v2 request for string customer
+     */
+    private createApiV2RequestForString(customerUniqueName: string, voucherType: string): any {
+        let requestObject;
+
+        if (!this.invoiceListRequestParams) {
+            requestObject = {
+                accountUniqueName: customerUniqueName,
+                voucherType,
+                subVoucher: this.getSubVoucher(),
+                number: '',
+                page: 1
+            };
+        } else {
+            requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
+            this.addSubVoucherIfNeeded(requestObject);
+        }
+
+        return this.configureRequestPagination(requestObject);
+    }
+
+    /**
+     * Create API v1 request for string customer
+     */
+    private createApiV1RequestForString(customerUniqueName: string, voucherType: string): any {
+        return {
+            accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
+            voucherType,
+            subVoucher: this.getSubVoucher()
+        };
+    }
+
+    /**
+     * Create request object for array customer (ledger entry update)
+     */
+    private createRequestForArrayCustomer(customerUniqueName: string[], voucherType: string): any {
+        if (this.voucherApiVersion === 2) {
+            return this.createApiV2RequestForArray(customerUniqueName, voucherType);
+        } else {
+            return this.createApiV1RequestForArray(customerUniqueName, voucherType);
+        }
+    }
+
+    /**
+     * Create API v2 request for array customer
+     */
+    private createApiV2RequestForArray(customerUniqueName: string[], voucherType: string): any {
+        let requestObject;
+
+        if (!this.invoiceListRequestParams) {
+            requestObject = {
+                accountUniqueName: customerUniqueName[customerUniqueName?.length - 1],
+                voucherType,
+                subVoucher: this.getSubVoucher(),
+                number: '',
+                page: 1
+            };
+        } else {
+            requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
+            this.addSubVoucherIfNeeded(requestObject);
+        }
+
+        return this.configureRequestPagination(requestObject);
+    }
+
+    /**
+     * Create API v1 request for array customer
+     */
+    private createApiV1RequestForArray(customerUniqueName: string[], voucherType: string): any {
+        return {
+            accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
+            voucherType,
+            subVoucher: this.getSubVoucher()
+        };
+    }
+
+    /**
+     * Get sub voucher type if needed
+     */
+    private getSubVoucher(): string | undefined {
+        return this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined;
+    }
+
+    /**
+     * Add sub voucher to request object if needed
+     */
+    private addSubVoucherIfNeeded(requestObject: any): void {
+        if (requestObject && this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) {
+            requestObject.subVoucher = SubVoucher.AdvanceReceipt;
+        }
+    }
+
+    /**
+     * Configure request pagination and search parameters
+     */
+    private configureRequestPagination(requestObject: any): any {
+        if (requestObject) {
+            requestObject.number = this.searchReferenceVoucher;
+
+            if (requestObject.number) {
+                this.resetInvoiceList();
+            }
+
+            requestObject.page = this.referenceVouchersCurrentPage;
+            this.referenceVouchersCurrentPage++;
+        }
+        return requestObject;
+    }
+
+    /**
+     * Finalize request object with additional properties for API v2
+     */
+    private finalizeRequestObject(requestObject: any): void {
         if (this.voucherApiVersion === 2) {
             requestObject.uniqueName = this.invoiceFormDetails?.voucherDetails?.voucherUniqueName;
             requestObject.voucherBalanceType = this.invoiceFormDetails?.type;
         }
+    }
 
-        this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, this.paginationLimit).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && response.body && (this.voucherApiVersion === 2 && response.body.page === requestObject.page)) {
-                let results = (response.body.results || response.body.items);
+    /**
+     * Execute the invoice list API request and handle response
+     */
+    private executeInvoiceListRequest(requestObject: any): void {
+        this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, this.paginationLimit)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((response) => {
+                this.handleInvoiceListResponse(response, requestObject);
+            });
+    }
 
-                if (this.voucherApiVersion === 2) {
-                    results = this.adjustmentUtilityService.formatAdjustmentsObject(results);
-                }
+    /**
+     * Handle the invoice list API response
+     */
+    private handleInvoiceListResponse(response: any, requestObject: any): void {
+        if (this.isValidResponse(response, requestObject)) {
+            this.processSuccessfulResponse(response);
+        } else {
+            this.processEmptyResponse(requestObject);
+        }
 
-                this.allAdvanceReceiptResponse = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
-                if (response.body.page === 1) {
-                    this.adjustVoucherOptions = [];
-                }
+        this.finalizeResponseProcessing();
+    }
 
-                if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
-                    (Array.isArray(this.allAdvanceReceiptResponse) ? this.allAdvanceReceiptResponse : []).forEach(item => {
-                        this.handlePartiallyAdjustedVoucher(item);
-                        if (item && item.voucherDate) {
-                            item.voucherDate = item.voucherDate?.replace(/-/g, '/');
-                            item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
-                            item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
-                            this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                            this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                        }
-                    });
+    /**
+     * Check if response is valid
+     */
+    private isValidResponse(response: any, requestObject: any): boolean {
+        return response && response.body && (this.voucherApiVersion === 2 && response.body.page === requestObject.page);
+    }
 
-                    this.assignCurrencyInAdjustVoucherForm();
-                } else {
-                    if (!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) {
-                        if (this.isVoucherModule) {
-                            this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
-                        } else {
-                            this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
-                        }
-                    }
-                }
+    /**
+     * Process successful API response
+     */
+    private processSuccessfulResponse(response: any): void {
+        let results = (response.body.results || response.body.items);
 
-                if (response.body.page === 1) {
-                    // Fill the suggestions with already adjusted vouchers
-                    this.pushExistingAdjustments();
-                }
+        if (this.voucherApiVersion === 2) {
+            results = this.adjustmentUtilityService.formatAdjustmentsObject(results);
+        }
 
-                this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
-            } else {
-                if (this.voucherApiVersion === 2 && requestObject.page === 1) {
-                    this.adjustVoucherOptions = [];
-                    // Since no vouchers available for adjustment, fill the suggestions with already adjusted vouchers
-                    this.pushExistingAdjustments();
-                    this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+        this.processInvoiceResults(results, response.body.page);
+    }
 
-                }
+    /**
+     * Process invoice results and update voucher options
+     */
+    private processInvoiceResults(results: any[], page: number): void {
+        this.allAdvanceReceiptResponse = results?.map(result => ({
+            ...result,
+            adjustmentAmount: {
+                amountForAccount: result.balanceDue?.amountForAccount,
+                amountForCompany: result.balanceDue?.amountForCompany
             }
-            this.shouldOpenDropdown = !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName && this.adjustVoucherForm?.adjustments?.length === 1;
-            this.changeDetectionRef.detectChanges();
+        }));
+
+        if (page === 1) {
+            this.adjustVoucherOptions = [];
+        }
+
+        if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
+            this.processValidResults();
+        } else {
+            this.handleNoResults();
+        }
+
+        if (page === 1) {
+            this.pushExistingAdjustments();
+        }
+
+        this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+    }
+
+    /**
+     * Process valid invoice results
+     */
+    private processValidResults(): void {
+        (Array.isArray(this.allAdvanceReceiptResponse) ? this.allAdvanceReceiptResponse : []).forEach(item => {
+            this.handlePartiallyAdjustedVoucher(item);
+            if (item && item.voucherDate) {
+                this.formatInvoiceItem(item);
+                this.addToVoucherOptions(item);
+            }
         });
+
+        this.assignCurrencyInAdjustVoucherForm();
+    }
+
+    /**
+     * Format individual invoice item
+     */
+    private formatInvoiceItem(item: any): void {
+        item.voucherDate = item.voucherDate?.replace(/-/g, '/');
+        item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
+        item.accountCurrency = item.accountCurrency ?? item.currency ?? {
+            symbol: this.baseCurrencySymbol,
+            code: this.companyCurrency
+        };
+    }
+
+    /**
+     * Add item to voucher options
+     */
+    private addToVoucherOptions(item: any): void {
+        const voucherOption = {
+            value: item.uniqueName,
+            label: item.voucherNumber,
+            additional: item
+        };
+
+        this.adjustVoucherOptions.push(voucherOption);
+        this.newAdjustVoucherOptions.push(voucherOption);
+    }
+
+    /**
+     * Handle case when no results are found
+     */
+    private handleNoResults(): void {
+        if (!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) {
+            const message = this.isVoucherModule ?
+                NO_ADVANCE_RECEIPT_FOUND :
+                this.commonLocaleData?.app_voucher_unavailable;
+            this.toaster.warningToast(message);
+        }
+    }
+
+    /**
+     * Process empty API response
+     */
+    private processEmptyResponse(requestObject: any): void {
+        if (this.voucherApiVersion === 2 && requestObject.page === 1) {
+            this.adjustVoucherOptions = [];
+            this.pushExistingAdjustments();
+            this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+        }
+    }
+
+    /**
+     * Finalize response processing
+     */
+    private finalizeResponseProcessing(): void {
+        this.shouldOpenDropdown = !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName &&
+                                 this.adjustVoucherForm?.adjustments?.length === 1;
+        this.changeDetectionRef.detectChanges();
     }
 }

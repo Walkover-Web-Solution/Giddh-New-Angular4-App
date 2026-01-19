@@ -891,13 +891,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.lc.transactionData$.pipe(takeUntil(this.destroyed$)).subscribe((lt: any) => {
             if (lt) {
-                // set date picker to and from date, as what we got from api in case of today selected from universal date
-                if (lt.from && lt.to && this.todaySelected) {
-                    let dateRange = { fromDate: '', toDate: '' };
-                    dateRange = this.generalService.dateConversionToSetComponentDatePicker(lt.from, lt.to);
-                    this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
-                    this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
-                }
+                this.processDateRangeForTodaySelection(lt);
 
                 this.ledgerTransactions = lt;
 
@@ -905,14 +899,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.arrangeLedgerTransactionsForMobile();
                 }
 
-                if (lt.periodClosingBalance) {
-                    this.closingBalanceBeforeReconcile = lt.periodClosingBalance;
-                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === TransactionType.Credit ? this.localeData?.cr : this.localeData?.dr;
-                }
-                if (lt.closingBalanceForBank) {
-                    this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
-                    this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === TransactionType.Credit ? this.localeData?.cr : this.localeData?.dr;
-                }
+                this.processClosingBalances(lt);
                 let checkedEntriesName: any[];
                 if (this.ledgerView === LedgerViewEnum.TView) {
                     const debitTransactions = lt.debitTransactions ?? [];
@@ -2426,73 +2413,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public entrySelected(event: MatCheckboxChange, uniqueName: string, type: string) {
         if (this.ledgerTransactions?.debitCreditTransactions?.length) {
-            const totalLength = this.ledgerTransactions?.debitCreditTransactions.length;
-            if (event?.checked) {
-                this.checkedTrxWhileHovering.push({ type, uniqueName });
-                this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
-                this.statementViewSelectAll = this.ledgerTransactions.debitCreditTransactions.every(transaction => transaction?.isChecked);
-            } else {
-                let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
-                this.checkedTrxWhileHovering.splice(itemIndx, 1);
-                const currentLength = this.isTabletScreen ?
-                    this.checkedTrxWhileHovering?.length
-                    : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
-                if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
-                    this.statementViewSelectAll = false;
-                    this.selectedTrxWhileHovering = '';
-                }
-
-                this.lc.selectedTxnUniqueName = null;
-                this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([uniqueName]));
-            }
-
+            this.handleDebitCreditTransactionSelection(event, uniqueName, type);
         } else {
-            const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
-                (type === 'credit') ? this.ledgerTransactions.creditTransactions?.length :
-                    (this.ledgerTransactions.debitTransactions?.length + this.ledgerTransactions.creditTransactions?.length);
-            if (event?.checked) {
-                this.checkedTrxWhileHovering.push({ type, uniqueName });
-                this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
-                const currentLength = this.isTabletScreen ?
-                    this.checkedTrxWhileHovering?.length
-                    : this.checkedTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
-                if (currentLength === totalLength) {
-                    if (type === 'credit') {
-                        this.creditSelectAll = true;
-                    } else if (type === 'debit') {
-                        this.debitSelectAll = true;
-                    } else {
-                        this.debitCreditSelectAll = true;
-                    }
-                } else {
-                    if (type === 'credit') {
-                        this.creditSelectAll = false;
-                    } else if (type === 'debit') {
-                        this.debitSelectAll = false;
-                    } else {
-                        this.debitCreditSelectAll = false;
-                    }
-                }
-            } else {
-                let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
-                this.checkedTrxWhileHovering.splice(itemIndx, 1);
-                const currentLength = this.isTabletScreen ?
-                    this.checkedTrxWhileHovering?.length
-                    : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
-                if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
-                    if (type === 'credit') {
-                        this.creditSelectAll = false;
-                    } else if (type === 'debit') {
-                        this.debitSelectAll = false;
-                    } else {
-                        this.debitCreditSelectAll = false;
-                    }
-                    this.selectedTrxWhileHovering = '';
-                }
-
-                this.lc.selectedTxnUniqueName = null;
-                this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([uniqueName]));
-            }
+            this.handleSeparateTransactionSelection(event, uniqueName, type);
         }
     }
 
@@ -4204,6 +4127,103 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public hideAllDropdown(exceptDropdown?: LedgerDropdownTypeEnum): void {
         if (this.newLedgerComponent && this.newLedgerComponent.hideAllDropdown) {
             this.newLedgerComponent.hideAllDropdown(exceptDropdown);
+        }
+    }
+
+    /**
+     * Handle debit credit transaction selection
+     */
+    private handleDebitCreditTransactionSelection(event: MatCheckboxChange, uniqueName: string, type: string): void {
+        const totalLength = this.ledgerTransactions?.debitCreditTransactions.length;
+        if (event?.checked) {
+            this.checkedTrxWhileHovering.push({ type, uniqueName });
+            this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
+            this.statementViewSelectAll = this.ledgerTransactions.debitCreditTransactions.every(transaction => transaction?.isChecked);
+        } else {
+            let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
+            this.checkedTrxWhileHovering.splice(itemIndx, 1);
+            const currentLength = this.isTabletScreen ?
+                this.checkedTrxWhileHovering?.length
+                : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
+            if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
+                this.statementViewSelectAll = false;
+                this.selectedTrxWhileHovering = '';
+            }
+
+            this.lc.selectedTxnUniqueName = null;
+            this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([uniqueName]));
+        }
+    }
+
+    /**
+     * Handle separate transaction selection (debit/credit)
+     */
+    private handleSeparateTransactionSelection(event: MatCheckboxChange, uniqueName: string, type: string): void {
+        const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
+            (type === 'credit') ? this.ledgerTransactions.creditTransactions?.length :
+                (this.ledgerTransactions.debitTransactions?.length + this.ledgerTransactions.creditTransactions?.length);
+
+        if (event?.checked) {
+            this.checkedTrxWhileHovering.push({ type, uniqueName });
+            this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
+            const currentLength = this.isTabletScreen ?
+                this.checkedTrxWhileHovering?.length
+                : this.checkedTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
+
+            this.updateSelectAllFlags(type, currentLength === totalLength);
+        } else {
+            let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
+            this.checkedTrxWhileHovering.splice(itemIndx, 1);
+            const currentLength = this.isTabletScreen ?
+                this.checkedTrxWhileHovering?.length
+                : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
+
+            if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
+                this.updateSelectAllFlags(type, false);
+                this.selectedTrxWhileHovering = '';
+            }
+
+            this.lc.selectedTxnUniqueName = null;
+            this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([uniqueName]));
+        }
+    }
+
+    /**
+     * Update select all flags based on transaction type
+     */
+    private updateSelectAllFlags(type: string, isSelected: boolean): void {
+        if (type === 'credit') {
+            this.creditSelectAll = isSelected;
+        } else if (type === 'debit') {
+            this.debitSelectAll = isSelected;
+        } else {
+            this.debitCreditSelectAll = isSelected;
+        }
+    }
+
+    /**
+     * Process date range for today selection from universal date
+     */
+    private processDateRangeForTodaySelection(lt: any): void {
+        if (lt.from && lt.to && this.todaySelected) {
+            let dateRange = { fromDate: '', toDate: '' };
+            dateRange = this.generalService.dateConversionToSetComponentDatePicker(lt.from, lt.to);
+            this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+            this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+        }
+    }
+
+    /**
+     * Process closing balances for reconciliation
+     */
+    private processClosingBalances(lt: any): void {
+        if (lt.periodClosingBalance) {
+            this.closingBalanceBeforeReconcile = lt.periodClosingBalance;
+            this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === TransactionType.Credit ? this.localeData?.cr : this.localeData?.dr;
+        }
+        if (lt.closingBalanceForBank) {
+            this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
+            this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === TransactionType.Credit ? this.localeData?.cr : this.localeData?.dr;
         }
     }
 }

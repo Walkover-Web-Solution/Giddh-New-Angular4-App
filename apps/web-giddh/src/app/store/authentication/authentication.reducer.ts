@@ -488,6 +488,29 @@ export function BranchConsolidatedReducer(state: IBranchConsolidatedState = bran
 }
 
 export function SessionReducer(state: SessionState = sessionInitialState, action: CustomActions): SessionState {
+    // Handle login and authentication actions
+    const loginResult = handleLoginActions(state, action);
+    if (loginResult !== null) return loginResult;
+
+    // Handle company actions
+    const companyResult = handleCompanyActions(state, action);
+    if (companyResult !== null) return companyResult;
+
+    // Handle common actions
+    const commonResult = handleCommonActions(state, action);
+    if (commonResult !== null) return commonResult;
+
+    // Handle settings actions
+    const settingsResult = handleSettingsActions(state, action);
+    if (settingsResult !== null) return settingsResult;
+
+    return state;
+}
+
+/**
+ * Handle login and authentication related actions
+ */
+function handleLoginActions(state: SessionState, action: CustomActions): SessionState | null {
     switch (action.type) {
         case LoginActions.renewSessionResponse: {
             let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
@@ -833,6 +856,97 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             });
         }
         default:
-            return state;
+            return null;
     }
+}
+
+/**
+ * Handle company related actions
+ */
+function handleCompanyActions(state: SessionState, action: CustomActions): SessionState | null {
+    switch (action.type) {
+        case CompanyActions.GET_STATE_DETAILS_RESPONSE:
+        case CompanyActions.CHANGE_COMPANY_RESPONSE:
+            return handleStateDetailsResponse(state, action);
+        case CompanyActions.SET_STATE_DETAILS_REQUEST:
+            return Object.assign({}, state, {
+                lastState: action.payload.lastState,
+                companyUniqueName: action.payload.companyUniqueName,
+                currentBranchUniqueName: action.payload.currentBranchUniqueName || ''
+            });
+        case CompanyActions.CREATE_COMPANY:
+        case CompanyActions.CREATE_NEW_COMPANY:
+            return Object.assign({}, state, { isCompanyCreationInProcess: true, isCompanyCreationSuccess: false });
+        case CompanyActions.RESET_CREATE_COMPANY_FLAG:
+            return Object.assign({}, state, {
+                isCompanyCreated: false,
+                isCompanyCreationInProcess: false,
+                isCompanyCreationSuccess: false
+            });
+        default:
+            return null;
+    }
+}
+
+/**
+ * Handle common actions
+ */
+function handleCommonActions(state: SessionState, action: CustomActions): SessionState | null {
+    switch (action.type) {
+        case CommonActions.SET_COMMON_LOCALE_DATA:
+            return Object.assign({}, state, { commonLocaleData: action.payload });
+        case CommonActions.SET_ACTIVE_LOCALE:
+            return Object.assign({}, state, { currentLocale: action.payload });
+        case CommonActions.SET_ACTIVE_FINANCIAL_YEAR:
+            return Object.assign({}, state, { activeCompany: action.payload });
+        case CommonActions.SET_ACTIVE_THEME:
+            return Object.assign({}, state, { activeTheme: action.payload });
+        case CommonActions.SET_FILTERS:
+            return Object.assign({}, state, { filters: action.payload });
+        default:
+            return null;
+    }
+}
+
+/**
+ * Handle settings actions
+ */
+function handleSettingsActions(state: SessionState, action: CustomActions): SessionState | null {
+    switch (action.type) {
+        case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE:
+        case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE:
+            return handleProfileResponse(state, action);
+        default:
+            return null;
+    }
+}
+
+/**
+ * Handle state details response
+ */
+function handleStateDetailsResponse(state: SessionState, action: CustomActions): SessionState {
+    let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
+    if (stateData?.status === 'success') {
+        return Object.assign({}, state, {
+            lastState: stateData.body?.lastState,
+            companyUniqueName: stateData.body?.companyUniqueName
+        });
+    }
+    return state;
+}
+
+/**
+ * Handle profile response
+ */
+function handleProfileResponse(state: SessionState, action: CustomActions): SessionState {
+    let response: BaseResponse<CompanyResponse, string> = action.payload;
+    if (response?.status === 'success') {
+        let d = cloneDeep(state);
+        let currentCompanyIndx = findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
+        if (currentCompanyIndx !== -1) {
+            d.companies[currentCompanyIndx].country = response.body?.country;
+            return Object.assign({}, state, d);
+        }
+    }
+    return state;
 }

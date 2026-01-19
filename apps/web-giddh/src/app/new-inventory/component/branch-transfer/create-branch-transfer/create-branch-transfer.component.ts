@@ -955,200 +955,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         const sourcesFormGroup = sourcesArray?.at(0) as UntypedFormGroup;
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
-                this.branchTransferCreateEditForm.patchValue({
-                    dateOfSupply: response.body?.dateOfSupply,
-                    challanNo: response.body?.challanNo,
-                    uniqueName: response.body?.uniqueName,
-                    note: response.body?.note,
-                    entity: response.body?.entity,
-                    transferType: 'products'
-                });
-                this.branchTransferCreateEditForm.get('transporterDetails').patchValue({
-                    dispatchedDate: response.body?.transporterDetails?.dispatchedDate,
-                    transporterName: this.transporterDropdown.find(res => res.value === response.body?.transporterDetails?.transporterId)?.label ?? '',
-                    transporterId: response.body?.transporterDetails?.transporterId,
-                    transportMode: response.body?.transporterDetails?.transportMode,
-                    vehicleNumber: response.body?.transporterDetails?.vehicleNumber
-                });
-
-                (productsArray as UntypedFormArray).clear();
-
-                response.body?.products?.forEach((product, index) => {
-                    const productFormGroup = this.initProductFormGroup();
-                    productFormGroup.patchValue({
-                        name: product.name,
-                        hsnNumber: product.hsnNumber,
-                        sacNumber: product.sacNumber,
-                        skuCode: product.skuCode,
-                        uniqueName: product.uniqueName,
-                        description: product.description
-                    });
-
-                    productFormGroup.get('variant').patchValue({
-                        name: product.variant.name,
-                        uniqueName: product.variant.uniqueName,
-                    });
-
-                    productFormGroup.get('stockDetails').patchValue({
-                        stockUnitUniqueName: product.stockDetails.stockUnitUniqueName,
-                        stockUnit: product.stockDetails.stockUnit,
-                        amount: product.stockDetails.amount,
-                        rate: product.stockDetails.rate,
-                        quantity: product.stockDetails.quantity
-                    });
-
-                    productsArray.push(productFormGroup);
-                    this.stockVariants[index] = [];
-                    this.stockVariants[index].push(productFormGroup.get('variant'));
-
-                    let stockObj = {
-                        label: productFormGroup.get('name').value,
-                        value: productFormGroup.get('uniqueName').value,
-                        additional: productFormGroup.value
-                    }
-                    this.selectProduct(stockObj, productFormGroup, true, index);
-                });
-
-                response.body?.sources?.forEach(source => {
-                    for (let i = 0; i < sourcesArray.length; i++) {
-                        const sourcesFormGroup = sourcesArray.at(i);
-                        sourcesFormGroup.patchValue({
-                            name: source.name,
-                            uniqueName: source.uniqueName,
-                        });
-                        sourcesFormGroup.get('warehouse').patchValue({
-                            name: source.warehouse.name,
-                            uniqueName: source.warehouse.uniqueName,
-                            taxNumber: source.warehouse.taxNumber,
-                            address: source.warehouse.address
-                        })
-                    }
-                });
-
-                response.body?.destinations?.forEach(destination => {
-                    for (let i = 0; i < destinationsArray.length; i++) {
-                        const destinationsFormGroup = destinationsArray.at(i);
-                        destinationsFormGroup.patchValue({
-                            name: destination.name,
-                            uniqueName: destination.uniqueName,
-                        });
-                        destinationsFormGroup.get('warehouse').patchValue({
-                            name: destination.warehouse.name,
-                            uniqueName: destination.warehouse.uniqueName,
-                            taxNumber: destination.warehouse.taxNumber,
-                            address: destination.warehouse.address
-                        })
-                    }
-                });
-
-                let allWarehouses = [];
-                if (Object.keys(this.allWarehouses)?.length > 0) {
-                    const usedWarehouses = [];
-                    if (sourcesArray && sourcesArray.length > 0) {
-                        for (let i = 0; i < sourcesArray.length; i++) {
-                            const branch = sourcesArray.at(i);
-                            if (branch && branch.get('warehouse.uniqueName')) {
-                                usedWarehouses.push(branch.get('warehouse.uniqueName')?.value);
-                            }
-                        }
-                    }
-
-                    if (destinationsArray && destinationsArray.length > 0) {
-                        for (let i = 0; i < destinationsArray.length; i++) {
-                            const branch = destinationsArray.at(i);
-
-                            if (branch && branch.get('warehouse.uniqueName')) {
-                                usedWarehouses.push(branch.get('warehouse.uniqueName')?.value);
-                            }
-                        }
-                    }
-
-                    Object.keys(this.allWarehouses)?.forEach(branch => {
-                        allWarehouses[branch] = [];
-                        this.allWarehouses[branch]?.forEach(warehouse => {
-                            if (!warehouse?.isArchived || usedWarehouses?.includes(warehouse?.uniqueName)) {
-                                allWarehouses[branch].push(warehouse);
-                            }
-                        });
-                    });
-                    this.allWarehouses = allWarehouses;
-                }
-
-                for (let i = 0; i < sourcesArray.length; i++) {
-                    const source = sourcesArray.at(i);
-                    if (source && source.get('warehouse.address')?.value) {
-                        const pin = source.get('warehouse.pincode')?.value;
-                        if (pin) {
-                            const currentAddress = source.get('warehouse.address')?.value;
-                            source.get('warehouse.address')?.setValue(`${currentAddress}\nPIN: ${pin}`);
-                        }
-                    }
-                }
-
-                for (let i = 0; i < destinationsArray.length; i++) {
-                    const destination = destinationsArray.at(i);
-                    if (destination && destination.get('warehouse.address')?.value) {
-                        const pin = destination.get('warehouse.pincode')?.value;
-                        if (pin) {
-                            const currentAddress = destination.get('warehouse.address')?.value;
-                            destination.get('warehouse.address')?.setValue(`${currentAddress}\nPIN: ${pin}`);
-                        }
-                    }
-                }
-
-                if (productsArray && productsArray.length > 0) {
-                    for (let i = 0; i < productsArray.length; i++) {
-                        const product = productsArray.at(i);
-                        if (product && product.get('hsnNumber')) {
-                            product.get('showCodeType')?.setValue('hsn');
-                        } else {
-                            product.get('showCodeType')?.setValue('sac');
-                        }
-                    }
-                }
-
-                let tempBranches = [];
-                this.branches?.forEach(branch => {
-                    if (!branch?.additional?.isArchived || (branch?.additional?.isArchived && (this.branchExists(branch?.value, destinationsArray[0]) || this.branchExists(branch?.value, sourcesArray[0])))) {
-                        tempBranches.push(branch);
-                    }
-                });
-
-                this.branches = cloneDeep(tempBranches);
-                if (this.branches) {
-                    const destinationBranch = this.branches.find(branch => branch.value === destinationsFormGroup.get('uniqueName').value);
-                    this.destinationBranchAlias = destinationBranch && destinationBranch.additional ? destinationBranch.additional.alias : '';
-                    const sourceBranch = this.branches.find(branch => branch.value === sourcesFormGroup.get('uniqueName').value);
-                    this.sourceBranchAlias = sourceBranch && sourceBranch.additional ? sourceBranch.additional.alias : '';
-                }
-                const transporterDetailsFormGroup = this.branchTransferCreateEditForm.get('transporterDetails') as UntypedFormGroup;
-                if (!this.branchTransferCreateEditForm.get('transporterDetails')) {
-                    transporterDetailsFormGroup.patchValue({
-                        dispatchedDate: null,
-                        transporterName: null,
-                        transporterId: null,
-                        transportMode: null,
-                        vehicleNumber: null
-                    });
-                }
-
-                if (response.body?.dateOfSupply) {
-                    this.tempDateParams.dateOfSupply = new Date(response.body?.dateOfSupply?.split("-")?.reverse()?.join("-"));
-                    let dateOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT)
-                    this.branchTransferCreateEditForm.get('dateOfSupply')?.setValue(dateOfSupply);
-                }
-                if (response.body?.transporterDetails && response.body?.transporterDetails.dispatchedDate) {
-                    this.tempDateParams.dispatchedDate = new Date(response.body?.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
-                    let dispatchedDate = dayjs(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT)
-                    this.branchTransferCreateEditForm.get('transporterDetails.dispatchedDate')?.setValue(dispatchedDate);
-                }
-                this.calculateOverallTotal();
-
-                this.resetDestinationWarehouses(0);
-                this.resetSourceWarehouses(0);
-                setTimeout(() => {
-                    this.isDefaultLoad = false;
-                }, 1000);
+                this.processBranchTransferEditData(response.body, sourcesArray, destinationsArray, productsArray);
             } else {
                 this.toasty.showSnackBar("error", response?.message);
             }
@@ -2323,5 +2130,312 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Process branch transfer edit data and populate form
+     */
+    private processBranchTransferEditData(responseBody: any, sourcesArray: UntypedFormArray, destinationsArray: UntypedFormArray, productsArray: UntypedFormArray): void {
+        // Patch main form values
+        this.patchMainFormValues(responseBody);
+
+        // Patch transporter details
+        this.patchTransporterDetails(responseBody);
+
+        // Process products
+        this.processProductsData(responseBody.products, productsArray);
+
+        // Process sources and destinations
+        this.processSourcesData(responseBody.sources, sourcesArray);
+        this.processDestinationsData(responseBody.destinations, destinationsArray);
+
+        // Process warehouses
+        this.processWarehousesData(sourcesArray, destinationsArray);
+
+        // Update addresses with PIN codes
+        this.updateAddressesWithPinCodes(sourcesArray, destinationsArray);
+
+        // Set product code types
+        this.setProductCodeTypes(productsArray);
+
+        // Process branches and aliases
+        this.processBranchesAndAliases(destinationsArray, sourcesArray);
+
+        // Handle dates
+        this.processDateFields(responseBody);
+
+        // Finalize setup
+        this.finalizeEditSetup();
+    }
+
+    /**
+     * Patch main form values
+     */
+    private patchMainFormValues(responseBody: any): void {
+        this.branchTransferCreateEditForm.patchValue({
+            dateOfSupply: responseBody?.dateOfSupply,
+            challanNo: responseBody?.challanNo,
+            uniqueName: responseBody?.uniqueName,
+            note: responseBody?.note,
+            entity: responseBody?.entity,
+            transferType: 'products'
+        });
+    }
+
+    /**
+     * Patch transporter details
+     */
+    private patchTransporterDetails(responseBody: any): void {
+        this.branchTransferCreateEditForm.get('transporterDetails').patchValue({
+            dispatchedDate: responseBody?.transporterDetails?.dispatchedDate,
+            transporterName: this.transporterDropdown.find(res => res.value === responseBody?.transporterDetails?.transporterId)?.label ?? '',
+            transporterId: responseBody?.transporterDetails?.transporterId,
+            transportMode: responseBody?.transporterDetails?.transportMode,
+            vehicleNumber: responseBody?.transporterDetails?.vehicleNumber
+        });
+    }
+
+    /**
+     * Process products data
+     */
+    private processProductsData(products: any[], productsArray: UntypedFormArray): void {
+        (productsArray as UntypedFormArray).clear();
+
+        products?.forEach((product, index) => {
+            const productFormGroup = this.initProductFormGroup();
+
+            // Patch product basic details
+            productFormGroup.patchValue({
+                name: product.name,
+                hsnNumber: product.hsnNumber,
+                sacNumber: product.sacNumber,
+                skuCode: product.skuCode,
+                uniqueName: product.uniqueName,
+                description: product.description
+            });
+
+            // Patch variant details
+            productFormGroup.get('variant').patchValue({
+                name: product.variant.name,
+                uniqueName: product.variant.uniqueName,
+            });
+
+            // Patch stock details
+            productFormGroup.get('stockDetails').patchValue({
+                stockUnitUniqueName: product.stockDetails.stockUnitUniqueName,
+                stockUnit: product.stockDetails.stockUnit,
+                amount: product.stockDetails.amount,
+                rate: product.stockDetails.rate,
+                quantity: product.stockDetails.quantity
+            });
+
+            productsArray.push(productFormGroup);
+            this.stockVariants[index] = [];
+            this.stockVariants[index].push(productFormGroup.get('variant'));
+
+            let stockObj = {
+                label: productFormGroup.get('name').value,
+                value: productFormGroup.get('uniqueName').value,
+                additional: productFormGroup.value
+            }
+            this.selectProduct(stockObj, productFormGroup, true, index);
+        });
+    }
+
+    /**
+     * Process sources data
+     */
+    private processSourcesData(sources: any[], sourcesArray: UntypedFormArray): void {
+        sources?.forEach(source => {
+            for (let i = 0; i < sourcesArray.length; i++) {
+                const sourcesFormGroup = sourcesArray.at(i);
+                sourcesFormGroup.patchValue({
+                    name: source.name,
+                    uniqueName: source.uniqueName,
+                });
+                sourcesFormGroup.get('warehouse').patchValue({
+                    name: source.warehouse.name,
+                    uniqueName: source.warehouse.uniqueName,
+                    taxNumber: source.warehouse.taxNumber,
+                    address: source.warehouse.address
+                })
+            }
+        });
+    }
+
+    /**
+     * Process destinations data
+     */
+    private processDestinationsData(destinations: any[], destinationsArray: UntypedFormArray): void {
+        destinations?.forEach(destination => {
+            for (let i = 0; i < destinationsArray.length; i++) {
+                const destinationsFormGroup = destinationsArray.at(i);
+                destinationsFormGroup.patchValue({
+                    name: destination.name,
+                    uniqueName: destination.uniqueName,
+                });
+                destinationsFormGroup.get('warehouse').patchValue({
+                    name: destination.warehouse.name,
+                    uniqueName: destination.warehouse.uniqueName,
+                    taxNumber: destination.warehouse.taxNumber,
+                    address: destination.warehouse.address
+                })
+            }
+        });
+    }
+
+    /**
+     * Process warehouses data and filter archived ones
+     */
+    private processWarehousesData(sourcesArray: UntypedFormArray, destinationsArray: UntypedFormArray): void {
+        let allWarehouses = [];
+        if (Object.keys(this.allWarehouses)?.length > 0) {
+            const usedWarehouses = this.getUsedWarehouses(sourcesArray, destinationsArray);
+
+            Object.keys(this.allWarehouses)?.forEach(branch => {
+                allWarehouses[branch] = [];
+                this.allWarehouses[branch]?.forEach(warehouse => {
+                    if (!warehouse?.isArchived || usedWarehouses?.includes(warehouse?.uniqueName)) {
+                        allWarehouses[branch].push(warehouse);
+                    }
+                });
+            });
+            this.allWarehouses = allWarehouses;
+        }
+    }
+
+    /**
+     * Get used warehouses from sources and destinations
+     */
+    private getUsedWarehouses(sourcesArray: UntypedFormArray, destinationsArray: UntypedFormArray): string[] {
+        const usedWarehouses = [];
+
+        if (sourcesArray && sourcesArray.length > 0) {
+            for (let i = 0; i < sourcesArray.length; i++) {
+                const branch = sourcesArray.at(i);
+                if (branch && branch.get('warehouse.uniqueName')) {
+                    usedWarehouses.push(branch.get('warehouse.uniqueName')?.value);
+                }
+            }
+        }
+
+        if (destinationsArray && destinationsArray.length > 0) {
+            for (let i = 0; i < destinationsArray.length; i++) {
+                const branch = destinationsArray.at(i);
+                if (branch && branch.get('warehouse.uniqueName')) {
+                    usedWarehouses.push(branch.get('warehouse.uniqueName')?.value);
+                }
+            }
+        }
+
+        return usedWarehouses;
+    }
+
+    /**
+     * Update addresses with PIN codes
+     */
+    private updateAddressesWithPinCodes(sourcesArray: UntypedFormArray, destinationsArray: UntypedFormArray): void {
+        // Update source addresses
+        for (let i = 0; i < sourcesArray.length; i++) {
+            const source = sourcesArray.at(i);
+            if (source && source.get('warehouse.address')?.value) {
+                const pin = source.get('warehouse.pincode')?.value;
+                if (pin) {
+                    const currentAddress = source.get('warehouse.address')?.value;
+                    source.get('warehouse.address')?.setValue(`${currentAddress}\nPIN: ${pin}`);
+                }
+            }
+        }
+
+        // Update destination addresses
+        for (let i = 0; i < destinationsArray.length; i++) {
+            const destination = destinationsArray.at(i);
+            if (destination && destination.get('warehouse.address')?.value) {
+                const pin = destination.get('warehouse.pincode')?.value;
+                if (pin) {
+                    const currentAddress = destination.get('warehouse.address')?.value;
+                    destination.get('warehouse.address')?.setValue(`${currentAddress}\nPIN: ${pin}`);
+                }
+            }
+        }
+    }
+
+    /**
+     * Set product code types (HSN or SAC)
+     */
+    private setProductCodeTypes(productsArray: UntypedFormArray): void {
+        if (productsArray && productsArray.length > 0) {
+            for (let i = 0; i < productsArray.length; i++) {
+                const product = productsArray.at(i);
+                if (product && product.get('hsnNumber')) {
+                    product.get('showCodeType')?.setValue('hsn');
+                } else {
+                    product.get('showCodeType')?.setValue('sac');
+                }
+            }
+        }
+    }
+
+    /**
+     * Process branches and set aliases
+     */
+    private processBranchesAndAliases(destinationsArray: UntypedFormArray, sourcesArray: UntypedFormArray): void {
+        const destinationsFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
+        const sourcesFormGroup = sourcesArray?.at(0) as UntypedFormGroup;
+
+        let tempBranches = [];
+        this.branches?.forEach(branch => {
+            if (!branch?.additional?.isArchived || (branch?.additional?.isArchived && (this.branchExists(branch?.value, destinationsArray[0]) || this.branchExists(branch?.value, sourcesArray[0])))) {
+                tempBranches.push(branch);
+            }
+        });
+
+        this.branches = cloneDeep(tempBranches);
+        if (this.branches) {
+            const destinationBranch = this.branches.find(branch => branch.value === destinationsFormGroup.get('uniqueName').value);
+            this.destinationBranchAlias = destinationBranch && destinationBranch.additional ? destinationBranch.additional.alias : '';
+            const sourceBranch = this.branches.find(branch => branch.value === sourcesFormGroup.get('uniqueName').value);
+            this.sourceBranchAlias = sourceBranch && sourceBranch.additional ? sourceBranch.additional.alias : '';
+        }
+
+        // Handle transporter details form group
+        const transporterDetailsFormGroup = this.branchTransferCreateEditForm.get('transporterDetails') as UntypedFormGroup;
+        if (!this.branchTransferCreateEditForm.get('transporterDetails')) {
+            transporterDetailsFormGroup.patchValue({
+                dispatchedDate: null,
+                transporterName: null,
+                transporterId: null,
+                transportMode: null,
+                vehicleNumber: null
+            });
+        }
+    }
+
+    /**
+     * Process date fields
+     */
+    private processDateFields(responseBody: any): void {
+        if (responseBody?.dateOfSupply) {
+            this.tempDateParams.dateOfSupply = new Date(responseBody?.dateOfSupply?.split("-")?.reverse()?.join("-"));
+            let dateOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT)
+            this.branchTransferCreateEditForm.get('dateOfSupply')?.setValue(dateOfSupply);
+        }
+        if (responseBody?.transporterDetails && responseBody?.transporterDetails.dispatchedDate) {
+            this.tempDateParams.dispatchedDate = new Date(responseBody?.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
+            let dispatchedDate = dayjs(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT)
+            this.branchTransferCreateEditForm.get('transporterDetails.dispatchedDate')?.setValue(dispatchedDate);
+        }
+    }
+
+    /**
+     * Finalize edit setup
+     */
+    private finalizeEditSetup(): void {
+        this.calculateOverallTotal();
+        this.resetDestinationWarehouses(0);
+        this.resetSourceWarehouses(0);
+        setTimeout(() => {
+            this.isDefaultLoad = false;
+        }, 1000);
     }
 }

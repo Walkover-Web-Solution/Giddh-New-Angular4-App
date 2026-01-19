@@ -2054,124 +2054,387 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public saveEntry(): any {
-        let data = cloneDeep({ ...this.journalVoucherForm.value, ...this.chequeDetailForm.value });
-        data.entryDate = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format(GIDDH_DATE_FORMAT) : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        const data = this.prepareEntryData();
 
-        data.transactions = this.validateTransaction(data.transactions);
-
-        if (!data.transactions.length) {
+        if (!this.validateEntryData(data)) {
             return;
         }
 
-        const foundContraEntry: boolean = this.validateForContraEntry(data);
-        const foundSalesAndBankEntry: boolean = this.validateForSalesAndPurchaseEntry(data);
+        if (!this.validateVoucherRules(data)) {
+            return;
+        }
+
+        if (!this.validateAmountBalance()) {
+            this.handleAmountBalanceError();
+            return;
+        }
+
+        if (!this.validatePaymentAndReceipt(data)) {
+            this.handlePaymentReceiptError(data);
+            return;
+        }
+
+        this.processAndSaveEntry(data);
+    }
+
+    /**
+     * Prepare entry data by combining form values and formatting date
+     */
+    private prepareEntryData(): any {
+        const data = cloneDeep({ ...this.journalVoucherForm.value, ...this.chequeDetailForm.value });
+        data.entryDate = this.formatEntryDate();
+        data.transactions = this.validateTransaction(data.transactions);
+        return data;
+    }
+
+    /**
+     * Format entry date to standard format
+     */
+    private formatEntryDate(): string {
+        const entryDateValue = this.journalVoucherForm.get('entryDate').value;
+        return (typeof entryDateValue === "object") ?
+            dayjs(entryDateValue).format(GIDDH_DATE_FORMAT) :
+            dayjs(entryDateValue, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
+     * Validate basic entry data requirements
+     */
+    private validateEntryData(data: any): boolean {
+        return data.transactions && data.transactions.length > 0;
+    }
+
+    /**
+     * Validate voucher-specific business rules
+     */
+    private validateVoucherRules(data: any): boolean {
+        if (!this.validateContraEntryRules(data)) {
+            return false;
+        }
+        return this.validateSalesAndPurchaseRules(data);
+    }
+
+    /**
+     * Validate contra entry rules
+     */
+    private validateContraEntryRules(data: any): boolean {
+        const foundContraEntry = this.validateForContraEntry(data);
         if (foundContraEntry && data.voucherType !== VOUCHERS.CONTRA) {
-            let message = this.localeData?.contra_entry_notallowed;
-            message = message?.replace("[VOUCHER_TYPE]", data.voucherType);
-            this._toaster.errorToast(message, this.commonLocaleData?.app_error);
-            this.activeRowIndex = null;
-            this.activeRowType = null;
-            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
+            this.handleContraEntryError(data.voucherType);
+            return false;
         }
+        return true;
+    }
 
-        // This suggestion was given by Sandeep
+    /**
+     * Handle contra entry validation error
+     */
+    private handleContraEntryError(voucherType: string): void {
+        let message = this.localeData?.contra_entry_notallowed;
+        message = message?.replace("[VOUCHER_TYPE]", voucherType);
+        this._toaster.errorToast(message, this.commonLocaleData?.app_error);
+        this.resetActiveState();
+        setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
+    }
+
+    /**
+     * Validate sales and purchase entry rules
+     */
+    private validateSalesAndPurchaseRules(data: any): boolean {
+        const foundSalesAndBankEntry = this.validateForSalesAndPurchaseEntry(data);
         if (foundSalesAndBankEntry && data.voucherType === VOUCHERS.JOURNAL) {
-            this._toaster.errorToast(this.localeData?.sales_purchase_entry_error, this.commonLocaleData?.app_error);
-            this.activeRowIndex = null;
-            this.activeRowType = null;
-            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
+            this.handleSalesAndPurchaseError();
+            return false;
         }
-        if (this.totalCreditAmount === this.totalDebitAmount) {
-            if (this.validatePaymentAndReceipt(data)) {
-                const voucherTypeControl = this.journalVoucherForm.get('voucherType');
-                if (voucherTypeControl.value === VOUCHERS.RECEIPT) {
-                    this.validateEntries(true);
+        return true;
+    }
 
-                    if (!this.isValidForm) {
-                        return false;
-                    }
-                }
-                let salesAmount;
-                (Array.isArray(data.transactions) ? data.transactions : []).forEach((element: any) => {
-                    if (element) {
-                        if (element.type === 'to' && !element.isDiscountApplied && !element.isTaxApplied && element.selectedAccount?.UniqueName) {
-                            salesAmount = element.amount;
-                        }
-                        element.type = (element.type === 'by') ? 'credit' : 'debit';
-                    }
-                });
-                let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount)?.selectedAccount?.UniqueName;
-                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o?.selectedAccount?.UniqueName === accUniqueName);
-                if (voucherTypeControl.value === VOUCHERS.RECEIPT) {
-                    if (this.receiptEntries && this.receiptEntries.length > 0) {
-                        data.transactions.splice(0, 2);
-                    } else {
-                        data.transactions.splice(0, 1);
-                    }
-                } else {
-                    data.transactions.splice(indexOfMaxAmountEntry, 1);
-                }
-                let filteredWithoutTaxDiscountData = [];
-                let filteredDiscountData = data?.transactions?.filter(transaction => transaction?.isDiscountApplied);
-                let filteredTaxData = data?.transactions?.filter(transaction => transaction?.isTaxApplied);
-                if (voucherTypeControl.value === VOUCHERS.SALES || voucherTypeControl.value === VOUCHERS.JOURNAL || voucherTypeControl.value === VOUCHERS.PURCHASE || voucherTypeControl.value === VOUCHERS.DEBIT_NOTE || voucherTypeControl.value === VOUCHERS.CREDIT_NOTE) {
-                    filteredWithoutTaxDiscountData = data?.transactions?.filter(transaction => !transaction?.isDiscountApplied && !transaction?.isTaxApplied);
-                    if (filteredDiscountData?.length) {
-                        filteredDiscountData?.forEach(discount => {
-                            let discountData = this.discountsList?.filter(response => response?.additional?.uniqueName === discount?.particular);
-                            filteredWithoutTaxDiscountData[0].discounts?.push({
-                                amount: discountData[0]?.additional?.discountValue,
-                                discountType: discountData[0]?.additional?.discountType,
-                                discountUniqueName: discountData[0]?.additional?.uniqueName,
-                                discountValue: discountData[0]?.additional?.discountValue,
-                                name: discountData[0]?.additional?.name,
-                                particular: "discount"
-                            });
-                        });
-                    }
-                    if (filteredTaxData?.length) {
-                        filteredTaxData?.forEach(tax => {
-                            filteredWithoutTaxDiscountData[0].taxes?.push(tax?.particular);
-                        });
-                    }
-                    filteredWithoutTaxDiscountData?.forEach(transaction => {
-                        delete transaction?.isDiscountApplied;
-                        delete transaction?.isTaxApplied;
-                    });
-                    data.transactions = filteredWithoutTaxDiscountData;
-                    if (data.transactions?.length) {
-                        data.transactions[0].amount = this.isSalesEntry ? salesAmount : (data.transactions[0]?.actualAmount - (filteredTaxData[0]?.amount ?? 0));
-                        data.transactions[0].total = data.transactions[0].actualAmount + (filteredDiscountData[0]?.amount ?? 0);
-                        data.transactions[0].isInclusiveTax = false;
-                    }
-                }
-                if (!data.transactions?.length) {
-                     this._toaster.showSnackBar("error", this.localeData?.blank_particular_error);
-                    return;
-                }
-                if (data.transactions.length > 1) {
-                    (Array.isArray(data.transactions) ? data.transactions : []).forEach((transaction, i) => {
-                        delete data.transactions[i].actualAmount;
-                    });
-                } else {
-                    delete data.transactions[0].actualAmount;
-                }
-                this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
-            } else {
-                const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
-                let message = this.localeData?.blank_account_error;
-                message = message?.replace("[BY_TO]", byOrTo.toUpperCase());
-                this._toaster.errorToast(message, this.commonLocaleData?.app_error);
-                this.activeRowIndex = null;
-                this.activeRowType = null;
-                setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
-            }
-        } else {
-            this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
-            this.activeRowIndex = null;
-            this.activeRowType = null;
-            setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
+    /**
+     * Handle sales and purchase entry validation error
+     */
+    private handleSalesAndPurchaseError(): void {
+        this._toaster.errorToast(this.localeData?.sales_purchase_entry_error, this.commonLocaleData?.app_error);
+        this.resetActiveState();
+        setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
+    }
+
+    /**
+     * Validate amount balance between credit and debit
+     */
+    private validateAmountBalance(): boolean {
+        return this.totalCreditAmount === this.totalDebitAmount;
+    }
+
+    /**
+     * Handle amount balance validation error
+     */
+    private handleAmountBalanceError(): void {
+        this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
+        this.resetActiveState();
+        setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
+    }
+
+    /**
+     * Handle payment and receipt validation error
+     */
+    private handlePaymentReceiptError(data: any): void {
+        const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
+        let message = this.localeData?.blank_account_error;
+        message = message?.replace("[BY_TO]", byOrTo.toUpperCase());
+        this._toaster.errorToast(message, this.commonLocaleData?.app_error);
+        this.resetActiveState();
+        setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
+    }
+
+    /**
+     * Reset active row state
+     */
+    private resetActiveState(): void {
+        this.activeRowIndex = null;
+        this.activeRowType = null;
+    }
+
+    /**
+     * Process and save the entry after all validations pass
+     */
+    private processAndSaveEntry(data: any): void {
+        const voucherTypeControl = this.journalVoucherForm.get('voucherType');
+
+        if (!this.validateReceiptEntries(voucherTypeControl)) {
+            return;
         }
+
+        const salesAmount = this.extractSalesAmount(data);
+        this.convertTransactionTypes(data);
+
+        const accUniqueName = this.getMaxAmountAccountUniqueName(data);
+        this.removeMaxAmountTransaction(data, voucherTypeControl, accUniqueName);
+
+        this.processTaxAndDiscountTransactions(data, voucherTypeControl, salesAmount);
+
+        if (!this.validateFinalTransactions(data)) {
+            return;
+        }
+
+        this.cleanupTransactionData(data);
+        this.dispatchSaveAction(data, accUniqueName);
+    }
+
+    /**
+     * Validate receipt entries if voucher type is receipt
+     */
+    private validateReceiptEntries(voucherTypeControl: any): boolean {
+        if (voucherTypeControl.value === VOUCHERS.RECEIPT) {
+            this.validateEntries(true);
+            if (!this.isValidForm) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Extract sales amount from transactions
+     */
+    private extractSalesAmount(data: any): number {
+        let salesAmount;
+        (Array.isArray(data.transactions) ? data.transactions : []).forEach((element: any) => {
+            if (element && element.type === 'to' && !element.isDiscountApplied &&
+                !element.isTaxApplied && element.selectedAccount?.UniqueName) {
+                salesAmount = element.amount;
+            }
+        });
+        return salesAmount;
+    }
+
+    /**
+     * Convert transaction types from 'by'/'to' to 'credit'/'debit'
+     */
+    private convertTransactionTypes(data: any): void {
+        (Array.isArray(data.transactions) ? data.transactions : []).forEach((element: any) => {
+            if (element) {
+                element.type = (element.type === 'by') ? 'credit' : 'debit';
+            }
+        });
+    }
+
+    /**
+     * Get unique name of account with maximum amount
+     */
+    private getMaxAmountAccountUniqueName(data: any): string {
+        return maxBy(data.transactions, (o: any) => o.amount)?.selectedAccount?.UniqueName;
+    }
+
+    /**
+     * Remove transaction with maximum amount based on voucher type
+     */
+    private removeMaxAmountTransaction(data: any, voucherTypeControl: any, accUniqueName: string): void {
+        if (voucherTypeControl.value === VOUCHERS.RECEIPT) {
+            this.removeReceiptTransactions(data);
+        } else {
+            this.removeMaxAmountEntry(data, accUniqueName);
+        }
+    }
+
+    /**
+     * Remove receipt-specific transactions
+     */
+    private removeReceiptTransactions(data: any): void {
+        if (this.receiptEntries && this.receiptEntries.length > 0) {
+            data.transactions.splice(0, 2);
+        } else {
+            data.transactions.splice(0, 1);
+        }
+    }
+
+    /**
+     * Remove entry with maximum amount
+     */
+    private removeMaxAmountEntry(data: any, accUniqueName: string): void {
+        const indexOfMaxAmountEntry = findIndex(data.transactions,
+            (o: any) => o?.selectedAccount?.UniqueName === accUniqueName
+        );
+        data.transactions.splice(indexOfMaxAmountEntry, 1);
+    }
+
+    /**
+     * Process tax and discount transactions for specific voucher types
+     */
+    private processTaxAndDiscountTransactions(data: any, voucherTypeControl: any, salesAmount: number): void {
+        if (!this.shouldProcessTaxAndDiscount(voucherTypeControl.value)) {
+            return;
+        }
+
+        const { filteredWithoutTaxDiscountData, filteredDiscountData, filteredTaxData } =
+            this.filterTransactionsByType(data);
+
+        this.processDiscountTransactions(filteredDiscountData, filteredWithoutTaxDiscountData);
+        this.processTaxTransactions(filteredTaxData, filteredWithoutTaxDiscountData);
+        this.cleanupTransactionFlags(filteredWithoutTaxDiscountData);
+
+        data.transactions = filteredWithoutTaxDiscountData;
+        this.updateTransactionAmounts(data, salesAmount, filteredTaxData, filteredDiscountData);
+    }
+
+    /**
+     * Check if voucher type should process tax and discount
+     */
+    private shouldProcessTaxAndDiscount(voucherType: string): boolean {
+        return [VOUCHERS.SALES, VOUCHERS.JOURNAL, VOUCHERS.PURCHASE,
+                VOUCHERS.DEBIT_NOTE, VOUCHERS.CREDIT_NOTE].includes(voucherType);
+    }
+
+    /**
+     * Filter transactions by type (tax, discount, regular)
+     */
+    private filterTransactionsByType(data: any): any {
+        return {
+            filteredWithoutTaxDiscountData: data?.transactions?.filter(
+                transaction => !transaction?.isDiscountApplied && !transaction?.isTaxApplied
+            ),
+            filteredDiscountData: data?.transactions?.filter(
+                transaction => transaction?.isDiscountApplied
+            ),
+            filteredTaxData: data?.transactions?.filter(
+                transaction => transaction?.isTaxApplied
+            )
+        };
+    }
+
+    /**
+     * Process discount transactions
+     */
+    private processDiscountTransactions(filteredDiscountData: any[], filteredWithoutTaxDiscountData: any[]): void {
+        if (!filteredDiscountData?.length || !filteredWithoutTaxDiscountData?.length) {
+            return;
+        }
+
+        filteredDiscountData.forEach(discount => {
+            const discountData = this.discountsList?.filter(
+                response => response?.additional?.uniqueName === discount?.particular
+            );
+
+            if (discountData?.length) {
+                filteredWithoutTaxDiscountData[0].discounts?.push({
+                    amount: discountData[0]?.additional?.discountValue,
+                    discountType: discountData[0]?.additional?.discountType,
+                    discountUniqueName: discountData[0]?.additional?.uniqueName,
+                    discountValue: discountData[0]?.additional?.discountValue,
+                    name: discountData[0]?.additional?.name,
+                    particular: "discount"
+                });
+            }
+        });
+    }
+
+    /**
+     * Process tax transactions
+     */
+    private processTaxTransactions(filteredTaxData: any[], filteredWithoutTaxDiscountData: any[]): void {
+        if (!filteredTaxData?.length || !filteredWithoutTaxDiscountData?.length) {
+            return;
+        }
+
+        filteredTaxData.forEach(tax => {
+            filteredWithoutTaxDiscountData[0].taxes?.push(tax?.particular);
+        });
+    }
+
+    /**
+     * Clean up transaction flags
+     */
+    private cleanupTransactionFlags(filteredWithoutTaxDiscountData: any[]): void {
+        filteredWithoutTaxDiscountData?.forEach(transaction => {
+            delete transaction?.isDiscountApplied;
+            delete transaction?.isTaxApplied;
+        });
+    }
+
+    /**
+     * Update transaction amounts after processing
+     */
+    private updateTransactionAmounts(data: any, salesAmount: number, filteredTaxData: any[], filteredDiscountData: any[]): void {
+        if (!data.transactions?.length) {
+            return;
+        }
+
+        data.transactions[0].amount = this.isSalesEntry ?
+            salesAmount :
+            (data.transactions[0]?.actualAmount - (filteredTaxData[0]?.amount ?? 0));
+
+        data.transactions[0].total = data.transactions[0].actualAmount + (filteredDiscountData[0]?.amount ?? 0);
+        data.transactions[0].isInclusiveTax = false;
+    }
+
+    /**
+     * Validate final transactions before saving
+     */
+    private validateFinalTransactions(data: any): boolean {
+        if (!data.transactions?.length) {
+            this._toaster.showSnackBar("error", this.localeData?.blank_particular_error);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Clean up transaction data by removing actualAmount property
+     */
+    private cleanupTransactionData(data: any): void {
+        if (data.transactions.length > 1) {
+            (Array.isArray(data.transactions) ? data.transactions : []).forEach((transaction, i) => {
+                delete data.transactions[i].actualAmount;
+            });
+        } else {
+            delete data.transactions[0].actualAmount;
+        }
+    }
+
+    /**
+     * Dispatch save action to store
+     */
+    private dispatchSaveAction(data: any, accUniqueName: string): void {
+        this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
     }
 
     /**
@@ -2773,16 +3036,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         setTimeout(() => {
             // Simple approach: find the amount input for current row using CSS selector
             const amountInput = document.querySelector(`#transactionAmount_${this.activeRowIndex} input`) as HTMLInputElement;
-            
+
             if (amountInput) {
                 amountInput.focus();
                 return;
             }
-            
+
             // Fallback: find any visible amount input in the current row
             const rowSelector = `tbody tr:nth-child(${(this.activeRowIndex * 2) + 1})`;
             const currentRow = document.querySelector(rowSelector);
-            
+
             if (currentRow) {
                 const amountField = currentRow.querySelector('.amount1 input, .amount2 input') as HTMLInputElement;
                 if (amountField && !amountField.readOnly) {

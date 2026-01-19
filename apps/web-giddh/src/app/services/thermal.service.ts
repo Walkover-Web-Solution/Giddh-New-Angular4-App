@@ -34,695 +34,24 @@ export class ThermalService {
     */
     public print(defaultTemplate: any, request: any): void {
         this.maxLength = 46;
-        /**
-         * This will use for hide/show for QR Code
-         */
-        let qr;
-        let dots;
-        let size1;
-        let size0;
-        let qrLength;
-        let itemsQrTaxData = "";
-        /** This will use for initialized entry tax */
-        let entryTaxesQR = [];
-        if (defaultTemplate?.sections?.header?.data?.showQrCode?.display) {
-            for (let entry of request.entries) {
-                if (entry?.taxes?.length > 0) {
-                    for (let taxApp of entry.taxes) {
-                        if (entryTaxesQR[taxApp.accountUniqueName] === undefined) {
-                            entryTaxesQR[taxApp.accountUniqueName] = [];
-                            entryTaxesQR[taxApp.accountUniqueName]['name'] = taxApp?.accountName;
-                            entryTaxesQR[taxApp.accountUniqueName]['amount'] = taxApp?.amount?.amountForAccount;
-                        } else {
-                            entryTaxesQR[taxApp.accountUniqueName]['amount'] = Number(entryTaxesQR[taxApp?.accountUniqueName]['amount']) + Number(taxApp?.amount?.amountForAccount);
-                        }
-                    }
-                }
-            }
-            Object.keys(entryTaxesQR)?.forEach(key => {
-                let entryTax = entryTaxesQR[key];
-                if (entryTax?.amount > 0) {
-                    let taxAmount = parseFloat(
-                        entryTax?.amount
-                    ).toFixed(2);
 
-                    itemsQrTaxData +=
-                        entryTax?.name +
-                        " - " +
-                        taxAmount;
-                }
-            });
+        // Generate QR code data if enabled
+        const qrData = this.generateQRCodeData(defaultTemplate, request);
 
-            // The QR data
-            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + (request?.grandTotal?.amountForCompany ? request?.grandTotal?.amountForCompany : 0) + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + (request?.taxTotal?.amountForAccount ? request?.taxTotal?.amountForAccount : 0) + this.printerFormat.lineBreak;
+        // Extract template field configurations
+        const templateFields = this.extractTemplateFields(defaultTemplate, request);
 
-            // The dot size of the QR code
-            dots = "\x03";
-
-            // Some proprietary size calculation
-            qrLength = qr?.length + 3;
-            size1 = String.fromCharCode(qrLength % 500);
-            size0 = String.fromCharCode(Math.floor(qrLength / 500));
-        }
-        else {
-            qr = "";
-            dots = 0;
-            size1 = 0;
-            size0 = 0;
-            qrLength = 0;
-        }
-
-        /** This will use for initialized entry tax */
-        let entryTaxes = [];
-
-        /** This will use for initialized items */
-        let items = "";
-
-        /** This will use for initialized items field */
-        let itemsField = "";
-
-        /** This will use for initialized tax */
-        let tax = "";
-
-        /**
-         * This will use for hide/show for thanks message
-         */
-        let thankYouMsgField;
-        if (defaultTemplate?.sections?.footer?.data?.thanks?.display) {
-            thankYouMsgField = defaultTemplate?.sections?.footer?.data?.thanks?.label;
-        } else {
-            thankYouMsgField = "";
-        }
-
-        /**
-         * This will use for hide/show for Company Name in footer
-         */
-        let firmNameField;
-        if (defaultTemplate?.sections?.footer?.data?.message1?.display) {
-            firmNameField = defaultTemplate?.sections?.footer?.data?.message1?.label;
-        }
-        else {
-            firmNameField = "";
-        }
-
-        /**
-         * This will use for hide/show for invoice heading
-         */
-        let invoiceHeadingField;
-        if (defaultTemplate?.sections?.header?.data?.formNameTaxInvoice?.display) {
-            invoiceHeadingField = defaultTemplate?.sections?.header?.data?.formNameTaxInvoice?.label;
-        } else {
-            invoiceHeadingField = "";
-        }
-
-        /**
-         * This will use for hide/show for company name in heading
-         */
-        let headerCompanyName;
-        if (defaultTemplate?.sections?.header?.data?.companyName?.display) {
-            if (request?.company?.name) {
-                headerCompanyName = request?.company?.name;
-            } else {
-                headerCompanyName = '';
-            }
-        } else {
-            headerCompanyName = "";
-        }
-
-        /**
-         * This will use for hide/show for company aaddress heading
-         */
-        let headerCompanyAddress;
-        if (defaultTemplate?.sections?.header?.data?.showCompanyAddress?.display) {
-            if (request?.company?.billingDetails?.address[0]) {
-                headerCompanyAddress = request?.company?.billingDetails?.address[0];
-            } else {
-                headerCompanyAddress = '';
-            }
-        } else {
-            headerCompanyAddress = '';
-        }
-
-        /**
-         * This will use for hide/show for customer billing address
-         */
-        let accountAddress = "";
-        let accountGstNumberField = "";
-        let billingGstinNumber = "";
-
-        /**
-         * This will use for hide/show for company GST number
-         */
-        let companyGstNumberField;
-        let companyGstin;
-        if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
-            companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
-            if (request?.company?.billingDetails?.taxNumber) {
-                companyGstin = request?.company?.billingDetails?.taxNumber;
-            } else {
-                companyGstNumberField = '';
-                companyGstin = '';
-            }
-        }
-        /**
-         * This will use for hide/show for account name
-         */
-        let accountName;
-        if (defaultTemplate?.sections?.header?.data?.customerName?.display) {
-            if (request?.account?.customerName) {
-                accountName = request?.account?.customerName;
-                if (accountName.length > 15) {
-                    const firstPart: string = accountName.substring(0, 15);
-                    const dots: string = '.'.repeat(Math.min(5, accountName.length - 15)); // Limit dots to 5
-                    accountName = `${firstPart}${dots}`;
-                }
-            } else {
-                accountName = '';
-            }
-        } else {
-            accountName = "";
-        }
-
-        /**
-         * This will use for hide/show for invoice/voucher label
-        */
-        let dateField;
-        let numberField;
-        let voucherNumber;
-        let voucherDate;
-        if (!(defaultTemplate?.type === "sales")) {
-            if (defaultTemplate?.sections?.header?.data?.invoiceDate?.display) {
-                dateField = defaultTemplate?.sections?.header?.data?.invoiceDate?.label;
-                voucherDate = request?.date;
-            } else {
-                dateField = "";
-                voucherDate = "";
-            }
-            if (defaultTemplate?.sections?.header?.data?.invoiceNumber?.display) {
-                numberField = defaultTemplate?.sections?.header?.data?.invoiceNumber?.label;
-                voucherNumber = request?.number;
-            } else {
-                numberField = "";
-                voucherNumber = "";
-            }
-        } else {
-            if (defaultTemplate?.sections?.header?.data?.voucherDate?.display) {
-                dateField = defaultTemplate?.sections?.header?.data?.voucherDate?.label;
-                voucherDate = request?.date;
-            } else {
-                dateField = "";
-                voucherNumber = "";
-            }
-            if (defaultTemplate?.sections?.header?.data?.voucherNumber?.display) {
-                numberField = defaultTemplate?.sections?.header?.data?.voucherNumber?.label;
-                voucherNumber = request?.number;
-            } else {
-                numberField = "";
-                voucherNumber = "";
-            }
-        }
-
-        /**
-         * This will use for hide/show for products name
-         */
-
-        let productsField;
-        if (defaultTemplate?.sections?.table?.data?.item?.display) {
-            productsField = defaultTemplate?.sections?.table?.data?.item?.label;
-        } else {
-            productsField = "";
-        }
-
-        /**
-         * This will use for hide/show for no of items
-         */
-        let noOfItemsField;
-
-        if (defaultTemplate?.sections?.table?.data?.totalQuantity?.display) {
-            noOfItemsField = defaultTemplate?.sections?.table?.data?.totalQuantity?.label;
-        } else {
-            noOfItemsField = '';
-        }
-
-        /**
-         * This will use for hide/show for total amount and total amount in words
-         */
-        let subTotal;
-        let totalAmountField;
-        let totalWords;
-        let companyCurrencyCode;
-        if (defaultTemplate?.sections?.footer?.data?.grandTotal?.display && defaultTemplate?.sections?.footer?.data?.totalInWords?.display) {
-            totalAmountField = 'Invoice Total';
-            totalWords = request.totalAsWords?.amountForAccount;
-            subTotal = parseFloat(request?.grandTotal?.amountForAccount).toFixed(2);
-            companyCurrencyCode = request?.company?.currency?.code;
-        } else {
-            totalAmountField = "";
-            subTotal = "";
-            totalWords = "";
-            companyCurrencyCode = "";
-        }
-
-        /**
-         * This will use for hide/show for discount total
-         */
-        let discountAmountField;
-        let discount: any;
-        if (defaultTemplate?.sections?.table?.data?.discount?.display) {
-            discountAmountField = defaultTemplate?.sections?.table?.data?.discount?.label;
-            discount = request?.discountTotal ? parseFloat(request?.discountTotal?.amountForCompany).toFixed(2) : "0";
-        } else {
-            discountAmountField = "";
-            discount = "";
-        }
-
-        /**
-         * This will use for hide/show for tax amount
-         */
-        let taxAmountField;
-        let taxableAmount = 0;
-        if (defaultTemplate?.sections?.table?.data?.taxableValue?.display) {
-            for (let entry of request.entries) {
-                for (let transaction of entry.transactions) {
-                    if (transaction?.taxableValue?.amountForAccount) {
-                        taxableAmount = taxableAmount + transaction?.taxableValue?.amountForAccount;
-                    } else {
-                        taxableAmount = 0;
-                    }
-                }
-            }
-            taxAmountField = defaultTemplate?.sections?.table?.data?.taxableValue?.label;
-        } else {
-            taxAmountField = "";
-        }
-
-        /**
-         * This will use for hide/show for quantity
-         */
-        let quantityField;
-        if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
-            quantityField = defaultTemplate?.sections?.table?.data?.quantity?.label;
-        } else {
-            quantityField = "";
-        }
-
-        /**
-         * This will use for hide/show for rate
-         */
-        let rateField;
-        if (defaultTemplate?.sections?.table?.data?.rate?.display) {
-            rateField = defaultTemplate?.sections?.table?.data?.rate?.label;
-        } else {
-            rateField = "";
-        }
-
-        /**
-         * This will use for hide/show for footer total
-         */
-        let netAmountField;
-        if (defaultTemplate?.sections?.table?.data?.total?.display) {
-            netAmountField = defaultTemplate?.sections?.table?.data?.total?.label;
-        } else {
-            netAmountField = "";
-        }
-
-        /**
-         * This will use for hide/show for footer company name
-         */
-        let footerCompanyName;
-        if (defaultTemplate?.sections?.footer?.data?.companyName?.display) {
-            footerCompanyName = request?.company?.name;
-        } else {
-            footerCompanyName = "";
-        }
-        /**
-         * This will use for hide/show for quantity
-         */
-        let qtyPadding;
-        /**
-         * This will use for hide/show for rate
-         */
-        let ratePadding;
-        /**
-         * This will use for hide/show for amount
-         */
-        let amountPadding;
-        if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
-            qtyPadding = 7;
-            ratePadding = 16;
-            amountPadding = 13;
-        } else {
-            qtyPadding = 0;
-            ratePadding = 16;
-            amountPadding = 13;
-        }
-        if (defaultTemplate?.sections?.table?.data?.rate?.display) {
-            qtyPadding = 7;
-            ratePadding = 16;
-            amountPadding = 13;
-        } else {
-            qtyPadding = 7;
-            ratePadding = 0;
-            amountPadding = 16;
-        }
-        if (defaultTemplate?.sections?.table?.data?.amount?.display) {
-            qtyPadding = 7;
-            ratePadding = 16;
-            amountPadding = 13;
-        } else {
-            qtyPadding = 7;
-            ratePadding = 16;
-            amountPadding = 0;
-        }
-        if (!defaultTemplate?.sections?.table?.data?.item?.display) {
-            qtyPadding = 2;
-            ratePadding = 22;
-            amountPadding = 22;
-        } else {
-            qtyPadding = 7;
-            ratePadding = 16;
-            amountPadding = 13;
-        }
-
-        /**
-         * This will use for hide/show for item details
-         */
-        let itemDetailsField =
-            quantityField?.padStart(qtyPadding) +
-            "" +
-            rateField?.padStart(ratePadding) +
-            "" +
-            netAmountField?.padStart(amountPadding);
-
-        let itemFieldLength = this.maxLength - itemDetailsField?.length;
-
-        let itemFieldName = productsField?.substring(0, itemFieldLength);
-
-        if (itemFieldName?.length < productsField?.length) {
-            let lastIndex = itemFieldName?.lastIndexOf(" ");
-            itemFieldName = itemFieldName?.substring(0, lastIndex);
-        }
-        if (itemFieldName?.length === 0) {
-            itemsField =
-                this.printerFormat.formatCenter(productsField
-                ) +
-                this.printerFormat.formatCenter(this.justifyText("", itemDetailsField)
-                );
-        } else {
-            itemsField =
-                this.printerFormat.formatCenter(
-                    this.justifyText(itemFieldName, itemDetailsField
-                    )
-                ) + this.printerFormat.lineBreak;
-        }
-        let totalQty: any = 0;
-        for (let entry of request?.entries) {
-            let variant = entry?.transactions[0]?.stock?.variant?.name;
-            let productName = entry?.transactions[0]?.stock?.name && variant
-                ? `${entry?.transactions[0]?.stock?.name} - ${variant}`
-                : entry?.transactions[0]?.stock?.name ? entry?.transactions[0]?.stock?.name : entry?.transactions[0]?.account?.name;
-
-            let quantity;
-            if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
-                if (entry?.transactions[0]?.stock?.quantity) {
-                    quantity =
-                        parseFloat(
-                            entry?.transactions[0]?.stock?.quantity
-                        ).toFixed(2) + ' ';
-                } else {
-                    quantity = '-' + ' ';
-                }
-            } else {
-                quantity = '';
-            }
-            let rate;
-            if (defaultTemplate?.sections?.table?.data?.rate?.display) {
-                if (entry?.transactions[0]?.stock?.rate?.rateForAccount) {
-                    rate =
-                        parseFloat(
-                            entry?.transactions[0]?.stock?.rate?.rateForAccount
-                        ).toFixed(2) + ' ';
-                } else {
-                    rate = '-' + ' ';
-                }
-            } else {
-                rate = '';
-            }
-            let amount;
-            if (defaultTemplate?.sections?.table?.data?.total?.display) {
-                amount =
-                    parseFloat(entry?.transactions[0]?.amount?.amountForAccount).toFixed(
-                        2
-                    ) + " ";
-            }
-            else {
-                amount = "";
-            }
-
-            let itemDetails =
-                quantity?.padStart(qtyPadding) +
-                "" +
-                rate?.padStart(ratePadding) +
-                "" +
-                amount?.padStart(amountPadding);
-
-            let itemLength = this.maxLength - itemDetails?.length;
-            let completeProductName = this.wrapStringByLength(productName, itemLength);
-            let itemName = Array.isArray(completeProductName) ? completeProductName[0] : completeProductName;
-
-            if (entry?.transactions[0]?.stock?.quantity) {
-                totalQty = totalQty + Number(quantity);
-            }
-
-            if (itemName?.length === 0) {
-                let productNameShow = "";
-                if (defaultTemplate?.sections?.table?.data?.item?.display) {
-                    productNameShow = this.printerFormat.formatCenter(this.justifyText(productName)
-                    )
-                }
-                items +=
-                    productNameShow +
-                    this.printerFormat.formatCenter(this.justifyText("", itemDetails)
-                    );
-            } else {
-                let itemNameShow = "";
-                if (defaultTemplate?.sections?.table?.data?.item?.display) {
-                    itemNameShow = itemName;
-                }
-
-                const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails);
-
-                items += this.printerFormat.formatCenter(
-                    itemNameShowHide
-                );
-                if ((itemName?.length < productName?.length) && Array.isArray(completeProductName)) {
-                    for (let i = 1; i < completeProductName?.length; i++) {
-                        items += (this.printerFormat.leftAlign + completeProductName[i] + this.printerFormat.lineBreak);
-                    }
-                }
-            }
-            for (let transaction of entry?.transactions) {
-                if (entry?.taxes && entry?.taxes.length > 0) {
-                    for (let taxApp of entry?.taxes) {
-                        if (entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent] === undefined) {
-                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent] = [];
-                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['name'] = taxApp?.accountName;
-                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
-                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = taxApp?.amount?.amountForAccount;
-                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['taxableValue'] = transaction?.taxableValue?.amountForAccount;
-                        } else {
-                            entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
-                            entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] + taxApp?.amount?.amountForAccount;
-                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['taxableValue'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['taxableValue'] + transaction?.taxableValue?.amountForAccount;
-                        }
-                    }
-                }
-            }
-        }
-
-        Object.keys(entryTaxes)?.forEach(key => {
-            let entryTax = entryTaxes[key];
-            if (entryTax?.amount > 0) {
-                let taxAmount = parseFloat(entryTax?.amount).toFixed(2);
-                let taxableValue = parseFloat(entryTax?.taxableValue).toFixed(2);
-                if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
-                    let taxLine =
-                        entryTax?.name +
-                        entryTax?.percent +
-                        "%" +
-                        ": " +
-                        taxableValue +
-                        " " +
-                        taxAmount
-                    const paddingSpaces = this.maxLength - taxLine.length;
-                    let alignedTaxLine = ' '.repeat(paddingSpaces) + taxLine;
-                    tax += alignedTaxLine + this.printerFormat.lineBreak;
-                }
-            }
-        });
-
-        if (!totalQty) {
-            totalQty = '-';
-        }
+        // Process items and calculate totals
+        const itemsData = this.processItemsAndTaxes(defaultTemplate, request);
 
         if (request) {
-            let header =
-                this.printerFormat.formatCenter(invoiceHeadingField) +
-                this.printerFormat.formatCenter(
-                    this.printerFormat.formatBold(headerCompanyName)
-                ) +
-                this.printerFormat.formatCenter(
-                    headerCompanyAddress
-                ) +
-                this.printerFormat.formatCenter(
-                    (companyGstNumberField && companyGstin) ? (companyGstNumberField + " ") + companyGstin : ''
-                ) +
-                this.printerFormat.formatCenter(this.blankDash()) +
-                this.printerFormat.formatBold(
-                    this.justifyText(accountName, (dateField + " ") + voucherDate)
-                ) +
-                this.printerFormat.lineBreak +
-                this.printerFormat.leftAlign +
-                this.justifyText(accountAddress, "") +
-                this.printerFormat.lineBreak +
-                this.justifyText(
-                    (accountGstNumberField + " ") + billingGstinNumber + " ",
-                    (numberField + " ") + voucherNumber
-                ) + this.printerFormat.lineBreak;
+            // Build print sections
+            const header = this.buildPrintHeader(templateFields);
+            const table = this.buildPrintTable(templateFields, itemsData);
+            const footer = this.buildPrintFooter(qrData, templateFields);
 
-            const productsFieldShowHide = productsField?.length ? this.justifyText(productsField, itemDetailsField) : this.justifyText(itemDetailsField);
-            let table =
-                this.blankDash() + this.printerFormat.lineBreak +
-                productsFieldShowHide
-                + this.printerFormat.lineBreak +
-                this.printerFormat.formatCenter(this.blankDash()) +
-                items +
-
-                this.printerFormat.formatCenter(this.blankDash()) +
-                this.justifyText(
-                    ((noOfItemsField ? noOfItemsField : '') + " ") + (noOfItemsField ? totalQty : ''),
-                    (discountAmountField + " ") + discount?.padStart(11)
-                ) +
-                this.justifyText('', (taxAmountField) + '' + taxableAmount?.toFixed(2).padStart(11)) +
-                this.printerFormat.lineBreak +
-                tax +
-                (totalAmountField ? (this.justifyText(
-                    "",
-                    (totalAmountField + "(" + companyCurrencyCode + ")") + subTotal?.padStart(11))
-                ) : "") +
-                this.printerFormat.lineBreak +
-                this.printerFormat.lineBreak +
-                this.printerFormat.formatCenter(totalWords) +
-                this.printerFormat.formatCenter(this.blankDash());
-
-            let footer =
-                this.printerFormat.lineBreak +
-                // <!-- BEGIN QR DATA -->
-                "\x1D" +
-                "\x28" +
-                "\x6B" +
-                "\x04" +
-                "\x00" +
-                "\x31" +
-                "\x41" +
-                "\x32" +
-                "\x00" +
-                "\x1D" +
-                "\x28" +
-                "\x6B" +
-                "\x03" +
-                "\x00" +
-                "\x31" +
-                "\x43" +
-                dots +
-                "\x1D" +
-                "\x28" +
-                "\x6B" +
-                "\x03" +
-                "\x00" +
-                "\x31" +
-                "\x45" +
-                "\x30" +
-                "\x1D" +
-                "\x28" +
-                "\x6B" +
-                size1 +
-                size0 +
-                "\x31" +
-                "\x50" +
-                "\x30" +
-                qr +
-                "\x1D" +
-                "\x28" +
-                "\x6B" +
-                "\x03" +
-                "\x00" +
-                "\x31" +
-                "\x51" +
-                "\x30" +
-                "\x1D" +
-                "\x28" +
-                "\x6B" +
-                "\x03" +
-                "\x00" +
-                "\x31" +
-                "\x52" +
-                "\x30" +
-                // <!-- END QR DATA -->
-                this.printerFormat.lineBreak +
-                this.justifyText(thankYouMsgField, footerCompanyName) +
-                this.printerFormat.lineBreak + this.printerFormat.lineBreak +
-                this.printerFormat.leftAlign + this.justifyText(firmNameField, "");
-            qz.security.setCertificatePromise((resolve, reject) => {
-                fetch(QZ_CERTIFICATE, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
-                    .then(data => resolve(data.text()));
-            });
-
-            /*
-             * Client-side using jsrsasign
-             */
-            qz.security.setSignatureAlgorithm("SHA512"); // Since 2.1
-            qz.security.setSignaturePromise(hash => {
-                return (resolve, reject) => {
-                    fetch(QZ_PEM, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
-                        .then(wrapped => wrapped.text())
-                        .then(data => {
-                            let pk = KEYUTIL.getKey(data);
-                            let sig = new KJUR.crypto.Signature({ "alg": "SHA512withRSA" }); // Use "SHA1withRSA" for QZ Tray 2.0 and older
-                            sig.init(pk);
-                            sig.updateString(hash);
-                            let hex = sig.sign();
-                            resolve(stob64(hextorstr(hex)));
-                        })
-                        .catch(err => console.error(err));
-                };
-            });
-
-            if (!qz.websocket.isActive()) {
-                qz.websocket
-                    .connect()
-                    .then(() => {
-                        this.findAndPrint(header, table, footer);
-                    })
-                    .catch((e: any) => {
-                        const operatingSystem = this.generalService.getOperatingSystem();
-                        let qzFile = "";
-
-                        if (operatingSystem === SUPPORTED_OPERATING_SYSTEMS.MacOS) {
-                            qzFile = QZ_FILES.MacOS;
-                        } else if (operatingSystem === SUPPORTED_OPERATING_SYSTEMS.Windows) {
-                            qzFile = QZ_FILES.Windows;
-                        }
-
-                        if (qzFile) {
-                            qzFile = " Click here to <a href='" + qzFile + "' class='underline'>download</a>";
-                        }
-
-                        this.toaster.warningToastWithTime(10000, "Please start QZ Tray application." + qzFile);
-                    });
-            } else {
-                this.findAndPrint(header, table, footer);
-            }
+            // Setup QZ Tray and execute print
+            this.setupQZTrayAndExecutePrint(header, table, footer);
         }
     }
 
@@ -835,5 +164,527 @@ export class ThermalService {
             return trimmedStringArray;
         }
         return productNameWithVariant;
+    }
+
+    /**
+     * Generate QR code data if QR display is enabled
+     */
+    private generateQRCodeData(defaultTemplate: any, request: any): any {
+        if (!defaultTemplate?.sections?.header?.data?.showQrCode?.display) {
+            return { qr: "", dots: 0, size1: 0, size0: 0, qrLength: 0 };
+        }
+
+        let itemsQrTaxData = "";
+        let entryTaxesQR = [];
+
+        // Process entry taxes for QR code
+        for (let entry of request.entries) {
+            if (entry?.taxes?.length > 0) {
+                for (let taxApp of entry.taxes) {
+                    if (entryTaxesQR[taxApp.accountUniqueName] === undefined) {
+                        entryTaxesQR[taxApp.accountUniqueName] = [];
+                        entryTaxesQR[taxApp.accountUniqueName]['name'] = taxApp?.accountName;
+                        entryTaxesQR[taxApp.accountUniqueName]['amount'] = taxApp?.amount?.amountForAccount;
+                    } else {
+                        entryTaxesQR[taxApp.accountUniqueName]['amount'] = Number(entryTaxesQR[taxApp?.accountUniqueName]['amount']) + Number(taxApp?.amount?.amountForAccount);
+                    }
+                }
+            }
+        }
+
+        // Build tax data string for QR
+        Object.keys(entryTaxesQR)?.forEach(key => {
+            let entryTax = entryTaxesQR[key];
+            if (entryTax?.amount > 0) {
+                let taxAmount = parseFloat(entryTax?.amount).toFixed(2);
+                itemsQrTaxData += entryTax?.name + " - " + taxAmount;
+            }
+        });
+
+        // Build complete QR data string
+        const qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + (request?.grandTotal?.amountForCompany ? request?.grandTotal?.amountForCompany : 0) + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + (request?.taxTotal?.amountForAccount ? request?.taxTotal?.amountForAccount : 0) + this.printerFormat.lineBreak;
+
+        // QR code formatting parameters
+        const dots = "\x03";
+        const qrLength = qr?.length + 3;
+        const size1 = String.fromCharCode(qrLength % 500);
+        const size0 = String.fromCharCode(Math.floor(qrLength / 500));
+
+        return { qr, dots, size1, size0, qrLength };
+    }
+
+    /**
+     * Extract template field configurations
+     */
+    private extractTemplateFields(defaultTemplate: any, request: any): any {
+        return {
+            thankYouMsgField: defaultTemplate?.sections?.footer?.data?.thanks?.display ? defaultTemplate?.sections?.footer?.data?.thanks?.label : "",
+            firmNameField: defaultTemplate?.sections?.footer?.data?.message1?.display ? defaultTemplate?.sections?.footer?.data?.message1?.label : "",
+            invoiceHeadingField: defaultTemplate?.sections?.header?.data?.formNameTaxInvoice?.display ? defaultTemplate?.sections?.header?.data?.formNameTaxInvoice?.label : "",
+            headerCompanyName: this.getHeaderCompanyName(defaultTemplate, request),
+            headerCompanyAddress: this.getHeaderCompanyAddress(defaultTemplate, request),
+            companyGstInfo: this.getCompanyGstInfo(defaultTemplate, request),
+            accountName: this.getAccountName(defaultTemplate, request),
+            dateAndNumberFields: this.getDateAndNumberFields(defaultTemplate, request),
+            productsField: defaultTemplate?.sections?.table?.data?.item?.display ? defaultTemplate?.sections?.table?.data?.item?.label : "",
+            noOfItemsField: defaultTemplate?.sections?.table?.data?.totalQuantity?.display ? defaultTemplate?.sections?.table?.data?.totalQuantity?.label : "",
+            totalAmountInfo: this.getTotalAmountInfo(defaultTemplate, request),
+            discountInfo: this.getDiscountInfo(defaultTemplate, request),
+            taxAmountField: this.getTaxAmountField(defaultTemplate, request),
+            quantityField: defaultTemplate?.sections?.table?.data?.quantity?.display ? defaultTemplate?.sections?.table?.data?.quantity?.label : "",
+            rateField: defaultTemplate?.sections?.table?.data?.rate?.display ? defaultTemplate?.sections?.table?.data?.rate?.label : "",
+            netAmountField: defaultTemplate?.sections?.table?.data?.total?.display ? defaultTemplate?.sections?.table?.data?.total?.label : "",
+            footerCompanyName: defaultTemplate?.sections?.footer?.data?.companyName?.display ? request?.company?.name : "",
+            paddingInfo: this.calculatePadding(defaultTemplate)
+        };
+    }
+
+    /**
+     * Get header company name
+     */
+    private getHeaderCompanyName(defaultTemplate: any, request: any): string {
+        if (defaultTemplate?.sections?.header?.data?.companyName?.display) {
+            return request?.company?.name ? request?.company?.name : '';
+        }
+        return "";
+    }
+
+    /**
+     * Get header company address
+     */
+    private getHeaderCompanyAddress(defaultTemplate: any, request: any): string {
+        if (defaultTemplate?.sections?.header?.data?.showCompanyAddress?.display) {
+            return request?.company?.billingDetails?.address[0] ? request?.company?.billingDetails?.address[0] : '';
+        }
+        return '';
+    }
+
+    /**
+     * Get company GST information
+     */
+    private getCompanyGstInfo(defaultTemplate: any, request: any): any {
+        if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
+            const companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
+            const companyGstin = request?.company?.billingDetails?.taxNumber ? request?.company?.billingDetails?.taxNumber : '';
+            return { companyGstNumberField, companyGstin };
+        }
+        return { companyGstNumberField: '', companyGstin: '' };
+    }
+
+    /**
+     * Get account name with truncation
+     */
+    private getAccountName(defaultTemplate: any, request: any): string {
+        if (defaultTemplate?.sections?.header?.data?.customerName?.display) {
+            if (request?.account?.customerName) {
+                let accountName = request?.account?.customerName;
+                if (accountName.length > 15) {
+                    const firstPart: string = accountName.substring(0, 15);
+                    const dots: string = '.'.repeat(Math.min(5, accountName.length - 15));
+                    accountName = `${firstPart}${dots}`;
+                }
+                return accountName;
+            }
+        }
+        return "";
+    }
+
+    /**
+     * Get date and number fields
+     */
+    private getDateAndNumberFields(defaultTemplate: any, request: any): any {
+        let dateField = "";
+        let numberField = "";
+        let voucherNumber = "";
+        let voucherDate = "";
+
+        if (!(defaultTemplate?.type === "sales")) {
+            if (defaultTemplate?.sections?.header?.data?.invoiceDate?.display) {
+                dateField = defaultTemplate?.sections?.header?.data?.invoiceDate?.label;
+                voucherDate = request?.date;
+            }
+            if (defaultTemplate?.sections?.header?.data?.invoiceNumber?.display) {
+                numberField = defaultTemplate?.sections?.header?.data?.invoiceNumber?.label;
+                voucherNumber = request?.number;
+            }
+        } else {
+            if (defaultTemplate?.sections?.header?.data?.voucherDate?.display) {
+                dateField = defaultTemplate?.sections?.header?.data?.voucherDate?.label;
+                voucherDate = request?.date;
+            }
+            if (defaultTemplate?.sections?.header?.data?.voucherNumber?.display) {
+                numberField = defaultTemplate?.sections?.header?.data?.voucherNumber?.label;
+                voucherNumber = request?.number;
+            }
+        }
+
+        return { dateField, numberField, voucherNumber, voucherDate };
+    }
+
+    /**
+     * Get total amount information
+     */
+    private getTotalAmountInfo(defaultTemplate: any, request: any): any {
+        if (defaultTemplate?.sections?.footer?.data?.grandTotal?.display && defaultTemplate?.sections?.footer?.data?.totalInWords?.display) {
+            return {
+                totalAmountField: 'Invoice Total',
+                totalWords: request.totalAsWords?.amountForAccount,
+                subTotal: parseFloat(request?.grandTotal?.amountForAccount).toFixed(2),
+                companyCurrencyCode: request?.company?.currency?.code
+            };
+        }
+        return { totalAmountField: "", subTotal: "", totalWords: "", companyCurrencyCode: "" };
+    }
+
+    /**
+     * Get discount information
+     */
+    private getDiscountInfo(defaultTemplate: any, request: any): any {
+        if (defaultTemplate?.sections?.table?.data?.discount?.display) {
+            return {
+                discountAmountField: defaultTemplate?.sections?.table?.data?.discount?.label,
+                discount: request?.discountTotal ? parseFloat(request?.discountTotal?.amountForCompany).toFixed(2) : "0"
+            };
+        }
+        return { discountAmountField: "", discount: "" };
+    }
+
+    /**
+     * Get tax amount field
+     */
+    private getTaxAmountField(defaultTemplate: any, request: any): any {
+        let taxAmountField = "";
+        let taxableAmount = 0;
+
+        if (defaultTemplate?.sections?.table?.data?.taxableValue?.display) {
+            for (let entry of request.entries) {
+                for (let transaction of entry.transactions) {
+                    if (transaction?.taxableValue?.amountForAccount) {
+                        taxableAmount = taxableAmount + transaction?.taxableValue?.amountForAccount;
+                    }
+                }
+            }
+            taxAmountField = defaultTemplate?.sections?.table?.data?.taxableValue?.label;
+        }
+
+        return { taxAmountField, taxableAmount };
+    }
+
+    /**
+     * Calculate padding for different fields
+     */
+    private calculatePadding(defaultTemplate: any): any {
+        let qtyPadding = 7;
+        let ratePadding = 16;
+        let amountPadding = 13;
+
+        if (!defaultTemplate?.sections?.table?.data?.quantity?.display) {
+            qtyPadding = 0;
+            ratePadding = 16;
+            amountPadding = 13;
+        }
+        if (!defaultTemplate?.sections?.table?.data?.rate?.display) {
+            qtyPadding = 7;
+            ratePadding = 0;
+            amountPadding = 16;
+        }
+        if (!defaultTemplate?.sections?.table?.data?.amount?.display) {
+            qtyPadding = 7;
+            ratePadding = 16;
+            amountPadding = 0;
+        }
+        if (!defaultTemplate?.sections?.table?.data?.item?.display) {
+            qtyPadding = 2;
+            ratePadding = 22;
+            amountPadding = 22;
+        }
+
+        return { qtyPadding, ratePadding, amountPadding };
+    }
+
+    /**
+     * Process items and calculate taxes
+     */
+    private processItemsAndTaxes(defaultTemplate: any, request: any): any {
+        const templateFields = this.extractTemplateFields(defaultTemplate, request);
+        let entryTaxes = [];
+        let items = "";
+        let tax = "";
+        let totalQty: any = 0;
+
+        // Build item details field
+        const itemDetailsField = templateFields.quantityField?.padStart(templateFields.paddingInfo.qtyPadding) + "" +
+                                templateFields.rateField?.padStart(templateFields.paddingInfo.ratePadding) + "" +
+                                templateFields.netAmountField?.padStart(templateFields.paddingInfo.amountPadding);
+
+        const itemFieldLength = this.maxLength - itemDetailsField?.length;
+        let itemFieldName = templateFields.productsField?.substring(0, itemFieldLength);
+
+        if (itemFieldName?.length < templateFields.productsField?.length) {
+            let lastIndex = itemFieldName?.lastIndexOf(" ");
+            itemFieldName = itemFieldName?.substring(0, lastIndex);
+        }
+
+        let itemsField = "";
+        if (itemFieldName?.length === 0) {
+            itemsField = this.printerFormat.formatCenter(templateFields.productsField) +
+                        this.printerFormat.formatCenter(this.justifyText("", itemDetailsField));
+        } else {
+            itemsField = this.printerFormat.formatCenter(this.justifyText(itemFieldName, itemDetailsField)) + this.printerFormat.lineBreak;
+        }
+
+        // Process each entry
+        for (let entry of request?.entries) {
+            const itemData = this.processIndividualItem(entry, defaultTemplate, templateFields.paddingInfo);
+            items += itemData.itemString;
+            totalQty += itemData.quantity;
+
+            // Process taxes for this entry
+            this.processTaxesForEntry(entry, entryTaxes);
+        }
+
+        // Build tax string
+        tax = this.buildTaxString(entryTaxes, defaultTemplate);
+
+        if (!totalQty) {
+            totalQty = '-';
+        }
+
+        return { items, itemsField, tax, totalQty, entryTaxes };
+    }
+
+    /**
+     * Process individual item
+     */
+    private processIndividualItem(entry: any, defaultTemplate: any, paddingInfo: any): any {
+        let variant = entry?.transactions[0]?.stock?.variant?.name;
+        let productName = entry?.transactions[0]?.stock?.name && variant
+            ? `${entry?.transactions[0]?.stock?.name} - ${variant}`
+            : entry?.transactions[0]?.stock?.name ? entry?.transactions[0]?.stock?.name : entry?.transactions[0]?.account?.name;
+
+        let quantity = "";
+        if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
+            if (entry?.transactions[0]?.stock?.quantity) {
+                quantity = parseFloat(entry?.transactions[0]?.stock?.quantity).toFixed(2) + ' ';
+            } else {
+                quantity = '-' + ' ';
+            }
+        }
+
+        let rate = "";
+        if (defaultTemplate?.sections?.table?.data?.rate?.display) {
+            if (entry?.transactions[0]?.stock?.rate?.rateForAccount) {
+                rate = parseFloat(entry?.transactions[0]?.stock?.rate?.rateForAccount).toFixed(2) + ' ';
+            } else {
+                rate = '-' + ' ';
+            }
+        }
+
+        let amount = "";
+        if (defaultTemplate?.sections?.table?.data?.total?.display) {
+            amount = parseFloat(entry?.transactions[0]?.amount?.amountForAccount).toFixed(2) + " ";
+        }
+
+        let itemDetails = quantity?.padStart(paddingInfo.qtyPadding) + "" +
+                         rate?.padStart(paddingInfo.ratePadding) + "" +
+                         amount?.padStart(paddingInfo.amountPadding);
+
+        let itemLength = this.maxLength - itemDetails?.length;
+        let completeProductName = this.wrapStringByLength(productName, itemLength);
+        let itemName = Array.isArray(completeProductName) ? completeProductName[0] : completeProductName;
+
+        let quantityNum = 0;
+        if (entry?.transactions[0]?.stock?.quantity) {
+            quantityNum = Number(quantity);
+        }
+
+        let itemString = "";
+        if (itemName?.length === 0) {
+            let productNameShow = "";
+            if (defaultTemplate?.sections?.table?.data?.item?.display) {
+                productNameShow = this.printerFormat.formatCenter(this.justifyText(productName));
+            }
+            itemString = productNameShow + this.printerFormat.formatCenter(this.justifyText("", itemDetails));
+        } else {
+            let itemNameShow = "";
+            if (defaultTemplate?.sections?.table?.data?.item?.display) {
+                itemNameShow = itemName;
+            }
+
+            const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails);
+            itemString = this.printerFormat.formatCenter(itemNameShowHide);
+
+            if ((itemName?.length < productName?.length) && Array.isArray(completeProductName)) {
+                for (let i = 1; i < completeProductName?.length; i++) {
+                    itemString += (this.printerFormat.leftAlign + completeProductName[i] + this.printerFormat.lineBreak);
+                }
+            }
+        }
+
+        return { itemString, quantity: quantityNum };
+    }
+
+    /**
+     * Process taxes for entry
+     */
+    private processTaxesForEntry(entry: any, entryTaxes: any[]): void {
+        for (let transaction of entry?.transactions) {
+            if (entry?.taxes && entry?.taxes.length > 0) {
+                for (let taxApp of entry?.taxes) {
+                    const taxKey = taxApp.accountUniqueName + "_" + taxApp?.taxPercent;
+                    if (entryTaxes[taxKey] === undefined) {
+                        entryTaxes[taxKey] = [];
+                        entryTaxes[taxKey]['name'] = taxApp?.accountName;
+                        entryTaxes[taxKey]['percent'] = taxApp?.taxPercent;
+                        entryTaxes[taxKey]['amount'] = taxApp?.amount?.amountForAccount;
+                        entryTaxes[taxKey]['taxableValue'] = transaction?.taxableValue?.amountForAccount;
+                    } else {
+                        entryTaxes[taxKey]['percent'] = taxApp?.taxPercent;
+                        entryTaxes[taxKey]['amount'] = entryTaxes[taxKey]['amount'] + taxApp?.amount?.amountForAccount;
+                        entryTaxes[taxKey]['taxableValue'] = entryTaxes[taxKey]['taxableValue'] + transaction?.taxableValue?.amountForAccount;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Build tax string
+     */
+    private buildTaxString(entryTaxes: any[], defaultTemplate: any): string {
+        let tax = "";
+        Object.keys(entryTaxes)?.forEach(key => {
+            let entryTax = entryTaxes[key];
+            if (entryTax?.amount > 0) {
+                let taxAmount = parseFloat(entryTax?.amount).toFixed(2);
+                let taxableValue = parseFloat(entryTax?.taxableValue).toFixed(2);
+                if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
+                    let taxLine = entryTax?.name + entryTax?.percent + "%" + ": " + taxableValue + " " + taxAmount;
+                    const paddingSpaces = this.maxLength - taxLine.length;
+                    let alignedTaxLine = ' '.repeat(paddingSpaces) + taxLine;
+                    tax += alignedTaxLine + this.printerFormat.lineBreak;
+                }
+            }
+        });
+        return tax;
+    }
+
+    /**
+     * Build print header
+     */
+    private buildPrintHeader(templateFields: any): string {
+        const gstInfo = templateFields.companyGstInfo;
+        const dateFields = templateFields.dateAndNumberFields;
+
+        return this.printerFormat.formatCenter(templateFields.invoiceHeadingField) +
+               this.printerFormat.formatCenter(this.printerFormat.formatBold(templateFields.headerCompanyName)) +
+               this.printerFormat.formatCenter(templateFields.headerCompanyAddress) +
+               this.printerFormat.formatCenter((gstInfo.companyGstNumberField && gstInfo.companyGstin) ? (gstInfo.companyGstNumberField + " ") + gstInfo.companyGstin : '') +
+               this.printerFormat.formatCenter(this.blankDash()) +
+               this.printerFormat.formatBold(this.justifyText(templateFields.accountName, (dateFields.dateField + " ") + dateFields.voucherDate)) +
+               this.printerFormat.lineBreak +
+               this.printerFormat.leftAlign +
+               this.justifyText("", "") +
+               this.printerFormat.lineBreak +
+               this.justifyText("", (dateFields.numberField + " ") + dateFields.voucherNumber) + this.printerFormat.lineBreak;
+    }
+
+    /**
+     * Build print table
+     */
+    private buildPrintTable(templateFields: any, itemsData: any): string {
+        const taxInfo = templateFields.taxAmountField;
+        const discountInfo = templateFields.discountInfo;
+        const totalInfo = templateFields.totalAmountInfo;
+
+        const productsFieldShowHide = templateFields.productsField?.length ? this.justifyText(templateFields.productsField, itemsData.itemsField) : this.justifyText(itemsData.itemsField);
+
+        return this.blankDash() + this.printerFormat.lineBreak +
+               productsFieldShowHide + this.printerFormat.lineBreak +
+               this.printerFormat.formatCenter(this.blankDash()) +
+               itemsData.items +
+               this.printerFormat.formatCenter(this.blankDash()) +
+               this.justifyText(((templateFields.noOfItemsField ? templateFields.noOfItemsField : '') + " ") + (templateFields.noOfItemsField ? itemsData.totalQty : ''),
+                              (discountInfo.discountAmountField + " ") + discountInfo.discount?.padStart(11)) +
+               this.justifyText('', (taxInfo.taxAmountField) + '' + taxInfo.taxableAmount?.toFixed(2).padStart(11)) +
+               this.printerFormat.lineBreak +
+               itemsData.tax +
+               (totalInfo.totalAmountField ? (this.justifyText("", (totalInfo.totalAmountField + "(" + totalInfo.companyCurrencyCode + ")") + totalInfo.subTotal?.padStart(11))) : "") +
+               this.printerFormat.lineBreak +
+               this.printerFormat.lineBreak +
+               this.printerFormat.formatCenter(totalInfo.totalWords) +
+               this.printerFormat.formatCenter(this.blankDash());
+    }
+
+    /**
+     * Build print footer with QR code
+     */
+    private buildPrintFooter(qrData: any, templateFields: any): string {
+        return this.printerFormat.lineBreak +
+               // QR DATA
+               "\x1D" + "\x28" + "\x6B" + "\x04" + "\x00" + "\x31" + "\x41" + "\x32" + "\x00" +
+               "\x1D" + "\x28" + "\x6B" + "\x03" + "\x00" + "\x31" + "\x43" + qrData.dots +
+               "\x1D" + "\x28" + "\x6B" + "\x03" + "\x00" + "\x31" + "\x45" + "\x30" +
+               "\x1D" + "\x28" + "\x6B" + qrData.size1 + qrData.size0 + "\x31" + "\x50" + "\x30" + qrData.qr +
+               "\x1D" + "\x28" + "\x6B" + "\x03" + "\x00" + "\x31" + "\x51" + "\x30" +
+               "\x1D" + "\x28" + "\x6B" + "\x03" + "\x00" + "\x31" + "\x52" + "\x30" +
+               // END QR DATA
+               this.printerFormat.lineBreak +
+               this.justifyText(templateFields.thankYouMsgField, templateFields.footerCompanyName) +
+               this.printerFormat.lineBreak + this.printerFormat.lineBreak +
+               this.printerFormat.leftAlign + this.justifyText(templateFields.firmNameField, "");
+    }
+
+    /**
+     * Setup QZ Tray and execute print
+     */
+    private setupQZTrayAndExecutePrint(header: string, table: string, footer: string): void {
+        qz.security.setCertificatePromise((resolve, reject) => {
+            fetch(QZ_CERTIFICATE, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
+                .then(data => resolve(data.text()));
+        });
+
+        qz.security.setSignatureAlgorithm("SHA512");
+        qz.security.setSignaturePromise(hash => {
+            return (resolve, reject) => {
+                fetch(QZ_PEM, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
+                    .then(wrapped => wrapped.text())
+                    .then(data => {
+                        let pk = KEYUTIL.getKey(data);
+                        let sig = new KJUR.crypto.Signature({ "alg": "SHA512withRSA" });
+                        sig.init(pk);
+                        sig.updateString(hash);
+                        let hex = sig.sign();
+                        resolve(stob64(hextorstr(hex)));
+                    })
+                    .catch(err => console.error(err));
+            };
+        });
+
+        if (!qz.websocket.isActive()) {
+            qz.websocket
+                .connect()
+                .then(() => {
+                    this.findAndPrint(header, table, footer);
+                })
+                .catch((e: any) => {
+                    const operatingSystem = this.generalService.getOperatingSystem();
+                    let qzFile = "";
+
+                    if (operatingSystem === SUPPORTED_OPERATING_SYSTEMS.MacOS) {
+                        qzFile = QZ_FILES.MacOS;
+                    } else if (operatingSystem === SUPPORTED_OPERATING_SYSTEMS.Windows) {
+                        qzFile = QZ_FILES.Windows;
+                    }
+
+                    if (qzFile) {
+                        qzFile = " Click here to <a href='" + qzFile + "' class='underline'>download</a>";
+                    }
+
+                    this.toaster.warningToastWithTime(10000, "Please start QZ Tray application." + qzFile);
+                });
+        } else {
+            this.findAndPrint(header, table, footer);
+        }
     }
 }

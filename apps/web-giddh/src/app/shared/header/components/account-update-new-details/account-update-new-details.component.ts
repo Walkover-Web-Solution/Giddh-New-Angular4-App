@@ -636,63 +636,197 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public prepareTaxDropdown() {
         // prepare drop down for taxes
-        this.store.pipe(select(createSelector([
-            (state: AppState) => state.groupwithaccounts.activeAccount,
-            (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
-            (state: AppState) => state.company && state.company.taxes],
-            (activeAccount: AccountResponseV2, activeAccountTaxHierarchy: AccountsTaxHierarchyResponse, taxes: TaxResponse[]) => {
-                let arr: IOption[] = [];
-                if (taxes) {
-                    if (activeAccount) {
-                        let applicableTaxes = activeAccount.applicableTaxes.map(p => p?.uniqueName);
+        this.store.pipe(
+            select(createSelector([
+                (state: AppState) => state.groupwithaccounts.activeAccount,
+                (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
+                (state: AppState) => state.company && state.company.taxes
+            ], this.processTaxDropdownData.bind(this))),
+            takeUntil(this.destroyed$)
+        ).subscribe((taxResponse: IOption[]) => {
+            this.handleTaxDropdownResponse(taxResponse);
+        });
+    }
 
-                        // set isGstEnabledAcc or not
-                        if (activeAccount.parentGroups[0]?.uniqueName) {
-                            let col = activeAccount.parentGroups[0]?.uniqueName;
-                            this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
-                            this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                        }
+    /**
+     * Process tax dropdown data from store selectors
+     */
+    private processTaxDropdownData(
+        activeAccount: AccountResponseV2,
+        activeAccountTaxHierarchy: AccountsTaxHierarchyResponse,
+        taxes: TaxResponse[]
+    ): IOption[] {
+        if (!taxes) {
+            return [];
+        }
 
-                        if (activeAccountTaxHierarchy) {
+        if (!activeAccount) {
+            return [];
+        }
 
-                            if (activeAccountTaxHierarchy.inheritedTaxes) {
-                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
-                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes?.indexOf(f) === -1);
-                                // set value in tax group form
-                                this.taxGroupForm?.setValue({ taxes: allTaxes });
-                            } else {
-                                this.taxGroupForm?.setValue({ taxes: applicableTaxes });
-                            }
-                            const notInheritedTax = differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p?.uniqueName, additional: p };
-                            }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p?.uniqueName, additional: p };
-                            }), 'value');
+        this.updateAccountTypeFlags(activeAccount);
+        const applicableTaxes = this.extractApplicableTaxes(activeAccount);
 
-                            return this.filterTaxesForDebtorCreditor(notInheritedTax);
-                        } else {
-                            // set value in tax group form
-                            this.taxGroupForm?.setValue({ taxes: applicableTaxes });
+        return this.processTaxHierarchy(activeAccount, activeAccountTaxHierarchy, taxes, applicableTaxes);
+    }
 
-                            const formattedTax = taxes.map(p => {
-                                return { label: p.name, value: p?.uniqueName, additional: p };
-                            });
-                            return this.filterTaxesForDebtorCreditor(formattedTax);
-                        }
-                    }
-                }
-                return arr;
-            })), takeUntil(this.destroyed$)).subscribe((taxResponse: IOption[]) => {
-                this.companyTaxDropDown = taxResponse;
-                if (this.companyTaxDropDown.length) {
-                    const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
-                    this.defaultTaxLabel = selectedTaxes.map(selectTax => {
-                        return this.companyTaxDropDown.find(tax => tax.value === selectTax)?.label;
-                    });
-                } else {
-                    this.defaultTaxLabel = [];
-                }
-            });
+    /**
+     * Update account type flags based on parent group
+     */
+    private updateAccountTypeFlags(activeAccount: AccountResponseV2): void {
+        if (activeAccount.parentGroups[0]?.uniqueName) {
+            const parentGroupUniqueName = activeAccount.parentGroups[0].uniqueName;
+            this.isHsnSacEnabledAcc = this.isHsnSacEnabledGroup(parentGroupUniqueName);
+            this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+        }
+    }
+
+    /**
+     * Check if parent group is HSN/SAC enabled
+     */
+    private isHsnSacEnabledGroup(parentGroupUniqueName: string): boolean {
+        const hsnSacGroups = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
+        return hsnSacGroups.includes(parentGroupUniqueName);
+    }
+
+    /**
+     * Extract applicable taxes from active account
+     */
+    private extractApplicableTaxes(activeAccount: AccountResponseV2): string[] {
+        return activeAccount.applicableTaxes.map(p => p?.uniqueName);
+    }
+
+    /**
+     * Process tax hierarchy and return formatted tax options
+     */
+    private processTaxHierarchy(
+        activeAccount: AccountResponseV2,
+        activeAccountTaxHierarchy: AccountsTaxHierarchyResponse,
+        taxes: TaxResponse[],
+        applicableTaxes: string[]
+    ): IOption[] {
+        if (activeAccountTaxHierarchy) {
+            return this.processWithTaxHierarchy(activeAccountTaxHierarchy, taxes, applicableTaxes);
+        } else {
+            return this.processWithoutTaxHierarchy(taxes, applicableTaxes);
+        }
+    }
+
+    /**
+     * Process taxes with tax hierarchy
+     */
+    private processWithTaxHierarchy(
+        activeAccountTaxHierarchy: AccountsTaxHierarchyResponse,
+        taxes: TaxResponse[],
+        applicableTaxes: string[]
+    ): IOption[] {
+        if (activeAccountTaxHierarchy.inheritedTaxes) {
+            return this.processInheritedTaxes(activeAccountTaxHierarchy, taxes, applicableTaxes);
+        } else {
+            this.setTaxGroupFormValue(applicableTaxes);
+            return this.getNotInheritedTaxes(activeAccountTaxHierarchy, taxes);
+        }
+    }
+
+    /**
+     * Process inherited taxes
+     */
+    private processInheritedTaxes(
+        activeAccountTaxHierarchy: AccountsTaxHierarchyResponse,
+        taxes: TaxResponse[],
+        applicableTaxes: string[]
+    ): IOption[] {
+        const inheritedTaxes = this.extractInheritedTaxes(activeAccountTaxHierarchy);
+        const allTaxes = applicableTaxes?.filter(f => inheritedTaxes?.indexOf(f) === -1);
+
+        this.setTaxGroupFormValue(allTaxes);
+        return this.getNotInheritedTaxes(activeAccountTaxHierarchy, taxes);
+    }
+
+    /**
+     * Extract inherited taxes from hierarchy
+     */
+    private extractInheritedTaxes(activeAccountTaxHierarchy: AccountsTaxHierarchyResponse): string[] {
+        return flattenDeep(
+            activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)
+        ).map((j: any) => j?.uniqueName);
+    }
+
+    /**
+     * Get taxes that are not inherited
+     */
+    private getNotInheritedTaxes(
+        activeAccountTaxHierarchy: AccountsTaxHierarchyResponse,
+        taxes: TaxResponse[]
+    ): IOption[] {
+        const formattedTaxes = this.formatTaxesToOptions(taxes);
+        const inheritedTaxOptions = this.formatInheritedTaxesToOptions(activeAccountTaxHierarchy);
+
+        const notInheritedTax = differenceBy(formattedTaxes, inheritedTaxOptions, 'value');
+        return this.filterTaxesForDebtorCreditor(notInheritedTax);
+    }
+
+    /**
+     * Format taxes to option format
+     */
+    private formatTaxesToOptions(taxes: TaxResponse[]): IOption[] {
+        return taxes.map(p => ({
+            label: p.name,
+            value: p?.uniqueName,
+            additional: p
+        }));
+    }
+
+    /**
+     * Format inherited taxes to option format
+     */
+    private formatInheritedTaxesToOptions(activeAccountTaxHierarchy: AccountsTaxHierarchyResponse): IOption[] {
+        return flattenDeep(
+            activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)
+        ).map((p: any) => ({
+            label: p.name,
+            value: p?.uniqueName,
+            additional: p
+        }));
+    }
+
+    /**
+     * Process taxes without tax hierarchy
+     */
+    private processWithoutTaxHierarchy(taxes: TaxResponse[], applicableTaxes: string[]): IOption[] {
+        this.setTaxGroupFormValue(applicableTaxes);
+        const formattedTax = this.formatTaxesToOptions(taxes);
+        return this.filterTaxesForDebtorCreditor(formattedTax);
+    }
+
+    /**
+     * Set value in tax group form
+     */
+    private setTaxGroupFormValue(taxes: string[]): void {
+        this.taxGroupForm?.setValue({ taxes });
+    }
+
+    /**
+     * Handle tax dropdown response
+     */
+    private handleTaxDropdownResponse(taxResponse: IOption[]): void {
+        this.companyTaxDropDown = taxResponse;
+
+        if (this.companyTaxDropDown.length) {
+            this.updateDefaultTaxLabels();
+        } else {
+            this.defaultTaxLabel = [];
+        }
+    }
+
+    /**
+     * Update default tax labels based on selected taxes
+     */
+    private updateDefaultTaxLabels(): void {
+        const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
+        this.defaultTaxLabel = selectedTaxes.map(selectTax => {
+            return this.companyTaxDropDown.find(tax => tax.value === selectTax)?.label;
+        });
     }
 
     public getDiscountList() {
@@ -2413,7 +2547,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             if (fieldIndex !== -1) {
                                 const customFieldDef = this.companyCustomFields?.find(field => field.uniqueName === item?.uniqueName);
                                 let value: any = item?.value;
-                                
+
                                 // Convert string boolean values to actual booleans for Boolean type fields
                                 if (customFieldDef?.fieldType?.type === this.availableFieldTypes.Boolean) {
                                     if (value === 'true' || value === true) {
@@ -2422,7 +2556,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                         value = false;
                                     }
                                 }
-                                
+
                                 customField?.at(fieldIndex).get('value').patchValue(value);
                             }
                         });
