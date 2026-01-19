@@ -503,8 +503,13 @@
     "tax_rate": "कराचे दर",
     "bill_from": "बिल फ्रॉम",
     "ship_from": "शिप फ्रॉम",
+    "bill_to": "बिल टो",
+    "ship_to": "Ship To",
     "template_set_as_default_successfully": "टेम्पलेट डिफ़ॉल्ट रूपांतरित किया गया",
     "are_you_sure_you_want_to_delete":"क्या आप वाकई \"<b>${template.name}</b>\" टेम्पलेट को हटाना चाहते हैं?",
     "account_custom_fields": "खाता कस्टम फ़ील्ड्स",
-    "select_custom_fields": "कस्टम फ़ील्ड्स चुनें"
+    "select_custom_fields": "कस्टम फ़ील्ड्स चुनें",
+    "apply_estimate_round_off": "अनुमान वाउचर पर राउंड ऑफ लागू करें",
+    "apply_proforma_round_off": "प्रोफार्मा वाउचर पर राउंड ऑफ लागू करें",
+    "apply_purchase_order_round_off": "खरीद आदेश वाउचर पर राउंड ऑफ लागू करें"
 }

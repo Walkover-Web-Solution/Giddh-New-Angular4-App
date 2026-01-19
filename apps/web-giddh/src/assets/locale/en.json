@@ -301,6 +301,7 @@
     "app_sac": "SAC",
     "app_address": "Address",
     "app_street": "Street",
+    "app_enter": "Enter",
     "app_enter_gstin": "Enter GSTIN",
     "app_enter_trn": "Enter TRN",
     "app_enter_vat": "Enter VAT",

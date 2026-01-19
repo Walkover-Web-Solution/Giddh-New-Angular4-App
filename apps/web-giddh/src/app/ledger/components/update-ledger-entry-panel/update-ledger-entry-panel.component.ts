@@ -848,6 +848,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             } else {
                 this.toaster.showSnackBar("error", response?.message)
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -1988,8 +1989,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.invoiceListRequestParams = { particularAccount: particularAccount, voucherType: this.vm.selectedLedger?.voucher?.name, ledgerAccount: this.activeAccount };
         }
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
-                    width: '980px',
-                    panelClass: 'container-modal-class'
+                    width: "800px"
                 });
     }
 
@@ -2511,8 +2511,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.selectedItem = this.vm.selectedLedger;
         this.selectedItem['isAttachment'] = isAttachment;
         let dialogRef = this.dialog.open(templateRef, {
-                    width: '70%'
-                });
+            width: '70%',
+            height: '790px',
+            maxHeight: '90vh',
+            role: 'alertdialog',
+            ariaLabel: 'template',
+            autoFocus: false
+        });
 
         dialogRef.afterClosed().subscribe(() => {
             document.querySelector(".cdk-global-overlay-wrapper")?.classList?.remove("double-popup-zindex");

@@ -352,11 +352,17 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
                 this.ocrImportSuccess$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
                     if (res && res.requestId) {
+                        // Always redirect to List view after successful upload
+                        this.selectedToggle = OcrAction.List;
+
                         if (this.mainPageUploadFile) {
                             this.getAllOcrDocuments(false);
                         } else {
                             this.aiOcrService.uploadDataSuccess$.next(true);
                         }
+
+                        // Trigger change detection to update UI
+                        this.changeDetection.detectChanges();
                     }
                 });
 

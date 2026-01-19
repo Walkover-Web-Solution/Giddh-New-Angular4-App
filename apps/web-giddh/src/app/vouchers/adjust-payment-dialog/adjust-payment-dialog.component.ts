@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, of, takeUntil } from 'rxjs';
@@ -131,13 +131,16 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     private globalKeydownListener?: (event: KeyboardEvent) => void;
     private globalMousedownListener?: () => void;
     private globalClickListener?: () => void;
+    /** Flag to control dropdown opening after view init */
+    public shouldOpenDropdown: boolean = false;
 
     constructor(
         private componentStore: VoucherComponentStore,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private generalService: GeneralService,
         private toasterService: ToasterService,
-        private voucherService: VoucherService
+        private voucherService: VoucherService,
+        private changeDetectorRef: ChangeDetectorRef
     ) { }
 
     /**
@@ -1164,6 +1167,8 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                     this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
                 }
             }
+            this.shouldOpenDropdown = !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName && this.adjustVoucherForm?.adjustments?.length === 1;
+            this.changeDetectorRef.detectChanges();
         });
     }
 

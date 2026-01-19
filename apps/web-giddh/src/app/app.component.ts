@@ -115,7 +115,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const path = window.location.pathname || '';
             const search = window.location.search || '';
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
-            // Generate returnUrl for any non-login-like path (including root path)
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
                 if (environment.production && !Configuration.isElectron && !isLocalHost) {

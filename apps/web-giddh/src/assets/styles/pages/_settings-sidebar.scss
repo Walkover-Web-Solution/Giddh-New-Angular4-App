@@ -19,11 +19,8 @@
                 }
 
                 span {
-                    color: var(--color-dark-gray);
-
                     i {
-                        margin-right: 10px;
-                        font-size: 22px;
+                        font-size: 19px;
                     }
 
                     &:first-child {
@@ -69,6 +66,10 @@
 
         .active-link {
             background-color: var(--bg-primary-color);
+
+            .list-item {
+                color: var(--color-white) !important;
+            }
 
             a {
                 span {

@@ -65,6 +65,7 @@ body {
 
     // Apply your custom mixin
     @include mixins.define-theme-colors($giddh-light-theme);
+    --mat-sys-outline: var(--color-silver);
 
     // Density override
     @include mat.all-component-densities($giddh-light-theme);

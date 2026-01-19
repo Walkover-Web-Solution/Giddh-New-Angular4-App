@@ -373,11 +373,14 @@ export class VouchersUtilityService {
 
                 delete entry.otherTax;
             });
+            // Custom fields are not cleaned
+            const customFields = invoiceForm.account?.customFields;
 
             invoiceForm = cleaner?.clean(invoiceForm, {
                 nullCleaner: true
             });
 
+            invoiceForm.account.customFields = customFields;
             return invoiceForm;
         }
     }
@@ -521,7 +524,7 @@ export class VouchersUtilityService {
             const selectedAddressAddress = Array.isArray(selectedAddress?.address) && selectedAddress.address[0]
                 ? selectedAddress.address[0]
                 : "";
-            const state = add?.state?.name ? add?.state?.name : add?.stateName ? add?.stateName : "";
+            const state = add?.state?.name || add?.stateName || add?.county?.name || "";
             const taxNumber = !selectedAddress?.taxNumber ? "" : selectedAddress?.taxNumber;
 
             if (address === selectedAddressAddress && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === taxNumber)) {

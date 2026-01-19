@@ -116,7 +116,7 @@
                             <div class="col-5">
                                 <div class="form-group mb-0">
                                     <reactive-dropdown-field
-                                        [openDropdown]="!entry.uniqueName && adjustVoucherForm?.adjustments?.length === 1"
+                                        [openDropdown]="shouldOpenDropdown"
                                         [autocomplete]="'off'"
                                         [readonly]="shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null"
                                         [cssClass]="'text-left'"

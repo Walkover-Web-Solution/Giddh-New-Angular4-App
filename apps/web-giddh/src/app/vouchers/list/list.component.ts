@@ -41,7 +41,7 @@ import { CommonActions } from "../../actions/common.actions";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
-import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../services/invoice.ui.data.service';
+import { InvoiceUiDataService } from '../../services/invoice.ui.data.service';
 import { TemplateModeEnum } from "../../models/api-models/Sales";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
@@ -380,7 +380,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private invoiceTemplatesService: InvoiceTemplatesService,
-        private invoiceUiDataService: InvoiceUiDataService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceActions: InvoiceActions,
         private salesAction: SalesActions,
@@ -581,6 +580,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.settingForm.get('invoiceSettings.gstEInvoiceEnable')?.disable();
                 }
             }
+        });
+
+        this.settingForm.get('invoiceSettings.useCustomPaymentNumber')?.valueChanges.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(() => {
+            this.changeDetectorRef.detectChanges();
         });
 
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
