@@ -72,13 +72,6 @@ export class SignupWithMobile {
     public countryCode: number = 91;
 }
 
-/**
- * SignupWithMobileResponse class
- * Implements SignupWithMobileResponse functionality
- */
-export class SignupWithMobileResponse {
-    public code: string;
-}
 
 /**
  * VerifyMobileModel class

@@ -151,20 +151,6 @@ export class AgingAdvanceSearchModal {
     name: string[];
 }
 
-/**
- * CustomerVendorFiledFilter class
- * Implements CustomerVendorFiledFilter functionality
- */
-export class CustomerVendorFiledFilter {
-    public selectAll: boolean = false;
-    public parentGroup: boolean = false;
-    public contact: boolean = false;
-    public state: boolean = false;
-    public gstin: boolean = false;
-    public comment: boolean = false;
-    public openingBalance: boolean = false;
-
-}
 
 /**
  * bulk update request

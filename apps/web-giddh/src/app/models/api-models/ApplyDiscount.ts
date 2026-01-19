@@ -1,12 +1,4 @@
 /**
- * ApplyDiscountRequest class
- * Implements ApplyDiscountRequest functionality
- */
-export class ApplyDiscountRequest {
-    public discountUniqueName: string;
-    public accountUniqueNames: string[];
-}
-/**
  * AssignDiscountRequestForAccount class
  * Implements AssignDiscountRequestForAccount functionality
  */

@@ -356,7 +356,7 @@ const {
      */
     reject = (arr: any[], fn: any) => arr.filter(x => !fn(x)),
     /**
-     * Deletes 
+     * Deletes
      */
     remove = (array: any[], predicate: any) => {
         const removed = [];
@@ -424,25 +424,6 @@ const {
      */
     union = (...arrays: any[]) => [...new Set(arrays.flat())],
     /**
-     * Handles unionBy functionality
-     */
-    unionBy = (array: any[], ...args: any[]) => {
-        const iteratee = args.pop();
-        const seen = new Set();
-        const result: any[] = [];
-        [array, ...args].flat().forEach(item => {
-            const key = typeof iteratee === 'string' ? item[iteratee] : iteratee(item);
-            /**
-             * Handles if functionality
-             */
-            if (!seen.has(key)) {
-                seen.add(key);
-                result.push(item);
-            }
-        });
-        return result;
-    },
-    /**
      * Handles uniq functionality
      */
     uniq = (arr: any[]) => [...new Set(arr)],
@@ -469,16 +450,6 @@ const {
      * Handles some functionality
      */
     some = (arr: any[], fn: any) => arr.some(fn),
-    /**
-     * Handles intersection functionality
-     */
-    intersection = (...arrays: any[]) => {
-        /**
-         * Handles if functionality
-         */
-        if (arrays.length === 0) return [];
-        return arrays[0].filter(item => arrays.every(arr => arr.includes(item)));
-    },
     /**
      * Handles forIn functionality
      */
@@ -642,7 +613,7 @@ export {
     maxBy, endsWith,
     cloneDeep, each, reject, map, filter, orderBy, isNull, flatten, sortBy, indexOf, remove, forEach,
     toArray, groupBy, difference, isUndefined, differenceBy, flattenDeep, union, omit, clone, without,
-    isString, find, range, includes, uniq, isEmpty, isNumber, findIndex, concat, unionBy, last, sumBy,
-    isArray, isEqual, uniqBy, some, intersection, forIn, pick, startsWith, get,
+    isString, find, range, includes, uniq, isEmpty, isNumber, findIndex, concat, last, sumBy,
+    isArray, isEqual, uniqBy, some, forIn, pick, startsWith, get,
     debounce, isObject, slice, keys, values, has, set
 };

@@ -364,18 +364,6 @@ export interface ICurrencyResponse {
 }
 
 /**
- * BankTransferRequest class
- * Implements BankTransferRequest functionality
- */
-export class BankTransferRequest {
-    public bankUserId: string;
-    public transferAccountUniqueName: string;
-    public otp: number;
-    public amount: number;
-    public payeeName: string;
-    public remarks: string;
-}
-
 /**
  * SubscriptionRequest class
  * Implements SubscriptionRequest functionality
