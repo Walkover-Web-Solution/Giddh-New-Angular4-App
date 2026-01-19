@@ -7,7 +7,6 @@ import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModa
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
-import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
 import { WebviewDirective } from './webview.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -69,7 +68,6 @@ import { MatCardModule } from '@angular/material/card';
 @NgModule({
     declarations: [
         DownloadOrSendInvoiceOnMailComponent,
-        EsignModalComponent,
         WebviewDirective,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,

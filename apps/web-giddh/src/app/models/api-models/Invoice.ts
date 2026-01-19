@@ -480,28 +480,6 @@ export class CustomTemplateResponse {
     public accountCustomFieldUniqueNames: string[] = [];
 }
 
-export class Esignature {
-    public File: string;
-    public Name: string = 'companyName';
-    public SelectPage: string = 'LAST';
-    public ReferenceNumber: string = '';
-    public AadhaarNumber: string = '';
-    public SignatureType: string = '1';
-    public SignaturePosition: string = 'Customize';
-    public authToken: string = 'YkvC7sGkgLDNT67ZvxCXg7t2Cy0FjUI8QTSh44QWo+Y=';
-    public PageNumber: string = '';
-    public FileType: string = 'PDF';
-    public PreviewRequired: boolean = true;
-    public CustomizeCoordinates: string = '420,200,540,150';
-    public PagelevelCoordinates: string = '';
-    public UploadSignatureOption: boolean = true;
-    public SelectFontOption: boolean = true;
-    public DrawSignatureOption: boolean = true;
-    public eSignaturePadOption: boolean = true;
-    public SUrl: string = 'https://esign.giddh.com/Fu59xHxuPsQFWEy4zhwB/';
-    public FUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
-    public CUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
-}
 
 export class EwayBillLogin {
     public userName: string;

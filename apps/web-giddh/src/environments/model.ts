@@ -12,6 +12,8 @@ export interface Environment {
     PORTAL_URL: string;
     GOOGLE_CLIENT_ID: string;
     GOOGLE_CLIENT_SECRET: string;
+    GOOGLE_CLIENT_ID_PROD: string;
+    GOOGLE_CLIENT_SECRET_PROD: string;
     OTP_WIDGET_ID: string;
     OTP_TOKEN_AUTH: string;
     RAZORPAY_KEY: string;
