@@ -1,12 +1,12 @@
 const COMMON_USER = 'company/:companyUniqueName/inventory-users';
-const COMMON_ENTRY = COMMON_USER + '/:inventoryUserUniqueName/inventory-entries';
+const COMMON_ENTRY = `${COMMON_USER}/:inventoryUserUniqueName/inventory-entries`;
 const COMMON_TRANSFER_ENTRY = 'inventory-transfer';
 const COMMON_V5 = 'v5/company/:companyUniqueName';
 export const INVENTORY_API = {
     USER: {
         CREATE: COMMON_USER,
-        UPDATE: COMMON_USER + '/:inventoryUserUniqueName',
-        GET_ALL: COMMON_USER + '?q=:q&refresh=:refresh&page=:page&count=:count'
+        UPDATE: `${COMMON_USER}/:inventoryUserUniqueName`,
+        GET_ALL: `${COMMON_USER}?q=:q&refresh=:refresh&page=:page&count=:count`
     },
     ENTRY: {
         CREATE: COMMON_ENTRY
@@ -69,9 +69,9 @@ export const INVENTORY_API = {
     DOWNLOAD_NEW_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/download?fileType=base64',
     GET_UNIT_CODE_REGEX: 'ui/forms?formName=:formName&country=:country',
     V5: {
-        CREATE_STOCK_GROUP: COMMON_V5 + '/stock-group?type=:type',
-        GET_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName',
-        UPDATE_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName'
+        CREATE_STOCK_GROUP: `${COMMON_V5}/stock-group?type=:type`,
+        GET_STOCK_GROUP: `${COMMON_V5}/stock-group/:groupUniqueName`,
+        UPDATE_STOCK_GROUP: `${COMMON_V5}/stock-group/:groupUniqueName`
     },
     NEW: {
         CREATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock',

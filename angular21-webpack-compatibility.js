@@ -1,8 +1,8 @@
 // Angular 21 Webpack Compatibility Layer for EPIPE Error Prevention
 // Addresses Angular 21 specific regression issues not present in Angular 16
 
-const webpack = require('webpack');
-const path = require('path');
+import webpack from 'webpack';
+import path from 'path';
 
 /**
  * Angular 21 introduced stricter webpack optimization that causes EPIPE errors

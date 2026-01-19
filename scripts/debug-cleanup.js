@@ -3,8 +3,8 @@
  * Debug Cleanup Script
  * Removes console.log, console.error, console.warn and other debug artifacts from production code
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 class DebugCleaner {
     constructor() {
         this.processedFiles = 0;
@@ -81,7 +81,7 @@ class DebugCleaner {
         try {
             const content = fs.readFileSync(filePath, 'utf8');
             let cleanedContent = content;
-            let fileRemovals = 0;
+            const fileRemovals = 0;
             // Pattern 1: Simple console statements (console.log, console.error, etc.)
             const simpleConsolePattern = /^\s*console\.(log|error|warn|info|debug|trace)\s*\([^;]*\);\s*$/gm;
             const simpleMatches = cleanedContent.match(simpleConsolePattern);

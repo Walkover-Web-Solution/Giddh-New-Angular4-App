@@ -3,8 +3,8 @@
  * Advanced Bundle Optimizer
  * Implements lazy loading and import optimizations for large libraries
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 class AdvancedBundleOptimizer {
     constructor() {
         this.processedFiles = 0;
@@ -58,7 +58,7 @@ class AdvancedBundleOptimizer {
         try {
             const content = fs.readFileSync(filePath, 'utf8');
             let optimizedContent = content;
-            let optimizations = 0;
+            const optimizations = 0;
             // Optimize Angular Material imports
             const materialOptimizations = this.optimizeAngularMaterialImports(optimizedContent);
             optimizedContent = materialOptimizations.content;
@@ -135,7 +135,7 @@ class AdvancedBundleOptimizer {
                 }
             });
             if (specificImports.length > 0) {
-                count++;
+                count += 1;
                 return specificImports.join('\n');
             }
             return match;
@@ -170,7 +170,7 @@ class AdvancedBundleOptimizer {
                     const usagePattern = new RegExp(`_\\.${method}`, 'g');
                     optimizedContent = optimizedContent.replace(usagePattern, method);
                 });
-                count++;
+                count += 1;
             }
         }
         return { content: optimizedContent, count };
@@ -204,7 +204,7 @@ class AdvancedBundleOptimizer {
                                     dynamicImportMethod + '\n' + 
                                     optimizedContent.slice(lastBraceIndex);
                 }
-                count++;
+                count += 1;
             }
         }
         return { content: optimizedContent, count };

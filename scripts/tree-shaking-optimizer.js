@@ -3,8 +3,8 @@
  * Tree Shaking Optimizer Script
  * Optimizes imports and enables better tree shaking for reduced bundle sizes
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 class TreeShakingOptimizer {
     constructor() {
         this.processedFiles = 0;
@@ -101,7 +101,7 @@ class TreeShakingOptimizer {
                     const usagePattern = new RegExp(`_\\.${method}`, 'g');
                     optimizedContent = optimizedContent.replace(usagePattern, method);
                 });
-                count++;
+                count += 1;
             }
         }
         return { content: optimizedContent, count };
@@ -140,7 +140,7 @@ class TreeShakingOptimizer {
                     }).filter(Boolean);
                     if (specificImports.length > 0) {
                         optimizedContent = optimizedContent.replace(match, specificImports.join('\n') + '\n');
-                        count++;
+                        count += 1;
                     }
                 }
             });
@@ -179,7 +179,7 @@ class TreeShakingOptimizer {
                     }).filter(Boolean);
                     if (specificImports.length > 0) {
                         optimizedContent = optimizedContent.replace(match, specificImports.join('\n') + '\n');
-                        count++;
+                        count += 1;
                     }
                 }
             });
@@ -207,7 +207,7 @@ class TreeShakingOptimizer {
     generateWebpackConfig() {
         const webpackConfig = `
 // webpack.config.js - Tree Shaking Optimizations
-const path = require('path');
+import path from 'path';
 module.exports = {
   mode: 'production',
   optimization: {

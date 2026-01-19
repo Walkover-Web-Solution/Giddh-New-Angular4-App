@@ -3,8 +3,8 @@
  * Angular Material Import Optimizer
  * Converts barrel imports to specific module imports for better tree shaking
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 class MaterialImportOptimizer {
     constructor() {
         this.processedFiles = 0;
@@ -43,7 +43,7 @@ class MaterialImportOptimizer {
         try {
             const content = fs.readFileSync(filePath, 'utf8');
             let optimizedContent = content;
-            let optimizations = 0;
+            const optimizations = 0;
             // Material module mapping
             const moduleMap = {
                 'MatButtonModule': '@angular/material/button',
@@ -97,7 +97,7 @@ class MaterialImportOptimizer {
                     }
                 });
                 if (specificImports.length > 0) {
-                    optimizations++;
+                    optimizations += 1;
                     return specificImports.join('\n') + '\n';
                 }
                 return match;

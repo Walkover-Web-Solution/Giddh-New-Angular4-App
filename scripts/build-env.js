@@ -8,8 +8,8 @@
  * Usage: node scripts/build-env.js [environment]
  * Example: node scripts/build-env.js local
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 const dotenv = require('dotenv');
 // Get environment from command line argument or default to 'local'
 const environment = process.argv[2] || 'local';
@@ -124,7 +124,7 @@ export const environment: Environment = {
     decorateModuleRef(modRef: NgModuleRef<any>) {
         ${environment === 'prod' ?
             'disableDebugTools();\n        return modRef;' :
-            'const appRef = modRef.injector.get(ApplicationRef);\n        const cmpRef = appRef.components[0];\n\n        let _ng = (<any>window).ng;\n        enableDebugTools(cmpRef);\n        (<any>window).ng.probe = _ng.probe;\n        (<any>window).ng.coreTokens = _ng.coreTokens;\n        return modRef;'
+            'const appRef = modRef.injector.get(ApplicationRef);\n        const cmpRef = appRef.components[0];\n\n        const _ng = (<any>window).ng;\n        enableDebugTools(cmpRef);\n        (<any>window).ng.probe = _ng.probe;\n        (<any>window).ng.coreTokens = _ng.coreTokens;\n        return modRef;'
         }
     },
     ENV_PROVIDERS: []

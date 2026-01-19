@@ -3,8 +3,8 @@
  * Bundle Size Optimization Script
  * Analyzes and optimizes Angular bundle sizes for better performance
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 /**
  * Analyze current angular.json for optimization opportunities
  */

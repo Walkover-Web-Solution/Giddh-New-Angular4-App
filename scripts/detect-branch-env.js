@@ -14,9 +14,9 @@
  * - feature/* -> local environment (.env.local)
  * - Any other branch -> local environment (.env.local)
  */
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 /**
  * Get current Git branch name
  */

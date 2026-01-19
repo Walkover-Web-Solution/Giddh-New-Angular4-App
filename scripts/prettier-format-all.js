@@ -5,9 +5,9 @@
  * Formats TypeScript, HTML, and SCSS files across the entire Angular application
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
 
 class PrettierFormatter {
     constructor() {
@@ -213,7 +213,7 @@ class PrettierFormatter {
             batches.push(files.slice(i, i + batchSize));
         }
 
-        for (let i = 0; i < batches.length; i++) {
+        for (let i = 0; i < batches.length; i += 1) {
             const batch = batches[i];
 
             try {

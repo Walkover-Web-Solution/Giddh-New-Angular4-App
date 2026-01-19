@@ -3,8 +3,8 @@
  * Build Success Message Script
  * Displays a success message with environment information after build completion
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 // Get environment from command line arguments
 const args = process.argv.slice(2);
 const environment = args[0] || 'prod';

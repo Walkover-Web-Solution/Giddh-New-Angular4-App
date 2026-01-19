@@ -6,8 +6,8 @@
  * and injects them into the HTML file at build time, ensuring sensitive credentials
  * are not hardcoded in the repository.
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 const dotenv = require('dotenv');
 /**
  * Determine which .env file to use based on build environment
@@ -67,7 +67,7 @@ function generateEnvScript(envVars) {
         RAZORPAY_KEY: envVars.RAZORPAY_KEY || envVars.RAZORPAY_KEY_TEST || ''
     };
     // Generate script content
-    let script = '<!-- Environment Variables - Injected at Build Time -->\n<script>\n';
+    const script = '<!-- Environment Variables - Injected at Build Time -->\n<script>\n';
     Object.keys(config).forEach(key => {
         const value = typeof config[key] === 'string' ? `"${config[key]}"` : config[key];
         script += `  window.${key} = ${value};\n`;

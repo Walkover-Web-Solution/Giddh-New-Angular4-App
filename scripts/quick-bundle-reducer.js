@@ -3,8 +3,8 @@
  * Quick Bundle Reducer - Immediate high-impact optimizations
  * Target: 15.78MB → <10MB (5.78MB reduction needed)
  */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 class QuickBundleReducer {
     constructor() {
         this.optimizations = [];

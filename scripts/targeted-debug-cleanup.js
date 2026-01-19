@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 const filesToClean = [
     'apps/web-giddh/src/app/electron-compatibility.ts',
     'apps/web-giddh/src/app/settings/profile/setting.profile.component.ts',
@@ -40,15 +40,15 @@ const filesToClean = [
     'apps/web-giddh/src/app/lodash-optimized.ts',
     'apps/web-giddh/src/main.ts'
 ];
-let totalRemovals = 0;
-let filesModified = 0;
+const totalRemovals = 0;
+const filesModified = 0;
 filesToClean.forEach(filePath => {
     const fullPath = path.join(__dirname, '..', filePath);
     if (fs.existsSync(fullPath)) {
         try {
             const content = fs.readFileSync(fullPath, 'utf8');
             let cleanedContent = content;
-            let fileRemovals = 0;
+            const fileRemovals = 0;
             // Remove console.log statements
             const consolePattern = /^\s*console\.(log|error|warn|info|debug|trace)\s*\([^;]*\);\s*$/gm;
             const matches = cleanedContent.match(consolePattern);
@@ -67,7 +67,7 @@ filesToClean.forEach(filePath => {
             cleanedContent = cleanedContent.replace(/\n\s*\n\s*\n/g, '\n\n');
             if (fileRemovals > 0) {
                 fs.writeFileSync(fullPath, cleanedContent, 'utf8');
-                filesModified++;
+                filesModified += 1;
                 totalRemovals += fileRemovals;
             }
         } catch (error) {

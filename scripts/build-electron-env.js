@@ -10,9 +10,9 @@
  * - node scripts/build-electron-env.js --force-env=prod (override environment)
  * - node scripts/build-electron-env.js --branch=giddh-2.0 (simulate branch)
  */
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 const dotenv = require('dotenv');
 // Import our branch detection utility
 const { getCurrentBranch, mapBranchToEnvironment, getEnvFilePath, validateEnvFile } = require('./detect-branch-env');

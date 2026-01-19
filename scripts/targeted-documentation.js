@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 function addDocumentationToFile(filePath) {
     try {
         const content = fs.readFileSync(filePath, 'utf8');
@@ -16,7 +16,7 @@ function addDocumentationToFile(filePath) {
  */
 `;
             enhancedContent = fileHeader + enhancedContent;
-            additions++;
+            additions += 1;
         }
         // Add class documentation if missing
         const classPattern = /(?<!\/\*\*[\s\S]*?\*\/\s*)\nexport class (\w+)/g;
@@ -28,7 +28,7 @@ function addDocumentationToFile(filePath) {
  * @class ${className}
  */
 ${match}`;
-            additions++;
+            additions += 1;
             return classDoc;
         });
         if (additions > 0) {
@@ -67,13 +67,13 @@ const keyFiles = [
     'apps/web-giddh/src/app/login/login.component.ts',
     'apps/web-giddh/src/app/contact/contact.component.ts'
 ];
-let totalAdditions = 0;
-let filesProcessed = 0;
+const totalAdditions = 0;
+const filesProcessed = 0;
 keyFiles.forEach(filePath => {
     const fullPath = path.join(__dirname, '..', filePath);
     if (fs.existsSync(fullPath)) {
         const additions = addDocumentationToFile(fullPath);
         totalAdditions += additions;
-        filesProcessed++;
+        filesProcessed += 1;
     }
 });
