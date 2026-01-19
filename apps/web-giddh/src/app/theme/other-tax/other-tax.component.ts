@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil, of as observableOf, of } from "rxjs";
 import { OtherTaxComponentStore } from "./utility/other-tax.store";
 import { AppState } from "../../store";
@@ -50,7 +50,8 @@ export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
         private store: Store<AppState>,
         public dialogRef: MatDialogRef<any>,
         @Inject(MAT_DIALOG_DATA) public inputData,
-        private settingsTaxesAction: SettingsTaxesActions
+        private settingsTaxesAction: SettingsTaxesActions,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
 
     }
@@ -133,12 +134,11 @@ export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public createTaxDialog(): void {
         this.taxAsideMenuRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
+        this.openAccountDropdown = false; 
         this.taxAsideMenuRef.afterClosed().subscribe(() => {
             this.taxAsideMenuRef = null;
-            this.openAccountDropdown = false; 
-            setTimeout(() => {
-                this.openAccountDropdown = true;
-            }, 50);
+            this.openAccountDropdown = true;
+            this.changeDetectorRef.detectChanges();
         });
         this.otherTax = true;
     }

@@ -1915,18 +1915,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * To set boolean type custom field value
-     *
-     * @param {string} isChecked to check boolean custom field true or false
-     * @param {number} index index number
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public selectedBooleanCustomField(isChecked: string, index: number): void {
-        const customField = this.addAccountForm.get('customFields') as FormArray;
-        customField.controls[index].get('value')?.setValue(isChecked);
-    }
-
-    /**
      * To check taxes list updated
      *
      * @param {*} event
@@ -2422,7 +2410,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (customField.controls?.length) {
                         (Array.isArray(accountDetails.customFields) ? accountDetails.customFields : []).forEach(item => {
                             const fieldIndex = customField.controls?.findIndex(control => control?.value?.uniqueName === item?.uniqueName);
-                            customField?.at(fieldIndex).get('value').patchValue(item?.value);
+                            if (fieldIndex !== -1) {
+                                const customFieldDef = this.companyCustomFields?.find(field => field.uniqueName === item?.uniqueName);
+                                let value: any = item?.value;
+                                
+                                // Convert string boolean values to actual booleans for Boolean type fields
+                                if (customFieldDef?.fieldType?.type === this.availableFieldTypes.Boolean) {
+                                    if (value === 'true' || value === true) {
+                                        value = true;
+                                    } else if (value === 'false' || value === false) {
+                                        value = false;
+                                    }
+                                }
+                                
+                                customField?.at(fieldIndex).get('value').patchValue(value);
+                            }
                         });
                     }
                 }

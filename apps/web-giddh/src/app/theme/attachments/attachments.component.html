@@ -144,7 +144,7 @@
                     </span>
                 </div>
                 <div class="display-area">
-                    <img *ngIf="previewedFile?.type === 'image'" [src]="previewedFile?.src" />
+                    <img *ngIf="previewedFile?.type === 'image'" [src]="previewedFile?.src" class="w-100" />
                     <iframe
                         title="myFrame"
                         *ngIf="previewedFile?.type === 'pdf'"

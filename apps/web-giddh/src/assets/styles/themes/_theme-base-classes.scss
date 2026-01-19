@@ -1,7 +1,7 @@
 body {
     --text-primary-color: var(--theme-primary-color);
     --bg-primary-color: var(--theme-primary-color);
-    --border-color: var(--theme-border-color);
+    --border-color: var(--color-silver);
 
     &.default-theme {
         --lighter-percent: 10%;

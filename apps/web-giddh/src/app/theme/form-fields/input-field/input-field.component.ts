@@ -248,7 +248,11 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      *
      * @memberof InputFieldComponent
      */
-    public handleInput(): void {
+    public handleInput(event?: any): void {
+        // Use the actual input value for real-time validation
+        if (event && event.target) {
+            this.validateMinMaxWithValue(event.target.value);
+        }
         this.onChangeCallback(this.value);
     }
 
@@ -258,6 +262,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     public handleChange(): void {
+        this.validateMinMax();
         this.onChangeCallback(this.value);
     }
 
@@ -268,6 +273,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      */
     public emitBlurEvent(): void {
         this.validatePatternOnBlur();
+        this.validateMinMax();
         this.onChange.emit(this.value);
     }
 
@@ -282,6 +288,44 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
             const isValid = regex.test(this.ngModel);
             this.patternValidation.emit({ isValid, value: this.ngModel });
         }
+    }
+
+    /**
+     * Validates min/max constraints and sets form control errors
+     *
+     * @memberof InputFieldComponent
+     */
+    private validateMinMax(): void {
+        this.validateMinMaxWithValue(this.ngModel);
+    }
+
+    /**
+     * Validates min/max constraints with a specific value
+     *
+     * @param {any} value - The value to validate
+     * @memberof InputFieldComponent
+     */
+    private validateMinMaxWithValue(value: any): void {
+        if (!this.ngControl?.control || !value) return;
+        
+        const numValue = parseFloat(value);
+        if (isNaN(numValue)) return;
+        
+        let errors: any = null;
+        
+        if (this.min !== null && numValue < Number(this.min)) {
+            errors = { min: { actual: numValue, min: Number(this.min) } };
+        } else if (this.max !== null && numValue > Number(this.max)) {
+            errors = { max: { actual: numValue, max: Number(this.max) } };
+        }
+        
+        this.showError = !!errors;
+        this.ngControl.control.setErrors(errors);
+        // Trigger change detection to update visual state immediately
+        this.ngControl.control.markAsTouched();
+        this.stateChanges.next();
+        this.changeDetectionRef.detectChanges();
+            
     }
 
     /**

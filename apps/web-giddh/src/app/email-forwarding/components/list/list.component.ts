@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -32,7 +32,7 @@ export class ListComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Data source for the material table */
-    public dataSource: EmailForwardingResponse[] = [];
+    public dataSource = signal<EmailForwardingResponse[]>([]);
     /** Columns to display in the table */
     public displayedColumns: string[] = [
         'forwardedMail',
@@ -41,7 +41,7 @@ export class ListComponent implements OnInit, OnDestroy {
         'actions'
     ];
     /** Loading state for async operations */
-    public isLoading: boolean = false;
+    public isLoading = signal<boolean>(false);
     /** Page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Current page index */
@@ -101,15 +101,15 @@ export class ListComponent implements OnInit, OnDestroy {
                 if (emailForwardingList.length === 0) {
                     this.router.navigate(['pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
                 }
-                this.dataSource = emailForwardingList;
-                this.isLoading = false;
+                this.dataSource.set(emailForwardingList);
+                this.isLoading.set(false);
             }
         });
 
         this.bankStatementStore.isLoading$.pipe(
             takeUntil(this.destroyed$)
         ).subscribe((isLoading) => {
-            this.isLoading = isLoading;
+            this.isLoading.set(isLoading);
         });
     }
 
@@ -120,7 +120,7 @@ export class ListComponent implements OnInit, OnDestroy {
      * @memberof ListComponent
      */
     private loadEmailForwardingData(): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.bankStatementStore.getAllEmailForwarding();
     }
 
@@ -130,7 +130,7 @@ export class ListComponent implements OnInit, OnDestroy {
      * @memberof ListComponent
      */
     public createNew(): void {
-        if (this.isLoading) {
+        if (this.isLoading()) {
             return;
         }
         this.bankStatementStore.generateEmail();

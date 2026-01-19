@@ -64,6 +64,10 @@ const routes: Routes = [
                 path: ":type/adjust/:refNo",
                 component: AdjustInventoryComponent
             },
+            {
+                path: "stock-balance",
+                component: StockBalanceComponent,
+            },
         ],
     },
     {
@@ -89,10 +93,6 @@ const routes: Routes = [
     {
         path: "branch-transfer",
         loadChildren: () => import('./component/branch-transfer/branch-transfer.module').then(module => module.BranchTransferModule)
-    },
-    {
-        path: "stock-balance",
-        component: StockBalanceComponent,
     },
 ];
 

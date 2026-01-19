@@ -101,7 +101,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
         totalPages: 0
     }
     /** True if  the variables showing   */
-    public showVariableMapping: boolean = false;
+    public showVariableMapping = signal<boolean>(false);
     /** Hold instance of destroyed   */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds available page size options */
@@ -214,6 +214,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
      */
     public deleteCommunicationPlatform(platformUniqueName: string): void {
         let dialogRef = this.dialog?.open(ConfirmModalComponent, {
+            panelClass: "mat-dialog-sm",
             data: {
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.communication?.delete_platform,
@@ -363,6 +364,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                         if (mappedValue) {
                             arg.value = mappedValue?.value;
                         }
+                        this.changeDetectorRef.detectChanges();
                     });
                 });
                 this.createTrigger.condition.action = response?.body?.condition?.action;
@@ -398,6 +400,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
             } else {
                 this.toasty.showSnackBar("error", response?.message);
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -478,7 +481,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     public backToListPage(event: any): void {
         if (event) {
             this.showTriggerForm = false;
-            this.showVariableMapping = false;
+            this.showVariableMapping.set(false);
             this.editCommunicationPlatform = "";
             this.resetCommunicationForm();
             this.triggerMode = 'create';
@@ -508,7 +511,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     public selectCampaign(campaign: any, getCampaignFields: boolean = false): void {
         this.createTrigger.campaignDetails.campaignSlug = campaign?.value;
         this.createTrigger.campaignDetails.campaignName = campaign?.label;
-        this.showVariableMapping = true;
+        this.showVariableMapping.set(true);
         if (getCampaignFields) {
             this.getCampaignFields(campaign?.value);
         }
@@ -785,7 +788,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
         }
         this.resetValidationErrors();
         this.showTriggerForm = true;
-        this.showVariableMapping = false;
+        this.showVariableMapping.set(false);
         this.getCampaignList();
         this.getFieldsSuggestion(this.platform, "VOUCHER");
     }

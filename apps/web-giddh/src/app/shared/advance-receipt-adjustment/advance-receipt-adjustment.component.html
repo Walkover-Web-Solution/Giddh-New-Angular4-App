@@ -16,7 +16,7 @@
                     {{ localeData?.adjusted_amount_error }}
                 </span>
                 <div class="row mb-2" *ngIf="isModal">
-                    <div class="col-md-8 mt-1">
+                    <div class="col-6 mt-3">
                         <div class="form-group">
                             <input-field
                                 id="customerName"
@@ -26,11 +26,10 @@
                                 [cssClass]="'form-control border bg-transparent'"
                                 [(ngModel)]="adjustPayment.customerName"
                                 [readonly]="true"
-                                [disabled]="true"
                             ></input-field>
                         </div>
                     </div>
-                    <div class="col-md-4 text-right font-size-15 pt-2">
+                    <div class="col-6 text-right font-size-15 pt-2">
                         <p>
                             {{
                                 adjustedVoucherType === 'rcpt'
@@ -116,35 +115,14 @@
                     </div>
                 </div>
                 <form #adjustAdvancePaymentForm="ngForm" autocomplete="off" class="d-flex flex-column flex-grow-1">
-                    <div class="row voucher-form">
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <strong>
-                                    <label for="name">
-                                        {{ localeData?.adjustment_voucher }}
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <strong>
-                                    <label>
-                                        {{ commonLocaleData?.app_amount }}
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                </strong>
-                            </div>
-                        </div>
-                    </div>
                     <ng-container
                         *ngFor="let entry of adjustVoucherForm?.adjustments; let entryIdx = index; let first = first; let last = last"
                     >
                         <div class="row voucher-form pb-1 align-items-center">
-                            <div class="col-sm-3">
+                            <div class="col-5">
                                 <div class="form-group">
                                     <reactive-dropdown-field
+                                        [openDropdown]="shouldOpenDropdown"
                                         [autocomplete]="'off'"
                                         [readonly]="shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null"
                                         *ngIf="voucherApiVersion === 2"
@@ -189,7 +167,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-5">
                                 <div class="form-group">
                                     <input-field
                                         [readonly]="shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null"
@@ -226,7 +204,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div *ngIf="voucherApiVersion === 2" class="col-sm-3">
+                            <div *ngIf="voucherApiVersion === 2" class="col pt-2">
                                 <a
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
@@ -263,7 +241,7 @@
                             <p>{{ commonLocaleData?.app_note }}:</p>
                             <p>{{ localeData?.adjustment_note }}</p>
                         </div>
-                        <div class="mt-auto d-flex column-gap-1" *ngIf="isModal">
+                        <div class="d-flex justify-content-end column-gap-1 mt-auto" *ngIf="isModal">
                             <button
                                 matButton="filled"
                                 *ngIf="!isUpdateMode"
