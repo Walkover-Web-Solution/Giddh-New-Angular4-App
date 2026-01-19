@@ -29,9 +29,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
 import { cloneDeep, find, forEach, get, includes, indexOf, keys, map, slice } from '../../../lodash-optimized';
-/**
- * Handles Component functionality
- */
+import { ReportInitializationHelper, ReportConfig } from '../../helpers/report-initialization.helper';
 @Component({
     selector: 'purchase-register-component',
     templateUrl: './purchase.register.component.html',
@@ -89,16 +87,21 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
      * [3] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
      */
+    /** Report configuration for purchase register */
+    private reportConfig: ReportConfig = {
+        columnKey: 'netPurchase',
+        columnLabel: 'app_net_purchase',
+        urlPatterns: ['/reports/purchase-register', '/reports/purchase-detailed-expand']
+    };
     public columnDefinitions: Record<string, ColumnDefinition> = {
         particular: ["app_particular", true, "", true],
         purchase: ["app_purchase", true, "text-right"],
         returns: ["app_return", false, "text-right"],
-        taxTotal: ["app_tax", false, "text-right"],
-        discountTotal: ["app_discount", false, "text-right"],
-        tcsTotal: ["app_tcs", false, "text-right"],
-        tdsTotal: ["app_tds", false, "text-right"],
-        netPurchase: ["app_net_purchase", false, "text-right"],
-        cumulative: ["app_cumulative", false, "text-right"]
+        taxTotal: ["net_tax", false, "text-right"],
+        discountTotal: ["net_discount", false, "text-right"],
+        tcsTotal: ["net_tcs", false, "text-right"],
+        tdsTotal: ["net_tds", false, "text-right"],
+        ...ReportInitializationHelper.createColumnConfig(this.reportConfig)
     }
     /** Constant for duration */
     public durationEnum: typeof DurationEnum = DurationEnum;
@@ -181,13 +184,7 @@ constructor(
         });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.router.events.pipe(
-            /**
-             * Handles filter functionality
-             */
-            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/purchase-register') || event.url.includes('/reports/purchase-detailed-expand')))),
-            /**
-             * Handles takeUntil functionality
-             */
+            filter(event => (event instanceof NavigationStart && ReportInitializationHelper.shouldResetFinancialYear(event.url, this.reportConfig.urlPatterns))),
             takeUntil(this.destroyed$)).subscribe(() => {
                 // Reset the chosen financial year when user leaves the module
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());

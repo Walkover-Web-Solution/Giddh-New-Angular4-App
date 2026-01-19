@@ -12,6 +12,7 @@ import { GeneralService } from '../../services/general.service';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { TdsTaxCalculationHelper } from '../../shared/helpers/tds-tax-calculation.helper';
 import { VoucherSelectionHelper } from '../../shared/helpers/voucher-selection.helper';
+import { AdvanceReceiptValidationHelper } from '../../shared/helpers/advance-receipt-validation.helper';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../services/toaster.service';
 import { NgForm } from '@angular/forms';
@@ -632,34 +633,13 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             });
         }
 
-        /**
-         * Handles if functionality
-         */
-        if (this.isTaxDeducted) {
-            /**
-             * Handles if functionality
-             */
-            if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
-                /**
-                 * Handles if functionality
-                 */
-                if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
-                    this.tdsTypeBox.nativeElement.classList.add('error-box');
-                isValid = false;
-            } else if (this.adjustVoucherForm.tdsAmount.amountForAccount === 0) {
-                /**
-                 * Handles if functionality
-                 */
-                if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
-                    this.tdsAmountBox.nativeElement.classList.add('error-box');
-                    isValid = false;
-                }
-            }
-        } else {
-            delete this.adjustVoucherForm['tdsAmount'];
-            delete this.adjustVoucherForm['description'];
-            delete this.adjustVoucherForm['tdsTaxUniqueName'];
-        }
+        const validationResult = AdvanceReceiptValidationHelper.validateAdjustmentForm(
+            this.adjustVoucherForm,
+            this.isTaxDeducted,
+            this.tdsTypeBox,
+            this.tdsAmountBox
+        );
+        isValid = isValid && validationResult;
 
         /**
          * Handles if functionality
@@ -680,25 +660,17 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
-        /**
-         * Handles if functionality
-         */
-        if (event && entry && !this.isFormReset) {
-            entry = cloneDeep(event.additional);
-            /**
-             * Handles if functionality
-             */
-            if (entry?.uniqueName) {
-                this.adjustVoucherForm.adjustments.splice(index, 1, entry);
-                this.calculateTax(entry, index);
-            } else {
-                this.adjustVoucherForm.adjustments[index] = new Adjustment();
-            }
-            this.checkValidations();
+        AdvanceReceiptValidationHelper.handleVoucherSelection(
+            event,
+            entry,
+            index,
+            this.adjustVoucherForm,
+            this.isFormReset,
+            (entry, index) => this.calculateTax(entry, index),
+            () => this.checkValidations()
+        );
 
-            /**
-             * Handles if functionality
-             */
+        if (event && entry && !this.isFormReset) {
             if (this.lastInteraction === InteractionType.KEYBOARD) {
                 /**
                  * Sets timeout value
@@ -722,27 +694,15 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      */
     public clickSelectVoucher(index: number, form: NgForm): any {
         this.currentAdjustmentRowIndex = index;
-        /**
-         * Handles if functionality
-         */
-        if (form.controls[`voucherName${index}`]) {
-            form.controls[`voucherName${index}`].markAsTouched();
-        }
-        this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
-
-        /**
-         * Handles if functionality
-         */
-        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
-            let selectedItem = this.newAdjustVoucherOptions.find(item => item?.value === this.adjustVoucherForm.adjustments[index]?.uniqueName);
-            /**
-             * Handles if functionality
-             */
-            if (selectedItem) {
-                delete selectedItem['isHilighted'];
-                this.adjustVoucherOptions.splice(0, 0, { value: selectedItem?.value, label: selectedItem.label, additional: selectedItem.additional })
-            }
-        }
+        
+        this.adjustVoucherOptions = AdvanceReceiptValidationHelper.prepareVoucherOptions(
+            index,
+            form,
+            this.adjustVoucherForm,
+            this.newAdjustVoucherOptions,
+            () => this.getAdvanceReceiptUnselectedVoucher()
+        );
+        
         this.adjustVoucherOptions = uniqBy(this.adjustVoucherOptions, (item) => {
             /**
              * Handles if functionality

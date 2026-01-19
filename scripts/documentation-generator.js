@@ -5,6 +5,7 @@
  */
 import fs from 'fs';
 import path from 'path';
+const { findTypeScriptFiles: findTypeScriptFilesUtil } = require('./file-finder-utils');
 class DocumentationGenerator {
     constructor() {
         this.processedFiles = 0;

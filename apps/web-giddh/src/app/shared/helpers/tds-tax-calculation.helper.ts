@@ -24,22 +24,13 @@ export class TdsTaxCalculationHelper {
         adjustVoucherForm: any,
         giddhBalanceDecimalPlaces: number,
         tdsTypeBox: ElementRef,
-        /**
-         * Handles changeTdsAmountCallback functionality
-         */
         changeTdsAmountCallback: (amount: number) => void
     ): number {
         let tdsAmount = 0;
-        /**
-         * Handles if functionality
-         */
         if (event && event.additional && event.additional && event.additional.taxDetail && event.additional.taxDetail[0].taxValue && adjustPayment && adjustPayment.subTotal) {
             tdsAmount = cloneDeep(this.calculateTdsAmount(Number(adjustPayment.subTotal), Number(event.additional.taxDetail[0].taxValue), giddhBalanceDecimalPlaces));
             adjustVoucherForm.tdsTaxUniqueName = cloneDeep(event?.value);
             adjustVoucherForm.tdsAmount.amountForAccount = cloneDeep(tdsAmount);
-            /**
-             * Handles changeTdsAmountCallback functionality
-             */
             changeTdsAmountCallback(tdsAmount);
             tdsTypeBox?.nativeElement?.classList?.remove('error-box');
         }
@@ -58,13 +49,7 @@ export class TdsTaxCalculationHelper {
         adjustVoucherForm: any,
         tdsAmountBox: ElementRef
     ): void {
-        /**
-         * Handles if functionality
-         */
         if (!Number(event) && adjustVoucherForm && adjustVoucherForm.tdsTaxUniqueName) {
-            /**
-             * Handles if functionality
-             */
             if (tdsAmountBox && tdsAmountBox.nativeElement) {
                 tdsAmountBox.nativeElement.classList.add('error-box');
             }

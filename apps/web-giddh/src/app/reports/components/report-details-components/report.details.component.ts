@@ -29,9 +29,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
 import { cloneDeep, find, forEach, get, includes, indexOf, keys, map, slice } from '../../../lodash-optimized';
-/**
- * Handles Component functionality
- */
+import { ReportInitializationHelper, ReportConfig } from '../../helpers/report-initialization.helper';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -87,6 +85,12 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
      * [3] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
      */
+    /** Report configuration for sales register */
+    private reportConfig: ReportConfig = {
+        columnKey: 'netSales',
+        columnLabel: 'net_sales',
+        urlPatterns: ['/reports/sales-register', '/reports/sales-detailed-expand']
+    };
     public columnDefinitions: Record<string, ColumnDefinition> = {
         particular: ["app_particular", true, "", true],
         sales: ["app_sales", true, "text-right"],
@@ -95,8 +99,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         discountTotal: ["net_discount", false, "text-right"],
         tcsTotal: ["net_tcs", false, "text-right"],
         tdsTotal: ["net_tds", false, "text-right"],
-        netSales: ["net_sales", false, "text-right"],
-        cumulative: ["app_cumulative", false, "text-right"]
+        ...ReportInitializationHelper.createColumnConfig(this.reportConfig)
     }
     /** Constant for duration */
     public durationEnum: typeof DurationEnum = DurationEnum;
@@ -179,13 +182,7 @@ constructor(
         });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.router.events.pipe(
-            /**
-             * Handles filter functionality
-             */
-            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/sales-register') || event.url.includes('/reports/sales-detailed-expand')))),
-            /**
-             * Handles takeUntil functionality
-             */
+            filter(event => (event instanceof NavigationStart && ReportInitializationHelper.shouldResetFinancialYear(event.url, this.reportConfig.urlPatterns))),
             takeUntil(this.destroyed$)).subscribe(() => {
                 // Reset the chosen financial year when user leaves the module
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());

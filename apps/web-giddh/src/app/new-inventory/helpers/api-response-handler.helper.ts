@@ -59,15 +59,9 @@ export class ApiResponseHandlerHelper {
             changeDetection.detectChanges();
             
             // Refresh virtual scroll viewport if available
-            /**
-             * Sets timeout value
-             */
             setTimeout(() => {
                 // Preserve scroll position when loading more data (not initial search)
                 const preservePosition = apiRequestParams.page > 1;
-                /**
-                 * Handles refreshCallback functionality
-                 */
                 refreshCallback(preservePosition);
                 changeDetection.detectChanges();
             }, 0);
