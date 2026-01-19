@@ -1,5 +1,6 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DatepickerMethodsHelper } from '../../../shared/helpers/datepicker-methods.helper';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
@@ -369,29 +370,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof ExportLedgerComponent
-     */
     public dateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
-            return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.toggleGiddhDatepicker(false);
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-        }
+        DatepickerMethodsHelper.dateSelectedCallback(value, this, this.universalDatepickerTrigger);
     }
 
     /**

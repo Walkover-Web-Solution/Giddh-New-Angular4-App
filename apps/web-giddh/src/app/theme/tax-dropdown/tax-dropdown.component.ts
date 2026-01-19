@@ -8,6 +8,7 @@ import { AppState } from "../../store";
 import { Store, select } from "@ngrx/store";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { isEqual } from "../../lodash-optimized";
+import { KeyboardNavigationHelper } from '../helpers/keyboard-navigation.helper';
 
 @Component({
     selector: "tax-dropdown",
@@ -288,52 +289,8 @@ export class TaxDropdownComponent implements OnChanges {
         }, 50);
     }
 
-    /**
-     * Focuses the next available checkbox in the tax list
-     *
-     * @param {HTMLElement} currentElement - The currently focused checkbox element
-     * @param {number} currentIndex - The index of the current checkbox
-     * @memberof TaxDropdownComponent
-     */
-    public focusNextCheckbox(currentElement: HTMLElement, currentIndex: number): void {
-        setTimeout(() => {
-            // Find the tax wrapper container
-            const taxWrapper = document.querySelector('.discount-checkbox-wrapper');
-            if (taxWrapper) {
-                // Get all mat-checkbox elements (Angular Material checkboxes)
-                const checkboxes = taxWrapper.querySelectorAll('mat-checkbox');
-                
-                if (checkboxes.length > 0) {
-                    const nextIndex = currentIndex + 1;
-                    
-                    if (nextIndex < checkboxes.length) {
-                        // Focus next checkbox - target the actual input element inside mat-checkbox
-                        const nextCheckbox = checkboxes[nextIndex] as HTMLElement;
-                        const inputElement = nextCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
-                        if (inputElement) {
-                            inputElement.focus();
-                        } else {
-                            nextCheckbox.focus();
-                        }
-                    } else {
-                        // If at the end, try to focus "Create New" button or cycle back to first checkbox
-                        const createNewButton = document.querySelector('.create-new span[tabindex="0"]');
-                        if (createNewButton) {
-                            (createNewButton as HTMLElement)?.focus();
-                        } else if (checkboxes.length > 0) {
-                            // Cycle back to first checkbox
-                            const firstCheckbox = checkboxes[0] as HTMLElement;
-                            const firstInputElement = firstCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
-                            if (firstInputElement) {
-                                firstInputElement.focus();
-                            } else {
-                                firstCheckbox.focus();
-                            }
-                        }
-                    }
-                }
-            }
-        }, 150);
+    public handleTabNavigation(event: KeyboardEvent): void {
+        KeyboardNavigationHelper.handleTabNavigation(event);
     }
 
     /**

@@ -6,7 +6,8 @@ import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil, distinctUntilChanged } from "rxjs/operators";
 import { CompanyActions } from "../../../actions/company.actions";
-import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
+import { StockGroupHelper } from '../../../shared/helpers/stock-group.helper';
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { uniqueNameInvalidStringReplace } from "../../../shared/helpers/helperFunctions";
@@ -22,6 +23,7 @@ import { IOption } from "../../../app.constant";
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, filter, find, findIndex, forEach, get, includes, isArray, isEqual, map, remove, set } from '../../../lodash-optimized';
+import { TaxSelectionHelper } from '../../helpers/tax-selection.helper';
 
 @Component({
     selector: 'create-update-group',
@@ -260,87 +262,22 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Select tax
+     * selectTax
      *
      * @param {*} taxSelected
      * @memberof CreateUpdateGroupComponent
      */
     public selectTax(taxSelected: any): void {
-        if (!taxSelected) {
-            return;
-        }
-
-        if (!this.isTaxSelectionOpen) {
-            if (this.processedTaxes.includes(taxSelected.uniqueName)) {
-                return;
-            }
-            this.processedTaxes.push(taxSelected.uniqueName);
-        }
-
-        let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
-        if (taxSelected.taxType !== 'gstcess') {
-            let index = findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === taxSelected.taxType);
-            if (index > -1 && !isSelected?.length) {
-                forEach(this.taxes, (tax) => {
-                    if (tax.taxType === taxSelected.taxType) {
-                        tax.isChecked = false;
-                        tax.isDisabled = true;
-                    }
-                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
-                        tax.isChecked = false;
-                        tax.isDisabled = true;
-                    }
-                });
-            }
-
-            if (index < 0 && !isSelected?.length) {
-                forEach(this.taxes, (tax) => {
-                    if (tax.taxType === taxSelected.taxType) {
-                        tax.isChecked = false;
-                        tax.isDisabled = true;
-                    }
-
-                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
-                        tax.isChecked = false;
-                        tax.isDisabled = true;
-                    }
-                    if (tax?.uniqueName === taxSelected.uniqueName) {
-                        taxSelected.isChecked = true;
-                        taxSelected.isDisabled = false;
-                        this.taxTempArray.push(taxSelected);
-                    }
-                });
-            } else if (index > -1 && !isSelected?.length) {
-                taxSelected.isChecked = true;
-                taxSelected.isDisabled = false;
-                this.taxTempArray = this.taxTempArray?.filter(taxTemp => {
-                    return taxSelected.taxType !== taxTemp.taxType;
-                });
-                this.taxTempArray.push(taxSelected);
-            } else {
-                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === taxSelected.uniqueName);
-                this.taxTempArray.splice(idx, 1);
-                taxSelected.isChecked = false;
-                forEach(this.taxes, (tax) => {
-                    if (tax.taxType === taxSelected.taxType) {
-                        tax.isDisabled = false;
-                    }
-                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
-                        tax.isDisabled = false;
-                    }
-                });
-            }
-        } else {
-            if (!isSelected?.length) {
-                this.taxTempArray.push(taxSelected);
-                taxSelected.isChecked = true;
-            } else {
-                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === taxSelected.uniqueName);
-                this.taxTempArray.splice(idx, 1);
-                taxSelected.isChecked = false;
-            }
-        }
-        this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
+        const result = TaxSelectionHelper.selectTax(
+            taxSelected,
+            this.taxes,
+            this.taxTempArray,
+            this.selectedTaxes,
+            this.processedTaxes,
+            this.isTaxSelectionOpen
+        );
+        this.taxTempArray = result.taxTempArray;
+        this.selectedTaxes = result.selectedTaxes;
         this.changeDetection.detectChanges();
     }
 
@@ -440,7 +377,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Arrange stock groups
+     * This will use for arrange stock groups
      *
      * @private
      * @param {IGroupsWithStocksHierarchyMinItem[]} groups
@@ -448,18 +385,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
-        groups.map(group => {
-            if (group) {
-                let newOption: IOption = { label: '', value: '', additional: {} };
-                newOption.label = group?.name;
-                newOption.value = group?.uniqueName;
-                newOption.additional = group;
-                parents.push(newOption);
-                if (group?.childStockGroups?.length > 0) {
-                    this.arrangeStockGroups(group?.childStockGroups, parents);
-                }
-            }
-        });
+        StockGroupHelper.arrangeStockGroups(groups, parents);
+        this.changeDetection.detectChanges();
     }
 
     /**

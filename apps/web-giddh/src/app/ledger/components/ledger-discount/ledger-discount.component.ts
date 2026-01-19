@@ -4,11 +4,12 @@ import { HIGH_RATE_FIELD_PRECISION } from '../../../app.constant';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { DiscountProcessingHelper } from '../../helpers/discount-processing.helper';
 
 @Component({
     selector: 'ledger-discount',
     templateUrl: 'ledger-discount.component.html',
-    styleUrls: [`./ledger-discount.component.scss`],
+    styleUrls: ['./ledger-discount.component.scss'],
     standalone: false
 })
 
@@ -108,24 +109,10 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof LedgerDiscountComponent
      */
     private processDiscountList(): void {
-        this.discountsList?.forEach(acc => {
-            if (this.discountAccountsDetails) {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
-                if (!hasItem) {
-                    let obj: LedgerDiscountClass = new LedgerDiscountClass();
-                    obj.amount = acc.discountValue;
-                    obj.discountValue = acc.discountValue;
-                    obj.discountType = acc.discountType;
-                    obj.isActive = false;
-                    obj.particular = acc.linkAccount?.uniqueName;
-                    obj.discountUniqueName = acc?.uniqueName;
-                    obj.name = acc.name;
-                    this.discountAccountsDetails.push(obj);
-                }
-            } else {
-                this.discountAccountsDetails = [];
-            }
-        });
+        this.discountAccountsDetails = DiscountProcessingHelper.processDiscountList(
+            this.discountsList,
+            this.discountAccountsDetails
+        );
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {

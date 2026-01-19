@@ -16,6 +16,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
+import { DomUtilsHelper } from 'apps/web-giddh/src/app/shared/helpers/dom-utils.helper';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
@@ -188,9 +189,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
 
     /* tslint:disable */
     public childOf(c, p) {
-        while ((c = c.parentNode) && c !== p) {
-        }
-        return !!c;
+        return DomUtilsHelper.childOf(c, p);
     }
 
     /**

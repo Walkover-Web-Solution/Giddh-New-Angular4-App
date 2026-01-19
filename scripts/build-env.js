@@ -109,6 +109,8 @@ export const environment: Environment = {
     PORTAL_URL: '${envConfig.PORTAL_URL}',
     GOOGLE_CLIENT_ID: '${envConfig.GOOGLE_CLIENT_ID}',
     GOOGLE_CLIENT_SECRET: '${envConfig.GOOGLE_CLIENT_SECRET}',
+    GOOGLE_CLIENT_ID_PROD: '${envConfig.GOOGLE_CLIENT_ID_PROD}',
+    GOOGLE_CLIENT_SECRET_PROD: '${envConfig.GOOGLE_CLIENT_SECRET_PROD}',
     OTP_WIDGET_ID: '${envConfig.OTP_WIDGET_ID}',
     OTP_TOKEN_AUTH: '${envConfig.OTP_TOKEN_AUTH}',
     RAZORPAY_KEY: '${envConfig.RAZORPAY_KEY}',

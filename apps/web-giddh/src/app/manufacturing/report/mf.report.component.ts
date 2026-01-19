@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DatepickerMethodsHelper } from '../../shared/helpers/datepicker-methods.helper';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -346,35 +347,12 @@ constructor(
     * @memberof VoucherListComponent
     */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
-        }
+        DatepickerMethodsHelper.toggleGiddhDatepicker(this.universalDatepickerTrigger, isOpen);
     }
 
-    /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof AuditLogsFormComponent
-     */
     public dateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
-            return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.toggleGiddhDatepicker(false);
+        DatepickerMethodsHelper.dateSelectedCallback(value, this, this.universalDatepickerTrigger);
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.mfStockSearchRequest.from = this.fromDate;
             this.mfStockSearchRequest.to = this.toDate;
         }

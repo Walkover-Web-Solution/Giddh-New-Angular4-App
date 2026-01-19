@@ -8,7 +8,8 @@ import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../app.const
 import { PageEvent } from '@angular/material/paginator';
 import { AppState } from '../../../store';
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
-import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
+import { StockGroupHelper } from '../../../shared/helpers/stock-group.helper';
 import { GroupStockReportRequest } from "../../../models/api-models/Inventory";
 import { SettingsFinancialYearActions } from "../../../actions/settings/financial-year/financial-year.action";
 import { GeneralService } from "../../../services/general.service";
@@ -397,18 +398,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     * @memberof StockBalanceComponent
     */
     private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
-        groups.map(group => {
-            if (group) {
-                let newOption: IOption = { label: '', value: '', additional: {} };
-                newOption.label = group?.name;
-                newOption.value = group?.uniqueName;
-                newOption.additional = group;
-                parents.push(newOption);
-                if (group?.childStockGroups?.length > 0) {
-                    this.arrangeStockGroups(group?.childStockGroups, parents);
-                }
-            }
-        });
+        StockGroupHelper.arrangeStockGroups(groups, parents);
+        this.cdr.detectChanges();
     }
 
     /**

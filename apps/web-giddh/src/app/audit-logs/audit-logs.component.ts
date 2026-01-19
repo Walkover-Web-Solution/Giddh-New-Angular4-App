@@ -2,6 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DatepickerMethodsHelper } from '../shared/helpers/datepicker-methods.helper';
 import { ReplaySubject, Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -103,11 +104,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
-        }
+        DatepickerMethodsHelper.toggleGiddhDatepicker(this.universalDatepickerTrigger, isOpen);
     }
 
     /**
@@ -117,22 +114,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
-            return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.toggleGiddhDatepicker(false);
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-        }
+        DatepickerMethodsHelper.dateSelectedCallback(value, this, this.universalDatepickerTrigger);
     }
 
     /**

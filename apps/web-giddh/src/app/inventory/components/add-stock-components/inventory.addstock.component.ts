@@ -3,6 +3,7 @@ import { map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output, TemplateRef } from '@angular/core';
+import { StockValidationHelper } from '../../helpers/stock-validation.helper';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../shared/helpers';
@@ -839,34 +840,19 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         stockObj.customField2Heading = formObj.customField2Heading;
         stockObj.customField2Value = formObj.customField2Value;
 
-        if (formObj.enablePurchase) {
-            if (this.validateStock(formObj.purchaseUnitRates)) {
-                formObj.purchaseUnitRates = formObj.purchaseUnitRates?.filter((pr) => {
-                    return pr.stockUnitUniqueName || pr.rate;
-                });
-                stockObj.purchaseAccountDetails = {
-                    accountUniqueName: formObj.purchaseAccountUniqueName,
-                    unitRates: formObj.purchaseUnitRates
-                };
-            } else {
-                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
-                return;
-            }
-        }
-        if (formObj.enableSales) {
-            if (this.validateStock(formObj.saleUnitRates)) {
-                formObj.saleUnitRates = formObj.saleUnitRates?.filter((pr) => {
-                    return pr.stockUnitUniqueName || pr.rate;
-                });
-                stockObj.salesAccountDetails = {
-                    accountUniqueName: formObj.salesAccountUniqueName,
-                    unitRates: formObj.saleUnitRates
-                };
-            } else {
-                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
-                return;
-            }
-        }
+        const purchaseDetails = StockValidationHelper.processAccountDetails(
+            formObj, 'purchase', this.validateStock.bind(this), 
+            this._toasty.errorToast.bind(this._toasty), INVALID_STOCK_ERROR_MESSAGE
+        );
+        if (purchaseDetails === null) return;
+        if (purchaseDetails) stockObj.purchaseAccountDetails = purchaseDetails;
+
+        const salesDetails = StockValidationHelper.processAccountDetails(
+            formObj, 'sales', this.validateStock.bind(this),
+            this._toasty.errorToast.bind(this._toasty), INVALID_STOCK_ERROR_MESSAGE
+        );
+        if (salesDetails === null) return;
+        if (salesDetails) stockObj.salesAccountDetails = salesDetails;
 
         stockObj.isFsStock = formObj.isFsStock;
         stockObj.taxes = (formObj.taxes) ? formObj.taxes : [];
@@ -963,35 +949,19 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             ]
         }
 
-        if (formObj.enablePurchase) {
-            if (this.validateStock(formObj.purchaseUnitRates)) {
-                formObj.purchaseUnitRates = formObj.purchaseUnitRates?.filter((pr) => {
-                    return pr.stockUnitUniqueName || pr.rate;
-                });
-                stockObj.purchaseAccountDetails = {
-                    accountUniqueName: formObj.purchaseAccountUniqueName,
-                    unitRates: formObj.purchaseUnitRates
-                };
-            } else {
-                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
-                return;
-            }
-        }
+        const purchaseDetails = StockValidationHelper.processAccountDetails(
+            formObj, 'purchase', this.validateStock.bind(this), 
+            this._toasty.errorToast.bind(this._toasty), INVALID_STOCK_ERROR_MESSAGE
+        );
+        if (purchaseDetails === null) return;
+        if (purchaseDetails) stockObj.purchaseAccountDetails = purchaseDetails;
 
-        if (formObj.enableSales) {
-            if (this.validateStock(formObj.saleUnitRates)) {
-                formObj.saleUnitRates = formObj.saleUnitRates?.filter((pr) => {
-                    return pr.stockUnitUniqueName || pr.rate;
-                });
-                stockObj.salesAccountDetails = {
-                    accountUniqueName: formObj.salesAccountUniqueName,
-                    unitRates: formObj.saleUnitRates
-                };
-            } else {
-                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
-                return;
-            }
-        }
+        const salesDetails = StockValidationHelper.processAccountDetails(
+            formObj, 'sales', this.validateStock.bind(this),
+            this._toasty.errorToast.bind(this._toasty), INVALID_STOCK_ERROR_MESSAGE
+        );
+        if (salesDetails === null) return;
+        if (salesDetails) stockObj.salesAccountDetails = salesDetails;
 
         stockObj.isFsStock = formObj.isFsStock;
 

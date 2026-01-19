@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { KeyboardNavigationHelper } from '../helpers/keyboard-navigation.helper';
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { isEqual } from "../../lodash-optimized";
@@ -313,45 +314,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      * @param {number} currentIndex - The index of the current checkbox
      * @memberof DiscountDropdownComponent
      */
-    public focusNextCheckbox(currentElement: HTMLElement, currentIndex: number): void {
-        setTimeout(() => {
-            // Find the discount wrapper container
-            const discountWrapper = document.querySelector('.discount-checkbox-wrapper');
-            if (discountWrapper) {
-                // Get all mat-checkbox elements (Angular Material checkboxes)
-                const checkboxes = discountWrapper.querySelectorAll('mat-checkbox');
-                
-                if (checkboxes.length > 0) {
-                    const nextIndex = currentIndex + 1;
-                    
-                    if (nextIndex < checkboxes.length) {
-                        // Focus next checkbox - target the actual input element inside mat-checkbox
-                        const nextCheckbox = checkboxes[nextIndex] as HTMLElement;
-                        const inputElement = nextCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
-                        if (inputElement) {
-                            inputElement.focus();
-                        } else {
-                            nextCheckbox.focus();
-                        }
-                    } else {
-                        // If at the end, try to focus "Create New" button or cycle back to first checkbox
-                        const createNewButton = document.querySelector('.create-new span[tabindex="0"]');
-                        if (createNewButton) {
-                            (createNewButton as HTMLElement)?.focus();
-                        } else if (checkboxes.length > 0) {
-                            // Cycle back to first checkbox
-                            const firstCheckbox = checkboxes[0] as HTMLElement;
-                            const firstInputElement = firstCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
-                            if (firstInputElement) {
-                                firstInputElement.focus();
-                            } else {
-                                firstCheckbox.focus();
-                            }
-                        }
-                    }
-                }
-            }
-        }, 150);
+    public handleTabNavigation(event: KeyboardEvent): void {
+        KeyboardNavigationHelper.handleTabNavigation(event);
     }
 
     /**
