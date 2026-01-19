@@ -47,6 +47,7 @@ import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.
 import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { ActionTypeEnum } from '../../../shared/sales-person/utility/sales-person.constant';
 import { LedgerDropdownTypeEnum } from '../../../models/api-models/Ledger';
+import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -146,7 +147,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Holds voucher dropdown component reference */
     @ViewChild('voucherDropdownRef', { static: false }) public voucherDropdownRef: ReactiveDropdownFieldComponent;
     /** Holds select tax control component reference */
-    @ViewChild('tax', { static: false }) public taxControl: TaxControlComponent;
+    @ViewChild('tax', { static: false }) public taxControl: CommonTaxComponent;
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Sales Person List */
@@ -761,9 +762,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountControl.change();
             }
 
-            if (this.taxControl) {
-                this.taxControl.change();
-            }
             if (this.currentTxn.inventory) {
                 this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
             } else {
@@ -856,10 +854,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.discountControl.change();
         }
 
-        if (this.taxControl) {
-            this.taxControl.taxTotalAmount = this.currentTxn.amount;
-            this.taxControl.change();
-        }
 
         if (this.currentTxn?.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
@@ -2225,10 +2219,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         let taxTotal = 0;
         if (this.taxControl) {
-            taxTotal = this.taxControl.taxRenderData?.filter(f => f.isChecked)
-                .reduce((pv, cv) => {
-                    return Number(pv) + Number(cv.amount);
-                }, 0) || 0;
+            taxTotal = this.taxControl.calculateSum();
         }
 
         return giddhRoundOff(((Number(total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
@@ -2242,33 +2233,33 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @private
      * @memberof NewLedgerEntryPanelComponent
      */
-    private calculateFieldValuesInclusively(): void {
-        this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
-        this.setBlankLedgerAmount();
-        if (this.currentTxn.inventory) {
-            this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
-        } else {
-            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
-        }
-        if (this.discountControl) {
-            this.discountControl.ledgerAmount = this.currentTxn.amount;
-            this.discountControl.change(null, null, true);
-            this.calculateTaxValue();
-        }
-        if (this.taxControl) {
-            this.taxControl.totalForTax = this.currentTxn.total;
-            this.taxControl.change(true);
-            this.calculateTotal();
-        }
-        if (this.currentTxn?.selectedAccount) {
-            if (this.currentTxn.selectedAccount.stock) {
-                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
-                this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
-                this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
-            }
-        }
-        this.calculateCompoundTotal();
-    }
+    // private calculateFieldValuesInclusively(): void {
+    //     this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
+    //     this.setBlankLedgerAmount();
+    //     if (this.currentTxn.inventory) {
+    //         this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+    //     } else {
+    //         this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+    //     }
+    //     if (this.discountControl) {
+    //         this.discountControl.ledgerAmount = this.currentTxn.amount;
+    //         this.discountControl.change(null, null, true);
+    //         this.calculateTaxValue();
+    //     }
+    //     if (this.taxControl) {
+    //         this.taxControl.totalForTax = this.currentTxn.total;
+    //         this.taxControl.change(true);
+    //         this.calculateTotal();
+    //     }
+    //     if (this.currentTxn?.selectedAccount) {
+    //         if (this.currentTxn.selectedAccount.stock) {
+    //             this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+    //             this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
+    //             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
+    //         }
+    //     }
+    //     this.calculateCompoundTotal();
+    // }
 
     /**
      * Calculates the tax value and converted tax value
@@ -2278,9 +2269,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private calculateTaxValue(): void {
         let totalPercentage: number;
-        totalPercentage = this.currentTxn?.taxesVm?.reduce((pv, cv) => {
-            return cv.isChecked ? pv + cv.amount : pv;
-        }, 0);
+        totalPercentage = this.taxControl?.calculateSum();
         if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn?.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds && !this.salesTaxInclusive && !this.purchaseTaxInclusive && !this.fixedAssetTaxInclusive) {
             this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.taxInclusiveAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         } else {

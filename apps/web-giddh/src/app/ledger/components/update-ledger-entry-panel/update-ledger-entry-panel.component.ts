@@ -71,6 +71,7 @@ import { SettingsDiscountService } from '../../../services/settings.discount.ser
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -121,6 +122,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
+    @ViewChild('commontax', { static: false }) public commonTaxControll: CommonTaxComponent;
     /** Element ref for mat menu **/
     @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
     /** Element ref for mat autocomplete **/
@@ -159,6 +161,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * tax types within a company and count upto which they are allowed
      */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
+    /** True, if tax error should be displayed */
+    public showTaxError: boolean = false;
     public tags: TagRequest[] = [];
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -906,12 +910,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         if (this.isRcmEntry && (!requestObj.taxes || requestObj.taxes?.length === 0)) {
-            if (this.taxControll?.taxInputElement?.nativeElement) {
-                // Taxes are mandatory for RCM and Advance Receipt entries
-                this.taxControll.taxInputElement.nativeElement?.classList?.add('error-box');
-                return;
-            }
+            // Taxes are mandatory for RCM and Advance Receipt entries
+            this.showTaxError = true;
+            return;
         }
+        // Reset tax error if validation passes
+        this.showTaxError = false;
         if (requestObj) {
             requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
             requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger?.exchangeRate) : this.vm.selectedLedger?.exchangeRate;
@@ -1344,8 +1348,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public hideTax(): void {
-        if (this.taxControll) {
-            this.taxControll?.change();
+        if (this.commonTaxControll) {
+            this.commonTaxControll?.toggleTaxMenu();
         }
     }
 

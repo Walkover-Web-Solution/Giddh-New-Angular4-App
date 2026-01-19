@@ -1457,9 +1457,9 @@
                                     "
                                 >
                                     <span>
-                                        <update-ledger-tax-control
+                                        <common-tax
                                             id="update-ledger-tax-amount"
-                                            #tax
+                                            #commontax
                                             [taxes]="vm.companyTaxesList$ | async"
                                             [customHeading]="
                                                 shouldShowAdvanceReceiptMandatoryFields
@@ -1468,26 +1468,29 @@
                                                       ? localeData?.tax_rcm
                                                       : ''
                                             "
+                                            [mask]="vm.inputMaskFormat"
                                             [isMandatory]="isRcmEntry"
+                                            [showError]="showTaxError"
                                             [date]="vm.selectedLedger.entryDate"
-                                            [taxRenderData]="vm.taxRenderData"
+                                            [applicableTaxes]="vm.selectedLedger.taxes"
                                             [totalForTax]="vm.totalForTax"
                                             [prefixInput]="vm.selectedPrefixForCurrency"
-                                            [maskInput]="vm.inputMaskFormat"
                                             [suffixInput]="vm.selectedSuffixForCurrency"
                                             [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
                                             [calculateTaxInclusively]="vm.isAdvanceReceiptWithTds"
                                             [isAdvanceReceipt]="vm.isAdvanceReceiptWithTds"
                                             [allowedSelectionOfAType]="allowedSelectionOfAType"
-                                            [applicableTaxes]="vm.selectedLedger.taxes"
-                                            [commonLocaleData]="commonLocaleData"
                                             [giddhBalanceDecimalPlaces]="vm.giddhBalanceDecimalPlaces"
+                                            [commonLocaleData]="commonLocaleData"
+                                            [showMatFormField]="true"
+                                            [hasBackdrop]="false"
+                                            [showCreateNew]="true"
+                                            [readonly]="isEinvoiceGenerated"
                                             (hideOtherPopups)="hideDiscount()"
-                                            (selectedTaxEvent)="vm.taxTrxUpdated($event)"
+                                            (selectedTaxEvent)="vm.taxTrxUpdated($event); showTaxError = false"
                                             (taxAmountSumEvent)="calculateTax()"
                                             (createNewTax)="showCreateTaxDialog()"
-                                            [readonly]="isEinvoiceGenerated"
-                                        ></update-ledger-tax-control>
+                                        ></common-tax>
                                     </span>
 
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">

@@ -2216,27 +2216,32 @@
                                                                     </div>
                                                                 </ng-container>
                                                                 <div>
-                                                                    <tax-dropdown
-                                                                        #taxDropdown
+                                                                    <common-tax
+                                                                        #commonTaxControll
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [date]="invoiceForm.get('date')?.value"
-                                                                        [amount]="
+                                                                        [mask]="company.inputMaskFormat"
+                                                                        [totalForTax]="
                                                                             transaction.get('amount.amountForAccount')?.value -
                                                                             entry.get('totalDiscount')?.value
                                                                         "
-                                                                        [selectedTaxesList]="entry.get('taxes')?.value"
-                                                                        [taxesList]="companyTaxes"
-                                                                        [currency]="account.baseCurrencySymbol"
+                                                                        [applicableTaxes]="entry.get('taxes')?.value"
+                                                                        [taxes]="companyTaxes"
+                                                                        [prefixInput]="account.baseCurrencySymbol"
+                                                                        [allowedSelectionOfAType]="allowedSelectionOfAType"
+                                                                        [suffixInput]="''"
                                                                         [calculateTaxInclusively]="
                                                                             invoiceForm?.get('isAdvanceReceipt')?.value && !isUpdateMode
                                                                         "
                                                                         [commonLocaleData]="commonLocaleData"
-                                                                        [calculateTax]="calculateTaxInTaxDropdown"
+                                                                        [giddhBalanceDecimalPlaces]="company.giddhBalanceDecimalPlaces"
+                                                                        [showMatFormField]="false"
+                                                                        [hasBackdrop]="true"
+                                                                        [showCreateNew]="true"
                                                                         (createNewTax)="showCreateTaxDialog()"
-                                                                        (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
-                                                                        (totalTax)="updateTotalTax($event, entry)"
-                                                                        (closeTaxDropdown)="focusNextElement($event)"
-                                                                    ></tax-dropdown>
+                                                                        (selectedTaxEvent)="getSelectedTaxes(entryIndex, $event)"
+                                                                        (taxAmountSumEvent)="updateTotalTax($event, entry)"
+                                                                    ></common-tax>
                                                                     <span
                                                                         class="font-size-14 text-light mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher"
