@@ -15,6 +15,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
+import { DomUtilsHelper } from 'apps/web-giddh/src/app/shared/helpers/dom-utils.helper';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -176,9 +177,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
 
     /* tslint:disable */
     public childOf(c, p) {
-        while ((c = c.parentNode) && c !== p) {
-        }
-        return !!c;
+        return DomUtilsHelper.childOf(c, p);
     }
 
     private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {

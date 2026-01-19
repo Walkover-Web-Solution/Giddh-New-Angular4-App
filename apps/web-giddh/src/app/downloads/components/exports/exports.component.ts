@@ -1,4 +1,6 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ChangeDetectionStrategy, TemplateRef, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import { DownloadsBaseComponent } from '../../base/downloads-base.component';
+import { DatepickerMethodsHelper } from '../../../shared/helpers/datepicker-methods.helper';
 import { MatDialog } from '@angular/material/dialog';
 import { DownloadsService } from '../../../services/downloads.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -33,37 +35,7 @@ const ELEMENT_DATA: DownloadData[] = [];
     standalone: false
 })
 
-export class ExportsComponent implements OnInit, OnDestroy {
-    /** This will hold local JSON data */
-    public localeData: any = {};
-    /** This will hold common JSON data */
-    public commonLocaleData: any = {};
-    /* it will store image path */
-    public imgPath: string = '';
-    /** True if api call in progress */
-    public isLoading: boolean = true;
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Selected from date */
-    public selectedFromDate: Date;
-    /** Selected to date */
-    public selectedToDate: Date;
-    /** Universal date observer */
-    public universalDate$: Observable<any>;
-    /** This will store selected date range to use in api */
-    public selectedDateRange: any;
-    /** This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
-    /** This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** Selected range label */
-    public selectedRangeLabel: any = "";
-    /** Angular Material menu trigger for datepicker */
-    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-/** This will store universalDate */
-    public universalDate: any;
-    /** To show clear filter */
-    public showClearFilter: boolean = false;
+export class ExportsComponent extends DownloadsBaseComponent implements OnInit, OnDestroy {
     /** This will use for table heading */
     public displayedColumns: string[] = ['requestedDate', 'user', 'services', 'filter', 'download', 'expiry'];
     /** Hold the data of downloads */
@@ -93,6 +65,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
     ];
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private store: Store<AppState>) {
+        super();
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -225,11 +198,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
      * @memberof ExportsComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
-        }
+        DatepickerMethodsHelper.toggleGiddhDatepicker(this.universalDatepickerTrigger, isOpen);
     }
 
     /**

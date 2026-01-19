@@ -6,8 +6,8 @@
  * and injects them into the HTML file at build time, ensuring sensitive credentials
  * are not hardcoded in the repository.
  */
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 const dotenv = require('dotenv');
 /**
  * Determine which .env file to use based on build environment

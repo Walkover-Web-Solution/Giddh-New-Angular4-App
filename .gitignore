@@ -38,7 +38,7 @@ build/Release
 !.env.example
 
 # Generated environment files (may contain sensitive data)
-apps/web-giddh/src/environments/environment.generated.ts
+
 
 # OS generated files #
 .DS_Store

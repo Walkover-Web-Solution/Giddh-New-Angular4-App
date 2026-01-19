@@ -16,6 +16,7 @@ import { InventoryService } from '../../../services/inventory.service';
 import { CompanyActions } from '../../../actions/company.actions';
 import { cloneDeep, isEqual } from '../../../lodash-optimized';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
+import { StockGroupHelper } from '../../../shared/helpers/stock-group.helper';
 import { ManufacturingService } from '../../../services/manufacturing.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { FieldTypes } from '../../../custom-fields/custom-fields.constant';
@@ -396,18 +397,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
-        groups.map(group => {
-            if (group) {
-                let newOption: IOption = { label: '', value: '', additional: {} };
-                newOption.label = group?.name;
-                newOption.value = group?.uniqueName;
-                newOption.additional = group;
-                parents.push(newOption);
-                if (group?.childStockGroups?.length > 0) {
-                    this.arrangeStockGroups(group?.childStockGroups, parents);
-                }
-            }
-        });
+        StockGroupHelper.arrangeStockGroups(groups, parents);
         this.cdr.detectChanges();
     }
 

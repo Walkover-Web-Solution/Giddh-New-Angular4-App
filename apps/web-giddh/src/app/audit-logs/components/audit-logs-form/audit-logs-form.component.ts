@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AuditLogsSearchBase } from '../../base/audit-logs-search-base';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -23,7 +24,7 @@ import { cloneDeep, concat, filter, flatten, forEach, map, omit, set, union } fr
     styleUrls: ['audit-logs-form.component.scss'],
     standalone: false
 })
-export class AuditLogsFormComponent implements OnInit, OnDestroy {
+export class AuditLogsFormComponent extends AuditLogsSearchBase implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
@@ -52,42 +53,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public forceClearUser$: Observable<IForceClear> = observableOf({ status: false });
     /** Active company unique name */
     public activeCompanyUniqueName$: Observable<string>;
-    /** Stores the search results pagination details */
-    public accountsSearchResultsPaginationData = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /** Default search suggestion list to be shown for search */
-    public defaultAccountSuggestions: Array<IOption> = [];
-    /** True, if API call should be prevented on default scroll caused by scroll in list */
-    public preventDefaultScrollApiCall: boolean = false;
-    /** Stores the default search results pagination details */
-    public defaultAccountPaginationData = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /** Stores the list of accounts */
-    public accounts: IOption[];
-    /** Stores the search results pagination details for group dropdown */
-    public groupsSearchResultsPaginationData = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /** Default search suggestion list to be shown for search for group dropdown */
-    public defaultGroupSuggestions: Array<IOption> = [];
-    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
-    public preventDefaultGroupScrollApiCall: boolean = false;
-    /** Stores the default search results pagination details for group dropdown */
-    public defaultGroupPaginationData = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /** Stores the value of groups */
-    public searchedGroups: IOption[];
     /** To destroy observers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** From date value of parent datepicker */
@@ -104,7 +69,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-
+        super();
     }
 
     /**

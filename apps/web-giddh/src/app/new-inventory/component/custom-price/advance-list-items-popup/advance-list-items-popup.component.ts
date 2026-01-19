@@ -1,4 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Output, ViewChild, Input, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ApiResponseHandlerHelper } from '../../../helpers/api-response-handler.helper';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { DOWN_ARROW, ENTER, ESCAPE, UP_ARROW, BACKSPACE, TAB, RIGHT_ARROW, LEFT_ARROW, CAPS_LOCK, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_META, MAC_WK_CMD_RIGHT } from '@angular/cdk/keycodes';
@@ -234,74 +235,26 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         if (this.apiRequestParams?.type === 'users') {
             this.inventoryService.getFlattenAccountsList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
-
-                if (res && res.body && res.body.results && res.body.results.length > 0) {
-                    // Create new array reference for proper change detection
-                    this.searchedItems = [...(this.searchedItems || []), ...res.body.results];
-                    
-                    if (this.apiRequestParams.page === 1) {
-                        this.highlightedItem = 0;
-                    }
-                    this.noResultsFound = false;
-                    this.apiRequestParams.totalPages = res.body.totalPages;
-                    // Only allow load more if there are more pages available
-                    this.allowLoadMore = this.apiRequestParams.page < this.apiRequestParams.totalPages;
-
-                    // Force change detection and viewport refresh
-                    this.changeDetection.detectChanges();
-                    
-                    // Refresh virtual scroll viewport if available
-                    setTimeout(() => {
-                        // Preserve scroll position when loading more data (not initial search)
-                        const preservePosition = this.apiRequestParams.page > 1;
-                        this.refreshVirtualScrollViewport(preservePosition);
-                        this.changeDetection.detectChanges();
-                    }, 0);
-                } else {
-                    if (this.searchedItems?.length === 0) {
-                        this.noResultsFound = true;
-                        this.allowLoadMore = false;
-                    }
-                    this.changeDetection.detectChanges();
-                }
-
-                this.initSetParentWidth();
+                const result = ApiResponseHandlerHelper.processApiResponse(
+                    res, this.searchedItems, this.apiRequestParams, this.changeDetection,
+                    this.refreshVirtualScrollViewport.bind(this), this.initSetParentWidth.bind(this)
+                );
+                this.searchedItems = result.searchedItems;
+                this.noResultsFound = result.noResultsFound;
+                this.allowLoadMore = result.allowLoadMore;
+                if (result.highlightedItem !== undefined) this.highlightedItem = result.highlightedItem;
             });
         } else if (this.apiRequestParams?.type === 'stocks') {
             this.inventoryService.getStockList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
-
-                if (res && res.body && res.body.results && res.body.results.length > 0) {
-                    // Create new array reference for proper change detection
-                    this.searchedItems = [...(this.searchedItems || []), ...res.body.results];
-                    
-                    if (this.apiRequestParams.page === 1) {
-                        this.highlightedItem = 0;
-                    }
-                    this.noResultsFound = false;
-                    this.apiRequestParams.totalPages = res.body.totalPages;
-                    // Only allow load more if there are more pages available
-                    this.allowLoadMore = this.apiRequestParams.page < this.apiRequestParams.totalPages;
-
-                    // Force change detection and viewport refresh
-                    this.changeDetection.detectChanges();
-                    
-                    // Refresh virtual scroll viewport if available
-                    setTimeout(() => {
-                        // Preserve scroll position when loading more data (not initial search)
-                        const preservePosition = this.apiRequestParams.page > 1;
-                        this.refreshVirtualScrollViewport(preservePosition);
-                        this.changeDetection.detectChanges();
-                    }, 0);
-                } else {
-                    if (this.searchedItems?.length === 0) {
-                        this.noResultsFound = true;
-                        this.allowLoadMore = false;
-                    }
-                    this.changeDetection.detectChanges();
-                }
-
-                this.initSetParentWidth();
+                const result = ApiResponseHandlerHelper.processApiResponse(
+                    res, this.searchedItems, this.apiRequestParams, this.changeDetection,
+                    this.refreshVirtualScrollViewport.bind(this), this.initSetParentWidth.bind(this)
+                );
+                this.searchedItems = result.searchedItems;
+                this.noResultsFound = result.noResultsFound;
+                this.allowLoadMore = result.allowLoadMore;
+                if (result.highlightedItem !== undefined) this.highlightedItem = result.highlightedItem;
             });
         }
     }

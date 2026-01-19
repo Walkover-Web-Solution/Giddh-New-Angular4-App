@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { AuditLogsSearchBase } from '../../base/audit-logs-search-base';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -21,56 +22,15 @@ import { concat, flatten, map, omit, set, union } from '../../../lodash-optimize
     styleUrls: ['audit-logs.sidebar.component.scss'],
     standalone: false
 })
-export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
-    /** This will hold local JSON data */
+export class AuditLogsSidebarComponent extends AuditLogsSearchBase implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
-    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     public vm: AuditLogsSidebarVM;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Stores the search results pagination details */
-    public accountsSearchResultsPaginationData = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /** Default search suggestion list to be shown for search */
-    public defaultAccountSuggestions: Array<IOption> = [];
-    /** True, if API call should be prevented on default scroll caused by scroll in list */
-    public preventDefaultScrollApiCall: boolean = false;
-    /** Stores the default search results pagination details */
-    public defaultAccountPaginationData = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /** Stores the list of accounts */
-    public accounts: IOption[];
-    /** Stores the search results pagination details for group dropdown */
-    public groupsSearchResultsPaginationData = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /** Default search suggestion list to be shown for search for group dropdown */
-    public defaultGroupSuggestions: Array<IOption> = [];
-    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
-    public preventDefaultGroupScrollApiCall: boolean = false;
-    /** Stores the default search results pagination details for group dropdown */
-    public defaultGroupPaginationData = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /** Stores the value of groups */
-    public searchedGroups: IOption[];
-    /** To clear filter by sh-select options   */
     public forceClearFilterBy$: Observable<IForceClear> = observableOf({ status: false });
-    /** To clear entity sh-select options   */
     public forceClearEntity$: Observable<IForceClear> = observableOf({ status: false });
-    /** To clear operations sh-select options   */
     public forceClearOperations$: Observable<IForceClear> = observableOf({ status: false });
     /** To clear account sh-select options   */
     public forceClearAccount$: Observable<IForceClear> = observableOf({ status: false });
@@ -86,7 +46,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-
+        super();
     }
 
     public ngOnInit() {

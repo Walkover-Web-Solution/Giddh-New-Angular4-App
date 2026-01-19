@@ -8,8 +8,8 @@
  * Usage: node scripts/build-env.js [environment]
  * Example: node scripts/build-env.js local
  */
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 const dotenv = require('dotenv');
 // Get environment from command line argument or default to 'local'
 const environment = process.argv[2] || 'local';
@@ -87,7 +87,9 @@ const envConfig = {
     TWITTER_CLIENT_ID: env.TWITTER_CLIENT_ID || '',
     TWITTER_SECRET_KEY: env.TWITTER_SECRET_KEY || '',
     LINKEDIN_CLIENT_ID: env.LINKEDIN_CLIENT_ID || '',
-    LINKEDIN_SECRET_KEY: env.LINKEDIN_SECRET_KEY || ''
+    LINKEDIN_SECRET_KEY: env.LINKEDIN_SECRET_KEY || '',
+    GOOGLE_CLIENT_ID_PROD: env.GOOGLE_CLIENT_ID_PROD || '',
+    GOOGLE_CLIENT_SECRET_PROD: env.GOOGLE_CLIENT_SECRET_PROD || ''
 };
 // Generate TypeScript environment file content - Angular 21 standard approach
 const envFileContent = `/* tslint:disable */
@@ -109,6 +111,8 @@ export const environment: Environment = {
     PORTAL_URL: '${envConfig.PORTAL_URL}',
     GOOGLE_CLIENT_ID: '${envConfig.GOOGLE_CLIENT_ID}',
     GOOGLE_CLIENT_SECRET: '${envConfig.GOOGLE_CLIENT_SECRET}',
+    GOOGLE_CLIENT_ID_PROD: '${envConfig.GOOGLE_CLIENT_ID_PROD}',
+    GOOGLE_CLIENT_SECRET_PROD: '${envConfig.GOOGLE_CLIENT_SECRET_PROD}',
     OTP_WIDGET_ID: '${envConfig.OTP_WIDGET_ID}',
     OTP_TOKEN_AUTH: '${envConfig.OTP_TOKEN_AUTH}',
     RAZORPAY_KEY: '${envConfig.RAZORPAY_KEY}',

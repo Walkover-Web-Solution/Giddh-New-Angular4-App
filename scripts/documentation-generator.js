@@ -16,26 +16,11 @@ class DocumentationGenerator {
     }
     /**
      * Find TypeScript files that need documentation
+     * Uses shared utility for consistent file discovery
      */
     findTypeScriptFiles(dir, tsFiles = []) {
-        try {
-            const files = fs.readdirSync(dir);
-            for (const file of files) {
-                const fullPath = path.join(dir, file);
-                const stat = fs.statSync(fullPath);
-                if (stat.isDirectory()) {
-                    // Skip node_modules, dist, and other build directories
-                    if (!['node_modules', 'dist', '.git', '.angular', 'coverage'].includes(file)) {
-                        this.findTypeScriptFiles(fullPath, tsFiles);
-                    }
-                } else if (file.endsWith('.ts') && !file.endsWith('.d.ts') && !file.endsWith('.spec.ts')) {
-                    tsFiles.push(fullPath);
-                }
-            }
-        } catch (error) {
-            this.errors.push(`Error reading directory ${dir}: ${error.message}`);
-        }
-        return tsFiles;
+        const files = findTypeScriptFilesUtil(dir, tsFiles);
+        return files.filter(file => !file.endsWith('.spec.ts'));
     }
     /**
      * Analyze TypeScript file and add missing documentation
