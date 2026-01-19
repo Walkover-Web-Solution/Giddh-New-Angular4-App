@@ -9,7 +9,14 @@
             <hr />
         </ng-container>
         <div class="mt-2">
-            <mat-checkbox name="originalCopy" formControlName="isOriginal" color="primary" value="Original" [checked]="true">
+            <mat-checkbox
+                name="originalCopy"
+                formControlName="isOriginal"
+                color="primary"
+                value="Original"
+                [checked]="true"
+                (change)="invoiceTypeChanged($event)"
+            >
                 {{ voucherType === 'purchase' ? commonLocaleData?.app_purchase_bill : localeData?.invoice_copy_options?.original }}
             </mat-checkbox>
         </div>
