@@ -29,6 +29,7 @@ import { DecimalDigitsModule } from '../../../shared/helpers/directives/decimalD
 import { NgxMaskModule } from '../../../shared/helpers/directives/ngx-mask';
 import { NumberToWordsModule } from '../../../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace.module';
+import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 
 @NgModule({
     declarations: [
@@ -67,7 +68,8 @@ import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace
             style: 'slide-left',
             spinnerSize: 30
         }),
-        OverlayModule
+        OverlayModule,
+        CommonTaxComponent
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

@@ -67,7 +67,7 @@ import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
-import { TaxDropdownComponent } from "../../theme/tax-dropdown/tax-dropdown.component";
+import { CommonTaxComponent } from "../../shared/common-tax/common-tax.component";
 import { DiscountDropdownComponent } from "../../theme/discount-dropdown/discount-dropdown.component";
 import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
@@ -169,7 +169,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Reference to the "Add new row/line" span element for focusing */
     @ViewChild('customerVendorDropdown') customerVendorDropdown!: ReactiveDropdownFieldComponent;
     /** Reference to the tax dropdown component */
-    @ViewChild('taxDropdown') taxDropdown!: TaxDropdownComponent;
+    @ViewChild('commonTaxControll') commonTaxControll!: CommonTaxComponent;
     /** Reference to the discount dropdown component */
     @ViewChild('discountDropdown') discountDropdown!: DiscountDropdownComponent;
     /**  This will use for dayjs */
@@ -257,6 +257,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public allCompanyTaxes: TaxResponse[] = [];
     /** Holds company tax list  */
     public companyTaxes: TaxResponse[] = [];
+    /** Allowed taxes list contains the unique name of all
+     * tax types within a company and count upto which they are allowed
+     */
+    public allowedSelectionOfAType: any = { type: [], count: 1 };
     /** Reference to the current RCM checkbox element for focus management */
     private currentRcmCheckboxElement: any;
     /** Holds company discounts */
@@ -2163,7 +2167,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (response) {
                 this.allCompanyTaxes = response;
                 this.companyTaxes = response?.filter((tax) => !this.otherTaxTypes.includes(tax.taxType));
+
             }
+            (Array.isArray(response) ? response : []).forEach((tax) => {
+                if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                    this.allowedSelectionOfAType.type.push(tax.taxType);
+                }
+            });
+ 
         });
     }
 
@@ -3703,8 +3714,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.taxAsideMenuRef.afterClosed().subscribe(() => {
-            if (this.lastInteraction === InteractionType.KEYBOARD && this.taxDropdown) {
-                this.taxDropdown.focusTaxDropdown();
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.commonTaxControll) {
+                this.commonTaxControll.focusTaxDropdown();
             }
         });
     }
