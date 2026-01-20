@@ -345,9 +345,11 @@ export class ListBranchTransferComponent implements OnInit {
                 this.branchTransferPaginationObject.totalPages = response.body.totalPages;
                 this.branchTransferPaginationObject.totalItems = response.body.totalItems;
                 this.branchTransferResponse = response.body?.items;
+                this.dialog?.closeAll();
             } else {
                 this.branchTransferResponse = [];
                 this.branchTransferPaginationObject.totalItems = 0;
+                this.toaster.showSnackBar('error', response?.message);
             }
             this.changeDetection.detectChanges();
         });
@@ -700,7 +702,6 @@ export class ListBranchTransferComponent implements OnInit {
             this.branchTransferForm.controls['voucherType'].setValue('deliverynote');
         }
         this.getBranchTransferList(true);
-        this.dialog?.closeAll();
     }
 
     /**
@@ -778,11 +779,20 @@ export class ListBranchTransferComponent implements OnInit {
         }
     }
 
+    /**
+     * This will be use for clear filter
+     *
+     * @param field
+     * @memberof ListBranchTransfer
+     */
+    public handleOnClear(field: string): void {
+        this.branchTransferForm.controls[field].setValue(null);
+        this.branchTransferAdvanceSearchFormObj[field] = null;
+    }
 
     /**
      * Component destroy hook
      *
-     * @param {*} event
      * @memberof ListBranchTransfer
      */
     public ngOnDestroy(): void {
@@ -790,7 +800,4 @@ export class ListBranchTransferComponent implements OnInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
-
-
 }

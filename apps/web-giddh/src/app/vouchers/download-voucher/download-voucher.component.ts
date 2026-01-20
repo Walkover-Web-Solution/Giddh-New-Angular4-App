@@ -109,7 +109,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         let downloadOption = "";
         this.fileType = "pdf";
         if (this.downloadForm?.get('isAttachment').value) {
-            if (this.invoiceType?.length > 0) {
+            if (this.invoiceType?.length > 1) {
                 downloadOption = "ALL";
             } else {
                 downloadOption = "ATTACHMENT";

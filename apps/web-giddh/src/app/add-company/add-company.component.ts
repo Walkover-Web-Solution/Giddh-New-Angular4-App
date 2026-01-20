@@ -31,6 +31,7 @@ import { ChangeBillingComponentStore } from "../subscription/change-billing/util
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
 import { ServiceConfig } from "../services/service.config";
+import { environment } from "../../environments/environment.generated";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -436,8 +437,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public initMobileNumberField(): void {
         let configuration = {
-            widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW),
-            tokenAuth: (this.serviceConfig.OTP_WIDGET_TOKEN_NEW || OTP_WIDGET_TOKEN_NEW),
+            widgetId: (this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID_NEW),
+            tokenAuth: (this.serviceConfig.OTP_TOKEN_AUTH || OTP_WIDGET_TOKEN_NEW),
             exposeMethods: true,
             success: (data: any) => { },
             failure: (error: any) => {
@@ -1179,7 +1180,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.nextStepForm();
-        if (PRODUCTION_ENV && this.companiesList?.length === 0) {
+        if (environment.PRODUCTION_ENV && this.companiesList?.length === 0) {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }

@@ -67,7 +67,7 @@ import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
-import { TaxDropdownComponent } from "../../theme/tax-dropdown/tax-dropdown.component";
+import { CommonTaxComponent } from "../../shared/common-tax/common-tax.component";
 import { DiscountDropdownComponent } from "../../theme/discount-dropdown/discount-dropdown.component";
 import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
@@ -169,7 +169,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Reference to the "Add new row/line" span element for focusing */
     @ViewChild('customerVendorDropdown') customerVendorDropdown!: ReactiveDropdownFieldComponent;
     /** Reference to the tax dropdown component */
-    @ViewChild('taxDropdown') taxDropdown!: TaxDropdownComponent;
+    @ViewChild('commonTaxControll') commonTaxControll!: CommonTaxComponent;
     /** Reference to the discount dropdown component */
     @ViewChild('discountDropdown') discountDropdown!: DiscountDropdownComponent;
     /**  This will use for dayjs */
@@ -257,6 +257,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public allCompanyTaxes: TaxResponse[] = [];
     /** Holds company tax list  */
     public companyTaxes: TaxResponse[] = [];
+    /** Allowed taxes list contains the unique name of all
+     * tax types within a company and count upto which they are allowed
+     */
+    public allowedSelectionOfAType: any = { type: [], count: 1 };
     /** Reference to the current RCM checkbox element for focus management */
     private currentRcmCheckboxElement: any;
     /** Holds company discounts */
@@ -718,7 +722,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         this.getVoucherVersion();
         this.initVoucherForm();
-        this.getCustomFields();        
+        this.getCustomFields();
         this.getCountryList();
         this.getDiscountsList();
         this.getCompanyBranches();
@@ -2163,7 +2167,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (response) {
                 this.allCompanyTaxes = response;
                 this.companyTaxes = response?.filter((tax) => !this.otherTaxTypes.includes(tax.taxType));
+
             }
+            (Array.isArray(response) ? response : []).forEach((tax) => {
+                if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                    this.allowedSelectionOfAType.type.push(tax.taxType);
+                }
+            });
+ 
         });
     }
 
@@ -3447,7 +3458,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Focuses on the other tax checkbox element with a delay
-     * 
+     *
      * @memberof VoucherCreateComponent
      */
     private focusOtherTaxCheckbox(): void {
@@ -3703,8 +3714,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.taxAsideMenuRef.afterClosed().subscribe(() => {
-            if (this.lastInteraction === InteractionType.KEYBOARD && this.taxDropdown) {
-                this.taxDropdown.focusTaxDropdown();
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.commonTaxControll) {
+                this.commonTaxControll.focusTaxDropdown();
             }
         });
     }
@@ -5179,12 +5190,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         // Filter out custom fields with empty values
         if (invoiceForm.account?.customFields?.length) {
-            invoiceForm.account.customFields = invoiceForm.account.customFields.filter((field: { uniqueName: string; value: any }) => {
-                return field.value !== null && 
-                       field.value !== undefined && 
-                       (typeof field.value !== 'string' || field.value.trim() !== '');
+            invoiceForm.account.customFields = invoiceForm.account.customFields.map((field: { uniqueName: string; value: any }) => {
+                // Clear field value if it's null, undefined, or empty/whitespace string
+                if (field.value == null || (typeof field.value === 'string' && !field.value.trim())) {
+                    field.value = "";
+                }
+                return field;
             });
-        } 
+        }
 
         if (!this.invoiceType.isPurchaseOrder) {
             if (this.isUkAccount) {
@@ -5631,7 +5644,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entriesFormArray.clear();
         const depositFormArray = this.invoiceForm.get("deposits") as FormArray;
         depositFormArray.clear();
-        
+
         // Store custom fields data before form reset
         const customFieldsFormArray = this.customFieldsFormArray;
         let customFieldsData: any[] = [];
@@ -5641,9 +5654,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 value: '' // Clear the value but preserve uniqueName
             }));
         }
-        
+
         this.invoiceForm.reset();
-        
+
         // Restore custom fields with preserved uniqueName but cleared values
         if (customFieldsData.length > 0) {
             const restoredCustomFieldsFormArray = this.customFieldsFormArray;
@@ -7717,7 +7730,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Get custom fields API call
-     * 
+     *
      * @private
      * @memberof VoucherCreateComponent
      */
@@ -7748,16 +7761,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private populateCustomFieldsFormArray(customFields: any[]): void {
         const customFieldsArray = this.customFieldsFormArray;
-        
+
         if (!customFieldsArray) {
             return;
         }
-        
+
         // Clear existing form controls
         while (customFieldsArray.length !== 0) {
             customFieldsArray.removeAt(0);
         }
-        
+
         // Create form groups for each custom field
         customFields.forEach(field => {
             const customFieldGroup = this.formBuilder.group({
@@ -7770,7 +7783,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Checks if custom field should show validation errors
-     * 
+     *
      * @param {number} index - The index of the custom field in the FormArray
      * @returns {boolean} - True if field is dirty, has value, and is invalid
      * @memberof VoucherCreateComponent
@@ -7793,7 +7806,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Reset the value of custom fields while preserving uniqueName
-     * 
+     *
      * @param {FormArray} customFieldsArray - The FormArray containing custom field controls
      * @param {any[]} customFieldsData - Optional array of custom field data to restore uniqueName values
      * @memberof VoucherCreateComponent
@@ -7809,7 +7822,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         } else {
             // Just clear the values, preserve existing uniqueName
-            customFieldsArray.controls.forEach((customField: FormGroup) => {  
+            customFieldsArray.controls.forEach((customField: FormGroup) => {
                 customField.get('value')?.patchValue('');
             });
         }
@@ -7817,7 +7830,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Populates custom fields form array with account custom fields data
-     * 
+     *
      * @param {any[]} customFields - Array of custom fields from account data
      * @memberof VoucherCreateComponent
      */
@@ -7835,7 +7848,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             customFieldsFormArray.controls.forEach((customField: FormGroup) => {
                 const uniqueName = customField.get('uniqueName')?.value;
                 const matchingCustomField = customFieldsMap.get(uniqueName);
-                
+
                 if (matchingCustomField) {
                     // Convert values before patching
                     const convertedField = this.parseCustomFieldValue(matchingCustomField);
@@ -7847,7 +7860,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Parses and converts custom field values to their appropriate types
-     * 
+     *
      * @param {any} field - The custom field object containing value to be parsed
      * @returns {any} The field object with converted value property
      * @memberof VoucherCreateComponent
@@ -7856,7 +7869,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!field || field.value === null || field.value === undefined) {
             return field;
         }
-        
+
         return {
             ...field,
             value: this.convertValueToAppropriateType(field.value)
@@ -7865,30 +7878,30 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Converts string values to their appropriate JavaScript types (boolean, number, or string)
-     * 
+     *
      * @param {any} value - The value to be converted
      * @returns {boolean | number | string} The converted value in its appropriate type
      * @memberof VoucherCreateComponent
      */
     private convertValueToAppropriateType(value: any): boolean | number | string {
         if (typeof value !== 'string') return value;
-        
+
         const trimmed = value.trim();
         if (trimmed === '') return trimmed;
-        
+
         const lower = trimmed.toLowerCase();
         if (lower === 'true') return true;
         if (lower === 'false') return false;
-        
+
         const num = Number(trimmed);
         if (!isNaN(num) && isFinite(num)) return num;
-        
+
         return value;
     }
 
     /**
      * Gets the address display text for billing or shipping details
-     * 
+     *
      * @param {string} addressType - Type of address ('billing' or 'shipping')
      * @param {string} entityType - Type of entity ('account' or 'company')
      * @returns {string} The formatted address display text
@@ -7896,14 +7909,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getAddressDisplayText(addressType: string, entityType: string): string {
         const addressControl = this.invoiceForm?.controls?.[entityType]?.get(`${addressType}Details`);
-        
+
         if (!addressControl) {
             return '';
         }
 
         const name = addressControl.get('name')?.value;
         const index = addressControl.get('index')?.value;
-        
+
         // If name exists, use it; otherwise use index + 1
         const displayValue = name || (index !== null && index !== undefined ? `${this.commonLocaleData?.app_address} ${index + 1}` : '');
         return displayValue ? `(${displayValue})` : '';
@@ -7911,7 +7924,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Checks if the account has changed in update mode
-     * 
+     *
      * @returns {boolean} True if the account has changed in update mode
      * @memberof VoucherCreateComponent
      */

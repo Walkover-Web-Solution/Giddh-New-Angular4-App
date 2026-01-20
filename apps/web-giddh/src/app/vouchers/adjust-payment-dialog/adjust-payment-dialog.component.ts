@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, of, takeUntil } from 'rxjs';
@@ -24,7 +24,7 @@ const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
     styleUrls: ['./adjust-payment-dialog.component.scss'],
     standalone:false
 })
-export class AdjustPaymentDialogComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     /** Reference to the amount input field for focus management */
     @ViewChild('amountInput') public amountInput: InputFieldComponent;
     public newAdjustVoucherOptions: IOption[] = [];
@@ -139,7 +139,8 @@ export class AdjustPaymentDialogComponent implements OnInit, AfterViewInit, OnDe
         private adjustmentUtilityService: AdjustmentUtilityService,
         private generalService: GeneralService,
         private toasterService: ToasterService,
-        private voucherService: VoucherService
+        private voucherService: VoucherService,
+        private changeDetectorRef: ChangeDetectorRef
     ) { }
 
     /**
@@ -234,15 +235,6 @@ export class AdjustPaymentDialogComponent implements OnInit, AfterViewInit, OnDe
             }
         });
         this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
-    }
-
-    /**
-     * Lifecycle hook after view initialization
-     *
-     * @memberof AdjustPaymentDialogComponent
-     */
-    public ngAfterViewInit(): void {
-        this.shouldOpenDropdown = !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName && this.adjustVoucherForm?.adjustments?.length === 1;
     }
 
     /**
@@ -1175,6 +1167,8 @@ export class AdjustPaymentDialogComponent implements OnInit, AfterViewInit, OnDe
                     this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
                 }
             }
+            this.shouldOpenDropdown = !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName && this.adjustVoucherForm?.adjustments?.length === 1;
+            this.changeDetectorRef.detectChanges();
         });
     }
 

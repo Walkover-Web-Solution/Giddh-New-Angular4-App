@@ -382,7 +382,7 @@ export class UpdateLedgerVm {
 
     // FIXME: fix total calculation
     public generateGrandTotal() {
-        let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
+        let taxTotal: number = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
         let total = this.totalAmount - this.discountTrxTotal;
         this.appliedTaxPerTotal = taxTotal;
         this.totalForTax = total;
@@ -542,7 +542,7 @@ export class UpdateLedgerVm {
                 }, 0) || 0;
         }
 
-        let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
+        let taxTotal: number = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
         const particularAccount = this.getParticularAccount();
         const ledgerAccount = this.getLedgerAccount(particularAccount);
         if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
@@ -653,7 +653,7 @@ export class UpdateLedgerVm {
     public prepare4Submit(): LedgerResponse {
         let requestObj: any = cloneDeep(this.selectedLedger);
         let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
-        let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
+        let taxes: any[] = cloneDeep(this.selectedTaxes);
         requestObj.voucherType = requestObj?.voucher?.shortCode;
         requestObj.transactions = requestObj?.transactions ? requestObj.transactions.filter(p => p.particular?.uniqueName && !p.isDiscount) : [];
         requestObj.generateInvoice = this.selectedLedger?.generateInvoice;
@@ -663,7 +663,7 @@ export class UpdateLedgerVm {
                 trx.particular.uniqueName = trx.particular?.uniqueName.split('#')[0];
             }
         });
-        requestObj.taxes = [...taxes.map(t => t.particular?.uniqueName)];
+        requestObj.taxes = [...taxes.map(t => t?.uniqueName)];
         if (requestObj.isOtherTaxesApplicable) {
             requestObj.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
         }
