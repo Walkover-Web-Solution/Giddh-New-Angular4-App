@@ -279,9 +279,35 @@ export class ElectronUpdaterService {
 ```
 
 ### Step 4: Configure S3 Bucket
-Ensure your S3 bucket has proper permissions:
+Your S3 bucket has ACLs disabled (modern best practice), so you must use a **bucket policy** for public access:
 
-1. **Bucket Policy** (replace `giddh-app-builds` with your bucket name):
+**Note:** The workflow uses `secrets.S3_BUCKET` which should be:
+- **Test builds:** `app-giddh-test`
+- **Production builds:** `giddh-app-builds`
+
+1. **Go to AWS S3 Console** → Select your bucket (e.g., `app-giddh-test`) → **Permissions** tab
+
+2. **Block Public Access Settings:**
+   - Uncheck "Block all public access" (or at minimum, uncheck "Block public access to buckets and objects granted through new public bucket or access point policies")
+   - Save changes
+
+3. **Add Bucket Policy** (replace `app-giddh-test` with your actual bucket name):
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::app-giddh-test/releases/*"
+        }
+    ]
+}
+```
+
+**For production bucket (`giddh-app-builds`), use:**
 ```json
 {
     "Version": "2012-10-17",
@@ -297,7 +323,7 @@ Ensure your S3 bucket has proper permissions:
 }
 ```
 
-2. **CORS Configuration**:
+4. **CORS Configuration** (if needed for web-based downloads):
 ```json
 [
     {

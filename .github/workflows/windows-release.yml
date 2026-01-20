@@ -308,15 +308,7 @@ jobs:
               Write-Host "✅ Uploaded to latest: s3://$bucket/$latestKey"
           }
           
-          # Set public read permissions for auto-updater access
-          aws s3api put-object-acl --bucket $bucket --key "releases/latest.yml" --acl public-read --region $region
-          aws s3api put-object-acl --bucket $bucket --key $versionedKey --acl public-read --region $region
-          
-          if ($env:UPLOAD_LATEST -eq "true") {
-              aws s3api put-object-acl --bucket $bucket --key $latestKey --acl public-read --region $region
-          }
-          
-          Write-Host "✅ Set public read permissions for auto-updater access"
+          Write-Host "✅ Files uploaded successfully (bucket policy controls public access)"
           
           # Store installer path for GitHub release
           "SIGNED_INSTALLER_PATH=$($signedInstaller.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
