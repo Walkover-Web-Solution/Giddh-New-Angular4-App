@@ -24,6 +24,7 @@ import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/cou
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { Configuration, IOption, PaymentProvider } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'buy-plan',
@@ -236,7 +237,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** True if promo code is removed */
     public removePromoCode: boolean = false;
     /** Hold true in production environment */
-    public isProdMode: boolean = PRODUCTION_ENV;
+    public isProdMode: boolean = environment.PRODUCTION_ENV;
     /** This will hold option selected state */
     public optionSelected: boolean = false;
 
