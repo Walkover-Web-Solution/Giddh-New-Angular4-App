@@ -14,6 +14,7 @@ import { cloneDeep } from '../../lodash-optimized';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Angular21ChangeDetectionService } from '../../services/angular21-change-detection.service';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'vat-liabilities-payments',
@@ -77,7 +78,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** Holds current branch information */
     private currentBranch: any = {};
     /** Hold true in production environment */
-    public isProdMode: boolean = PRODUCTION_ENV;
+    public isProdMode: boolean = environment.PRODUCTION_ENV;
     /** Hold HMRC portal url */
     public connectToHMRCUrl: string = null;
     /** True if API Call is in progress */

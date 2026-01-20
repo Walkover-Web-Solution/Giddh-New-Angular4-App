@@ -229,7 +229,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** Hold broadcast event */
     public broadcast: any;
     /** Hold true in production environment */
-    public isProdMode: boolean = PRODUCTION_ENV;
+    public isProdMode: boolean = environment.PRODUCTION_ENV;
     /** Hold broadcast event for project wise accounting */
     public projectBroadcast: any;
     /** Hold broadcast event for AI OCR */
