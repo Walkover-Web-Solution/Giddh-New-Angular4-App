@@ -1180,7 +1180,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.nextStepForm();
-        if (environment.production && this.companiesList?.length === 0) {
+        if (environment.PRODUCTION_ENV && this.companiesList?.length === 0) {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }
