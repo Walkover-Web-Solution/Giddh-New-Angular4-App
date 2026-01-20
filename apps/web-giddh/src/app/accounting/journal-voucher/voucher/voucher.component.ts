@@ -544,12 +544,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
         this.keyUpDownEvent = event;
-        if (event.key === 'F6') {
-            event.preventDefault(); // Prevent default F6 behavior
-            this.customFunctionForF6();
-        } else if (event.key === 'F7') {
+        if (event.key === 'F7') {
             event.preventDefault(); // Prevent default F7 behavior
             this.customFunctionForF7();
+        } else if (event.key === 'F8') {
+            event.preventDefault(); // Prevent default F8 behavior
+            this.customFunctionForF8();
         } else if (event.altKey && (event.key === 'd' || event.code === 'KeyD')) {
             event.preventDefault();
             this.customFunctionForDiscountSidebar();
@@ -573,8 +573,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      *
      * @memberof AccountAsVoucherComponent
      */
-    public customFunctionForF6(): void {
-        // Define your custom functionality for F6 key here
+    public customFunctionForF7(): void {
+        // Define your custom functionality for F7 key here
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         voucherTypeControl.setValue(VOUCHERS.RECEIPT);
     }
@@ -584,8 +584,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     *
     * @memberof AccountAsVoucherComponent
     */
-    public customFunctionForF7(): void {
-        // Define your custom functionality for F7 key here
+    public customFunctionForF8(): void {
+        // Define your custom functionality for F8 key here
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         voucherTypeControl.setValue(VOUCHERS.JOURNAL);
     }

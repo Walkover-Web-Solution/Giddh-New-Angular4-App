@@ -7,7 +7,7 @@
             (click)="setSelectedPage(accountingVouchers.CONTRA, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.CONTRA }"
         >
-            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f4 }} : {{ commonLocaleData?.app_voucher_types?.contra }}
+            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f5 }} : {{ commonLocaleData?.app_voucher_types?.contra }}
         </a>
     </li>
 
@@ -19,7 +19,7 @@
             (click)="setSelectedPage(accountingVouchers.PAYMENT, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.PAYMENT }"
         >
-            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f5 }} : {{ commonLocaleData?.app_voucher_types?.payment }}
+            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f6 }} : {{ commonLocaleData?.app_voucher_types?.payment }}
         </a>
     </li>
 
@@ -31,7 +31,7 @@
             (click)="setSelectedPage(accountingVouchers.RECEIPT, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.RECEIPT }"
         >
-            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f6 }} : {{ commonLocaleData?.app_voucher_types?.receipt }}
+            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f7 }} : {{ commonLocaleData?.app_voucher_types?.receipt }}
         </a>
     </li>
     <li role="account-items">
@@ -42,7 +42,7 @@
             (click)="setSelectedPage(accountingVouchers.JOURNAL, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.JOURNAL }"
         >
-            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f7 }} : {{ commonLocaleData?.app_voucher_types?.journal }}
+            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f8 }} : {{ commonLocaleData?.app_voucher_types?.journal }}
         </a>
     </li>
     <li role="account-items">
@@ -53,7 +53,7 @@
             (click)="setSelectedPage(accountingVouchers.SALES, 'voucher', 'sales')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.SALES }"
         >
-            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f8 }} : {{ commonLocaleData?.app_voucher_types?.sales }}
+            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f9 }} : {{ commonLocaleData?.app_voucher_types?.sales }}
         </a>
     </li>
     <li role="account-items">
@@ -64,7 +64,7 @@
             (click)="setSelectedPage(accountingVouchers.PURCHASE, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.PURCHASE }"
         >
-            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f9 }} : {{ commonLocaleData?.app_voucher_types?.purchases }}
+            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f10 }} : {{ commonLocaleData?.app_voucher_types?.purchases }}
         </a>
     </li>
     <li role="account-items">
@@ -75,7 +75,7 @@
             (click)="setSelectedPage(accountingVouchers.DEBIT_NOTE, 'voucher', 'debit note')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.DEBIT_NOTE }"
         >
-            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f10 }} : {{ commonLocaleData?.app_voucher_types?.debit_note }}
+            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f11 }} : {{ commonLocaleData?.app_voucher_types?.debit_note }}
         </a>
     </li>
     <li role="account-items">
@@ -86,7 +86,7 @@
             (click)="setSelectedPage(accountingVouchers.CREDIT_NOTE, 'voucher', 'credit note')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.CREDIT_NOTE }"
         >
-            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f11 }} : {{ commonLocaleData?.app_voucher_types?.credit_note }}
+            {{ commonLocaleData?.app_alt }}+{{ commonLocaleData?.app_keys?.f12 }} : {{ commonLocaleData?.app_voucher_types?.credit_note }}
         </a>
     </li>
     <ng-container *ngIf="showDiscountAndTax">
