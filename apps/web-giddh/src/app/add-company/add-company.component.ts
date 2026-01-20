@@ -31,6 +31,7 @@ import { ChangeBillingComponentStore } from "../subscription/change-billing/util
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
 import { ServiceConfig } from "../services/service.config";
+import { environment } from "../../environments/environment.generated";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -1179,7 +1180,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.nextStepForm();
-        if (PRODUCTION_ENV && this.companiesList?.length === 0) {
+        if (environment.production && this.companiesList?.length === 0) {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }
