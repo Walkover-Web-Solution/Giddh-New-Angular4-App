@@ -6,7 +6,9 @@
     "publish": [
         {
             "provider": "s3",
-            "bucket": "giddh-app-builds"
+            "bucket": "giddh-app-builds",
+            "region": "ap-south-1",
+            "path": "releases"
         }
     ],
     "directories": {
@@ -74,7 +76,7 @@
         "installerHeaderIcon": "icon.ico",
         "deleteAppDataOnUninstall": false,
         "runAfterFinish": true,
-        "differentialPackage": false,
+        "differentialPackage": true,
         "packElevateHelper": false,
         "allowElevation": false,
         "installerSidebar": "icon.ico"
