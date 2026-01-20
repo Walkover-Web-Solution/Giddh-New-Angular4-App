@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
-import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil } from "rxjs";
+import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil, take, filter } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { MatAutocomplete } from "@angular/material/autocomplete";
@@ -139,10 +139,20 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public ngOnInit(): void {
+        let skipInitialValue = true;
+
         if (this.enableDynamicSearch) {
             this.searchFormControl.pipe(
                 debounceTime(700),
-                skip(1),
+                filter((search: string) => {
+                    // Skip the initial empty value, but allow all subsequent values including empty ones
+                    if (skipInitialValue && (!search || search.trim() === '')) {
+                        skipInitialValue = false;
+                        return false;
+                    }
+                    skipInitialValue = false;
+                    return true;
+                }),
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
                 this.dynamicSearchedQuery.emit(search);
@@ -154,7 +164,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         } else {
             this.searchFormControl.pipe(
                 debounceTime(700),
-                skip(1),
+                filter((search: string) => {
+                    // Skip the initial empty value, but allow all subsequent values including empty ones
+                    if (skipInitialValue && (!search || search.trim() === '')) {
+                        skipInitialValue = false;
+                        return false;
+                    }
+                    skipInitialValue = false;
+                    return true;
+                }),
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
                 if (!search) {
@@ -598,7 +616,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
         // Check if click is outside the component
         const componentElement = this.selectField?.nativeElement?.closest('.reactive-dropdown-field') ||
-                                this.selectField?.nativeElement?.parentElement;
+            this.selectField?.nativeElement?.parentElement;
 
         if (componentElement && !componentElement.contains(clickedElement)) {
             // Check if click is not on the autocomplete panel with sidebar-list-view class
