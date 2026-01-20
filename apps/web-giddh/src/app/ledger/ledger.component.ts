@@ -72,7 +72,7 @@ import { environment } from '../../environments/environment.generated';
     styleUrls: ['./ledger.component.scss'],
     providers: [LedgerComponentStore, BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    standalone: false
 })
 
 export class LedgerComponent implements OnInit, OnDestroy {
@@ -2229,10 +2229,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
-                    width: '980px',
-                    role: 'alertdialog',
-                    ariaLabel: 'advance'
-                });
+            width: '980px',
+            role: 'alertdialog',
+            ariaLabel: 'advance'
+        });
     }
 
     public search(term: string): void {
@@ -2713,7 +2713,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             lodashMap(res?.body?.invoiceList, (o) => {
                 this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
             });
-           uniqBy(this.invoiceList, 'value');
+            uniqBy(this.invoiceList, 'value');
         });
     }
 
@@ -3422,16 +3422,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
         transaction['isAttachment'] = isAttachment;
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
-                    width: '70%',
-                    height: '790px',
-                    maxHeight: '90vh',
-                    role: 'alertdialog',
-                    ariaLabel: 'template',
-                    autoFocus: false
-                });
+            width: '70%',
+            height: '790px',
+            maxHeight: '90vh',
+            role: 'alertdialog',
+            ariaLabel: 'template',
+            autoFocus: false
+        });
 
         dialogRef.afterClosed().subscribe(response => {
-            this.getTransactionData();
+            if (this.isAdvanceSearchImplemented) {
+                this.createLedgerBalance();
+                this.store.dispatch(this.ledgerActions.doAdvanceSearch(cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.trxRequest.from, this.trxRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
+            } else {
+                this.getTransactionData();
+            }
         });
     }
 
