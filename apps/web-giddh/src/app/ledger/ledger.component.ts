@@ -205,14 +205,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public preventDefaultScrollApiCall: boolean = false;
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
-        page: 0,
+        page: 1,
         count: API_BULK_FETCH_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details (required only for passing
      * default search pagination details to Update ledger component) */
     public defaultResultsPaginationData = {
-        page: 0,
+        page: 1,
         count: API_BULK_FETCH_LIMIT,
         query: '',
     };
@@ -273,7 +273,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public paginationObject: any = {
         totalItems: 0,
         itemsPerPage: 0,
-        page: 0,
+        page: 1,
         totalPages: 0,
         showPagination: false,
         prevToken: null,
@@ -495,7 +495,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let to = dayjs(value.endDate, GIDDH_DATE_FORMAT).toDate();
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-            page: 0,
+            page: 1,
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                 bsRangeValue: [from, to]
             })
@@ -792,11 +792,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     })
                 });
                 this.advanceSearchRequest.to = to;
-                this.advanceSearchRequest.page = 0;
+                this.advanceSearchRequest.page = 1;
 
                 this.trxRequest.from = from;
                 this.trxRequest.to = to;
-                this.trxRequest.page = 0;
+                this.trxRequest.page = 1;
                 this.isDefaultLoad = false;
             } else {
                 // means ledger is opened normally
@@ -812,11 +812,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         })
                     });
                     this.advanceSearchRequest.to = universalDate[1];
-                    this.advanceSearchRequest.page = 0;
+                    this.advanceSearchRequest.page = 1;
 
                     this.trxRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                     this.trxRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                    this.trxRequest.page = 0;
+                    this.trxRequest.page = 1;
                 } else {
                     this.selectedDateRange = { startDate: dayjs(), endDate: dayjs() };
                     this.selectedDateRangeUi = dayjs().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs().format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -827,8 +827,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             bsRangeValue: []
                         })
                     });
-                    this.advanceSearchRequest.page = 0;
-                    this.trxRequest.page = 0;
+                    this.advanceSearchRequest.page = 1;
+                    this.trxRequest.page = 1;
 
                     // set request from and to, '' because we are depending on api to give us from and to date
                     this.advanceSearchRequest.to = '';
@@ -1018,7 +1018,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             .subscribe(term => {
                 const searchCleared = (this.trxRequest.q && !term);
                 this.trxRequest.q = term;
-                this.trxRequest.page = 0;
+                this.trxRequest.page = 1;
                 this.needToShowLoader = false;
                 if (term || this.trxRequest.q || searchCleared) {
                     this.trxRequest.paginationToken = "";
@@ -1904,7 +1904,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showExportLedgerModal(): void {
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-                page: 0,
+                page: 1,
                 dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                     bsRangeValue: [this.selectedDateRange.startDate, this.selectedDateRange.endDate]
                 })
@@ -2001,7 +2001,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public resetAdvanceSearch() {
         this.searchText = "";
         this.isAdvanceSearchImplemented = false;
-        this.trxRequest.page = 0;
+        this.trxRequest.page = 1;
         let accountUniqueName = this.advanceSearchRequest.accountUniqueName;
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.advanceSearchRequest.accountUniqueName = accountUniqueName;
@@ -2206,7 +2206,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public resetPreviousSearchResults(): void {
         this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
-            page: 0,
+            page: 1,
             count: 0,
             query: ''
         };
@@ -2221,7 +2221,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onOpenAdvanceSearch(): void {
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-                page: 0,
+                page: 1,
                 dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                     bsRangeValue: [this.selectedDateRange.startDate, this.selectedDateRange.endDate]
                 })

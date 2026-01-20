@@ -5,7 +5,7 @@ import { PAGINATION_LIMIT } from "../../app.constant";
 export class AdvanceSearchRequest {
     public dataToSend: AdvanceSearchModel = new AdvanceSearchModel();
     public q: string = '';
-    public page: number = 0;
+    public page: number = 1;
     public count: number = PAGINATION_LIMIT;
     public accountUniqueName: string = '';
     public sort: string = 'asc';

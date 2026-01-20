@@ -223,7 +223,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
             this.daybookQueryRequest.from = from;
             this.daybookQueryRequest.to = to;
-            this.daybookQueryRequest.page = 0;
+            this.daybookQueryRequest.page = 1;
             this.getDaybook();
         }
     }
@@ -246,7 +246,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             }
             this.daybookQueryRequest.from = (reqObj.fromDate) ? reqObj.fromDate : this.todaySelected ? '' : this.daybookQueryRequest.from;
             this.daybookQueryRequest.to = (reqObj.toDate) ? reqObj.toDate : this.todaySelected ? '' : this.daybookQueryRequest.to;
-            this.daybookQueryRequest.page = 0;
+            this.daybookQueryRequest.page = 1;
             if (reqObj.action === 'search') {
                 this.modalDialogRef.close();
                 this.getDaybook(this.searchFilterData);
@@ -285,7 +285,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     this.daybookData = response?.body;
                     this.checkIsStockEntryAvailable();
                 } else {
-                    this.daybookData = { entries: [], totalItems: 0, page: 0 };
+                    this.daybookData = { entries: [], totalItems: 0, page: 1 };
                 }
                 if (this.todaySelected) {
                     this.daybookQueryRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -299,7 +299,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
             } else {
                 if (response?.message) {
-                    this.daybookData = { entries: [], totalItems: 0, page: 0 };
+                    this.daybookData = { entries: [], totalItems: 0, page: 1};
                     this.toasterService.showSnackBar("error", response?.message);
                 } else {
                     this.daybookData = response?.body;
@@ -344,7 +344,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         this.daybookQueryRequest.from = "";
                         this.daybookQueryRequest.to = "";
                     }
-                    this.daybookQueryRequest.page = 0;
+                    this.daybookQueryRequest.page = 1;
                     this.getDaybook();
                 });
             }
@@ -557,7 +557,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
             this.daybookQueryRequest.from = this.fromDate;
             this.daybookQueryRequest.to = this.toDate;
-            this.daybookQueryRequest.page = 0;
+            this.daybookQueryRequest.page = 1;
             this.getDaybook(this.searchFilterData);
         }
     }
