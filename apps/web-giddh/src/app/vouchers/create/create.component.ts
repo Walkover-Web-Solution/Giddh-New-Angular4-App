@@ -2391,6 +2391,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public searchStock(query: string = "", page: number = 1): void {
+        console.log("searchStock", query, page, this.stockSearchRequest?.isLoading);
         if (this.stockSearchRequest?.isLoading) {
             return;
         }
@@ -2581,6 +2582,56 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.pageLeaveUtilityService.addBrowserConfirmationDialog();
         } else {
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        }
+    }
+
+    /**
+     * Gets the display label for account dropdown
+     *
+     * @param {*} transaction
+     * @returns {string}
+     * @memberof VoucherCreateComponent
+     */
+    public getAccountDisplayLabel(transaction: any): string {
+        try {
+            const accountName = transaction?.get('account.name')?.value;
+            const stockName = transaction?.get('stock.name')?.value;
+
+            if (accountName) {
+                return stockName ? `${accountName} (${stockName})` : accountName;
+            }
+            return '';
+        } catch (error) {
+            console.error('Error getting account display label:', error);
+            return '';
+        }
+    }
+
+    /**
+     * Determines if dropdown should be opened
+     *
+     * @param {number} entryIndex
+     * @returns {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public shouldOpenDropdown(entryIndex: number): boolean {
+        try {
+            if (entryIndex !== this.activeEntryIndex) {
+                return false;
+            }
+
+            const accountControl = this.invoiceForm.controls['account'];
+            if (!accountControl) {
+                return false;
+            }
+
+            if (this.invoiceType?.isCashInvoice) {
+                return !!accountControl.get('customerName')?.value;
+            } else {
+                return !!accountControl.get('uniqueName')?.value;
+            }
+        } catch (error) {
+            return false;
         }
     }
 

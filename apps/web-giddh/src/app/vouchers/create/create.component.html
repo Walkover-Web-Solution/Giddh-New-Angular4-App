@@ -1544,14 +1544,7 @@
                                                                         formControlName="uniqueName"
                                                                         [name]="'transactionAccountUniqueName' + entryIndex"
                                                                         [useCustomLabelValue]="true"
-                                                                        [labelValue]="
-                                                                            transaction.get('stock.name')?.value
-                                                                                ? transaction.get('account.name')?.value +
-                                                                                  ' (' +
-                                                                                  transaction.get('stock.name')?.value +
-                                                                                  ')'
-                                                                                : transaction.get('account.name')?.value
-                                                                        "
+                                                                        [labelValue]="getAccountDisplayLabel(transaction)"
                                                                         [options]="voucherStockResults$ | async"
                                                                         [showCreateNew]="true"
                                                                         [enableDynamicSearch]="true"
@@ -1562,12 +1555,7 @@
                                                                         (dynamicSearchedQuery)="searchStock($event, 1)"
                                                                         (onClear)="selectStock($event, entryIndex, true)"
                                                                         (createOption)="toggleStockAsidePane()"
-                                                                        [openDropdown]="
-                                                                            entryIndex === activeEntryIndex &&
-                                                                            (invoiceType.isCashInvoice
-                                                                                ? invoiceForm.controls['account'].get('customerName')?.value
-                                                                                : invoiceForm.controls['account'].get('uniqueName')?.value)
-                                                                        "
+                                                                        [openDropdown]="shouldOpenDropdown(entryIndex)"
                                                                         [showOptionDivider]="true"
                                                                         [showMatLabel]="false"
                                                                         [showCaretIcon]="false"
