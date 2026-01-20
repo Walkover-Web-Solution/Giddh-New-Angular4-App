@@ -245,8 +245,8 @@
                         "
                         [isMandatory]="isRcmEntry"
                         [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
-                        [prefixInput]="selectedPrefixForCurrency"
-                        [suffixInput]="selectedSuffixForCurrency"
+                        [prefixInput]="selectedPrefixForCurrency || ''"
+                        [suffixInput]="selectedSuffixForCurrency || ''"
                         [applicableTaxes]="
                             taxListForStock?.length && !currentTxn?.duplicateEntry
                                 ? taxListForStock

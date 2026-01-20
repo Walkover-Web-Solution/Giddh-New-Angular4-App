@@ -1,11 +1,8 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, input, output, signal, computed, effect, ViewChild, HostListener, ElementRef } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, input, output, signal, computed, effect, ViewChild, HostListener, ElementRef } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { ITaxControlData, ITaxDetail } from '../../models/interfaces/tax.interface';
 import { giddhRoundOff } from '../helpers/helperFunctions';
-import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { cloneDeep, isEqual, orderBy } from '../../lodash-optimized';
 import { MatSelect } from '@angular/material/select';
@@ -50,7 +47,6 @@ import { A11yModule } from '@angular/cdk/a11y';
     selector: 'common-tax',
     templateUrl: './common-tax.component.html',
     styleUrls: ['./common-tax.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
         CommonModule,
@@ -129,7 +125,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     /** Sum of all selected tax percentages */
     public taxSum = signal<number>(0);
     /** Calculated total tax amount */
-    public _taxTotalAmount = signal<number>(0);
+    public calculatedTaxAmount = signal<number>(0);
     /** Number of decimal places for balance amounts */
     public giddhBalanceDecimalPlaces = signal<number>(2);
     /** Array of selected tax objects */
@@ -159,7 +155,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
      * @returns The calculated total tax amount
      */
     get taxTotalAmount(): number {
-        return this._taxTotalAmount();
+        return this.calculatedTaxAmount();
     }
 
     /**
@@ -167,18 +163,16 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
      * @param value - The tax amount to set
      */
     set taxTotalAmount(value: number) {
-        this._taxTotalAmount.set(value || 0);
+        this.calculatedTaxAmount.set(value || 0);
     }
 
     /**
      * Constructor
      * Initializes the component with required services and sets up reactive effects
      * 
-     * @param store - NgRx store for accessing application state
      * @param cdr - Change detector reference for manual change detection
      */
     constructor(
-        private store: Store<AppState>,
         private cdr: ChangeDetectorRef,
         private elementRef: ElementRef
     ) {
@@ -214,12 +208,6 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
      * @public
      */
     public ngOnInit(): void {
-        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
-            if (profile) {
-                this.giddhBalanceDecimalPlaces.set(profile.balanceDecimalPlaces);
-            }
-        });
-        
         if (this.taxes()) {
             this.prepareTaxObject();
             this.change();
@@ -681,7 +669,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
             );
         }
         
-        this.taxAmountSumEvent.emit(this._taxTotalAmount());
+        this.taxAmountSumEvent.emit(this.taxTotalAmount);
     }
 
     /**
@@ -762,16 +750,6 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                 // Index 0 would be the "Create New" option, index 1 is the first tax option
                 if (options && options.length > 1) {
                     keyManager.setActiveItem(1);
-
-                    // Ensure the focused option is visible
-                    const activeOption = keyManager.activeItem;
-                    if (activeOption && (activeOption as any)._element) {
-                        (activeOption as any)._element.nativeElement.scrollIntoView({
-                            behavior: 'auto',
-                            block: 'nearest',
-                            inline: 'nearest'
-                        });
-                    }
                 }
             } catch (error) {
                 // Silently handle any errors

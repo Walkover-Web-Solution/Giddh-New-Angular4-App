@@ -2227,41 +2227,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
-     * Calculates the value of discount, tax inclusively and stock price
-     * This method will be used for inclusive MRP calculation in future
-     *
-     * @private
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    // private calculateFieldValuesInclusively(): void {
-    //     this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
-    //     this.setBlankLedgerAmount();
-    //     if (this.currentTxn.inventory) {
-    //         this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
-    //     } else {
-    //         this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
-    //     }
-    //     if (this.discountControl) {
-    //         this.discountControl.ledgerAmount = this.currentTxn.amount;
-    //         this.discountControl.change(null, null, true);
-    //         this.calculateTaxValue();
-    //     }
-    //     if (this.taxControl) {
-    //         this.taxControl.totalForTax = this.currentTxn.total;
-    //         this.taxControl.change(true);
-    //         this.calculateTotal();
-    //     }
-    //     if (this.currentTxn?.selectedAccount) {
-    //         if (this.currentTxn.selectedAccount.stock) {
-    //             this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
-    //             this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
-    //             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
-    //         }
-    //     }
-    //     this.calculateCompoundTotal();
-    // }
-
-    /**
      * Calculates the tax value and converted tax value
      *
      * @private
