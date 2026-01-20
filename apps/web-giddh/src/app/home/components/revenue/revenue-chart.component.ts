@@ -373,44 +373,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         legend: {
                             display: false
                         },
-                        tooltip: {
-                            callbacks: {
-                                title: function () { return '' },
-                                afterLabel: function (context) {
-                                    let label = ''
-                                    let dataIndex = context.dataIndex;
-                                    let datasetIndex = context.datasetIndex;
-                                    let data = datasetIndex === 0 ? currentData : previousData;
-                                    let tooltipIndex = dataIndex;
-
-                                    for (let i = 0; i < data.length; i++) {
-                                        label = data[tooltipIndex].tooltipAfterLabel
-                                    }
-                                    return label;
-                                },
-                                label: function (context) {
-                                    let label = ''
-                                    let dataIndex = context.dataIndex;
-                                    let datasetIndex = context.datasetIndex;
-                                    let data = datasetIndex === 0 ? currentData : previousData;
-                                    let tooltipIndex = dataIndex;
-
-                                    for (let i = 0; i < data.length; i++) {
-                                        label = data[tooltipIndex].tooltipLabel
-                                    }
-                                    return label;
-                                }
-                            },
-                            backgroundColor: 'rgba(255,255,255,0.8)',
-                            borderColor: 'rgb(12, 177, 175)',
-                            bodyColor: 'rgb(0, 0, 0)',
-                            titleColor: 'rgb(0, 0, 0)',
-                            borderWidth: 0.5,
-                            titleFont: {
-                                weight: 'normal'
-                            },
-                            displayColors: false,
-                        },
+                        tooltip: this.getTooltipConfig(currentData, previousData),
                     },
                     scales: {
                         x: {
@@ -484,40 +447,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         legend: {
                             display: false
                         },
-                        tooltip: {
-                            callbacks: {
-                                title: function () { return '' },
-                                afterLabel: function (context) {
-                                    let label = ''
-                                    let dataIndex = context.dataIndex;
-                                    let datasetIndex = context.datasetIndex;
-                                    let data = datasetIndex === 0 ? currentData : previousData;
-                                    let tooltipIndex = dataIndex;
-
-                                    for (let i = 0; i < data.length; i++) {
-                                        label = data[tooltipIndex].tooltipAfterLabel
-                                    }
-                                    return label;
-                                },
-                                label: function (context) {
-                                    let label = ''
-                                    let dataIndex = context.dataIndex;
-                                    let datasetIndex = context.datasetIndex;
-                                    let data = datasetIndex === 0 ? currentData : previousData;
-                                    let tooltipIndex = dataIndex;
-
-                                    for (let i = 0; i < data.length; i++) {
-                                        label = data[tooltipIndex].tooltipLabel
-                                    }
-                                    return label;
-                                }
-                            },
-                            backgroundColor: 'rgba(255,255,255,0.8)',
-                            borderColor: 'rgb(12, 177, 175)',
-                            bodyColor: 'rgb(0, 0, 0)',
-                            borderWidth: 0.5,
-                            displayColors: false
-                        }
+                        tooltip: this.getTooltipConfig(currentData, previousData),
                     },
                     scales: {
                         x: {
@@ -561,6 +491,56 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         }
 
         this.requestInFlight = false;
+    }
+
+    /**
+     * Returns shared tooltip configuration for chart
+     *
+     * @private
+     * @param {any[]} currentData - Current period data
+     * @param {any[]} previousData - Previous period data
+     * @returns {any} Tooltip configuration object
+     * @memberof RevenueChartComponent
+     */
+    private getTooltipConfig(currentData: any[], previousData: any[]): any {
+        return {
+            callbacks: {
+                title: function () { return ''; },
+                afterLabel: function (context) {
+                    let label = '';
+                    let dataIndex = context.dataIndex;
+                    let datasetIndex = context.datasetIndex;
+                    let data = datasetIndex === 0 ? currentData : previousData;
+                    let tooltipIndex = dataIndex;
+
+                    for (let i = 0; i < data.length; i++) {
+                        label = data[tooltipIndex].tooltipAfterLabel;
+                    }
+                    return label;
+                },
+                label: function (context) {
+                    let label = '';
+                    let dataIndex = context.dataIndex;
+                    let datasetIndex = context.datasetIndex;
+                    let data = datasetIndex === 0 ? currentData : previousData;
+                    let tooltipIndex = dataIndex;
+
+                    for (let i = 0; i < data.length; i++) {
+                        label = data[tooltipIndex].tooltipLabel;
+                    }
+                    return label;
+                }
+            },
+            backgroundColor: 'rgba(255,255,255,0.8)',
+            borderColor: 'rgb(12, 177, 175)',
+            bodyColor: 'rgb(0, 0, 0)',
+            titleColor: 'rgb(0, 0, 0)',
+            borderWidth: 0.5,
+            titleFont: {
+                weight: 'normal'
+            },
+            displayColors: false
+        };
     }
 }
 

@@ -11,6 +11,64 @@ import { LEDGER } from 'apps/web-giddh/src/app/actions/ledger/ledger.const';
 import { UNAUTHORISED } from '../../app.constant';
 import { cloneDeep, concat, filter, findIndex, forEach, indexOf, isArray, map, remove } from '../../lodash-optimized';
 
+/**
+ * Processes bulk invoice generation response and handles failed entries
+ *
+ * @param {any} newState - Current state object to update
+ * @param {BaseResponse<any, GenerateBulkInvoiceRequest[]>} res - Response from bulk invoice generation API
+ * @param {GenerateBulkInvoiceRequest[]} reqObj - Request object containing entry unique names
+ * @returns {any} Updated state object
+ */
+function processBulkInvoiceGenerationResponse(newState: any, res: BaseResponse<any, GenerateBulkInvoiceRequest[]>, reqObj: GenerateBulkInvoiceRequest[]): any {
+    if (res?.status === 'success' && reqObj?.length > 0) {
+        // check for failed entries
+        if (isArray(res.body) && res.body?.length > 0) {
+            let failedEntriesArr: string[] = [];
+            let needToRemoveEleArr: string[] = [];
+            forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
+                forEach(item.failedEntries, (uniqueName: string) => {
+                    failedEntriesArr.push(uniqueName);
+                    newState.ledgers.results = map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                        if (o?.uniqueName === uniqueName) {
+                            o.hasGenerationErr = true;
+                            o.errMsg = item.reason;
+                        }
+                        return o;
+                    });
+                });
+            });
+            forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                forEach(item.entries, (uniqueName: string) => {
+                    // find index and push
+                    if (indexOf(failedEntriesArr, uniqueName) === -1) {
+                        needToRemoveEleArr.push(uniqueName);
+                    }
+                });
+            });
+
+            forEach(needToRemoveEleArr, (uniqueName: string) => {
+                newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    return o?.uniqueName !== uniqueName;
+                });
+            });
+
+        } else if (typeof res.body === 'string') {
+            forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                forEach(item.entries, (uniqueName: string) => {
+                    newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                        return o?.uniqueName !== uniqueName;
+                    });
+                });
+            });
+            if (newState.ledgers.results?.length === 0) {
+                newState.isBulkInvoiceGeneratedWithoutErrors = true;
+            }
+        }
+        newState.isBulkInvoiceGenerated = true;
+    }
+    return newState;
+}
+
 export interface InvoiceState {
     base64Data: string;
     ledgers: GetAllLedgersOfInvoicesResponse;
@@ -176,54 +234,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             if (res?.status === 'success' && action.payload.queryString && action.payload.queryString.requestedFrom === 'ledger') {
                 return state;
             }
-            if (res?.status === 'success' && reqObj?.length > 0) {
-                // check for failed entries
-                if (isArray(res.body) && res.body?.length > 0) {
-                    let failedEntriesArr: string[] = [];
-                    let needToRemoveEleArr: string[] = [];
-                    forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
-                        forEach(item.failedEntries, (uniqueName: string) => {
-                            failedEntriesArr.push(uniqueName);
-                            newState.ledgers.results = map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                                if (o?.uniqueName === uniqueName) {
-                                    o.hasGenerationErr = true;
-                                    o.errMsg = item.reason;
-                                }
-                                return o;
-                            });
-                        });
-                    });
-                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        forEach(item.entries, (uniqueName: string) => {
-                            // find index and push
-                            if (indexOf(failedEntriesArr, uniqueName) === -1) {
-                                needToRemoveEleArr.push(uniqueName);
-                            }
-                        });
-                    });
-
-                    forEach(needToRemoveEleArr, (uniqueName: string) => {
-                        newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                            return o?.uniqueName !== uniqueName;
-                        });
-                    });
-
-                } else if (typeof res.body === 'string') {
-                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        forEach(item.entries, (uniqueName: string) => {
-                            newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                                return o?.uniqueName !== uniqueName;
-                            });
-                        });
-                    });
-                    if (newState.ledgers.results?.length === 0) {
-                        newState.isBulkInvoiceGeneratedWithoutErrors = true;
-                    }
-                }
-                newState.isBulkInvoiceGenerated = true;
-                return Object.assign({}, state, newState);
-            }
-            newState.isBulkInvoiceGenerated = true;
+            newState = processBulkInvoiceGenerationResponse(newState, res, reqObj);
             return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
@@ -430,55 +441,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             if (res?.status === 'success' && action.payload.queryString && action.payload.queryString.requestedFrom === 'ledger') {
                 return state;
             }
-            if (res?.status === 'success' && reqObj?.length > 0) {
-                // check for failed entries
-                if (isArray(res.body) && res.body?.length > 0) {
-                    let failedEntriesArr: string[] = [];
-                    let needToRemoveEleArr: string[] = [];
-                    forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
-                        forEach(item.failedEntries, (uniqueName: string) => {
-                            failedEntriesArr.push(uniqueName);
-                            newState.ledgers.results = map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                                if (o?.uniqueName === uniqueName) {
-                                    o.hasGenerationErr = true;
-                                    o.errMsg = item.reason;
-                                }
-                                return o;
-                            });
-                        });
-                    });
-                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        forEach(item.entries, (uniqueName: string) => {
-                            // find index and push
-                            if (indexOf(failedEntriesArr, uniqueName) === -1) {
-                                needToRemoveEleArr.push(uniqueName);
-                            }
-                        });
-                    });
-
-                    forEach(needToRemoveEleArr, (uniqueName: string) => {
-                        newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                            return o?.uniqueName !== uniqueName;
-                        });
-                    });
-
-                } else if (typeof res.body === 'string') {
-                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        forEach(item.entries, (uniqueName: string) => {
-                            newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                                return o?.uniqueName !== uniqueName;
-                            });
-                        });
-                    });
-                    if (newState.ledgers.results?.length === 0) {
-                        newState.isBulkInvoiceGeneratedWithoutErrors = true;
-                    }
-                }
-                newState.isBulkInvoiceGenerated = true;
-                newState.isInvoiceGenerated = true;
-                return Object.assign({}, state, newState);
-            }
-            newState.isBulkInvoiceGenerated = true;
+            newState = processBulkInvoiceGenerationResponse(newState, res, reqObj);
             newState.isInvoiceGenerated = true;
             return Object.assign({}, state, newState);
         }

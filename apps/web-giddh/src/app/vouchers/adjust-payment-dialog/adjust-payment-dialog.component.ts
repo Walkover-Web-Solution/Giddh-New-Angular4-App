@@ -13,6 +13,7 @@ import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { TdsTaxCalculationHelper } from '../../shared/helpers/tds-tax-calculation.helper';
 import { VoucherSelectionHelper } from '../../shared/helpers/voucher-selection.helper';
 import { AdvanceReceiptValidationHelper } from '../../shared/helpers/advance-receipt-validation.helper';
+import { AdvanceReceiptFormHelper } from '../../shared/helpers/advance-receipt-form.helper';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../services/toaster.service';
 import { NgForm } from '@angular/forms';
@@ -226,12 +227,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
 
         this.componentStore.company$.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
-                this.availableTdsTaxes = [];
-                (Array.isArray(obj.taxes) ? obj.taxes : []).forEach(item => {
-                    if (item && (item.taxType === 'tdsrc' || item.taxType === 'tdspay')) {
-                        this.availableTdsTaxes.push({ value: item.uniqueName, label: item.name, additional: item })
-                    }
-                });
+                this.availableTdsTaxes = AdvanceReceiptFormHelper.filterTdsTaxes(obj.taxes);
             }
         });
         this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
@@ -243,11 +239,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public onCancel(): void {
-        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
-            this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments?.filter(item => {
-                return item?.voucherNumber !== '' || item?.adjustmentAmount?.amountForAccount > 0;
-            });
-        }
+        this.adjustVoucherForm = AdvanceReceiptFormHelper.handleCancel(this.adjustVoucherForm);
         this.closeModelEvent.emit({
             adjustVoucherData: this.adjustVoucherForm,
             adjustPaymentData: this.adjustPayment
@@ -262,14 +254,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      */
     public onClear(isFormReset?: boolean): void {
         this.isFormReset = isFormReset;
-        this.adjustVoucherForm = {
-            tdsTaxUniqueName: '',
-            tdsAmount: {
-                amountForAccount: 0
-            },
-            description: '',
-            adjustments: this.resetAdjustments()
-        };
+        this.adjustVoucherForm = AdvanceReceiptFormHelper.clearForm(() => this.resetAdjustments());
 
         this.calculateBalanceDue();
 
@@ -934,12 +919,11 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     private assignCurrencyInAdjustVoucherForm(): void {
-        if (this.adjustVoucherForm?.adjustments?.length > 0) {
-            this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.map(item => {
-                item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
-                return item;
-            });
-        }
+        this.adjustVoucherForm = AdvanceReceiptFormHelper.assignCurrencyInAdjustments(
+            this.adjustVoucherForm,
+            this.baseCurrencySymbol,
+            this.companyCurrency
+        );
     }
 
     /**
@@ -948,8 +932,9 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public resetInvoiceList(): void {
-        this.adjustVoucherOptions = [];
-        this.referenceVouchersCurrentPage = 1;
+        const result = AdvanceReceiptFormHelper.resetInvoiceList();
+        this.adjustVoucherOptions = result.adjustVoucherOptions;
+        this.referenceVouchersCurrentPage = result.referenceVouchersCurrentPage;
     }
 
     /**
@@ -974,19 +959,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getInvoiceList(): void {
-        let voucherType = (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
-
-        if (voucherType === AdjustedVoucherType.Sales) {
-            voucherType = AdjustedVoucherType.SalesInvoice;
-        } else if (voucherType === AdjustedVoucherType.Purchase) {
-            voucherType = AdjustedVoucherType.PurchaseInvoice;
-        } else if (voucherType === AdjustedVoucherType.Payment) {
-            voucherType = VoucherTypeEnum.payment
-        } else if (voucherType === AdjustedVoucherType.Receipt) {
-            voucherType = VoucherTypeEnum.receipt
-        } else if (voucherType === AdjustedVoucherType.Journal) {
-            voucherType = AdjustedVoucherType.JournalVoucher
-        }
+        let voucherType = AdvanceReceiptFormHelper.mapVoucherType(this.adjustedVoucherType, 2);
 
         if (this.invoiceListRequestParams) {
             this.invoiceListRequestParams.voucherType = voucherType;

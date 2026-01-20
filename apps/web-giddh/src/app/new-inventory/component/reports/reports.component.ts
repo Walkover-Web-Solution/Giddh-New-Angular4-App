@@ -509,33 +509,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 };
                 stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getItemWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
-                    this.isLoading = false;
-                    if (response && response.body && response.status === 'success') {
-                        this.isDataAvailable = (response.body.results?.length) ? true : false;
-                        this.dataSource = response.body.results;
-                        this.stockReportRequest.page = response.body.page;
-                        this.stockReportRequest.totalItems = response.body.totalItems;
-                        this.stockReportRequest.totalPages = response.body.totalPages;
-                        this.stockReportRequest.count = response.body.count;
-                        if (response?.body?.fromDate && response?.body?.toDate) {
-                            this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                            this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                            this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                            this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                            this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                            this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            if (this.todaySelected) {
-                                this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                            } else {
-                                this.fromToDate = null;
-                            }
-                        }
-                    } else {
-                        this.toaster.errorToast(response?.message);
-                        this.dataSource = [];
-                        this.stockReportRequest.totalItems = 0;
-                    }
-                    this.changeDetection.detectChanges();
+                    this.handleReportResponse(response);
                 });
             }
 
@@ -551,34 +525,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 };
                 stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
-                    this.isLoading = false;
-                    if (response && response.body && response.status === 'success') {
-                        this.isDataAvailable = (response.body.results?.length) ? true : false;
-                        this.dataSource = response.body.results;
-                        this.stockReportRequest.page = response.body.page;
-                        this.stockReportRequest.totalItems = response.body.totalItems;
-                        this.stockReportRequest.totalPages = response.body.totalPages;
-                        this.stockReportRequest.count = response.body.count;
-                        if (response?.body?.fromDate && response?.body?.toDate) {
-                            this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                            this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                            this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                            this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                            this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                            this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-
-                            if (this.todaySelected) {
-                                this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                            } else {
-                                this.fromToDate = null;
-                            }
-                        }
-                    } else {
-                        this.toaster.errorToast(response?.message);
-                        this.dataSource = [];
-                        this.stockReportRequest.totalItems = 0;
-                    }
-                    this.changeDetection.detectChanges();
+                    this.handleReportResponse(response);
                 });
             }
             if (fetchBalance) {
@@ -791,6 +738,43 @@ export class ReportsComponent implements OnInit, OnDestroy {
         }
 
         this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName], { queryParams: { tab: 1 } });
+    }
+
+    /**
+     * Handles report response processing
+     *
+     * @private
+     * @param {any} response - Response from inventory report API
+     * @memberof ReportsComponent
+     */
+    private handleReportResponse(response: any): void {
+        this.isLoading = false;
+        if (response && response.body && response.status === 'success') {
+            this.isDataAvailable = (response.body.results?.length) ? true : false;
+            this.dataSource = response.body.results;
+            this.stockReportRequest.page = response.body.page;
+            this.stockReportRequest.totalItems = response.body.totalItems;
+            this.stockReportRequest.totalPages = response.body.totalPages;
+            this.stockReportRequest.count = response.body.count;
+            if (response?.body?.fromDate && response?.body?.toDate) {
+                this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                if (this.todaySelected) {
+                    this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
+                } else {
+                    this.fromToDate = null;
+                }
+            }
+        } else {
+            this.toaster.errorToast(response?.message);
+            this.dataSource = [];
+            this.stockReportRequest.totalItems = 0;
+        }
+        this.changeDetection.detectChanges();
     }
 
     /**
