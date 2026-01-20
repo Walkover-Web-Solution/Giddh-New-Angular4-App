@@ -271,37 +271,8 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                      * Handles tap functionality
                      */
                     tap(
-                        (res: BaseResponse<any, any>) => {
-                            /**
-                             * Handles if functionality
-                             */
-                            if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Plan purchased successfully');
-                                return this.patchState({
-                                    updateSubscriptionPaymentInProgress: false,
-                                    updateSubscriptionPaymentIsSuccess: res?.body ?? null
-                                });
-                            } else {
-                                /**
-                                 * Handles if functionality
-                                 */
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
-                                    updateSubscriptionPaymentInProgress: false,
-                                    updateSubscriptionPaymentIsSuccess: null
-                                });
-                            }
-                        },
-                        (error: any) => {
-                           this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
-
-                            return this.patchState({
-                                updateSubscriptionPaymentInProgress: false,
-                                updateSubscriptionPaymentIsSuccess: null
-                            });
-                        }
+                        (res: BaseResponse<any, any>) => this.handleSubscriptionPaymentResponse(res),
+                        (error: any) => this.handleSubscriptionPaymentError(error)
                     ),
                     /**
                      * Handles catchError functionality
@@ -324,37 +295,8 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                      * Handles tap functionality
                      */
                     tap(
-                        (res: BaseResponse<any, any>) => {
-                            /**
-                             * Handles if functionality
-                             */
-                            if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Plan purchased successfully');
-                                return this.patchState({
-                                    updateSubscriptionPaymentInProgress: false,
-                                    updateSubscriptionPaymentIsSuccess: res?.body ?? null
-                                });
-                            } else {
-                                /**
-                                 * Handles if functionality
-                                 */
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
-                                    updateSubscriptionPaymentInProgress: false,
-                                    updateSubscriptionPaymentIsSuccess: null
-                                });
-                            }
-                        },
-                        (error: any) => {
-                           this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
-
-                            return this.patchState({
-                                updateSubscriptionPaymentInProgress: false,
-                                updateSubscriptionPaymentIsSuccess: null
-                            });
-                        }
+                        (res: BaseResponse<any, any>) => this.handleSubscriptionPaymentResponse(res),
+                        (error: any) => this.handleSubscriptionPaymentError(error)
                     ),
                     /**
                      * Handles catchError functionality
@@ -782,6 +724,46 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
             })
         );
     });
+
+    /**
+     * Handles subscription payment response
+     *
+     * @private
+     * @param {BaseResponse<any, any>} res - Response from subscription payment API
+     * @memberof BuyPlanComponentStore
+     */
+    private handleSubscriptionPaymentResponse(res: BaseResponse<any, any>): void {
+        if (res?.status === 'success') {
+            this.toasterService.showSnackBar('success', 'Plan purchased successfully');
+            this.patchState({
+                updateSubscriptionPaymentInProgress: false,
+                updateSubscriptionPaymentIsSuccess: res?.body ?? null
+            });
+        } else {
+            if (res.message) {
+                this.toasterService.showSnackBar('error', res.message);
+            }
+            this.patchState({
+                updateSubscriptionPaymentInProgress: false,
+                updateSubscriptionPaymentIsSuccess: null
+            });
+        }
+    }
+
+    /**
+     * Handles subscription payment error
+     *
+     * @private
+     * @param {any} error - Error from subscription payment API
+     * @memberof BuyPlanComponentStore
+     */
+    private handleSubscriptionPaymentError(error: any): void {
+        this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+        this.patchState({
+            updateSubscriptionPaymentInProgress: false,
+            updateSubscriptionPaymentIsSuccess: null
+        });
+    }
 
     /**
      * Lifecycle hook for component destroy

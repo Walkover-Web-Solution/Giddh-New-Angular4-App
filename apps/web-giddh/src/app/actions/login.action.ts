@@ -287,100 +287,7 @@ export class LoginActions {
                 console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList());
             }), map((results: any[]) => {
-                console.log("Login Success");
-                /* check if local storage is cleared or not for first time
-                 for application menu set up in localstorage */
-
-                let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
-                let isMenuUpdated = localStorage.getItem('isMenuUpdated');
-
-                /**
-                 * Handles if functionality
-                 */
-                if (!JSON.parse(isNewMenuSetted) || (JSON.parse(isNewMenuSetted) && !isMenuUpdated)) {
-                    this._dbService.clearAllData();
-                    localStorage.setItem('isNewMenuSetted', true.toString());
-                    localStorage.setItem('isMenuUpdated', true.toString());
-                }
-
-                let cmpUniqueName = '';
-                let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
-                let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-
-                /**
-                 * Handles if functionality
-                 */
-                if (companies.body && companies.body.length === 0) {
-                    this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-                    this.zone.run(() => {
-                        this.store.pipe(
-                            /**
-                             * Handles select functionality
-                             */
-                            select(state => state.session.user),
-                            /**
-                             * Handles take functionality
-                             */
-                            take(1), // take only the first emission
-                            /**
-                             * Handles tap functionality
-                             */
-                            tap(response => {
-                                const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
-                                /**
-                                 * Handles if functionality
-                                 */
-                                if (hasSubscriptionPermission) {
-                                    this._router.navigate(['/pages/user-details/subscription']);
-                                } else {
-                                    this._router.navigate(['/pages/user-details/subscription/buy-plan']);
-                                }
-                            })
-                        ).subscribe();
-                    });
-                    return { type: 'EmptyAction' };
-                } else {
-                    /**
-                     * Handles if functionality
-                     */
-                    if (stateDetail.body && stateDetail?.status === 'success') {
-                        this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
-                        this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
-                        /**
-                         * Handles if functionality
-                         */
-                        if (stateDetail.body.branchUniqueName) {
-                            const details = {
-                                branchDetails: {
-                                    uniqueName: this._generalService.currentBranchUniqueName
-                                }
-                            };
-                            const organization: Organization = {
-                                type: OrganizationType.Branch,
-                                uniqueName: this._generalService.companyUniqueName || '',
-                                details
-                            };
-                            this.store.dispatch(this.companyActions.setCompanyBranch(organization));
-                        }
-                        cmpUniqueName = stateDetail.body.companyUniqueName;
-                        /**
-                         * Handles if functionality
-                         */
-                        if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
-                            return this.finalThingTodo(stateDetail, companies);
-                        } else {
-                            // old user fail safe scenerio
-                            return this.doSameStuffs(companies);
-                        }
-                    } else {
-                        /**
-                         * if user is new and signed up by shared entity
-                         * find the entity and redirect user according to terms.
-                         * shared entities [GROUP, COMPANY, ACCOUNT]
-                         */
-                        return this.doSameStuffs(companies);
-                    }
-                }
+                return this.handleLoginSuccessResponse(results);
             })));
 
     public loginSuccess$: Observable<Action> = createEffect(() => this.actions$
@@ -396,102 +303,7 @@ export class LoginActions {
                 console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList(), [action.payload]);
             }), map((results: any[]) => {
-                console.log("Login Success");
-                /* check if local storage is cleared or not for first time
-                 for application menu set up in localstorage */
-
-                let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
-                let isMenuUpdated = localStorage.getItem('isMenuUpdated');
-
-                /**
-                 * Handles if functionality
-                 */
-                if (!JSON.parse(isNewMenuSetted) || (JSON.parse(isNewMenuSetted) && !isMenuUpdated)) {
-                    this._dbService.clearAllData();
-                    localStorage.setItem('isNewMenuSetted', true.toString());
-                    localStorage.setItem('isMenuUpdated', true.toString());
-                }
-
-                let cmpUniqueName = '';
-                let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
-                let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-
-                /**
-                 * Handles if functionality
-                 */
-                if (companies.body && companies.body.length === 0) {
-                    this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-                    this.zone.run(() => {
-                        this.store.pipe(
-                            /**
-                             * Handles select functionality
-                             */
-                            select(state => state.session.user),
-                            /**
-                             * Handles take functionality
-                             */
-                            take(1), // take only the first emission
-                            /**
-                             * Handles tap functionality
-                             */
-                            tap(response => {
-                                const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
-                                /**
-                                 * Handles if functionality
-                                 */
-                                if (hasSubscriptionPermission) {
-                                    this._router.navigate(['/pages/user-details/subscription']);
-                                } else {
-                                    this._router.navigate(['/pages/user-details/subscription/buy-plan']);
-                                }
-                            })
-                        ).subscribe();
-                    });
-
-                    return { type: 'EmptyAction' };
-                } else {
-                    /**
-                     * Handles if functionality
-                     */
-                    if (stateDetail.body && stateDetail?.status === 'success') {
-                        this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
-                        this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
-                        this._generalService.voucherApiVersion = stateDetail.body.voucherVersion || 2;
-                        /**
-                         * Handles if functionality
-                         */
-                        if (stateDetail.body.branchUniqueName) {
-                            const details = {
-                                branchDetails: {
-                                    uniqueName: this._generalService.currentBranchUniqueName
-                                }
-                            };
-                            const organization: Organization = {
-                                type: OrganizationType.Branch,
-                                uniqueName: this._generalService.companyUniqueName || '',
-                                details
-                            };
-                            this.store.dispatch(this.companyActions.setCompanyBranch(organization));
-                        }
-                        cmpUniqueName = stateDetail.body.companyUniqueName;
-                        /**
-                         * Handles if functionality
-                         */
-                        if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
-                            return this.finalThingTodo(stateDetail, companies, results[2]);
-                        } else {
-                            // old user fail safe scenerio
-                            return this.doSameStuffs(companies, results[2]);
-                        }
-                    } else {
-                        /**
-                         * if user is new and signed up by shared entity
-                         * find the entity and redirect user according to terms.
-                         * shared entities [GROUP, COMPANY, ACCOUNT]
-                         */
-                        return this.doSameStuffs(companies, results[2]);
-                    }
-                }
+                return this.handleLoginSuccessResponse(results, results[2]);
             })));
 
     public logoutSuccess$: Observable<Action> = createEffect(() => this.actions$
@@ -1658,5 +1470,79 @@ export class LoginActions {
      */
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         this._generalService.finalNavigate(route, parameter, isSocialLogin);
+    }
+
+    /**
+     * Handles login success response processing
+     *
+     * @private
+     * @param {any[]} results - Array containing state details and companies
+     * @param {boolean} [isSocialLogin] - Optional social login payload
+     * @returns {Action} Action to dispatch
+     * @memberof LoginActions
+     */
+    private handleLoginSuccessResponse(results: any[], isSocialLogin?: boolean): Action {
+        console.log("Login Success");
+        
+        let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
+        let isMenuUpdated = localStorage.getItem('isMenuUpdated');
+
+        if (!JSON.parse(isNewMenuSetted) || (JSON.parse(isNewMenuSetted) && !isMenuUpdated)) {
+            this._dbService.clearAllData();
+            localStorage.setItem('isNewMenuSetted', true.toString());
+            localStorage.setItem('isMenuUpdated', true.toString());
+        }
+
+        let cmpUniqueName = '';
+        let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
+        let companies = results[1] as BaseResponse<CompanyResponse[], string>;
+
+        if (companies.body && companies.body.length === 0) {
+            this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
+            this.zone.run(() => {
+                this.store.pipe(
+                    select(state => state.session.user),
+                    take(1),
+                    tap(response => {
+                        const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                        if (hasSubscriptionPermission) {
+                            this._router.navigate(['/pages/user-details/subscription']);
+                        } else {
+                            this._router.navigate(['/pages/user-details/subscription/buy-plan']);
+                        }
+                    })
+                ).subscribe();
+            });
+            return { type: 'EmptyAction' };
+        } else {
+            if (stateDetail.body && stateDetail?.status === 'success') {
+                this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
+                this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
+                if (isSocialLogin) {
+                    this._generalService.voucherApiVersion = stateDetail.body.voucherVersion || 2;
+                }
+                if (stateDetail.body.branchUniqueName) {
+                    const details = {
+                        branchDetails: {
+                            uniqueName: this._generalService.currentBranchUniqueName
+                        }
+                    };
+                    const organization: Organization = {
+                        type: OrganizationType.Branch,
+                        uniqueName: this._generalService.companyUniqueName || '',
+                        details
+                    };
+                    this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                }
+                cmpUniqueName = stateDetail.body.companyUniqueName;
+                if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+                    return this.finalThingTodo(stateDetail, companies, isSocialLogin);
+                } else {
+                    return this.doSameStuffs(companies, isSocialLogin);
+                }
+            } else {
+                return this.doSameStuffs(companies, isSocialLogin);
+            }
+        }
     }
 }

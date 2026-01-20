@@ -14,6 +14,7 @@ import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { TdsTaxCalculationHelper } from '../helpers/tds-tax-calculation.helper';
 import { VoucherSelectionHelper } from '../helpers/voucher-selection.helper';
 import { AdvanceReceiptValidationHelper } from '../helpers/advance-receipt-validation.helper';
+import { AdvanceReceiptFormHelper } from '../helpers/advance-receipt-form.helper';
 import { AdjustedVoucherType, PAGINATION_LIMIT, SubVoucher } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 import { AdjustmentUtilityService } from './services/adjustment-utility.service';
@@ -267,15 +268,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
              * Handles if functionality
              */
             if (obj && obj.taxes) {
-                this.availableTdsTaxes = [];
-                (Array.isArray(obj.taxes) ? obj.taxes : []).forEach(item => {
-                    /**
-                     * Handles if functionality
-                     */
-                    if (item && (item.taxType === 'tdsrc' || item.taxType === 'tdspay')) {
-                        this.availableTdsTaxes.push({ value: item.uniqueName, label: item.name, additional: item })
-                    }
-                });
+                this.availableTdsTaxes = AdvanceReceiptFormHelper.filterTdsTaxes(obj.taxes);
             }
         });
         this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
@@ -287,14 +280,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public onCancel(): void {
-        /**
-         * Handles if functionality
-         */
-        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
-            this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments?.filter(item => {
-                return item?.voucherNumber !== '' || item?.adjustmentAmount?.amountForAccount > 0;
-            });
-        }
+        this.adjustVoucherForm = AdvanceReceiptFormHelper.handleCancel(this.adjustVoucherForm);
         this.closeModelEvent.emit({
             adjustVoucherData: this.adjustVoucherForm,
             adjustPaymentData: this.adjustPayment
@@ -309,14 +295,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public onClear(isFormReset?: boolean): void {
         this.isFormReset = isFormReset;
-        this.adjustVoucherForm = {
-            tdsTaxUniqueName: '',
-            tdsAmount: {
-                amountForAccount: 0
-            },
-            description: '',
-            adjustments: this.resetAdjustments()
-        };
+        this.adjustVoucherForm = AdvanceReceiptFormHelper.clearForm(() => this.resetAdjustments());
 
         this.calculateBalanceDue();
 
@@ -1177,15 +1156,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     private assignCurrencyInAdjustVoucherForm(): void {
-        /**
-         * Handles if functionality
-         */
+        this.adjustVoucherForm = AdvanceReceiptFormHelper.assignCurrencyInAdjustments(
+            this.adjustVoucherForm,
+            this.baseCurrencySymbol,
+            this.companyCurrency
+        );
         if (this.adjustVoucherForm?.adjustments?.length > 0) {
-            this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.map(item => {
-                item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
-                return item;
-            });
-
             this.changeDetectionRef.detectChanges();
         }
     }
@@ -1196,8 +1172,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public resetInvoiceList(): void {
-        this.adjustVoucherOptions = [];
-        this.referenceVouchersCurrentPage = 1;
+        const result = AdvanceReceiptFormHelper.resetInvoiceList();
+        this.adjustVoucherOptions = result.adjustVoucherOptions;
+        this.referenceVouchersCurrentPage = result.referenceVouchersCurrentPage;
     }
 
     /**
@@ -1228,8 +1205,85 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getInvoiceList(): void {
-        const voucherType = this.getVoucherType();
-        const requestObject = this.createRequestObject(voucherType);
+        let voucherType = AdvanceReceiptFormHelper.mapVoucherType(this.adjustedVoucherType, this.voucherApiVersion);
+
+        if (this.voucherApiVersion === 2 && this.invoiceListRequestParams) {
+            this.invoiceListRequestParams.voucherType = voucherType;
+        }
+
+        const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
+        let requestObject;
+        if (typeof customerUniqueName === 'string') {
+            // New entry is created from ledger
+            if (this.voucherApiVersion === 2) {
+                if (!this.invoiceListRequestParams) {
+                    requestObject = {
+                        accountUniqueName: customerUniqueName,
+                        voucherType,
+                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined,
+                        number: '',
+                        page: 1
+                    }
+                } else {
+                    requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
+                    if (requestObject && this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) {
+                        requestObject.subVoucher = SubVoucher.AdvanceReceipt;
+                    }
+                }
+
+                if (requestObject) {
+                    requestObject.number = this.searchReferenceVoucher;
+
+                    if (requestObject.number) {
+                        this.resetInvoiceList();
+                    }
+
+                    requestObject.page = this.referenceVouchersCurrentPage;
+                    this.referenceVouchersCurrentPage++;
+                }
+            } else {
+                requestObject = {
+                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
+                    voucherType,
+                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                }
+            }
+        } else {
+            // A ledger entry is updated
+            if (this.voucherApiVersion === 2) {
+                if (!this.invoiceListRequestParams) {
+                    requestObject = {
+                        accountUniqueName: customerUniqueName[customerUniqueName?.length - 1],
+                        voucherType,
+                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined,
+                        number: '',
+                        page: 1
+                    }
+                } else {
+                    requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
+                    if (requestObject && this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) {
+                        requestObject.subVoucher = SubVoucher.AdvanceReceipt;
+                    }
+                }
+
+                if (requestObject) {
+                    requestObject.number = this.searchReferenceVoucher;
+
+                    if (requestObject.number) {
+                        this.resetInvoiceList();
+                    }
+
+                    requestObject.page = this.referenceVouchersCurrentPage;
+                    this.referenceVouchersCurrentPage++;
+                }
+            } else {
+                requestObject = {
+                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
+                    voucherType,
+                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                }
+            }
+        }
 
         /**
          * Handles if functionality
