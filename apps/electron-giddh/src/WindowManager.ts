@@ -1,6 +1,6 @@
 import { app, BrowserWindow as BrowserWindowElectron, ipcMain } from 'electron';
 import * as path from 'path';
-import AppUpdaterV1 from './AppUpdater';
+import { getAppUpdater } from './AppUpdater';
 import { autoUpdater } from 'electron-updater';
 import { WebContentsSignal, WindowEvent } from './electronEventSignals';
 import { DEFAULT_URL, StateManager, WindowItem } from './StateManager';
@@ -11,11 +11,14 @@ export const WINDOW_NAVIGATED = 'windowNavigated';
 
 export default class WindowManager {
 
-    private appUpdater: AppUpdaterV1 = null;
+    private appUpdater = null;
     private stateManager = new StateManager();
     private windows: BrowserWindow[] = [];
 
     constructor() {
+        // Setup IPC handlers for auto-updater
+        this.setupAutoUpdaterIPC();
+
         app.on('window-all-closed', () => {
             // restore default set of windows
             this.stateManager.restoreWindows();
@@ -24,13 +27,13 @@ export default class WindowManager {
             if (process.platform === 'darwin') {
                 // reopen initial window
                 // this.openWindows();
-                if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
+                if (this.appUpdater && this.appUpdater.getUpdateStatus().isUpdateDownloaded) {
                     autoUpdater.quitAndInstall();
                 } else {
                     app.quit();
                 }
             } else {
-                if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
+                if (this.appUpdater && this.appUpdater.getUpdateStatus().isUpdateDownloaded) {
                     setTimeout(() => {
                         autoUpdater.quitAndInstall();
                     }, 60000);
@@ -38,6 +41,38 @@ export default class WindowManager {
                     app.quit();
                 }
             }
+        });
+    }
+
+    private setupAutoUpdaterIPC(): void {
+        ipcMain.handle('check-for-updates', async () => {
+            try {
+                if (!this.appUpdater) {
+                    this.appUpdater = getAppUpdater();
+                }
+                await this.appUpdater.checkForUpdates();
+                return { success: true };
+            } catch (error) {
+                return { success: false, error: (error as Error).message };
+            }
+        });
+
+        ipcMain.handle('get-update-status', () => {
+            if (!this.appUpdater) {
+                this.appUpdater = getAppUpdater();
+            }
+            return this.appUpdater.getUpdateStatus();
+        });
+
+        ipcMain.handle('quit-and-install', () => {
+            if (!this.appUpdater) {
+                this.appUpdater = getAppUpdater();
+            }
+            this.appUpdater.quitAndInstall();
+        });
+
+        ipcMain.handle('get-app-version', () => {
+            return app.getVersion();
         });
     }
 
@@ -110,8 +145,8 @@ export default class WindowManager {
             }, 2 * 1000);
         }
 
-        // tslint:disable-next-line:no-unused-expression
-        this.appUpdater = new AppUpdaterV1();
+        // Initialize auto-updater after windows are created
+        this.appUpdater = getAppUpdater();
     }
 
     public focusFirstWindow(): void {
@@ -128,46 +163,36 @@ export default class WindowManager {
     private registerWindowEventHandlers(window: BrowserWindow, descriptor: WindowItem): void {
         window.on('close', () => {
             WindowManager.saveWindowState(window, descriptor);
-            const url = window.webContents.getURL();
-            if (!isUrlInvalid(url)) {
-                descriptor.url = url;
-            }
-            this.stateManager.save();
+            this.stateManager.saveWindows();
         });
+
         window.on('closed', () => {
             const index = this.windows.indexOf(window);
-            console.assert(index >= 0);
-            this.windows.splice(index, 1);
-        });
-
-        window.on('app-command', (e: any, command: string) => {
-            // navigate the window back when the user hits their mouse back button
-            if (command === 'browser-backward') {
-                if (window.webContents.canGoBack()) {
-                    window.webContents.goBack();
-                }
-            } else if (command === 'browser-forward') {
-                if (window.webContents.canGoForward()) {
-                    window.webContents.goForward();
-                }
+            if (index >= 0) {
+                this.windows.splice(index, 1);
             }
         });
 
-        const webContents = window.webContents;
-        // cannot find way to listen url change in pure JS
-        new WebContentsSignal(webContents)
-            .navigated((event, url) => {
-                ipcMain.emit(WINDOW_NAVIGATED, event.sender, url);
-                webContents.send('maybeUrlChanged', url);
-            })
-            .navigatedInPage((event, url) => {
-                ipcMain.emit(WINDOW_NAVIGATED, event.sender, url);
-                webContents.send('maybeUrlChanged', url);
-            });
+        window.webContents.on('did-navigate', (event, url) => {
+            descriptor.url = url;
+            this.stateManager.saveWindows();
+            window.webContents.send(WINDOW_NAVIGATED, url);
+        });
+
+        window.webContents.on('did-navigate-in-page', (event, url) => {
+            descriptor.url = url;
+            this.stateManager.saveWindows();
+            window.webContents.send(WINDOW_NAVIGATED, url);
+        });
     }
 
+    public handleBeforeQuit(): void {
+        if (this.appUpdater && this.appUpdater.getUpdateStatus().isUpdateDownloaded) {
+            autoUpdater.quitAndInstall();
+        }
+    }
 }
 
 function isUrlInvalid(url: string): boolean {
-    return url == null || url.length === 0 || url === 'about:blank';
+    return url == null || url.length === 0;
 }
