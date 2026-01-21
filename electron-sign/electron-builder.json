@@ -6,9 +6,9 @@
     "publish": [
         {
             "provider": "s3",
-            "bucket": "giddh-app-builds",
+            "bucket": "app-giddh-test",
             "region": "ap-south-1",
-            "path": "releases"
+            "path": "test/windows"
         }
     ],
     "directories": {
