@@ -109,6 +109,21 @@ jobs:
               Write-Host "  ❌ ERROR: Executable not found in expected location"
               exit 1
           }
+          
+          # Verify ICU data file exists
+          Write-Host "🔍 Checking for ICU data files..."
+          $icuFile = Get-ChildItem -Path "dist/apps/electrongiddh-packages/win-unpacked" -Filter "icudtl.dat" -Recurse
+          if ($icuFile) {
+              Write-Host "  ✅ Found ICU data: $($icuFile.FullName)"
+          } else {
+              Write-Host "  ⚠️ WARNING: ICU data file (icudtl.dat) not found!"
+          }
+          
+          # List all files in unpacked directory for debugging
+          Write-Host "📋 Contents of win-unpacked directory:"
+          Get-ChildItem -Path "dist/apps/electrongiddh-packages/win-unpacked" -Recurse | Select-Object -First 50 | ForEach-Object {
+              Write-Host "  $($_.FullName)"
+          }
 
       - name: Extract version from package.json
         shell: pwsh
