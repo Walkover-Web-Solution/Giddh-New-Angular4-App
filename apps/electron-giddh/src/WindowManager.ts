@@ -118,7 +118,7 @@ export default class WindowManager {
                     webSecurity: false,
                     preload: path.join(__dirname, 'preload.js')
                 },
-                tabbingIdentifier: 'giddh'
+                tabbingIdentifier: 'Giddh'
             };
 
             let isMaximized = true;
