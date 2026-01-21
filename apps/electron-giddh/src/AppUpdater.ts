@@ -84,7 +84,6 @@ export default class AppUpdater {
             this.isUpdateDownloaded = true;
             this.showUpdateDownloadedDialog(event);
         });
-        
         log.info('Event listeners setup complete');
     }
 
