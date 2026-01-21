@@ -100,11 +100,7 @@
         "allowElevation": true,
         "displayLanguageSelector": false
     },
-    "asar": true,
-    "asarUnpack": [
-        "**/*.node",
-        "**/build/icons/*.png"
-    ],
+    "asar": false,
     "extraResources": [
         {
             "from": "build/icons",
