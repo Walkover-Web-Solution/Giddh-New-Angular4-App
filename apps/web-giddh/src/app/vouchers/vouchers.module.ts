@@ -95,6 +95,7 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
 import { ResizableDirective } from "../shared/directives/resizable.directive";
+import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
 
 @NgModule({
     declarations: [
@@ -193,7 +194,8 @@ import { ResizableDirective } from "../shared/directives/resizable.directive";
         TributeMentionModule,
         MobileNumberInputComponent,
         KeyboardNavigationModule,
-        ResizableDirective
+        ResizableDirective  ,
+        AsideRecurrenceVoucherCreateComponent
     ],
     exports: [
         VoucherCreateComponent,

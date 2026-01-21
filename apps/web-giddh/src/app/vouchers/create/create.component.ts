@@ -125,6 +125,7 @@ import { Platform } from "@angular/cdk/platform";
 import { GeneralActions } from "../../actions/general/general.actions";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CustomFieldsService } from "../../services/custom-fields.service";
+import { RecurrenceFormService } from "../../services/aside-recurring-voucher-create.service";
 
 @Component({
     selector: "create",
@@ -659,6 +660,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             shippingDetails: null,
         },
     };
+    get recurrenceFormGroup(): FormGroup {
+  return this.invoiceForm.get('recurrence') as FormGroup;
+}
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -695,7 +699,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private platform: Platform,
         private ngZone: NgZone,
         private generalActions: GeneralActions,
-        private customFieldsService: CustomFieldsService
+        private customFieldsService: CustomFieldsService,
+          private recurrenceService: RecurrenceFormService
     ) {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
@@ -2947,30 +2952,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 date: [""],
             }),
             isRecurringVoucher: [false], // toggle from parent
-            recurrence: this.formBuilder.group({
-                startDate: [null],
-                frequency: this.formBuilder.group({
-                    unit: ['DAY'],
-                    interval: [1]
-                }),
-                repeatOn: this.formBuilder.group({
-                    monthlyMode: ['DAY'],   // 👈 ADD THIS
-                    daysOfWeek: [[]],
-                    dayOfMonth: [null],
-                    weekOfMonth: [null],
-                    weekday: [null]
-                }),
-
-                end: this.formBuilder.group({
-                    type: ['AFTER_OCCURRENCES'],
-                    endDate: [null],
-                    occurrences: [12]
-                }),
-                preview: this.formBuilder.group({
-                    dates: [[]],
-                    totalOccurrences: [0]
-                })
-            }),
+            recurrence: this.recurrenceService.createForm(),
             einvoiceGenerated: [false],
             linkedPo: [null], //temp
             grandTotalMultiCurrency: [0], //temp
@@ -7948,314 +7930,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isAccountChangeInUpdateMode(): boolean {
         return this.isUpdateMode && this.isAccountChanged;
     }
-
-
-    /* =======================
-      UI STATE FLAGS
-    ======================= */
-    showCustom = false;
-    showDayThe = false;
-    showWeekdayToggle = false;
-
-    /* =======================
-      CONSTANT OPTIONS
-    ======================= */
-    weekdays = [
-        { label: 'M', value: 1 },
-        { label: 'T', value: 2 },
-        { label: 'W', value: 3 },
-        { label: 'T', value: 4 },
-        { label: 'F', value: 5 },
-        { label: 'S', value: 6 },
-        { label: 'S', value: 7 }
-    ];
-
-    weekdayOptions = [
-        { label: 'Monday', value: 1 },
-        { label: 'Tuesday', value: 2 },
-        { label: 'Wednesday', value: 3 },
-        { label: 'Thursday', value: 4 },
-        { label: 'Friday', value: 5 },
-        { label: 'Saturday', value: 6 },
-        { label: 'Sunday', value: 7 }
-    ];
-
-    weekOfMonthOptions = [
-        { label: '1st', value: 1 },
-        { label: '2nd', value: 2 },
-        { label: '3rd', value: 3 },
-        { label: '4th', value: 4 },
-        { label: 'Last', value: 'LAST' }
-    ];
-
-    monthDays: number[] = Array.from({ length: 31 }, (_, i) => i + 1);
-
-    repeatOptions: Array<{ label: string; value: any }> = [];
-    selectedRepeatOption: 'DAY' | 'WEEKLY' | 'MONTHLY_DATE' | 'MONTHLY_WEEKDAY' | 'CUSTOM' | null = null;
-
-    /* =======================
-      FORM GETTERS
-    ======================= */
-    get recurrenceForm(): FormGroup {
-        return this.invoiceForm.get('recurrence') as FormGroup;
-    }
-
-    get repeatOnForm(): FormGroup | null {
-        return this.recurrenceForm?.get('repeatOn') as FormGroup;
-    }
-
-    /* =======================
-      START DATE CHANGE
-    ======================= */
-    onStartDateChange(date: Date | null): void {
-        if (!date) return;
-
-        this.recurrenceForm.patchValue({ startDate: date });
-
-        // Build repeat dropdown dynamically
-        this.buildRepeatOptions(date);
-
-        // Auto-select Weekly by default
-        this.selectedRepeatOption = 'WEEKLY';
-        this.selectRepeatOption('DAY');
-    }
-
-    public onRecurrenceEndTypeChange(type: string): void {
-        if (type === 'NEVER') {
-            const endGroup = this.recurrenceForm.get('end');
-            endGroup?.get('endDate')?.setValue(null);
-        }
-    }
-
-    /* =======================
-      BUILD REPEAT OPTIONS
-    ======================= */
-    private buildRepeatOptions(startDate: Date): void {
-        const dayOfMonth = startDate.getDate();
-        const weekdayIndex = startDate.getDay() === 0 ? 7 : startDate.getDay();
-        const weekdayName =
-            this.weekdayOptions.find(w => w.value === weekdayIndex)?.label || '';
-        const weekOfMonth = Math.ceil(dayOfMonth / 7);
-
-        this.repeatOptions = [
-            {
-                label: `Weekly on ${weekdayName}`,
-                value: 'WEEKLY'
-            },
-            {
-                label: `Monthly on ${this.getOrdinal(dayOfMonth)}`,
-                value: 'MONTHLY_DATE'
-            },
-            {
-                label: `Monthly on the ${this.getOrdinal(weekOfMonth)} ${weekdayName}`,
-                value: 'MONTHLY_WEEKDAY'
-            },
-            {
-                label: 'Custom',
-                value: 'CUSTOM'
-            }
-        ];
-    }
-
-    /* =======================
-      GET ORDINAL
-    ======================= */
-    private getOrdinal(n: number): string {
-        const mod10 = n % 10;
-        const mod100 = n % 100;
-
-        if (mod100 >= 11 && mod100 <= 13) return `${n}th`;
-
-        switch (mod10) {
-            case 1: return `${n}st`;
-            case 2: return `${n}nd`;
-            case 3: return `${n}rd`;
-            default: return `${n}th`;
-        }
-    }
-    get daysOfWeekArray(): FormArray | null {
-        return this.repeatOnForm?.get('daysOfWeek') as FormArray ?? null;
-    }
-
-    /* =======================
-      SELECT REPEAT OPTION
-    ======================= */
-    selectRepeatOption(option: 'DAY' | 'WEEKLY' | 'MONTHLY_DATE' | 'MONTHLY_WEEKDAY' | 'CUSTOM'): void {
-        this.selectedRepeatOption = option;
-        this.showCustom = option === 'CUSTOM';
-
-        this.recurrenceForm.patchValue({
-            frequency: { unit: 'DAY', interval: 1 },
-            repeatOn: {
-                daysOfWeek: [],
-                dayOfMonth: null,
-                weekOfMonth: null,
-                weekday: null
-            }
-        });
-
-        const startDate: Date = new Date(this.recurrenceForm.value.startDate);
-        const dayOfMonth = startDate.getDate();
-        const weekday = startDate.getDay() === 0 ? 7 : startDate.getDay();
-        const weekOfMonth = Math.ceil(dayOfMonth / 7);
-
-        switch (option) {
-            case 'WEEKLY':
-                this.showWeekdayToggle = false;
-                this.showDayThe = false;
-                this.recurrenceForm.patchValue({
-                    frequency: { unit: 'WEEK', interval: 1 },
-                    repeatOn: { daysOfWeek: [weekday] }
-                });
-                break;
-
-            case 'MONTHLY_DATE':
-                this.showWeekdayToggle = false;
-                this.showDayThe = false;
-                this.recurrenceForm.patchValue({
-                    frequency: { unit: 'MONTH', interval: 1 },
-                    repeatOn: { dayOfMonth }
-                });
-                break;
-
-            case 'MONTHLY_WEEKDAY':
-                this.showWeekdayToggle = false;
-                this.showDayThe = false;
-                this.recurrenceForm.patchValue({
-                    frequency: { unit: 'MONTH', interval: 1 },
-                    repeatOn: { weekOfMonth, weekday }
-                });
-                break;
-
-            case 'CUSTOM': {
-                // Reset repeat-on values safely
-                this.resetRepeatOn();
-
-                // Default frequency
-                this.recurrenceForm.get('frequency')?.patchValue({
-                    unit: 'DAY',
-                    interval: 1
-                });
-
-                // ✅ USE START DATE AS END DATE
-                const startDate: Date | null = this.recurrenceForm.get('startDate')?.value;
-
-                this.recurrenceForm.get('end')?.patchValue({
-                    type: 'ON_DATE',
-                    endDate: startDate
-                });
-
-                // UI flags (deferred to avoid ExpressionChanged errors)
-                Promise.resolve().then(() => {
-                    this.showCustom = true;
-                    this.showWeekdayToggle = false;
-                    this.showDayThe = false;
-                });
-
-                break;
-            }
-
-        }
-    }
-
-    /* =======================
-      CUSTOM UNIT CHANGE
-    ======================= */
-    onRepeatUnitChange(unit: 'DAY' | 'WEEK' | 'MONTH'): void {
-        if (!this.repeatOnForm) return;
-
-        this.resetRepeatOn();
-
-        if (unit === 'WEEK') {
-            this.repeatOnForm.patchValue({
-                daysOfWeek: [null]
-            });
-        }
-
-        if (unit === 'MONTH') {
-
-            this.repeatOnForm?.patchValue({
-                monthlyMode: 'DAY',      // ✅ THIS selects Day radio
-                dayOfMonth: 1,
-                weekOfMonth: null,
-                weekday: null
-            });
-        }
-
-
-        Promise.resolve().then(() => {
-            this.showWeekdayToggle = unit === 'WEEK';
-            this.showDayThe = unit === 'MONTH';
-        });
-    }
-
-
-
-
-    /* =======================
-      WEEKDAY TOGGLE
-    ======================= */
-    isWeekdaySelected(day: number): boolean {
-        const arr = this.daysOfWeekArray;
-        if (!arr) return false;
-        return arr.value.includes(day);
-    }
-
-    toggleWeekday(day: number): void {
-        const arr = this.daysOfWeekArray;
-        if (!arr) return;
-
-        console.log('Before toggle:', arr.value, 'Toggling day:', day);
-
-        const index = arr.value.indexOf(day);
-        if (index >= 0) {
-            // Day is selected, remove it
-            arr.removeAt(index);
-        } else {
-            // Day is not selected, add it
-            arr.push(new FormControl(day));
-        }
-
-        console.log('After toggle:', arr.value);
-    }
-
-
-    private resetRepeatOn(): void {
-        const arr = this.daysOfWeekArray;
-        if (arr) {
-            while (arr.length) arr.removeAt(0); // clear all days
-        }
-        this.repeatOnForm?.patchValue({
-            dayOfMonth: null,
-            weekOfMonth: null,
-            weekday: null
-        });
-    }
-
-
-
-    /* =======================
-      MONTHLY DAY/THE
-    ======================= */
-    selectMonthlyDay(): void {
-        this.repeatOnForm?.patchValue({ dayOfMonth: 1, weekOfMonth: null, weekday: null });
-    }
-
-    selectMonthlyThe(): void {
-        console.log('selectMonthlyThe called');
-        this.repeatOnForm?.patchValue({
-            dayOfMonth: null,
-            weekOfMonth: 1,
-            weekday: 1
-        });
-        console.log('repeatOnForm values after selectMonthlyThe:', this.repeatOnForm?.value);
-    }
-
-    get frequencyUnit(): 'DAY' | 'WEEK' | 'MONTH' | null {
-        return this.recurrenceForm?.get('frequency.unit')?.value ?? null;
-    }
-
-
 
 }
 

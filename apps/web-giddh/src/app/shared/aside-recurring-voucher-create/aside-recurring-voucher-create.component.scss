@@ -1,0 +1,20 @@
+.recurring-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.weekday-toggle {
+    display: flex;
+    gap: 8px;
+}
+
+.section {
+    margin-top: 16px;
+}
