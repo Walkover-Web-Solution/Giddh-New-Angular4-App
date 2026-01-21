@@ -254,15 +254,22 @@ jobs:
       - name: Prepare latest.yml for upload
         shell: pwsh
         run: |
+          Write-Host "🔍 Searching for latest.yml..."
+          
           # Find latest.yml
           $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
           
           if ($latestYml) {
+            Write-Host "✅ Found latest.yml at: $($latestYml.FullName)"
             Copy-Item $latestYml.FullName "artifacts/final/latest.yml" -Force
             "LATEST_YML_PATH=$((Resolve-Path 'artifacts/final/latest.yml').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
-            Write-Host "Prepared latest.yml for upload"
+            Write-Host "✅ Copied latest.yml to artifacts/final/"
+            Write-Host "📄 Contents of latest.yml:"
+            Get-Content "artifacts/final/latest.yml" | Write-Host
           } else {
-            Write-Host "Warning: latest.yml not found"
+            Write-Host "❌ WARNING: latest.yml not found in dist/apps/electrongiddh-packages"
+            Write-Host "📁 Listing dist/apps/electrongiddh-packages contents:"
+            Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Recurse | Select-Object FullName | Write-Host
           }
 
       # --- AWS Auth (using access keys only for now) ---
