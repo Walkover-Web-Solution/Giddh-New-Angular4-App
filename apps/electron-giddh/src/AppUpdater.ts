@@ -34,7 +34,8 @@ export default class AppUpdater {
             provider: 's3',
             bucket: 'app-giddh-test',
             region: 'ap-south-1',
-            path: `test/${platform}/latest`
+            path: `test/${platform}/latest`,
+            endpoint: 'https://s3-ap-south-1.amazonaws.com'
         };
         
         log.info('Configuring auto-updater with feed:', feedConfig);
