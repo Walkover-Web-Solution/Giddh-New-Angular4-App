@@ -126,11 +126,20 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
                 // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
-                const isGiddhDomain = href.includes('books.giddh.com') || href.includes('test.giddh.com') || href.includes('books.giddh.com/login') || href.includes('test.giddh.com/login');
+                const isGiddhDomain = href.includes('books.giddh.com') || href.includes('test.giddh.com') || href.includes('books.giddh.com/login') || href.includes('test.giddh.com/login') || href.includes('books.giddh.com/') || href.includes('test.giddh.com/');
 
                 if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
                     // Hard redirect for books.giddh.com or test.giddh.com domains
                     const currentUrl = path + search;
+
+                    // For root domain (/) or login path (/login), redirect to login without returnUrl
+                    if (currentUrl === '/' || currentUrl === '' || currentUrl === '/login' || currentUrl.startsWith('/login')) {
+                        const regionLogin = this._generalService.getGiddhRegionUrl() + '/login';
+                        window.location.href = regionLogin;
+                        return;
+                    }
+
+                    // For other paths, extract returnUrl and redirect to login with returnUrl
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
                         returnUrl = currentUrl.split('/pages/')[1] || '';
