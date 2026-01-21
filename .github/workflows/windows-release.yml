@@ -47,7 +47,7 @@ jobs:
       # Common options:
       # - npm run build && npm run dist
       # - npx electron-builder --win --x64 --publish never
-      - name: Build Electron App (unpacked)
+      - name: Build Electron App (unpacked only - for signing)
         env:
           ELECTRON_ENV: true
         run: |
@@ -86,18 +86,20 @@ jobs:
           Write-Host "  ✅ Copied $($trayIcons.Count) tray icon files"
           
           cd dist/apps/web-giddh
-          Write-Host "🔨 Building Electron app with electron-builder..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64
+          Write-Host "🔨 Building unpacked Electron app (no installer yet)..."
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --dir
           cd ../../../
           
-          # Verify the built executable exists and has an icon
+          # Verify the built executable exists
           Write-Host "🔍 Verifying built executable..."
           $exePath = Get-ChildItem -Path "dist/apps/electrongiddh-packages/win-unpacked" -Filter "*.exe" -Recurse | Select-Object -First 1
           if ($exePath) {
               Write-Host "  ✅ Found executable: $($exePath.FullName)"
               Write-Host "  Size: $($exePath.Length) bytes"
+              "UNSIGNED_EXE=$($exePath.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           } else {
-              Write-Host "  ⚠️ WARNING: Executable not found in expected location"
+              Write-Host "  ❌ ERROR: Executable not found in expected location"
+              exit 1
           }
 
       - name: Extract version from package.json
@@ -110,6 +112,51 @@ jobs:
           Write-Host "Package version: $version"
           
           node scripts/build-success-message.js prod
+
+      - name: Sign application executable (giddh.exe)
+        uses: SSLcom/esigner-codesign@v1.3.2
+        with:
+          command: sign
+          username: ${{ secrets.ES_USERNAME }}
+          password: ${{ secrets.ES_PASSWORD }}
+          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
+          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
+          file_path: ${{ env.UNSIGNED_EXE }}
+          output_path: ${{ env.UNSIGNED_EXE }}
+          malware_block: false
+          environment_name: PROD
+          override: true
+
+      - name: Verify executable signature
+        shell: pwsh
+        run: |
+          Write-Host "========================================="
+          Write-Host "EXECUTABLE Signature Verification:"
+          $sig = Get-AuthenticodeSignature $env:UNSIGNED_EXE
+          Write-Host "File: $env:UNSIGNED_EXE"
+          Write-Host "Status: $($sig.Status)"
+          Write-Host "Status Message: $($sig.StatusMessage)"
+          Write-Host "Signer Certificate Subject: $($sig.SignerCertificate.Subject)"
+          Write-Host "Signer Certificate Issuer: $($sig.SignerCertificate.Issuer)"
+          Write-Host "Signer Certificate Thumbprint: $($sig.SignerCertificate.Thumbprint)"
+          Write-Host "Time Stamper Certificate: $($sig.TimeStamperCertificate.Subject)"
+          Write-Host "========================================="
+          
+          if ($sig.Status -ne "Valid") {
+              Write-Host "❌ ERROR: Executable signature is not valid!"
+              exit 1
+          } else {
+              Write-Host "✅ SUCCESS: Executable signature is valid!"
+          }
+
+      - name: Build installer with signed executable
+        shell: pwsh
+        run: |
+          Write-Host "🔨 Building installer with signed executable..."
+          cd dist/apps/web-giddh
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --prepackaged ../electrongiddh-packages/win-unpacked
+          cd ../../../
+          Write-Host "✅ Installer built successfully with signed executable"
 
       - name: Find unsigned installer and metadata
         shell: pwsh

@@ -23,8 +23,34 @@ const debugMode = isEnvSet
 // In development, it's in the same directory as the compiled JS
 const getIndexPath = () => {
     if (isPackaged()) {
-        // Packaged: go up from app.asar to resources folder where index.html is
-        return path.join(__dirname, '..', 'index.html');
+        // In packaged apps, __dirname is inside app.asar
+        // We need to find index.html which should be in the app root
+        const fs = require('fs');
+        const possiblePaths = [
+            // Standard Electron packaging: index.html at app root
+            path.join(process.resourcesPath, '..', 'index.html'),
+            // Alternative: index.html in resources folder
+            path.join(process.resourcesPath, 'index.html'),
+            // Fallback: relative to __dirname
+            path.join(__dirname, '..', '..', 'index.html'),
+            path.join(__dirname, '..', 'index.html'),
+        ];
+        
+        for (const testPath of possiblePaths) {
+            if (fs.existsSync(testPath)) {
+                console.log('✅ Found index.html at:', testPath);
+                return testPath;
+            }
+        }
+        
+        // If not found, log error and return default
+        console.error('❌ index.html not found in any expected location');
+        console.error('Searched paths:', possiblePaths);
+        console.error('__dirname:', __dirname);
+        console.error('process.resourcesPath:', process.resourcesPath);
+        
+        // Return first path as fallback (will show error to user)
+        return possiblePaths[0];
     } else {
         // Development: index.html is in the same directory
         return path.join(__dirname, 'index.html');
