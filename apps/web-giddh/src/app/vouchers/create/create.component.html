@@ -1298,6 +1298,146 @@
 
                                 <!-- Row 5 -->
                                 <div class="row row-gap-15 mt-3">
+                                    <!-- Recurring Voucher Checkbox -->
+                                    <div class="col-12">
+                                        <mat-checkbox
+                                            #recurringCheckbox
+                                            cdkMonitorElementFocus
+                                            class="mr-1"
+                                            color="primary"
+                                            id="recurring-voucher"
+                                            formControlName="isRecurringVoucher"
+                                            (keydown.enter)="$event.preventDefault(); recurringCheckbox.toggle()"
+                                        >
+                                            <label for="recurring-voucher" [innerHTML]="localeData?.transaction_recurring"></label>
+                                        </mat-checkbox>
+                                    </div>
+                                    <!-- Recurring Voucher Fields (shown when recurring checkbox is checked) -->
+                                    <!-- Recurring Voucher Section -->
+
+                                    <ng-container *ngIf="invoiceForm.get('isRecurringVoucher')?.value && recurrenceForm && repeatOnForm">
+                                        <div [formGroup]="recurrenceForm" class="recurring-wrapper">
+                                            <!-- START DATE -->
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Start on</mat-label>
+                                                <input
+                                                    matInput
+                                                    [matDatepicker]="dp"
+                                                    formControlName="startDate"
+                                                    (dateChange)="onStartDateChange($event.value)"
+                                                />
+                                                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                                                <mat-datepicker #dp></mat-datepicker>
+                                            </mat-form-field>
+
+                                            <!-- REPEAT OPTIONS (DROPDOWN) -->
+                                            <mat-form-field appearance="outline" class="full-width">
+                                                <mat-label>Repeat</mat-label>
+                                                <mat-select
+                                                    [value]="selectedRepeatOption"
+                                                    (selectionChange)="selectRepeatOption($event.value)"
+                                                >
+                                                    <mat-option *ngFor="let opt of repeatOptions" [value]="opt.value">
+                                                        {{ opt.label }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+
+                                            <!-- CUSTOM CONFIG -->
+                                            <ng-container *ngIf="showCustom && repeatOnForm">
+                                                <!-- REPEAT EVERY -->
+                                                <div class="row" formGroupName="frequency">
+                                                    <mat-form-field>
+                                                        <mat-label>Repeat every</mat-label>
+                                                        <input matInput type="number" min="1" formControlName="interval" />
+                                                    </mat-form-field>
+
+                                                    <mat-form-field>
+                                                        <mat-select
+                                                            formControlName="unit"
+                                                            (selectionChange)="onRepeatUnitChange($event.value)"
+                                                        >
+                                                            <mat-option value="DAY">Day</mat-option>
+                                                            <mat-option value="WEEK">Week</mat-option>
+                                                            <mat-option value="MONTH">Month</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <!-- WEEKLY -->
+                                                <ng-container *ngIf="frequencyUnit !== 'DAY'">
+                                                    Repeat on
+                                                    <div *ngIf="showWeekdayToggle && daysOfWeekArray" class="weekday-toggle">
+                                                        <button
+                                                            mat-raised-button
+                                                            *ngFor="let d of weekdays"
+                                                            [color]="isWeekdaySelected(d.value) ? 'primary' : ''"
+                                                            [style.background-color]="isWeekdaySelected(d.value) ? '#1976d2' : ''"
+                                                            [style.color]="isWeekdaySelected(d.value) ? 'white' : ''"
+                                                            (click)="toggleWeekday(d.value)"
+                                                        >
+                                                            {{ d.label }}
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- MONTHLY -->
+                                                    <div *ngIf="showDayThe" [formGroup]="repeatOnForm">
+                                                        <mat-radio-group formControlName="monthlyMode">
+                                                            <!-- DAY -->
+                                                            <mat-radio-button value="DAY" (change)="selectMonthlyDay()">
+                                                                Day
+                                                                <mat-form-field (click)="$event.stopPropagation()">
+                                                                    <mat-select formControlName="dayOfMonth">
+                                                                        <mat-option *ngFor="let d of monthDays" [value]="d">
+                                                                            {{ d }}
+                                                                        </mat-option>
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </mat-radio-button>
+
+                                                            <!-- THE -->
+                                                            <mat-radio-button value="THE" (change)="selectMonthlyThe()">
+                                                                The
+                                                                <mat-form-field (click)="$event.stopPropagation()">
+                                                                    <mat-select formControlName="weekOfMonth">
+                                                                        <mat-option *ngFor="let w of weekOfMonthOptions" [value]="w.value">
+                                                                            {{ w.label }}
+                                                                        </mat-option>
+                                                                    </mat-select>
+                                                                </mat-form-field>
+
+                                                                <mat-form-field (click)="$event.stopPropagation()">
+                                                                    <mat-select formControlName="weekday">
+                                                                        <mat-option *ngFor="let d of weekdayOptions" [value]="d.value">
+                                                                            {{ d.label }}
+                                                                        </mat-option>
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </mat-radio-button>
+                                                        </mat-radio-group>
+                                                    </div>
+                                                </ng-container>
+                                            </ng-container>
+
+                                            <!-- Ends -->
+                                            <div formGroupName="end" class="section">
+                                                <label class="section-label mb-3">Ends</label>
+                                                <mat-radio-group formControlName="type" (change)="onRecurrenceEndTypeChange($event.value)">
+                                                    <div class="row">
+                                                        <mat-radio-button value="ON_DATE">On</mat-radio-button>
+                                                        <mat-form-field appearance="outline">
+                                                            <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+                                                            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                                                            <mat-datepicker #endPicker></mat-datepicker>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                    <mat-radio-button value="NEVER">Never</mat-radio-button>
+                                                </mat-radio-group>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <!-- Recurring Voucher Checkbox -->
                                     <!-- Reverse Charge Checkbox -->
                                     <div
                                         class="col-12"

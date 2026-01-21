@@ -5569,6 +5569,432 @@
                 </div>
             </mat-tab>
             <!-- template-content-end -->
+
+            <!-- invoice-content-start -->
+            <!-- *ngIf="activeTabGroup === 5" -->
+            <mat-tab [label]="'Recurring Invoices'">
+                <div class="vouchers-wrapper p-3 overflow-visible" *ngIf="voucherType === voucherTypeEnum.sales && activeModule === 'list'">
+                    <div class="invoice-header d-flex align-items-center justify-content-between mb-3 flex-wrap row-gap-1">
+                        <div class="d-flex align-items-center column-gap-1">
+                            <button
+                                matButton="filled"
+                                [routerLink]="['/pages/vouchers/sales/create']"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                                class="width-200"
+                            >
+                                <span>New Recurring Voucher</span>
+                                <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            </button>
+                            <div class="custom-datepicker-wrapper">
+                                <div
+                                    class="custom-datepicker"
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
+                                    <input
+                                        matInput
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <button
+                            matButton="outlined"
+                            (click)="setInitialAdvanceFilter()"
+                            class="mx-auto"
+                            *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
+                        >
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="table-responsive overflow-visible">
+                        <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
+                        <table
+                            mat-table
+                            *ngIf="!isColumnsLoading && !(getVouchersInProgress$ | async) && (dataSource?.length || isSearching)"
+                            [dataSource]="dataSource"
+                            matSort
+                            (matSortChange)="sortChange($event)"
+                            class="w-100"
+                        >
+                            <!-- S No. -->
+                            <ng-container matColumnDef="index">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
+                                    <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                    <span *ngIf="selectedVouchers?.length"></span>
+                                </th>
+                                <td mat-cell *matCellDef="let element; let i = index">
+                                    <div class="d-flex align-items-center">
+                                        <div class="invoice-number" *ngIf="!selectedVouchers?.length">
+                                            {{ i + 1 }}
+                                        </div>
+                                        <div [ngClass]="{ 'checkbox-hide': !selectedVouchers?.length }">
+                                            <mat-checkbox
+                                                color="primary"
+                                                [checked]="isVoucherSelected(element)"
+                                                [value]="element.uniqueName"
+                                                (change)="selectVoucher($event, element)"
+                                            ></mat-checkbox>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <ng-container *ngFor="let column of dynamicCustomColumns">
+                                <ng-container [ngSwitch]="column?.value">
+                                    <!-- Invoice No -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.InvoiceNo">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th
+                                                mat-header-cell
+                                                *matHeaderCellDef
+                                                #invoiceNo
+                                                (clickOutside)="handleClickOutside($event, invoiceNo, 'invoiceNumber')"
+                                                width="15%"
+                                            >
+                                                <div class="d-flex align-items-center column-gap-05">
+                                                    <ng-container
+                                                        *ngTemplateOutlet="
+                                                            searchTemplate;
+                                                            context: {
+                                                                $implicit: showInvoiceNoSearch,
+                                                                fieldName: 'invoiceNumber',
+                                                                voucherType: 'sales',
+                                                                formControl: voucherNumberInput,
+                                                                title: commonLocaleData?.app_invoice_no,
+                                                            }
+                                                        "
+                                                    ></ng-container>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <a
+                                                    href="javascript:;"
+                                                    class="btn-link-2"
+                                                    (click)="showVoucherPreview(element?.uniqueName)"
+                                                    [matTooltip]="element?.voucherNumber"
+                                                    matTooltipPosition="above"
+                                                >
+                                                    {{
+                                                        element?.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available
+                                                    }}
+                                                </a>
+                                                <small class="text-danger d-block text-ellipsis" *ngIf="element?.overdueDays">
+                                                    {{ element.overdueDays }}
+                                                </small>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- Customer -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.Customer">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th
+                                                mat-header-cell
+                                                *matHeaderCellDef
+                                                #accountUniqueName
+                                                (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
+                                                width="15%"
+                                            >
+                                                <div class="d-flex align-items-center column-gap-05">
+                                                    <ng-container
+                                                        *ngTemplateOutlet="
+                                                            searchTemplate;
+                                                            context: {
+                                                                $implicit: showCustomerSearch,
+                                                                fieldName: 'accountUniqueName',
+                                                                voucherType: 'sales',
+                                                                formControl: accountUniqueNameInput,
+                                                                title: commonLocaleData?.app_customer,
+                                                            }
+                                                        "
+                                                    ></ng-container>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                                <div
+                                                    class="cursor-pointer text-ellipsis"
+                                                    (dblclick)="element.showAccountDetails = true"
+                                                    [matTooltip]="element.account?.customerName"
+                                                    matTooltipPosition="above"
+                                                >
+                                                    {{ element.account?.customerName || element?.account?.name | titlecase }}
+                                                </div>
+                                                <mat-card
+                                                    class="outline-card account-detail-wrapper border"
+                                                    *ngIf="element?.showAccountDetails"
+                                                    (clickOutside)="element.showAccountDetails = false"
+                                                >
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
+                                                    >
+                                                        <p>
+                                                            {{ element?.account?.customerName || element?.account?.name }}
+                                                        </p>
+                                                        <a (click)="editAccount(element)" class="edit-icon pl-1 pt-1">
+                                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
+                                                        </a>
+                                                    </div>
+                                                    <mat-card-content class="pt-3">
+                                                        <ul class="list-unstyled">
+                                                            <li class="text-left">
+                                                                <a
+                                                                    href="javascript:;"
+                                                                    class="theme-foreground-color"
+                                                                    (click)="goToLedger(element)"
+                                                                >
+                                                                    {{ commonLocaleData?.app_goto_ledger }}
+                                                                </a>
+                                                            </li>
+                                                            <li class="text-left mt-2">
+                                                                <a
+                                                                    href="javascript:;"
+                                                                    class="theme-foreground-color"
+                                                                    (click)="generateVoucher(element)"
+                                                                >
+                                                                    {{ commonLocaleData?.app_generate_invoice }}
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </mat-card-content>
+                                                </mat-card>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- Invoice Date -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.InvoiceDate">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th
+                                                mat-header-cell
+                                                *matHeaderCellDef
+                                                mat-sort-header
+                                                [start]="sortKeyMap?.[column?.value]"
+                                                class="sortable-header-justify-center table-date-width"
+                                            >
+                                                {{ commonLocaleData?.app_invoice_date }}
+                                            </th>
+                                            <td mat-cell *matCellDef="let element" class="text-center table-date-width">
+                                                {{ element.voucherDate ?? '-' }}
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- Amount -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.Amount">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th
+                                                mat-header-cell
+                                                *matHeaderCellDef
+                                                mat-sort-header
+                                                [start]="sortKeyMap?.[column?.value]"
+                                                class="text-right"
+                                            >
+                                                {{ commonLocaleData?.app_amount }}
+                                            </th>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let element"
+                                                class="text-right"
+                                                [matTooltip]="element?.grandTotalTooltipText"
+                                                matTooltipPosition="above"
+                                            >
+                                                <amount-field
+                                                    [amount]="element?.grandTotal?.amountForAccount"
+                                                    [currencySymbol]="element?.account?.currency?.symbol"
+                                                    [currencyCode]="element?.account?.currency?.code"
+                                                ></amount-field>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- Balance Due -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.BalanceDue">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th
+                                                mat-header-cell
+                                                *matHeaderCellDef
+                                                mat-sort-header
+                                                [start]="sortKeyMap?.[column?.value]"
+                                                class="text-right"
+                                            >
+                                                {{ localeData?.balance_due }}
+                                            </th>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let element"
+                                                class="text-right"
+                                                [matTooltip]="element?.balanceDueTooltipText"
+                                                matTooltipPosition="above"
+                                            >
+                                                <amount-field
+                                                    [amount]="element?.totalBalance?.amountForAccount"
+                                                    [currencySymbol]="element?.account?.currency?.symbol"
+                                                    [currencyCode]="element?.account?.currency?.code"
+                                                ></amount-field>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- Due Date -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.DueDate">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th
+                                                mat-header-cell
+                                                *matHeaderCellDef
+                                                mat-sort-header
+                                                [start]="sortKeyMap?.[column?.value]"
+                                                class="sortable-header-justify-center table-date-width"
+                                            >
+                                                {{ localeData?.due_date }}
+                                            </th>
+                                            <td mat-cell *matCellDef="let element" class="text-center table-date-width">
+                                                {{ element.dueDate ?? '-' }}
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- Status -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.Status">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                {{ commonLocaleData?.app_status }}
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{ element.balanceStatus | titlecase }}
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- CustomField1 -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.CustomField1">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                {{ localeData?.custom_field_1 }}
+                                            </th>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let element"
+                                                [matTooltip]="element?.otherData?.customField1 ? element.otherData.customField1 : null"
+                                                matTooltipPosition="above"
+                                            >
+                                                {{ element?.otherData?.customField1 || '-' }}
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- CustomField2 -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.CustomField2">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                {{ localeData?.custom_field_2 }}
+                                            </th>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let element"
+                                                [matTooltip]="element?.otherData?.customField2 ? element.otherData.customField2 : null"
+                                            >
+                                                {{ element?.otherData?.customField2 || '-' }}
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- CustomField3 -->
+                                    <ng-container *ngSwitchCase="salesTableColumnsEnum.CustomField3">
+                                        <ng-container [matColumnDef]="column?.value">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                {{ localeData?.custom_field_3 }}
+                                            </th>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let element"
+                                                [matTooltip]="element?.otherData?.customField3 ? element.otherData.customField3 : null"
+                                            >
+                                                {{ element?.otherData?.customField3 || '-' }}
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+
+                            <!-- E Invoice Status -->
+                            <ng-container [matColumnDef]="salesTableColumnsEnum.EInvoiceStatus">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    {{ localeData?.e_invoice_status }}
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                        {{ element.status }}
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <!-- More Options -->
+                            <ng-container matColumnDef="more_options">
+                                <th mat-header-cell *matHeaderCellDef class="w50">&nbsp;</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span
+                                        [matMenuTriggerFor]="menu"
+                                        class="cursor-pointer"
+                                        *ngIf="element?.balanceStatus !== 'cancel' && !isCompany && !isConsolidatedBranch"
+                                    >
+                                        <i class="icon-dots-three-vertical"></i>
+                                    </span>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="showPaymentDialog(element)">
+                                            {{ commonLocaleData?.app_payment_status?.paid }}
+                                        </button>
+                                        <button mat-menu-item (click)="showAdjustmentDialog(element)">
+                                            {{ commonLocaleData?.app_payment_status?.adjust_amount }}
+                                        </button>
+                                        <button mat-menu-item (click)="actionVoucher(element, 'unpaid')">
+                                            {{ commonLocaleData?.app_payment_status?.unpaid }}
+                                        </button>
+                                        <button mat-menu-item (click)="actionVoucher(element, 'hold')">
+                                            {{ commonLocaleData?.app_payment_status?.hold }}
+                                        </button>
+                                        <button mat-menu-item (click)="openCancelVoucherDialog(element)">
+                                            {{ commonLocaleData?.app_payment_status?.cancel }}
+                                        </button>
+                                        <button mat-menu-item (click)="showEwayBillDialog(element)" *ngIf="voucherApiVersion === 2">
+                                            {{ localeData?.generate_eway_bill }}
+                                        </button>
+                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
+                                            {{ commonLocaleData?.app_delete }}
+                                        </button>
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns" class="checkbox-show"></tr>
+                        </table>
+                        <mat-paginator
+                            *ngIf="!(getVouchersInProgress$ | async) && dataSource?.length && totalResults > pageSizeOptions[0]"
+                            (page)="handlePageChange($event)"
+                            [length]="totalResults"
+                            [pageSize]="advanceFilters.count"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [hidePageSize]="false"
+                            [pageIndex]="advanceFilters.page - 1"
+                        ></mat-paginator>
+                        <ng-container *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                        <section class="mb-5"></section>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- invoice-content-end -->
         </mat-tab-group>
         <div class="video-link position-absolute" *ngIf="activeTabGroup === 0 && selectedTabIndex === 2">
             <watch-video [cssClass]="'text-primary'" [moduleName]="'SALES_PREVIEW'"></watch-video>
