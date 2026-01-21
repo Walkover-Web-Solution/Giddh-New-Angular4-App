@@ -1,6 +1,6 @@
 {
     "appId": "com.giddh.prod",
-    "electronVersion": "39.2.7",
+    "electronVersion": "29.4.6",
     "productName": "giddh",
     "icon": "icon.ico",
     "publish": [
@@ -31,7 +31,6 @@
         "!**/{appveyor.yml,.travis.yml,circle.yml}",
         "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "afterSign": "./../../../electron-sign/notarize.js",
     "mac": {
         "category": "public.app-category.finance",
         "target": [
@@ -45,7 +44,8 @@
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
         "icon": "icon.png",
         "hardenedRuntime": true,
-        "gatekeeperAssess": false
+        "gatekeeperAssess": false,
+        "afterSign": "./../../../electron-sign/notarize.js"
     },
     "dmg": {
         "sign": false
@@ -77,7 +77,7 @@
         ],
         "icon": "icon.ico",
         "legalTrademarks": "",
-        "signAndEditExecutable": true,
+        "signAndEditExecutable": false,
         "requestedExecutionLevel": "asInvoker",
         "artifactName": "${productName}-${version}-${arch}.${ext}",
         "verifyUpdateCodeSignature": false
@@ -100,7 +100,11 @@
         "allowElevation": true,
         "displayLanguageSelector": false
     },
-    "asar": false,
+    "asar": true,
+    "asarUnpack": [
+        "**/*.node",
+        "**/build/icons/*.png"
+    ],
     "extraResources": [
         {
             "from": "build/icons",
