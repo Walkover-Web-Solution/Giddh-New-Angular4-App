@@ -7,6 +7,7 @@ export default class AppUpdater {
     private isUpdateDownloaded: boolean = false;
     private updateInfo: UpdateInfo | null = null;
     private updateCheckInterval: NodeJS.Timeout | null = null;
+    private downloadProgressWindow: Electron.BrowserWindow | null = null;
 
     constructor() {
         log.info(`App packaged status: ${app.isPackaged}`);
@@ -77,6 +78,10 @@ export default class AppUpdater {
         autoUpdater.on('download-progress', (progressObj) => {
             const logMessage = `📥 Download progress: ${progressObj.percent.toFixed(2)}% (${progressObj.transferred}/${progressObj.total} bytes) - Speed: ${progressObj.bytesPerSecond} B/s`;
             log.info(logMessage);
+            
+            // Show progress in dialog title if possible
+            const percent = progressObj.percent.toFixed(0);
+            log.info(`Download ${percent}% complete`);
         });
 
         autoUpdater.on('update-downloaded', (event: UpdateDownloadedEvent) => {
@@ -139,7 +144,16 @@ export default class AppUpdater {
 
         dialog.showMessageBox(options).then((result) => {
             if (result.response === 0) {
-                autoUpdater.downloadUpdate();
+                log.info('User clicked Download Now - starting download...');
+                this.showDownloadingDialog();
+                autoUpdater.downloadUpdate().then(() => {
+                    log.info('Download started successfully');
+                }).catch((error) => {
+                    log.error('Failed to start download:', error);
+                    this.showUpdateErrorDialog(error);
+                });
+            } else {
+                log.info('User chose to download update later');
             }
         });
     }
@@ -155,25 +169,45 @@ export default class AppUpdater {
         dialog.showMessageBox(options);
     }
 
+    private showDownloadingDialog(): void {
+        const options: MessageBoxOptions = {
+            type: 'info',
+            title: 'Downloading Update',
+            message: 'Downloading update...',
+            detail: 'Please wait while the update is being downloaded. This may take a few minutes.',
+            buttons: []
+        };
+        
+        // Show non-blocking message
+        log.info('Showing download progress notification');
+    }
+
     private showUpdateDownloadedDialog(event: UpdateDownloadedEvent): void {
+        log.info('Update downloaded successfully, showing restart dialog');
+        log.info('Downloaded version:', event.version);
+        log.info('Release date:', event.releaseDate);
+        
         const dialogOpts: MessageBoxOptions = {
             type: 'info',
-            buttons: ['Restart', 'Later'],
+            buttons: ['Restart Now', 'Later'],
             defaultId: 0,
             cancelId: 1,
-            title: 'Application Update',
-            message: process.platform === 'win32' ? (typeof event.releaseNotes === 'object' ? event.releaseNotes.join(",") : event.releaseNotes) : event.releaseName,
-            detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+            title: 'Update Ready to Install',
+            message: `Version ${event.version} has been downloaded successfully!`,
+            detail: 'The application needs to restart to install the update. Click "Restart Now" to install immediately, or "Later" to install on next restart.'
         };
 
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
             if (returnValue.response === 0) {
-                autoUpdater.quitAndInstall();
+                log.info('User clicked Restart Now - quitting and installing...');
+                setImmediate(() => {
+                    autoUpdater.quitAndInstall(false, true);
+                });
             } else {
-                log.info('User chose to install update later');
+                log.info('User chose to install update later - will install on next app quit');
             }
         }).catch((error) => {
-            log.error('Error showing update dialog:', error);
+            log.error('Error showing update downloaded dialog:', error);
         });
     }
 

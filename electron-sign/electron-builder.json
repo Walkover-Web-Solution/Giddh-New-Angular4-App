@@ -77,9 +77,9 @@
         "deleteAppDataOnUninstall": false,
         "runAfterFinish": true,
         "differentialPackage": true,
-        "packElevateHelper": false,
-        "allowElevation": false,
-        "installerSidebar": "icon.ico"
+        "packElevateHelper": true,
+        "allowElevation": true,
+        "displayLanguageSelector": false
     },
     "asar": true,
     "asarUnpack": [
