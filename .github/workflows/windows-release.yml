@@ -122,7 +122,7 @@ jobs:
           credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
           file_path: ${{ env.UNSIGNED_EXE }}
-          output_path: ${{ env.UNSIGNED_EXE }}
+          output_path: dist/apps/electrongiddh-packages/win-unpacked
           malware_block: false
           environment_name: PROD
           override: true
