@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, Menu, MenuItemConstructorOptions } from 'electron';
+import { app, dialog, Menu, MenuItemConstructorOptions } from 'electron';
 import { checkForUpdates } from './AppUpdater';
 import WindowManager from './WindowManager';
 
