@@ -6,7 +6,7 @@ import * as path from 'path';
 const Configstore = require('configstore');
 
 import * as url from 'url';
-import { isDev } from './util';
+import { isDev, isPackaged } from './util';
 
 let serve;
 const args = process.argv.slice(1);
@@ -19,9 +19,20 @@ const debugMode = isEnvSet
     : process.defaultApp ||
     /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
+// In packaged apps, index.html is in the parent directory of app.asar
+// In development, it's in the same directory as the compiled JS
+const getIndexPath = () => {
+    if (isPackaged()) {
+        // Packaged: go up from app.asar to resources folder where index.html is
+        return path.join(__dirname, '..', 'index.html');
+    } else {
+        // Development: index.html is in the same directory
+        return path.join(__dirname, 'index.html');
+    }
+};
 
 export const DEFAULT_URL = url.format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: getIndexPath(),
     protocol: 'file:',
     slashes: true
 });
