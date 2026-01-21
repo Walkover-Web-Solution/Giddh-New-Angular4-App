@@ -41,10 +41,12 @@ jobs:
           node-version: "20"
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Configure npm
+      - name: Configure npm and upgrade to latest
         run: |
+          npm install -g npm@latest
           npm config set registry https://registry.npmjs.org/
           npm config set strict-ssl true
+          npm --version
 
       - name: Install deps
         run: npm install
