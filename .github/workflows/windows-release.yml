@@ -39,6 +39,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Configure npm
+        run: |
+          npm config set registry https://registry.npmjs.org/
+          npm config set strict-ssl true
 
       - name: Install deps
         run: npm install
