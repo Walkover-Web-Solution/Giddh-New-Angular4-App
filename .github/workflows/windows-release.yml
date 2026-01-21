@@ -100,7 +100,7 @@ jobs:
               Write-Host "  ⚠️ WARNING: Executable not found in expected location"
           }
 
-      - name: Extract version and find unpacked app executable
+      - name: Extract version from package.json
         shell: pwsh
         run: |
           # Extract version from package.json
@@ -108,26 +108,7 @@ jobs:
           $version = $packageJson.version
           "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Package version: $version"
-
-          # Find the unpacked win-unpacked directory
-          $unpackedDir = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "win-unpacked" -Directory -Recurse | Select-Object -First 1
-          if (-not $unpackedDir) { throw "win-unpacked directory not found. Check electron-builder output." }
-
-          # Find the Electron app executable (not the installer)
-          $appExe = Get-ChildItem -Path $unpackedDir.FullName -Filter "*.exe" | Select-Object -First 1
-          if (-not $appExe) { throw "No app.exe found in win-unpacked directory." }
-
-          "UNSIGNED_APP_EXE=$($appExe.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
-          "UNPACKED_DIR=$($unpackedDir.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
-          Write-Host "Found app executable: $($appExe.FullName)"
-
-      - name: Build installer with auto-updater metadata
-        shell: pwsh
-        run: |
-          cd dist/apps/web-giddh
-          # Build installer with publish configuration to generate update metadata
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --prepackaged "$env:UNPACKED_DIR" --publish always
-          cd ../../../
+          
           node scripts/build-success-message.js prod
 
       - name: Find unsigned installer and metadata
