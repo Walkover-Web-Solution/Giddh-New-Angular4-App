@@ -44,8 +44,7 @@
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
         "icon": "icon.png",
         "hardenedRuntime": true,
-        "gatekeeperAssess": false,
-        "afterSign": "./../../../electron-sign/notarize.js"
+        "gatekeeperAssess": false
     },
     "dmg": {
         "sign": false
