@@ -163,7 +163,7 @@ export default class WindowManager {
     private registerWindowEventHandlers(window: BrowserWindow, descriptor: WindowItem): void {
         window.on('close', () => {
             WindowManager.saveWindowState(window, descriptor);
-            this.stateManager.saveWindows();
+            this.stateManager.save();
         });
 
         window.on('closed', () => {
@@ -175,13 +175,13 @@ export default class WindowManager {
 
         window.webContents.on('did-navigate', (event, url) => {
             descriptor.url = url;
-            this.stateManager.saveWindows();
+            this.stateManager.save();
             window.webContents.send(WINDOW_NAVIGATED, url);
         });
 
         window.webContents.on('did-navigate-in-page', (event, url) => {
             descriptor.url = url;
-            this.stateManager.saveWindows();
+            this.stateManager.save();
             window.webContents.send(WINDOW_NAVIGATED, url);
         });
     }

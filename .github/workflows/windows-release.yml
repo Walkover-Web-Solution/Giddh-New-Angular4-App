@@ -157,8 +157,8 @@ jobs:
               Write-Host "⚠️ WARNING: latest.yml not found - auto-updater may not work"
           }
           
-          # Create final filename
-          $finalExeName = "giddh Setup $env:PACKAGE_VERSION.exe"
+          # Create final filename with test suffix
+          $finalExeName = "giddh-test Setup $env:PACKAGE_VERSION.exe"
           "FINAL_EXE_NAME=$finalExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Final installer name will be: $finalExeName"
 
@@ -290,22 +290,28 @@ jobs:
           $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
           if (-not $signedInstaller) { throw "Signed installer not found" }
           
-          # Upload versioned installer
-          $versionedKey = "releases/v$version/$env:FINAL_EXE_NAME"
+          # Upload versioned installer to test folder
+          $versionedKey = "test/windows/$version/giddh-test-$version.exe"
           aws s3 cp "$($signedInstaller.FullName)" "s3://$bucket/$versionedKey" --region $region
           Write-Host "✅ Uploaded versioned installer: s3://$bucket/$versionedKey"
           
-          # Upload latest.yml for auto-updater
+          # Upload latest.yml for auto-updater to versioned folder
           if (Test-Path "artifacts/final/latest.yml") {
-              aws s3 cp "artifacts/final/latest.yml" "s3://$bucket/releases/latest.yml" --region $region
-              Write-Host "✅ Uploaded latest.yml: s3://$bucket/releases/latest.yml"
+              aws s3 cp "artifacts/final/latest.yml" "s3://$bucket/test/windows/$version/latest.yml" --region $region
+              Write-Host "✅ Uploaded latest.yml: s3://$bucket/test/windows/$version/latest.yml"
           }
           
           # Upload to latest folder if enabled
           if ($env:UPLOAD_LATEST -eq "true") {
-              $latestKey = "releases/latest/$env:FINAL_EXE_NAME"
+              $latestKey = "test/windows/latest/giddh-test-setup.exe"
               aws s3 cp "$($signedInstaller.FullName)" "s3://$bucket/$latestKey" --region $region
               Write-Host "✅ Uploaded to latest: s3://$bucket/$latestKey"
+              
+              # Also upload latest.yml to latest folder
+              if (Test-Path "artifacts/final/latest.yml") {
+                  aws s3 cp "artifacts/final/latest.yml" "s3://$bucket/test/windows/latest/latest.yml" --region $region
+                  Write-Host "✅ Uploaded latest.yml to latest folder: s3://$bucket/test/windows/latest/latest.yml"
+              }
           }
           
           Write-Host "✅ Files uploaded successfully (bucket policy controls public access)"
@@ -356,13 +362,14 @@ jobs:
           Write-Host "S3 Bucket: $env:S3_BUCKET"
           Write-Host ""
           Write-Host "📦 Uploaded Files:"
-          Write-Host "  - Versioned: releases/v$env:PACKAGE_VERSION/$env:FINAL_EXE_NAME"
-          Write-Host "  - Latest: releases/latest/$env:FINAL_EXE_NAME"
-          Write-Host "  - Metadata: releases/latest.yml"
+          Write-Host "  - Versioned: test/windows/$env:PACKAGE_VERSION/giddh-test-$env:PACKAGE_VERSION.exe"
+          Write-Host "  - Versioned Metadata: test/windows/$env:PACKAGE_VERSION/latest.yml"
+          Write-Host "  - Latest: test/windows/latest/giddh-test-setup.exe"
+          Write-Host "  - Latest Metadata: test/windows/latest/latest.yml"
           Write-Host ""
           Write-Host "🔄 Auto-updater Configuration:"
-          Write-Host "  - Update server: https://$env:S3_BUCKET.s3.$env:AWS_REGION.amazonaws.com/releases/"
-          Write-Host "  - Metadata file: latest.yml"
+          Write-Host "  - Update server: https://$env:S3_BUCKET.s3.$env:AWS_REGION.amazonaws.com/test/windows/"
+          Write-Host "  - Metadata file: latest/latest.yml"
           Write-Host "  - Public access: Enabled"
           Write-Host ""
           Write-Host "✅ Users with existing installations will be notified of this update!"

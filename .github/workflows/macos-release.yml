@@ -144,8 +144,8 @@ jobs:
               echo "⚠️ WARNING: latest-mac.yml not found"
           fi
           
-          # Create final filename
-          FINAL_DMG_NAME="giddh-${PACKAGE_VERSION}.dmg"
+          # Create final filename with test suffix
+          FINAL_DMG_NAME="giddh-test-${PACKAGE_VERSION}.dmg"
           echo "FINAL_DMG_NAME=$FINAL_DMG_NAME" >> $GITHUB_ENV
           echo "Final DMG name will be: $FINAL_DMG_NAME"
 
@@ -171,13 +171,22 @@ jobs:
           echo "  Source: $DMG_FILE"
           echo "  Destination: $FINAL_NAME"
           
-          # Upload DMG directly to bucket root (flat structure)
-          aws s3 cp "$DMG_FILE" "s3://$BUCKET/$FINAL_NAME" \
+          # Upload DMG to test/mac/version folder
+          aws s3 cp "$DMG_FILE" "s3://$BUCKET/test/mac/$VERSION/$FINAL_NAME" \
             --content-type "application/x-apple-diskimage" \
             --metadata "version=$VERSION,platform=macos,arch=universal"
           
-          echo "✅ Uploaded DMG: $FINAL_NAME"
-          echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/$FINAL_NAME"
+          echo "✅ Uploaded versioned DMG: test/mac/$VERSION/$FINAL_NAME"
+          
+          # Upload to latest folder if enabled
+          if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
+            aws s3 cp "$DMG_FILE" "s3://$BUCKET/test/mac/latest/giddh-test.dmg" \
+              --content-type "application/x-apple-diskimage" \
+              --metadata "version=$VERSION,platform=macos,arch=universal"
+            echo "✅ Uploaded to latest: test/mac/latest/giddh-test.dmg"
+          fi
+          
+          echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/mac/$VERSION/$FINAL_NAME"
 
       - name: Upload latest-mac.yml to S3
         if: env.LATEST_MAC_YML != ''
@@ -189,13 +198,22 @@ jobs:
           
           echo "📤 Uploading latest-mac.yml to S3..."
           
-          # Upload yml directly to bucket root (flat structure)
-          aws s3 cp "$YML_FILE" "s3://$BUCKET/latest-mac.yml" \
+          # Upload yml to test/mac/version folder
+          aws s3 cp "$YML_FILE" "s3://$BUCKET/test/mac/$VERSION/latest-mac.yml" \
             --content-type "text/yaml" \
             --metadata "version=$VERSION,platform=macos"
           
-          echo "✅ Uploaded latest-mac.yml"
-          echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/latest-mac.yml"
+          echo "✅ Uploaded latest-mac.yml to versioned folder: test/mac/$VERSION/latest-mac.yml"
+          
+          # Upload to latest folder if enabled
+          if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
+            aws s3 cp "$YML_FILE" "s3://$BUCKET/test/mac/latest/latest-mac.yml" \
+              --content-type "text/yaml" \
+              --metadata "version=$VERSION,platform=macos"
+            echo "✅ Uploaded latest-mac.yml to latest folder: test/mac/latest/latest-mac.yml"
+          fi
+          
+          echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/mac/$VERSION/latest-mac.yml"
 
       - name: Build Summary
         if: always()
@@ -210,6 +228,8 @@ jobs:
           echo "S3 Bucket: ${{ env.S3_BUCKET }}"
           echo "========================================="
           echo "Download URLs:"
-          echo "DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.FINAL_DMG_NAME }}"
-          echo "YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/latest-mac.yml"
+          echo "Versioned DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/${{ env.PACKAGE_VERSION }}/${{ env.FINAL_DMG_NAME }}"
+          echo "Versioned YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/${{ env.PACKAGE_VERSION }}/latest-mac.yml"
+          echo "Latest DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test.dmg"
+          echo "Latest YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/latest-mac.yml"
           echo "=========================================="

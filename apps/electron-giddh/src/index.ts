@@ -1,5 +1,5 @@
 import { app, ipcMain, Tray, Menu, nativeImage } from "electron";
-import setMenu from "./AppMenuManager";
+import AppMenuManager from "./AppMenuManager";
 import { log } from "./util";
 import WindowManager from "./WindowManager";
 import { GoogleLoginElectronConfig } from "./main-auth.config";
@@ -10,11 +10,10 @@ let STAGING_ENV = false;
 let TEST_ENV = false;
 let LOCAL_ENV = true;
 let PRODUCTION_ENV = false;
-let APP_URL = 'file://' + __dirname + '/index.html';  // Direct path to packaged Angular app
+let APP_URL = 'file://' + __dirname + '/index.html';
 let APP_FOLDER = '';
 let tray: Tray | null = null;
 
-// Electron-specific configuration
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 process.env.NODE_ENV = 'development';
 
@@ -23,8 +22,9 @@ app.on("ready", () => {
         log(arg);
     });
 
-    setMenu();
     windowManager = new WindowManager();
+    const menuManager = new AppMenuManager(windowManager);
+    menuManager.setApplicationMenu();
     windowManager.openWindows();
     createTray();
 });

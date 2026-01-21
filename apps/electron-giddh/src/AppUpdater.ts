@@ -1,6 +1,7 @@
 import { UpdateDownloadedEvent, autoUpdater, UpdateInfo } from 'electron-updater';
 import { MessageBoxOptions, dialog, app } from 'electron';
 import * as log from 'electron-log';
+import { S3Options } from 'builder-util-runtime';
 
 export default class AppUpdater {
     private isUpdateDownloaded: boolean = false;
@@ -8,14 +9,16 @@ export default class AppUpdater {
     private updateCheckInterval: NodeJS.Timeout | null = null;
 
     constructor() {
-        // Only initialize if app is packaged (not in development)
+        log.info(`App packaged status: ${app.isPackaged}`);
+        log.info(`App version: ${app.getVersion()}`);
+        log.info(`Platform: ${process.platform}`);
+        
         if (app.isPackaged) {
             this.configureUpdater();
             this.setupEventListeners();
-            // Delay initial check to prevent startup hang
             setTimeout(() => {
                 this.checkForUpdatesQuietly();
-            }, 10000); // Wait 10 seconds after app starts
+            }, 10000);
         } else {
             log.info('Auto-updater disabled in development mode');
         }
@@ -25,55 +28,64 @@ export default class AppUpdater {
         log.transports.file.level = 'info';
         autoUpdater.logger = log;
 
-        // Configure S3 update server
-        autoUpdater.setFeedURL({
+        const platform = process.platform === 'darwin' ? 'mac' : 'windows';
+        const feedConfig: S3Options = {
             provider: 's3',
-            bucket: 'app-giddh-test', // Use test bucket for now
+            bucket: 'app-giddh-test',
             region: 'ap-south-1',
-            path: 'releases'
-        });
+            path: `test/${platform}/latest`
+        };
+        
+        log.info('Configuring auto-updater with feed:', feedConfig);
+        autoUpdater.setFeedURL(feedConfig);
 
         autoUpdater.autoDownload = false;
         autoUpdater.autoInstallOnAppQuit = true;
         autoUpdater.allowPrerelease = false;
         autoUpdater.allowDowngrade = false;
+        
+        log.info('Auto-updater configured successfully');
 
-        // Check every 4 hours (but not immediately on startup)
         this.updateCheckInterval = setInterval(() => {
             this.checkForUpdatesQuietly();
         }, 4 * 60 * 60 * 1000);
     }
 
     private setupEventListeners(): void {
+        log.info('Setting up auto-updater event listeners');
+        
         autoUpdater.on('checking-for-update', () => {
-            log.info('Checking for update...');
+            log.info('🔍 Checking for update...');
         });
 
         autoUpdater.on('update-available', (info: UpdateInfo) => {
-            log.info('Update available:', info);
+            log.info('✅ Update available:', JSON.stringify(info, null, 2));
             this.updateInfo = info;
             this.showUpdateAvailableDialog(info);
         });
 
         autoUpdater.on('update-not-available', (info: UpdateInfo) => {
-            log.info('Update not available:', info);
+            log.info('ℹ️ Update not available. Current version is latest:', JSON.stringify(info, null, 2));
         });
 
         autoUpdater.on('error', (err: Error) => {
-            log.error('Error in auto-updater:', err);
-            // Don't show error dialog for automatic checks
+            log.error('❌ Error in auto-updater:', err.message);
+            log.error('Error details:', err);
+            log.error('Error stack:', err.stack);
         });
 
         autoUpdater.on('download-progress', (progressObj) => {
-            const logMessage = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`;
+            const logMessage = `📥 Download progress: ${progressObj.percent.toFixed(2)}% (${progressObj.transferred}/${progressObj.total} bytes) - Speed: ${progressObj.bytesPerSecond} B/s`;
             log.info(logMessage);
         });
 
         autoUpdater.on('update-downloaded', (event: UpdateDownloadedEvent) => {
-            log.info('Update downloaded');
+            log.info('✅ Update downloaded successfully');
             this.isUpdateDownloaded = true;
             this.showUpdateDownloadedDialog(event);
         });
+        
+        log.info('Event listeners setup complete');
     }
 
     // Quiet check (no user notification if no update)
@@ -86,24 +98,31 @@ export default class AppUpdater {
         }
     }
 
-    // Manual check (shows dialog to user)
     public async checkForUpdates(): Promise<void> {
         try {
+            log.info('=== Manual update check initiated ===');
+            log.info(`App packaged: ${app.isPackaged}`);
+            log.info(`Current version: ${app.getVersion()}`);
+            
             if (!app.isPackaged) {
+                log.warn('App is not packaged - showing development mode dialog');
                 this.showDevelopmentModeDialog();
                 return;
             }
-            log.info('Manual update check initiated');
-            const result = await autoUpdater.checkForUpdates();
             
-            // If no update available, show dialog after a short delay
+            log.info('Checking for updates...');
+            const result = await autoUpdater.checkForUpdates();
+            log.info('Check for updates result:', result);
+            
             setTimeout(() => {
                 if (!this.updateInfo) {
+                    log.info('No update available');
                     this.showNoUpdateDialog();
                 }
             }, 2000);
         } catch (error) {
             log.error('Error checking for updates:', error);
+            log.error('Error stack:', (error as Error).stack);
             this.showUpdateErrorDialog(error as Error);
         }
     }
