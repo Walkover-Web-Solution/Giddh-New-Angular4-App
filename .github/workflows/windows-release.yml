@@ -299,24 +299,24 @@ jobs:
           
           # Upload versioned installer to test folder
           $versionedKey = "test/windows/$version/giddh-test-$version.exe"
-          aws s3 cp "$($signedInstaller.FullName)" "s3://$bucket/$versionedKey" --region $region
+          aws s3 cp "$($signedInstaller.FullName)" "s3://$bucket/$versionedKey" --region $region --acl public-read
           Write-Host "✅ Uploaded versioned installer: s3://$bucket/$versionedKey"
           
           # Upload latest.yml for auto-updater to versioned folder
           if (Test-Path "artifacts/final/latest.yml") {
-              aws s3 cp "artifacts/final/latest.yml" "s3://$bucket/test/windows/$version/latest.yml" --region $region
+              aws s3 cp "artifacts/final/latest.yml" "s3://$bucket/test/windows/$version/latest.yml" --region $region --acl public-read
               Write-Host "✅ Uploaded latest.yml: s3://$bucket/test/windows/$version/latest.yml"
           }
           
           # Upload to latest folder if enabled
           if ($env:UPLOAD_LATEST -eq "true") {
               $latestKey = "test/windows/latest/giddh-test-setup.exe"
-              aws s3 cp "$($signedInstaller.FullName)" "s3://$bucket/$latestKey" --region $region
+              aws s3 cp "$($signedInstaller.FullName)" "s3://$bucket/$latestKey" --region $region --acl public-read
               Write-Host "✅ Uploaded to latest: s3://$bucket/$latestKey"
               
               # Also upload latest.yml to latest folder
               if (Test-Path "artifacts/final/latest.yml") {
-                  aws s3 cp "artifacts/final/latest.yml" "s3://$bucket/test/windows/latest/latest.yml" --region $region
+                  aws s3 cp "artifacts/final/latest.yml" "s3://$bucket/test/windows/latest/latest.yml" --region $region --acl public-read
                   Write-Host "✅ Uploaded latest.yml to latest folder: s3://$bucket/test/windows/latest/latest.yml"
               }
           }
