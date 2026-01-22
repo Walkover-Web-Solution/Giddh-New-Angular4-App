@@ -20,43 +20,23 @@ const debugMode = isEnvSet
     : process.defaultApp ||
     /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
-// In packaged apps, index.html is in the parent directory of app.asar
+// In packaged apps, index.html is inside app.asar alongside the compiled JS
 // In development, it's in the same directory as the compiled JS
 const getIndexPath = () => {
     if (isPackaged()) {
-        // In packaged apps, __dirname is inside app.asar
-        // index.html should be at the same level as app.asar (in the app root)
-        const fs = require('fs');
-        const possiblePaths = [
-            // Most common: index.html next to app.asar in app root
-            path.join(process.resourcesPath, 'app', 'index.html'),
-            // Alternative: index.html directly in resources
-            path.join(process.resourcesPath, 'index.html'),
-            // Fallback: relative to __dirname (inside asar)
-            path.join(__dirname, 'index.html'),
-            // Another common location
-            path.join(process.resourcesPath, '..', 'index.html'),
-        ];
-        
-        for (const testPath of possiblePaths) {
-            if (fs.existsSync(testPath)) {
-                console.log('✅ Found index.html at:', testPath);
-                return testPath;
-            }
-        }
-        
-        // If not found, log error and return default
-        console.error('❌ index.html not found in any expected location');
-        console.error('Searched paths:', possiblePaths);
-        console.error('__dirname:', __dirname);
-        console.error('process.resourcesPath:', process.resourcesPath);
-        console.error('app.getAppPath():', app.getAppPath());
-        
-        // Return the most likely path as fallback
-        return path.join(process.resourcesPath, 'app', 'index.html');
+        // In packaged apps, __dirname points inside app.asar
+        // index.html is packaged inside app.asar in the same directory as main.js
+        // So we use __dirname which correctly points inside the asar
+        const indexPath = path.join(__dirname, 'index.html');
+        console.log('📦 Packaged app - Loading index.html from:', indexPath);
+        console.log('   __dirname:', __dirname);
+        console.log('   app.getAppPath():', app.getAppPath());
+        return indexPath;
     } else {
         // Development: index.html is in the same directory
-        return path.join(__dirname, 'index.html');
+        const indexPath = path.join(__dirname, 'index.html');
+        console.log('🔧 Development mode - Loading index.html from:', indexPath);
+        return indexPath;
     }
 };
 
