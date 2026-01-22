@@ -2,13 +2,13 @@
     "appId": "com.giddh.prod",
     "electronVersion": "29.4.6",
     "productName": "giddh",
-    "icon": "icon.ico",
+    "icon": "resources/icon.ico",
     "publish": [
         {
             "provider": "s3",
             "bucket": "app-giddh-test",
             "region": "ap-south-1",
-            "path": "test/windows"
+            "path": "test/windows/latest"
         }
     ],
     "directories": {
@@ -74,11 +74,11 @@
             },
             "zip"
         ],
-        "icon": "icon.ico",
+        "icon": "resources/icon.ico",
         "legalTrademarks": "",
         "signAndEditExecutable": false,
         "requestedExecutionLevel": "asInvoker",
-        "artifactName": "${productName}-${version}-${arch}.${ext}",
+        "artifactName": "giddh-test-setup.exe",
         "verifyUpdateCodeSignature": false
     },
     "nsis": {
@@ -89,9 +89,9 @@
         "menuCategory": "Accounting",
         "shortcutName": "Giddh",
         "perMachine": false,
-        "installerIcon": "icon.ico",
-        "uninstallerIcon": "icon.ico",
-        "installerHeaderIcon": "icon.ico",
+        "installerIcon": "resources/icon.ico",
+        "uninstallerIcon": "resources/icon.ico",
+        "installerHeaderIcon": "resources/icon.ico",
         "deleteAppDataOnUninstall": false,
         "runAfterFinish": true,
         "differentialPackage": true,

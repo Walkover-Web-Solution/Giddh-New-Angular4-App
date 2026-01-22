@@ -55,6 +55,11 @@ jobs:
           
           Write-Host "📦 Copying icon files..."
           $iconSource = "apps/electron-giddh/src/resources/icon.ico"
+          
+          # Create resources directory in dist
+          New-Item -ItemType Directory -Force -Path "dist/apps/web-giddh/resources" | Out-Null
+          
+          # Copy icon to resources directory (for electron-builder)
           $iconDest = "dist/apps/web-giddh/resources/icon.ico"
           
           if (Test-Path $iconSource) {
