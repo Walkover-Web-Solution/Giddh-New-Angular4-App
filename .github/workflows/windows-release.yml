@@ -247,6 +247,17 @@ jobs:
             
             # For latest folder, modify latest.yml to reference giddh-test-setup.exe
             if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
+              # Calculate SHA512 hash of the actual installer file
+              $installerFile = "${{ env.FINAL_INSTALLER }}"
+              Write-Host "📊 Calculating SHA512 hash for: $installerFile"
+              $sha512Hash = (Get-FileHash -Path $installerFile -Algorithm SHA512).Hash
+              $sha512Base64 = [Convert]::ToBase64String([byte[]] -split ($sha512Hash -replace '..', '0x$& '))
+              Write-Host "  SHA512 (base64): $sha512Base64"
+              
+              # Get file size
+              $fileSize = (Get-Item $installerFile).Length
+              Write-Host "  File size: $fileSize bytes"
+              
               # Read the latest.yml content
               $ymlContent = Get-Content $YML_FILE -Raw
               
@@ -259,9 +270,15 @@ jobs:
               $ymlContent = $ymlContent -replace 'path: Giddh-\d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
               $ymlContent = $ymlContent -replace 'path: giddh-\d+\.\d+\.\d+(-x64|-ia32)?\.exe', 'path: giddh-test-setup.exe'
               
+              # Update the main path entry with correct hash and size
+              $ymlContent = $ymlContent -replace 'path: giddh-test-setup\.exe\s+sha512: [^\s]+\s+size: \d+', "path: giddh-test-setup.exe`nsha512: $sha512Base64`nsize: $fileSize"
+              
               # Save modified content to a new file
               $modifiedYml = "artifacts/final/latest-modified.yml"
               $ymlContent | Set-Content $modifiedYml -NoNewline
+              
+              Write-Host "📝 Modified latest.yml content:"
+              Get-Content $modifiedYml | Write-Host
               
               # Upload modified latest.yml to latest folder
               aws s3 cp "$modifiedYml" "s3://$BUCKET/test/windows/latest/latest.yml" `
