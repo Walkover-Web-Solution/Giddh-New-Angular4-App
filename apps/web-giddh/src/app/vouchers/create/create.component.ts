@@ -3222,17 +3222,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getTransactionTaxFormGroup(tax?: any): FormGroup {
+        const taxDetailGroup = this.formBuilder.group({
+            taxValue: [tax?.taxDetail?.[0]?.taxValue ?? 0],
+            date: [tax?.taxDetail?.[0]?.date ?? null],
+        });
+
         return this.formBuilder.group({
             calculationMethod: [tax?.calculationMethod],
             uniqueName: [tax?.uniqueName],
-            taxType: [tax?.taxType], //temp
-            taxDetail: [tax?.taxDetail], //temp
+            taxType: [tax?.taxType],
+            taxDetail: this.formBuilder.array([taxDetailGroup])
         });
     }
 
     /**
      * Calculate max quantity for PO linking in PB
      *
+     * @private
      * @param entryData
      * @returns
      */
@@ -4494,9 +4500,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         taxes?.forEach((tax) => {
             if (tax.taxType === TaxCollectionDeductionType.GST_CESS) {
-                cessPercentage += tax?.taxDetail?.taxValue;
+                cessPercentage += tax?.taxDetail?.[0]?.taxValue;
             } else {
-                totalTaxWithoutCess += tax?.taxDetail?.taxValue;
+                totalTaxWithoutCess += tax?.taxDetail?.[0]?.taxValue;
             }
 
             taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
@@ -4506,14 +4512,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(totalTaxWithoutCess));
             entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(cessPercentage));
 
-            if (this.invoiceForm.get("isAdvanceReceipt").value && taxes?.[0]?.taxDetail?.taxValue > 0) {
+            if (this.invoiceForm.get("isAdvanceReceipt").value && taxes?.[0]?.taxDetail?.[0]?.taxValue > 0) {
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                 transactionFormGroup
                     .get("amount.amountForAccount")
                     .patchValue(
                         transactionFormGroup.get("amount.amountForAccount").value -
                         (transactionFormGroup.get("amount.amountForAccount").value *
-                            (taxes?.[0]?.taxDetail?.taxValue ?? 1)) /
+                            (taxes?.[0]?.taxDetail?.[0]?.taxValue ?? 1)) /
                         100
                     );
             }
@@ -4544,11 +4550,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
                 const taxFormGroup = taxesFormArray.at(taxIndex) as FormGroup;
+                const taxDetailArray = taxFormGroup.get("taxDetail") as FormArray;
 
                 if (taxFormGroup.get("taxType")?.value === TaxCollectionDeductionType.GST_CESS) {
-                    cessPercentage += taxFormGroup.get("taxDetail")?.value?.taxValue;
+                    cessPercentage += taxDetailArray.at(0)?.get("taxValue")?.value ?? 0;
                 } else {
-                    taxPercentage += taxFormGroup.get("taxDetail")?.value?.taxValue;
+                    taxPercentage += taxDetailArray.at(0)?.get("taxValue")?.value ?? 0;
                 }
             }
 
@@ -4617,7 +4624,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This will be use for copy invoice
+     * Copies invoice
      *
      * @param {PreviousInvoicesVm} item
      * @memberof VoucherCreateComponent
@@ -4633,7 +4640,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This will update due date based on voucher date
+     * Updates due date based on voucher date
      *
      * @memberof VoucherCreateComponent
      */
@@ -7186,15 +7193,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         totalAmount = Number(entryFormGroup.get("total.amountForAccount")?.value);
                         if (entryFormGroup.get("otherTax")?.value?.amount) {
                             let totalTaxRate = 0;
-                            entryFormGroup.get("taxes")?.value?.forEach((tax) => {
-                                if (Array.isArray(tax?.taxDetail)) {
-                                    tax?.taxDetail?.forEach((taxDetail) => {
-                                        totalTaxRate += Number(taxDetail.taxValue);
-                                    });
-                                } else {
-                                    totalTaxRate += Number(tax?.taxDetail?.taxValue ?? 0);
-                                }
-                            });
+                            const taxesArray = entryFormGroup.get("taxes") as FormArray;
+                            for (let i = 0; i < taxesArray.length; i++) {
+                                const taxFormGroup = taxesArray.at(i) as FormGroup;
+                                const taxDetailArray = taxFormGroup.get("taxDetail") as FormArray;
+                                totalTaxRate += Number(taxDetailArray.at(0)?.get("taxValue")?.value ?? 0);
+                            }
                             if (totalTaxRate > 0) {
                                 if (entryFormGroup.get("otherTax").value.type === this.otherTaxTypeEnum.TDS) {
                                     if (
@@ -7237,16 +7241,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             totalAmount = giddhRoundOff(totalAmount, this.company.giddhBalanceDecimalPlaces);
                         } else if (entryFormGroup.get("taxes")?.value?.length > 0) {
                             let totalTaxRate = 0;
-                            entryFormGroup.get("taxes")?.value?.forEach((tax) => {
-                                if (Array.isArray(tax?.taxDetail)) {
-                                    tax?.taxDetail?.forEach((taxDetail) => {
-                                        totalTaxRate += Number(taxDetail.taxValue);
-                                    });
-                                } else {
-                                    totalTaxRate += Number(tax?.taxDetail?.taxValue ?? 0);
-                                }
-                            });
-
+                            const taxesArray = entryFormGroup.get("taxes") as FormArray;
+                            for (let i = 0; i < taxesArray.length; i++) {
+                                const taxFormGroup = taxesArray.at(i) as FormGroup;
+                                const taxDetailArray = taxFormGroup.get("taxDetail") as FormArray;
+                                totalTaxRate += Number(taxDetailArray.at(0)?.get("taxValue")?.value ?? 0);
+                            }
                             totalAmount += (totalAmount * totalTaxRate) / 100;
                             totalAmount = giddhRoundOff(totalAmount, this.company.giddhBalanceDecimalPlaces);
                         }
@@ -7254,15 +7254,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         totalAmount = Number(entryFormGroup.get("total.amountForAccount")?.value);
                     }
 
-                    entryFormGroup.get("taxes")?.value?.forEach((tax) => {
-                        if (Array.isArray(tax?.taxDetail)) {
-                            tax?.taxDetail?.forEach((taxDetail) => {
-                                taxPercentage += Number(taxDetail.taxValue);
-                            });
-                        } else {
-                            taxPercentage += Number(tax?.taxDetail?.taxValue ?? 0);
-                        }
-                    });
+                    const taxesArray = entryFormGroup.get("taxes") as FormArray;
+                    for (let i = 0; i < taxesArray.length; i++) {
+                        const taxFormGroup = taxesArray.at(i) as FormGroup;
+                        const taxDetailArray = taxFormGroup.get("taxDetail") as FormArray;
+                        taxPercentage += Number(taxDetailArray.at(0)?.get("taxValue")?.value ?? 0);
+                    }
                 } else {
                     totalAmount = Number(entryFormGroup.get("total.amountForAccount")?.value);
                     if (isUpdate) {
