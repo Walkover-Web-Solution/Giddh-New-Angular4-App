@@ -59,7 +59,7 @@ jobs:
           # Create resources directory in dist
           New-Item -ItemType Directory -Force -Path "dist/apps/web-giddh/resources" | Out-Null
           
-          # Copy icon to resources directory (for electron-builder)
+          # Copy icon to resources directory (for electron-builder build)
           $iconDest = "dist/apps/web-giddh/resources/icon.ico"
           
           if (Test-Path $iconSource) {
@@ -67,6 +67,10 @@ jobs:
               Write-Host "  Source icon: $iconSource ($iconSize bytes)"
               Copy-Item $iconSource $iconDest -Force
               Write-Host "  ✅ Copied to: $iconDest"
+              
+              # Also copy to root for runtime access
+              Copy-Item $iconSource "dist/apps/web-giddh/icon.ico" -Force
+              Write-Host "  ✅ Copied to: dist/apps/web-giddh/icon.ico"
               
               if (Test-Path $iconDest) {
                   $destSize = (Get-Item $iconDest).Length

@@ -1,6 +1,7 @@
 {
     "appId": "com.giddh.prod",
     "electronVersion": "32.2.6",
+    "productName": "Giddh",
     "publish": [
         {
             "provider": "s3",
@@ -13,7 +14,10 @@
     },
     "files": [
         "**/*",
+        "index.html",
         "preload.js",
+        "icon.icns",
+        "resources/icon.icns",
         "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
         "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
         "!**/node_modules/*.d.ts",
@@ -38,7 +42,7 @@
                 "arch": ["universal"]
             }
         ],
-        "icon": "icon.icns",
+        "icon": "resources/icon.icns",
         "hardenedRuntime": false,
         "gatekeeperAssess": false,
         "type": "development",

@@ -2,6 +2,7 @@
 
 import * as os from 'os';
 import * as path from 'path';
+import { app } from 'electron';
 
 const Configstore = require('configstore');
 
@@ -24,16 +25,17 @@ const debugMode = isEnvSet
 const getIndexPath = () => {
     if (isPackaged()) {
         // In packaged apps, __dirname is inside app.asar
-        // We need to find index.html which should be in the app root
+        // index.html should be at the same level as app.asar (in the app root)
         const fs = require('fs');
         const possiblePaths = [
-            // Standard Electron packaging: index.html at app root
-            path.join(process.resourcesPath, '..', 'index.html'),
-            // Alternative: index.html in resources folder
+            // Most common: index.html next to app.asar in app root
+            path.join(process.resourcesPath, 'app', 'index.html'),
+            // Alternative: index.html directly in resources
             path.join(process.resourcesPath, 'index.html'),
-            // Fallback: relative to __dirname
-            path.join(__dirname, '..', '..', 'index.html'),
-            path.join(__dirname, '..', 'index.html'),
+            // Fallback: relative to __dirname (inside asar)
+            path.join(__dirname, 'index.html'),
+            // Another common location
+            path.join(process.resourcesPath, '..', 'index.html'),
         ];
         
         for (const testPath of possiblePaths) {
@@ -48,9 +50,10 @@ const getIndexPath = () => {
         console.error('Searched paths:', possiblePaths);
         console.error('__dirname:', __dirname);
         console.error('process.resourcesPath:', process.resourcesPath);
+        console.error('app.getAppPath():', app.getAppPath());
         
-        // Return first path as fallback (will show error to user)
-        return possiblePaths[0];
+        // Return the most likely path as fallback
+        return path.join(process.resourcesPath, 'app', 'index.html');
     } else {
         // Development: index.html is in the same directory
         return path.join(__dirname, 'index.html');
