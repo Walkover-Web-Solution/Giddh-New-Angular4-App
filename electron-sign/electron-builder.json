@@ -98,8 +98,7 @@
         "differentialPackage": true,
         "packElevateHelper": true,
         "allowElevation": true,
-        "displayLanguageSelector": false,
-        "shortcutIcon": "resources/icon.ico"
+        "displayLanguageSelector": false
     },
     "asar": true,
     "asarUnpack": [
