@@ -41,9 +41,9 @@ import { CommonActions } from "../../actions/common.actions";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
-import { InvoiceUiDataService } from '../../services/invoice.ui.data.service';
 import { TemplateModeEnum } from "../../models/api-models/Sales";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { AsideRecurrenceVoucherCreateComponent } from "../../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -3573,5 +3573,32 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.selectedTemplate = template;
         this.fetchAllCreatedTemplates(template.value);
         this.fetchTemplates(template.value);
+    }
+
+    generateRecurringVoucher(voucher: any): void {
+        try {
+            const dialogRef = this.dialog.open(AsideRecurrenceVoucherCreateComponent, {
+                panelClass: ['mat-dialog-md'],
+                disableClose: true,
+                data: {
+                    title: 'Create Recurring Voucher',
+                    voucher: voucher
+                }
+            });
+
+            dialogRef.afterClosed().subscribe({
+                next: (result) => {
+                    if (result) {
+                        console.log('Recurring voucher data:', result);
+                        // Handle the form submission
+                    }
+                },
+                error: (error) => {
+                    console.error('Error in recurring voucher dialog:', error);
+                }
+            });
+        } catch (error) {
+            console.error('Error opening recurring voucher dialog:', error);
+        }
     }
 }

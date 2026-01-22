@@ -3,7 +3,9 @@ import {
     input,
     output,
     OnInit,
-    signal
+    signal,
+    Inject,
+    Optional
 } from '@angular/core';
 import {
     FormBuilder,
@@ -12,6 +14,7 @@ import {
     FormControl,
     Validators
 } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'aside-recurrence-voucher-create',
@@ -22,6 +25,7 @@ import {
 export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     // Add this property to your component class
     previewDates: string[] = [];
+    isDialogMode = false;
     /* =======================
        INPUT / OUTPUT
     ======================= */
@@ -37,9 +41,14 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
        DATE CONSTRAINT
     ======================= */
     minStartDate: Date = new Date();
+    dialogTitle = 'Recurring Voucher';
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder,
+        @Optional() private dialogRef: MatDialogRef<AsideRecurrenceVoucherCreateComponent>,
+        @Optional() @Inject(MAT_DIALOG_DATA) public data: any
+    ) {
         this.minStartDate.setHours(0, 0, 0, 0);
+        this.isDialogMode = !!dialogRef;
     }
 
     /* =======================
@@ -505,5 +514,16 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
             case 3: return `${n}rd`;
             default: return `${n}th`;
         }
+    }
+
+    // Add a method to close the dialog with the form data
+    onSubmit(): void {
+        if (this.activeForm.valid) {
+            this.dialogRef.close(this.activeForm.value);
+        }
+    }
+    // Add a method to close the dialog without saving
+    onCancel(): void {
+        this.dialogRef.close();
     }
 }

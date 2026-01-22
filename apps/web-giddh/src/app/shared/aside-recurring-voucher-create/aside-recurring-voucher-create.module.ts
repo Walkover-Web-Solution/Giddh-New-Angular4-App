@@ -8,23 +8,24 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { AsideRecurrenceVoucherCreateComponent } from './aside-recurring-voucher-create.component';
-import { MatDivider } from "@angular/material/divider";
+import { MatDivider, MatDividerModule } from "@angular/material/divider";
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
         AsideRecurrenceVoucherCreateComponent
     ],
     imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatButtonModule,
-    FormsModule,
-    MatDivider
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatDividerModule
 ],
     exports: [
         AsideRecurrenceVoucherCreateComponent

@@ -1350,6 +1350,9 @@
                                         <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
+                                        <button mat-menu-item (click)="generateRecurringVoucher(element)" *ngIf="voucherApiVersion === 2">
+                                            Recurring Voucher
+                                        </button>
                                     </mat-menu>
                                 </td>
                             </ng-container>
