@@ -241,8 +241,8 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string): void {
         const dataToSave = {
             code: authCode,
-            client_secret: (this.serviceConfig.GOOGLE_CLIENT_SECRET || GOOGLE_CLIENT_SECRET),
-            client_id: (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID),
+            client_secret: GOOGLE_CLIENT_SECRET,
+            client_id: GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl()
         };
