@@ -15,7 +15,7 @@ phases:
     commands:
       - echo "Starting build process for branch: $BRANCH"
       - echo "Setting AWS CodePipeline optimized environment variables..."
-      - export NODE_OPTIONS="--max-old-space-size=8192"
+      - export NODE_OPTIONS="--max-old-space-size=16000"
       - export NG_CLI_ANALYTICS=false
       - export CI=true
       - export AWS_CODEBUILD=true
@@ -24,13 +24,13 @@ phases:
       - |
         if [ "${BRANCH}" = "giddh-2.0" ]; then
           echo "For giddh-2.0 branch - Angular 21 EPIPE fix with optimization disabled";
-          NODE_ENV=test node --max_old_space_size=8192 scripts/build-env.js test && NODE_OPTIONS="--max-old-space-size=8192" npx ng build web-giddh --configuration=test --output-hashing=all --source-map=false --vendor-chunk=true --named-chunks=true && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files
+          NODE_ENV=test node --max_old_space_size=16000 scripts/build-env.js test && NODE_OPTIONS="--max-old-space-size=16000" npx ng build web-giddh --configuration=test --output-hashing=all --source-map=false --vendor-chunk=true --named-chunks=true && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files
         elif [ "${BRANCH}" = "86d0fexwc-test" ]; then
           echo "For beta-stage branch - Angular 21 EPIPE fix with optimization disabled";
-          NODE_ENV=staging node --max_old_space_size=8192 scripts/build-env.js stage && NODE_OPTIONS="--max-old-space-size=8192" npx ng build web-giddh --configuration=stage --output-hashing=all --source-map=false --vendor-chunk=true --named-chunks=true && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files
+          NODE_ENV=staging node --max_old_space_size=16000 scripts/build-env.js stage && NODE_OPTIONS="--max-old-space-size=16000" npx ng build web-giddh --configuration=stage --output-hashing=all --source-map=false --vendor-chunk=true --named-chunks=true && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files
         elif [ "${BRANCH}" = "books-production" ]; then
           echo "For production branch - Angular 21 EPIPE fix with optimization disabled";
-          NODE_ENV=production node --max_old_space_size=8192 scripts/build-env.js prod && NODE_OPTIONS="--max-old-space-size=8192" npx ng build web-giddh --configuration=prod --output-hashing=all --source-map=false --vendor-chunk=true --named-chunks=true && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files
+          NODE_ENV=production node --max_old_space_size=16000 scripts/build-env.js prod && NODE_OPTIONS="--max-old-space-size=16000" npx ng build web-giddh --configuration=prod --output-hashing=all --source-map=false --vendor-chunk=true --named-chunks=true && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files
         fi
   post_build:
     commands:
