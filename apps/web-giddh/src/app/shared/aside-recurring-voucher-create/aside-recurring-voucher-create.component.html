@@ -126,4 +126,11 @@
             <mat-radio-button value="NEVER">Never</mat-radio-button>
         </mat-radio-group>
     </div>
+    <mat-divider></mat-divider>
+    <div class="preview-container" *ngIf="previewDates.length > 0">
+        <div class="preview-row" *ngFor="let date of previewDates">
+            <span>{{ date }}</span>
+        </div>
+    </div>
+    <div *ngIf="previewDates.length === 0" class="no-dates">No preview dates available</div>
 </div>

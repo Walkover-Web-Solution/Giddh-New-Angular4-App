@@ -5096,8 +5096,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.checkRcm();
         let invoiceForm = cloneDeep(this.invoiceForm.value);
                   // ✅ ONLY attach recurrence if checkbox is checked
-    if (this.invoiceForm.get('isRecurringVoucher')?.value) {
-      console.log(this.recurrenceFormGroup.getRawValue());
+        if (this.invoiceForm.get('isRecurringVoucher')?.value) {
+            const cleanData = this.recurrenceService.getCleanFormValue(this.recurrenceFormGroup);
+            console.log('Clean form data:', cleanData);
     } else {
         console.log("not r")
     }

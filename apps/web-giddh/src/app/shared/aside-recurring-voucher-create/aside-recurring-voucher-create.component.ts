@@ -20,7 +20,8 @@ import {
     standalone: false
 })
 export class AsideRecurrenceVoucherCreateComponent implements OnInit {
-
+    // Add this property to your component class
+    previewDates: string[] = [];
     /* =======================
        INPUT / OUTPUT
     ======================= */
@@ -110,6 +111,40 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
                 this.selectMonthlyThe();
             }
         });
+        // Add this in ngOnInit() or where you initialize your form
+        this.activeForm.valueChanges.subscribe(() => {
+            this.refreshPreview();
+        });
+    }
+
+    // Add this method to your component
+    private updatePreviewDates(dates: string[]): void {
+        this.previewDates = dates.map(dateStr => {
+            // Convert "DD-MM-YYYY" to Date object
+            const [day, month, year] = dateStr.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+
+            // Format as "MMM d EEE" (e.g., "Dec 31 Wed")
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                weekday: 'short'
+            });
+        });
+    }
+    // Call this method when you receive dates from your API
+    // Example:
+    // this.yourApiService.getDates().subscribe(response => {
+    //     this.updatePreviewDates(response.dates);
+    // });
+    // You can also add a method to refresh preview based on form values
+    private refreshPreview(): void {
+        // This is where you would call your API with the current form values
+        // For now, we'll just show a mock response
+        const mockResponse = {
+            dates: ['22-01-2026'] // Example date in DD-MM-YYYY format
+        };
+        this.updatePreviewDates(mockResponse.dates);
     }
 
     private initializeForm(): void {
@@ -189,7 +224,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
             end: this.fb.group({
                 type: ['ON_DATE'],
                 endDate: [null],
-                count: [null]
             })
         });
     }
@@ -240,8 +274,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         }
 
         this.buildRepeatOptions(date);
-        this.selectedRepeatOption.set('CUSTOM');
-        this.selectRepeatOption('CUSTOM');
     }
 
     /* =======================
@@ -272,11 +304,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
                 type: 'DAY_OF_MONTH',
                 monthlyMode: 'DAY',
                 dayOfMonth
-            });
-
-            this.activeForm.get('end')?.patchValue({
-                type: 'ON_DATE',
-                endDate: startDate
             });
 
             queueMicrotask(() => {
@@ -312,6 +339,11 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
                 weekday
             });
         }
+
+            this.activeForm.get('end')?.patchValue({
+                type: 'ON_DATE',
+                endDate: startDate
+            });
     }
 
 

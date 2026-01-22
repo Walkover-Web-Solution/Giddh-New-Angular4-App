@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-
+import * as dayjs from 'dayjs';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 @Injectable({ providedIn: 'root' })
 export class RecurrenceFormService {
 
@@ -27,7 +28,6 @@ export class RecurrenceFormService {
     end: this.fb.group({
         type: ['ON_DATE'],
         endDate: [null],
-        count: [null]
     })
     });
   }
@@ -65,4 +65,81 @@ export class RecurrenceFormService {
       }
     });
   }
+
+    // Add this method to the RecurrenceFormService class
+
+    /**
+     * Cleans the form values based on the repeatOn type
+     * @param formValue The raw form value to clean
+     * @returns Cleaned form value with only relevant fields
+     */
+    cleanFormValues(formValue: any): any {
+        // Create a deep copy to avoid mutating the original
+        const cleaned = JSON.parse(JSON.stringify(formValue));
+        // Format dates if they exist
+        if (cleaned.startDate) {
+            cleaned.startDate = dayjs(cleaned.startDate).format(GIDDH_DATE_FORMAT);
+        }
+        // Handle end object based on type
+        if (cleaned.end) {
+            if (cleaned.end.type === 'NEVER') {
+                // Remove endDate when type is NEVER
+                delete cleaned.end.endDate;
+            } else if (cleaned.end.type === 'ON_DATE' && cleaned.end.endDate) {
+                // Format endDate when type is ON_DATE
+                cleaned.end.endDate = dayjs(cleaned.end.endDate).format(GIDDH_DATE_FORMAT);
+            }
+        }
+        if (!cleaned.repeatOn?.type) return cleaned;
+        const repeatType = cleaned.repeatOn.type;
+        const repeatOn = cleaned.repeatOn;
+
+        // ... existing code ...
+
+        switch (repeatType) {
+            case 'EVERY_DAY':
+                // Remove repeatOn object completely for EVERY_DAY
+                delete cleaned.repeatOn;
+                break;
+
+            case 'DAY_OF_MONTH':
+                // For DAY_OF_MONTH, keep type and dayOfMonth, remove weekdays
+                cleaned.repeatOn = {
+                    type: repeatType,
+                    dayOfMonth: repeatOn.dayOfMonth
+                };
+                break;
+
+            case 'WEEK_DAYS':
+                // For WEEK_DAYS, keep type and weekdays
+                cleaned.repeatOn = {
+                    type: repeatType,
+                    weekdays: repeatOn.weekdays || []
+                };
+                break;
+
+            case 'NTH_WEEKDAY':
+                // For NTH_WEEKDAY, keep type and nth
+                cleaned.repeatOn = {
+                    type: repeatType,
+                    nth: repeatOn.nth
+                };
+                break;
+
+            default:
+                // For any other type, keep only the type
+                cleaned.repeatOn = { type: repeatType };
+                break;
+        }
+
+        // ... rest of the code ...
+
+        return cleaned;
+    }
+
+    // Add this method to clean the form before submission
+    getCleanFormValue(form: FormGroup): any {
+        const formValue = form.getRawValue();
+        return this.cleanFormValues(formValue);
+    }
 }
