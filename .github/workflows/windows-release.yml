@@ -251,7 +251,12 @@ jobs:
               $ymlContent = Get-Content $YML_FILE -Raw
               
               # Replace versioned exe filenames with fixed name
+              # electron-builder generates filenames like "Giddh Setup 9.1.49.exe" based on productName
+              $ymlContent = $ymlContent -replace 'Giddh Setup \d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
+              $ymlContent = $ymlContent -replace 'Giddh-\d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
               $ymlContent = $ymlContent -replace 'giddh-\d+\.\d+\.\d+(-x64|-ia32)?\.exe', 'giddh-test-setup.exe'
+              $ymlContent = $ymlContent -replace 'path: Giddh Setup \d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
+              $ymlContent = $ymlContent -replace 'path: Giddh-\d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
               $ymlContent = $ymlContent -replace 'path: giddh-\d+\.\d+\.\d+(-x64|-ia32)?\.exe', 'path: giddh-test-setup.exe'
               
               # Save modified content to a new file
