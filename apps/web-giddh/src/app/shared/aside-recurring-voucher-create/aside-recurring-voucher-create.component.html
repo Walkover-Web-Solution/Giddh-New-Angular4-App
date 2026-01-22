@@ -1,4 +1,4 @@
-<div [formGroup]="recurrenceForm" class="recurring-wrapper">
+<div *ngIf="activeForm" [formGroup]="activeForm" class="recurring-wrapper">
     <!-- =======================
          START DATE
     ======================= -->
@@ -16,22 +16,26 @@
     </mat-form-field>
 
     <!-- =======================
-         REPEAT OPTIONS
+         REPEAT
     ======================= -->
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>Repeat</mat-label>
-        <mat-select [value]="selectedRepeatOption" (selectionChange)="selectRepeatOption($event.value)">
-            <mat-option *ngFor="let opt of repeatOptions" [value]="opt.value">
-                {{ opt.label }}
-            </mat-option>
+        <mat-select [value]="selectedRepeatOption()" (selectionChange)="selectRepeatOption($event.value)">
+            @for (opt of repeatOptions(); track opt.value) {
+                <mat-option [value]="opt.value">
+                    {{ opt.label }}
+                </mat-option>
+            }
         </mat-select>
     </mat-form-field>
 
     <!-- =======================
          CUSTOM CONFIG
     ======================= -->
-    <ng-container *ngIf="showCustom">
-        <!-- REPEAT EVERY -->
+    @if (showCustom()) {
+        <!-- =======================
+             FREQUENCY
+        ======================= -->
         <div class="row" formGroupName="frequency">
             <mat-form-field appearance="outline">
                 <mat-label>Repeat every</mat-label>
@@ -46,68 +50,65 @@
                 </mat-select>
             </mat-form-field>
         </div>
-
-        <!-- =======================
-           WEEKLY
-      ======================= -->
-        <ng-container *ngIf="showWeekdayToggle">
+        @if (showWeekdayToggle()) {
+            <!-- =======================
+             WEEKLY
+        ======================= -->
             <div class="weekday-toggle">
-                <button
-                    mat-raised-button
-                    *ngFor="let d of weekdays"
-                    [class.active]="isWeekdaySelected(d.value)"
-                    (click)="toggleWeekday(d.value)"
-                    type="button"
-                >
-                    {{ d.label }}
-                </button>
+                @for (d of weekdays; track d.value) {
+                    <button mat-raised-button type="button" [class.active]="isWeekdaySelected(d.value)" (click)="toggleWeekday(d.value)">
+                        {{ d.label }}
+                    </button>
+                }
             </div>
-        </ng-container>
+        }
 
-        <!-- =======================
-           MONTHLY
-      ======================= -->
-        <ng-container *ngIf="showDayThe">
+        @if (showDayThe()) {
+            <!-- =======================
+             MONTHLY
+        ======================= -->
             <div formGroupName="repeatOn">
-                <mat-radio-group formControlName="monthlyMode">
-                    <!-- DAY -->
-                    <mat-radio-button value="DAY" (change)="selectMonthlyDay()">
-                        Day
-                        <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                            <mat-select formControlName="dayOfMonth">
-                                <mat-option *ngFor="let d of monthDays" [value]="d">
-                                    {{ d }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </mat-radio-button>
+                @if (repeatOnForm?.get('monthlyMode')) {
+                    <mat-radio-group [formControl]="monthlyModeControl">
+                        <!-- DAY -->
+                        <mat-radio-button value="DAY">
+                            Day
+                            <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                                <mat-select formControlName="dayOfMonth">
+                                    @for (d of monthDays; track d) {
+                                        <mat-option [value]="d">{{ d }}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </mat-radio-button>
 
-                    <!-- THE -->
-                    <mat-radio-button value="THE" (change)="selectMonthlyThe()">
-                        The
-                        <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                            <mat-select formControlName="weekOfMonth">
-                                <mat-option *ngFor="let w of weekOfMonthOptions" [value]="w.value">
-                                    {{ w.label }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <!-- THE -->
+                        <mat-radio-button value="THE">
+                            The
+                            <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                                <mat-select formControlName="nth">
+                                    @for (w of weekOfMonthOptions; track w.value) {
+                                        <mat-option [value]="w.value">{{ w.label }}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
 
-                        <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                            <mat-select formControlName="weekday">
-                                <mat-option *ngFor="let d of weekdayOptions" [value]="d.value">
-                                    {{ d.label }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </mat-radio-button>
-                </mat-radio-group>
+                            <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                                <mat-select formControlName="weekday">
+                                    @for (d of weekdayOptions; track d.value) {
+                                        <mat-option [value]="d.value">{{ d.label }}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </mat-radio-button>
+                    </mat-radio-group>
+                }
             </div>
-        </ng-container>
-    </ng-container>
+        }
+    }
 
     <!-- =======================
-         ENDS
+         END
     ======================= -->
     <div formGroupName="end" class="section">
         <label class="section-label">Ends</label>

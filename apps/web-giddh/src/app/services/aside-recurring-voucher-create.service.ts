@@ -8,25 +8,27 @@ export class RecurrenceFormService {
 
   createForm(): FormGroup {
     return this.fb.group({
-      startDate: [null, Validators.required],
+     startDate: [null, Validators.required],
 
-      frequency: this.fb.group({
+    frequency: this.fb.group({
         unit: ['MONTH'],
         interval: [1]
-      }),
+    }),
 
-      repeatOn: this.fb.group({
-        daysOfWeek: this.fb.array([]),
+    repeatOn: this.fb.group({
+        type: ['EVERY_DAY'],
+        weekdays: this.fb.array([]),
         dayOfMonth: [null],
-        weekOfMonth: [null],
+        nth: [null],
         weekday: [null],
         monthlyMode: ['DAY']
-      }),
+    }),
 
-      end: this.fb.group({
+    end: this.fb.group({
         type: ['ON_DATE'],
-        endDate: [null]
-      })
+        endDate: [null],
+        count: [null]
+    })
     });
   }
 

@@ -5089,13 +5089,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public saveVoucher(callback?: Function): void {
-        this.startLoader(true);
+        // this.startLoader(true);
 
         const entries = this.getEntries();
         const deposits = this.getDeposits();
         this.checkRcm();
         let invoiceForm = cloneDeep(this.invoiceForm.value);
-
+                  // ✅ ONLY attach recurrence if checkbox is checked
+    if (this.invoiceForm.get('isRecurringVoucher')?.value) {
+      console.log(this.recurrenceFormGroup.getRawValue());
+    } else {
+        console.log("not r")
+    }
+    return;
         invoiceForm.entries = entries;
         invoiceForm.deposits = deposits;
 

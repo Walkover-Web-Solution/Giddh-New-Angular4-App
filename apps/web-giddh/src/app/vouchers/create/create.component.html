@@ -1316,7 +1316,7 @@
                                     <!-- Recurring Voucher Section -->
                                     {{ invoiceForm.get('isRecurringVoucher')?.value }}
                                     <aside-recurrence-voucher-create
-                                        *ngIf="invoiceForm.get('isRecurringVoucher')?.value"
+                                        *ngIf="invoiceForm.get('isRecurringVoucher')?.value && recurrenceFormGroup"
                                         [recurrenceForm]="recurrenceFormGroup"
                                     ></aside-recurrence-voucher-create>
 
