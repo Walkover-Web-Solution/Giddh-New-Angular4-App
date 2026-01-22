@@ -10,8 +10,8 @@ on:
       - "test-electron-build-gh-action"
 
 permissions:
-  contents: write # needed to push version changes back to repository
-  id-token: write # needed only if you use AWS OIDC (role-to-assume)
+  contents: write
+  id-token: write
 
 concurrency:
   group: windows-release-${{ github.ref_name }}
@@ -26,7 +26,7 @@ jobs:
       RELEASE_TAG: ${{ github.ref_name }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      UPLOAD_LATEST: "true" # set to "false" if you don't want releases/latest/app.exe
+      UPLOAD_LATEST: "true"
 
     steps:
       - name: Checkout
@@ -39,23 +39,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Configure npm and upgrade to latest
-        run: |
-          npm install -g npm@latest
-          npm config set registry https://registry.npmjs.org/
-          npm config set strict-ssl true
-          npm --version
 
       - name: Install deps
         run: npm install
 
-      # Adjust this to your project scripts.
-      # Common options:
-      # - npm run build && npm run dist
-      # - npx electron-builder --win --x64 --publish never
-      - name: Build Electron App (unpacked only - for signing)
+      - name: Build Windows Electron App
         env:
           ELECTRON_ENV: true
         run: |
@@ -65,7 +53,6 @@ jobs:
           npx ng build electron-giddh --configuration=test
           node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html
           
-          # Ensure updated icon is copied to dist folder
           Write-Host "📦 Copying icon files..."
           $iconSource = "apps/electron-giddh/src/resources/icon.ico"
           $iconDest = "dist/apps/web-giddh/resources/icon.ico"
@@ -85,7 +72,6 @@ jobs:
               exit 1
           }
           
-          # Copy tray icons for Windows tray functionality
           Write-Host "📦 Copying tray icons..."
           New-Item -ItemType Directory -Force -Path "dist/apps/web-giddh/build/icons" | Out-Null
           Copy-Item "apps/web-giddh/src/build/icons/*.png" "dist/apps/web-giddh/build/icons/" -Force -ErrorAction SilentlyContinue
@@ -94,104 +80,28 @@ jobs:
           Write-Host "  ✅ Copied $($trayIcons.Count) tray icon files"
           
           cd dist/apps/web-giddh
-          Write-Host "🔨 Building unpacked Electron app (no installer yet)..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --dir
+          Write-Host "🔨 Building Windows app with electron-builder..."
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64
           cd ../../../
+          node scripts/build-success-message.js prod
           
-          # Verify the built executable exists
-          Write-Host "🔍 Verifying built executable..."
-          $exePath = Get-ChildItem -Path "dist/apps/electrongiddh-packages/win-unpacked" -Filter "*.exe" -Recurse | Select-Object -First 1
+          Write-Host "🔍 Verifying built installer..."
+          $exePath = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse | Where-Object { $_.Directory.Name -ne "win-unpacked" } | Select-Object -First 1
           if ($exePath) {
-              Write-Host "  ✅ Found executable: $($exePath.FullName)"
+              Write-Host "  ✅ Found installer: $($exePath.FullName)"
               Write-Host "  Size: $($exePath.Length) bytes"
-              "UNSIGNED_EXE=$($exePath.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           } else {
-              Write-Host "  ❌ ERROR: Executable not found in expected location"
-              exit 1
-          }
-          
-          # Verify ICU data file exists
-          Write-Host "🔍 Checking for ICU data files..."
-          $icuFile = Get-ChildItem -Path "dist/apps/electrongiddh-packages/win-unpacked" -Filter "icudtl.dat" -Recurse
-          if ($icuFile) {
-              Write-Host "  ✅ Found ICU data: $($icuFile.FullName)"
-          } else {
-              Write-Host "  ⚠️ WARNING: ICU data file (icudtl.dat) not found!"
-          }
-          
-          # List all files in unpacked directory for debugging
-          Write-Host "📋 Contents of win-unpacked directory:"
-          Get-ChildItem -Path "dist/apps/electrongiddh-packages/win-unpacked" -Recurse | Select-Object -First 50 | ForEach-Object {
-              Write-Host "  $($_.FullName)"
+              Write-Host "  ⚠️ WARNING: Installer not found in expected location"
           }
 
-      - name: Extract version from package.json
+      - name: Extract version and find installer
         shell: pwsh
         run: |
-          # Extract version from package.json
           $packageJson = Get-Content "package.json" | ConvertFrom-Json
           $version = $packageJson.version
           "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Package version: $version"
-          
-          node scripts/build-success-message.js prod
 
-      - name: Sign application executable (giddh.exe)
-        uses: SSLcom/esigner-codesign@v1.3.2
-        with:
-          command: sign
-          username: ${{ secrets.ES_USERNAME }}
-          password: ${{ secrets.ES_PASSWORD }}
-          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
-          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
-          file_path: ${{ env.UNSIGNED_EXE }}
-          output_path: dist/apps/electrongiddh-packages/signed-output
-          malware_block: false
-          environment_name: PROD
-          override: true
-
-      - name: Copy signed executable back to unpacked directory
-        shell: pwsh
-        run: |
-          Write-Host "📝 Copying signed executable back..."
-          Copy-Item "dist/apps/electrongiddh-packages/signed-output/giddh.exe" "$env:UNSIGNED_EXE" -Force
-          Write-Host "✅ Signed executable copied successfully"
-
-      - name: Verify executable signature
-        shell: pwsh
-        run: |
-          Write-Host "========================================="
-          Write-Host "EXECUTABLE Signature Verification:"
-          $sig = Get-AuthenticodeSignature $env:UNSIGNED_EXE
-          Write-Host "File: $env:UNSIGNED_EXE"
-          Write-Host "Status: $($sig.Status)"
-          Write-Host "Status Message: $($sig.StatusMessage)"
-          Write-Host "Signer Certificate Subject: $($sig.SignerCertificate.Subject)"
-          Write-Host "Signer Certificate Issuer: $($sig.SignerCertificate.Issuer)"
-          Write-Host "Signer Certificate Thumbprint: $($sig.SignerCertificate.Thumbprint)"
-          Write-Host "Time Stamper Certificate: $($sig.TimeStamperCertificate.Subject)"
-          Write-Host "========================================="
-          
-          if ($sig.Status -ne "Valid") {
-              Write-Host "❌ ERROR: Executable signature is not valid!"
-              exit 1
-          } else {
-              Write-Host "✅ SUCCESS: Executable signature is valid!"
-          }
-
-      - name: Build installer with signed executable
-        shell: pwsh
-        run: |
-          Write-Host "🔨 Building installer with signed executable..."
-          cd dist/apps/web-giddh
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64 --prepackaged ../electrongiddh-packages/win-unpacked
-          cd ../../../
-          Write-Host "✅ Installer built successfully with signed executable"
-
-      - name: Find unsigned installer and metadata
-        shell: pwsh
-        run: |
-          # Find the installer EXE
           $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse |
             Where-Object { $_.Name -notmatch "blockmap" -and $_.Directory.Name -ne "win-unpacked" } |
             Sort-Object Length -Descending |
@@ -202,31 +112,25 @@ jobs:
           "UNSIGNED_INSTALLER=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Found unsigned installer: $($installer.FullName)"
           
-          # Find the latest.yml file (auto-updater metadata)
           $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
           if ($latestYml) {
               "LATEST_YML=$($latestYml.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
               Write-Host "Found latest.yml: $($latestYml.FullName)"
-              
-              # Display contents for debugging
-              Write-Host "latest.yml contents:"
-              Get-Content $latestYml.FullName | Write-Host
           } else {
-              Write-Host "⚠️ WARNING: latest.yml not found - auto-updater may not work"
+              Write-Host "⚠️ WARNING: latest.yml not found"
           }
           
-          # Create final filename with test suffix
-          $finalExeName = "giddh-test Setup $env:PACKAGE_VERSION.exe"
+          $finalExeName = "giddh-test-setup.exe"
           "FINAL_EXE_NAME=$finalExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Final installer name will be: $finalExeName"
 
-      - name: Create artifacts directory for signed installer
+      - name: Create artifacts directory
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path "artifacts/final" | Out-Null
           Write-Host "Created artifacts/final directory"
 
-      - name: Sign final installer with SSL.com eSigner
+      - name: Sign installer with SSL.com eSigner
         uses: SSLcom/esigner-codesign@v1.3.2
         with:
           command: sign
@@ -240,206 +144,124 @@ jobs:
           environment_name: PROD
           override: true
 
-      - name: Update latest.yml with signed installer info
-        shell: pwsh
-        run: |
-          if ($env:LATEST_YML -and (Test-Path $env:LATEST_YML)) {
-              # Find the signed installer
-              $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
-              if ($signedInstaller) {
-                  # Copy latest.yml to artifacts directory
-                  Copy-Item $env:LATEST_YML "artifacts/final/latest.yml" -Force
-                  
-                  # Update the path in latest.yml to point to the signed installer
-                  $latestContent = Get-Content "artifacts/final/latest.yml" -Raw
-                  $originalFileName = [System.IO.Path]::GetFileName($env:UNSIGNED_INSTALLER)
-                  $signedFileName = $signedInstaller.Name
-                  
-                  # Replace the filename in latest.yml
-                  $latestContent = $latestContent -replace [regex]::Escape($originalFileName), $signedFileName
-                  
-                  # Update file size and hash for signed installer
-                  $signedSize = $signedInstaller.Length
-                  $signedHash = (Get-FileHash $signedInstaller.FullName -Algorithm SHA512).Hash
-                  
-                  # Update size in latest.yml
-                  $latestContent = $latestContent -replace 'size: \d+', "size: $signedSize"
-                  
-                  # Update SHA512 hash in latest.yml
-                  $latestContent = $latestContent -replace 'sha512: [A-Fa-f0-9]+', "sha512: $signedHash"
-                  
-                  # Save updated latest.yml
-                  Set-Content "artifacts/final/latest.yml" $latestContent -NoNewline
-                  
-                  Write-Host "✅ Updated latest.yml with signed installer information"
-                  Write-Host "Updated latest.yml contents:"
-                  Get-Content "artifacts/final/latest.yml" | Write-Host
-              }
-          }
-
       - name: Verify installer signature
         shell: pwsh
         run: |
-          # Find the signed installer
           $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
-          if ($signedInstaller) {
-              # Verify signature
-              $sig = Get-AuthenticodeSignature $signedInstaller.FullName
-              Write-Host "========================================="
-              Write-Host "INSTALLER Signature Verification:"
-              Write-Host "File: $($signedInstaller.FullName)"
-              Write-Host "Status: $($sig.Status)"
-              Write-Host "Status Message: $($sig.StatusMessage)"
-              Write-Host "Signer Certificate Subject: $($sig.SignerCertificate.Subject)"
-              Write-Host "Signer Certificate Issuer: $($sig.SignerCertificate.Issuer)"
-              Write-Host "Signer Certificate Thumbprint: $($sig.SignerCertificate.Thumbprint)"
-              Write-Host "Time Stamper Certificate: $($sig.TimeStamperCertificate.Subject)"
-              Write-Host "========================================="
-              
-              if ($sig.Status -ne "Valid") {
-                  Write-Host "❌ ERROR: Installer signature is not valid!"
-                  exit 1
-              } else {
-                  Write-Host "✅ SUCCESS: Installer signature is valid!"
-              }
-          }
-
-          Write-Host "✅ Installer signature is valid!"
+          if (-not $signedInstaller) { throw "Signed installer not found in artifacts/final" }
           
-          # Set path for upload
+          $sig = Get-AuthenticodeSignature $signedInstaller.FullName
+          Write-Host "========================================="
+          Write-Host "INSTALLER Signature Verification:"
+          Write-Host "File: $($signedInstaller.FullName)"
+          Write-Host "Status: $($sig.Status)"
+          Write-Host "Status Message: $($sig.StatusMessage)"
+          Write-Host "Signer Certificate Subject: $($sig.SignerCertificate.Subject)"
+          Write-Host "Signer Certificate Issuer: $($sig.SignerCertificate.Issuer)"
+          Write-Host "Signer Certificate Thumbprint: $($sig.SignerCertificate.Thumbprint)"
+          Write-Host "Time Stamper Certificate: $($sig.TimeStamperCertificate.Subject)"
+          Write-Host "========================================="
+          
+          if ($sig.Status -ne "Valid") { 
+            Write-Host "ERROR: Installer signature verification failed!"
+            throw "Installer signature verification failed: $($sig.StatusMessage)" 
+          }
+          
+          Write-Host "✅ Installer signature is valid!"
           "FINAL_INSTALLER=$($signedInstaller.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Prepare latest.yml for upload
         shell: pwsh
         run: |
-          Write-Host "🔍 Searching for latest.yml..."
-          
-          # Find latest.yml
-          $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
-          
-          if ($latestYml) {
-            Write-Host "✅ Found latest.yml at: $($latestYml.FullName)"
-            Copy-Item $latestYml.FullName "artifacts/final/latest.yml" -Force
-            "LATEST_YML_PATH=$((Resolve-Path 'artifacts/final/latest.yml').Path)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          if (Test-Path $env:LATEST_YML) {
+            Copy-Item $env:LATEST_YML "artifacts/final/latest.yml" -Force
             Write-Host "✅ Copied latest.yml to artifacts/final/"
-            Write-Host "📄 Contents of latest.yml:"
-            Get-Content "artifacts/final/latest.yml" | Write-Host
           } else {
-            Write-Host "❌ WARNING: latest.yml not found in dist/apps/electrongiddh-packages"
-            Write-Host "📁 Listing dist/apps/electrongiddh-packages contents:"
-            Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Recurse | Select-Object FullName | Write-Host
+            Write-Host "⚠️ WARNING: latest.yml not found"
           }
-
-      # --- AWS Auth (using access keys only for now) ---
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Upload signed installer and metadata to S3
+      - name: Upload installer to S3
         shell: pwsh
         run: |
-          $version = $env:PACKAGE_VERSION
-          $bucket = $env:S3_BUCKET
-          $region = $env:AWS_REGION
+          $VERSION = "${{ env.PACKAGE_VERSION }}"
+          $BUCKET = "${{ env.S3_BUCKET }}"
+          $INSTALLER_FILE = "${{ env.FINAL_INSTALLER }}"
+          $FINAL_NAME = "${{ env.FINAL_EXE_NAME }}"
           
-          Write-Host "🚀 Uploading to S3..."
-          Write-Host "Bucket: $bucket"
-          Write-Host "Region: $region"
-          Write-Host "Version: $version"
+          Write-Host "� Uploading Windows installer to S3..."
+          Write-Host "  Version: $VERSION"
+          Write-Host "  Bucket: $BUCKET"
+          Write-Host "  Source: $INSTALLER_FILE"
+          Write-Host "  Destination: $FINAL_NAME"
           
-          # Find signed installer
-          $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
-          if (-not $signedInstaller) { throw "Signed installer not found" }
+          aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/$VERSION/$FINAL_NAME" `
+            --content-type "application/x-msdownload" `
+            --metadata "version=$VERSION,platform=windows,arch=x64"
           
-          # Upload versioned installer to test folder
-          $versionedKey = "test/windows/$version/giddh-test-$version.exe"
-          aws s3 cp "$($signedInstaller.FullName)" "s3://$bucket/$versionedKey" --region $region
-          Write-Host "✅ Uploaded versioned installer: s3://$bucket/$versionedKey"
+          Write-Host "✅ Uploaded versioned installer: test/windows/$VERSION/$FINAL_NAME"
           
-          # Upload latest.yml for auto-updater to versioned folder
-          if (Test-Path "artifacts/final/latest.yml") {
-              aws s3 cp "artifacts/final/latest.yml" "s3://$bucket/test/windows/$version/latest.yml" --region $region
-              Write-Host "✅ Uploaded latest.yml: s3://$bucket/test/windows/$version/latest.yml"
+          if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
+            aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/latest/$FINAL_NAME" `
+              --content-type "application/x-msdownload" `
+              --metadata "version=$VERSION,platform=windows,arch=x64"
+            Write-Host "✅ Uploaded to latest: test/windows/latest/$FINAL_NAME"
+          }
+          
+          Write-Host "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/windows/$VERSION/$FINAL_NAME"
+
+      - name: Upload latest.yml to S3
+        if: env.LATEST_YML != ''
+        shell: pwsh
+        run: |
+          $VERSION = "${{ env.PACKAGE_VERSION }}"
+          $BUCKET = "${{ env.S3_BUCKET }}"
+          $YML_FILE = "artifacts/final/latest.yml"
+          
+          if (Test-Path $YML_FILE) {
+            Write-Host "📤 Uploading latest.yml to S3..."
+            
+            aws s3 cp "$YML_FILE" "s3://$BUCKET/test/windows/$VERSION/latest.yml" `
+              --content-type "text/yaml" `
+              --metadata "version=$VERSION,platform=windows"
+            
+            Write-Host "✅ Uploaded latest.yml to versioned folder: test/windows/$VERSION/latest.yml"
+            
+            if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
+              aws s3 cp "$YML_FILE" "s3://$BUCKET/test/windows/latest/latest.yml" `
+                --content-type "text/yaml" `
+                --metadata "version=$VERSION,platform=windows"
+              Write-Host "✅ Uploaded latest.yml to latest folder: test/windows/latest/latest.yml"
+            }
+            
+            Write-Host "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/windows/$VERSION/latest.yml"
           } else {
-              Write-Host "⚠️ WARNING: latest.yml not found, skipping versioned metadata upload"
+            Write-Host "⚠️ WARNING: latest.yml not found at $YML_FILE"
           }
-          
-          # Upload to latest folder if enabled
-          if ($env:UPLOAD_LATEST -eq "true") {
-              $latestKey = "test/windows/latest/giddh-test-setup.exe"
-              aws s3 cp "$($signedInstaller.FullName)" "s3://$bucket/$latestKey" --region $region
-              Write-Host "✅ Uploaded to latest: s3://$bucket/$latestKey"
-              
-              # Also upload latest.yml to latest folder
-              if (Test-Path "artifacts/final/latest.yml") {
-                  aws s3 cp "artifacts/final/latest.yml" "s3://$bucket/test/windows/latest/latest.yml" --region $region
-                  Write-Host "✅ Uploaded latest.yml to latest folder: s3://$bucket/test/windows/latest/latest.yml"
-              } else {
-                  Write-Host "⚠️ WARNING: latest.yml not found, skipping latest metadata upload"
-              }
-          }
-          
-          Write-Host "✅ Files uploaded successfully (bucket policy controls public access)"
-          
-          # Store installer path for GitHub release
-          "SIGNED_INSTALLER_PATH=$($signedInstaller.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            ${{ env.SIGNED_INSTALLER_PATH }}
-            artifacts/final/latest.yml
-          name: "Giddh v${{ env.PACKAGE_VERSION }}"
-          body: |
-            ## Giddh Desktop v${{ env.PACKAGE_VERSION }}
-            
-            ### 🚀 What's New
-            - Auto-updater support enabled
-            - Code-signed Windows installer
-            - Enhanced security and performance
-            
-            ### 📥 Download
-            - **Windows**: Download the installer below
-            - **Auto-updates**: Existing users will be notified of this update
-            
-            ### 🔧 Installation
-            1. Download the installer
-            2. Run as administrator if prompted
-            3. Follow the installation wizard
-            
-            ### 🔄 Auto-Updates
-            This version includes auto-updater functionality. Future updates will be delivered automatically.
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Summary
+      - name: Build Summary
+        if: always()
         shell: pwsh
         run: |
           Write-Host "========================================="
-          Write-Host "🎉 BUILD AND DEPLOYMENT COMPLETE!"
+          Write-Host "WINDOWS BUILD SUMMARY"
           Write-Host "========================================="
-          Write-Host "Version: $env:PACKAGE_VERSION"
-          Write-Host "Installer: $env:FINAL_EXE_NAME"
-          Write-Host "S3 Bucket: $env:S3_BUCKET"
-          Write-Host ""
-          Write-Host "📦 Uploaded Files:"
-          Write-Host "  - Versioned: test/windows/$env:PACKAGE_VERSION/giddh-test-$env:PACKAGE_VERSION.exe"
-          Write-Host "  - Versioned Metadata: test/windows/$env:PACKAGE_VERSION/latest.yml"
-          Write-Host "  - Latest: test/windows/latest/giddh-test-setup.exe"
-          Write-Host "  - Latest Metadata: test/windows/latest/latest.yml"
-          Write-Host ""
-          Write-Host "🔄 Auto-updater Configuration:"
-          Write-Host "  - Update server: https://$env:S3_BUCKET.s3.$env:AWS_REGION.amazonaws.com/test/windows/"
-          Write-Host "  - Metadata file: latest/latest.yml"
-          Write-Host "  - Public access: Enabled"
-          Write-Host ""
-          Write-Host "✅ Users with existing installations will be notified of this update!"
+          Write-Host "Version: ${{ env.PACKAGE_VERSION }}"
+          Write-Host "Installer: ${{ env.FINAL_EXE_NAME }}"
+          Write-Host "Architecture: x64"
+          Write-Host "S3 Bucket: ${{ env.S3_BUCKET }}"
           Write-Host "========================================="
+          Write-Host "Download URLs:"
+          Write-Host "Versioned EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/${{ env.PACKAGE_VERSION }}/${{ env.FINAL_EXE_NAME }}"
+          Write-Host "Versioned YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/${{ env.PACKAGE_VERSION }}/latest.yml"
+          Write-Host "Latest EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/${{ env.FINAL_EXE_NAME }}"
+          Write-Host "Latest YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/latest.yml"
+          Write-Host "=========================================="
+

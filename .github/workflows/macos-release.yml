@@ -144,8 +144,8 @@ jobs:
               echo "⚠️ WARNING: latest-mac.yml not found"
           fi
           
-          # Create final filename with test suffix
-          FINAL_DMG_NAME="giddh-test-${PACKAGE_VERSION}.dmg"
+          # Create final filenames
+          FINAL_DMG_NAME="giddh-test.dmg"
           echo "FINAL_DMG_NAME=$FINAL_DMG_NAME" >> $GITHUB_ENV
           echo "Final DMG name will be: $FINAL_DMG_NAME"
 
