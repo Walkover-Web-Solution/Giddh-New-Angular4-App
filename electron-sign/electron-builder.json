@@ -76,9 +76,9 @@
             },
             "zip"
         ],
-        "icon": "resources/icon.ico",
+        "icon": "icon.ico",
         "legalTrademarks": "",
-        "signAndEditExecutable": false,
+        "signAndEditExecutable": true,
         "requestedExecutionLevel": "asInvoker",
         "verifyUpdateCodeSignature": false
     },
