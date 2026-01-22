@@ -189,6 +189,57 @@ jobs:
             Write-Host "⚠️ WARNING: latest.yml not found"
           }
 
+      - name: Recalculate SHA512 and update latest.yml (after signing)
+        shell: pwsh
+        run: |
+          Write-Host "📊 Recalculating SHA512 hash for signed installer..."
+          
+          # Get the signed installer file
+          $signedFile = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
+          
+          if (-not $signedFile) {
+            throw "Signed installer not found in artifacts/final/"
+          }
+          
+          Write-Host "  Signed file: $($signedFile.FullName)"
+          
+          # Calculate SHA512 hash and convert to Base64
+          $hashHex = (Get-FileHash -Path $signedFile.FullName -Algorithm SHA512).Hash
+          Write-Host "  SHA512 (hex): $hashHex"
+          
+          # Convert hex string to byte array then to Base64
+          $byteArray = for ($i = 0; $i -lt $hashHex.Length; $i += 2) { 
+            [Convert]::ToByte($hashHex.Substring($i, 2), 16) 
+          }
+          $base64Hash = [Convert]::ToBase64String($byteArray)
+          Write-Host "  SHA512 (base64): $base64Hash"
+          
+          # Get new file size (signing changes file size)
+          $newSize = (Get-Item $signedFile.FullName).Length
+          Write-Host "  File size: $newSize bytes"
+          
+          # Update latest.yml with new hash and size
+          $ymlPath = "artifacts/final/latest.yml"
+          if (Test-Path $ymlPath) {
+            $content = Get-Content $ymlPath -Raw
+            
+            # Update all sha512 references
+            $content = $content -replace 'sha512:\s*[A-Za-z0-9+/=]+', "sha512: $base64Hash"
+            
+            # Update all size references
+            $content = $content -replace 'size:\s*\d+', "size: $newSize"
+            
+            # Save updated content
+            Set-Content -Path $ymlPath -Value $content -Encoding UTF8 -NoNewline
+            
+            Write-Host "✅ Updated latest.yml with new SHA512 hash and size"
+            Write-Host ""
+            Write-Host "Updated latest.yml content:"
+            Get-Content $ymlPath | Write-Host
+          } else {
+            throw "latest.yml not found at $ymlPath"
+          }
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -247,31 +298,17 @@ jobs:
             
             # For latest folder, modify latest.yml to reference giddh-test-setup.exe
             if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
-              # Calculate SHA512 hash of the actual installer file
-              $installerFile = "${{ env.FINAL_INSTALLER }}"
-              Write-Host "📊 Calculating SHA512 hash for: $installerFile"
-              $sha512Hash = (Get-FileHash -Path $installerFile -Algorithm SHA512).Hash
-              $sha512Base64 = [Convert]::ToBase64String([byte[]] -split ($sha512Hash -replace '..', '0x$& '))
-              Write-Host "  SHA512 (base64): $sha512Base64"
-              
-              # Get file size
-              $fileSize = (Get-Item $installerFile).Length
-              Write-Host "  File size: $fileSize bytes"
-              
-              # Read the latest.yml content
+              # Read the already-updated latest.yml (SHA512 was recalculated after signing)
               $ymlContent = Get-Content $YML_FILE -Raw
               
               # Replace versioned exe filenames with fixed name
-              # electron-builder generates filenames like "Giddh Setup 9.1.49.exe" based on productName
+              # electron-builder generates filenames like "Giddh Setup 9.1.54.exe" based on productName
               $ymlContent = $ymlContent -replace 'Giddh Setup \d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
               $ymlContent = $ymlContent -replace 'Giddh-\d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
               $ymlContent = $ymlContent -replace 'giddh-\d+\.\d+\.\d+(-x64|-ia32)?\.exe', 'giddh-test-setup.exe'
               $ymlContent = $ymlContent -replace 'path: Giddh Setup \d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
               $ymlContent = $ymlContent -replace 'path: Giddh-\d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
               $ymlContent = $ymlContent -replace 'path: giddh-\d+\.\d+\.\d+(-x64|-ia32)?\.exe', 'path: giddh-test-setup.exe'
-              
-              # Update the main path entry with correct hash and size
-              $ymlContent = $ymlContent -replace 'path: giddh-test-setup\.exe\s+sha512: [^\s]+\s+size: \d+', "path: giddh-test-setup.exe`nsha512: $sha512Base64`nsize: $fileSize"
               
               # Save modified content to a new file
               $modifiedYml = "artifacts/final/latest-modified.yml"
