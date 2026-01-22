@@ -36,10 +36,6 @@
             {
                 "target": "dmg",
                 "arch": ["universal"]
-            },
-            {
-                "target": "zip", 
-                "arch": ["universal"]
             }
         ],
         "icon": "resources/icon.icns",
