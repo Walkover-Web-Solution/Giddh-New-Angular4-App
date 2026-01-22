@@ -1,6 +1,6 @@
 {
   "name": "giddh-workspaces",
-  "version": "9.1.43",
+  "version": "9.1.44",
   "license": "MIT",
   "private": true,
   "main": "dist/apps/web-giddh/index.js",
