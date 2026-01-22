@@ -13,6 +13,13 @@
 .weekday-toggle {
     display: flex;
     gap: 8px;
+
+    button {
+        &.active {
+            background-color: var(--bg-primary-color) !important;
+            color: var(--color-white) !important;
+        }
+    }
 }
 
 .section {

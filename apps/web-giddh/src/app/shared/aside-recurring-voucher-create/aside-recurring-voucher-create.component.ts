@@ -16,7 +16,8 @@ import {
 @Component({
     selector: 'aside-recurrence-voucher-create',
     templateUrl: './aside-recurring-voucher-create.component.html',
-    styleUrls: ['./aside-recurring-voucher-create.component.scss']
+    styleUrls: ['./aside-recurring-voucher-create.component.scss'],
+    standalone: false
 })
 export class AsideRecurrenceVoucherCreateComponent implements OnInit {
 
@@ -72,7 +73,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         { label: '2nd', value: 2 },
         { label: '3rd', value: 3 },
         { label: '4th', value: 4 },
-        { label: 'Last', value: 'LAST' }
+        { label: '5th', value: 5 }
     ];
 
     monthDays: number[] = Array.from({ length: 31 }, (_, i) => i + 1);

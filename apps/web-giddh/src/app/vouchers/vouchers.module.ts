@@ -93,9 +93,11 @@ import { AllTemplatesComponent } from "./template/all-templates/all-templates.co
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
-import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
 import { ResizableDirective } from "../shared/directives/resizable.directive";
-import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
+import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
+
+
+import { AsideRecurringVoucherCreateModule } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.module";
 
 @NgModule({
     declarations: [
@@ -118,7 +120,7 @@ import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring
         FullAddressComponent,
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
-        AllTemplatesComponent,
+        AllTemplatesComponent
     ],
     imports: [
         CommonModule,
@@ -194,8 +196,8 @@ import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring
         TributeMentionModule,
         MobileNumberInputComponent,
         KeyboardNavigationModule,
-        ResizableDirective  ,
-        AsideRecurrenceVoucherCreateComponent
+        AsideRecurringVoucherCreateModule,
+        ResizableDirective
     ],
     exports: [
         VoucherCreateComponent,
