@@ -46,11 +46,11 @@
         "hardenedRuntime": false,
         "gatekeeperAssess": false,
         "type": "development",
-        "artifactName": "${productName}-${version}.${ext}"
+        "artifactName": "${productName} Setup ${version}.${ext}"
     },
     "dmg": {
         "sign": false,
-        "artifactName": "${productName}-${version}.${ext}",
+        "artifactName": "${productName} Setup ${version}.${ext}",
         "title": "${productName} ${version}",
         "icon": "icon.icns",
         "iconSize": 80,

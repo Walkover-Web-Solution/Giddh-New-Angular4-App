@@ -152,10 +152,15 @@ jobs:
               echo "⚠️ WARNING: latest-mac.yml not found"
           fi
           
-          # Create final filenames
-          FINAL_DMG_NAME="giddh-test.dmg"
+          # Get original DMG filename (electron-builder generates versioned names)
+          ORIGINAL_DMG_NAME=$(basename "$DMG_FILE")
+          echo "ORIGINAL_DMG_NAME=$ORIGINAL_DMG_NAME" >> $GITHUB_ENV
+          echo "Original DMG name: $ORIGINAL_DMG_NAME"
+          
+          # Fixed name for latest folder (for auto-updater)
+          FINAL_DMG_NAME="giddh-test-setup.dmg"
           echo "FINAL_DMG_NAME=$FINAL_DMG_NAME" >> $GITHUB_ENV
-          echo "Final DMG name will be: $FINAL_DMG_NAME"
+          echo "Fixed DMG name for latest: $FINAL_DMG_NAME"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -179,22 +184,26 @@ jobs:
           echo "  Source: $DMG_FILE"
           echo "  Destination: $FINAL_NAME"
           
-          # Upload DMG to test/mac/version folder
-          aws s3 cp "$DMG_FILE" "s3://$BUCKET/test/mac/$VERSION/$FINAL_NAME" \
+          # Get original filename from electron-builder
+          ORIGINAL_NAME=$(basename "$DMG_FILE")
+          
+          # Upload DMG to test/mac/version folder with original versioned filename
+          aws s3 cp "$DMG_FILE" "s3://$BUCKET/test/mac/$VERSION/$ORIGINAL_NAME" \
             --content-type "application/x-apple-diskimage" \
             --metadata "version=$VERSION,platform=macos,arch=universal"
           
-          echo "✅ Uploaded versioned DMG: test/mac/$VERSION/$FINAL_NAME"
+          echo "✅ Uploaded versioned DMG: test/mac/$VERSION/$ORIGINAL_NAME"
           
           # Upload to latest folder if enabled
           if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
-            aws s3 cp "$DMG_FILE" "s3://$BUCKET/test/mac/latest/giddh-test.dmg" \
+            aws s3 cp "$DMG_FILE" "s3://$BUCKET/test/mac/latest/giddh-test-setup.dmg" \
               --content-type "application/x-apple-diskimage" \
               --metadata "version=$VERSION,platform=macos,arch=universal"
-            echo "✅ Uploaded to latest: test/mac/latest/giddh-test.dmg"
+            echo "✅ Uploaded to latest: test/mac/latest/giddh-test-setup.dmg"
           fi
           
-          echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/mac/$VERSION/$FINAL_NAME"
+          ORIGINAL_NAME=$(basename "$DMG_FILE")
+          echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/mac/$VERSION/$ORIGINAL_NAME"
 
       - name: Upload latest.yml to S3
         if: env.LATEST_MAC_YML != ''
@@ -206,19 +215,35 @@ jobs:
           
           echo "📤 Uploading latest.yml to S3..."
           
-          # Upload yml to test/mac/version folder (renamed to latest.yml)
+          # Upload original latest.yml to versioned folder
           aws s3 cp "$YML_FILE" "s3://$BUCKET/test/mac/$VERSION/latest.yml" \
             --content-type "text/yaml" \
             --metadata "version=$VERSION,platform=macos"
           
           echo "✅ Uploaded latest.yml to versioned folder: test/mac/$VERSION/latest.yml"
           
-          # Upload to latest folder if enabled (renamed to latest.yml)
+          # For latest folder, modify latest.yml to reference giddh-test.dmg
           if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
-            aws s3 cp "$YML_FILE" "s3://$BUCKET/test/mac/latest/latest.yml" \
+            # Read the latest.yml content
+            YML_CONTENT=$(cat "$YML_FILE")
+            
+            # Replace versioned DMG filenames with fixed name
+            # electron-builder generates filenames like "Giddh Setup 9.1.57.dmg"
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test-setup.dmg/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test-setup.dmg|g')
+            
+            # Save modified content to a temporary file
+            MODIFIED_YML="/tmp/latest-modified.yml"
+            echo "$YML_CONTENT" > "$MODIFIED_YML"
+            
+            echo "📝 Modified latest.yml content:"
+            cat "$MODIFIED_YML"
+            
+            # Upload modified latest.yml to latest folder
+            aws s3 cp "$MODIFIED_YML" "s3://$BUCKET/test/mac/latest/latest.yml" \
               --content-type "text/yaml" \
               --metadata "version=$VERSION,platform=macos"
-            echo "✅ Uploaded latest.yml to latest folder: test/mac/latest/latest.yml"
+            echo "✅ Uploaded modified latest.yml to latest folder: test/mac/latest/latest.yml"
           fi
           
           echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/mac/$VERSION/latest.yml"
@@ -236,8 +261,8 @@ jobs:
           echo "S3 Bucket: ${{ env.S3_BUCKET }}"
           echo "========================================="
           echo "Download URLs:"
-          echo "Versioned DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/${{ env.PACKAGE_VERSION }}/${{ env.FINAL_DMG_NAME }}"
+          echo "Versioned DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/${{ env.PACKAGE_VERSION }}/${{ env.ORIGINAL_DMG_NAME }}"
           echo "Versioned YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/${{ env.PACKAGE_VERSION }}/latest.yml"
-          echo "Latest DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test.dmg"
+          echo "Latest DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test-setup.dmg"
           echo "Latest YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/latest.yml"
           echo "=========================================="
