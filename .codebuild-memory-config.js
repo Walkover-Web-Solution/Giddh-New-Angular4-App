@@ -17,7 +17,7 @@ let maxOldSpaceSize;
 let maxSemiSpaceSize;
 
 if (memoryInGB >= 15) {
-    maxOldSpaceSize = 8192; // 8GB for large CodeBuild instances
+    maxOldSpaceSize = 16000; // 8GB for large CodeBuild instances
     maxSemiSpaceSize = 256;
 } else if (memoryInGB >= 8) {
     maxOldSpaceSize = 6144; // 6GB for medium CodeBuild instances
