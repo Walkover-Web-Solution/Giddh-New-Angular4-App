@@ -199,28 +199,29 @@ jobs:
           $VERSION = "${{ env.PACKAGE_VERSION }}"
           $BUCKET = "${{ env.S3_BUCKET }}"
           $INSTALLER_FILE = "${{ env.FINAL_INSTALLER }}"
-          $FINAL_NAME = "${{ env.FINAL_EXE_NAME }}"
           
-          Write-Host "� Uploading Windows installer to S3..."
+          Write-Host "📤 Uploading Windows installer to S3..."
           Write-Host "  Version: $VERSION"
           Write-Host "  Bucket: $BUCKET"
           Write-Host "  Source: $INSTALLER_FILE"
-          Write-Host "  Destination: $FINAL_NAME"
           
-          aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/$VERSION/$FINAL_NAME" `
+          # Upload to versioned folder with original filename
+          $originalName = Split-Path -Leaf $INSTALLER_FILE
+          aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/$VERSION/$originalName" `
             --content-type "application/x-msdownload" `
             --metadata "version=$VERSION,platform=windows,arch=x64"
           
-          Write-Host "✅ Uploaded versioned installer: test/windows/$VERSION/$FINAL_NAME"
+          Write-Host "✅ Uploaded versioned installer: test/windows/$VERSION/$originalName"
           
+          # Upload to latest folder with fixed name for auto-updater
           if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
-            aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/latest/$FINAL_NAME" `
+            aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/latest/giddh-test-setup.exe" `
               --content-type "application/x-msdownload" `
               --metadata "version=$VERSION,platform=windows,arch=x64"
-            Write-Host "✅ Uploaded to latest: test/windows/latest/$FINAL_NAME"
+            Write-Host "✅ Uploaded to latest: test/windows/latest/giddh-test-setup.exe"
           }
           
-          Write-Host "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/windows/$VERSION/$FINAL_NAME"
+          Write-Host "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/windows/$VERSION/$originalName"
 
       - name: Upload latest.yml to S3
         if: env.LATEST_YML != ''
@@ -233,17 +234,31 @@ jobs:
           if (Test-Path $YML_FILE) {
             Write-Host "📤 Uploading latest.yml to S3..."
             
+            # Upload original latest.yml to versioned folder
             aws s3 cp "$YML_FILE" "s3://$BUCKET/test/windows/$VERSION/latest.yml" `
               --content-type "text/yaml" `
               --metadata "version=$VERSION,platform=windows"
             
             Write-Host "✅ Uploaded latest.yml to versioned folder: test/windows/$VERSION/latest.yml"
             
+            # For latest folder, modify latest.yml to reference giddh-test-setup.exe
             if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
-              aws s3 cp "$YML_FILE" "s3://$BUCKET/test/windows/latest/latest.yml" `
+              # Read the latest.yml content
+              $ymlContent = Get-Content $YML_FILE -Raw
+              
+              # Replace versioned exe filenames with fixed name
+              $ymlContent = $ymlContent -replace 'giddh-\d+\.\d+\.\d+(-x64|-ia32)?\.exe', 'giddh-test-setup.exe'
+              $ymlContent = $ymlContent -replace 'path: giddh-\d+\.\d+\.\d+(-x64|-ia32)?\.exe', 'path: giddh-test-setup.exe'
+              
+              # Save modified content to a new file
+              $modifiedYml = "artifacts/final/latest-modified.yml"
+              $ymlContent | Set-Content $modifiedYml -NoNewline
+              
+              # Upload modified latest.yml to latest folder
+              aws s3 cp "$modifiedYml" "s3://$BUCKET/test/windows/latest/latest.yml" `
                 --content-type "text/yaml" `
                 --metadata "version=$VERSION,platform=windows"
-              Write-Host "✅ Uploaded latest.yml to latest folder: test/windows/latest/latest.yml"
+              Write-Host "✅ Uploaded modified latest.yml to latest folder: test/windows/latest/latest.yml"
             }
             
             Write-Host "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/windows/$VERSION/latest.yml"
@@ -259,14 +274,11 @@ jobs:
           Write-Host "WINDOWS BUILD SUMMARY"
           Write-Host "========================================="
           Write-Host "Version: ${{ env.PACKAGE_VERSION }}"
-          Write-Host "Installer: ${{ env.FINAL_EXE_NAME }}"
-          Write-Host "Architecture: x64"
+          Write-Host "Architecture: x64 + ia32"
           Write-Host "S3 Bucket: ${{ env.S3_BUCKET }}"
           Write-Host "========================================="
           Write-Host "Download URLs:"
-          Write-Host "Versioned EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/${{ env.PACKAGE_VERSION }}/${{ env.FINAL_EXE_NAME }}"
-          Write-Host "Versioned YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/${{ env.PACKAGE_VERSION }}/latest.yml"
-          Write-Host "Latest EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/${{ env.FINAL_EXE_NAME }}"
+          Write-Host "Latest EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/giddh-test-setup.exe"
           Write-Host "Latest YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/latest.yml"
           Write-Host "=========================================="
 

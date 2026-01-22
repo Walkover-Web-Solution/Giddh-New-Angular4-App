@@ -78,7 +78,6 @@
         "legalTrademarks": "",
         "signAndEditExecutable": false,
         "requestedExecutionLevel": "asInvoker",
-        "artifactName": "giddh-test-setup.exe",
         "verifyUpdateCodeSignature": false
     },
     "nsis": {
