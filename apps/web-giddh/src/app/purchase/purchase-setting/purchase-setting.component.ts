@@ -61,7 +61,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private dialog: MatDialog, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
 
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID));
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
 
@@ -266,9 +266,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public getRedirectUrl(): string {
-        const baseUrl = (this.serviceConfig.AppUrl || AppUrl);
-        const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
-        return normalizedBaseUrl + 'pages/purchase-management/purchase/settings';
+        return (this.serviceConfig.AppUrl || AppUrl) + 'pages/purchase-management/purchase/settings';
     }
 
     /**
