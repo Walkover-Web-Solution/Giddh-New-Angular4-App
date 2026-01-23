@@ -25,6 +25,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { IRegistration, GetOTPRequest, BulkPaymentResponse, BulkPaymentConfirmRequest } from "../models/interfaces/registration.interface";
 import { ReportsRequestModel, ReportsResponseModel } from "../models/api-models/Reports";
 import { concat, get } from '../lodash-optimized';
+import { SOCKET_FLOW_API } from '../app.constant';
 
 @Injectable({
     providedIn: 'root'
@@ -54,7 +55,7 @@ export class CompanyService {
      * CreateCompany
      */
     public SocketCreateCompany(company: SocketNewCompanyRequest): Observable<BaseResponse<any, SocketNewCompanyRequest>> {
-        return this.http.post('https://ebl-api-h7duexlbuq-el.a.run.app/func/CMEQnVPyk2a8', company).pipe(
+        return this.http.post(SOCKET_FLOW_API, company).pipe(
             map((res) => {
                 let data: BaseResponse<any, SocketNewCompanyRequest> = res;
                 data.request = company;
