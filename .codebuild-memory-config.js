@@ -17,16 +17,16 @@ let maxOldSpaceSize;
 let maxSemiSpaceSize;
 
 if (memoryInGB >= 15) {
-    maxOldSpaceSize = 16000; // 8GB for large CodeBuild instances
+    maxOldSpaceSize = 12288; // 12GB for large CodeBuild instances (reduced from 16GB)
     maxSemiSpaceSize = 256;
 } else if (memoryInGB >= 8) {
-    maxOldSpaceSize = 6144; // 6GB for medium CodeBuild instances
+    maxOldSpaceSize = 5120; // 5GB for medium CodeBuild instances
     maxSemiSpaceSize = 128;
 } else if (memoryInGB >= 4) {
-    maxOldSpaceSize = 3072; // 3GB for small CodeBuild instances
+    maxOldSpaceSize = 2560; // 2.5GB for small CodeBuild instances
     maxSemiSpaceSize = 64;
 } else {
-    maxOldSpaceSize = 2048; // 2GB for minimal instances
+    maxOldSpaceSize = 1536; // 1.5GB for minimal instances
     maxSemiSpaceSize = 32;
 }
 
