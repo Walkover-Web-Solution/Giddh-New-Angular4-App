@@ -16,7 +16,7 @@ This project uses **two independent GitHub Actions workflows** to build and dist
 - **Architecture**: Universal (Intel x86_64 + Apple Silicon ARM64)
 - **Output**: `giddh-X.X.X.dmg` (disk image)
 - **Signing**: Unsigned (no Apple Developer certificate required)
-- **Auto-update file**: `latest-mac.yml`
+- **Auto-update file**: `latest.yml`
 
 ## Universal Binary Explained
 
@@ -126,10 +126,10 @@ s3://giddh-app-builds/
       └── mac/
           ├── 9.1.5/
           │   ├── giddh-9.1.5.dmg
-          │   └── latest-mac.yml
+          │   └── latest.yml
           └── latest/
               ├── giddh-9.1.5.dmg
-              └── latest-mac.yml
+              └── latest.yml
 ```
 
 ## Required GitHub Secrets
@@ -249,7 +249,7 @@ Push to `test-electron-build-gh-action` branch to test without creating a releas
 3. **Keep Electron version consistent** across both configurations
 4. **Update secrets regularly** especially SSL.com credentials
 5. **Test downloads** from S3 on actual Windows and macOS machines
-6. **Review auto-update files** (latest.yml, latest-mac.yml) for correctness
+6. **Review auto-update files** (latest.yml) for correctness
 
 ## Future Enhancements
 

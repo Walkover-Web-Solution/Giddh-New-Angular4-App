@@ -35,7 +35,8 @@ export default class AppUpdater {
             bucket: 'app-giddh-test',
             region: 'ap-south-1',
             path: `test/${platform}/latest`,
-            endpoint: 'https://s3-ap-south-1.amazonaws.com'
+            endpoint: 'https://s3-ap-south-1.amazonaws.com',
+            channel: 'latest'
         };
         
         log.info('Configuring auto-updater with feed:', feedConfig);
@@ -45,6 +46,7 @@ export default class AppUpdater {
         autoUpdater.autoInstallOnAppQuit = true;
         autoUpdater.allowPrerelease = false;
         autoUpdater.allowDowngrade = false;
+        autoUpdater.channel = 'latest';
         
         log.info('Auto-updater configured successfully');
 
