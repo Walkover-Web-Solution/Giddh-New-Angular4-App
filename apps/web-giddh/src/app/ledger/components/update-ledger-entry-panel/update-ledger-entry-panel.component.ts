@@ -41,7 +41,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
-import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
+import { CommonDiscountComponent } from '../../../shared/common-discount/common-discount.component';
 import { UpdateLedgerVm } from './update-ledger.vm';
 import { SearchService } from '../../../services/search.service';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
@@ -120,7 +120,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public isDaybook: boolean = false;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
-    @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
+    @ViewChild('discount', { static: false }) public discountComponent: CommonDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
     @ViewChild('commontax', { static: false }) public commonTaxControll: CommonTaxComponent;
     /** Element ref for mat menu **/
@@ -584,13 +584,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.transaction = this.entryTransactionData?.transaction;
         this.index = this.entryTransactionData?.index;
         this.transactionsList = this.entryTransactionData?.transactionsList;
-        if (this.transaction?.entryUniqueName) {
-            setTimeout(() => {
-                this.hideTax();
-                this.hideDiscount();
-            }, 3000);
-            this.changeDetectorRef.detectChanges();
-        }
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -1336,14 +1329,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public hideDiscountTax(): void {
         if (this.discountComponent) {
-            this.discountComponent.discountMenu = false;
+            this.discountComponent.closeDiscountMenu();
         }
     }
 
     public hideDiscount(): void {
         if (this.discountComponent) {
-            this.discountComponent?.change();
-            this.discountComponent.discountMenu = false;
+            this.discountComponent.closeDiscountMenu();
         }
     }
 
@@ -2781,7 +2773,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.discountDialogRef.afterClosed().subscribe(response => {
             if (response) {
-                this.getAllDiscounts();
+                this.getAllDiscounts(() => {
+                    setTimeout(() => {
+                        this.discountComponent?.toggleDiscountMenu(true);
+                    }, 100);
+                });
+            } else {
+                this.discountComponent?.toggleDiscountMenu(true);
             }
             this.discountDialogRef = undefined;
         });
@@ -2791,13 +2789,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Get all discounts API call
      *
      * @private
+     * @param callback - Optional callback to execute after API completes
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    private getAllDiscounts(): void {
+    private getAllDiscounts(callback?: () => void): void {
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountsList = response?.body;
                 this.changeDetectorRef.detectChanges();
+            }
+            if (callback) {
+                callback();
             }
         });
     }

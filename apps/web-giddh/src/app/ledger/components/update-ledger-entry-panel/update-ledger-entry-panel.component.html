@@ -1397,12 +1397,11 @@
                                     class="text-right min-width-0"
                                 >
                                     <span>
-                                        <update-ledger-discount
-                                            id="update-ledger-discount-amount"
+                                        <common-discount
                                             #discount
                                             [disabled]="isEinvoiceGenerated"
                                             [discountAccountsDetails]="vm.discountArray"
-                                            [ledgerAmount]="vm.totalAmount"
+                                            [amountForDiscount]="vm.totalAmount"
                                             [prefixInput]="vm.selectedPrefixForCurrency"
                                             [maskInput]="vm.inputMaskFormat"
                                             [suffixInput]="vm.selectedSuffixForCurrency"
@@ -1410,11 +1409,12 @@
                                             [giddhBalanceDecimalPlaces]="vm.giddhBalanceDecimalPlaces"
                                             (discountTotalUpdated)="vm.handleDiscountEntry($event); vm.generateGrandTotal()"
                                             [discountsList]="discountsList"
-                                            (hideOtherPopups)="hideTax()"
                                             [readonly]="isEinvoiceGenerated"
                                             (createNewDiscount)="showCreateDiscountDialog()"
-                                            [cssClass]="'bg-transparent'"
-                                        ></update-ledger-discount>
+                                            [showCreateNew]="true"
+                                            [hasBackdrop]="false"
+                                            (selectedDiscountsEvent)="vm.discountArray = $event"
+                                        ></common-discount>
                                     </span>
 
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
@@ -1489,6 +1489,7 @@
                                             (selectedTaxEvent)="vm.taxTrxUpdated($event); showTaxError = false"
                                             (taxAmountSumEvent)="calculateTax()"
                                             (createNewTax)="showCreateTaxDialog()"
+                                            (hideOtherPopups)="hideDiscount()"
                                         ></common-tax>
                                     </span>
 

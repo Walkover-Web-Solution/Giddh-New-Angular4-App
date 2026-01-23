@@ -26,7 +26,7 @@ import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
-import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
+import { CommonDiscountComponent } from '../../../shared/common-discount/common-discount.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
@@ -139,7 +139,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public closeOtherDialogMenu: EventEmitter<boolean> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     /** Holds select discount control component reference */
-    @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
+    @ViewChild('discount', { static: false }) public discountControl: CommonDiscountComponent;
     /** Holds select multiple fields component reference */
     @ViewChild('selectMultipleFieldsRef', { static: false }) public selectMultipleFieldsRef: SelectMultipleFieldsComponent;
     /** Holds sales person dropdown component reference */
@@ -653,10 +653,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @param {*} event
      * @memberof NewLedgerEntryPanelComponent
      */
-    public calculateDiscount(event: any): void {
-        if (this.currentTxn) {
-            this.currentTxn.discount = event.discountTotal;
-        }
+    public calculateDiscount(): void {
+
+        this.currentTxn.discounts = this.discountControl.getActiveDiscounts();
         const matchedUnit = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
         if (matchedUnit?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length && !this.currentTxn?.duplicateEntry) {
             if (!this.currentTxn.isMrpDiscountApplied) {
@@ -674,16 +673,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.isMrpDiscountApplied = true;
         } else {
             if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
-                (Array.isArray(this.accountOtherApplicableDiscount) ? this.accountOtherApplicableDiscount : []).forEach(item => {
-                    if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
-                        item.isActive = event.isActive.target?.checked;
+                this.accountOtherApplicableDiscount.forEach(item => {
+                    const matchingDiscount = this.currentTxn.discounts?.find(d => d?.discountUniqueName === item?.uniqueName);
+                    if (matchingDiscount) {
+                        item.isActive = matchingDiscount.isActive;
                     }
                 });
             }
-            if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts) {
-                (Array.isArray(this.currentTxn.selectedAccount.accountApplicableDiscounts) ? this.currentTxn.selectedAccount.accountApplicableDiscounts : []).forEach(item => {
-                    if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
-                        item.isActive = event.isActive.target?.checked;
+            if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
+                this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
+                    const matchingDiscount = this.currentTxn.discounts?.find(d => d?.discountUniqueName === item?.uniqueName);
+                    if (matchingDiscount) {
+                        item.isActive = matchingDiscount.isActive;
                     }
                 });
             }
@@ -704,6 +705,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public calculateTotal(): void {
         if (this.currentTxn) {
+            this.currentTxn.discounts = this.discountControl.getActiveDiscounts();
             if (this.currentTxn.amount) {
                 /** apply account's discount (default) */
                 if (this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length && !this.currentTxn.isMrpDiscountApplied) {
@@ -758,9 +760,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
                 }
             }
-            if (this.discountControl) {
-                this.discountControl.change();
-            }
 
             if (this.currentTxn.inventory) {
                 this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
@@ -800,11 +799,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
             }
 
-            // calculate discount on change of price
-            if (this.discountControl) {
-                this.discountControl.ledgerAmount = this.currentTxn.amount;
-                this.discountControl.change();
-            }
 
             this.calculateTotal();
         } else if (this.isInclusiveEntry && isUnitChanged) {
@@ -825,11 +819,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
         }
 
-        // calculate discount on change of price
-        if (this.discountControl) {
-            this.discountControl.ledgerAmount = this.currentTxn.amount;
-            this.discountControl.change();
-        }
 
         this.calculateTotal();
     }
@@ -848,12 +837,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         } else {
             this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
         }
-
-        if (this.discountControl) {
-            this.discountControl.ledgerAmount = this.currentTxn.amount;
-            this.discountControl.change();
-        }
-
 
         if (this.currentTxn?.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
@@ -1226,7 +1209,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     */
     public closeDiscountDropdown(): void {
         if (this.discountControl) {
-            this.discountControl.toggleDiscountMenu(false);
+            this.discountControl.closeDiscountMenu();
         }
     }
 
@@ -1576,9 +1559,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.currentTxn[entry[0]] = this.currentTxn[entry[1]];
                 this.currentTxn[entry[1]] = value;
             });
-        }
-        if (this.discountControl) {
-            this.discountControl.discountTotal = this.currentTxn.discount;
         }
         if (this.taxControl) {
             this.taxControl.taxTotalAmount = this.currentTxn.tax;
@@ -1979,19 +1959,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         /** if percent or value type discount applied */
         if (this.currentTxn?.discounts && this.currentTxn?.discounts[0]) {
-            if (this.currentTxn?.discounts[0].amount) {
+            if (this.currentTxn?.discounts[0].discountValue) {
                 this.currentTxn.discounts[0].isActive = true;
             } else {
                 this.currentTxn.discounts[0].isActive = false;
-            }
-        }
-        if (this.discountControl) {
-            if (this.discountControl.discountAccountsDetails) {
-                this.discountControl.discountAccountsDetails = this.currentTxn?.discounts;
-                if (this.currentTxn) {
-                    this.currentTxn.discount = giddhRoundOff(this.discountControl.generateTotal());
-                }
-                this.discountControl.discountTotal = this.currentTxn?.discount;
             }
         }
     }
@@ -2204,18 +2175,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private calculateInclusiveAmount(total: number): number {
         let fixDiscount = 0;
         let percentageDiscount = 0;
-        if (this.discountControl) {
-            percentageDiscount = this.discountControl.discountAccountsDetails?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'PERCENTAGE')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
-
-            fixDiscount = this.discountControl.discountAccountsDetails?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'FIX_AMOUNT')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
+        if (this.currentTxn?.discounts && this.discountControl) {
+            percentageDiscount = this.discountControl.getTotalPercentageDiscount();
+            fixDiscount = this.discountControl.getTotalFixedDiscount();
         }
         let taxTotal = 0;
         if (this.taxControl) {
