@@ -265,14 +265,24 @@ jobs:
           
           # For latest folder, modify latest.yml to reference fixed filenames
           if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
+            # Delete old latest-mac.yml if it exists (legacy file)
+            echo "🗑️ Removing old latest-mac.yml from S3 (if exists)..."
+            aws s3 rm "s3://$BUCKET/test/mac/latest/latest-mac.yml" --quiet || true
+            echo "✅ Cleaned up old latest-mac.yml"
+            
             # Read the latest.yml content
             YML_CONTENT=$(cat "$YML_FILE")
             
             # Replace versioned filenames with fixed names
             # electron-builder generates filenames like "Giddh Setup 9.1.57.zip" and "Giddh Setup 9.1.57.dmg"
+            # Replace ZIP references
             YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip/giddh-test-setup.zip/g')
             YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh-test-setup.zip|g')
             YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh-test-setup.zip|g')
+            # Replace DMG references
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test-setup.dmg/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test-setup.dmg|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-test-setup.dmg|g')
             
             # Save modified content to a temporary file
             MODIFIED_YML="/tmp/latest-modified.yml"
