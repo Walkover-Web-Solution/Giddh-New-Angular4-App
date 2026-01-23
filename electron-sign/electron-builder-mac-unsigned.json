@@ -34,6 +34,10 @@
         "category": "public.app-category.finance",
         "target": [
             {
+                "target": "zip",
+                "arch": ["universal"]
+            },
+            {
                 "target": "dmg",
                 "arch": ["universal"]
             }

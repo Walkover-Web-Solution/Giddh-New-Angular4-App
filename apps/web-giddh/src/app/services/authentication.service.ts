@@ -319,7 +319,7 @@ export class AuthenticationService {
         args.headers['cache-control'] = 'no-cache';
         args.headers['Content-Type'] = 'application/xml';
         args.headers = new HttpHeaders(args.headers);
-        return this.httpClient.get('https://s3-ap-south-1.amazonaws.com/giddh-app-builds/latest-mac.yml', {
+        return this.httpClient.get('https://s3-ap-south-1.amazonaws.com/giddh-app-builds/latest.yml', {
             headers: args.headers,
             responseType: 'text'
         }).pipe(map((res) => {
