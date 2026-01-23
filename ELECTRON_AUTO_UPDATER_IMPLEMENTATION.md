@@ -45,9 +45,9 @@ export default class AppUpdater {
         // Configure S3 update server
         autoUpdater.setFeedURL({
             provider: 's3',
-            bucket: 'giddh-app-builds',
-            region: 'us-east-1',
-            path: 'releases'
+            bucket: 'app-giddh-test',
+            region: 'ap-south-1',
+            path: 'test/windows/latest'
         });
 
         autoUpdater.autoDownload = false;
@@ -282,8 +282,8 @@ export class ElectronUpdaterService {
 Your S3 bucket has ACLs disabled (modern best practice), so you must use a **bucket policy** for public access:
 
 **Note:** The workflow uses `secrets.S3_BUCKET` which should be:
-- **Test builds:** `app-giddh-test`
-- **Production builds:** `giddh-app-builds`
+- **Test builds:** `app-giddh-test` with path `test/**`
+- **Production builds:** `app-giddh-test` with path `prod/**`
 
 1. **Go to AWS S3 Console** → Select your bucket (e.g., `app-giddh-test`) → **Permissions** tab
 
@@ -307,7 +307,7 @@ Your S3 bucket has ACLs disabled (modern best practice), so you must use a **buc
 }
 ```
 
-**For production bucket (`giddh-app-builds`), use:**
+**For production bucket (`app-giddh-test`), use:**
 ```json
 {
     "Version": "2012-10-17",
@@ -317,7 +317,7 @@ Your S3 bucket has ACLs disabled (modern best practice), so you must use a **buc
             "Effect": "Allow",
             "Principal": "*",
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::giddh-app-builds/releases/*"
+            "Resource": "arn:aws:s3:::app-giddh-test/prod/*"
         }
     ]
 }
@@ -354,10 +354,10 @@ git push origin v1.0.1
 ### 2. Verify S3 Structure
 Check that these files exist:
 ```
-s3://giddh-app-builds/
-├── releases/
-│   ├── latest.yml
-│   ├── latest/
+s3://app-giddh-test/
+├── test/
+│   ├── windows/latest/latest.yml
+│   ├── mac/latest/latest.yml
 │   │   └── giddh Setup 1.0.1.exe
 │   └── v1.0.1/
 │       └── giddh Setup 1.0.1.exe

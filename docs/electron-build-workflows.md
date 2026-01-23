@@ -108,27 +108,27 @@ Both workflows use **automatic version incrementing**:
 
 ### Windows
 ```
-s3://giddh-app-builds/
-  └── releases/
+s3://app-giddh-test/
+  └── test/
       └── windows/
-          ├── 9.1.5/
-          │   ├── giddh Setup 9.1.5.exe
+          ├── 10.0.1/
+          │   ├── Giddh Setup 10.0.1.exe
           │   └── latest.yml
           └── latest/
-              ├── giddh Setup 9.1.5.exe
+              ├── giddh-test-setup.exe
               └── latest.yml
 ```
 
 ### macOS
 ```
-s3://giddh-app-builds/
-  └── releases/
+s3://app-giddh-test/
+  └── test/
       └── mac/
-          ├── 9.1.5/
-          │   ├── giddh-9.1.5.dmg
+          ├── 10.0.1/
+          │   ├── Giddh Setup 10.0.1.dmg
           │   └── latest.yml
           └── latest/
-              ├── giddh-9.1.5.dmg
+              ├── giddh-test-setup.dmg
               └── latest.yml
 ```
 
@@ -136,8 +136,8 @@ s3://giddh-app-builds/
 
 ### Common Secrets
 - `GITHUB_TOKEN` - Automatically provided by GitHub Actions
-- `S3_BUCKET` - AWS S3 bucket name (e.g., `giddh-app-builds`)
-- `AWS_REGION` - AWS region (e.g., `us-east-1`)
+- `S3_BUCKET` - AWS S3 bucket name (e.g., `app-giddh-test`)
+- `AWS_REGION` - AWS region (e.g., `ap-south-1`)
 
 ### AWS Authentication (choose one method)
 
@@ -197,12 +197,12 @@ git push origin test-electron-build-gh-action
 
 **Windows**:
 ```
-https://giddh-app-builds.s3.amazonaws.com/releases/windows/latest/giddh%20Setup%209.1.5.exe
+https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/windows/latest/giddh-test-setup.exe
 ```
 
 **macOS**:
 ```
-https://giddh-app-builds.s3.amazonaws.com/releases/mac/latest/giddh-9.1.5.dmg
+https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/mac/latest/giddh-test-setup.dmg
 ```
 
 ## Troubleshooting
