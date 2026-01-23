@@ -110,7 +110,7 @@ jobs:
           
           cd dist/apps/web-giddh
           echo "🔨 Building macOS Universal app with electron-builder..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder-mac-unsigned.json --mac --universal
+          npx electron-builder build --config ./../../../electron-sign/electron-builder-mac-unsigned.json --mac --universal --publish never
           cd ../../../
           node scripts/build-success-message.js prod
           
