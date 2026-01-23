@@ -1179,11 +1179,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             delete this.company.creatorSuperAdmin;
         }
         this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
-        this.nextStepForm();
-        if (environment.PRODUCTION_ENV && this.companiesList?.length === 0) {
+        if (environment.PRODUCTION_ENV && !this.companiesList?.length) {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }
+        this.nextStepForm();
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
