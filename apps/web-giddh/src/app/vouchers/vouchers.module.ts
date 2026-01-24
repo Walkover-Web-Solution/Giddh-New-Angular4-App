@@ -96,12 +96,14 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
 import { ResizableDirective } from "../shared/directives/resizable.directive";
 import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
 import { AsideRecurringVoucherCreateModule } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.module";
+import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview.component";
 
 @NgModule({
     declarations: [
         MainComponent,
         VoucherListComponent,
         VouchersPreviewComponent,
+        RecurringPreviewComponent,
         VoucherCreateComponent,
         AdvanceSearchComponent,
         BulkExportComponent,

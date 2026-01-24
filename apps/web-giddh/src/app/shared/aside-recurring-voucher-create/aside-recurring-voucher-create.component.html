@@ -1,143 +1,108 @@
 <!-- appTranslate [file]="'invoice/ewaybill'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" -->
 <!-- aside-recurring-voucher-create.component.html -->
 <ng-container *ngIf="isDialogMode">
-    <div cdkFocusInitial class="dialog-header">
+    <div class="dialog-header">
         <span class="font-size-16">{{ dialogTitle }}</span>
     </div>
     <div mat-dialog-content class="dialog-body">
         <div *ngIf="activeForm" [formGroup]="activeForm" class="recurring-wrapper">
-            <!-- =======================
-         START DATE
-    ======================= -->
-            <div class="row mb-1">
-                <div class="col-6">
+            <div class="d-flex column-gap-1 mb-3 w-100">
+                <mat-form-field appearance="outline">
+                    <mat-label>Start on</mat-label>
+                    <input
+                        matInput
+                        [matDatepicker]="startPicker"
+                        formControlName="startDate"
+                        [min]="minStartDate"
+                        (dateChange)="onStartDateChange($event.value)"
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startPicker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Repeat</mat-label>
+                    <mat-select [value]="selectedRepeatOption()" (selectionChange)="selectRepeatOption($event.value)">
+                        @for (opt of repeatOptions(); track opt.value) {
+                            <mat-option [value]="opt.value">
+                                {{ opt.label }}
+                            </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            @if (showCustom()) {
+                <div class="font-size-16 mb-3">Repeat on</div>
+                <div class="d-flex column-gap-1 mb-3 w-100" formGroupName="frequency">
                     <mat-form-field appearance="outline">
-                        <mat-label>Start on</mat-label>
-                        <input
-                            matInput
-                            [matDatepicker]="startPicker"
-                            formControlName="startDate"
-                            [min]="minStartDate"
-                            (dateChange)="onStartDateChange($event.value)"
-                        />
-                        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-                        <mat-datepicker #startPicker></mat-datepicker>
+                        <mat-label>Repeat every</mat-label>
+                        <input matInput type="number" min="1" formControlName="interval" />
                     </mat-form-field>
-                </div>
-                <!-- =======================
-         REPEAT
-    ======================= -->
-                <div class="col-6">
-                    <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Repeat</mat-label>
-                        <mat-select [value]="selectedRepeatOption()" (selectionChange)="selectRepeatOption($event.value)">
-                            @for (opt of repeatOptions(); track opt.value) {
-                                <mat-option [value]="opt.value">
-                                    {{ opt.label }}
-                                </mat-option>
-                            }
+                    <mat-form-field appearance="outline">
+                        <mat-select formControlName="unit" (selectionChange)="onRepeatUnitChange($event.value)">
+                            <mat-option value="DAY">Day</mat-option>
+                            <mat-option value="WEEK">Week</mat-option>
+                            <mat-option value="MONTH">Month</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-            </div>
-
-            <!-- =======================
-         CUSTOM CONFIG
-    ======================= -->
-            <div class="row">
-                @if (showCustom()) {
-                    <!-- =======================
-             FREQUENCY
-
-        ======================= -->
-
-                    <div formGroupName="frequency">
-                        <div class="col-6">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Repeat every</mat-label>
-                                <input matInput type="number" min="1" formControlName="interval" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-6">
-                            <mat-form-field appearance="outline">
-                                <mat-select formControlName="unit" (selectionChange)="onRepeatUnitChange($event.value)">
-                                    <mat-option value="DAY">Day</mat-option>
-                                    <mat-option value="WEEK">Week</mat-option>
-                                    <mat-option value="MONTH">Month</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
+                @if (showWeekdayToggle()) {
+                    <div class="d-flex column-gap-4 mb-3 w-100 weekday-toggle">
+                        @for (d of weekdays; track d.value) {
+                            <button
+                                mat-raised-button
+                                type="button"
+                                [class.active]="isWeekdaySelected(d.value)"
+                                (click)="toggleWeekday(d.value)"
+                            >
+                                {{ d.label }}
+                            </button>
+                        }
                     </div>
-
-                    @if (showWeekdayToggle()) {
-                        <!-- =======================
-             WEEKLY
-        ======================= -->
-                        <div class="weekday-toggle">
-                            @for (d of weekdays; track d.value) {
-                                <button
-                                    mat-raised-button
-                                    type="button"
-                                    [class.active]="isWeekdaySelected(d.value)"
-                                    (click)="toggleWeekday(d.value)"
-                                >
-                                    {{ d.label }}
-                                </button>
-                            }
-                        </div>
-                    }
-                    @if (showDayThe()) {
-                        <!-- =======================
-             MONTHLY
-        ======================= -->
-                        <div formGroupName="repeatOn">
-                            @if (repeatOnForm?.get('monthlyMode')) {
-                                <mat-radio-group [formControl]="monthlyModeControl">
-                                    <!-- DAY -->
-                                    <mat-radio-button value="DAY">
-                                        Day
-                                        <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                                            <mat-select formControlName="dayOfMonth">
-                                                @for (d of monthDays; track d) {
-                                                    <mat-option [value]="d">{{ d }}</mat-option>
-                                                }
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </mat-radio-button>
-
-                                    <!-- THE -->
-                                    <mat-radio-button value="THE">
-                                        The
-                                        <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                                            <mat-select formControlName="nth">
-                                                @for (w of weekOfMonthOptions; track w.value) {
-                                                    <mat-option [value]="w.value">{{ w.label }}</mat-option>
-                                                }
-                                            </mat-select>
-                                        </mat-form-field>
-
-                                        <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                                            <mat-select formControlName="weekday">
-                                                @for (d of weekdayOptions; track d.value) {
-                                                    <mat-option [value]="d.value">{{ d.label }}</mat-option>
-                                                }
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </mat-radio-button>
-                                </mat-radio-group>
-                            }
-                        </div>
-                    }
                 }
-            </div>
-            <!-- =======================
-         END
-    ======================= -->
-            <div formGroupName="end" class="section">
-                <label class="section-label">Ends</label>
+                @if (showDayThe()) {
+                    <div formGroupName="repeatOn">
+                        @if (repeatOnForm?.get('monthlyMode')) {
+                            <mat-radio-group [formControl]="monthlyModeControl" class="d-block">
+                                <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
+                                    <mat-radio-button value="DAY">Day</mat-radio-button>
+                                    <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                                        <mat-select formControlName="dayOfMonth">
+                                            @for (d of monthDays; track d) {
+                                                <mat-option [value]="d">{{ d }}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <!-- THE -->
+                                <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
+                                    <mat-radio-button value="THE">The</mat-radio-button>
+                                    <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                                        <mat-select formControlName="nth">
+                                            @for (w of weekOfMonthOptions; track w.value) {
+                                                <mat-option [value]="w.value">{{ w.label }}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
 
-                <mat-radio-group formControlName="type">
-                    <div class="row">
+                                    <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                                        <mat-select formControlName="weekday">
+                                            @for (d of weekdayOptions; track d.value) {
+                                                <mat-option [value]="d.value">{{ d.label }}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </mat-radio-group>
+                        }
+                    </div>
+                }
+            }
+            <div formGroupName="end">
+                <label class="font-size-16 mb-3">Ends :</label>
+
+                <mat-radio-group formControlName="type" class="d-block">
+                    <div class="col-6 d-flex align-items-center column-gap-4 mb-3">
                         <mat-radio-button value="ON_DATE">On</mat-radio-button>
                         <mat-form-field appearance="outline">
                             <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
@@ -146,7 +111,9 @@
                         </mat-form-field>
                     </div>
 
-                    <mat-radio-button value="NEVER">Never</mat-radio-button>
+                    <div class="col-6 align-items-center column-gap-4 mb-3">
+                        <mat-radio-button value="NEVER">Never</mat-radio-button>
+                    </div>
                 </mat-radio-group>
             </div>
             <mat-divider></mat-divider>
@@ -164,52 +131,40 @@
         </div>
     </div>
 </ng-container>
-
 <ng-container *ngIf="!isDialogMode">
     <div *ngIf="activeForm" [formGroup]="activeForm" class="recurring-wrapper">
-        <!-- =======================
-         START DATE
-    ======================= -->
-        <mat-form-field appearance="outline">
-            <mat-label>Start on</mat-label>
-            <input
-                matInput
-                [matDatepicker]="startPicker"
-                formControlName="startDate"
-                [min]="minStartDate"
-                (dateChange)="onStartDateChange($event.value)"
-            />
-            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-            <mat-datepicker #startPicker></mat-datepicker>
-        </mat-form-field>
+        <div class="d-flex column-gap-1 mb-3 w-100">
+            <mat-form-field appearance="outline">
+                <mat-label>Start on</mat-label>
+                <input
+                    matInput
+                    [matDatepicker]="startPicker"
+                    formControlName="startDate"
+                    [min]="minStartDate"
+                    (dateChange)="onStartDateChange($event.value)"
+                />
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Repeat</mat-label>
+                <mat-select [value]="selectedRepeatOption()" (selectionChange)="selectRepeatOption($event.value)">
+                    @for (opt of repeatOptions(); track opt.value) {
+                        <mat-option [value]="opt.value">
+                            {{ opt.label }}
+                        </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
 
-        <!-- =======================
-         REPEAT
-    ======================= -->
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Repeat</mat-label>
-            <mat-select [value]="selectedRepeatOption()" (selectionChange)="selectRepeatOption($event.value)">
-                @for (opt of repeatOptions(); track opt.value) {
-                    <mat-option [value]="opt.value">
-                        {{ opt.label }}
-                    </mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
-
-        <!-- =======================
-         CUSTOM CONFIG
-    ======================= -->
         @if (showCustom()) {
-            <!-- =======================
-             FREQUENCY
-        ======================= -->
-            <div class="row" formGroupName="frequency">
+            <div class="font-size-16 mb-3">Repeat on</div>
+            <div class="d-flex column-gap-1 mb-3 w-100" formGroupName="frequency">
                 <mat-form-field appearance="outline">
                     <mat-label>Repeat every</mat-label>
                     <input matInput type="number" min="1" formControlName="interval" />
                 </mat-form-field>
-
                 <mat-form-field appearance="outline">
                     <mat-select formControlName="unit" (selectionChange)="onRepeatUnitChange($event.value)">
                         <mat-option value="DAY">Day</mat-option>
@@ -219,10 +174,7 @@
                 </mat-form-field>
             </div>
             @if (showWeekdayToggle()) {
-                <!-- =======================
-             WEEKLY
-        ======================= -->
-                <div class="weekday-toggle">
+                <div class="d-flex column-gap-4 mb-3 w-100 weekday-toggle">
                     @for (d of weekdays; track d.value) {
                         <button
                             mat-raised-button
@@ -235,17 +187,12 @@
                     }
                 </div>
             }
-
             @if (showDayThe()) {
-                <!-- =======================
-             MONTHLY
-        ======================= -->
                 <div formGroupName="repeatOn">
                     @if (repeatOnForm?.get('monthlyMode')) {
-                        <mat-radio-group [formControl]="monthlyModeControl">
-                            <!-- DAY -->
-                            <mat-radio-button value="DAY">
-                                Day
+                        <mat-radio-group [formControl]="monthlyModeControl" class="d-block">
+                            <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
+                                <mat-radio-button value="DAY">Day</mat-radio-button>
                                 <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
                                     <mat-select formControlName="dayOfMonth">
                                         @for (d of monthDays; track d) {
@@ -253,11 +200,10 @@
                                         }
                                     </mat-select>
                                 </mat-form-field>
-                            </mat-radio-button>
-
+                            </div>
                             <!-- THE -->
-                            <mat-radio-button value="THE">
-                                The
+                            <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
+                                <mat-radio-button value="THE">The</mat-radio-button>
                                 <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
                                     <mat-select formControlName="nth">
                                         @for (w of weekOfMonthOptions; track w.value) {
@@ -273,21 +219,17 @@
                                         }
                                     </mat-select>
                                 </mat-form-field>
-                            </mat-radio-button>
+                            </div>
                         </mat-radio-group>
                     }
                 </div>
             }
         }
+        <div formGroupName="end">
+            <label class="font-size-16 mb-3">Ends :</label>
 
-        <!-- =======================
-         END
-    ======================= -->
-        <div formGroupName="end" class="section">
-            <label class="section-label">Ends</label>
-
-            <mat-radio-group formControlName="type">
-                <div class="row">
+            <mat-radio-group formControlName="type" class="d-block">
+                <div class="col-6 d-flex align-items-center column-gap-4 mb-3">
                     <mat-radio-button value="ON_DATE">On</mat-radio-button>
                     <mat-form-field appearance="outline">
                         <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
@@ -296,7 +238,9 @@
                     </mat-form-field>
                 </div>
 
-                <mat-radio-button value="NEVER">Never</mat-radio-button>
+                <div class="col-6 align-items-center column-gap-4 mb-3">
+                    <mat-radio-button value="NEVER">Never</mat-radio-button>
+                </div>
             </mat-radio-group>
         </div>
         <mat-divider></mat-divider>

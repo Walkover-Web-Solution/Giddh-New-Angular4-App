@@ -1,0 +1,75 @@
+// Search field styling
+.search-field {
+    i {
+        top: 10px;
+        left: 10px;
+    }
+
+    .form-control {
+        padding-left: 15px !important;
+    }
+}
+
+// Single invoice detail styling
+::ng-deep .dark-theme .single-invoice-detail {
+    &:hover,
+    &.active {
+        background-color: var(--theme-primary-light) !important;
+
+        .light-gray,
+        p,
+        .theme-foreground-color {
+            color: var(--color-black) !important;
+        }
+    }
+}
+
+:host ::ng-deep .single-invoice-detail {
+    &.mat-mdc-list-item.mdc-list-item--with-one-line {
+        min-height: var(--mat-list-list-item-one-line-container-height, 48px) !important;
+        height: auto;
+    }
+}
+
+// Invoice preview wrapper styling
+:host ::ng-deep .invoice-preview-wrapper {
+    .preview-list {
+        overflow-y: auto;
+
+        .single-invoice-detail {
+            &:hover,
+            &.active {
+                background-color: var(--theme-primary-light);
+
+                .title-text {
+                    color: var(--theme-primary-color) !important;
+                }
+            }
+        }
+    }
+
+    .preview-content {
+        overflow-y: auto;
+
+        .back-button {
+            right: 5px;
+            top: 5px;
+            z-index: 99 !important;
+        }
+    }
+}
+
+// Contact not found message
+.contact-no-data-message {
+    margin-top: 150px;
+    font-size: var(--font-size-32);
+    color: var(--color-black);
+    height: 200px;
+}
+
+// Responsive list styling
+@media screen and (max-width: 1199px) {
+    .list-responsive {
+        flex-wrap: wrap;
+    }
+}

@@ -1297,13 +1297,13 @@
                                 </div>
 
                                 <!-- Row 5 -->
-                                <div class="row row-gap-15 mt-3">
+                                <div class="row row-gap-15 mt-3 mb-3">
                                     <!-- Recurring Voucher Checkbox -->
                                     <div class="col-12">
                                         <mat-checkbox
                                             #recurringCheckbox
                                             cdkMonitorElementFocus
-                                            class="mr-1"
+                                            class="mr-1 mb-3"
                                             color="primary"
                                             id="recurring-voucher"
                                             formControlName="isRecurringVoucher"
@@ -1311,15 +1311,12 @@
                                         >
                                             <label for="recurring-voucher" [innerHTML]="localeData?.transaction_recurring"></label>
                                         </mat-checkbox>
+                                        <aside-recurrence-voucher-create
+                                            #asideRecurrenceVoucher
+                                            *ngIf="invoiceForm.get('isRecurringVoucher')?.value && recurrenceFormGroup"
+                                            [recurrenceForm]="recurrenceFormGroup"
+                                        ></aside-recurrence-voucher-create>
                                     </div>
-                                    <!-- Recurring Voucher Fields (shown when recurring checkbox is checked) -->
-                                    <!-- Recurring Voucher Section -->
-                                    {{ invoiceForm.get('isRecurringVoucher')?.value }}
-                                    <aside-recurrence-voucher-create
-                                        *ngIf="invoiceForm.get('isRecurringVoucher')?.value && recurrenceFormGroup"
-                                        [recurrenceForm]="recurrenceFormGroup"
-                                    ></aside-recurrence-voucher-create>
-
                                     <!-- Recurring Voucher Checkbox -->
                                     <!-- Reverse Charge Checkbox -->
                                     <div

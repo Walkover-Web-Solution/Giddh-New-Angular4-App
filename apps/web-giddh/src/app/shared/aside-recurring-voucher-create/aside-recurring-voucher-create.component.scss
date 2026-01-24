@@ -1,43 +1,8 @@
-.recurring-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.row {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
 .weekday-toggle {
-    display: flex;
-    gap: 8px;
-
     button {
         &.active {
             background-color: var(--bg-primary-color) !important;
             color: var(--color-white) !important;
-        }
-    }
-}
-
-.section {
-    margin-top: 16px;
-}
-.preview-container {
-    margin-top: 16px;
-    padding: 12px;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-
-    .preview-row {
-        padding: 8px 0;
-        font-size: 14px;
-        color: #333;
-
-        &:not(:last-child) {
-            border-bottom: 1px solid #e0e0e0;
         }
     }
 }
@@ -48,5 +13,3 @@
     font-style: italic;
     text-align: center;
 }
-
-// ... rest of your existing styles

@@ -184,6 +184,15 @@ export class VoucherService {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        
+        // Add isRecurringVoucher flag to model
+        model.isRecurringVoucher = model.isRecurringVoucher || false;
+        
+        // Add isRecurringVoucher as query parameter after voucherVersion
+        if (model.isRecurringVoucher) {
+            const delimiter = url.includes('?') ? '&' : '?';
+            url += `${delimiter}isRecurringVoucher=${model.isRecurringVoucher}`;
+        }
 
         return this.http.post(url
             ?.replace(':companyUniqueName', companyUniqueName)

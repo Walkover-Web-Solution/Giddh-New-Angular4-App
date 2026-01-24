@@ -125,7 +125,7 @@ import { Platform } from "@angular/cdk/platform";
 import { GeneralActions } from "../../actions/general/general.actions";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CustomFieldsService } from "../../services/custom-fields.service";
-import { RecurrenceFormService } from "../../services/aside-recurring-voucher-create.service";
+import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
 
 @Component({
     selector: "create",
@@ -173,6 +173,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('taxDropdown') taxDropdown!: TaxDropdownComponent;
     /** Reference to the discount dropdown component */
     @ViewChild('discountDropdown') discountDropdown!: DiscountDropdownComponent;
+    /** Reference to the recurrence component */
+    @ViewChild('asideRecurrenceVoucher') asideRecurrenceVoucher: any;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -661,8 +663,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         },
     };
     get recurrenceFormGroup(): FormGroup {
-  return this.invoiceForm.get('recurrence') as FormGroup;
-}
+        return this.invoiceForm.get('recurrence') as FormGroup;
+    }
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -700,7 +702,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private ngZone: NgZone,
         private generalActions: GeneralActions,
         private customFieldsService: CustomFieldsService,
-          private recurrenceService: RecurrenceFormService
+        private recurrenceService: RecurrenceFormService
     ) {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
@@ -734,6 +736,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .pipe(delay(1), takeUntil(this.destroyed$))
             .subscribe((response) => {
                 if (response) {
+                    console.log('response', response);
                     let params = response[0];
                     if (params?.voucherType) {
                         this.isMainVoucher = true;
@@ -2898,6 +2901,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private initVoucherForm(): void {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const { weekday } = this.recurrenceService.getDateMeta(today);
+        const nth = Math.ceil(today.getDate() / 7);
         this.invoiceForm = this.formBuilder.group({
             account: this.formBuilder.group({
                 customerName: [""],
@@ -2952,7 +2959,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 date: [""],
             }),
             isRecurringVoucher: [false], // toggle from parent
-            recurrence: this.recurrenceService.createForm(),
+            recurrence: this.formBuilder.group({
+                startDate: [null, Validators.required],
+
+                frequency: this.formBuilder.group({
+                    unit: ['MONTH', Validators.required],
+                    interval: [1, [Validators.required, Validators.min(1)]]
+                }),
+
+                repeatOn: this.formBuilder.group({
+                    type: ['DAY_OF_MONTH'],
+                    weekdays: this.formBuilder.array([]),   // ✅ ALWAYS exists
+                    dayOfMonth: [null],
+                    nth: [null],
+                    weekday: [null],
+                    monthlyMode: ['DAY']
+                }),
+
+                end: this.formBuilder.group({
+                    type: ['ON_DATE'],
+                    endDate: [null],
+                })
+            }),
             einvoiceGenerated: [false],
             linkedPo: [null], //temp
             grandTotalMultiCurrency: [0], //temp
@@ -2964,6 +2992,39 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPersonName: [''],
             salesPersonUniqueName: ['']
         });
+
+        // Add listener to isRecurringVoucher checkbox
+        this.invoiceForm.get('isRecurringVoucher')?.valueChanges
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((isChecked) => {
+                if (isChecked) {
+                    // When checkbox is checked, populate recurrence form with today's date
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const { weekday } = this.recurrenceService.getDateMeta(today);
+                    const nth = Math.ceil(today.getDate() / 7);
+
+                    const recurrenceForm = this.invoiceForm.get('recurrence') as FormGroup;
+                    recurrenceForm.patchValue({
+                        startDate: today,
+                        frequency: {
+                            unit: 'MONTH',
+                            interval: 1
+                        },
+                        repeatOn: {
+                            type: 'DAY_OF_MONTH',
+                            dayOfMonth: today.getDate(),
+                            nth: nth,
+                            weekday: weekday,
+                            monthlyMode: 'DAY'
+                        },
+                        end: {
+                            type: 'ON_DATE',
+                            endDate: today
+                        }
+                    });
+                }
+            });
     }
 
     /**
@@ -5095,14 +5156,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const deposits = this.getDeposits();
         this.checkRcm();
         let invoiceForm = cloneDeep(this.invoiceForm.value);
-                  // ✅ ONLY attach recurrence if checkbox is checked
-        if (this.invoiceForm.get('isRecurringVoucher')?.value) {
-            const cleanData = this.recurrenceService.getCleanFormValue(this.recurrenceFormGroup);
-            console.log('Clean form data:', cleanData);
-    } else {
-        console.log("not r")
-    }
-    return;
         invoiceForm.entries = entries;
         invoiceForm.deposits = deposits;
 
@@ -5494,6 +5547,31 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     invoiceForm.ewayBillDetails = this.eWayBillResponse;
                     this.eWayBillResponse = null;
                 }
+                if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice) {
+                    // ✅ ONLY attach recurrence if checkbox is checked
+                    if (this.invoiceForm.get('isRecurringVoucher')?.value) {
+                        // Notify recurrence component to skip preview calls during form cleaning
+                        if (this.asideRecurrenceVoucher) {
+                            this.asideRecurrenceVoucher.setSubmitting(true);
+                        }
+
+                        const cleanData = this.recurrenceService.getCleanFormValue(this.recurrenceFormGroup);
+                        console.log('Clean form data:', cleanData);
+                        invoiceForm.recurrence = cleanData;
+
+                        // Reset the flag after debounce completes (700ms + buffer)
+                        setTimeout(() => {
+                            if (this.asideRecurrenceVoucher) {
+                                this.asideRecurrenceVoucher.setSubmitting(false);
+                            }
+                        }, 800);
+                    } else {
+                        delete invoiceForm.isRecurringVoucher;
+                        delete invoiceForm.recurrence;
+                    }
+                }
+                invoiceForm.isRecurringVoucher = this.queryParams.isRecurringVoucher ? true : false;
+                console.log('Invoice form:', invoiceForm);
                 this.voucherService
                     .generateVoucher(invoiceForm.account?.uniqueName, invoiceForm)
                     .pipe(takeUntil(this.destroyed$))

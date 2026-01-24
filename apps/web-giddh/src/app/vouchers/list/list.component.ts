@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild, signal, computed } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
@@ -15,7 +15,7 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { ASIDE_PANE_CONFIG, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
@@ -44,6 +44,8 @@ import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-mod
 import { TemplateModeEnum } from "../../models/api-models/Sales";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { AsideRecurrenceVoucherCreateComponent } from "../../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
+import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
+import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -64,7 +66,7 @@ interface IReportFilterTableColumn {
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
     providers: [VoucherComponentStore],
-    standalone:false
+    standalone: false
 })
 export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold all voucher list data source for table */
@@ -103,6 +105,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     /** Holds show Customer Search input visibility status */
     public showCustomerSearch: boolean = false;
+    /** Holds show Customer Search input visibility status */
+    public showAccountSearch: boolean = false;
     /** Holds show Invoice No Search input visibility status */
     public showInvoiceNoSearch: boolean = false;
     /** Holds show Purchase Order Number Search input visibility status */
@@ -111,6 +115,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public voucherNumberInput: FormControl = new FormControl(null);
     /** Holds account Unique Name form control */
     public accountUniqueNameInput: FormControl = new FormControl(null);
+    /** Holds account Unique Name form control */
+    public accountNameInput: FormControl = new FormControl(null);
     /** Holds Purchase Order Unique Name form control */
     public purchaseOrderUniqueNameInput: FormControl = new FormControl(null);
     /** True if searching is in progress */
@@ -200,6 +206,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public allVouchersSelected: boolean = false;
     /** Holds True if all Pending Vouchers are Selected */
     public allPendingVouchersSelected: boolean = false;
+
+    // Angular 21 Signals for Recurring Vouchers
+    /** Signal for recurring vouchers data source */
+    public recurringVouchersData = signal<any[]>([]);
+    /** Signal for recurring vouchers loading state */
+    public recurringVouchersLoading = signal<boolean>(false);
+    /** Signal for recurring vouchers total count */
+    public recurringVouchersTotalCount = signal<number>(0);
+    /** Signal for recurring vouchers display columns */
+    public recurringVouchersColumns = signal<string[]>(['index', 'accountName', 'frequency', 'lastRun', 'nextRun', 'amount', 'status', 'actions']);
     /** Holds Eway Bill Dialog Ref */
     public ewayBillDialogRef: any;
     /** Holds Advance Search Dialog Ref */
@@ -365,6 +381,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Show purchase lock date */
     public showPurchaseDate: boolean = true;
     public templateFor: string = '';
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: "", uniqueName: "" };
+    /** Stores the current branch data */
+    public currentBranchData: any;
+
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -385,7 +410,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private salesAction: SalesActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
         private commonActions: CommonActions,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private recurrenceService: RecurrenceFormService,
+        private settingsBranchAction: SettingsBranchActions
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
@@ -496,13 +523,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                         this.fetchTemplates(VoucherTypeEnum.purchase_bill);
                         this.fetchAllCreatedTemplates(VoucherTypeEnum.purchase_bill);
-                    } else if (this.urlVoucherType === 'debit-note' || this.urlVoucherType === 'credit-note') {
-                        this.fetchTemplates(VoucherTypeEnum.voucher);
-                        this.fetchAllCreatedTemplates(VoucherTypeEnum.voucher);
-                    } else if (this.urlVoucherType === VoucherTypeEnum.sales) {
-                        this.fetchTemplates(VoucherTypeEnum.invoice);
-                        this.fetchAllCreatedTemplates(VoucherTypeEnum.invoice);
+                    } else {
+                        this.fetchTemplates(this.urlVoucherType);
+                        this.fetchAllCreatedTemplates(this.urlVoucherType);
                     }
+                } else if (this.activeModule === 'recurring') {
+                    this.getRecurringVouchers();
                 }
                 setTimeout(() => {
                     if (this.urlVoucherType === VoucherTypeEnum.purchase) {
@@ -555,7 +581,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 if (this.activeTabGroup === -1) {
                     this.activeTabGroup = 0; // default to the first group if not found
                 }
-
                 this.getSelectedTabIndex();
                 this.ledgerSearchRequest.page = 1;
                 this.ledgerSearchRequest.count = PAGINATION_LIMIT;
@@ -677,8 +702,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                     this.advanceFilters.page = this.queryParams.page;
                 }
-                this.getVouchers(true);
-                this.getVoucherBalances();
+                if (this.activeModule === 'recurring') {
+                    this.getRecurringVouchers();
+                } else {
+                    this.getVouchers(true);
+                    this.getVoucherBalances();
+                }
             }
         });
 
@@ -808,6 +837,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.checkSearchingIsEmpty();
                 this.advanceFilters.page = 1;
                 this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.accountNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search || search === '') {
+                this.advanceFilters.q = search;
+                this.isSearching = true;
+                this.checkSearchingIsEmpty();
+                this.advanceFilters.page = 1;
+                this.getRecurringVouchers();
             }
         });
 
@@ -949,6 +988,49 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         };
+        if (this.activeModule === 'recurring') {
+            this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+            this.currentCompanyBranches$.subscribe(response => {
+                if (response && response.length) {
+                    this.currentCompanyBranches = response.map(branch => ({
+                        label: branch?.name,
+                        value: branch?.uniqueName,
+                        name: branch?.name,
+                        parentBranch: branch?.parentBranch,
+                        consolidatedBranch: branch?.consolidatedBranch
+                    }));
+                    this.currentCompanyBranches.unshift({
+                        label: this.activeCompany ? this.activeCompany.name : '',
+                        name: this.activeCompany ? this.activeCompany.name : "",
+                        value: this.activeCompany ? this.activeCompany.uniqueName : "",
+                        isCompany: true,
+                    });
+                    let currentBranchUniqueName;
+                    if (!this.currentBranch?.uniqueName) {
+                        // Assign the current branch only when it is not selected. This check is necessary as
+                        // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                        // branches are loaded
+                        if (!this.isCompany) {
+                            currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                            this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                        } else {
+                            currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
+                            this.currentBranch = {
+                                name: this.activeCompany ? this.activeCompany.name : "",
+                                alias: this.activeCompany ? this.activeCompany.nameAlias : "",
+                                uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
+                            };
+                        }
+                        this.currentBranchData = cloneDeep(this.currentBranch);
+                    }
+                } else {
+                    if (this.generalService.companyUniqueName) {
+                        // Avoid API call if new user is onboarded
+                        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -963,7 +1045,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (this.voucherType === VoucherTypeEnum.purchase) {
             searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0);
         } else {
-            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0);
+            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0);
         }
 
         this.advanceFiltersApplied = this.isSearching = searchingFieldIsEmpty;
@@ -1090,6 +1172,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 4;
                 } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'templates') {
                     this.selectedTabIndex = 5;
+                } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'recurring') {
+                    this.selectedTabIndex = 6;
                 }
             } else if (this.activeTabGroup === 1) {
                 if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'list') {
@@ -1112,6 +1196,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 3;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'recurring') {
+                    this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === 'receipt' && this.activeModule === 'list') {
@@ -1142,6 +1228,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 3;
                 } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 4;
+                } else if (this.voucherType === 'sales' && this.activeModule === 'recurring') {
+                    this.selectedTabIndex = 5;
                 }
             } else if (this.activeTabGroup === 1) {
                 if (this.voucherType === 'debit note' && this.activeModule === 'list') {
@@ -1160,6 +1248,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 2;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'recurring') {
+                    this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
@@ -1416,7 +1506,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.sortBy = event?.active;
         this.advanceFilters.page = 1;
         this.advanceFiltersApplied = true;
-        this.getVouchers(false);
+        if (this.activeModule === 'recurring') {
+            this.getRecurringVouchers();
+        } else {
+            this.getVouchers(false);
+        }
     }
 
     /**
@@ -1430,6 +1524,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.ledgerSearchRequest.page = event.pageIndex + 1;
             this.ledgerSearchRequest.count = event.pageSize;
             this.getLedgersOfInvoice();
+        } else if (this.activeModule === 'recurring') {
+            this.advanceFilters.page = this.advanceFilters.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            this.advanceFilters.count = event.pageSize;
+            this.getRecurringVouchers();
         } else {
             this.advanceFilters.page = this.advanceFilters.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.advanceFilters.count = event.pageSize;
@@ -1559,6 +1657,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
             if (this.activeModule === 'pending') {
                 this.getLedgersOfInvoice();
+            } else if (this.activeModule === 'recurring') {
+                this.getRecurringVouchers();
             } else {
                 this.getVouchers(this.isUniversalDateApplicable);
                 this.getVoucherBalances();
@@ -1720,13 +1820,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public deleteVoucherDialog(voucher?: any): void {
+        console.log(voucher, this.localeData);
         let confirmationMessages = [];
         this.localeData?.confirmation_messages?.map(message => {
             confirmationMessages[message.module] = message;
         });
-
-        const configuration = this.generalService.getVoucherDeleteConfiguration(confirmationMessages[this.voucherType]?.title, confirmationMessages[this.voucherType]?.message1, confirmationMessages[this.voucherType]?.message2, this.commonLocaleData);
-
+        let configuration;
+        if (this.activeModule === 'recurring') {
+            configuration = this.generalService.getVoucherDeleteConfiguration(confirmationMessages['recurring']?.title, confirmationMessages['recurring']?.message1, confirmationMessages['recurring']?.message2, this.commonLocaleData);
+        } else {
+            configuration = this.generalService.getVoucherDeleteConfiguration(confirmationMessages[this.voucherType]?.title, confirmationMessages[this.voucherType]?.message1, confirmationMessages[this.voucherType]?.message2, this.commonLocaleData);
+        }
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-md'],
             data: {
@@ -1737,37 +1841,59 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
-                this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
-                if (this.voucherType === VoucherTypeEnum.purchase) {
-                    this.componentStore.deleteVoucher({
-                        accountUniqueName: voucher?.account?.uniqueName, model: {
-                            uniqueName: voucher?.uniqueName,
-                            voucherType: this.voucherType
-                        }
-                    });
-                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                    if (voucher?.uniqueName) {
-                        this.componentStore.deleteSinglePOVoucher(voucher?.uniqueName);
-                    } else {
-                        this.poBulkAction('delete');
+                if (this.activeModule === 'recurring') {
+                    if (voucher?.recurringVoucherUniqueName) {
+                        this.recurrenceService.delete(voucher.recurringVoucherUniqueName).pipe(
+                            takeUntil(this.destroyed$)
+                        ).subscribe({
+                            next: (response: any) => {
+                                if (response?.status === 'success') {
+                                    this.toasterService.showSnackBar('success', response.body);
+                                    this.getRecurringVouchers();
+                                } else {
+                                    this.toasterService.showSnackBar('error', response?.message);
+                                }
+                            },
+                            error: (error) => {
+                                console.error('Error deleting recurring voucher:', error);
+                                this.toasterService.showSnackBar('error', error?.message);
+                            }
+                        });
                     }
-                } else if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    const selectedVoucher = voucher ?? this.selectedVouchers[0];
-                    const payload = {
-                        accountUniqueName: selectedVoucher.customerUniqueName
-                    }
-                    if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-                        payload['estimateNumber'] = selectedVoucher?.estimateNumber;
-                    } else {
-                        payload['proformaNumber'] = selectedVoucher?.proformaNumber;
-                    }
-                    this.componentStore.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
                 } else {
-                    const payload = {
-                        voucherUniqueNames: voucher?.uniqueName ? [voucher.uniqueName] : this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
-                        voucherType: this.voucherType
-                    };
-                    this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
+                    this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
+                    if (this.voucherType === VoucherTypeEnum.purchase) {
+                        this.componentStore.deleteVoucher({
+                            accountUniqueName: voucher?.account?.uniqueName, model: {
+                                uniqueName: voucher?.uniqueName,
+                                voucherType: this.voucherType
+                            }
+                        });
+
+                    } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                        if (voucher?.uniqueName) {
+                            this.componentStore.deleteSinglePOVoucher(voucher?.uniqueName);
+                        } else {
+                            this.poBulkAction('delete');
+                        }
+                    } else if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+                        const selectedVoucher = voucher ?? this.selectedVouchers[0];
+                        const payload = {
+                            accountUniqueName: selectedVoucher.customerUniqueName
+                        }
+                        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
+                            payload['estimateNumber'] = selectedVoucher?.estimateNumber;
+                        } else {
+                            payload['proformaNumber'] = selectedVoucher?.proformaNumber;
+                        }
+                        this.componentStore.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
+                    } else {
+                        const payload = {
+                            voucherUniqueNames: voucher?.uniqueName ? [voucher.uniqueName] : this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
+                            voucherType: this.voucherType
+                        };
+                        this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
+                    }
                 }
             }
         });
@@ -1783,12 +1909,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public toggleSearch(event: any, fieldName: string, voucherType: string): void {
+        console.log('voucherType', voucherType, fieldName);
         switch (voucherType) {
             case VoucherTypeEnum.sales:
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "invoiceNumber") {
                     this.showInvoiceNoSearch = true;
+                } else if (fieldName === "accountName") {
+                    this.showAccountSearch = true;
                 }
                 break;
             case VoucherTypeEnum.estimate:
@@ -1847,6 +1976,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.showInvoiceNoSearch = true;
                 } else if (fieldName === "purchaseOrderNumbers") {
                     this.showPurchaseOrderNumberSearch = true;
+                } else if (fieldName === "accountName") {
+                    this.showAccountSearch = true;
                 }
                 break;
         }
@@ -1864,6 +1995,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof ListBranchTransferComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        console.log('searchedFieldName', searchedFieldName);
         const searchedFieldNameArray: string[] = ['invoiceNumber', 'estimateNumber', 'proformaNumber', 'purchaseOrderNumber', 'receiptNumber', 'paymentNumber', 'creditNoteNumber', 'debitNoteNumber', 'billNumber'];
         if (searchedFieldNameArray.includes(searchedFieldName)) {
             if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
@@ -1877,6 +2009,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (this.purchaseOrderUniqueNameInput.value !== null && this.purchaseOrderUniqueNameInput.value !== '') {
                 return;
             }
+        } else if (searchedFieldName === 'accountName') {
+            if (this.accountNameInput.value !== null && this.accountNameInput.value !== '') {
+                return;
+            }
         }
 
         if (this.generalService.childOf(event?.target, element)) {
@@ -1888,6 +2024,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.showCustomerSearch = false;
             } else if (searchedFieldName === 'purchaseOrderNumbers') {
                 this.showPurchaseOrderNumberSearch = false;
+            } else if (searchedFieldName === 'accountName') {
+                this.showAccountSearch = false;
             }
         }
     }
@@ -2327,17 +2465,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         };
         this.voucherNumberInput.patchValue(null, { emitEvent: false });
         this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
+        this.accountNameInput.patchValue(null, { emitEvent: false });
         this.purchaseOrderUniqueNameInput.patchValue(null, { emitEvent: false });
         this.showCustomerSearch = false;
         this.showInvoiceNoSearch = false;
         this.showPurchaseOrderNumberSearch = false;
+        this.showAccountSearch = false;
         this.advanceFiltersApplied = false;
         this.isSearching = false;
         this.advanceSearchTempKeyObj = {};
         this.activeSearchField = null;
         this.sortKeyMap = {};
+
         if (!onlyResetValue) {
-            this.getVouchers(false);
+            if (this.activeModule === 'recurring') {
+                this.getRecurringVouchers();
+            } else {
+                this.getVouchers(false);
+            }
         }
     }
 
@@ -3516,12 +3661,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         };
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
-                    width: '100%',
-                    height: '95vh',
-                    maxHeight: '95vh',
-                    data: dataToSend,
-                    disableClose: true
-                });
+            width: '100%',
+            height: '95vh',
+            maxHeight: '95vh',
+            data: dataToSend,
+            disableClose: true
+        });
 
         dialogRef.afterClosed().subscribe(response => {
             if (response) {
@@ -3575,6 +3720,63 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.fetchTemplates(template.value);
     }
 
+    /**
+     * Fetch all recurring vouchers based on voucher type with query parameters
+     * 
+     * @memberof VoucherListComponent
+     */
+    public getRecurringVouchers(): void {
+        if (this.activeModule !== 'recurring') {
+            return;
+        }
+
+        const voucherType = this.voucherType === VoucherTypeEnum.sales ? 'sales' : 'purchase';
+
+        this.recurringVouchersLoading.set(true);
+
+        // Build query parameters
+        const params: any = {
+            page: this.advanceFilters.page || 1,
+            count: this.advanceFilters.count || 50,
+        };
+
+        // Add date range if available
+        params.fromDate = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '';
+        params.toDate = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '';
+
+        // Add search query if available
+        params.q = this.advanceFilters.q ?? '';
+
+        // Add sorting if available
+        params.sortBy = this.advanceFilters.sortBy ?? '';
+        params.sort = this.advanceFilters.sort ?? 'asc';
+
+        console.log('Fetching recurring vouchers with params:', params);
+
+        this.recurrenceService.getAll(voucherType, params).pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe({
+            next: (response: any) => {
+                if (response?.status === 'success' && response?.body) {
+                    const vouchersData = response.body?.items || response.body || [];
+                    this.recurringVouchersData.set(vouchersData);
+                    this.recurringVouchersTotalCount.set(response.body?.totalItems || vouchersData.length);
+                    console.log('Recurring vouchers loaded:', vouchersData, 'Total:', response.body?.totalItems);
+                } else {
+                    this.recurringVouchersData.set([]);
+                    this.recurringVouchersTotalCount.set(0);
+                }
+                this.recurringVouchersLoading.set(false);
+            },
+            error: (error) => {
+                console.error('Error fetching recurring vouchers:', error);
+                this.recurringVouchersData.set([]);
+                this.recurringVouchersTotalCount.set(0);
+                this.recurringVouchersLoading.set(false);
+            }
+        });
+    }
+
     generateRecurringVoucher(voucher: any): void {
         try {
             const dialogRef = this.dialog.open(AsideRecurrenceVoucherCreateComponent, {
@@ -3589,8 +3791,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             dialogRef.afterClosed().subscribe({
                 next: (result) => {
                     if (result) {
-                        console.log('Recurring voucher data:', result);
-                        // Handle the form submission
+                        this.getAllVouchers();
                     }
                 },
                 error: (error) => {
@@ -3600,5 +3801,92 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         } catch (error) {
             console.error('Error opening recurring voucher dialog:', error);
         }
+    }
+
+    /**
+     * Resume a recurring voucher
+     * 
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
+    public resumeRecurringVoucher(voucher: any): void {
+        if (voucher?.recurringVoucherUniqueName) {
+            this.recurrenceService.updateStatus(voucher.recurringVoucherUniqueName, 'RESUME').pipe(
+                takeUntil(this.destroyed$)
+            ).subscribe({
+                next: (response: any) => {
+                    if (response?.status === 'success') {
+                        this.toasterService.showSnackBar('success', response?.body);
+                        this.getRecurringVouchers();
+                    } else {
+                        this.toasterService.showSnackBar('error', response?.message);
+                    }
+                },
+                error: (error) => {
+                    console.error('Error resuming recurring voucher:', error);
+                    this.toasterService.showSnackBar('error', error?.message);
+                }
+            });
+        }
+    }
+
+    /**
+     * Stop a recurring voucher
+     * 
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
+    public stopRecurringVoucher(voucher: any): void {
+        if (voucher?.recurringVoucherUniqueName) {
+            this.recurrenceService.updateStatus(voucher.recurringVoucherUniqueName, 'STOP').pipe(
+                takeUntil(this.destroyed$)
+            ).subscribe({
+                next: (response: any) => {
+                    if (response?.status === 'success') {
+                        this.toasterService.showSnackBar('success', response?.body);
+                        this.getRecurringVouchers();
+                    } else {
+                        this.toasterService.showSnackBar('error', response?.message);
+                    }
+                },
+                error: (error) => {
+                    console.error('Error stopping recurring voucher:', error);
+                    this.toasterService.showSnackBar('error', error?.message);
+                }
+            });
+        }
+    }
+
+    /**
+     * Set all account to service variable and redirect to view page
+     *
+     * @memberof ContactComponent
+     */
+    public showRecurringPreview(recurringVoucherUniqueName: string): void {
+        if (!recurringVoucherUniqueName) {
+            return;
+        }
+        const voucherType = this.voucherType === VoucherTypeEnum.sales ? 'sales' : 'purchase';
+        const queryParams = {
+            page: this.advanceFilters.page,
+            count: this.advanceFilters.count,
+            from: this.selectedDateRange?.startDate.format(GIDDH_DATE_FORMAT),
+            to: this.selectedDateRange?.endDate.format(GIDDH_DATE_FORMAT),
+            sort: this.advanceFilters.sort,
+            sortBy: this.advanceFilters.sortBy,
+            recurringVoucherUniqueName: recurringVoucherUniqueName
+        };
+        const searchString = this.advanceFilters.q;
+        if (searchString?.length) {
+            queryParams['search'] = searchString;
+        };
+
+        if (this.currentCompanyBranches?.length > 2 &&
+            (this.isCompany || this.isConsolidatedBranch)) {
+            queryParams['branchUniqueName'] = this.currentBranch?.uniqueName;
+        }
+        this.router.navigate([`/pages/vouchers/view/${voucherType}/recurring/${recurringVoucherUniqueName}`], {
+            queryParams: queryParams
+        });
     }
 }
