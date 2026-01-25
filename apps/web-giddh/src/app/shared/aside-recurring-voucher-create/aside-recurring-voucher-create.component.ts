@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RecurrenceFormService } from '../../services/aside-recurring-voucher.service';
-import { debounceTime, ReplaySubject, takeUntil, filter, switchMap, Subject } from 'rxjs';
+import { debounceTime, ReplaySubject, takeUntil, Subject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 
 @Component({
@@ -25,23 +25,37 @@ import { ToasterService } from '../../services/toaster.service';
     styleUrls: ['./aside-recurring-voucher-create.component.scss'],
     standalone: false
 })
+/**
+ * Component for creating and managing recurring voucher configurations.
+ * Supports both dialog mode and embedded mode with form-based recurrence setup.
+ */
 export class AsideRecurrenceVoucherCreateComponent implements OnInit {
-    // Add this property to your component class
-    previewDates: string[] = [];
-    isDialogMode = false;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private previewEnabled$ = new Subject<boolean>();
+    /** Array of formatted preview dates for the recurring voucher pattern */
+    public previewDates: string[] = [];
+    /** Flag indicating if component is running in dialog mode */
+    public isDialogMode = false;
+    /** Subject for managing component destruction and cleanup */
+    private readonly destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Subject for controlling preview generation state */
+    private readonly previewEnabled$ = new Subject<boolean>();
+    /** Internal flag to track if preview generation is paused */
     private isPreviewPausedFlag = false;
     /* =======================
        INPUT / OUTPUT
     ======================= */
-    recurrenceForm = input<FormGroup>(); // for embedded usage
-    recurrenceChange = output<FormGroup>();
+    /** Input signal for receiving recurrence form from parent component (embedded mode) */
+    public readonly recurrenceForm = input<FormGroup>();
+    /** Output signal for emitting form changes to parent component */
+    public readonly recurrenceChange = output<FormGroup>();
 
-    activeForm!: FormGroup; // The form actually used (input or internal)
+    /** Active form group - either from input or internally created */
+    public activeForm!: FormGroup;
 
-    // Public method to pause/resume preview from parent component
-    setSubmitting(value: boolean): void {
+    /**
+     * Pauses or resumes preview generation from parent component
+     * @param {boolean} value - True to pause preview, false to resume
+     */
+    public setSubmitting(value: boolean): void {
         if (value) {
             // Pause preview
             this.isPreviewPausedFlag = true;
@@ -55,18 +69,24 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         }
     }
     
-    private isPreviewPaused(): boolean {
+    /**
+     * Checks if preview generation is currently paused
+     * @returns {boolean} True if preview is paused, false otherwise
+     */
+    private readonly isPreviewPaused = (): boolean => {
         return this.isPreviewPausedFlag;
-    }
+    };
 
-    // Add this with other form controls
-    monthlyModeControl = new FormControl<'DAY' | 'THE'>('DAY');
+    /** Form control for toggling between day-of-month and nth-weekday monthly modes */
+    public readonly monthlyModeControl = new FormControl<'DAY' | 'THE'>('DAY');
 
     /* =======================
        DATE CONSTRAINT
     ======================= */
-    minStartDate: Date = new Date();
-    dialogTitle = 'Recurring Voucher';
+    /** Minimum allowed start date (today at 00:00:00) */
+    public minStartDate: Date = new Date();
+    /** Title displayed in dialog mode */
+    public readonly dialogTitle = 'Recurring Voucher';
 
     constructor(private fb: FormBuilder,
         private recurrenceService: RecurrenceFormService,
@@ -82,15 +102,19 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     /* =======================
        UI STATE FLAGS
     ======================= */
-    showCustom = signal(false);
-    showDayThe = signal(false);
-    showWeekdayToggle = signal(false);
-    // In the component class, add this with other signals
-    monthlyMode = signal<'DAY' | 'THE'>('DAY');
+    /** Signal to control visibility of custom repeat options */
+    public readonly showCustom = signal(false);
+    /** Signal to control visibility of day/the monthly mode selector */
+    public readonly showDayThe = signal(false);
+    /** Signal to control visibility of weekday toggle buttons */
+    public readonly showWeekdayToggle = signal(false);
+    /** Signal tracking the current monthly mode selection */
+    public readonly monthlyMode = signal<'DAY' | 'THE'>('DAY');
     /* =======================
        CONSTANT OPTIONS
     ======================= */
-    weekdays = [
+    /** Array of weekday options with short labels for toggle buttons */
+    public readonly weekdays = [
         { label: 'MON', value: 'Monday' },
         { label: 'TUE', value: 'Tuesday' },
         { label: 'WED', value: 'Wednesday' },
@@ -100,7 +124,8 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         { label: 'SUN', value: 'Sunday' }
     ];
 
-    weekdayOptions = [
+    /** Array of weekday options with full labels for select dropdowns */
+    public readonly weekdayOptions = [
         { label: 'Monday', value: 'Monday' },
         { label: 'Tuesday', value: 'Tuesday' },
         { label: 'Wednesday', value: 'Wednesday' },
@@ -110,7 +135,8 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         { label: 'Sunday', value: 'Sunday' }
     ];
 
-    weekOfMonthOptions = [
+    /** Array of week-of-month options (1st through 5th) */
+    public readonly weekOfMonthOptions = [
         { label: '1st', value: 1 },
         { label: '2nd', value: 2 },
         { label: '3rd', value: 3 },
@@ -118,10 +144,13 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         { label: '5th', value: 5 }
     ];
 
-    monthDays: number[] = Array.from({ length: 31 }, (_, i) => i + 1);
+    /** Array of days in a month (1-31) */
+    public readonly monthDays: number[] = Array.from({ length: 31 }, (_, i) => i + 1);
 
-    repeatOptions = signal<Array<{ label: string; value: any }>>([]);
-    selectedRepeatOption = signal<
+    /** Signal containing available repeat options based on selected start date */
+    public readonly repeatOptions = signal<Array<{ label: string; value: any }>>([]);
+    /** Signal tracking the currently selected repeat option */
+    public readonly selectedRepeatOption = signal<
         | 'DAY'
         | 'WEEKLY'
         | 'MONTHLY_DATE'
@@ -133,7 +162,11 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     /* =======================
        INIT
     ======================= */
-    ngOnInit(): void {
+    /**
+     * Angular lifecycle hook - initializes form and sets up subscriptions
+     * Creates new form if not provided via input, or uses provided form in edit mode
+     */
+    public ngOnInit(): void {
         // Initialize the form if not provided (CREATE mode)
         if (!this.recurrenceForm()) {
             this.initializeForm();
@@ -204,8 +237,12 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         this.previewEnabled$.next(true);
     }
 
-    // Add this method to your component
-    private updatePreviewDates(dates: string[]): void {
+    /**
+     * Updates preview dates array with formatted date strings
+     * Converts DD-MM-YYYY format to localized date display (e.g., "Dec 31 Wed")
+     * @param {string[]} dates - Array of dates in DD-MM-YYYY format
+     */
+    private readonly updatePreviewDates = (dates: string[]): void => {
         this.previewDates = dates.map(dateStr => {
             // Convert "DD-MM-YYYY" to Date object
             const [day, month, year] = dateStr.split('-').map(Number);
@@ -218,14 +255,17 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
                 weekday: 'short'
             });
         });
-    }
+    };
     // Call this method when you receive dates from your API
     // Example:
     // this.yourApiService.getDates().subscribe(response => {
     //     this.updatePreviewDates(response.dates);
     // });
-    // You can also add a method to refresh preview based on form values
-    private refreshPreview(): void {
+    /**
+     * Refreshes preview dates by calling the preview API with current form values
+     * Debounced to avoid excessive API calls during rapid form changes
+     */
+    private readonly refreshPreview = (): void => {
         if (!this.activeForm) return;
 
         const payload = this.recurrenceService.getCleanFormValue(this.activeForm);
@@ -239,9 +279,14 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
                 this.previewDates = [];
             }
         });
-    }
+    };
 
-    private initializeForm(): void {
+    /**
+     * Initializes a new recurrence form with default values
+     * Sets up form groups for startDate, frequency, repeatOn, and end configurations
+     * Builds repeat options based on today's date
+     */
+    private readonly initializeForm = (): void => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const { weekday } = this.recurrenceService.getDateMeta(today);
@@ -277,10 +322,14 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         // Pre-populate repeat options and dependent controls based on today's date
         this.buildRepeatOptions(today);
         this.onStartDateChange(today);
-    }
+    };
 
 
-    private ensureRepeatOnControls(): void {
+    /**
+     * Ensures all required controls exist in the repeatOn form group
+     * Adds missing controls: monthlyMode, dayOfMonth, nth, weekday, weekdays
+     */
+    private readonly ensureRepeatOnControls = (): void => {
         const group = this.repeatOnForm;
 
         if (!group.get('monthlyMode')) {
@@ -302,13 +351,17 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         if (!group.get('weekdays')) {
             group.addControl('weekdays', this.fb.array([]));
         }
-    }
+    };
 
 
     /* =======================
        FORM FACTORY
     ======================= */
-    private createRecurrenceForm(): FormGroup {
+    /**
+     * Factory method to create a new recurrence form structure
+     * @returns {FormGroup} A new form group with recurrence configuration structure
+     */
+    private readonly createRecurrenceForm = (): FormGroup => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const { weekday } = this.recurrenceService.getDateMeta(today);
@@ -336,25 +389,42 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
                 endDate: [today],
             })
         });
-    }
+    };
 
 
     /* =======================
        FORM GETTERS
     ======================= */
-    get repeatOnForm(): FormGroup {
+    /**
+     * Getter for the repeatOn form group
+     * @returns {FormGroup} The repeatOn form group containing repeat configuration
+     */
+    public get repeatOnForm(): FormGroup {
         return this.activeForm.get('repeatOn') as FormGroup;
     }
 
-    get weekdaysArray(): FormArray {
+    /**
+     * Getter for the weekdays form array
+     * @returns {FormArray} The weekdays array containing selected weekdays
+     */
+    public get weekdaysArray(): FormArray {
         return this.repeatOnForm.get('weekdays') as FormArray;
     }
 
-    get frequencyUnit(): 'DAY' | 'WEEK' | 'MONTH' | null {
+    /**
+     * Getter for the current frequency unit
+     * @returns {'DAY' | 'WEEK' | 'MONTH' | null} The selected frequency unit
+     */
+    public get frequencyUnit(): 'DAY' | 'WEEK' | 'MONTH' | null {
         return this.activeForm.get('frequency.unit')?.value ?? null;
     }
 
-    toggleWeekday(day: string): void {
+    /**
+     * Toggles a weekday in the weekdays array
+     * Adds the weekday if not present, removes if already selected
+     * @param {string} day - The weekday name to toggle (e.g., 'Monday')
+     */
+    public toggleWeekday(day: string): void {
         if (!this.weekdaysArray) return;
 
         const values: string[] = this.weekdaysArray.value || [];
@@ -371,7 +441,12 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     /* =======================
        START DATE CHANGE
     ======================= */
-    onStartDateChange(date: Date | null): void {
+    /**
+     * Handles start date change and updates repeat options accordingly
+     * Rebuilds repeat options and resets repeat configuration based on new date
+     * @param {Date | null} date - The newly selected start date
+     */
+    public onStartDateChange(date: Date | null): void {
         if (!date || !this.activeForm) return;
 
         this.activeForm.get('startDate')?.setValue(date, { emitEvent: false });
@@ -462,7 +537,12 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     /* =======================
        REPEAT OPTIONS
     ======================= */
-    selectRepeatOption(option: any): void {
+    /**
+     * Selects a repeat option and configures form accordingly
+     * Handles WEEKLY, MONTHLY_DATE, MONTHLY_WEEKDAY, and CUSTOM options
+     * @param {any} option - The repeat option to select
+     */
+    public selectRepeatOption(option: any): void {
         if (!this.activeForm || !this.repeatOnForm) return;
         this.ensureRepeatOnControls(); // ✅ ADD THIS FIRST
         this.selectedRepeatOption.set(option);
@@ -536,10 +616,12 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     /* =======================
        CUSTOM UNIT CHANGE
     ======================= */
-    /* =======================
-       CUSTOM UNIT CHANGE
-    ======================= */
-    onRepeatUnitChange(unit: 'DAY' | 'WEEK' | 'MONTH'): void {
+    /**
+     * Handles frequency unit change in custom mode
+     * Updates repeat configuration based on selected unit (DAY, WEEK, or MONTH)
+     * @param {'DAY' | 'WEEK' | 'MONTH'} unit - The selected frequency unit
+     */
+    public onRepeatUnitChange(unit: 'DAY' | 'WEEK' | 'MONTH'): void {
         const startDate: Date = this.activeForm.get('startDate')?.value;
         if (!startDate) return;
         this.ensureRepeatOnControls(); // ✅ ADD THIS FIRST
@@ -583,7 +665,12 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         this.showDayThe.set(unit === 'MONTH');
     }
 
-    isWeekdaySelected(day: string): boolean {
+    /**
+     * Checks if a specific weekday is currently selected
+     * @param {string} day - The weekday name to check
+     * @returns {boolean} True if the weekday is selected, false otherwise
+     */
+    public isWeekdaySelected(day: string): boolean {
         if (!this.repeatOnForm || !this.weekdaysArray) {
             return false;
         }
@@ -596,7 +683,11 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     /* =======================
        MONTHLY MODE
     ======================= */
-    selectMonthlyDay(): void {
+    /**
+     * Configures form for monthly day-of-month mode
+     * Sets repeat type to DAY_OF_MONTH with the day from start date
+     */
+    public selectMonthlyDay(): void {
         const startDate = this.activeForm.get('startDate')?.value;
         if (!startDate) return;
 
@@ -609,7 +700,11 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
             monthlyMode: 'DAY'
         });
     }
-    selectMonthlyThe(): void {
+    /**
+     * Configures form for monthly nth-weekday mode
+     * Sets repeat type to NTH_WEEKDAY with week and day from start date
+     */
+    public selectMonthlyThe(): void {
         const startDate = this.activeForm.get('startDate')?.value;
         if (!startDate) return;
 
@@ -628,8 +723,11 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
        HELPERS
     ======================= */
 
-    // Then update the resetRepeatOn method to remove monthlyMode from patchValue
-    private resetRepeatOn(): void {
+    /**
+     * Resets repeat configuration to default values
+     * Clears weekdays array and resets all repeat fields
+     */
+    private readonly resetRepeatOn = (): void => {
         const weekdaysCtrl = this.repeatOnForm.get('weekdays');
 
         if (weekdaysCtrl instanceof FormArray) {
@@ -649,9 +747,14 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         // Reset the UI state
         this.monthlyModeControl.setValue('DAY');
 
-    }
+    };
 
-    onMonthlyModeChange(event: any): void {
+    /**
+     * Handles monthly mode change event
+     * Delegates to selectMonthlyDay or selectMonthlyThe based on mode value
+     * @param {any} event - The radio button change event
+     */
+    public onMonthlyModeChange(event: any): void {
         const mode = event.value;
         if (mode === 'DAY') {
             this.selectMonthlyDay();
@@ -661,7 +764,12 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     }
 
 
-    private buildRepeatOptions(startDate: Date): void {
+    /**
+     * Builds repeat options array based on the selected start date
+     * Generates labels for WEEKLY, MONTHLY_DATE, MONTHLY_WEEKDAY, and CUSTOM options
+     * @param {Date} startDate - The start date to base options on
+     */
+    private readonly buildRepeatOptions = (startDate: Date): void => {
         const { dayOfMonth, weekday, weekOfMonth } = this.recurrenceService.getDateMeta(startDate);
         const weekdayName = this.weekdayOptions.find(w => w.value === weekday)?.label || '';
 
@@ -677,11 +785,15 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
             },
             { label: 'Custom', value: 'CUSTOM' }
         ]);
-    }
+    };
 
 
-    // Add a method to close the dialog with the form data
-    onSubmit(): void {
+    /**
+     * Submits the recurrence form and creates/updates recurring voucher
+     * Validates form, cleans data, and calls makeRecurring API
+     * Shows success/error toast and closes dialog on completion
+     */
+    public onSubmit(): void {
         if (this.activeForm.valid) {
             const cleanData = this.recurrenceService.getCleanFormValue(this.activeForm);
             const voucherUniqueName = this.data?.voucher?.uniqueName; // Get from context/parameter
@@ -700,8 +812,11 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
             });
         }
     }
-    // Add a method to close the dialog without saving
-    onCancel(): void {
+    /**
+     * Cancels the dialog without saving
+     * Closes the dialog and discards any form changes
+     */
+    public onCancel(): void {
         this.dialogRef.close();
     }
 }

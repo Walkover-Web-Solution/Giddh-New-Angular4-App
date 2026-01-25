@@ -11,6 +11,11 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { RECURRING_API } from './apiurls/aside-recurring-voucher.api';
 
+/**
+ * Service for managing recurring voucher form operations and API interactions.
+ * Handles form value cleaning, date metadata extraction, and API calls for recurring vouchers.
+ * Provides utilities for date formatting, ordinal conversion, and form validation.
+ */
 @Injectable({ providedIn: 'root' })
 export class RecurrenceFormService {
 
@@ -22,14 +27,14 @@ export class RecurrenceFormService {
   ) { }
 
 
-  // Add this method to the RecurrenceFormService class
-
   /**
    * Cleans the form values based on the repeatOn type
-   * @param formValue The raw form value to clean
-   * @returns Cleaned form value with only relevant fields
+   * Removes unnecessary fields based on the repeat type to optimize API payload
+   * Formats dates to GIDDH_DATE_FORMAT for API compatibility
+   * @param {any} formValue - The raw form value to clean
+   * @returns {any} Cleaned form value with only relevant fields for the selected repeat type
    */
-  cleanFormValues(formValue: any): any {
+  public cleanFormValues(formValue: any): any {
     // Create a deep copy to avoid mutating the original
     const cleaned = JSON.parse(JSON.stringify(formValue));
     // Format dates if they exist
@@ -93,13 +98,24 @@ export class RecurrenceFormService {
     return cleaned;
   }
 
-  // Add this method to clean the form before submission
-  getCleanFormValue(form: FormGroup): any {
+  /**
+   * Extracts raw form value and cleans it for API submission
+   * Wrapper method that gets form raw value and passes it to cleanFormValues
+   * @param {FormGroup} form - The form group to extract and clean values from
+   * @returns {any} Cleaned form value ready for API submission
+   */
+  public getCleanFormValue(form: FormGroup): any {
     const formValue = form.getRawValue();
     return this.cleanFormValues(formValue);
   }
 
-  getDateMeta(date: Date) {
+  /**
+   * Extracts date metadata from a given date
+   * Calculates day of month, weekday name, and week of month
+   * @param {Date} date - The date to extract metadata from
+   * @returns {Object} Object containing dayOfMonth, weekday (name), and weekOfMonth
+   */
+  public getDateMeta(date: Date) {
     const dayOfMonth = date.getDate();
     const dayOfWeek = date.getDay();
     const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
@@ -107,7 +123,13 @@ export class RecurrenceFormService {
     return { dayOfMonth, weekday, weekOfMonth };
   }
 
-  getOrdinal(n: number): string {
+  /**
+   * Converts a number to its ordinal string representation
+   * Examples: 1 -> "1st", 2 -> "2nd", 3 -> "3rd", 4 -> "4th"
+   * @param {number} n - The number to convert to ordinal
+   * @returns {string} The ordinal representation of the number
+   */
+  public getOrdinal(n: number): string {
     if (n % 100 >= 11 && n % 100 <= 13) return `${n}th`;
     switch (n % 10) {
       case 1: return `${n}st`;
@@ -121,7 +143,13 @@ export class RecurrenceFormService {
      API CALLS
   ======================= */
 
-  preview(payload: any): Observable<BaseResponse<any, any>> {
+  /**
+   * Generates preview dates for a recurring voucher configuration
+   * Calls the preview API with the form payload to get sample dates
+   * @param {any} payload - The recurrence configuration payload
+   * @returns {Observable<BaseResponse<any, any>>} Observable with preview dates response
+   */
+  public preview(payload: any): Observable<BaseResponse<any, any>> {
     const companyUniqueName = this.generalService.companyUniqueName;
     return this.http.post(
       this.config.apiUrl + RECURRING_API.PREVIEW.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
@@ -132,7 +160,14 @@ export class RecurrenceFormService {
     );
   }
 
-  getAll(voucherType?: string, params?: any): Observable<BaseResponse<any, any>> {
+  /**
+   * Retrieves all recurring vouchers for the current company
+   * Supports filtering by voucher type and pagination parameters
+   * @param {string} [voucherType] - Optional voucher type filter (e.g., 'sales', 'purchase')
+   * @param {any} [params] - Optional query parameters (page, count, fromDate, toDate, q, sortBy, sort)
+   * @returns {Observable<BaseResponse<any, any>>} Observable with list of recurring vouchers
+   */
+  public getAll(voucherType?: string, params?: any): Observable<BaseResponse<any, any>> {
     const companyUniqueName = this.generalService.companyUniqueName;
     let url = this.config.apiUrl +
       RECURRING_API.GET_ALL.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)) +
@@ -169,7 +204,13 @@ export class RecurrenceFormService {
     );
   }
 
-  delete(recurringVoucherUniqueName: string): Observable<BaseResponse<any, any>> {
+  /**
+   * Deletes a recurring voucher by its unique name
+   * Removes the recurring voucher configuration from the system
+   * @param {string} recurringVoucherUniqueName - The unique name of the recurring voucher to delete
+   * @returns {Observable<BaseResponse<any, any>>} Observable with deletion response
+   */
+  public delete(recurringVoucherUniqueName: string): Observable<BaseResponse<any, any>> {
     const companyUniqueName = this.generalService.companyUniqueName;
     const url = this.config.apiUrl +
       RECURRING_API.DELETE
@@ -181,7 +222,15 @@ export class RecurrenceFormService {
     );
   }
 
-  getRuleDetails(recurringVoucherUniqueName: string, branchUniqueName?: string, status?: string): Observable<BaseResponse<any, any>> {
+  /**
+   * Retrieves detailed rule information for a specific recurring voucher
+   * Includes configuration, schedule, and status information
+   * @param {string} recurringVoucherUniqueName - The unique name of the recurring voucher
+   * @param {string} [branchUniqueName] - Optional branch unique name filter
+   * @param {string} [status] - Optional status filter (e.g., 'ACTIVE', 'INACTIVE')
+   * @returns {Observable<BaseResponse<any, any>>} Observable with detailed rule information
+   */
+  public getRuleDetails(recurringVoucherUniqueName: string, branchUniqueName?: string, status?: string): Observable<BaseResponse<any, any>> {
     const companyUniqueName = this.generalService.companyUniqueName;
     let url = this.config.apiUrl +
       RECURRING_API.RULE_DETAILS
@@ -199,7 +248,14 @@ export class RecurrenceFormService {
     );
   }
 
-  getVoucherDetails(recurringVoucherUniqueName: string): Observable<BaseResponse<any, any>> {
+  /**
+   * Retrieves detailed information about a specific recurring voucher
+   * Includes voucher items, amounts, and other transaction details
+   * @param {string} recurringVoucherUniqueName - The unique name of the recurring voucher
+   * @returns {Observable<BaseResponse<any, any>>} Observable with detailed voucher information
+   */
+  public getVoucherDetails(recurringVoucherUniqueName: string): Observable<BaseResponse<any, any>> {
+    console.log('Recurring voucher unique name:', recurringVoucherUniqueName);
     const companyUniqueName = this.generalService.companyUniqueName;
     const url = this.config.apiUrl +
       RECURRING_API.VOUCHER_DETAILS
@@ -211,7 +267,15 @@ export class RecurrenceFormService {
     );
   }
 
-  updateStatus(recurringVoucherUniqueName: string, status: string, branchUniqueName?: string): Observable<BaseResponse<any, any>> {
+  /**
+   * Updates the status of a recurring voucher (ACTIVE/INACTIVE)
+   * Changes the recurrence status without deleting the configuration
+   * @param {string} recurringVoucherUniqueName - The unique name of the recurring voucher
+   * @param {string} status - The new status (e.g., 'ACTIVE', 'INACTIVE')
+   * @param {string} [branchUniqueName] - Optional branch unique name for branch-specific updates
+   * @returns {Observable<BaseResponse<any, any>>} Observable with status update response
+   */
+  public updateStatus(recurringVoucherUniqueName: string, status: string, branchUniqueName?: string): Observable<BaseResponse<any, any>> {
     const companyUniqueName = this.generalService.companyUniqueName;
     let url = this.config.apiUrl +
       RECURRING_API.STATUS_UPDATE
@@ -227,7 +291,14 @@ export class RecurrenceFormService {
     );
   }
 
-  makeRecurring(voucherUniqueName: string, payload: any): Observable<BaseResponse<any, any>> {
+  /**
+   * Creates or updates a recurring voucher configuration
+   * Converts a regular voucher into a recurring one with specified recurrence rules
+   * @param {string} voucherUniqueName - The unique name of the voucher to make recurring
+   * @param {any} payload - The recurrence configuration payload (cleaned form values)
+   * @returns {Observable<BaseResponse<any, any>>} Observable with creation/update response
+   */
+  public makeRecurring(voucherUniqueName: string, payload: any): Observable<BaseResponse<any, any>> {
     const companyUniqueName = this.generalService.companyUniqueName;
     const url = this.config.apiUrl +
       RECURRING_API.MAKE_RECURRING

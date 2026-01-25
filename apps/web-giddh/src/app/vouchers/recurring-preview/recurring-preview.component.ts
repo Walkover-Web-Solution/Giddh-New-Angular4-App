@@ -1,114 +1,130 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, ViewChild, signal, computed, effect } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, of, ReplaySubject } from "rxjs";
-import { takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import * as dayjs from "dayjs";
 import { BranchHierarchyType, Configuration, PAGINATION_LIMIT } from "../../app.constant";
-import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
-import { AccountsAction } from "../../actions/accounts.actions";
 import { cloneDeep } from "../../lodash-optimized";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { ServiceConfig } from "../../services/service.config";
 import { ContactComponentStore } from "../../contact/utility/contact.store";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
+import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 
 @Component({
     selector: "recurring-preview",
     templateUrl: "./recurring-preview.component.html",
     styleUrls: ["./recurring-preview.component.scss"],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RecurringPreviewComponent implements OnInit, OnDestroy {
+/**
+ * Component for previewing and managing recurring voucher details.
+ * Displays recurring voucher list, selected voucher details, and child vouchers.
+ * Implements OnPush change detection strategy with Angular signals for optimal performance.
+ */
+export class RecurringPreviewComponent implements OnDestroy {
     /** Reference to the virtual scroll viewport used for scrolling contact lists */
-    @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    @ViewChild(CdkVirtualScrollViewport) public cdkScrollbar: CdkVirtualScrollViewport;
+    /** Subject for managing component destruction and cleanup of subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    
+    // Signals for reactive state management
     /** Holds localized text for this component */
-    public localeData: any = {};
+    public readonly localeData = signal<any>({});
     /** Holds common localized text used across the app */
-    public commonLocaleData: any = {};
-    /** Reference to the dayjs library for date manipulation */
-    public dayjs: any = dayjs;
-    /** Holds advanced filter keys for contact search */
-    public advanceFilters: any = {
+    public readonly commonLocaleData = signal<any>({});
+    /** List of all recurring vouchers fetched for preview */
+    public readonly recurringVoucherList = signal<any[]>([]);
+    /** Currently selected recurring voucher object */
+    public readonly selectedRecurringVoucher = signal<any>(null);
+    /** Type of contact (e.g., customer, vendor) */
+    public readonly contactType = signal<string>('');
+    /** Total number of result pages for contacts */
+    public readonly totalPages = signal<number>(0);
+    /** Stores route or query parameters relevant to the view */
+    public readonly params = signal<any>({});
+    /** Flag indicating if the current mode is company mode */
+    public readonly isCompany = signal<boolean>(false);
+    /** Flag indicating if the current branch is a consolidated branch */
+    public readonly isConsolidatedBranch = signal<boolean>(false);
+    /** Stores text and link for the 'Create New Voucher' action */
+    public readonly createNewVoucher = signal<any>({ text: '', link: '' });
+    /** Flag indicating if the component is in update mode */
+    public readonly isUpdateMode = signal<boolean>(false);
+    /** Flag indicating if a search operation is in progress */
+    public readonly isSearching = signal<boolean>(false);
+    /** Stores the current route's query parameters */
+    public readonly queryParams = signal<any>({});
+    /** Stores the image path for use in web and electron apps */
+    public readonly imgPath = signal<string>('');
+    /** List of branches for the current company */
+    public readonly currentCompanyBranches = signal<Array<any>>([]);
+    /** Object representing the currently selected branch */
+    public readonly currentBranch = signal<any>({ name: "", uniqueName: "" });
+    /** Object representing the currently active company */
+    public readonly activeCompany = signal<any>(null);
+    /** Object representing data for the currently selected branch */
+    public readonly currentBranchData = signal<any>(null);
+    /** Sorting key for contact list (default: name) */
+    public readonly key = signal<string>("name");
+    /** Sorting order for contact list (default: asc) */
+    public readonly order = signal<string>("asc");
+    /** Flag indicating if more contact data is being loaded */
+    public readonly isLoadMore = signal<boolean>(false);
+    /** Flag indicating if the selected contact was not found */
+    public readonly isRecurringNotFound = signal<boolean>(false);
+    /** Flag to show/hide contact preview section */
+    public readonly contactPreview = signal<boolean>(false);
+    /** Unique name of the currently active account */
+    public readonly activeAccountUniqueName = signal<string>('');
+    /** Name of the currently active contact tab */
+    public readonly recurringActiveTab = signal<string>('');
+    /** Rule details for the selected recurring voucher */
+    public readonly ruleDetails = signal<any>(null);
+    /** Account unique name for the selected recurring voucher */
+    public readonly selectedAccountUniqueName = signal<string>('');
+    /** Voucher unique name for the selected recurring voucher */
+    public readonly selectedVoucherUniqueName = signal<string>('');
+    /** Dynamic query parameters for voucher view link */
+    public readonly voucherQueryParams = signal<any>({ page: 1, count: 50, from: '', to: '', isRecurringVoucher: true });
+    
+    // Private signals
+    /** Tracks pagination history to avoid duplicate API calls */
+    private pageNumberHistory = signal<any[]>([]);
+    /** Counter for API calls to manage pagination state */
+    private getAllApiCallCount = signal<number>(0);
+    /** Advanced filter configuration for API requests */
+    private advanceFilters = signal<any>({
         page: 1,
         count: PAGINATION_LIMIT,
         q: '',
         sort: '',
         sortBy: ''
-    };
-    /** Form control for the contact search input */
-    public search: FormControl = new FormControl('');
-    /** List of all recurring vouchers fetched for preview */
-    public recurringVoucherList: any[] = [];
-    /** Currently selected recurring voucher object */
-    public selectedRecurringVoucher: any;
-    /** Type of contact (e.g., customer, vendor) */
-    public contactType: any = '';
-    /** Total number of result pages for contacts */
-    public totalPages: number = 0;
-    /** Stores route or query parameters relevant to the view */
-    public params: any = {};
-    /** Flag indicating if the current mode is company mode */
-    public isCompany: boolean;
-    /** Flag indicating if the current branch is a consolidated branch */
-    public isConsolidatedBranch: boolean;
-    /** Stores text and link for the 'Create New Voucher' action */
-    public createNewVoucher: any = {
-        text: '',
-        link: ''
-    };
-    /** Flag indicating if the component is in update mode */
-    public isUpdateMode: boolean;
-    /** Array of page numbers that have data present in the list */
-    private pageNumberHistory: any[] = [];
-    /** Flag indicating if a search operation is in progress */
-    public isSearching: boolean;
-    /** Counter for the number of 'get all contacts' API calls made */
-    private getAllApiCallCount: number = 0;
-    /** Stores the current route's query parameters */
-    public queryParams: any = {};
-    /** Stores the image path for use in web and electron apps */
-    public imgPath: string = '';
-    /** Observable for the list of branches in the current company */
+    });
+    
+    // Reference to the dayjs library for date manipulation
+    /** Reference to dayjs library for date formatting and manipulation */
+    public readonly dayjs: any = dayjs;
+    
+    // Observable for the list of branches in the current company
+    /** Observable stream of branches for the current company */
     public currentCompanyBranches$: Observable<any>;
-    /** List of branches for the current company */
-    public currentCompanyBranches: Array<any>;
-    /** Object representing the currently selected branch */
-    public currentBranch: any = { name: "", uniqueName: "" };
-    /** Object representing the currently active company */
-    public activeCompany: any;
-    /** Object representing data for the currently selected branch */
-    public currentBranchData: any;
-    /** Holds the organization type of the current company */
-    public currentOrganizationType: OrganizationType;
-    /** Sorting key for contact list (default: name) */
-    public key: string = "name";
-    /** Sorting order for contact list (default: asc) */
-    public order: string = "asc";
-    /** Flag indicating if more contact data is being loaded */
-    public isLoadMore: boolean;
-    /** Flag indicating if the selected contact was not found */
-    public isRecurringNotFound: boolean = false;
-    /** Flag to show/hide contact preview section */
-    public contactPreview: boolean = false;
-    /** Unique name of the currently active account */
-    public activeAccountUniqueName: string;
-    /** Name of the currently active contact tab */
-    public recurringActiveTab: string;
     /** Observable for the unique name of the currently active group */
-    public activeRecurringUniqueName$: Observable<string> = of('');
+    public readonly activeRecurringUniqueName$: Observable<string> = of('');
     /** Observable indicating if recurring voucher data is being loaded */
-    public getRecurringVouchersInProgress$: Observable<any> = this.componentStore.getLastAccountsInProgress$;
-    /** Rule details for the selected recurring voucher */
-    public ruleDetails: any;
+    public getRecurringVouchersInProgress$: Observable<any>;
+    
+    // Organization type
+    /** Current organization type (Company or Branch) */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private router: Router,
@@ -116,183 +132,170 @@ export class RecurringPreviewComponent implements OnInit, OnDestroy {
         private componentStore: ContactComponentStore,
         private activatedRoute: ActivatedRoute,
         private generalService: GeneralService,
-        private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
         @Inject(ServiceConfig) private serviceConfig,
         private recurrenceFormService: RecurrenceFormService
     ) {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+        this.currentCompanyBranches$ = this.componentStore.currentCompanyBranches$;
+        this.getRecurringVouchersInProgress$ = this.componentStore.getLastAccountsInProgress$;
+        this.isCompany.set(this.generalService.currentOrganizationType === OrganizationType.Company);
+        this.imgPath.set(Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/');
+        
+        // Initialize component with subscriptions
+        this.initializeBranches();
+        this.initializeRouteParams();
     }
 
     /**
-    * Initializes the component
-    *
-    * @memberof ContactPreviewComponent
-    */
-    public ngOnInit(): void {
-        this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.currentCompanyBranches$ = this.componentStore.currentCompanyBranches$;
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+     * Initializes branches from the component store
+     * Subscribes to branch updates and sets up branch selection logic
+     * @private
+     */
+    private readonly initializeBranches = (): void => {
         this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.length) {
-                this.currentCompanyBranches = response.map((branch: any) => ({
+                const branches = response.map((branch: any) => ({
                     label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
                     parentBranch: branch?.parentBranch,
                     consolidatedBranch: branch?.consolidatedBranch
                 }));
-                this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.name : '',
-                    name: this.activeCompany ? this.activeCompany.name : "",
-                    value: this.activeCompany ? this.activeCompany.uniqueName : "",
+                branches.unshift({
+                    label: this.activeCompany()?.name || '',
+                    name: this.activeCompany()?.name || "",
+                    value: this.activeCompany()?.uniqueName || "",
                     isCompany: true,
                 });
-                let currentBranchUniqueName;
-                if (!this.currentBranch?.uniqueName) {
-                    // Assign the current branch only when it is not selected. This check is necessary as
-                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
-                    // branches are loaded
+                this.currentCompanyBranches.set(branches);
+                
+                if (!this.currentBranch()?.uniqueName) {
+                    let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                        this.currentBranch.set(cloneDeep(response.find((branch: any) => branch?.uniqueName === currentBranchUniqueName)));
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
-                        this.currentBranch = {
-                            name: this.activeCompany ? this.activeCompany.name : "",
-                            alias: this.activeCompany ? this.activeCompany.nameAlias : "",
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
-                        };
+                        currentBranchUniqueName = this.activeCompany()?.uniqueName || "";
+                        this.currentBranch.set({
+                            name: this.activeCompany()?.name || "",
+                            alias: this.activeCompany()?.nameAlias || "",
+                            uniqueName: this.activeCompany()?.uniqueName || "",
+                        });
                     }
-                    this.currentBranchData = cloneDeep(this.currentBranch);
+                    this.currentBranchData.set(cloneDeep(this.currentBranch()));
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
-                    // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
+    };
 
-
+    /**
+     * Initializes route parameters from activated route
+     * Subscribes to route params and query params to set up component state
+     * @private
+     */
+    private readonly initializeRouteParams = (): void => {
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params) {
-                console.log('Params:', params);
-                this.params = params;
-                this.recurringActiveTab = params?.voucherType;
+                this.params.set(params);
+                this.recurringActiveTab.set(params?.voucherType);
             }
         });
 
         this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams) => {
             if (queryParams) {
-                console.log('Query params:', queryParams);
-                this.isSearching = false;
-                this.selectedRecurringVoucher = null;
-                this.queryParams = queryParams;
-                this.activeAccountUniqueName = queryParams?.accountUniqueName;
-                this.advanceFilters.page = Number(queryParams.page);
-                this.advanceFilters.count = queryParams.count ? Number(queryParams.count) : PAGINATION_LIMIT;
-                this.advanceFilters.from = queryParams.from ?? '';
-                this.advanceFilters.to = queryParams.to ?? '';
-                this.advanceFilters.q = queryParams.search ?? '';
-                this.advanceFilters.refresh = queryParams.refresh ?? true;
-                if (queryParams.sort && queryParams.sortBy) {
-                    this.key = queryParams.sortBy;
-                    this.order = queryParams.sort;
-                } else {
-                    this.key = (this.recurringActiveTab === "sales") ? "name" : "name";
-                    this.order = (this.recurringActiveTab === "sales") ? "desc" : "asc";
-                }
-                console.log('Advance filters:', this.advanceFilters);
-                const searchString = queryParams.search;
-                if (searchString) {
-                    // Update the search input to show the search term
-                    this.search.patchValue(searchString, { emitEvent: false });
-                    this.fetchRecurringVoucherRuleDetails();
-                } else {
-                    this.fetchRecurringVoucherRuleDetails();
-                }
-            }
-        });
-
-
-        this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search || search === '') {
-                // Reset Filter
-                this.pageNumberHistory = [1];
-                this.advanceFilters = {
-                    page: 1,
-                    from: this.advanceFilters.from,
-                    to: this.advanceFilters.to,
-                    count: PAGINATION_LIMIT,
-                    q: '',
+                this.isSearching.set(false);
+                this.selectedRecurringVoucher.set(null);
+                this.queryParams.set(queryParams);
+                this.activeAccountUniqueName.set(queryParams?.accountUniqueName);
+                
+                const filters = {
+                    page: Number(queryParams.page),
+                    count: queryParams.count ? Number(queryParams.count) : PAGINATION_LIMIT,
+                    q: queryParams.search ?? '',
                     sort: '',
-                    sortBy: ''
+                    sortBy: '',
+                    from: queryParams.from ?? '',
+                    to: queryParams.to ?? '',
+                    refresh: queryParams.refresh ?? true
                 };
-                this.isSearching = true;
-                this.advanceFilters.q = search;
-                console.log('Advance filters:', this.advanceFilters);
+                this.advanceFilters.set(filters);
+                
+                this.voucherQueryParams.set({
+                    page: filters.page,
+                    count: filters.count,
+                    from: filters.from,
+                    to: filters.to,
+                    isRecurringVoucher: true
+                });
+                
+                if (queryParams.sort && queryParams.sortBy) {
+                    this.key.set(queryParams.sortBy);
+                    this.order.set(queryParams.sort);
+                } else {
+                    this.key.set((this.recurringActiveTab() === "sales") ? "name" : "name");
+                    this.order.set((this.recurringActiveTab() === "sales") ? "desc" : "asc");
+                }
+                
                 this.fetchRecurringVoucherRuleDetails();
             }
         });
-
-    }
+    };
 
     /**
      * Fetches recurring voucher details by calling getAll() and then getRuleDetails()
-     * 
+     * Retrieves list of recurring vouchers and details for the first one
      * @private
-     * @memberof RecurringPreviewComponent
      */
-    private fetchRecurringVoucherRuleDetails(): void {
-        const voucherType = this.recurringActiveTab === 'sales' ? 'sales' : 'purchase';
+    private readonly fetchRecurringVoucherRuleDetails = (): void => {
+        const voucherType = this.recurringActiveTab() === 'sales' ? 'sales' : 'purchase';
         this.recurrenceFormService.getAll(voucherType, {
-            page: this.advanceFilters.page,
-            count: this.advanceFilters.count,
-            q: this.advanceFilters.q
+            page: this.advanceFilters().page,
+            count: this.advanceFilters().count,
+            q: this.advanceFilters().q
         }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            console.log('Recurring voucher list:', response);
             if (response && response.body) {
                 this.handleGetAllRecurringResponse(response.body);
                 if (response.body.items?.length > 0) {
                     const recurringVoucherUniqueName = response.body.items[0].recurringVoucherUniqueName;
                     this.recurrenceFormService.getRuleDetails(
                         recurringVoucherUniqueName,
-                        this.currentBranch?.uniqueName
+                        this.currentBranch()?.uniqueName
                     ).pipe(takeUntil(this.destroyed$)).subscribe((ruleResponse) => {
                         if (ruleResponse) {
-                            console.log('Rule details fetched:', ruleResponse);
-                            this.ruleDetails = ruleResponse;
-                            this.changeDetection.detectChanges();
+                            this.ruleDetails.set(this.formatRuleDetailsDateFields(ruleResponse?.body));
+                            this.selectedAccountUniqueName.set(ruleResponse?.body?.account?.uniqueName);
+                            this.selectedVoucherUniqueName.set(ruleResponse?.body?.uniqueName);
                         }
                     });
                 }
             }
         });
-    }
+    };
 
     /**
-     * Handles the response from the get all contacts API.
-     * Updates the contact list, handles pagination, and manages selected contact.
-     *
+     * Handles the response from the getAll recurring vouchers API
+     * Updates the recurring voucher list, handles pagination, and manages selected voucher
      * @private
-     * @param {*} response The API response containing contacts data.
-     * @memberof ContactPreviewComponent
+     * @param {any} response - The API response containing recurring vouchers data
      */
-    private handleGetAllRecurringResponse(response: any): void {
-        console.log('Recurring voucher list:', response);
+    private readonly handleGetAllRecurringResponse = (response: any): void => {
         if (response) {
             const currentRecurringList = [];
-            const page = response.page || this.advanceFilters.page;
-            if (!this.pageNumberHistory.includes(page)) {
-                this.pageNumberHistory.push(page);
+            const page = response.page || this.advanceFilters().page;
+            const history = this.pageNumberHistory();
+            if (!history.includes(page)) {
+                this.pageNumberHistory.set([...history, page]);
             }
-            this.totalPages = response?.totalPages || 0;
+            this.totalPages.set(response?.totalPages || 0);
 
-            if (this.totalPages === 0) {
-                this.recurringVoucherList = [];
-                this.changeDetection.detectChanges(); // added change detection call
+            if (this.totalPages() === 0) {
+                this.recurringVoucherList.set([]);
                 return;
             }
 
@@ -301,86 +304,95 @@ export class RecurringPreviewComponent implements OnInit, OnDestroy {
                     item.index = index + 1;
                     currentRecurringList.push(item);
                 });
-            } else {
-                console.log('No items found in response:', response);
             }
 
-            if (this.isSearching) {
-                // Handle page number is more than total pages in query params
-                if (this.totalPages < this.advanceFilters.page) {
-                    this.advanceFilters.page = 1;
-                    this.fetchRecurringVoucherRuleDetails();
-                    return;
-                }
-            }
-
-            if (this.advanceFilters.page === 1) {
-                this.recurringVoucherList = currentRecurringList;
+            if (this.advanceFilters().page === 1) {
+                this.recurringVoucherList.set(currentRecurringList);
             } else {
-                this.recurringVoucherList = [...this.recurringVoucherList, ...currentRecurringList];
+                this.recurringVoucherList.set([...this.recurringVoucherList(), ...currentRecurringList]);
             }
-            this.getAllApiCallCount++;
-            console.log('Recurring voucher list:', this.recurringVoucherList);
-            if (this.recurringVoucherList?.length) {
-                const exists = this.recurringVoucherList.some(voucher => voucher.recurringVoucherUniqueName === this.activeAccountUniqueName);
-                if (exists && (!this.isSearching || this.advanceFilters.q)) {
-                    this.selectedRecurringVoucher = this.recurringVoucherList?.find(voucher => voucher?.recurringVoucherUniqueName === this.activeAccountUniqueName);
+            this.getAllApiCallCount.set(this.getAllApiCallCount() + 1);
+            if (this.recurringVoucherList()?.length) {
+                const exists = this.recurringVoucherList().some(voucher => voucher.recurringVoucherUniqueName === this.activeAccountUniqueName());
+                if (exists && (this.advanceFilters().q)) {
+                    this.selectedRecurringVoucher.set(this.recurringVoucherList()?.find(voucher => voucher?.recurringVoucherUniqueName === this.activeAccountUniqueName()));
                 } else {
-                    this.selectedRecurringVoucher = this.recurringVoucherList[0];
+                    this.selectedRecurringVoucher.set(this.recurringVoucherList()[0]);
                 }
             }
-            console.log('Selected recurring voucher:', this.selectedRecurringVoucher);
-            this.changeDetection.detectChanges();
         }
-    }
+    };
 
     /**
-     * Sets the selected recurring voucher by unique name.
-     * If found and selected, sets the not found flag to false.
-     *
-     * @param {string} voucherUniqueName The unique name of the recurring voucher to select.
-     * @param {boolean} [isNewVoucherSelected=false] Whether a new voucher is being selected.
-     * @memberof RecurringPreviewComponent
+     * Sets the selected recurring voucher by unique name
+     * Fetches rule details for the selected voucher and updates UI accordingly
+     * @param {string} voucherUniqueName - The unique name of the recurring voucher to select
+     * @param {boolean} [isNewVoucherSelected=false] - Whether a new voucher is being selected
      */
-    public setSelectedRecurringVoucher(voucherUniqueName: string, isNewVoucherSelected: boolean = false): void {
-        if (isNewVoucherSelected && this.selectedRecurringVoucher?.recurringVoucherUniqueName === voucherUniqueName) {
+    public readonly setSelectedRecurringVoucher = (voucherUniqueName: string, isNewVoucherSelected: boolean = false): void => {
+        if (isNewVoucherSelected && this.selectedRecurringVoucher()?.recurringVoucherUniqueName === voucherUniqueName) {
             return;
         }
-        this.selectedRecurringVoucher = this.recurringVoucherList?.find(voucher => voucher?.recurringVoucherUniqueName === voucherUniqueName);
-        if (isNewVoucherSelected && this.selectedRecurringVoucher?.recurringVoucherUniqueName) {
-            this.isRecurringNotFound = false;
+        this.selectedRecurringVoucher.set(this.recurringVoucherList()?.find(voucher => voucher?.recurringVoucherUniqueName === voucherUniqueName));
+        if (isNewVoucherSelected && this.selectedRecurringVoucher()?.recurringVoucherUniqueName) {
+            this.isRecurringNotFound.set(false);
         } else {
-            this.isRecurringNotFound = true;
+            this.isRecurringNotFound.set(true);
         }
-        if (this.selectedRecurringVoucher) {
+        if (this.selectedRecurringVoucher()) {
             this.recurrenceFormService.getRuleDetails(
-                this.selectedRecurringVoucher.recurringVoucherUniqueName,
-                this.currentBranch?.uniqueName
+                this.selectedRecurringVoucher().recurringVoucherUniqueName,
+                this.currentBranch()?.uniqueName
             ).pipe(takeUntil(this.destroyed$)).subscribe((ruleResponse) => {
                 if (ruleResponse) {
-                    console.log('Rule details fetched:', ruleResponse);
-                    this.ruleDetails = ruleResponse;
-                    this.changeDetection.detectChanges();
+                    this.ruleDetails.set(this.formatRuleDetailsDateFields(ruleResponse?.body));
+                    this.selectedAccountUniqueName.set(ruleResponse?.body?.account?.uniqueName);
+                    this.selectedVoucherUniqueName.set(ruleResponse?.body?.uniqueName);
                 }
             });
         }
-        this.changeDetection.detectChanges();
-    }
+    };
 
     /**
-     * Navigates back to the previous contact list page based on the active tab.
-     *
-     * @memberof ContactPreviewComponent
+     * Navigates back to the recurring voucher list page
+     * Uses the active tab (sales/purchase) to determine the route
      */
-    public redirectToGetAllPage(): void {
-        this.router.navigate([`/pages/vouchers/recurring/${this.recurringActiveTab}`]);
-    }
+    public readonly redirectToGetAllPage = (): void => {
+        this.router.navigate([`/pages/vouchers/preview/${this.recurringActiveTab()}/recurring`]);
+    };
 
     /**
-     * Lifecycle hook for destroy.
-     * Cleans up all subscriptions and resources used by the component.
-     *
-     * @memberof ContactPreviewComponent
+     * Converts date fields in ruleDetails object to GIDDH_DATE_FORMAT
+     * Handles startDate, endDate, and nextInvoiceDate fields
+     * @private
+     * @param {any} ruleDetails - The rule details object to format
+     * @returns {any} The formatted rule details object with converted dates
+     */
+    private readonly formatRuleDetailsDateFields = (ruleDetails: any): any => {
+        if (!ruleDetails) {
+            return ruleDetails;
+        }
+
+        const formattedDetails = cloneDeep(ruleDetails);
+
+        if (formattedDetails.startDate && formattedDetails.startDate !== '--') {
+            formattedDetails.startDate = dayjs(formattedDetails.startDate).format(GIDDH_DATE_FORMAT);
+        }
+
+        if (formattedDetails.endDate && formattedDetails.endDate !== '--') {
+            formattedDetails.endDate = dayjs(formattedDetails.endDate).format(GIDDH_DATE_FORMAT);
+        }
+
+        if (formattedDetails.nextInvoiceDate && formattedDetails.nextInvoiceDate !== '--') {
+            formattedDetails.nextInvoiceDate = dayjs(formattedDetails.nextInvoiceDate).format(GIDDH_DATE_FORMAT);
+        }
+
+        return formattedDetails;
+    };
+
+    /**
+     * Angular lifecycle hook for component destruction
+     * Cleans up all subscriptions and resources to prevent memory leaks
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

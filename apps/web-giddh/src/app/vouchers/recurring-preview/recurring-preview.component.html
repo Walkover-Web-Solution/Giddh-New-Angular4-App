@@ -1,7 +1,12 @@
-<div appTranslate [file]="'vouchers/recurring-preview'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<div
+    appTranslate
+    [file]="'vouchers/recurring-preview'"
+    (localeData)="localeData.set($event)"
+    (commonLocaleData)="commonLocaleData.set($event)"
+>
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <giddh-page-loader
-        *ngIf="!isSearching && !isLoadMore && (getRecurringVouchersInProgress$ | async)"
+        *ngIf="!isSearching() && !isLoadMore() && (getRecurringVouchersInProgress$ | async)"
         [cssClass]="'no-data'"
     ></giddh-page-loader>
     <div
@@ -12,29 +17,17 @@
         [defaultWidthRatio]="0.3"
         [moduleName]="'recurring-voucher-preview'"
         class="invoice-preview-wrapper d-flex full-viewport-height"
-        *ngIf="isSearching || isLoadMore || !(getRecurringVouchersInProgress$ | async)"
+        *ngIf="isSearching() || isLoadMore() || !(getRecurringVouchersInProgress$ | async)"
     >
         <div class="preview-list pb-3">
-            <div class="d-flex align-items-center column-gap-05 p-3 w-100 list-responsive row-gap-1">
-                <div class="position-relative search-field flex-grow-1">
-                    <text-field
-                        class="width-inherit"
-                        [type]="'text'"
-                        [cssClass]="'form-control pl-3'"
-                        [placeholder]="commonLocaleData?.app_search"
-                        [formControl]="search"
-                    ></text-field>
-                    <i class="icon-search position-absolute"></i>
-                </div>
-            </div>
             <div class="mat-grid-wrapper">
                 <div class="mat-list-wrap overflow-auto recurring-voucher-list" *ngIf="(getRecurringVouchersInProgress$ | async) === false">
                     <mat-list>
-                        <ng-container *ngFor="let item of recurringVoucherList; let i = index; let lastItem = last">
+                        @for (item of recurringVoucherList(); track item.recurringVoucherUniqueName; let i = $index; let lastItem = $last) {
                             <mat-list-item
                                 class="single-invoice-detail cursor-pointer"
                                 [ngClass]="{
-                                    'active': item?.recurringVoucherUniqueName === selectedRecurringVoucher?.recurringVoucherUniqueName,
+                                    'active': item?.recurringVoucherUniqueName === selectedRecurringVoucher()?.recurringVoucherUniqueName,
                                     'border-bottom': !lastItem,
                                 }"
                                 (click)="setSelectedRecurringVoucher(item?.recurringVoucherUniqueName, true)"
@@ -58,254 +51,145 @@
                                     </div>
                                 </div>
                             </mat-list-item>
-                        </ng-container>
-                        <mat-list-item *ngIf="recurringVoucherList?.length === 0">
-                            <p class="text-center light-gray">{{ commonLocaleData?.app_no_data_found }}</p>
-                        </mat-list-item>
+                        }
+                        @if (recurringVoucherList()?.length === 0) {
+                            <mat-list-item>
+                                <p class="text-center light-gray">{{ commonLocaleData()?.app_no_data_found }}</p>
+                            </mat-list-item>
+                        }
                     </mat-list>
                 </div>
                 <giddh-page-loader
-                    *ngIf="isSearching && !isLoadMore && (getRecurringVouchersInProgress$ | async)"
+                    *ngIf="isSearching() && !isLoadMore() && (getRecurringVouchersInProgress$ | async)"
                     [cssClass]="'no-data'"
                 ></giddh-page-loader>
             </div>
         </div>
         <div class="preview-content flex-grow-1">
-            <div class="position-relative overflow-visible">
-                <div class="clear-both overflow-visible">
-                    <div class="position-absolute back-button">
+            <section class="preview-header p-3">
+                <div class="d-flex justify-content-between pt-3 align-items-center flex-wrap row-gap-2 flex-row-reverse">
+                    <div class="order-1 mr-auto">
+                        <p class="font-size-16 font-weight-semibold">{{ ruleDetails()?.accountName }}</p>
+                    </div>
+                    <div class="d-flex column-gap-1 flex-wrap row-gap-1">
+                        <div class="d-flex action-btn">
+                            <a
+                                [routerLink]="[
+                                    '/pages/vouchers/sales',
+                                    selectedRecurringVoucher()?.accountUniqueName,
+                                    selectedRecurringVoucher()?.recurringVoucherUniqueName,
+                                    'edit',
+                                ]"
+                                [queryParams]="voucherQueryParams()"
+                                matButton="outlined"
+                                class="btn-stroked-icon"
+                                [matTooltip]="commonLocaleData()?.app_edit"
+                                [matTooltipPosition]="'above'"
+                            >
+                                <i class="icon-edit-pencil"></i>
+                            </a>
+                        </div>
                         <button matButton="outlined" (click)="redirectToGetAllPage()">
-                            {{ commonLocaleData?.app_back }}
+                            {{ commonLocaleData()?.app_back }}
                         </button>
                     </div>
-                    <div class="details fill-container noscroll-x">
-                        <div class="details-info">
-                            <div class="group">
-                                <!---->
-                                <div class="row">
-                                    <div class="col-lg-2">
-                                        <img
-                                            alt="Dilpreet's profile photo"
-                                            src="https://secure.gravatar.com/avatar/00000000000000000000000000000000?&amp;d=mm"
-                                            class="cp-pic"
-                                            loading="lazy"
-                                        />
-                                    </div>
-                                    <div class="col-lg-10">
-                                        <a id="ember385" class="ember-view" href="#/contacts/2646543000000043030">Dilpreet</a>
-                                        <br />
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                    </div>
-                                </div>
+                </div>
+            </section>
+            <div class="details fill-container noscroll-x mt-3">
+                <div class="details-info">
+                    <div class="toggle-header">
+                        <div class="uppercase fw-light">Details</div>
+                    </div>
+                    <div class="group">
+                        <div class="row">
+                            <label class="col-lg-6 text-muted">Profile Status:</label>
+                            <div class="col-lg-6">
+                                <span [ngClass]="ruleDetails()?.ruleStatus === 'ACTIVE' ? 'success' : 'danger'">
+                                    {{ ruleDetails()?.ruleStatus }}
+                                </span>
                             </div>
-                            <div class="toggle-header">
-                                <div class="uppercase fw-light">Details</div>
-                            </div>
-                            <div class="group">
-                                <div class="row">
-                                    <label class="col-lg-6 text-muted">Profile Status:</label>
-                                    <div class="col-lg-6"><span class="badge text-semibold badge-success">Active</span></div>
-                                </div>
-                                <!---->
-                                <div class="row">
-                                    <label class="col-lg-6 text-muted">Start Date:</label>
-                                    <div class="col-lg-6">13/01/2026</div>
-                                </div>
-                                <div class="row">
-                                    <label class="col-lg-6 text-muted">End Date:</label>
-                                    <div class="col-lg-6">Never Expires</div>
-                                </div>
-                                <!---->
-                                <!---->
-                                <div class="row">
-                                    <label class="col-lg-6 text-muted">Payment Terms:</label>
-                                    <div class="col-lg-6">Due on Receipt</div>
-                                </div>
-                                <!---->
-                                <div class="row">
-                                    <label class="col-lg-6 text-muted text-capitalize">manually created invoices:</label>
-                                    <div class="col-lg-6">1</div>
-                                </div>
-                                <!---->
-                                <div class="row g-0 rounded-xlg p-4 preference-band">
-                                    <div class="col-lg-11 align-self-center font-xs">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 462.51 462.51"
-                                            class="icon icon-xs me-2 fill-azure-blue align-middle mb-1"
-                                        >
-                                            <path
-                                                d="M231.26 0C103.54 0 0 103.54 0 231.26s103.54 231.26 231.26 231.26 231.26-103.54 231.26-231.26S358.97 0 231.26 0zm0 98.37c13.38 0 24.23 10.85 24.23 24.23s-10.85 24.23-24.23 24.23-24.23-10.85-24.23-24.23 10.85-24.23 24.23-24.23zm47.88 249.77h-95.75c-13.25 0-24-10.75-24-24s10.75-24 24-24h23.88v-75.09h-14.12c-13.25 0-24-10.75-24-24s10.75-24 24-24h38.12c13.25 0 24 10.75 24 24v99.09h23.88c13.25 0 24 10.75 24 24s-10.75 24-24 24z"
-                                            ></path>
-                                            <path
-                                                d="M207.03 122.6c0-13.38 10.85-24.23 24.23-24.23s24.23 10.85 24.23 24.23-10.85 24.23-24.23 24.23-24.23-10.85-24.23-24.23zm72.1 177.54h-23.88v-99.09c0-13.25-10.75-24-24-24h-38.12c-13.25 0-24 10.75-24 24s10.75 24 24 24h14.12v75.09h-23.88c-13.25 0-24 10.75-24 24s10.75 24 24 24h95.75c13.25 0 24-10.75 24-24s-10.75-24-24-24z"
-                                                fill="#fff"
-                                            ></path>
-                                        </svg>
-                                        <span>
-                                            Recurring Invoice preference has been set to
-                                            <b>"Create Invoices as Drafts"</b>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!---->
-                            <div class="toggle-header">
-                                <div class="uppercase fw-light">Address</div>
-                            </div>
-                            <div class="group">
-                                <!---->
-                                <div>Billing Address</div>
-                                <address id="ember386" class="font-small ember-view">
-                                    <div class="text-break">
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                    </div>
-                                </address>
-                                <div>Shipping Address</div>
-                                <address id="ember387" class="font-small ember-view">
-                                    <div class="text-break">
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                        <!---->
-                                    </div>
-                                </address>
-                            </div>
-                            <div class="toggle-header">
-                                <div class="uppercase fw-light">Customer Notes</div>
-                            </div>
-                            <div class="group">Thanks for your business.</div>
-                            <!---->
                         </div>
-                        <div class="prim-info entity-details">
-                            <div class="recinv-overview-info">
-                                <div class="px-4">
-                                    <ul class="list-unstyled row recurringinvoice-arap-details">
-                                        <li class="col-lg-4 text-center">
-                                            <h5 class="text-muted">Invoice Amount</h5>
-                                            ₹111.00
-                                        </li>
-                                        <li class="col-lg-4 text-center">
-                                            <h5 class="text-muted">Next Invoice Date</h5>
-                                            <a
-                                                id="ember388"
-                                                class="ember-view"
-                                                href="#/recurringinvoices/2646543000000043048/nextinvoice?filter_by=Status.All&amp;per_page=25&amp;sort_column=recurrence_name&amp;sort_order=A"
-                                            >
-                                                17/02/2026
-                                            </a>
-                                        </li>
-                                        <li class="col-lg-4 text-center">
-                                            <h5 class="text-muted">Recurring Period</h5>
-                                            Every 4 Weeks
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="row mx-0">
-                                <div class="col-lg-5 list-header">All Child Invoices</div>
-                                <div class="col-lg-7 text-end">Unpaid Invoices&nbsp;:&nbsp; ₹0.00</div>
-                            </div>
-                            <table id="vertically-scrolled-table" class="table zi-table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-start" style="" aria-sort="">
-                                            <div class="position-relative d-flex align-items-center">
-                                                <!---->
-                                                <span class="visually-hidden">Child Invoices</span>
-                                                <!---->
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr tabindex="-1" id="ember394" class="ember-view">
-                                        <td>
-                                            <div class="list-primary">
-                                                <span class="float-end amount">₹111.00</span>
-                                                <div class="name" title="Dilpreet">Dilpreet</div>
-                                            </div>
-                                            <div class="list-secondary clearfix">
-                                                <span class="float-end text-uppercase font-xs text-draft">Draft</span>
-                                                <div>
-                                                    <a id="ember395" class="ember-view number" href="#/invoices/2646543000000043060">
-                                                        INV-000001
+                        <div class="row mt-2">
+                            <label class="col-lg-6 text-muted">Start Date:</label>
+                            <div class="col-lg-6">{{ ruleDetails()?.startDate ? ruleDetails()?.startDate : '-' }}</div>
+                        </div>
+                        <div class="row mt-2">
+                            <label class="col-lg-6 text-muted">End Date:</label>
+                            <div class="col-lg-6">{{ ruleDetails()?.endDate ? ruleDetails()?.endDate : '-' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="prim-info entity-details">
+                    <div class="recinv-overview-info">
+                        <div class="px-4">
+                            <ul class="list-unstyled row recurringinvoice-arap-details">
+                                <li class="col-lg-4 text-center">
+                                    <h5 class="text-muted mt-2">Invoice Amount</h5>
+                                    <amount-field
+                                        [amount]="ruleDetails()?.invoiceAmount"
+                                        [currencySymbol]="ruleDetails()?.currency?.symbol"
+                                        [currencyCode]="ruleDetails()?.currency?.code"
+                                    ></amount-field>
+                                </li>
+                                <li class="col-lg-4 text-center">
+                                    <h5 class="text-muted mt-2">Next Invoice Date</h5>
+                                    {{ ruleDetails()?.nextInvoiceDate ? ruleDetails()?.nextInvoiceDate : '-' }}
+                                </li>
+                                <li class="col-lg-4 text-center">
+                                    <h5 class="text-muted mt-2">Recurring Period</h5>
+                                    {{ ruleDetails()?.recurringPeriod }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="position-relative d-flex align-items-center mt-3 mb-3">
+                        <span class="visually-hidden ml-2">Child Invoices</span>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div class="mat-grid-wrapper">
+                        <div class="mat-list-wrap">
+                            <mat-list>
+                                @for (item of ruleDetails()?.childVouchers; track item.uniqueName; let i = $index; let lastItem = $last) {
+                                    <mat-list-item
+                                        class="single-invoice-detail cursor-pointer"
+                                        [ngClass]="{
+                                            'active': item?.uniqueName === selectedInvoice?.uniqueName,
+                                            'border-bottom': !lastItem,
+                                        }"
+                                        (click)="setSelectedInvoice(item?.uniqueName, true)"
+                                    >
+                                        <div class="d-flex justify-content-between align-items-center column-gap-05">
+                                            <div class="flex-grow-1 min-width-0">
+                                                <div class="text-ellipsis w-100">
+                                                    <a
+                                                        [routerLink]="['/pages/vouchers/view/sales', item?.voucherUniqueName]"
+                                                        [queryParams]="voucherQueryParams()"
+                                                        class="font-size-16 text-primary"
+                                                    >
+                                                        {{
+                                                            item.voucherNumber ? item.voucherNumber : commonLocaleData()?.app_not_available
+                                                        }}
                                                     </a>
-                                                    <span class="text-muted separationline">13/01/2026</span>
                                                 </div>
-                                                <div class="text-muted"></div>
-                                                <div class="text-muted float-start">
-                                                    <div class="text-muted" style="padding-top: 4px">
-                                                        <svg
-                                                            version="1.1"
-                                                            id="Layer_1"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            x="0"
-                                                            y="0"
-                                                            viewBox="0 0 512 512"
-                                                            xml:space="preserve"
-                                                            class="icon icon-xsmall align-middle"
-                                                        >
-                                                            <path
-                                                                d="M256 172.3c-11.3 0-20.4 9.2-20.4 20.4v195.9c0 11.3 9.2 20.4 20.4 20.4s20.4-9 20.4-20.4V192.7c0-11.4-9.2-20.4-20.4-20.4z"
-                                                            ></path>
-                                                            <path
-                                                                d="M256 0C114.9 0 0 114.9 0 256s114.8 256 256 256c141.1 0 256-114.9 256-256S397.1 0 256 0zm0 471.3c-118.7 0-215.3-96.6-215.3-215.3S137.3 40.7 256 40.7 471.3 137.3 471.3 256 374.7 471.3 256 471.3z"
-                                                            ></path>
-                                                            <circle cx="256.4" cy="121.7" r="21.9"></circle>
-                                                        </svg>
-                                                        <i class="align-middle font-xs">Manually Added</i>
-                                                    </div>
-                                                </div>
-                                                <button
-                                                    id="ember396"
-                                                    class="btn btn-primary ember-view btn-xs font-xs float-end"
-                                                    type="submit"
-                                                >
-                                                    <!---->
-                                                    Record Payment
-                                                    <!---->
-                                                </button>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <!---->
-                                </tbody>
-                            </table>
-                            <!---->
+                                            <div>
+                                                <span class="theme-foreground-color">
+                                                    <amount-field
+                                                        [amount]="item?.amount"
+                                                        [currencySymbol]="ruleDetails()?.currency?.symbol"
+                                                        [currencyCode]="ruleDetails()?.currency?.code"
+                                                    ></amount-field>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </mat-list-item>
+                                }
+                                @if (ruleDetails()?.childVouchers?.length === 0) {
+                                    <mat-list-item>
+                                        <p class="text-center light-gray">{{ commonLocaleData()?.app_no_data_found }}</p>
+                                    </mat-list-item>
+                                }
+                            </mat-list>
                         </div>
                     </div>
                 </div>
