@@ -297,7 +297,7 @@
                                         [options]="voucherTypes"
                                         (selectedOption)="selectVoucherType($event)"
                                         [labelValue]="branchTransferAdvanceSearchFormObj?.voucherType"
-                                        (onClear)="branchTransferAdvanceSearchFormObj.voucherType = ''"
+                                        (onClear)="handleOnClear('voucherType')"
                                         [label]="commonLocaleData?.app_voucher_type"
                                     ></reactive-dropdown-field>
                                 </div>
@@ -313,7 +313,7 @@
                                         [options]="amountOperators"
                                         (selectedOption)="selectOperator($event)"
                                         [labelValue]="branchTransferAdvanceSearchFormObj?.amountOperator"
-                                        (onClear)="branchTransferAdvanceSearchFormObj.amountOperator = ''"
+                                        (onClear)="handleOnClear('amountOperator')"
                                         [label]="commonLocaleData?.app_select_category"
                                     ></reactive-dropdown-field>
                                 </div>
@@ -330,7 +330,7 @@
                                         [name]="'amount'"
                                         [(ngModel)]="branchTransferAdvanceSearchFormObj.amount"
                                         [allowDecimalDigitsOnly]="true"
-                                        (onClear)="branchTransferAdvanceSearchFormObj.amount = ''"
+                                        (onClear)="handleOnClear('amount')"
                                         [autocomplete]="'off'"
                                         [label]="commonLocaleData?.app_total_amount"
                                     ></input-field>
