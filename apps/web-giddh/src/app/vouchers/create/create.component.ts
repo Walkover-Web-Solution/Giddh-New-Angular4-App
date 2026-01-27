@@ -68,7 +68,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
 import { CommonTaxComponent } from "../../shared/common-tax/common-tax.component";
-import { DiscountDropdownComponent } from "../../theme/discount-dropdown/discount-dropdown.component";
+import { CommonDiscountComponent } from "../../shared/common-discount/common-discount.component";
 import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
 import { AddAccountRequest, UpdateAccountRequest } from "../../models/api-models/Account";
@@ -171,7 +171,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Reference to the tax dropdown component */
     @ViewChild('commonTaxControll') commonTaxControll!: CommonTaxComponent;
     /** Reference to the discount dropdown component */
-    @ViewChild('discountDropdown') discountDropdown!: DiscountDropdownComponent;
+    @ViewChild('discountDropdown') discountDropdown!: CommonDiscountComponent;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -3206,6 +3206,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 type: ["DEBIT"],
             }),
             calculationMethod: [discount?.discountType || discount?.calculationMethod || "FIX_AMOUNT"],
+            discountType: [discount?.discountType || discount?.calculationMethod || "FIX_AMOUNT"],
             discountValue: [discount?.discountValue],
             name: [discount?.name],
             particular: [""],

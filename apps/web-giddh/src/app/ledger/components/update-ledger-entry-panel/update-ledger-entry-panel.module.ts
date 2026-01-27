@@ -30,6 +30,7 @@ import { NgxMaskModule } from '../../../shared/helpers/directives/ngx-mask';
 import { NumberToWordsModule } from '../../../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace.module';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
+import { CommonDiscountComponent } from '../../../shared/common-discount/common-discount.component';
 
 @NgModule({
     declarations: [
@@ -69,7 +70,8 @@ import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.compon
             spinnerSize: 30
         }),
         OverlayModule,
-        CommonTaxComponent
+        CommonTaxComponent,
+        CommonDiscountComponent
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

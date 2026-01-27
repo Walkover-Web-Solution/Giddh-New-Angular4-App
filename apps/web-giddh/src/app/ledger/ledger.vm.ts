@@ -154,7 +154,7 @@ export class LedgerVM {
                 // filter taxes uniqueNames
                 bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
                 // filter discount
-                bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
+                bl.discounts = bl.discounts?.filter(p => p.discountValue && p.isActive);
                 // delete local id
                 delete bl['id'];
                 if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
@@ -326,7 +326,7 @@ export class LedgerVM {
                 // filter taxes uniqueNames
                 bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
                 // filter discount
-                bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
+                bl.discounts = bl.discounts?.filter(p => p.discountValue && p.isActive);
                 // delete local id
                 delete bl['id'];
             }
@@ -347,6 +347,7 @@ export class LedgerVM {
         return {
             discountType: 'FIX_AMOUNT',
             amount: 0,
+            discountValue: 0,
             name: '',
             particular: '',
             isActive: true
