@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, signal, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, HIGH_RATE_FIELD_PRECISION, IOption, RATE_FIELD_PRECISION, SubVoucher } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
@@ -48,6 +48,7 @@ import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/react
 import { ActionTypeEnum } from '../../../shared/sales-person/utility/sales-person.constant';
 import { LedgerDropdownTypeEnum } from '../../../models/api-models/Ledger';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
+import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -177,6 +178,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public companyTaxesList: TaxResponse[] = [];
+    /** Active account discounts */
+    public activeAccountDiscounts = signal<LedgerDiscountClass[]>([]);
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
     /** Selected invoice for credit note */
@@ -1917,16 +1920,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
                 this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
                 if (this.currentTxn?.discounts && this.currentTxn?.discounts?.length === 1) {
-                    setTimeout(() => {
-                        (Array.isArray(this.currentTxn?.selectedAccount.accountApplicableDiscounts) ? this.currentTxn?.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
-                            this.currentTxn?.discounts?.map(item => {
-                                if (element?.uniqueName === item?.discountUniqueName) {
-                                    item.isActive = true;
-                                }
-                                return item;
-                            });
+                    (Array.isArray(this.currentTxn?.selectedAccount.accountApplicableDiscounts) ? this.currentTxn?.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
+                        this.currentTxn?.discounts?.map(item => {
+                            if (element?.uniqueName === item?.discountUniqueName) {
+                                item.isActive = true;
+                            }
+                            return item;
                         });
-                    }, 300);
+                    });
                 } else {
                     (Array.isArray(this.currentTxn.selectedAccount.accountApplicableDiscounts) ? this.currentTxn.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
                         this.currentTxn?.discounts?.map(item => {
@@ -1965,6 +1966,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.currentTxn.discounts[0].isActive = false;
             }
         }
+        this.activeAccountDiscounts.set(this.currentTxn?.discounts || []);
     }
 
     /**
