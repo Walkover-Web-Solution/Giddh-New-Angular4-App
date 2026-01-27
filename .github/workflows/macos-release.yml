@@ -179,8 +179,8 @@ jobs:
           echo "Original DMG name: $ORIGINAL_DMG_NAME"
           
           # Fixed names for latest folder (for auto-updater)
-          FINAL_ZIP_NAME="giddh-test-setup.zip"
-          FINAL_DMG_NAME="giddh-test-setup.dmg"
+          FINAL_ZIP_NAME="giddh-test.zip"
+          FINAL_DMG_NAME="giddh-test.dmg"
           echo "FINAL_ZIP_NAME=$FINAL_ZIP_NAME" >> $GITHUB_ENV
           echo "FINAL_DMG_NAME=$FINAL_DMG_NAME" >> $GITHUB_ENV
           echo "Fixed ZIP name for latest: $FINAL_ZIP_NAME"
@@ -271,13 +271,13 @@ jobs:
             # Replace versioned filenames with fixed names
             # electron-builder generates filenames like "Giddh Setup 9.1.57.zip" and "Giddh Setup 9.1.57.dmg"
             # Replace ZIP references
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip/giddh-test-setup.zip/g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh-test-setup.zip|g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh-test-setup.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip/giddh-test.zip/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh-test.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh-test.zip|g')
             # Replace DMG references
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test-setup.dmg/g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test-setup.dmg|g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-test-setup.dmg|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test.dmg/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test.dmg|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-test.dmg|g')
             
             # Save modified content to a temporary file
             MODIFIED_YML="/tmp/latest-modified.yml"
@@ -314,7 +314,7 @@ jobs:
           echo "  YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/${{ env.PACKAGE_VERSION }}/latest.yml"
           echo ""
           echo "Download URLs (Latest - Auto-updater):"
-          echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test-setup.zip"
-          echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test-setup.dmg"
+          echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test.zip"
+          echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test.dmg"
           echo "  YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/latest.yml"
           echo "=========================================="
