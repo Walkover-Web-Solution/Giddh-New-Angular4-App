@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'vouchers/recurring-preview'"
-    (localeData)="localeData.set($event)"
-    (commonLocaleData)="commonLocaleData.set($event)"
->
+<div appTranslate [file]="'vouchers/preview'" (localeData)="localeData.set($event)" (commonLocaleData)="commonLocaleData.set($event)">
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <giddh-page-loader
         *ngIf="!isSearching() && !isLoadMore() && (getRecurringVouchersInProgress$ | async)"
@@ -98,11 +93,11 @@
             <div class="details fill-container noscroll-x mt-3">
                 <div class="details-info">
                     <div class="toggle-header">
-                        <div class="uppercase fw-light">Details</div>
+                        <div class="uppercase fw-light">{{ commonLocaleData()?.app_details }}</div>
                     </div>
                     <div class="group">
                         <div class="row">
-                            <label class="col-lg-6 text-muted">Profile Status:</label>
+                            <label class="col-lg-6 text-muted">{{ localeData()?.profile_status }}:</label>
                             <div class="col-lg-6">
                                 <span [ngClass]="ruleDetails()?.ruleStatus === 'ACTIVE' ? 'success' : 'danger'">
                                     {{ ruleDetails()?.ruleStatus }}
@@ -110,11 +105,11 @@
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <label class="col-lg-6 text-muted">Start Date:</label>
+                            <label class="col-lg-6 text-muted">{{ commonLocaleData()?.app_start_date }}:</label>
                             <div class="col-lg-6">{{ ruleDetails()?.startDate ? ruleDetails()?.startDate : '-' }}</div>
                         </div>
                         <div class="row mt-2">
-                            <label class="col-lg-6 text-muted">End Date:</label>
+                            <label class="col-lg-6 text-muted">{{ commonLocaleData()?.app_end_date }}:</label>
                             <div class="col-lg-6">{{ ruleDetails()?.endDate ? ruleDetails()?.endDate : '-' }}</div>
                         </div>
                     </div>
@@ -124,7 +119,7 @@
                         <div class="px-4">
                             <ul class="list-unstyled row recurringinvoice-arap-details">
                                 <li class="col-lg-4 text-center">
-                                    <h5 class="text-muted mt-2">Invoice Amount</h5>
+                                    <h5 class="text-muted mt-2">{{ localeData()?.invoice_amount }}</h5>
                                     <amount-field
                                         [amount]="ruleDetails()?.invoiceAmount"
                                         [currencySymbol]="ruleDetails()?.currency?.symbol"
@@ -132,18 +127,18 @@
                                     ></amount-field>
                                 </li>
                                 <li class="col-lg-4 text-center">
-                                    <h5 class="text-muted mt-2">Next Invoice Date</h5>
+                                    <h5 class="text-muted mt-2">{{ localeData()?.next_invoice_date }}</h5>
                                     {{ ruleDetails()?.nextInvoiceDate ? ruleDetails()?.nextInvoiceDate : '-' }}
                                 </li>
                                 <li class="col-lg-4 text-center">
-                                    <h5 class="text-muted mt-2">Recurring Period</h5>
+                                    <h5 class="text-muted mt-2">{{ localeData()?.recurring_period }}</h5>
                                     {{ ruleDetails()?.recurringPeriod }}
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="position-relative d-flex align-items-center mt-3 mb-3">
-                        <span class="visually-hidden ml-2">Child Invoices</span>
+                        <span class="visually-hidden ml-2">{{ localeData()?.child_invoices }}</span>
                     </div>
                     <mat-divider></mat-divider>
                     <div class="mat-grid-wrapper">
@@ -163,7 +158,7 @@
                                                 <div class="text-ellipsis w-100">
                                                     <a
                                                         [routerLink]="['/pages/vouchers/view/sales', item?.voucherUniqueName]"
-                                                        [queryParams]="voucherQueryParams()"
+                                                        [queryParams]="getVoucherQueryParams(item?.voucherNumber)"
                                                         class="font-size-16 text-primary"
                                                     >
                                                         {{

@@ -126,7 +126,7 @@ import { GeneralActions } from "../../actions/general/general.actions";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
-
+import { Location } from '@angular/common';
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -676,6 +676,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         },
     };
 
+    /**
+     * Converts a date string in DD-MM-YYYY format to a Date object
+     * @param {string | Date | null} dateValue - The date value to convert
+     * @returns {Date | null} Date object or null if input is null/undefined
+     */
+    private convertToDateObject(dateValue: string | Date | null): Date | null {
+        if (!dateValue) {
+            return null;
+        }
+        if (typeof dateValue === 'string') {
+            const [day, month, year] = dateValue.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+        return dateValue;
+    }
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
@@ -712,7 +728,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private ngZone: NgZone,
         private generalActions: GeneralActions,
         private customFieldsService: CustomFieldsService,
-        private recurrenceService: RecurrenceFormService
+        private recurrenceService: RecurrenceFormService,
+        private location: Location
     ) {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
@@ -776,7 +793,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
 
                         this.resetVoucherForm(!params?.uniqueName, true);
-                        this.invoiceForm.get('isRecurringVoucher')?.setValue(this.queryParams.isRecurringVoucher ? true : false);
+                        this.invoiceForm.get('isRecurringVoucher')?.patchValue(this.queryParams.isRecurringVoucher ? true : false);
                         // Initialize recurring voucher form after resetVoucherForm creates the form structure
                         if (this.queryParams.isRecurringVoucher) {
                             this.isRecurringVoucherSelected();
@@ -1101,18 +1118,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         combineLatest([this.componentStore.voucherDetails$, this.aiOcrService.aiOcrDetails$])
             .pipe(delay(1), takeUntil(this.destroyed$))
             .subscribe(([voucherDetails, aiOcrDetails]) => {
-                let recurringResponse: any;
-                if (this.isRecurringVoucher[1]?.isRecurringVoucher && this.isUpdateMode) {
-                    this.recurrenceService.getVoucherDetails(this.isRecurringVoucher[0].uniqueName)
-                        .pipe(takeUntil(this.destroyed$))
-                        .subscribe((response) => {
-                            if (response?.status === 'success') {
-                                recurringResponse = response.body;
-                            } else {
-                                this.toasterService.showSnackBar("error", response?.message);
-                            }
-                        });
-                }
                 if (!this.isMainVoucher && aiOcrDetails?.token) {
                     this.ocrDataEnabled = true;
                     this.uploadFile(true);
@@ -1163,9 +1168,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.searchAccount();
                 }
                 const processVoucherDetails = () => {
-                    if (recurringResponse) {
-                        voucherDetails = recurringResponse;
-                    }
+                    // if (recurringResponse) {
+                    //     voucherDetails = recurringResponse;
+                    // }
                     if (voucherDetails) {
                         this.account.branch = voucherDetails?.branch ?? null;
                         if (!voucherDetails.isCopyVoucher) {
@@ -1375,40 +1380,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                         this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
                         this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
-                        voucherDetails['recurrencePreviewRequest'] = {
-                            "startDate": dayjs().toDate(),
-                            "frequency": {
-                                "unit": "DAY",
-                                "interval": 1
-                            },
-                            "repeatOn": {
-                                "type": "EVERY_DAY",
-                                "dayOfMonth": null,
-                                "weekdays": null,
-                                "nth": null,
-                                "weekday": null
-                            },
-                            "end": {
-                                "type": "NEVER",
-                                "count": null,
-                                "endDate": null
-                            }
-                        }
 
-                        if (this.isRecurringVoucher[1]?.isRecurringVoucher && voucherDetails?.recurrencePreviewRequest) {
+                        if (this.isRecurringVoucher[1]?.isRecurringVoucher || voucherDetails?.recurrencePreviewRequest) {
                             const recurrence = voucherDetails.recurrencePreviewRequest;
-                            this.invoiceForm.get('isRecurringVoucher')?.patchValue(voucherDetails.recurrencePreviewRequest ? true : false);
-                            this.invoiceForm.get('recurrence.startDate')?.patchValue(recurrence.startDate);
-                            this.invoiceForm.get('recurrence.frequency.unit')?.patchValue(recurrence.frequency?.unit || 'MONTH');
-                            this.invoiceForm.get('recurrence.frequency.interval')?.patchValue(recurrence.frequency?.interval || 1);
+                            this.invoiceForm.get('isRecurringVoucher')?.patchValue(voucherDetails.recurrencePreviewRequest || this.isRecurringVoucher[1]?.isRecurringVoucher ? true : false);
 
-                            this.invoiceForm.get('recurrence.repeatOn.type')?.patchValue(recurrence.repeatOn?.type || 'DAY_OF_MONTH');
-                            this.invoiceForm.get('recurrence.repeatOn.dayOfMonth')?.patchValue(recurrence.repeatOn?.dayOfMonth || null);
-                            this.invoiceForm.get('recurrence.repeatOn.weekday')?.patchValue(recurrence.repeatOn?.weekday || null);
-                            this.invoiceForm.get('recurrence.repeatOn.nth')?.patchValue(recurrence.repeatOn?.nth || null);
-                            this.invoiceForm.get('recurrence.repeatOn.monthlyMode')?.patchValue(recurrence.repeatOn?.monthlyMode || 'DAY');
+                            const startDate = this.convertToDateObject(recurrence?.startDate || this.invoiceForm.get('recurrence.startDate')?.value);
+                            this.invoiceForm.get('recurrence.startDate')?.patchValue(startDate);
 
-                            if (recurrence.repeatOn?.weekdays && Array.isArray(recurrence.repeatOn.weekdays)) {
+                            this.invoiceForm.get('recurrence.frequency.unit')?.patchValue(recurrence?.frequency?.unit || this.invoiceForm.get('recurrence.frequency.unit')?.value);
+                            this.invoiceForm.get('recurrence.frequency.interval')?.patchValue(recurrence?.frequency?.interval || this.invoiceForm.get('recurrence.frequency.interval')?.value);
+
+                            this.invoiceForm.get('recurrence.repeatOn.type')?.patchValue(recurrence?.repeatOn?.type || this.invoiceForm.get('recurrence.repeatOn.type')?.value);
+                            this.invoiceForm.get('recurrence.repeatOn.dayOfMonth')?.patchValue(recurrence?.repeatOn?.dayOfMonth || this.invoiceForm.get('recurrence.repeatOn.dayOfMonth')?.value);
+                            this.invoiceForm.get('recurrence.repeatOn.weekday')?.patchValue(recurrence?.repeatOn?.weekday || this.invoiceForm.get('recurrence.repeatOn.weekday')?.value);
+                            this.invoiceForm.get('recurrence.repeatOn.nth')?.patchValue(recurrence?.repeatOn?.nth || this.invoiceForm.get('recurrence.repeatOn.nth')?.value);
+                            this.invoiceForm.get('recurrence.repeatOn.monthlyMode')?.patchValue(recurrence?.repeatOn?.monthlyMode || this.invoiceForm.get('recurrence.repeatOn.monthlyMode')?.value);
+
+                            if (recurrence?.repeatOn?.weekdays && Array.isArray(recurrence.repeatOn.weekdays)) {
                                 const weekdaysArray = this.invoiceForm.get('recurrence.repeatOn.weekdays') as FormArray;
                                 weekdaysArray.clear();
                                 recurrence.repeatOn.weekdays.forEach((weekday: any) => {
@@ -1416,8 +1405,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 });
                             }
 
-                            this.invoiceForm.get('recurrence.end.type')?.patchValue(recurrence.end?.type || 'ON_DATE');
-                            this.invoiceForm.get('recurrence.end.endDate')?.patchValue(recurrence.end?.endDate || null);
+                            this.invoiceForm.get('recurrence.end.type')?.patchValue(recurrence?.end?.type || this.invoiceForm.get('recurrence.end.type')?.value);
+
+                            const endDate = this.convertToDateObject(recurrence?.end?.endDate || this.invoiceForm.get('recurrence.end.endDate')?.value);
+                            this.invoiceForm.get('recurrence.end.endDate')?.patchValue(endDate);
                         }
 
                         const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
@@ -5034,10 +5025,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public cancelUpdateVoucher(): void {
-        if (this.redirectUrl) {
-            this.router.navigateByUrl(this.redirectUrl);
+        if (this.queryParams.isRecurringVoucher) {
+            this.location.back();
         } else {
-            this.redirectToVoucherPreview();
+            if (this.redirectUrl) {
+                this.router.navigateByUrl(this.redirectUrl);
+            } else {
+                this.redirectToVoucherPreview();
+            }
         }
     }
 
@@ -5634,8 +5629,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }, 800);
                 } else {
-                    delete invoiceForm.isRecurringVoucher;
                     delete invoiceForm.recurrence;
+                }
+                if (!this.queryParams?.isRecurringVoucher) {
+                    delete invoiceForm.isRecurringVoucher;
                 }
             }
             if (this.isUpdateMode) {
@@ -7282,6 +7279,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     isCopyVoucher: false,
                     accountUniqueName: params?.accountUniqueName,
                     payload: { uniqueName: params?.uniqueName, voucherType: this.voucherType },
+                });
+            } else {
+                  this.componentStore.getVoucherDetails({
+                    isCopyVoucher: false,
+                    accountUniqueName: params?.accountUniqueName,
+                    payload: { recurringVoucherUniqueName: params?.uniqueName, voucherType: this.voucherType },
                 });
             }
         }

@@ -14,12 +14,12 @@
                         <div class="d-flex align-items-center">
                             <ng-container *ngIf="queryParams.isRecurringVoucher && !isUpdateMode">
                                 <p class="voucher-heading">
-                                    {{ invoiceType.isSalesInvoice ? 'Recurring Sales Invoice' : 'Recurring Purchase Invoice' }}
+                                    {{ invoiceType.isSalesInvoice ? 'Recurring Invoice' : 'Recurring Purchase' }}
                                 </p>
                             </ng-container>
                             <ng-container *ngIf="queryParams.isRecurringVoucher && isUpdateMode">
                                 <p class="voucher-heading">
-                                    {{ invoiceType.isSalesInvoice ? 'Edit Recurring Sales Invoice' : 'Edit Recurring Purchase Invoice' }}
+                                    {{ invoiceType.isSalesInvoice ? 'Edit Recurring Invoice' : 'Edit Recurring Purchase ' }}
                                 </p>
                             </ng-container>
                             <ng-container *ngIf="!queryParams.isRecurringVoucher">
@@ -3260,17 +3260,10 @@
                                         </button>
                                         <button
                                             matButton="filled"
-                                            *ngIf="invoiceType.isSalesInvoice && !isPendingEntries"
+                                            *ngIf="invoiceType.isSalesInvoice && !isPendingEntries && !queryParams.isRecurringVoucher"
                                             (click)="updateAccountAndGenerateVoucher()"
                                         >
-                                            {{
-                                                !queryParams.isRecurringVoucher
-                                                    ? localeData?.generate_sales_update_account
-                                                    : invoiceType.isSalesInvoice
-                                                      ? 'Generate Recurring Sales Invoice & Update A/c'
-                                                      : 'Generate Recurring
-                                                Purchase Invoice & Update A/c'
-                                            }}
+                                            {{ localeData?.generate_sales_update_account }}
                                         </button>
                                         <button matButton="filled" *ngIf="invoiceType.isEstimateInvoice" (click)="generateVoucher()">
                                             {{ commonLocaleData?.app_create }}
@@ -3284,9 +3277,7 @@
                                             (click)="generateVoucher()"
                                         >
                                             {{
-                                                !queryParams.isRecurringVoucher
-                                                    ? localeData?.generate_sales
-                                                    : 'Generate Recurring Sales Invoice'
+                                                !queryParams.isRecurringVoucher ? localeData?.generate_sales : 'Generate Recurring Invoice'
                                             }}
                                         </button>
                                         <button
@@ -3350,28 +3341,30 @@
                                         <button matButton="filled" *ngIf="invoiceType.isPaymentInvoice" (click)="generateVoucher()">
                                             {{ localeData?.create_payment }}
                                         </button>
-                                        <button
-                                            matButton="outlined"
-                                            [matMenuTriggerFor]="moreOptions"
-                                            class="min-width-unset"
-                                            *ngIf="
-                                                invoiceType.isSalesInvoice ||
-                                                invoiceType.isEstimateInvoice ||
-                                                invoiceType.isProformaInvoice ||
-                                                invoiceType.isReceiptInvoice ||
-                                                invoiceType.isPaymentInvoice
-                                            "
-                                        >
-                                            <i class="caret rotate-180"></i>
-                                        </button>
-                                        <mat-menu #moreOptions="matMenu" yPosition="above">
-                                            <button mat-menu-item (click)="createSendVoucher()">
-                                                {{ localeData?.create_send }}
+                                        <ng-container *ngIf="!queryParams.isRecurringVoucher">
+                                            <button
+                                                matButton="outlined"
+                                                [matMenuTriggerFor]="moreOptions"
+                                                class="min-width-unset"
+                                                *ngIf="
+                                                    invoiceType.isSalesInvoice ||
+                                                    invoiceType.isEstimateInvoice ||
+                                                    invoiceType.isProformaInvoice ||
+                                                    invoiceType.isReceiptInvoice ||
+                                                    invoiceType.isPaymentInvoice
+                                                "
+                                            >
+                                                <i class="caret rotate-180"></i>
                                             </button>
-                                            <button mat-menu-item (click)="createPrintVoucher()">
-                                                {{ localeData?.create_print }}
-                                            </button>
-                                        </mat-menu>
+                                            <mat-menu #moreOptions="matMenu" yPosition="above">
+                                                <button mat-menu-item (click)="createSendVoucher()">
+                                                    {{ localeData?.create_send }}
+                                                </button>
+                                                <button mat-menu-item (click)="createPrintVoucher()">
+                                                    {{ localeData?.create_print }}
+                                                </button>
+                                            </mat-menu>
+                                        </ng-container>
                                     </ng-container>
                                     <ng-container *ngIf="isUpdateMode">
                                         <button matButton="outlined" (click)="cancelUpdateVoucher()">
@@ -3382,9 +3375,8 @@
                                                 !queryParams.isRecurringVoucher
                                                     ? updateVoucherText
                                                     : invoiceType.isSalesInvoice
-                                                      ? 'Update Recurring Sales Invoice'
-                                                      : 'Update
-                                                Recurring Purchase Invoice'
+                                                      ? 'Update Recurring Invoice'
+                                                      : 'Update Recurring Purchase'
                                             }}
                                         </button>
                                     </ng-container>

@@ -35,7 +35,7 @@ export class RecurringPreviewComponent implements OnDestroy {
     @ViewChild(CdkVirtualScrollViewport) public cdkScrollbar: CdkVirtualScrollViewport;
     /** Subject for managing component destruction and cleanup of subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    
+
     // Signals for reactive state management
     /** Holds localized text for this component */
     public readonly localeData = signal<any>({});
@@ -95,7 +95,7 @@ export class RecurringPreviewComponent implements OnDestroy {
     public readonly selectedVoucherUniqueName = signal<string>('');
     /** Dynamic query parameters for voucher view link */
     public readonly voucherQueryParams = signal<any>({ page: 1, count: 50, from: '', to: '', isRecurringVoucher: true });
-    
+
     // Private signals
     /** Tracks pagination history to avoid duplicate API calls */
     private pageNumberHistory = signal<any[]>([]);
@@ -109,11 +109,11 @@ export class RecurringPreviewComponent implements OnDestroy {
         sort: '',
         sortBy: ''
     });
-    
+
     // Reference to the dayjs library for date manipulation
     /** Reference to dayjs library for date formatting and manipulation */
     public readonly dayjs: any = dayjs;
-    
+
     // Observable for the list of branches in the current company
     /** Observable stream of branches for the current company */
     public currentCompanyBranches$: Observable<any>;
@@ -121,7 +121,7 @@ export class RecurringPreviewComponent implements OnDestroy {
     public readonly activeRecurringUniqueName$: Observable<string> = of('');
     /** Observable indicating if recurring voucher data is being loaded */
     public getRecurringVouchersInProgress$: Observable<any>;
-    
+
     // Organization type
     /** Current organization type (Company or Branch) */
     public currentOrganizationType: OrganizationType;
@@ -142,7 +142,7 @@ export class RecurringPreviewComponent implements OnDestroy {
         this.getRecurringVouchersInProgress$ = this.componentStore.getLastAccountsInProgress$;
         this.isCompany.set(this.generalService.currentOrganizationType === OrganizationType.Company);
         this.imgPath.set(Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/');
-        
+
         // Initialize component with subscriptions
         this.initializeBranches();
         this.initializeRouteParams();
@@ -170,7 +170,7 @@ export class RecurringPreviewComponent implements OnDestroy {
                     isCompany: true,
                 });
                 this.currentCompanyBranches.set(branches);
-                
+
                 if (!this.currentBranch()?.uniqueName) {
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
@@ -213,7 +213,7 @@ export class RecurringPreviewComponent implements OnDestroy {
                 this.selectedRecurringVoucher.set(null);
                 this.queryParams.set(queryParams);
                 this.activeAccountUniqueName.set(queryParams?.accountUniqueName);
-                
+
                 const filters = {
                     page: Number(queryParams.page),
                     count: queryParams.count ? Number(queryParams.count) : PAGINATION_LIMIT,
@@ -225,7 +225,7 @@ export class RecurringPreviewComponent implements OnDestroy {
                     refresh: queryParams.refresh ?? true
                 };
                 this.advanceFilters.set(filters);
-                
+
                 this.voucherQueryParams.set({
                     page: filters.page,
                     count: filters.count,
@@ -233,7 +233,7 @@ export class RecurringPreviewComponent implements OnDestroy {
                     to: filters.to,
                     isRecurringVoucher: true
                 });
-                
+
                 if (queryParams.sort && queryParams.sortBy) {
                     this.key.set(queryParams.sortBy);
                     this.order.set(queryParams.sort);
@@ -241,7 +241,7 @@ export class RecurringPreviewComponent implements OnDestroy {
                     this.key.set((this.recurringActiveTab() === "sales") ? "name" : "name");
                     this.order.set((this.recurringActiveTab() === "sales") ? "desc" : "asc");
                 }
-                
+
                 this.fetchRecurringVoucherRuleDetails();
             }
         });
@@ -389,6 +389,18 @@ export class RecurringPreviewComponent implements OnDestroy {
 
         return formattedDetails;
     };
+
+    /**
+     * Generates dynamic query parameters for voucher view link with search parameter
+     * @param voucherNumber - The voucher number to use as search parameter
+     * @returns Query parameters object with search set to voucher number
+     */
+    public getVoucherQueryParams(voucherNumber: string): any {
+        return {
+            ...this.voucherQueryParams(),
+            search: voucherNumber || ''
+        };
+    }
 
     /**
      * Angular lifecycle hook for component destruction

@@ -21,7 +21,6 @@ import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
 import { COMMON_API } from "./apiurls/common.api";
 import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
 import { LEDGER_API } from "./apiurls/ledger.api";
-import { concat, forEach, get, includes, keys } from '../lodash-optimized';
 
 
 @Injectable({
@@ -184,16 +183,16 @@ export class VoucherService {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-        
+
         // Add isRecurringVoucher flag to model
         model.isRecurringVoucher = model.isRecurringVoucher || false;
-        
+
         // Add isRecurringVoucher as query parameter after voucherVersion
         if (model.isRecurringVoucher) {
             const delimiter = url.includes('?') ? '&' : '?';
             url += `${delimiter}isRecurringVoucher=${model.isRecurringVoucher}`;
         }
-
+        delete model.isRecurringVoucher;
         return this.http.post(url
             ?.replace(':companyUniqueName', companyUniqueName)
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
@@ -221,7 +220,7 @@ export class VoucherService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         let requestObj: VoucherRequest | ReceiptVoucherDetailsRequest = Object.assign({}, model);
-        requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model?.uniqueName);
+        requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model?.uniqueName, model?.recurringVoucherUniqueName);
 
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.post(url, requestObj
@@ -398,7 +397,15 @@ export class VoucherService {
         let accountUniqueName = model.account?.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        // Add isRecurringVoucher flag to model
+        model.isRecurringVoucher = model.isRecurringVoucher || false;
 
+        // Add isRecurringVoucher as query parameter after voucherVersion
+        if (model.isRecurringVoucher) {
+            const delimiter = url.includes('?') ? '&' : '?';
+            url += `${delimiter}isRecurringVoucher=${model.isRecurringVoucher}`;
+        }
+        delete model.isRecurringVoucher;
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.put(url, model)
             .pipe(

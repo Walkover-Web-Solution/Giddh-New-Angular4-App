@@ -1301,6 +1301,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 5) {
                     voucherType = "sales";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 6) {
+                    voucherType = "sales";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 1) {
                 if (selectedTabIndex === 0) {
@@ -1332,6 +1335,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 3) {
                     voucherType = "purchase";
                     activeModule = "templates";
+                }  else if (selectedTabIndex === 4) {
+                    voucherType = "purchase";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1398,6 +1404,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 2) {
                     voucherType = "purchase";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "purchase";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1820,7 +1829,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public deleteVoucherDialog(voucher?: any): void {
-        console.log(voucher, this.localeData);
         let confirmationMessages = [];
         this.localeData?.confirmation_messages?.map(message => {
             confirmationMessages[message.module] = message;
@@ -1855,7 +1863,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                                 }
                             },
                             error: (error) => {
-                                console.error('Error deleting recurring voucher:', error);
                                 this.toasterService.showSnackBar('error', error?.message);
                             }
                         });
@@ -1909,7 +1916,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public toggleSearch(event: any, fieldName: string, voucherType: string): void {
-        console.log('voucherType', voucherType, fieldName);
         switch (voucherType) {
             case VoucherTypeEnum.sales:
                 if (fieldName === "accountUniqueName") {
@@ -1995,7 +2001,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof ListBranchTransferComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        console.log('searchedFieldName', searchedFieldName);
         const searchedFieldNameArray: string[] = ['invoiceNumber', 'estimateNumber', 'proformaNumber', 'purchaseOrderNumber', 'receiptNumber', 'paymentNumber', 'creditNoteNumber', 'debitNoteNumber', 'billNumber'];
         if (searchedFieldNameArray.includes(searchedFieldName)) {
             if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
@@ -3722,7 +3727,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     /**
      * Fetch all recurring vouchers based on voucher type with query parameters
-     * 
+     *
      * @memberof VoucherListComponent
      */
     public getRecurringVouchers(): void {
@@ -3751,17 +3756,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         params.sortBy = this.advanceFilters.sortBy ?? '';
         params.sort = this.advanceFilters.sort ?? 'asc';
 
-        console.log('Fetching recurring vouchers with params:', params);
-
         this.recurrenceService.getAll(voucherType, params).pipe(
             takeUntil(this.destroyed$)
         ).subscribe({
             next: (response: any) => {
                 if (response?.status === 'success' && response?.body) {
                     const vouchersData = response.body?.items || response.body || [];
-                    this.recurringVouchersData.set(vouchersData);
+                    const formattedVouchersData = vouchersData.map((voucher: any) => ({
+                        ...voucher,
+                        lastRun: voucher.lastRun === '--' ? '-' : (voucher.lastRun ? dayjs(voucher.lastRun).format(GIDDH_DATE_FORMAT) : ''),
+                        nextRun: voucher.nextRun === '--' ? '-' : (voucher.nextRun ? dayjs(voucher.nextRun).format(GIDDH_DATE_FORMAT) : '')
+                    }));
+                    this.recurringVouchersData.set(formattedVouchersData);
                     this.recurringVouchersTotalCount.set(response.body?.totalItems || vouchersData.length);
-                    console.log('Recurring vouchers loaded:', vouchersData, 'Total:', response.body?.totalItems);
                 } else {
                     this.recurringVouchersData.set([]);
                     this.recurringVouchersTotalCount.set(0);
@@ -3769,7 +3776,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.recurringVouchersLoading.set(false);
             },
             error: (error) => {
-                console.error('Error fetching recurring vouchers:', error);
                 this.recurringVouchersData.set([]);
                 this.recurringVouchersTotalCount.set(0);
                 this.recurringVouchersLoading.set(false);
@@ -3795,17 +3801,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                 },
                 error: (error) => {
-                    console.error('Error in recurring voucher dialog:', error);
+                    this.toasterService.showSnackBar('error', error?.message);
                 }
             });
         } catch (error) {
-            console.error('Error opening recurring voucher dialog:', error);
+            this.toasterService.showSnackBar('error', error?.message);
         }
     }
 
     /**
      * Resume a recurring voucher
-     * 
+     *
      * @param {*} voucher
      * @memberof VoucherListComponent
      */
@@ -3823,7 +3829,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                 },
                 error: (error) => {
-                    console.error('Error resuming recurring voucher:', error);
                     this.toasterService.showSnackBar('error', error?.message);
                 }
             });
@@ -3832,7 +3837,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     /**
      * Stop a recurring voucher
-     * 
+     *
      * @param {*} voucher
      * @memberof VoucherListComponent
      */
@@ -3850,7 +3855,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                 },
                 error: (error) => {
-                    console.error('Error stopping recurring voucher:', error);
                     this.toasterService.showSnackBar('error', error?.message);
                 }
             });

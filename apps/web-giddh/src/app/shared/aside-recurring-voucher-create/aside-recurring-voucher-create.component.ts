@@ -5,7 +5,8 @@ import {
     OnInit,
     signal,
     Inject,
-    Optional
+    Optional,
+    ChangeDetectorRef
 } from '@angular/core';
 import {
     FormBuilder,
@@ -30,6 +31,10 @@ import { ToasterService } from '../../services/toaster.service';
  * Supports both dialog mode and embedded mode with form-based recurrence setup.
  */
 export class AsideRecurrenceVoucherCreateComponent implements OnInit {
+    /** Holds localized text for this component */
+    public readonly localeData = signal<any>({});
+    /** Holds common localized text used across the app */
+    public readonly commonLocaleData = signal<any>({});
     /** Array of formatted preview dates for the recurring voucher pattern */
     public previewDates: string[] = [];
     /** Flag indicating if component is running in dialog mode */
@@ -68,7 +73,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
             }, 800);
         }
     }
-    
+
     /**
      * Checks if preview generation is currently paused
      * @returns {boolean} True if preview is paused, false otherwise
@@ -91,12 +96,12 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     constructor(private fb: FormBuilder,
         private recurrenceService: RecurrenceFormService,
         private toasterService: ToasterService,
+        private cdr: ChangeDetectorRef,
         @Optional() private dialogRef: MatDialogRef<AsideRecurrenceVoucherCreateComponent>,
         @Optional() @Inject(MAT_DIALOG_DATA) public data: any
     ) {
         this.minStartDate.setHours(0, 0, 0, 0);
         this.isDialogMode = !!dialogRef;
-        console.log(this.data)
     }
 
     /* =======================
@@ -173,26 +178,26 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         } else {
             // UPDATE/EDIT mode: Use form from parent
             this.activeForm = this.recurrenceForm()!;
-            
+
             // Build UI based on existing form data (don't reset values)
             const startDate = this.activeForm.get('startDate')?.value;
             const frequencyUnit = this.activeForm.get('frequency.unit')?.value;
             const repeatOnType = this.activeForm.get('repeatOn.type')?.value;
             const monthlyMode = this.activeForm.get('repeatOn.monthlyMode')?.value;
-            
+
             if (startDate) {
                 // Only build repeat options, don't call onStartDateChange which resets values
                 this.buildRepeatOptions(startDate);
                 this.ensureRepeatOnControls();
-                
+
                 // Set UI state dynamically based on existing form data
                 this.showCustom.set(false);
                 this.showDayThe.set(false);
                 this.showWeekdayToggle.set(false);
-                
+
                 // Determine which repeat option matches the existing form configuration
                 let selectedOption: 'DAY' | 'WEEKLY' | 'MONTHLY_DATE' | 'MONTHLY_WEEKDAY' | 'CUSTOM' | null = null;
-                
+
                 // Determine visibility and mode based on frequency and repeat type
                 if (frequencyUnit === 'WEEK' && repeatOnType === 'WEEK_DAYS') {
                     this.showWeekdayToggle.set(true);
@@ -209,7 +214,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
                 } else {
                     this.monthlyModeControl.setValue('DAY', { emitEvent: false });
                 }
-                
+
                 // Set the selected repeat option
                 this.selectedRepeatOption.set(selectedOption);
             }
@@ -232,7 +237,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
                 this.refreshPreview();
             }
         });
-        
+
         // Initialize preview as enabled
         this.previewEnabled$.next(true);
     }
@@ -249,18 +254,14 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
             const date = new Date(year, month - 1, day);
 
             // Format as "MMM d EEE" (e.g., "Dec 31 Wed")
-            return date.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                weekday: 'short'
-            });
+            const monthName = date.toLocaleString('en-US', { month: 'short' });
+            const dayName = date.toLocaleString('en-US', { weekday: 'short' });
+            return `${monthName} ${day} ${dayName}`;
         });
+        // Trigger change detection to update UI
+        this.cdr.detectChanges();
     };
-    // Call this method when you receive dates from your API
-    // Example:
-    // this.yourApiService.getDates().subscribe(response => {
-    //     this.updatePreviewDates(response.dates);
-    // });
+
     /**
      * Refreshes preview dates by calling the preview API with current form values
      * Debounced to avoid excessive API calls during rapid form changes
@@ -275,8 +276,8 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
                 this.updatePreviewDates(Array.isArray(dates) ? dates : []);
             },
             error: (err) => {
-                console.error('Preview fetch failed', err);
                 this.previewDates = [];
+                this.cdr.detectChanges();
             }
         });
     };
@@ -675,7 +676,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
             return false;
         }
         const value = this.weekdaysArray.value;
-        console.log(this.weekdaysArray, day, value);
         return Array.isArray(value) && value.includes(day);
     }
 
