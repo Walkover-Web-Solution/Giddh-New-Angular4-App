@@ -70,7 +70,7 @@
                         <div class="d-flex action-btn">
                             <a
                                 [routerLink]="[
-                                    '/pages/vouchers/sales',
+                                    '/pages/vouchers/' + recurringActiveTab(),
                                     selectedRecurringVoucher()?.accountUniqueName,
                                     selectedRecurringVoucher()?.recurringVoucherUniqueName,
                                     'edit',
@@ -157,7 +157,10 @@
                                             <div class="flex-grow-1 min-width-0">
                                                 <div class="text-ellipsis w-100">
                                                     <a
-                                                        [routerLink]="['/pages/vouchers/view/sales', item?.voucherUniqueName]"
+                                                        [routerLink]="[
+                                                            '/pages/vouchers/view/' + recurringActiveTab(),
+                                                            item?.voucherUniqueName,
+                                                        ]"
                                                         [queryParams]="getVoucherQueryParams(item?.voucherNumber)"
                                                         class="font-size-16 text-primary"
                                                     >

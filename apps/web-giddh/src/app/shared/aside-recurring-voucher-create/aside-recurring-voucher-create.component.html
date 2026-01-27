@@ -251,8 +251,8 @@
             </div>
             <mat-divider></mat-divider>
             <div class="preview-container" *ngIf="previewDates.length > 0">
-                <div class="preview-row" *ngFor="let date of previewDates">
-                    <span class="font-size-16 mt-1 ml-1">{{ date }}</span>
+                <div class="preview-row mt-2" *ngFor="let date of previewDates">
+                    <span class="font-size-16">{{ date }}</span>
                 </div>
             </div>
             <div *ngIf="previewDates.length === 0" class="no-dates">{{ localeData()?.no_preview_dates_available }}</div>

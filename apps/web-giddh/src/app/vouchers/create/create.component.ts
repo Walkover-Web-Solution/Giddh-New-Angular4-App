@@ -7281,7 +7281,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     payload: { uniqueName: params?.uniqueName, voucherType: this.voucherType },
                 });
             } else {
-                  this.componentStore.getVoucherDetails({
+                this.componentStore.getVoucherDetails({
                     isCopyVoucher: false,
                     accountUniqueName: params?.accountUniqueName,
                     payload: { recurringVoucherUniqueName: params?.uniqueName, voucherType: this.voucherType },

@@ -3871,6 +3871,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             return;
         }
         const voucherType = this.voucherType === VoucherTypeEnum.sales ? 'sales' : 'purchase';
+        console.log(voucherType)
         const queryParams = {
             page: this.advanceFilters.page,
             count: this.advanceFilters.count,
