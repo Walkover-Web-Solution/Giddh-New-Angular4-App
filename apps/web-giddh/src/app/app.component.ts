@@ -115,14 +115,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const path = window.location.pathname || '';
             const search = window.location.search || '';
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
-            // Generate returnUrl for any non-login-like path (including root path)
-            console.log("href", href);
-            console.log("path", path);
-            console.log("search", search);
-            console.log("isLoginLike", isLoginLike);
-            console.log(this._generalService.getGiddhRegionUrl());
-            console.log("environment.production", environment.production);
-            console.log("Configuration.isElectron", Configuration.isElectron);
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
                 // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
@@ -144,7 +136,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
                     window.location.href = target;
                 } else {
-                    // Soft redirect for other domains or local development
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {

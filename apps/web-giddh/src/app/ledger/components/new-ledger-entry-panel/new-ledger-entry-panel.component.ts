@@ -877,12 +877,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 applyRoundOff = this.invoiceSettings.invoiceSettings.debitNoteRoundOff;
             } else if (this.blankLedger.voucherType === VoucherTypeEnum.creditNote) {
                 applyRoundOff = this.invoiceSettings.invoiceSettings.creditNoteRoundOff;
-            } else if (this.blankLedger.voucherType === VoucherTypeEnum.estimate || this.blankLedger.voucherType === VoucherTypeEnum.generateEstimate) {
-                applyRoundOff = this.invoiceSettings.estimateSettings.estimateRoundOff;
-            } else if (this.blankLedger.voucherType === VoucherTypeEnum.proforma || this.blankLedger.voucherType === VoucherTypeEnum.generateProforma) {
-                applyRoundOff = this.invoiceSettings.proformaSettings?.proformaRoundOff;
-            } else if (this.blankLedger.voucherType === VoucherTypeEnum.purchaseOrder) {
-                applyRoundOff = this.invoiceSettings.purchaseBillSettings?.purchaseOrderRoundOff;
             }
             if (applyRoundOff) {
                 this.calculatedRoundOff = Number(Math.round(this.blankLedger.compoundTotal) - this.blankLedger.compoundTotal);

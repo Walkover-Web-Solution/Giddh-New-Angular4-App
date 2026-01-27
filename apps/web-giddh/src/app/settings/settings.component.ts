@@ -280,8 +280,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     private getRedirectUrl(baseHref: string) {
-        const baseUrl = baseHref.endsWith('/') ? baseHref : baseHref + '/';
-        return `${baseUrl}pages/settings?tab=integration`;
+        return `${baseHref}pages/settings?tab=integration`;
     }
 
     /**

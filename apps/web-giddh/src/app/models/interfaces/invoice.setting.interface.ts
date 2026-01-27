@@ -43,7 +43,6 @@ export class EstimateSettings {
     constructor() {
         this.autoMail = false;
         this.autoChangeStatusOnExp = false;
-        this.estimateRoundOff = false;
     }
     headerName: string;
     nextStepToEstimate: string;
@@ -53,14 +52,12 @@ export class EstimateSettings {
     autoMail: boolean;
     enableEstimate: boolean;
     autoWhatsApp: boolean;
-    estimateRoundOff: boolean;
 }
 
 export class ProformaSettings {
     constructor() {
         this.autoMail = false;
         this.autoChangeStatusOnExp = false;
-        this.proformaRoundOff = false;
     }
     duePeriod?: any;
     autoMail: boolean;
@@ -75,7 +72,6 @@ export class ProformaSettings {
     sendSms: boolean;
     enableProforma: boolean;
     autoWhatsApp: boolean;
-    proformaRoundOff?: boolean;
 }
 
 export class InvoiceSettings {

@@ -101,7 +101,7 @@ ${environment === 'prod' ? 'import { enableProdMode } from \'@angular/core\';\ne
 export const environment: Environment = {
     production: true,
     showDevModule: false,
-    AppUrl: ${envConfig.isElectron ? "'./'" : `'${envConfig.AppUrl}'`},
+    AppUrl: '${envConfig.AppUrl}',
     ApiUrl: '${envConfig.ApiUrl}',
     UkApiUrl: '${envConfig.UkApiUrl}',
     isElectron: ${envConfig.isElectron},

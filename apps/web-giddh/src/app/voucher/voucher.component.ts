@@ -6698,12 +6698,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
                     } else if (this.invoiceType === VoucherTypeEnum.creditNote) {
                         this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
-                    } else if (this.invoiceType === VoucherTypeEnum.estimate || this.invoiceType === VoucherTypeEnum.generateEstimate) {
-                        this.applyRoundOff = settings.estimateSettings.estimateRoundOff;
-                    } else if (this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
-                        this.applyRoundOff = settings.proformaSettings?.proformaRoundOff;
-                    } else if (this.invoiceType === VoucherTypeEnum.purchaseOrder) {
-                        this.applyRoundOff = settings.purchaseBillSettings?.purchaseOrderRoundOff;
+                    } else if (this.invoiceType === VoucherTypeEnum.estimate || this.invoiceType === VoucherTypeEnum.generateEstimate || this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
+                        this.applyRoundOff = true;
                     }
                 } else {
                     this.applyRoundOff = true;

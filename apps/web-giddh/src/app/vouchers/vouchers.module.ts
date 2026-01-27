@@ -93,15 +93,18 @@ import { AllTemplatesComponent } from "./template/all-templates/all-templates.co
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
-import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
 import { ResizableDirective } from "../shared/directives/resizable.directive";
 import { CommonTaxComponent } from "../shared/common-tax/common-tax.component";
+import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
+import { AsideRecurringVoucherCreateModule } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.module";
+import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview.component";
 
 @NgModule({
     declarations: [
         MainComponent,
         VoucherListComponent,
         VouchersPreviewComponent,
+        RecurringPreviewComponent,
         VoucherCreateComponent,
         AdvanceSearchComponent,
         BulkExportComponent,
@@ -118,7 +121,7 @@ import { CommonTaxComponent } from "../shared/common-tax/common-tax.component";
         FullAddressComponent,
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
-        AllTemplatesComponent,
+        AllTemplatesComponent
     ],
     imports: [
         CommonModule,
@@ -195,7 +198,9 @@ import { CommonTaxComponent } from "../shared/common-tax/common-tax.component";
         MobileNumberInputComponent,
         KeyboardNavigationModule,
         ResizableDirective,
-        CommonTaxComponent
+        CommonTaxComponent,
+        AsideRecurringVoucherCreateModule,
+        ResizableDirective
     ],
     exports: [
         VoucherCreateComponent,
