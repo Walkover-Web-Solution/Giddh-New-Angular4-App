@@ -30,14 +30,21 @@ export default class AppUpdater {
         autoUpdater.logger = log;
 
         const platform = process.platform === 'darwin' ? 'mac' : 'windows';
-        const feedConfig: S3Options = {
-            provider: 's3',
-            bucket: 'app-giddh-test',
-            region: 'ap-south-1',
-            path: `test/${platform}/latest`,
-            endpoint: 'https://s3-ap-south-1.amazonaws.com',
-            channel: 'latest'
-        };
+        
+        // Use generic provider for macOS to force latest.yml instead of latest-mac.yml
+        // S3 provider on macOS defaults to latest-mac.yml which we don't want
+        const feedConfig: any = process.platform === 'darwin' 
+            ? {
+                provider: 'generic',
+                url: `https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/${platform}/latest`
+              }
+            : {
+                provider: 's3',
+                bucket: 'app-giddh-test',
+                region: 'ap-south-1',
+                path: `test/${platform}/latest`,
+                endpoint: 'https://s3-ap-south-1.amazonaws.com'
+              };
         
         log.info('Configuring auto-updater with feed:', feedConfig);
         autoUpdater.setFeedURL(feedConfig);
@@ -46,7 +53,6 @@ export default class AppUpdater {
         autoUpdater.autoInstallOnAppQuit = true;
         autoUpdater.allowPrerelease = false;
         autoUpdater.allowDowngrade = false;
-        autoUpdater.channel = 'latest';
         
         log.info('Auto-updater configured successfully');
 
