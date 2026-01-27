@@ -655,7 +655,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public calculateDiscount(): void {
 
-        this.currentTxn.discounts = this.discountControl.getActiveDiscounts();
+        this.currentTxn.discounts = this.discountControl?.getActiveDiscounts() || [];
         const matchedUnit = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
         if (matchedUnit?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length && !this.currentTxn?.duplicateEntry) {
             if (!this.currentTxn.isMrpDiscountApplied) {
@@ -674,7 +674,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         } else {
             if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
                 this.accountOtherApplicableDiscount.forEach(item => {
-                    const matchingDiscount = this.currentTxn.discounts?.find(d => d?.discountUniqueName === item?.uniqueName);
+                    const matchingDiscount = this.currentTxn.discounts?.find(discount => discount?.discountUniqueName === item?.uniqueName);
                     if (matchingDiscount) {
                         item.isActive = matchingDiscount.isActive;
                     }
@@ -682,7 +682,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
                 this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
-                    const matchingDiscount = this.currentTxn.discounts?.find(d => d?.discountUniqueName === item?.uniqueName);
+                    const matchingDiscount = this.currentTxn.discounts?.find(discount => discount?.discountUniqueName === item?.uniqueName);
                     if (matchingDiscount) {
                         item.isActive = matchingDiscount.isActive;
                     }
@@ -705,7 +705,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public calculateTotal(): void {
         if (this.currentTxn) {
-            this.currentTxn.discounts = this.discountControl.getActiveDiscounts();
+            this.currentTxn.discounts = this.discountControl?.getActiveDiscounts() || [];
             if (this.currentTxn.amount) {
                 /** apply account's discount (default) */
                 if (this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length && !this.currentTxn.isMrpDiscountApplied) {

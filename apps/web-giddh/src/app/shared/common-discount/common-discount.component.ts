@@ -259,10 +259,13 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         const accounts: LedgerDiscountClass[] = discountDetails?.length > 0 
             ? discountDetails.map(discount => ({
                 ...discount,
-                isActive: discount.isActive ?? true
+                isActive: discount.isActive ?? true,
+                discountUniqueName: discount.discountUniqueName ?? discount.uniqueName,
+                uniqueName: discount.discountUniqueName ?? discount.uniqueName,
             }))
             : [Object.assign(new LedgerDiscountClass(), {
                 discountValue: 0,
+                amount: 0,
                 discountType: 'PERCENTAGE',
                 isActive: false
             })];
@@ -277,6 +280,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
             if (!existingUniqueNames.has(acc?.uniqueName)) {
                 accounts.push(Object.assign(new LedgerDiscountClass(), {
                     discountValue: acc.discountValue,
+                    amount: acc.discountValue,
                     discountType: acc.discountType,
                     isActive: false,
                     particular: acc.linkAccount?.uniqueName,
@@ -298,10 +302,14 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      * @param val - Input value as string
      */
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-        this.defaultDiscount.discountValue = parseFloat(String(val)?.replace(/,/g, ''));
+        const cleanedValue = String(val || '')?.replace(/[^\d.]/g, '');
+        const parsedValue = parseFloat(cleanedValue);
+        
+        this.defaultDiscount.discountValue = isNaN(parsedValue) ? 0 : parsedValue;
+        this.defaultDiscount.amount = this.defaultDiscount.discountValue;
         this.defaultDiscount.discountType = type;
 
-        if (!val) {
+        if (!val || !cleanedValue || isNaN(parsedValue)) {
             this.discountFromVal.set(true);
             this.discountFromPer.set(true);
             this.change();
@@ -332,7 +340,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
 
     /**
      * Gets all active discounts
-     * Index 0 (default discount) is always included regardless of isActive state
+     * Manual discount (without uniqueName) is always included at index 0
      * Other discounts are filtered by isActive condition
      * 
      * @returns Array of active discount accounts
@@ -343,11 +351,12 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         
         const result: LedgerDiscountClass[] = [];
         accounts.forEach((discount, index) => {
-            if (index === 0 || discount.isActive) {
+            if (discount.isActive && discount.uniqueName) {
                 result.push(discount);
             }
         });
-        return result;
+
+        return [this.defaultDiscount, ...result];
     }
 
     /**

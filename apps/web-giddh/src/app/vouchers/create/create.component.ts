@@ -2391,7 +2391,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public searchStock(query: string = "", page: number = 1): void {
-        console.log("searchStock", query, page, this.stockSearchRequest?.isLoading);
         if (this.stockSearchRequest?.isLoading) {
             return;
         }

@@ -36,7 +36,10 @@
         [matMenuTriggerFor]="!disabled() ? discountMenu : null"
         #menuTrigger="matMenuTrigger"
         [placeholder]="prefixInput() + '0' + suffixInput()"
-        [value]="prefixInput() + discountTotal() + suffixInput()"
+        [(ngModel)]="$any(discountTotal)"
+        [mask]="maskInput()"
+        [prefix]="prefixInput()"
+        [suffix]="suffixInput()"
         [readonly]="true"
         (menuOpened)="handleMenuOpened()"
         (menuClosed)="handleMenuClosed($event)"
@@ -75,13 +78,16 @@
                     </div>
                     <div class="mb-2">
                         <input-field
-                            [type]="'number'"
+                            [type]="'text'"
                             [id]="'common-discount-value'"
                             [name]="'discountFixedValueModal'"
                             [label]="commonLocaleData()?.app_value"
                             [disabled]="!discountFromVal()"
                             [allowDecimalDigitsOnly]="true"
-                            [customDecimalPlaces]="2"
+                            [prefix]="prefixInput()"
+                            [suffix]="suffixInput()"
+                            [mask]="maskInput()"
+                            [useMask]="true"
                             [min]="0"
                             [cssClass]="'text-right'"
                             [(ngModel)]="$any(discountFixedValueModal)"
@@ -121,7 +127,16 @@
                                         $event.preventDefault(); discountRef.toggle(); change(); focusNextCheckbox($event.target, idx)
                                     "
                                 >
-                                    <span class="font-size-15">{{ discount?.name }}</span>
+                                    <span class="font-size-15">
+                                        {{ discount?.name }}
+                                        <span>
+                                            ({{
+                                                discount?.discountType === 'PERCENTAGE'
+                                                    ? discount?.discountValue + '%'
+                                                    : prefixInput() + discount?.discountValue + suffixInput()
+                                            }})
+                                        </span>
+                                    </span>
                                 </mat-checkbox>
                             </li>
                         </ng-container>
