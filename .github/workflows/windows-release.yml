@@ -208,6 +208,14 @@ jobs:
           "LATEST_EXE_NAME=$latestExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Latest installer name: $latestExeName"
 
+      - name: Create signing output directories
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "artifacts/signed" | Out-Null
+          New-Item -ItemType Directory -Force -Path "artifacts/signed-app" | Out-Null
+          New-Item -ItemType Directory -Force -Path "artifacts/final" | Out-Null
+          Write-Host "✅ Created signing output directories"
+
       - name: Sign installer with SSL.com eSigner
         uses: SSLcom/esigner-codesign@v1.3.2
         with:
