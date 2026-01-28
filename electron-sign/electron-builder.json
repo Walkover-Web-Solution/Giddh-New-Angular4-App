@@ -80,11 +80,8 @@
         "legalTrademarks": "",
         "artifactName": "giddh-test-setup-${version}.${ext}",
         "signAndEditExecutable": false,
-        "certificateSubjectName": "Walkover Web Solutions Private Limited",
-        "publisherName": "Walkover Web Solutions Private Limited",
         "requestedExecutionLevel": "asInvoker",
-        "verifyUpdateCodeSignature": false,
-        "signingHashAlgorithms": ["sha256"]
+        "verifyUpdateCodeSignature": false
     },
     "nsis": {
         "oneClick": false,
