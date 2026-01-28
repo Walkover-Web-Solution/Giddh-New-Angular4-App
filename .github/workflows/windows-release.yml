@@ -93,7 +93,21 @@ jobs:
           $trayIcons = Get-ChildItem "dist/apps/web-giddh/build/icons/*.png" -ErrorAction SilentlyContinue
           Write-Host "  ✅ Copied $($trayIcons.Count) tray icon files"
           
+          Write-Host "📦 Copying Electron app files..."
+          # Copy compiled Electron main process files
+          Copy-Item "apps/electron-giddh/src/package.json" "dist/apps/web-giddh/" -Force
+          Copy-Item "apps/electron-giddh/src/index.js" "dist/apps/web-giddh/" -Force
+          Copy-Item "apps/electron-giddh/src/preload.js" "dist/apps/web-giddh/" -Force
+          Copy-Item "apps/electron-giddh/src/*.js" "dist/apps/web-giddh/" -Force -ErrorAction SilentlyContinue
+          Copy-Item "apps/electron-giddh/src/*.js.map" "dist/apps/web-giddh/" -Force -ErrorAction SilentlyContinue
+          Write-Host "  ✅ Copied Electron main process files"
+          
+          # Install production dependencies for Electron
+          Write-Host "📦 Installing Electron production dependencies..."
           cd dist/apps/web-giddh
+          npm install --production --no-optional
+          Write-Host "  ✅ Installed dependencies"
+          
           Write-Host "🔨 Building Windows app with electron-builder..."
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win
           cd ../../../
