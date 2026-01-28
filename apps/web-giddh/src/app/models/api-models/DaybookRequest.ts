@@ -14,6 +14,7 @@ export class DaybookQueryRequest {
 
 export class ExportBodyRequest {
     from?: string;
+    haveToShowTaxBifurcation?: boolean;
     to?: string;
     sort?: string;
     showVoucherNumber?: boolean;
