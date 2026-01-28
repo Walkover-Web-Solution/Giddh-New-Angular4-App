@@ -780,6 +780,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.ocrType = "";
                         this.transactionOptions = [];
                         this.queryParams = cloneDeep(response[1]);
+
                         // Reset exchange rate when route changes
                         this.componentStore.resetExchangeRate();
 
@@ -1172,9 +1173,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.searchAccount();
                 }
                 const processVoucherDetails = () => {
-                    // if (recurringResponse) {
-                    //     voucherDetails = recurringResponse;
-                    // }
                     if (voucherDetails) {
                         this.account.branch = voucherDetails?.branch ?? null;
                         if (!voucherDetails.isCopyVoucher) {
@@ -1505,7 +1503,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
                 setTimeout(() => {
                     this.changeDetection.detectChanges();
-                }, 500);
+                }, 200);
             });
 
         /** Send email success */
@@ -2006,20 +2004,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                     this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomCreditNoteNumber;
-                } else if (
-                    this.voucherType === VoucherTypeEnum.estimate ||
-                    this.voucherType === VoucherTypeEnum.generateEstimate ||
-                    this.voucherType === VoucherTypeEnum.proforma ||
-                    this.voucherType === VoucherTypeEnum.generateProforma
-                ) {
-                    this.applyRoundOff = true;
-                    this.useCustomVoucherNumber = true;
-                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                    this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
-                } else if (this.voucherType === VoucherTypeEnum.receipt) {
+                } if (this.voucherType === VoucherTypeEnum.receipt) {
                     this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomReceiptNumber;
                 } else if (this.voucherType === VoucherTypeEnum.payment) {
                     this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomPaymentNumber;
+                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate) {
+                    this.applyRoundOff = settings.estimateSettings.estimateRoundOff;
+                    this.useCustomVoucherNumber = true;
+                } else if (this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    this.applyRoundOff = settings.proformaSettings?.proformaRoundOff;
+                    this.useCustomVoucherNumber = true;
+                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                    this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
+                    this.applyRoundOff = settings.purchaseBillSettings?.purchaseOrderRoundOff;
                 }
 
                 this.invoiceForm.get("roundOffApplicable")?.patchValue(this.applyRoundOff);
@@ -3037,7 +3034,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private initVoucherForm(): void {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const { weekday } = this.recurrenceService.getDateMeta(today);
+        const { weekday } = this.generalService.getDateMeta(today);
         const nth = Math.ceil(today.getDate() / 7);
         this.invoiceForm = this.formBuilder.group({
             account: this.formBuilder.group({
@@ -3146,7 +3143,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         // When checkbox is checked, populate recurrence form with today's date
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const { weekday } = this.recurrenceService.getDateMeta(today);
+        const { weekday } = this.generalService.getDateMeta(today);
         const nth = Math.ceil(today.getDate() / 7);
 
         const recurrenceForm = this.invoiceForm.get('recurrence') as FormGroup;
@@ -3185,7 +3182,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             type: ["DEBIT"],
         });
     }
-
     /**
      * Returns address form group
      *
@@ -5305,12 +5301,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public saveVoucher(callback?: Function): void {
-        // this.startLoader(true);
+        this.startLoader(true);
 
         const entries = this.getEntries();
         const deposits = this.getDeposits();
         this.checkRcm();
         let invoiceForm = cloneDeep(this.invoiceForm.value);
+
         invoiceForm.entries = entries;
         invoiceForm.deposits = deposits;
 
@@ -8168,7 +8165,4 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isAccountChangeInUpdateMode(): boolean {
         return this.isUpdateMode && this.isAccountChanged;
     }
-
 }
-
-

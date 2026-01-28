@@ -9,7 +9,7 @@ import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview
 
 const routes: Routes = [
     {
-        path: "", 
+        path: "",
         component: MainComponent,
         children: [
             {
@@ -43,7 +43,7 @@ const routes: Routes = [
                 path: ":voucherType/:accountUniqueName/:uniqueName/:action",
                 component: VoucherCreateComponent,
                 canDeactivate: [PageLeaveConfirmationGuard]
-            },
+            }
         ]
     }
 ];

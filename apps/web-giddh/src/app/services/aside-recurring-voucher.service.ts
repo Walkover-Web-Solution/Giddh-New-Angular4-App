@@ -10,6 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { RECURRING_API } from './apiurls/aside-recurring-voucher.api';
+import { RecurringRepeatType, RecurringEndType } from '../models/enums/recurring-voucher.enum';
 
 /**
  * Service for managing recurring voucher form operations and API interactions.
@@ -43,10 +44,10 @@ export class RecurrenceFormService {
     }
     // Handle end object based on type
     if (cleaned.end) {
-      if (cleaned.end.type === 'NEVER') {
+      if (cleaned.end.type === RecurringEndType.NEVER) {
         // Remove endDate when type is NEVER
         delete cleaned.end.endDate;
-      } else if (cleaned.end.type === 'ON_DATE' && cleaned.end.endDate) {
+      } else if (cleaned.end.type === RecurringEndType.ON_DATE && cleaned.end.endDate) {
         // Format endDate when type is ON_DATE
         cleaned.end.endDate = dayjs(cleaned.end.endDate).format(GIDDH_DATE_FORMAT);
       }
@@ -58,12 +59,12 @@ export class RecurrenceFormService {
     // ... existing code ...
 
     switch (repeatType) {
-      case 'EVERY_DAY':
+      case RecurringRepeatType.EVERY_DAY:
         // Remove repeatOn object completely for EVERY_DAY
         delete cleaned.repeatOn;
         break;
 
-      case 'DAY_OF_MONTH':
+      case RecurringRepeatType.DAY_OF_MONTH:
         // For DAY_OF_MONTH, keep type and dayOfMonth, remove weekdays
         cleaned.repeatOn = {
           type: repeatType,
@@ -71,7 +72,7 @@ export class RecurrenceFormService {
         };
         break;
 
-      case 'WEEK_DAYS':
+      case RecurringRepeatType.WEEK_DAYS:
         // For WEEK_DAYS, keep type and weekdays
         cleaned.repeatOn = {
           type: repeatType,
@@ -79,7 +80,7 @@ export class RecurrenceFormService {
         };
         break;
 
-      case 'NTH_WEEKDAY':
+      case RecurringRepeatType.NTH_WEEKDAY:
         // For NTH_WEEKDAY, keep type and nth
         cleaned.repeatOn = {
           type: repeatType,
@@ -107,36 +108,6 @@ export class RecurrenceFormService {
   public getCleanFormValue(form: FormGroup): any {
     const formValue = form.getRawValue();
     return this.cleanFormValues(formValue);
-  }
-
-  /**
-   * Extracts date metadata from a given date
-   * Calculates day of month, weekday name, and week of month
-   * @param {Date} date - The date to extract metadata from
-   * @returns {Object} Object containing dayOfMonth, weekday (name), and weekOfMonth
-   */
-  public getDateMeta(date: Date) {
-    const dayOfMonth = date.getDate();
-    const dayOfWeek = date.getDay();
-    const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
-    const weekOfMonth = Math.ceil(dayOfMonth / 7);
-    return { dayOfMonth, weekday, weekOfMonth };
-  }
-
-  /**
-   * Converts a number to its ordinal string representation
-   * Examples: 1 -> "1st", 2 -> "2nd", 3 -> "3rd", 4 -> "4th"
-   * @param {number} n - The number to convert to ordinal
-   * @returns {string} The ordinal representation of the number
-   */
-  public getOrdinal(n: number): string {
-    if (n % 100 >= 11 && n % 100 <= 13) return `${n}th`;
-    switch (n % 10) {
-      case 1: return `${n}st`;
-      case 2: return `${n}nd`;
-      case 3: return `${n}rd`;
-      default: return `${n}th`;
-    }
   }
 
   /* =======================
@@ -172,7 +143,7 @@ export class RecurrenceFormService {
     let url = this.config.apiUrl +
       RECURRING_API.GET_ALL.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)) +
       (voucherType ? `&voucherType=${encodeURIComponent(voucherType)}` : '');
-    
+
     // Add query parameters if provided
     if (params) {
       if (params.page) {
@@ -197,7 +168,7 @@ export class RecurrenceFormService {
         url += `&sort=${encodeURIComponent(params.sort)}`;
       }
     }
-    
+
     return this.http.get(url).pipe(
       map(res => res as BaseResponse<any, any>),
       catchError(e => this.errorHandler.HandleCatch<any, any>(e))
@@ -255,7 +226,6 @@ export class RecurrenceFormService {
    * @returns {Observable<BaseResponse<any, any>>} Observable with detailed voucher information
    */
   public getVoucherDetails(recurringVoucherUniqueName: string): Observable<BaseResponse<any, any>> {
-    console.log('Recurring voucher unique name:', recurringVoucherUniqueName);
     const companyUniqueName = this.generalService.companyUniqueName;
     const url = this.config.apiUrl +
       RECURRING_API.VOUCHER_DETAILS

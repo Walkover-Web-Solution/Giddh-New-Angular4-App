@@ -189,8 +189,7 @@ export class VoucherService {
 
         // Add isRecurringVoucher as query parameter after voucherVersion
         if (model.isRecurringVoucher) {
-            const delimiter = url.includes('?') ? '&' : '?';
-            url += `${delimiter}isRecurringVoucher=${model.isRecurringVoucher}`;
+            url = this.generalService.appendQueryParam(url, 'isRecurringVoucher', model.isRecurringVoucher);
         }
         delete model.isRecurringVoucher;
         return this.http.post(url
@@ -394,7 +393,6 @@ export class VoucherService {
      * @memberof VoucherService
      */
     public updateVoucher(model: any): Observable<BaseResponse<any, any>> {
-        console.log(model)
         let accountUniqueName = model.account?.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
@@ -403,8 +401,7 @@ export class VoucherService {
 
         // Add isRecurringVoucher as query parameter after voucherVersion
         if (model.isRecurringVoucher) {
-            const delimiter = url.includes('?') ? '&' : '?';
-            url += `${delimiter}isRecurringVoucher=${model.isRecurringVoucher}`;
+            url = this.generalService.appendQueryParam(url, 'isRecurringVoucher', model.isRecurringVoucher);
             model['recurringVoucherUniqueName'] = model.uniqueName;
             delete model.uniqueName;
         }

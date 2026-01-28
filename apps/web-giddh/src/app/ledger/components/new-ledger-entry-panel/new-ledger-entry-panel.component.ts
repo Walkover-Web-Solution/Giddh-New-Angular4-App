@@ -64,7 +64,7 @@ const NEW_LEDGER_ENTRIES = [
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
     providers: [SalesPersonComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    standalone: false
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -877,6 +877,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 applyRoundOff = this.invoiceSettings.invoiceSettings.debitNoteRoundOff;
             } else if (this.blankLedger.voucherType === VoucherTypeEnum.creditNote) {
                 applyRoundOff = this.invoiceSettings.invoiceSettings.creditNoteRoundOff;
+            } else if (this.blankLedger.voucherType === VoucherTypeEnum.estimate || this.blankLedger.voucherType === VoucherTypeEnum.generateEstimate) {
+                applyRoundOff = this.invoiceSettings.estimateSettings.estimateRoundOff;
+            } else if (this.blankLedger.voucherType === VoucherTypeEnum.proforma || this.blankLedger.voucherType === VoucherTypeEnum.generateProforma) {
+                applyRoundOff = this.invoiceSettings.proformaSettings?.proformaRoundOff;
+            } else if (this.blankLedger.voucherType === VoucherTypeEnum.purchaseOrder) {
+                applyRoundOff = this.invoiceSettings.purchaseBillSettings?.purchaseOrderRoundOff;
             }
             if (applyRoundOff) {
                 this.calculatedRoundOff = Number(Math.round(this.blankLedger.compoundTotal) - this.blankLedger.compoundTotal);
@@ -934,8 +940,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public showDeleteAttachedFileModal() {
         this.deleteAttachedFileDialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '630px',
-                    data: {
+            width: '630px',
+            data: {
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.confirm_delete_file,
                 ok: this.commonLocaleData?.app_yes,
@@ -1034,8 +1040,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.mapBodyContent = this.mapBodyContent?.replace("[CHEQUE_NUMBER]", item.chequeNumber);
 
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '630px',
-                    data: {
+            width: '630px',
+            data: {
                 title: this.commonLocaleData?.map_bank_entry,
                 body: this.mapBodyContent,
                 ok: this.commonLocaleData?.app_yes,
@@ -1598,8 +1604,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isRcmPopupOpen = true;
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-                    width: '630px',
-                    data: {
+            width: '630px',
+            data: {
                 configuration: this.rcmConfiguration
             }
         });
@@ -1845,9 +1851,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
-                    width: '980px',
-                    panelClass: 'container-modal-class'
-                });
+            width: '980px',
+            panelClass: 'container-modal-class'
+        });
 
         this.adjustmentDialogRef.afterClosed().subscribe(response => {
             this.isAdjustmentPopupOpen = false;

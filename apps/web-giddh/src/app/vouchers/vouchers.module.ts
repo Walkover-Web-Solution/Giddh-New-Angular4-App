@@ -121,7 +121,7 @@ import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview
         FullAddressComponent,
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
-        AllTemplatesComponent
+        AllTemplatesComponent,
     ],
     imports: [
         CommonModule,

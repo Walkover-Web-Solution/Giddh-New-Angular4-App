@@ -19,6 +19,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RecurrenceFormService } from '../../services/aside-recurring-voucher.service';
 import { debounceTime, ReplaySubject, takeUntil, Subject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
+import { GeneralService } from '../../services/general.service';
+import { RecurringFrequencyUnit, RecurringMonthlyMode, RecurringEndType } from '../../models/enums/recurring-voucher.enum';
 
 @Component({
     selector: 'aside-recurrence-voucher-create',
@@ -95,6 +97,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
 
     constructor(private fb: FormBuilder,
         private recurrenceService: RecurrenceFormService,
+        private generalService: GeneralService,
         private toasterService: ToasterService,
         private cdr: ChangeDetectorRef,
         @Optional() private dialogRef: MatDialogRef<AsideRecurrenceVoucherCreateComponent>,
@@ -115,6 +118,17 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     public readonly showWeekdayToggle = signal(false);
     /** Signal tracking the current monthly mode selection */
     public readonly monthlyMode = signal<'DAY' | 'THE'>('DAY');
+
+    /* =======================
+       ENUMS FOR TEMPLATE
+    ======================= */
+    /** Expose RecurringFrequencyUnit enum for template usage */
+    public readonly RecurringFrequencyUnit = RecurringFrequencyUnit;
+    /** Expose RecurringMonthlyMode enum for template usage */
+    public readonly RecurringMonthlyMode = RecurringMonthlyMode;
+    /** Expose RecurringEndType enum for template usage */
+    public readonly RecurringEndType = RecurringEndType;
+
     /* =======================
        CONSTANT OPTIONS
     ======================= */
@@ -290,7 +304,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     private readonly initializeForm = (): void => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const { weekday } = this.recurrenceService.getDateMeta(today);
+        const { weekday } = this.generalService.getDateMeta(today);
         const nth = Math.ceil(today.getDate() / 7);
 
         this.activeForm = this.fb.group({
@@ -365,7 +379,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
     private readonly createRecurrenceForm = (): FormGroup => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const { weekday } = this.recurrenceService.getDateMeta(today);
+        const { weekday } = this.generalService.getDateMeta(today);
         const nth = Math.ceil(today.getDate() / 7);
 
         return this.fb.group({
@@ -454,7 +468,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
 
         this.buildRepeatOptions(date);
 
-        const { dayOfMonth, weekday, weekOfMonth } = this.recurrenceService.getDateMeta(date);
+        const { dayOfMonth, weekday, weekOfMonth } = this.generalService.getDateMeta(date);
         const currentFrequencyUnit = this.activeForm.get('frequency.unit')?.value || 'MONTH';
         const isCustomMode = this.showCustom();
 
@@ -551,7 +565,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         const startDate: Date = this.activeForm.get('startDate')?.value;
         if (!startDate) return;
 
-        const { dayOfMonth, weekday, weekOfMonth } = this.recurrenceService.getDateMeta(startDate);
+        const { dayOfMonth, weekday, weekOfMonth } = this.generalService.getDateMeta(startDate);
 
         this.resetRepeatOn();
 
@@ -632,7 +646,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
 
         this.resetRepeatOn();
 
-        const { dayOfMonth, weekday, weekOfMonth } = this.recurrenceService.getDateMeta(startDate);
+        const { dayOfMonth, weekday, weekOfMonth } = this.generalService.getDateMeta(startDate);
 
         switch (unit) {
             case 'DAY':
@@ -708,7 +722,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         const startDate = this.activeForm.get('startDate')?.value;
         if (!startDate) return;
 
-        const { weekOfMonth, weekday } = this.recurrenceService.getDateMeta(startDate);
+        const { weekOfMonth, weekday } = this.generalService.getDateMeta(startDate);
 
         this.repeatOnForm.patchValue({
             type: 'NTH_WEEKDAY',
@@ -770,17 +784,17 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
      * @param {Date} startDate - The start date to base options on
      */
     private readonly buildRepeatOptions = (startDate: Date): void => {
-        const { dayOfMonth, weekday, weekOfMonth } = this.recurrenceService.getDateMeta(startDate);
+        const { dayOfMonth, weekday, weekOfMonth } = this.generalService.getDateMeta(startDate);
         const weekdayName = this.weekdayOptions.find(w => w.value === weekday)?.label || '';
 
         this.repeatOptions.set([
             { label: `Weekly on ${weekdayName}`, value: 'WEEKLY' },
             {
-                label: `Monthly on ${this.recurrenceService.getOrdinal(dayOfMonth)}`,
+                label: `Monthly on ${this.generalService.getOrdinal(dayOfMonth)}`,
                 value: 'MONTHLY_DATE'
             },
             {
-                label: `Monthly on the ${this.recurrenceService.getOrdinal(weekOfMonth)} ${weekdayName}`,
+                label: `Monthly on the ${this.generalService.getOrdinal(weekOfMonth)} ${weekdayName}`,
                 value: 'MONTHLY_WEEKDAY'
             },
             { label: 'Custom', value: 'CUSTOM' }

@@ -14,12 +14,16 @@
                         <div class="d-flex align-items-center">
                             <ng-container *ngIf="queryParams.isRecurringVoucher && !isUpdateMode">
                                 <p class="voucher-heading">
-                                    {{ invoiceType.isSalesInvoice ? 'Recurring Invoice' : 'Recurring Purchase' }}
+                                    {{ invoiceType.isSalesInvoice ? localeData?.recurring_invoice : localeData?.recurring_purchase }}
                                 </p>
                             </ng-container>
                             <ng-container *ngIf="queryParams.isRecurringVoucher && isUpdateMode">
                                 <p class="voucher-heading">
-                                    {{ invoiceType.isSalesInvoice ? 'Edit Recurring Invoice' : 'Edit Recurring Purchase ' }}
+                                    {{
+                                        invoiceType.isSalesInvoice
+                                            ? localeData?.edit_recurring_invoice
+                                            : localeData?.edit_recurring_purchase
+                                    }}
                                 </p>
                             </ng-container>
                             <ng-container *ngIf="!queryParams.isRecurringVoucher">
@@ -3274,7 +3278,9 @@
                                             (click)="generateVoucher()"
                                         >
                                             {{
-                                                !queryParams.isRecurringVoucher ? localeData?.generate_sales : 'Generate Recurring Invoice'
+                                                !queryParams.isRecurringVoucher
+                                                    ? localeData?.generate_sales
+                                                    : localeData?.generate_recurring_invoice
                                             }}
                                         </button>
                                         <button
@@ -3372,8 +3378,8 @@
                                                 !queryParams.isRecurringVoucher
                                                     ? updateVoucherText
                                                     : invoiceType.isSalesInvoice
-                                                      ? 'Update Recurring Invoice'
-                                                      : 'Update Recurring Purchase'
+                                                      ? localeData?.update_recurring_invoice
+                                                      : localeData?.update_recurring_purchase
                                             }}
                                         </button>
                                     </ng-container>

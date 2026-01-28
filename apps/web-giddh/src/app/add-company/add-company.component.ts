@@ -42,7 +42,7 @@ declare var window: any;
     styleUrls: ['./add-company.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [AddCompanyComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore],
-    standalone:false
+    standalone: false
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -1179,8 +1179,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             delete this.company.creatorSuperAdmin;
         }
         this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
-        this.nextStepForm();
-        if (environment.PRODUCTION_ENV && this.companiesList?.length === 0) {
+        if (environment.PRODUCTION_ENV && !this.companiesList?.length) {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }
