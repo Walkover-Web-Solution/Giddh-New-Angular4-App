@@ -1,0 +1,302 @@
+# Windows Code Signing Setup for Auto-Updates with SSL.com eSigner
+
+## Overview
+
+This document explains how to set up Windows code signing for Electron auto-updates using SSL.com eSigner cloud-based HSM (Hardware Security Module) signing.
+
+## Why CSC Signing is Required
+
+For Windows auto-updates to work properly:
+
+1. **Both the installed app AND the update installer must be signed with the SAME certificate**
+2. **Signing must happen DURING packaging**, not after
+3. **electron-updater validates the signature chain** to prevent SmartScreen warnings
+
+### The Problem with Post-Build Signing
+
+❌ **Old Approach (Doesn't Work for Auto-Updates):**
+```
+1. electron-builder creates unsigned EXE
+2. Post-build script signs installer
+3. electron-updater generates differential update → UNSIGNED
+4. Windows blocks update with SmartScreen
+```
+
+✅ **Correct Approach (Works for Auto-Updates):**
+```
+1. electron-builder signs during packaging (using CSC_LINK)
+2. App executable is signed
+3. Installer is signed
+4. Differential updates are signed
+5. Auto-updates work silently without SmartScreen
+```
+
+## Certificate Export from SSL.com
+
+### Step 1: Export Certificate as PFX
+
+1. Log into your SSL.com account
+2. Navigate to your code signing certificate
+3. Export the certificate in **PFX format** (PKCS#12)
+4. Set a strong password for the PFX file
+5. Download the `.pfx` file
+
+### Step 2: Convert PFX to Base64
+
+**On Windows (PowerShell):**
+```powershell
+$pfxPath = "C:\path\to\your\certificate.pfx"
+$bytes = [System.IO.File]::ReadAllBytes($pfxPath)
+$base64 = [System.Convert]::ToBase64String($bytes)
+$base64 | Out-File -FilePath "certificate-base64.txt"
+```
+
+**On macOS/Linux:**
+```bash
+base64 -i certificate.pfx -o certificate-base64.txt
+```
+
+### Step 3: Add to GitHub Secrets
+
+1. Go to your GitHub repository
+2. Navigate to **Settings → Secrets and variables → Actions**
+3. Add two secrets:
+
+   **WIN_CSC_LINK:**
+   - Value: The entire base64 string from `certificate-base64.txt`
+   - This is your certificate in base64 format
+
+   **WIN_CSC_KEY_PASSWORD:**
+   - Value: The password you set when exporting the PFX
+   - This unlocks the certificate during signing
+
+## electron-builder Configuration
+
+The `electron-builder.json` is already configured correctly:
+
+```json
+{
+  "win": {
+    "signAndEditExecutable": true,
+    "certificateSubjectName": "Walkover Web Solutions Private Limited",
+    "publisherName": "Walkover Web Solutions Private Limited",
+    "verifyUpdateCodeSignature": true,
+    "signingHashAlgorithms": ["sha256"]
+  }
+}
+```
+
+**Key Settings:**
+- `signAndEditExecutable: true` - Signs app executable during build
+- `verifyUpdateCodeSignature: true` - Validates signature chain for updates
+- `signingHashAlgorithms: ["sha256"]` - Uses SHA-256 for signing
+
+## GitHub Actions Workflow
+
+The workflow is configured to use CSC signing:
+
+```yaml
+- name: Build Windows Electron App
+  env:
+    ELECTRON_ENV: true
+    CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+    CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+  run: |
+    npm run prepare.electron.giddh
+    node scripts/build-env.js test
+    npx ng build electron-giddh --configuration=test
+    # ... copy files ...
+    cd dist/apps/web-giddh
+    npm install --production --no-optional
+    npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win
+```
+
+**What Happens:**
+1. electron-builder reads `CSC_LINK` and `CSC_KEY_PASSWORD`
+2. Decodes the base64 certificate
+3. Signs the app executable (`Giddh.exe` in `win-unpacked`)
+4. Signs the installer (`giddh-test-setup-VERSION.exe`)
+5. Signs any differential update packages
+6. Generates `latest.yml` with correct signature hashes
+
+## Verification
+
+The workflow automatically verifies signatures:
+
+```powershell
+# Verify installer signature
+$installerSig = Get-AuthenticodeSignature $installer.FullName
+if ($installerSig.Status -eq "Valid") {
+    Write-Host "✅ Installer is SIGNED"
+}
+
+# Verify app executable signature (CRITICAL for auto-updates)
+$appSig = Get-AuthenticodeSignature $appExe.FullName
+if ($appSig.Status -eq "Valid") {
+    Write-Host "✅ App executable is SIGNED (auto-updates will work)"
+}
+```
+
+## Auto-Update Flow
+
+### How It Works
+
+1. **User installs app** from signed installer
+   - Windows validates signature
+   - App installs without SmartScreen warning
+
+2. **App checks for updates**
+   - Reads `latest.yml` from S3
+   - Compares version numbers
+
+3. **Download update**
+   - Downloads signed installer or differential package
+   - Validates signature matches installed app
+
+4. **Install update**
+   - Signature chain is valid
+   - Update installs silently
+   - No SmartScreen warning
+   - No user interaction required
+
+### What Gets Signed
+
+✅ **App Executable** (`Giddh.exe` in `win-unpacked`)
+- This is the running application
+- MUST be signed for auto-updates to work
+
+✅ **Installer** (`giddh-test-setup-VERSION.exe`)
+- This is the NSIS installer
+- Used for manual downloads
+
+✅ **Differential Packages** (`.nsis.7z` files)
+- Generated by electron-updater
+- Used for efficient updates
+
+✅ **Blockmap Files** (`.blockmap`)
+- Used for differential updates
+- Contains signature hashes
+
+## Troubleshooting
+
+### Issue: "Installer is NOT SIGNED"
+
+**Cause:** CSC_LINK or CSC_KEY_PASSWORD secrets are missing or incorrect
+
+**Solution:**
+1. Verify secrets exist in GitHub repository settings
+2. Check that CSC_LINK is valid base64
+3. Verify CSC_KEY_PASSWORD is correct
+4. Re-export certificate if needed
+
+### Issue: "App executable is NOT SIGNED"
+
+**Cause:** `signAndEditExecutable` is disabled or CSC signing failed
+
+**Solution:**
+1. Verify `signAndEditExecutable: true` in electron-builder.json
+2. Check electron-builder logs for signing errors
+3. Ensure certificate is valid and not expired
+
+### Issue: "Auto-updates show SmartScreen warning"
+
+**Cause:** Signature chain mismatch between installed app and update
+
+**Solution:**
+1. Verify both installer and app executable are signed with SAME certificate
+2. Check that `verifyUpdateCodeSignature: true` in electron-builder.json
+3. Ensure `latest.yml` has correct signature hashes
+
+### Issue: "Certificate expired"
+
+**Cause:** Code signing certificates typically expire after 1-3 years
+
+**Solution:**
+1. Renew certificate with SSL.com
+2. Export new certificate as PFX
+3. Update WIN_CSC_LINK secret in GitHub
+4. Rebuild and republish app
+
+## Security Best Practices
+
+1. **Never commit PFX files** to version control
+2. **Use strong passwords** for PFX export
+3. **Rotate secrets** when team members leave
+4. **Monitor certificate expiration** dates
+5. **Use GitHub environment secrets** for production builds
+6. **Audit signing logs** regularly
+
+## Benefits of CSC Signing
+
+✅ **Seamless Auto-Updates**
+- No SmartScreen warnings
+- Silent installation
+- Better user experience
+
+✅ **Simplified Workflow**
+- Single-step signing during build
+- No post-build signing scripts
+- Fewer moving parts
+
+✅ **Reliable Signature Chain**
+- electron-builder handles all signing
+- Consistent signatures across all artifacts
+- Proper differential update support
+
+✅ **Industry Standard**
+- Recommended by Electron documentation
+- Used by major Electron apps
+- Well-tested and maintained
+
+## References
+
+- [electron-builder Code Signing Documentation](https://www.electron.build/code-signing)
+- [Electron Auto-Update Documentation](https://www.electronjs.org/docs/latest/api/auto-updater)
+- [Windows Authenticode Signing](https://docs.microsoft.com/en-us/windows/win32/seccrypto/cryptography-tools)
+
+## Migration from SSL.com eSigner
+
+### What Was Removed
+
+❌ **Removed from workflow:**
+- `ES_USERNAME`, `ES_PASSWORD`, `ES_CREDENTIAL_ID`, `ES_TOTP_SECRET` environment variables
+- `SSLcom/esigner-codesign` GitHub Action
+- Post-build signing step
+- SHA512 recalculation step
+- Conditional signing logic
+
+### What Was Added
+
+✅ **Added to workflow:**
+- `CSC_LINK` and `CSC_KEY_PASSWORD` environment variables
+- Signature verification for both installer and app executable
+- Simplified artifact preparation
+
+### Why This Change
+
+The SSL.com eSigner approach signs AFTER packaging, which doesn't work for auto-updates because:
+1. electron-updater generates new packages at runtime
+2. These runtime packages are unsigned
+3. Windows blocks unsigned updates
+
+The CSC approach signs DURING packaging, which ensures:
+1. All packages are signed at build time
+2. Differential updates are signed
+3. Signature chain is maintained
+4. Auto-updates work reliably
+
+## Summary
+
+**Before (SSL.com eSigner):**
+- ❌ Post-build signing
+- ❌ Unsigned app executable
+- ❌ Auto-updates blocked by SmartScreen
+- ❌ Complex workflow with multiple steps
+
+**After (CSC Signing):**
+- ✅ Signing during build
+- ✅ Signed app executable
+- ✅ Silent auto-updates
+- ✅ Simple, reliable workflow
+
+This is the **industry-standard approach** for Electron Windows code signing and auto-updates.

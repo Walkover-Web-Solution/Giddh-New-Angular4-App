@@ -1,7 +1,7 @@
 # Author Name: Divyanshu Shrivastava
 # Date: 14th January 2026
-# Updated: 28th January 2026 - Signing now happens DURING build via custom-sign.js
-name: Windows EXE (build with signing → S3 upload)
+# Updated: 28th January 2026 - eSigner cloud signing for installer AND app executable (critical for auto-updates)
+name: Windows EXE (build → eSigner signing → S3 upload)
 
 on:
   push:
@@ -47,10 +47,6 @@ jobs:
       - name: Build Windows Electron App
         env:
           ELECTRON_ENV: true
-          ES_USERNAME: ${{ secrets.ES_USERNAME }}
-          ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
-          ES_CREDENTIAL_ID: ${{ secrets.ES_CREDENTIAL_ID }}
-          ES_TOTP_SECRET: ${{ secrets.ES_TOTP_SECRET }}
         run: |
           node scripts/clean-old-builds.js
           npm run prepare.electron.giddh
@@ -141,36 +137,27 @@ jobs:
           Write-Host "🔍 Verifying built artifacts..."
           
           # Check installer
-          $exePath = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse | Where-Object { $_.Directory.Name -ne "win-unpacked" } | Select-Object -First 1
-          if ($exePath) {
-              Write-Host "  ✅ Found installer: $($exePath.FullName)"
-              Write-Host "  Size: $($exePath.Length) bytes"
+          $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse | Where-Object { $_.Name -notmatch "blockmap" -and $_.Directory.Name -ne "win-unpacked" } | Select-Object -First 1
+          if ($installer) {
+              Write-Host "  ✅ Found installer: $($installer.FullName)"
+              Write-Host "  Size: $($installer.Length) bytes"
           } else {
-              Write-Host "  ⚠️ WARNING: Installer not found in expected location"
+              Write-Host "  ❌ ERROR: Installer not found!"
+              exit 1
           }
           
-          # Check app executable in win-unpacked (critical for auto-updates)
-          $appExePath = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "Giddh.exe" -Recurse | Where-Object { $_.Directory.Name -eq "win-unpacked" } | Select-Object -First 1
-          if ($appExePath) {
-              Write-Host "  ✅ Found app executable: $($appExePath.FullName)"
-              Write-Host "  Size: $($appExePath.Length) bytes"
-              
-              # Verify signature of app executable
-              $sig = Get-AuthenticodeSignature $appExePath.FullName
-              Write-Host "  📝 App Executable Signature Status: $($sig.Status)"
-              if ($sig.Status -eq "Valid") {
-                  Write-Host "  ✅ App executable is SIGNED (auto-updates will work)"
-                  Write-Host "  Signer: $($sig.SignerCertificate.Subject)"
-              } else {
-                  Write-Host "  ❌ ERROR: App executable is NOT SIGNED!"
-                  Write-Host "  This will cause Windows SmartScreen to block auto-updates!"
-                  exit 1
-              }
+          # Check app executable in win-unpacked (CRITICAL for auto-updates)
+          $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "Giddh.exe" -Recurse | Where-Object { $_.Directory.Name -eq "win-unpacked" } | Select-Object -First 1
+          if ($appExe) {
+              Write-Host "  ✅ Found app executable: $($appExe.FullName)"
+              Write-Host "  Size: $($appExe.Length) bytes"
+              Write-Host "  ⚠️  Not signed yet - will be signed by eSigner in next step"
           } else {
-              Write-Host "  ⚠️ WARNING: App executable not found in win-unpacked"
+              Write-Host "  ❌ ERROR: App executable not found in win-unpacked!"
+              exit 1
           }
 
-      - name: Extract version and find installer
+      - name: Find artifacts and prepare for signing
         shell: pwsh
         run: |
           $packageJson = Get-Content "package.json" | ConvertFrom-Json
@@ -178,45 +165,31 @@ jobs:
           "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Package version: $version"
 
-          Write-Host "📂 Listing all files in dist/apps/electrongiddh-packages:"
-          if (Test-Path "dist/apps/electrongiddh-packages") {
-            Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Recurse | ForEach-Object {
-              Write-Host "  $($_.FullName) - Directory: $($_.Directory.Name)"
-            }
-          } else {
-            Write-Host "⚠️ Directory dist/apps/electrongiddh-packages does not exist!"
-            Write-Host "📂 Listing dist/apps:"
-            Get-ChildItem -Path "dist/apps" -Recurse | ForEach-Object {
-              Write-Host "  $($_.FullName)"
-            }
-          }
-
-          $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse -ErrorAction SilentlyContinue |
+          # Find unsigned installer
+          $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse |
             Where-Object { $_.Name -notmatch "blockmap" -and $_.Directory.Name -ne "win-unpacked" } |
-            Sort-Object Length -Descending |
             Select-Object -First 1
 
           if (-not $installer) { 
-            Write-Host "❌ No installer found with current filters. Trying without filters..."
-            $allExes = Get-ChildItem -Path "dist/apps" -Filter "*.exe" -Recurse -ErrorAction SilentlyContinue
-            Write-Host "Found EXE files:"
-            $allExes | ForEach-Object { Write-Host "  $($_.FullName)" }
-            throw "No installer found. Check electron-builder output." 
+            throw "Installer not found. Check electron-builder output." 
           }
 
+          Write-Host "Found unsigned installer: $($installer.FullName)"
           "INSTALLER_PATH=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
-          Write-Host "Found installer: $($installer.FullName)"
           
-          # Check if installer is already signed (from custom-sign.js during build)
-          $installerSig = Get-AuthenticodeSignature $installer.FullName
-          if ($installerSig.Status -eq "Valid") {
-              Write-Host "✅ Installer is already SIGNED during build"
-              "INSTALLER_ALREADY_SIGNED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
-          } else {
-              Write-Host "⚠️  Installer is NOT signed, will sign in next step"
-              "INSTALLER_ALREADY_SIGNED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
+          # Find app executable in win-unpacked (CRITICAL for auto-updates)
+          $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "Giddh.exe" -Recurse |
+            Where-Object { $_.Directory.Name -eq "win-unpacked" } |
+            Select-Object -First 1
+          
+          if (-not $appExe) {
+            throw "App executable not found in win-unpacked. This is required for auto-updates!"
           }
           
+          Write-Host "Found unsigned app executable: $($appExe.FullName)"
+          "APP_EXE_PATH=$($appExe.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          
+          # Find latest.yml
           $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
           if ($latestYml) {
               "LATEST_YML=$($latestYml.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -225,24 +198,17 @@ jobs:
               Write-Host "⚠️ WARNING: latest.yml not found"
           }
           
-          # Get versioned filename from electron-builder (e.g., giddh-test-setup-10.0.9.exe)
+          # Get versioned filename (e.g., giddh-test-setup-10.0.14.exe)
           $versionedExeName = Split-Path -Leaf $installer.FullName
           "VERSIONED_EXE_NAME=$versionedExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Versioned installer name: $versionedExeName"
           
-          # Fixed name for latest folder (for auto-updater) - without version suffix
+          # Fixed name for latest folder (without version suffix)
           $latestExeName = "giddh-test-setup.exe"
           "LATEST_EXE_NAME=$latestExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Latest installer name: $latestExeName"
 
-      - name: Create artifacts directory
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path "artifacts/final" | Out-Null
-          Write-Host "Created artifacts/final directory"
-
-      - name: Sign installer with SSL.com eSigner (fallback if not signed during build)
-        if: env.INSTALLER_ALREADY_SIGNED == 'false'
+      - name: Sign installer with SSL.com eSigner
         uses: SSLcom/esigner-codesign@v1.3.2
         with:
           command: sign
@@ -251,47 +217,77 @@ jobs:
           credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
           file_path: ${{ env.INSTALLER_PATH }}
-          output_path: artifacts/final
+          output_path: artifacts/signed
           malware_block: false
           environment_name: PROD
           override: true
 
-      - name: Verify installer signature and prepare for upload
+      - name: Sign app executable with SSL.com eSigner (CRITICAL for auto-updates)
+        uses: SSLcom/esigner-codesign@v1.3.2
+        with:
+          command: sign
+          username: ${{ secrets.ES_USERNAME }}
+          password: ${{ secrets.ES_PASSWORD }}
+          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
+          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
+          file_path: ${{ env.APP_EXE_PATH }}
+          output_path: artifacts/signed-app
+          malware_block: false
+          environment_name: PROD
+          override: true
+
+      - name: Verify signatures and prepare final artifacts
         shell: pwsh
         run: |
-          # Determine which installer to use
-          if ("${{ env.INSTALLER_ALREADY_SIGNED }}" -eq "true") {
-            # Installer was signed during build, copy it to artifacts/final
-            Write-Host "📦 Using installer signed during build"
-            Copy-Item "${{ env.INSTALLER_PATH }}" "artifacts/final/" -Force
-            $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
-          } else {
-            # Installer was signed after build by eSigner action
-            Write-Host "📦 Using installer signed by eSigner action"
-            $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
+          # Verify installer signature
+          $signedInstaller = Get-ChildItem -Path "artifacts/signed" -Filter "*.exe" | Select-Object -First 1
+          if (-not $signedInstaller) {
+            throw "Signed installer not found in artifacts/signed"
           }
           
-          if (-not $signedInstaller) { throw "Signed installer not found in artifacts/final" }
-          
-          $sig = Get-AuthenticodeSignature $signedInstaller.FullName
+          $installerSig = Get-AuthenticodeSignature $signedInstaller.FullName
           Write-Host "========================================="
           Write-Host "INSTALLER Signature Verification:"
           Write-Host "File: $($signedInstaller.FullName)"
-          Write-Host "Status: $($sig.Status)"
-          Write-Host "Status Message: $($sig.StatusMessage)"
-          Write-Host "Signer Certificate Subject: $($sig.SignerCertificate.Subject)"
-          Write-Host "Signer Certificate Issuer: $($sig.SignerCertificate.Issuer)"
-          Write-Host "Signer Certificate Thumbprint: $($sig.SignerCertificate.Thumbprint)"
-          Write-Host "Time Stamper Certificate: $($sig.TimeStamperCertificate.Subject)"
+          Write-Host "Status: $($installerSig.Status)"
+          Write-Host "Signer: $($installerSig.SignerCertificate.Subject)"
           Write-Host "========================================="
           
-          if ($sig.Status -ne "Valid") { 
-            Write-Host "ERROR: Installer signature verification failed!"
-            throw "Installer signature verification failed: $($sig.StatusMessage)" 
+          if ($installerSig.Status -ne "Valid") {
+            throw "Installer signature verification failed: $($installerSig.StatusMessage)"
+          }
+          Write-Host "✅ Installer is SIGNED"
+          
+          # Verify app executable signature (CRITICAL for auto-updates)
+          $signedAppExe = Get-ChildItem -Path "artifacts/signed-app" -Filter "Giddh.exe" | Select-Object -First 1
+          if (-not $signedAppExe) {
+            throw "Signed app executable not found in artifacts/signed-app"
           }
           
-          Write-Host "✅ Installer signature is valid!"
-          "FINAL_INSTALLER=$($signedInstaller.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          $appSig = Get-AuthenticodeSignature $signedAppExe.FullName
+          Write-Host "========================================="
+          Write-Host "APP EXECUTABLE Signature Verification:"
+          Write-Host "File: $($signedAppExe.FullName)"
+          Write-Host "Status: $($appSig.Status)"
+          Write-Host "Signer: $($appSig.SignerCertificate.Subject)"
+          Write-Host "========================================="
+          
+          if ($appSig.Status -ne "Valid") {
+            throw "App executable signature verification failed: $($appSig.StatusMessage)"
+          }
+          Write-Host "✅ App executable is SIGNED (auto-updates will work)"
+          
+          # Copy signed app executable back to win-unpacked
+          $winUnpackedDir = Split-Path -Parent $env:APP_EXE_PATH
+          Copy-Item $signedAppExe.FullName $winUnpackedDir -Force
+          Write-Host "✅ Copied signed app executable back to win-unpacked"
+          
+          # Copy signed installer to final artifacts
+          New-Item -ItemType Directory -Force -Path "artifacts/final" | Out-Null
+          Copy-Item $signedInstaller.FullName "artifacts/final/" -Force
+          Write-Host "✅ Copied signed installer to artifacts/final/"
+          
+          "FINAL_INSTALLER=artifacts/final/$env:VERSIONED_EXE_NAME" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Prepare latest.yml for upload
         shell: pwsh
