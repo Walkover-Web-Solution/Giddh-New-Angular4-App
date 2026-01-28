@@ -12,6 +12,7 @@
             <div class="country-select-wrapper" (click)="$event.stopPropagation()">
                 <mat-select
                     #countrySelect
+                    [disabled]="disabled"
                     cdkMonitorElementFocus
                     [formControl]="countryControl"
                     panelWidth="400px"
@@ -74,6 +75,7 @@
                 (focus)="onMobileFocus()"
                 (click)="$event.stopPropagation()"
                 autocomplete="tel"
+                [disabled]="disabled"
             />
         </div>
         <!-- <mat-error *ngIf="mobileControl.hasError('required')">
