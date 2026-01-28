@@ -194,7 +194,7 @@ jobs:
           
           # Fixed names for latest folder (for auto-updater)
           FINAL_ZIP_NAME="giddh-test.zip"
-          FINAL_DMG_NAME="giddh-test.dmg"
+          FINAL_DMG_NAME="giddh-test-setup.dmg"
           echo "FINAL_ZIP_NAME=$FINAL_ZIP_NAME" >> $GITHUB_ENV
           echo "FINAL_DMG_NAME=$FINAL_DMG_NAME" >> $GITHUB_ENV
           echo "Fixed ZIP name for latest: $FINAL_ZIP_NAME"
@@ -294,9 +294,9 @@ jobs:
             YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh-test.zip|g')
             YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh-test.zip|g')
             # Replace DMG references
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test.dmg/g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test.dmg|g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-test.dmg|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test-setup.dmg/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test-setup.dmg|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: Giddh Setup [0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-test-setup.dmg|g')
             
             # Save modified content to a temporary file
             MODIFIED_YML="/tmp/latest-modified.yml"
@@ -305,12 +305,12 @@ jobs:
             echo "📝 Modified latest.yml content:"
             cat "$MODIFIED_YML"
             
-            # Upload modified latest.yml to latest folder (electron-updater looks for latest.yml on macOS)
-            aws s3 cp "$MODIFIED_YML" "s3://$BUCKET/test/mac/latest/latest.yml" \
+            # Upload modified latest-mac.yml to latest folder (electron-updater looks for latest-mac.yml on macOS)
+            aws s3 cp "$MODIFIED_YML" "s3://$BUCKET/test/mac/latest/latest-mac.yml" \
               --content-type "text/yaml" \
               --cache-control "no-cache, no-store, must-revalidate" \
               --metadata "version=$VERSION,platform=macos"
-            echo "✅ Uploaded modified latest.yml to latest folder: test/mac/latest/latest.yml"
+            echo "✅ Uploaded modified latest-mac.yml to latest folder: test/mac/latest/latest-mac.yml"
           fi
           
           echo "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/mac/$VERSION/latest.yml"
@@ -335,6 +335,6 @@ jobs:
           echo ""
           echo "Download URLs (Latest - Auto-updater):"
           echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test.zip"
-          echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test.dmg"
-          echo "  YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/latest.yml"
+          echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/giddh-test-setup.dmg"
+          echo "  YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/mac/latest/latest-mac.yml"
           echo "=========================================="
