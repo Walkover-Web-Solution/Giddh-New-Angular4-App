@@ -208,9 +208,11 @@ export default class AppUpdater {
 
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
             if (returnValue.response === 0) {
-                log.info('User clicked Restart Now - quitting and installing...');
+                log.info('User clicked Restart Now - installing silently and restarting...');
                 setImmediate(() => {
-                    autoUpdater.quitAndInstall(false, true);
+                    // Silent install: no NSIS wizard, automatic restart
+                    // Params: isSilent=true, isForceRunAfter=true
+                    autoUpdater.quitAndInstall(true, true);
                 });
             } else {
                 log.info('User chose to install update later - will install on next app quit');
@@ -251,7 +253,9 @@ export default class AppUpdater {
 
     public quitAndInstall(): void {
         if (this.isUpdateDownloaded) {
-            autoUpdater.quitAndInstall();
+            log.info('Installing update silently and restarting app...');
+            // Silent install: no NSIS wizard, automatic restart
+            autoUpdater.quitAndInstall(true, true);
         }
     }
 

@@ -48,11 +48,11 @@
         "hardenedRuntime": false,
         "gatekeeperAssess": false,
         "type": "development",
-        "artifactName": "${productName} Setup ${version}.${ext}"
+        "artifactName": "giddh-test-setup-${version}.${ext}"
     },
     "dmg": {
         "sign": false,
-        "artifactName": "${productName} Setup ${version}.${ext}",
+        "artifactName": "giddh-test-setup-${version}.${ext}",
         "title": "${productName} ${version}",
         "icon": "icon.icns",
         "iconSize": 80,

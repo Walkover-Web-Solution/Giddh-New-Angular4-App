@@ -1,6 +1,7 @@
 # Author Name: Divyanshu Shrivastava
 # Date: 14th January 2026
-name: Windows EXE (build → eSigner sign → S3 upload)
+# Updated: 28th January 2026 - Signing now happens DURING build via custom-sign.js
+name: Windows EXE (build with signing → S3 upload)
 
 on:
   push:
@@ -46,6 +47,10 @@ jobs:
       - name: Build Windows Electron App
         env:
           ELECTRON_ENV: true
+          ES_USERNAME: ${{ secrets.ES_USERNAME }}
+          ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
+          ES_CREDENTIAL_ID: ${{ secrets.ES_CREDENTIAL_ID }}
+          ES_TOTP_SECRET: ${{ secrets.ES_TOTP_SECRET }}
         run: |
           node scripts/clean-old-builds.js
           npm run prepare.electron.giddh
@@ -94,13 +99,36 @@ jobs:
           cd ../../../
           node scripts/build-success-message.js prod
           
-          Write-Host "🔍 Verifying built installer..."
+          Write-Host "🔍 Verifying built artifacts..."
+          
+          # Check installer
           $exePath = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse | Where-Object { $_.Directory.Name -ne "win-unpacked" } | Select-Object -First 1
           if ($exePath) {
               Write-Host "  ✅ Found installer: $($exePath.FullName)"
               Write-Host "  Size: $($exePath.Length) bytes"
           } else {
               Write-Host "  ⚠️ WARNING: Installer not found in expected location"
+          }
+          
+          # Check app executable in win-unpacked (critical for auto-updates)
+          $appExePath = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "Giddh.exe" -Recurse | Where-Object { $_.Directory.Name -eq "win-unpacked" } | Select-Object -First 1
+          if ($appExePath) {
+              Write-Host "  ✅ Found app executable: $($appExePath.FullName)"
+              Write-Host "  Size: $($appExePath.Length) bytes"
+              
+              # Verify signature of app executable
+              $sig = Get-AuthenticodeSignature $appExePath.FullName
+              Write-Host "  📝 App Executable Signature Status: $($sig.Status)"
+              if ($sig.Status -eq "Valid") {
+                  Write-Host "  ✅ App executable is SIGNED (auto-updates will work)"
+                  Write-Host "  Signer: $($sig.SignerCertificate.Subject)"
+              } else {
+                  Write-Host "  ❌ ERROR: App executable is NOT SIGNED!"
+                  Write-Host "  This will cause Windows SmartScreen to block auto-updates!"
+                  exit 1
+              }
+          } else {
+              Write-Host "  ⚠️ WARNING: App executable not found in win-unpacked"
           }
 
       - name: Extract version and find installer
@@ -118,8 +146,18 @@ jobs:
 
           if (-not $installer) { throw "No installer found. Check electron-builder output." }
 
-          "UNSIGNED_INSTALLER=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
-          Write-Host "Found unsigned installer: $($installer.FullName)"
+          "INSTALLER_PATH=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Found installer: $($installer.FullName)"
+          
+          # Check if installer is already signed (from custom-sign.js during build)
+          $installerSig = Get-AuthenticodeSignature $installer.FullName
+          if ($installerSig.Status -eq "Valid") {
+              Write-Host "✅ Installer is already SIGNED during build"
+              "INSTALLER_ALREADY_SIGNED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
+          } else {
+              Write-Host "⚠️  Installer is NOT signed, will sign in next step"
+              "INSTALLER_ALREADY_SIGNED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
+          }
           
           $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
           if ($latestYml) {
@@ -129,9 +167,15 @@ jobs:
               Write-Host "⚠️ WARNING: latest.yml not found"
           }
           
-          $finalExeName = "giddh-test-setup.exe"
-          "FINAL_EXE_NAME=$finalExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
-          Write-Host "Final installer name will be: $finalExeName"
+          # Get versioned filename from electron-builder (e.g., giddh-test-setup-10.0.9.exe)
+          $versionedExeName = Split-Path -Leaf $installer.FullName
+          "VERSIONED_EXE_NAME=$versionedExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Versioned installer name: $versionedExeName"
+          
+          # Fixed name for latest folder (for auto-updater) - without version suffix
+          $latestExeName = "giddh-test-setup.exe"
+          "LATEST_EXE_NAME=$latestExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Latest installer name: $latestExeName"
 
       - name: Create artifacts directory
         shell: pwsh
@@ -139,7 +183,8 @@ jobs:
           New-Item -ItemType Directory -Force -Path "artifacts/final" | Out-Null
           Write-Host "Created artifacts/final directory"
 
-      - name: Sign installer with SSL.com eSigner
+      - name: Sign installer with SSL.com eSigner (fallback if not signed during build)
+        if: env.INSTALLER_ALREADY_SIGNED == 'false'
         uses: SSLcom/esigner-codesign@v1.3.2
         with:
           command: sign
@@ -147,16 +192,27 @@ jobs:
           password: ${{ secrets.ES_PASSWORD }}
           credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
-          file_path: ${{ env.UNSIGNED_INSTALLER }}
+          file_path: ${{ env.INSTALLER_PATH }}
           output_path: artifacts/final
           malware_block: false
           environment_name: PROD
           override: true
 
-      - name: Verify installer signature
+      - name: Verify installer signature and prepare for upload
         shell: pwsh
         run: |
-          $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
+          # Determine which installer to use
+          if ("${{ env.INSTALLER_ALREADY_SIGNED }}" -eq "true") {
+            # Installer was signed during build, copy it to artifacts/final
+            Write-Host "📦 Using installer signed during build"
+            Copy-Item "${{ env.INSTALLER_PATH }}" "artifacts/final/" -Force
+            $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
+          } else {
+            # Installer was signed after build by eSigner action
+            Write-Host "📦 Using installer signed by eSigner action"
+            $signedInstaller = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
+          }
+          
           if (-not $signedInstaller) { throw "Signed installer not found in artifacts/final" }
           
           $sig = Get-AuthenticodeSignature $signedInstaller.FullName
@@ -260,23 +316,22 @@ jobs:
           Write-Host "  Bucket: $BUCKET"
           Write-Host "  Source: $INSTALLER_FILE"
           
-          # Upload to versioned folder with original filename
-          $originalName = Split-Path -Leaf $INSTALLER_FILE
-          aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/$VERSION/$originalName" `
+          # Upload to versioned folder with versioned filename
+          aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/$VERSION/${{ env.VERSIONED_EXE_NAME }}" `
             --content-type "application/x-msdownload" `
             --metadata "version=$VERSION,platform=windows,arch=x64"
           
-          Write-Host "✅ Uploaded versioned installer: test/windows/$VERSION/$originalName"
+          Write-Host "✅ Uploaded versioned installer: test/windows/$VERSION/${{ env.VERSIONED_EXE_NAME }}"
           
-          # Upload to latest folder with fixed name for auto-updater
+          # Upload to latest folder with fixed name for auto-updater (without version)
           if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
-            aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/latest/giddh-test-setup.exe" `
+            aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/latest/${{ env.LATEST_EXE_NAME }}" `
               --content-type "application/x-msdownload" `
               --metadata "version=$VERSION,platform=windows,arch=x64"
-            Write-Host "✅ Uploaded to latest: test/windows/latest/giddh-test-setup.exe"
+            Write-Host "✅ Uploaded to latest: test/windows/latest/${{ env.LATEST_EXE_NAME }}"
           }
           
-          Write-Host "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/windows/$VERSION/$originalName"
+          Write-Host "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/windows/$VERSION/${{ env.VERSIONED_EXE_NAME }}"
 
       - name: Upload latest.yml to S3
         if: env.LATEST_YML != ''
@@ -301,14 +356,11 @@ jobs:
               # Read the already-updated latest.yml (SHA512 was recalculated after signing)
               $ymlContent = Get-Content $YML_FILE -Raw
               
-              # Replace versioned exe filenames with fixed name
-              # electron-builder generates filenames like "Giddh Setup 9.1.54.exe" based on productName
-              $ymlContent = $ymlContent -replace 'Giddh Setup \d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
-              $ymlContent = $ymlContent -replace 'Giddh-\d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
-              $ymlContent = $ymlContent -replace 'giddh-\d+\.\d+\.\d+(-x64|-ia32)?\.exe', 'giddh-test-setup.exe'
-              $ymlContent = $ymlContent -replace 'path: Giddh Setup \d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
-              $ymlContent = $ymlContent -replace 'path: Giddh-\d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
-              $ymlContent = $ymlContent -replace 'path: giddh-\d+\.\d+\.\d+(-x64|-ia32)?\.exe', 'path: giddh-test-setup.exe'
+              # Replace versioned exe filenames with fixed name (without version suffix)
+              # electron-builder generates filenames like "giddh-test-setup-10.0.9.exe"
+              $ymlContent = $ymlContent -replace 'giddh-test-setup-\d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
+              $ymlContent = $ymlContent -replace 'path: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
+              $ymlContent = $ymlContent -replace 'url: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'url: giddh-test-setup.exe'
               
               # Save modified content to a new file
               $modifiedYml = "artifacts/final/latest-modified.yml"
@@ -340,8 +392,12 @@ jobs:
           Write-Host "Architecture: x64 + ia32"
           Write-Host "S3 Bucket: ${{ env.S3_BUCKET }}"
           Write-Host "========================================="
-          Write-Host "Download URLs:"
-          Write-Host "Latest EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/giddh-test-setup.exe"
-          Write-Host "Latest YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/latest.yml"
+          Write-Host "Download URLs (Versioned):"
+          Write-Host "  EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_EXE_NAME }}"
+          Write-Host "  YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/${{ env.PACKAGE_VERSION }}/latest.yml"
+          Write-Host ""
+          Write-Host "Download URLs (Latest - Auto-updater):"
+          Write-Host "  EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/${{ env.LATEST_EXE_NAME }}"
+          Write-Host "  YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/latest.yml"
           Write-Host "=========================================="
 

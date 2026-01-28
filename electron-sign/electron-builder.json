@@ -78,9 +78,14 @@
         ],
         "icon": "icon.ico",
         "legalTrademarks": "",
+        "artifactName": "giddh-test-setup-${version}.${ext}",
         "signAndEditExecutable": true,
+        "certificateSubjectName": "Walkover Web Solutions Private Limited",
+        "publisherName": "Walkover Web Solutions Private Limited",
         "requestedExecutionLevel": "asInvoker",
-        "verifyUpdateCodeSignature": false
+        "verifyUpdateCodeSignature": false,
+        "signingHashAlgorithms": ["sha256"],
+        "sign": "./custom-sign.js"
     },
     "nsis": {
         "oneClick": false,
@@ -89,13 +94,13 @@
         "createStartMenuShortcut": true,
         "menuCategory": "Accounting",
         "shortcutName": "Giddh",
-        "perMachine": false,
+        "perMachine": true,
         "installerIcon": "resources/icon.ico",
         "uninstallerIcon": "resources/icon.ico",
         "installerHeaderIcon": "resources/icon.ico",
         "deleteAppDataOnUninstall": false,
         "runAfterFinish": true,
-        "differentialPackage": true,
+        "differentialPackage": false,
         "packElevateHelper": true,
         "allowElevation": true,
         "displayLanguageSelector": false

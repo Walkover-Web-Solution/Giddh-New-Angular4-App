@@ -4,6 +4,7 @@ import { log } from "./util";
 import WindowManager from "./WindowManager";
 import { GoogleLoginElectronConfig } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
+import { getAppUpdater } from "./AppUpdater";
 
 let windowManager: WindowManager = null;
 let STAGING_ENV = false;
@@ -210,6 +211,16 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
                 }
             });
     }
+});
+
+ipcMain.on('check-for-updates', () => {
+    const updater = getAppUpdater();
+    updater.checkForUpdates();
+});
+
+ipcMain.on('install-update', () => {
+    const updater = getAppUpdater();
+    updater.quitAndInstall();
 });
 
 function createTray(): void {
