@@ -306,13 +306,13 @@
                                     "minify": true,
                                     "inlineCritical": false
                                 },
-                                "fonts": true
+                                "fonts": false
                             },
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractLicenses": true,
+                            "extractLicenses": false,
                             "vendorChunk": true,
-                            "namedChunks": false,
+                            "namedChunks": true,
                             "budgets": [
                                 {
                                     "type": "initial",

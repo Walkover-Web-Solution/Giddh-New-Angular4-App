@@ -198,21 +198,23 @@
                     *ngIf="showTaxationDiscountBox && currentTxn?.selectedAccount && !shouldShowAdvanceReceiptMandatoryFields"
                     (click)="$event.stopPropagation()"
                 >
-                    <ledger-discount
+                    <common-discount
                         (click)="hideAllDropdown(ledgerDropdownTypeEnum.DISCOUNT)"
                         #discount
-                        id="ledger-discount"
-                        [discountAccountsDetails]="currentTxn?.discounts"
+                        [discountAccountsDetails]="activeAccountDiscounts()"
                         [maskInput]="inputMaskFormat"
                         [prefixInput]="selectedPrefixForCurrency"
                         [suffixInput]="selectedSuffixForCurrency"
-                        [ledgerAmount]="currentTxn.amount"
+                        [amountForDiscount]="currentTxn.amount"
                         [discountsList]="discountsList"
                         [commonLocaleData]="commonLocaleData"
                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
-                        (discountTotalUpdated)="calculateDiscount($event)"
+                        [showCreateNew]="true"
+                        [hasBackdrop]="false"
+                        (discountTotalUpdated)="currentTxn.discount = $event; calculateDiscount()"
+                        (selectedDiscountsEvent)="currentTxn.discounts = $event"
                         (createNewDiscount)="showCreateDiscountDialog()"
-                    ></ledger-discount>
+                    ></common-discount>
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                         <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                         <span class="d-inline-flex">

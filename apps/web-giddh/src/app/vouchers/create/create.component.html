@@ -2132,26 +2132,30 @@
                                                                     </div>
                                                                 </ng-container>
                                                                 <div>
-                                                                    <discount-dropdown
+                                                                    <common-discount
                                                                         #discountDropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
-                                                                        [amount]="transaction.get('amount.amountForAccount')?.value"
-                                                                        [companyDecimalPlaces]="company.giddhBalanceDecimalPlaces"
+                                                                        [showMatFormField]="false"
+                                                                        [amountForDiscount]="
+                                                                            transaction.get('amount.amountForAccount')?.value
+                                                                        "
+                                                                        [giddhBalanceDecimalPlaces]="company.giddhBalanceDecimalPlaces"
                                                                         [discountsList]="(discountsList$ | async) ?? []"
                                                                         [commonLocaleData]="commonLocaleData"
-                                                                        [selectedDiscountsList]="entry.get('discounts')?.value"
-                                                                        [currency]="account.baseCurrencySymbol"
+                                                                        [maskInput]="company.inputMaskFormat"
+                                                                        [discountAccountsDetails]="entry.get('discounts')?.value"
+                                                                        [prefixInput]="account.baseCurrencySymbol"
+                                                                        [suffixInput]="''"
                                                                         (createNewDiscount)="showCreateDiscountDialog()"
-                                                                        (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)"
-                                                                        (totalDiscount)="
+                                                                        (selectedDiscountsEvent)="getSelectedDiscounts(entryIndex, $event)"
+                                                                        (discountTotalUpdated)="
                                                                             updateTotalDiscount(
                                                                                 $event,
                                                                                 entry,
                                                                                 activeEntryIndex === entryIndex
                                                                             )
                                                                         "
-                                                                        (closeDiscountDropdown)="focusNextElement($event)"
-                                                                    ></discount-dropdown>
+                                                                    ></common-discount>
                                                                     <span
                                                                         class="font-size-14 text-light mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher"

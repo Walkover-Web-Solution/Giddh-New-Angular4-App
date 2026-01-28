@@ -112,6 +112,8 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     public selectedTaxEvent = output<any[]>();
     /** Emits when "Create New Tax" is clicked */
     public createNewTax = output<boolean>();
+    /** Emits when tax dropdown is opened to hide other popups */
+    public hideOtherPopups = output<void>();
 
     // ==================== VIEW CHILDREN ====================
     /** Reference to mat-select when showMatFormField is true */
@@ -695,6 +697,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     public onSelectOpenedChange(opened: boolean, selectInstance: MatSelect): void {
         this.isDropdownOpen.set(opened);
         if (opened) {
+            this.hideOtherPopups.emit();
             this.focusSecondOption(selectInstance);
         }
     }
