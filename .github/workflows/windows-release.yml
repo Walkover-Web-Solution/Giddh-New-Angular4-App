@@ -95,7 +95,7 @@ jobs:
           
           cd dist/apps/web-giddh
           Write-Host "🔨 Building Windows app with electron-builder..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --x64
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win
           cd ../../../
           node scripts/build-success-message.js prod
           
@@ -139,12 +139,31 @@ jobs:
           "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Package version: $version"
 
-          $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse |
+          Write-Host "📂 Listing all files in dist/apps/electrongiddh-packages:"
+          if (Test-Path "dist/apps/electrongiddh-packages") {
+            Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Recurse | ForEach-Object {
+              Write-Host "  $($_.FullName) - Directory: $($_.Directory.Name)"
+            }
+          } else {
+            Write-Host "⚠️ Directory dist/apps/electrongiddh-packages does not exist!"
+            Write-Host "📂 Listing dist/apps:"
+            Get-ChildItem -Path "dist/apps" -Recurse | ForEach-Object {
+              Write-Host "  $($_.FullName)"
+            }
+          }
+
+          $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse -ErrorAction SilentlyContinue |
             Where-Object { $_.Name -notmatch "blockmap" -and $_.Directory.Name -ne "win-unpacked" } |
             Sort-Object Length -Descending |
             Select-Object -First 1
 
-          if (-not $installer) { throw "No installer found. Check electron-builder output." }
+          if (-not $installer) { 
+            Write-Host "❌ No installer found with current filters. Trying without filters..."
+            $allExes = Get-ChildItem -Path "dist/apps" -Filter "*.exe" -Recurse -ErrorAction SilentlyContinue
+            Write-Host "Found EXE files:"
+            $allExes | ForEach-Object { Write-Host "  $($_.FullName)" }
+            throw "No installer found. Check electron-builder output." 
+          }
 
           "INSTALLER_PATH=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Found installer: $($installer.FullName)"
