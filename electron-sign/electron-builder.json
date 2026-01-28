@@ -79,13 +79,12 @@
         "icon": "icon.ico",
         "legalTrademarks": "",
         "artifactName": "giddh-test-setup-${version}.${ext}",
-        "signAndEditExecutable": true,
+        "signAndEditExecutable": false,
         "certificateSubjectName": "Walkover Web Solutions Private Limited",
         "publisherName": "Walkover Web Solutions Private Limited",
         "requestedExecutionLevel": "asInvoker",
         "verifyUpdateCodeSignature": false,
-        "signingHashAlgorithms": ["sha256"],
-        "sign": "./custom-sign.js"
+        "signingHashAlgorithms": ["sha256"]
     },
     "nsis": {
         "oneClick": false,
