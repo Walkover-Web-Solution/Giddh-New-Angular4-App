@@ -93,20 +93,45 @@ jobs:
           $trayIcons = Get-ChildItem "dist/apps/web-giddh/build/icons/*.png" -ErrorAction SilentlyContinue
           Write-Host "  ✅ Copied $($trayIcons.Count) tray icon files"
           
-          Write-Host "📦 Copying Electron app files..."
-          # Copy compiled Electron main process files
-          Copy-Item "apps/electron-giddh/src/package.json" "dist/apps/web-giddh/" -Force
-          Copy-Item "apps/electron-giddh/src/index.js" "dist/apps/web-giddh/" -Force
-          Copy-Item "apps/electron-giddh/src/preload.js" "dist/apps/web-giddh/" -Force
-          Copy-Item "apps/electron-giddh/src/*.js" "dist/apps/web-giddh/" -Force -ErrorAction SilentlyContinue
-          Copy-Item "apps/electron-giddh/src/*.js.map" "dist/apps/web-giddh/" -Force -ErrorAction SilentlyContinue
+          Write-Host "📦 Setting up Electron app structure..."
+          # Copy ALL compiled Electron files from apps/electron-giddh/src to dist/apps/web-giddh
+          Write-Host "  Copying Electron main process files..."
+          Copy-Item "apps/electron-giddh/src/package.json" "dist/apps/web-giddh/package.json" -Force
+          Copy-Item "apps/electron-giddh/src/index.js" "dist/apps/web-giddh/index.js" -Force
+          Copy-Item "apps/electron-giddh/src/preload.js" "dist/apps/web-giddh/preload.js" -Force
+          
+          # Copy all other compiled JS files (AppUpdater, WindowManager, etc.)
+          Get-ChildItem "apps/electron-giddh/src/*.js" | ForEach-Object {
+              Copy-Item $_.FullName "dist/apps/web-giddh/$($_.Name)" -Force
+          }
+          
+          # Copy source maps for debugging
+          Get-ChildItem "apps/electron-giddh/src/*.js.map" -ErrorAction SilentlyContinue | ForEach-Object {
+              Copy-Item $_.FullName "dist/apps/web-giddh/$($_.Name)" -Force
+          }
+          
           Write-Host "  ✅ Copied Electron main process files"
+          Write-Host "  Files in dist/apps/web-giddh:"
+          Get-ChildItem "dist/apps/web-giddh" -File | Select-Object -First 10 | ForEach-Object { Write-Host "    - $($_.Name)" }
           
           # Install production dependencies for Electron
           Write-Host "📦 Installing Electron production dependencies..."
           cd dist/apps/web-giddh
+          
+          # Verify package.json exists and has main entry
+          if (Test-Path "package.json") {
+              $pkg = Get-Content "package.json" | ConvertFrom-Json
+              Write-Host "  Package name: $($pkg.name)"
+              Write-Host "  Main entry: $($pkg.main)"
+              Write-Host "  Version: $($pkg.version)"
+          } else {
+              Write-Host "  ❌ ERROR: package.json not found!"
+              exit 1
+          }
+          
           npm install --production --no-optional
           Write-Host "  ✅ Installed dependencies"
+          Write-Host "  node_modules created: $(Test-Path 'node_modules')"
           
           Write-Host "🔨 Building Windows app with electron-builder..."
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win
