@@ -178,8 +178,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public companyTaxesList: TaxResponse[] = [];
-    /** Active account discounts */
-    public activeAccountDiscounts = signal<LedgerDiscountClass[]>([]);
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
     /** Selected invoice for credit note */
@@ -1894,7 +1892,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             }
         }
-        this.activeAccountDiscounts.set(this.currentTxn.discounts);
     }
 
     /**
