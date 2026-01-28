@@ -142,19 +142,15 @@
                         </ng-container>
                     </ul>
                 </div>
-                <div
-                    *ngIf="showCreateNew()"
-                    class="create-new pt-2 mt-2 text-center cursor-pointer"
-                    (click)="createNew(); menuTrigger?.closeMenu()"
-                >
+                <div *ngIf="showCreateNew()" class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
                     <span
                         class="text-primary"
                         tabindex="0"
                         role="button"
                         cdkMonitorElementFocus
                         [attr.aria-label]="commonLocaleData()?.app_create_new"
-                        (keydown.enter)="$event.preventDefault(); createNew(); menuTrigger?.closeMenu()"
-                        (keydown.space)="$event.preventDefault(); createNew(); menuTrigger?.closeMenu()"
+                        (keydown.enter)="$event.preventDefault(); createNew()"
+                        (keydown.space)="$event.preventDefault(); createNew()"
                     >
                         {{ commonLocaleData()?.app_create_new }}
                     </span>
