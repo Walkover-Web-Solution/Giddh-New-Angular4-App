@@ -1,5 +1,5 @@
 import { CompanyResponse } from "apps/web-giddh/src/app/models/api-models/Company";
-import { Account, ChildGroup } from "apps/web-giddh/src/app/models/api-models/Search";
+import { Account, ChildGroup, ClosingBalance } from "apps/web-giddh/src/app/models/api-models/Search";
 import { giddhRoundOff } from "apps/web-giddh/src/app/shared/helpers/helperFunctions";
 import { RecTypePipe } from "apps/web-giddh/src/app/shared/helpers/pipes/recType/recType.pipe";
 import { Total } from "../trial-balance/export-csv/export-csv.component";
@@ -36,7 +36,7 @@ export class DataFormatter {
         csv += `${header}\r\n${title}`;
 
         (Array.isArray(this.exportData) ? this.exportData : []).forEach(obj => {
-            const balanceObj = obj.closingBalance[Object.keys(obj.closingBalance)[0]];
+            const balanceObj = obj.closingBalance as ClosingBalance;
             row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance?.amount} ${this.recType.transform(obj.forwardedBalance)}, ${obj.debitTotal},${obj.creditTotal}, ${balanceObj?.amount} ${this.recType.transform(balanceObj)}\r\n`;
             total = this.calculateTotal(obj, total);
         });
@@ -157,17 +157,16 @@ export class DataFormatter {
     }
 
     public calculateTotal = (group: ChildGroup, total: Total, decimalPlaces?: number): Total => {
-        const key = Object.keys(group.closingBalance)[0];
 
         if (group.forwardedBalance.type === 'DEBIT') {
             total.ob = total.ob + group.forwardedBalance.amount;
         } else {
             total.ob = total.ob - group.forwardedBalance.amount;
         }
-        if (group.closingBalance[key].type === 'DEBIT') {
-            total.cb = total.cb + group.closingBalance[key].amount;
+        if (group.closingBalance.type === 'DEBIT') {
+            total.cb = total.cb + (group.closingBalance as ClosingBalance).amount;
         } else {
-            total.cb = total.cb - group.closingBalance[key].amount;
+            total.cb = total.cb - (group.closingBalance as ClosingBalance).amount;
         }
 
         total.cr += group.creditTotal;
