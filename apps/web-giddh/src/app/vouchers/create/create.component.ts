@@ -664,7 +664,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public get recurrenceFormGroup(): FormGroup {
-        return this.invoiceForm.get('recurrence') as FormGroup;
+        return this.invoiceForm.get('recurrencePreviewRequest') as FormGroup;
     }
 
 
@@ -1384,33 +1384,33 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
 
                         if (this.isRecurringVoucher[1]?.isRecurringVoucher || voucherDetails?.recurrencePreviewRequest) {
-                            const recurrence = voucherDetails.recurrencePreviewRequest;
+                            const recurrencePreviewRequest = voucherDetails.recurrencePreviewRequest;
                             this.invoiceForm.get('isRecurringVoucher')?.patchValue(voucherDetails.recurrencePreviewRequest || this.isRecurringVoucher[1]?.isRecurringVoucher ? true : false);
 
-                            const startDate = this.convertToDateObject(recurrence?.startDate || this.invoiceForm.get('recurrence.startDate')?.value);
-                            this.invoiceForm.get('recurrence.startDate')?.patchValue(startDate);
+                            const startDate = this.convertToDateObject(recurrencePreviewRequest?.startDate || this.invoiceForm.get('recurrencePreviewRequest.startDate')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.startDate')?.patchValue(startDate);
 
-                            this.invoiceForm.get('recurrence.frequency.unit')?.patchValue(recurrence?.frequency?.unit || this.invoiceForm.get('recurrence.frequency.unit')?.value);
-                            this.invoiceForm.get('recurrence.frequency.interval')?.patchValue(recurrence?.frequency?.interval || this.invoiceForm.get('recurrence.frequency.interval')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.frequency.unit')?.patchValue(recurrencePreviewRequest?.frequency?.unit || this.invoiceForm.get('recurrencePreviewRequest.frequency.unit')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.frequency.interval')?.patchValue(recurrencePreviewRequest?.frequency?.interval || this.invoiceForm.get('recurrencePreviewRequest.frequency.interval')?.value);
 
-                            this.invoiceForm.get('recurrence.repeatOn.type')?.patchValue(recurrence?.repeatOn?.type || this.invoiceForm.get('recurrence.repeatOn.type')?.value);
-                            this.invoiceForm.get('recurrence.repeatOn.dayOfMonth')?.patchValue(recurrence?.repeatOn?.dayOfMonth || this.invoiceForm.get('recurrence.repeatOn.dayOfMonth')?.value);
-                            this.invoiceForm.get('recurrence.repeatOn.weekday')?.patchValue(recurrence?.repeatOn?.weekday || this.invoiceForm.get('recurrence.repeatOn.weekday')?.value);
-                            this.invoiceForm.get('recurrence.repeatOn.nth')?.patchValue(recurrence?.repeatOn?.nth || this.invoiceForm.get('recurrence.repeatOn.nth')?.value);
-                            this.invoiceForm.get('recurrence.repeatOn.monthlyMode')?.patchValue(recurrence?.repeatOn?.monthlyMode || this.invoiceForm.get('recurrence.repeatOn.monthlyMode')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.repeatOn.type')?.patchValue(recurrencePreviewRequest?.repeatOn?.type || this.invoiceForm.get('recurrencePreviewRequest.repeatOn.type')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.repeatOn.dayOfMonth')?.patchValue(recurrencePreviewRequest?.repeatOn?.dayOfMonth || this.invoiceForm.get('recurrencePreviewRequest.repeatOn.dayOfMonth')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.repeatOn.weekday')?.patchValue(recurrencePreviewRequest?.repeatOn?.weekday || this.invoiceForm.get('recurrencePreviewRequest.repeatOn.weekday')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.repeatOn.nth')?.patchValue(recurrencePreviewRequest?.repeatOn?.nth || this.invoiceForm.get('recurrencePreviewRequest.repeatOn.nth')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.repeatOn.monthlyMode')?.patchValue(recurrencePreviewRequest?.repeatOn?.monthlyMode || this.invoiceForm.get('recurrencePreviewRequest.repeatOn.monthlyMode')?.value);
 
-                            if (recurrence?.repeatOn?.weekdays && Array.isArray(recurrence.repeatOn.weekdays)) {
-                                const weekdaysArray = this.invoiceForm.get('recurrence.repeatOn.weekdays') as FormArray;
+                            if (recurrencePreviewRequest?.repeatOn?.weekdays && Array.isArray(recurrencePreviewRequest.repeatOn.weekdays)) {
+                                const weekdaysArray = this.invoiceForm.get('recurrencePreviewRequest.repeatOn.weekdays') as FormArray;
                                 weekdaysArray.clear();
-                                recurrence.repeatOn.weekdays.forEach((weekday: any) => {
+                                recurrencePreviewRequest.repeatOn.weekdays.forEach((weekday: any) => {
                                     weekdaysArray.push(this.formBuilder.control(weekday));
                                 });
                             }
 
-                            this.invoiceForm.get('recurrence.end.type')?.patchValue(recurrence?.end?.type || this.invoiceForm.get('recurrence.end.type')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.end.type')?.patchValue(recurrencePreviewRequest?.end?.type || this.invoiceForm.get('recurrencePreviewRequest.end.type')?.value);
 
-                            const endDate = this.convertToDateObject(recurrence?.end?.endDate || this.invoiceForm.get('recurrence.end.endDate')?.value);
-                            this.invoiceForm.get('recurrence.end.endDate')?.patchValue(endDate);
+                            const endDate = this.convertToDateObject(recurrencePreviewRequest?.end?.endDate || this.invoiceForm.get('recurrencePreviewRequest.end.endDate')?.value);
+                            this.invoiceForm.get('recurrencePreviewRequest.end.endDate')?.patchValue(endDate);
                         }
 
                         const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
@@ -3090,7 +3090,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 date: [""],
             }),
             isRecurringVoucher: [false], // toggle from parent
-            recurrence: this.formBuilder.group({
+            recurrencePreviewRequest: this.formBuilder.group({
                 startDate: [null, Validators.required],
 
                 frequency: this.formBuilder.group({
@@ -3135,18 +3135,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * When checkbox is checked, populate recurrence form with today's date
+     * When checkbox is checked, populate recurrencePreviewRequest form with today's date
      *
      * @memberof VoucherCreateComponent
      */
     public isRecurringVoucherSelected(): void {
-        // When checkbox is checked, populate recurrence form with today's date
+        // When checkbox is checked, populate recurrencePreviewRequest form with today's date
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const { weekday } = this.generalService.getDateMeta(today);
         const nth = Math.ceil(today.getDate() / 7);
 
-        const recurrenceForm = this.invoiceForm.get('recurrence') as FormGroup;
+        const recurrenceForm = this.invoiceForm.get('recurrencePreviewRequest') as FormGroup;
         recurrenceForm.patchValue({
             startDate: today,
             frequency: {
@@ -5678,15 +5678,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 invoiceForm.account.uniqueName = accountUniqueName;
             }
             if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice) {
-                // ✅ ONLY attach recurrence if checkbox is checked
+                // ✅ ONLY attach recurrencePreviewRequest if checkbox is checked
                 if (this.invoiceForm.get('isRecurringVoucher')?.value) {
-                    // Notify recurrence component to skip preview calls during form cleaning
+                    // Notify recurrencePreviewRequest component to skip preview calls during form cleaning
                     if (this.asideRecurrenceVoucher) {
                         this.asideRecurrenceVoucher.setSubmitting(true);
                     }
 
                     const cleanData = this.recurrenceService.getCleanFormValue(this.recurrenceFormGroup);
-                    invoiceForm.recurrence = cleanData;
+                    invoiceForm.recurrencePreviewRequest = cleanData;
 
                     // Reset the flag after debounce completes (700ms + buffer)
                     setTimeout(() => {
@@ -5695,7 +5695,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }, 800);
                 } else {
-                    delete invoiceForm.recurrence;
+                    delete invoiceForm.recurrencePreviewRequest;
                 }
                 if (!this.queryParams?.isRecurringVoucher) {
                     delete invoiceForm.isRecurringVoucher;
