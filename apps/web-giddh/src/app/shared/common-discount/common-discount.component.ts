@@ -400,16 +400,6 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      * @returns Total discount amount
      */
     public generateTotal(): number {
-        // const accounts = this.discountAccounts();
-        // if (accounts && accounts[0]) {
-        //     if (accounts[0].discountValue) {
-        //         accounts[0].isActive = true;
-        //     } else {
-        //         accounts[0].isActive = false;
-        //     }
-        //     this.discountAccounts.set([...accounts]);
-        // }
-
         const percentageListTotal = this.getTotalPercentageDiscount();
         const fixedListTotal = this.getTotalFixedDiscount();
 
@@ -434,16 +424,16 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      */
     public toggleDiscountMenu(isOpen: boolean = false) {
         if (isOpen) {
-            !this.discountMenu.menuOpen && this.discountMenu?.openMenu();
+            !this.discountMenu?.menuOpen && this.discountMenu?.openMenu();
         } else {
-            this.discountMenu.menuOpen && this.discountMenu?.closeMenu();
+            this.discountMenu?.menuOpen && this.discountMenu?.closeMenu();
         }
     }
 
     /**
      * Emits create new discount event
      */
-    public createNew(): void {
+    protected createNew(): void {
         this.discountMenu.closeMenu();
         this.createNewDiscount.emit(false);
     }
