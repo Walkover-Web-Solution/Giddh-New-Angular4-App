@@ -25,7 +25,7 @@ import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss'],
-    standalone:false
+    standalone: false
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */

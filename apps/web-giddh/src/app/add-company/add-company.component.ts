@@ -42,7 +42,7 @@ declare var window: any;
     styleUrls: ['./add-company.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [AddCompanyComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore],
-    standalone:false
+    standalone: false
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
