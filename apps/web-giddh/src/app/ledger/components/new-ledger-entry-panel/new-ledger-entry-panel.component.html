@@ -201,7 +201,7 @@
                     <common-discount
                         (click)="hideAllDropdown(ledgerDropdownTypeEnum.DISCOUNT)"
                         #discount
-                        [discountAccountsDetails]="activeAccountDiscounts()"
+                        [discountAccountsDetails]="currentTxn.discounts"
                         [maskInput]="inputMaskFormat"
                         [prefixInput]="selectedPrefixForCurrency"
                         [suffixInput]="selectedSuffixForCurrency"

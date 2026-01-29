@@ -3309,12 +3309,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 },
                                 amount: {
                                     amountForAccount: giddhRoundOff(
-                                        Number(item.quantity) * Number(item.rate),
+                                        Number(item.quantity) * Number(item.additional.stock.rate),
                                         this.company.giddhBalanceDecimalPlaces
                                     ),
                                     amountForCompany:
                                         giddhRoundOff(
-                                            Number(item.quantity) * Number(item.rate),
+                                            Number(item.quantity) * Number(item.additional.stock.rate),
                                             this.company.giddhBalanceDecimalPlaces
                                         ) * this.invoiceForm.get("exchangeRate")?.value,
                                 },
