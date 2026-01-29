@@ -13,6 +13,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepicker.module';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
+import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module';
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
         MatDividerModule,
         TranslateDirectiveModule,
         GiddhDatepickerModule,
-        FormFieldsModule
+        FormFieldsModule,
+        KeyboardNavigationModule
 ],
     exports: [
         AsideRecurrenceVoucherCreateComponent

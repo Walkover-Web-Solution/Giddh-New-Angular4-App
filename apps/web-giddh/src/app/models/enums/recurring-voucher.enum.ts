@@ -36,3 +36,29 @@ export enum RecurringMonthlyMode {
     DAY = 'DAY',
     THE = 'THE'
 }
+
+/**
+ * Enum for repeat option types
+ * Defines the available repeat pattern options in the UI
+ */
+export enum RecurringRepeatOption {
+    DAY = 'DAY',
+    WEEKLY = 'WEEKLY',
+    MONTHLY_DATE = 'MONTHLY_DATE',
+    MONTHLY_WEEKDAY = 'MONTHLY_WEEKDAY',
+    CUSTOM = 'CUSTOM'
+}
+
+/**
+ * Enum for weekday names
+ * Defines the days of the week for recurring patterns
+ */
+export enum RecurringWeekday {
+    MONDAY = 'Monday',
+    TUESDAY = 'Tuesday',
+    WEDNESDAY = 'Wednesday',
+    THURSDAY = 'Thursday',
+    FRIDAY = 'Friday',
+    SATURDAY = 'Saturday',
+    SUNDAY = 'Sunday'
+}

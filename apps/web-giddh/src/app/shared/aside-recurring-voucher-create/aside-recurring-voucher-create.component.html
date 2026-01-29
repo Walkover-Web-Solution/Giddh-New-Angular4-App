@@ -9,6 +9,7 @@
                 <div [formGroup]="activeForm" class="recurring-wrapper">
                     <div class="d-flex column-gap-1 mb-3 w-100">
                         <giddh-datepicker
+                            appEnterNext
                             name="startDate"
                             [label]="localeData()?.start_on"
                             [placeholder]="localeData()?.start_on"
@@ -33,6 +34,7 @@
                         <div class="font-size-16 mb-3">{{ localeData()?.repeat_on }}</div>
                         <div class="d-flex column-gap-1 mb-3 w-100" formGroupName="frequency">
                             <input-field
+                                appEnterNext
                                 [name]="'interval'"
                                 [label]="localeData()?.repeat_every"
                                 [placeholder]="localeData()?.repeat_every"
@@ -65,9 +67,11 @@
                         @if (showDayThe()) {
                             <div formGroupName="repeatOn">
                                 @if (repeatOnForm?.get('monthlyMode')) {
-                                    <mat-radio-group [formControl]="monthlyModeControl" class="d-block">
+                                    <mat-radio-group [formControl]="monthlyModeControl" class="d-block" appEnterNext>
                                         <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
-                                            <mat-radio-button [value]="RecurringMonthlyMode.DAY">{{ localeData()?.day }}</mat-radio-button>
+                                            <mat-radio-button [value]="RecurringMonthlyMode.DAY" (keydown.enter)="$event.target.click()">
+                                                {{ localeData()?.day }}
+                                            </mat-radio-button>
                                             <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
                                                 <mat-select formControlName="dayOfMonth">
                                                     @for (day of monthDays; track day) {
@@ -78,7 +82,9 @@
                                         </div>
                                         <!-- THE -->
                                         <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
-                                            <mat-radio-button [value]="RecurringMonthlyMode.THE">{{ localeData()?.the }}</mat-radio-button>
+                                            <mat-radio-button [value]="RecurringMonthlyMode.THE" (keydown.enter)="$event.target.click()">
+                                                {{ localeData()?.the }}
+                                            </mat-radio-button>
                                             <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
                                                 <mat-select formControlName="nth">
                                                     @for (week of weekOfMonthOptions; track week.value) {
@@ -105,8 +111,11 @@
 
                         <mat-radio-group formControlName="type" class="d-block">
                             <div class="col-6 d-flex align-items-center column-gap-4 mb-3">
-                                <mat-radio-button [value]="RecurringEndType.ON_DATE">{{ localeData()?.on }}</mat-radio-button>
+                                <mat-radio-button [value]="RecurringEndType.ON_DATE" (keydown.enter)="$event.target.click()">
+                                    {{ localeData()?.on }}
+                                </mat-radio-button>
                                 <giddh-datepicker
+                                    appEnterNext
                                     name="endDate"
                                     [label]="localeData()?.ends_on"
                                     [placeholder]="localeData()?.ends_on"
@@ -116,7 +125,9 @@
                             </div>
 
                             <div class="col-6 align-items-center column-gap-4 mb-3">
-                                <mat-radio-button [value]="RecurringEndType.NEVER">{{ localeData()?.never }}</mat-radio-button>
+                                <mat-radio-button [value]="RecurringEndType.NEVER" (keydown.enter)="$event.target.click()">
+                                    {{ localeData()?.never }}
+                                </mat-radio-button>
                             </div>
                         </mat-radio-group>
                     </div>
@@ -147,6 +158,7 @@
             <div [formGroup]="activeForm" class="recurring-wrapper">
                 <div class="d-flex column-gap-1 mb-3 w-100">
                     <giddh-datepicker
+                        appEnterNext
                         name="startDate"
                         [label]="localeData()?.start_on"
                         [placeholder]="localeData()?.start_on"
@@ -171,6 +183,7 @@
                     <div class="font-size-16 mb-3">{{ localeData()?.repeat_on }}</div>
                     <div class="d-flex column-gap-1 mb-3 w-100" formGroupName="frequency">
                         <input-field
+                            appEnterNext
                             [name]="'interval'"
                             [label]="localeData()?.repeat_every"
                             [placeholder]="localeData()?.repeat_every"
@@ -203,9 +216,11 @@
                     @if (showDayThe()) {
                         <div formGroupName="repeatOn">
                             @if (repeatOnForm?.get('monthlyMode')) {
-                                <mat-radio-group [formControl]="monthlyModeControl" class="d-block">
+                                <mat-radio-group [formControl]="monthlyModeControl" class="d-block" appEnterNext>
                                     <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
-                                        <mat-radio-button [value]="RecurringMonthlyMode.DAY">{{ localeData()?.day }}</mat-radio-button>
+                                        <mat-radio-button [value]="RecurringMonthlyMode.DAY" (keydown.enter)="$event.target.click()">
+                                            {{ localeData()?.day }}
+                                        </mat-radio-button>
                                         <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
                                             <mat-select formControlName="dayOfMonth">
                                                 @for (day of monthDays; track day) {
@@ -216,7 +231,9 @@
                                     </div>
                                     <!-- THE -->
                                     <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
-                                        <mat-radio-button [value]="RecurringMonthlyMode.THE">{{ localeData()?.the }}</mat-radio-button>
+                                        <mat-radio-button [value]="RecurringMonthlyMode.THE" (keydown.enter)="$event.target.click()">
+                                            {{ localeData()?.the }}
+                                        </mat-radio-button>
                                         <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
                                             <mat-select formControlName="nth">
                                                 @for (week of weekOfMonthOptions; track week.value) {
@@ -243,8 +260,11 @@
 
                     <mat-radio-group formControlName="type" class="d-block">
                         <div class="col-6 d-flex align-items-center column-gap-4 mb-3">
-                            <mat-radio-button [value]="RecurringEndType.ON_DATE">{{ localeData()?.on }}</mat-radio-button>
+                            <mat-radio-button [value]="RecurringEndType.ON_DATE" (keydown.enter)="$event.target.click()">
+                                {{ localeData()?.on }}
+                            </mat-radio-button>
                             <giddh-datepicker
+                                appEnterNext
                                 name="endDate"
                                 [label]="localeData()?.ends_on"
                                 [placeholder]="localeData()?.ends_on"
@@ -254,7 +274,9 @@
                         </div>
 
                         <div class="col-6 align-items-center column-gap-4 mb-3">
-                            <mat-radio-button [value]="RecurringEndType.NEVER">{{ localeData()?.never }}</mat-radio-button>
+                            <mat-radio-button [value]="RecurringEndType.NEVER" (keydown.enter)="$event.target.click()">
+                                {{ localeData()?.never }}
+                            </mat-radio-button>
                         </div>
                     </mat-radio-group>
                 </div>

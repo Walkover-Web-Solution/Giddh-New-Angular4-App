@@ -5620,7 +5620,8 @@
                 <div
                     class="vouchers-wrapper p-3 overflow-visible"
                     *ngIf="
-                        (voucherType === voucherTypeEnum.sales || voucherType === voucherTypeEnum.purchase) && activeModule === 'recurring'
+                        (voucherType === voucherTypeEnum.sales || voucherType === voucherTypeEnum.purchase) &&
+                        activeModule === voucherTypeEnum.recurring
                     "
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3 flex-wrap row-gap-1">
