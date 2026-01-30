@@ -113,6 +113,14 @@
             "filter": [
                 "**/*"
             ]
+        },
+        {
+            "from": "icon.ico",
+            "to": "icon.ico"
+        },
+        {
+            "from": "resources/icon.ico",
+            "to": "resources/icon.ico"
         }
     ]
 }

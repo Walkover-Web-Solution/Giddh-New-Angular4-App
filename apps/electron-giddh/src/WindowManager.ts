@@ -111,47 +111,22 @@ export default class WindowManager {
             // Get correct icon for packaged vs development
             const getIcon = () => {
                 const fs = require('fs');
-                let iconPath: string;
                 const isMac = process.platform === 'darwin';
                 const iconExt = isMac ? 'icns' : 'ico';
                 
                 if (isPackaged()) {
-                    // In packaged app, try multiple possible locations
-                    const possiblePaths = isMac ? [
-                        // macOS icon locations
-                        path.join(process.resourcesPath, `icon.${iconExt}`),
-                        path.join(process.resourcesPath, 'app', 'resources', `icon.${iconExt}`),
-                        path.join(__dirname, '..', 'resources', `icon.${iconExt}`),
-                        path.join(__dirname, 'resources', `icon.${iconExt}`),
-                    ] : [
-                        // Windows icon locations
-                        path.join(process.resourcesPath, `icon.${iconExt}`),
-                        path.join(process.resourcesPath, 'app', 'resources', `icon.${iconExt}`),
-                        path.join(__dirname, '..', 'resources', `icon.${iconExt}`),
-                        path.join(__dirname, 'resources', `icon.${iconExt}`),
-                    ];
-                    
-                    for (const testPath of possiblePaths) {
-                        if (fs.existsSync(testPath)) {
-                            iconPath = testPath;
-                            console.log(`✅ Found window icon at: ${iconPath}`);
-                            break;
-                        }
-                    }
-                    
-                    if (!iconPath) {
-                        console.error('❌ Window icon not found in packaged app');
-                        console.error('Searched paths:', possiblePaths);
-                        console.error('Platform:', process.platform);
-                    }
+                    // In packaged app, icon is in extraResources
+                    const iconPath = path.join(process.resourcesPath, `icon.${iconExt}`);
+                    console.log(`✅ Window icon path (packaged): ${iconPath}`);
+                    console.log(`   Icon exists: ${fs.existsSync(iconPath)}`);
+                    return fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : undefined;
                 } else {
                     // In development, use the source icon
-                    iconPath = path.join(__dirname, '..', '..', '..', 'apps', 'electron-giddh', 'src', 'resources', `icon.${iconExt}`);
-                    console.log(`Development icon path: ${iconPath}`);
+                    const iconPath = path.join(__dirname, '..', '..', '..', 'apps', 'electron-giddh', 'src', 'resources', `icon.${iconExt}`);
+                    console.log(`✅ Window icon path (development): ${iconPath}`);
+                    console.log(`   Icon exists: ${fs.existsSync(iconPath)}`);
+                    return fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : undefined;
                 }
-                
-                // Return nativeImage for better cross-platform support
-                return iconPath && fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : undefined;
             };
 
             // Get correct preload path

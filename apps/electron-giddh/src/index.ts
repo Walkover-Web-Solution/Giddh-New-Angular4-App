@@ -228,38 +228,37 @@ function createTray(): void {
         const path = require('path');
         const fs = require('fs');
         
-        // Try multiple possible locations for the tray icon
-        const possiblePaths = [
-            // For packaged app - extraResources
-            path.join(process.resourcesPath, 'build', 'icons', 'tray.png'),
-            // For packaged app - app.asar.unpacked
-            path.join(process.resourcesPath, 'app.asar.unpacked', 'build', 'icons', 'tray.png'),
-            // For development
-            path.join(__dirname, 'build', 'icons', 'tray.png'),
-            // Fallback to smaller icon
-            path.join(process.resourcesPath, 'build', 'icons', 'tray-small.png'),
-            path.join(__dirname, 'build', 'icons', 'tray-small.png')
-        ];
-
-        console.log('🔍 Tray icon loading - Debug info:');
-        console.log('  process.resourcesPath:', process.resourcesPath);
-        console.log('  __dirname:', __dirname);
-        console.log('  app.isPackaged:', app.isPackaged);
-
-        let trayIconPath: string | null = null;
+        // Determine tray icon path based on environment
+        let trayIconPath: string;
         
-        for (const testPath of possiblePaths) {
-            console.log('  Testing:', testPath);
-            if (fs.existsSync(testPath)) {
-                trayIconPath = testPath;
-                console.log('  ✅ Found at:', testPath);
-                break;
-            }
+        if (app.isPackaged) {
+            // In packaged app, tray icons are in extraResources
+            trayIconPath = path.join(process.resourcesPath, 'build', 'icons', 'tray.png');
+            console.log('🔍 Tray icon path (packaged):', trayIconPath);
+        } else {
+            // In development
+            trayIconPath = path.join(__dirname, 'build', 'icons', 'tray.png');
+            console.log('🔍 Tray icon path (development):', trayIconPath);
         }
 
-        if (!trayIconPath) {
-            console.error('❌ Tray icon not found in any location');
-            return;
+        console.log('  process.resourcesPath:', process.resourcesPath);
+        console.log('  __dirname:', __dirname);
+        console.log('  Icon exists:', fs.existsSync(trayIconPath));
+
+        if (!fs.existsSync(trayIconPath)) {
+            console.error('❌ Tray icon not found at:', trayIconPath);
+            // Try fallback to smaller icon
+            const fallbackPath = app.isPackaged 
+                ? path.join(process.resourcesPath, 'build', 'icons', 'tray-small.png')
+                : path.join(__dirname, 'build', 'icons', 'tray-small.png');
+            
+            if (fs.existsSync(fallbackPath)) {
+                trayIconPath = fallbackPath;
+                console.log('  ✅ Using fallback icon:', fallbackPath);
+            } else {
+                console.error('❌ No tray icon found, skipping tray creation');
+                return;
+            }
         }
 
         const image = nativeImage.createFromPath(trayIconPath);
