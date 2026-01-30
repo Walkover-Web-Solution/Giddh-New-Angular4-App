@@ -103,21 +103,11 @@
     },
     "asar": true,
     "asarUnpack": [
-        "**/*.node",
-        "**/build/icons/*.png"
+        "**/*.node"
     ],
     "extraResources": [
-        {
-            "from": "build/icons",
-            "to": "build/icons"
-        },
-        {
-            "from": "icon.ico",
-            "to": "."
-        },
-        {
-            "from": "resources",
-            "to": "resources"
-        }
+        "build/icons/**/*",
+        "icon.ico",
+        "resources/**/*"
     ]
 }
