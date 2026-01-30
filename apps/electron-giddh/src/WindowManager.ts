@@ -114,19 +114,33 @@ export default class WindowManager {
                 const isMac = process.platform === 'darwin';
                 const iconExt = isMac ? 'icns' : 'ico';
                 
+                let iconPath: string;
+                
                 if (isPackaged()) {
-                    // In packaged app, icon is in extraResources
-                    const iconPath = path.join(process.resourcesPath, `icon.${iconExt}`);
-                    console.log(`✅ Window icon path (packaged): ${iconPath}`);
+                    // In packaged app, icon is in extraResources at process.resourcesPath/icon.ico
+                    // extraResources config puts icon.ico directly in resources folder
+                    iconPath = path.join(process.resourcesPath, `icon.${iconExt}`);
+                    console.log(`🪟 Window icon path (packaged): ${iconPath}`);
+                    console.log(`   process.resourcesPath: ${process.resourcesPath}`);
                     console.log(`   Icon exists: ${fs.existsSync(iconPath)}`);
-                    return fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : undefined;
+                    
+                    // Fallback: try resources subdirectory if not found at root
+                    if (!fs.existsSync(iconPath)) {
+                        const fallbackPath = path.join(process.resourcesPath, 'resources', `icon.${iconExt}`);
+                        console.log(`   Trying fallback: ${fallbackPath}`);
+                        console.log(`   Fallback exists: ${fs.existsSync(fallbackPath)}`);
+                        if (fs.existsSync(fallbackPath)) {
+                            iconPath = fallbackPath;
+                        }
+                    }
                 } else {
                     // In development, use the source icon
-                    const iconPath = path.join(__dirname, '..', '..', '..', 'apps', 'electron-giddh', 'src', 'resources', `icon.${iconExt}`);
-                    console.log(`✅ Window icon path (development): ${iconPath}`);
+                    iconPath = path.join(__dirname, '..', '..', '..', 'apps', 'electron-giddh', 'src', 'resources', `icon.${iconExt}`);
+                    console.log(`🪟 Window icon path (development): ${iconPath}`);
                     console.log(`   Icon exists: ${fs.existsSync(iconPath)}`);
-                    return fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : undefined;
                 }
+                
+                return fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : undefined;
             };
 
             // Get correct preload path

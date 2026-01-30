@@ -117,10 +117,16 @@ jobs:
           Write-Host "  ✅ Installed dependencies"
           Write-Host "  node_modules created: $(Test-Path 'node_modules')"
           
-          Write-Host "� Verifying icon files before electron-builder..."
+          Write-Host "🔍 Verifying icon files before electron-builder..."
           Write-Host "  Checking icon.ico: $(Test-Path 'icon.ico')"
           Write-Host "  Checking resources/icon.ico: $(Test-Path 'resources/icon.ico')"
           Write-Host "  Checking build/icons directory: $(Test-Path 'build/icons')"
+          
+          # CRITICAL: Fail build if icon.ico is missing
+          if (!(Test-Path 'icon.ico')) {
+            throw "❌ FATAL: icon.ico missing at build root - electron-builder cannot embed icon!"
+          }
+          Write-Host "  ✅ icon.ico exists at build root"
           if (Test-Path 'build/icons') {
               $iconFiles = Get-ChildItem 'build/icons/*.png' -ErrorAction SilentlyContinue
               Write-Host "  Found $($iconFiles.Count) PNG files in build/icons:"
@@ -315,6 +321,22 @@ jobs:
             throw "App executable signature verification failed: $($appSig.StatusMessage)"
           }
           Write-Host "✅ App executable is SIGNED (auto-updates will work)"
+          
+          # CRITICAL: Verify icon is still embedded after signing
+          Write-Host ""
+          Write-Host "🔍 Verifying icon preserved after signing..."
+          try {
+            Add-Type -AssemblyName System.Drawing
+            $iconCheck = [System.Drawing.Icon]::ExtractAssociatedIcon($signedAppExe.FullName)
+            if ($iconCheck) {
+              Write-Host "  ✅ Icon PRESERVED after signing"
+              Write-Host "  Icon size: $($iconCheck.Width)x$($iconCheck.Height)"
+            } else {
+              throw "Icon was stripped during signing!"
+            }
+          } catch {
+            throw "❌ FATAL: Signed EXE LOST ICON - $($_.Exception.Message)"
+          }
           
           # Copy signed app executable back to win-unpacked
           $winUnpackedDir = Split-Path -Parent $env:APP_EXE_PATH

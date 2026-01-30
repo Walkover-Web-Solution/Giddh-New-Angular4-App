@@ -75,10 +75,10 @@
             },
             "zip"
         ],
-        "icon": "resources/icon.ico",
+        "icon": "icon.ico",
         "legalTrademarks": "",
         "artifactName": "giddh-test-setup-${version}.${ext}",
-        "signAndEditExecutable": false,
+        "signAndEditExecutable": true,
         "requestedExecutionLevel": "asInvoker",
         "verifyUpdateCodeSignature": false
     },
@@ -90,9 +90,9 @@
         "menuCategory": "Accounting",
         "shortcutName": "Giddh",
         "perMachine": true,
-        "installerIcon": "resources/icon.ico",
-        "uninstallerIcon": "resources/icon.ico",
-        "installerHeaderIcon": "resources/icon.ico",
+        "installerIcon": "icon.ico",
+        "uninstallerIcon": "icon.ico",
+        "installerHeaderIcon": "icon.ico",
         "deleteAppDataOnUninstall": false,
         "runAfterFinish": true,
         "differentialPackage": false,
@@ -105,8 +105,17 @@
         "**/*.node"
     ],
     "extraResources": [
-        "build/icons/**/*",
-        "icon.ico",
-        "resources/**/*"
+        {
+            "from": "icon.ico",
+            "to": "icon.ico"
+        },
+        {
+            "from": "resources",
+            "to": "resources"
+        },
+        {
+            "from": "build/icons",
+            "to": "build/icons"
+        }
     ]
 }
