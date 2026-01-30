@@ -93,7 +93,6 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         exportBodyRequest.isExpanded = this.inputData?.expand;
         exportBodyRequest.q = this.inputData?.q;
         exportBodyRequest.branchUniqueName = this.inputData?.branchUniqueName;
-        exportBodyRequest.haveToShowTaxBifurcation = false;
         exportBodyRequest.columnsToExport = ["Account UniqueName"];
         if (this.exportForm.value.showVoucherType) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
@@ -106,7 +105,7 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         }
         if (this.exportForm.value.showTax) {
             exportBodyRequest.columnsToExport.push("Tax");
-            exportBodyRequest.haveToShowTaxBifurcation = true;
+            exportBodyRequest.haveToShowTaxBifurcation = this.exportForm.get('haveToShowTaxBifurcation')?.value;
         }
         if (this.exportForm.value.showGroup) {
             exportBodyRequest.columnsToExport.push("Group");
