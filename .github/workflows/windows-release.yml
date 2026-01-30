@@ -77,6 +77,10 @@ jobs:
           $trayIcons = Get-ChildItem "dist/apps/web-giddh/build/icons/*.png" -ErrorAction SilentlyContinue
           Write-Host "  ✅ Copied $($trayIcons.Count) tray icon files"
           
+          Write-Host "📦 Copying NSIS custom installer script..."
+          Copy-Item "build/installer.nsh" "dist/apps/web-giddh/build/installer.nsh" -Force
+          Write-Host "  ✅ Copied installer.nsh for icon cache refresh"
+          
           Write-Host "📦 Setting up Electron app structure..."
           # Copy ALL compiled Electron files from apps/electron-giddh/src to dist/apps/web-giddh
           Write-Host "  Copying Electron main process files..."
@@ -133,22 +137,12 @@ jobs:
               $iconFiles | ForEach-Object { Write-Host "    - $($_.Name)" }
           }
           
-          Write-Host "� Building Windows app with electron-builder..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win
+          Write-Host "📦 Building Windows app with electron-builder (dir target only - no installer yet)..."
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --dir
           cd ../../../
-          node scripts/build-success-message.js prod
           
           Write-Host "🔍 Verifying built artifacts..."
-          
-          # Check installer
-          $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse | Where-Object { $_.Name -notmatch "blockmap" -and $_.Directory.Name -ne "win-unpacked" } | Select-Object -First 1
-          if ($installer) {
-              Write-Host "  ✅ Found installer: $($installer.FullName)"
-              Write-Host "  Size: $($installer.Length) bytes"
-          } else {
-              Write-Host "  ❌ ERROR: Installer not found!"
-              exit 1
-          }
+          Write-Host "  ⚠️  Installer not built yet - will be created after signing"
           
           # Check app executable in win-unpacked (CRITICAL for auto-updates)
           $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "Giddh.exe" -Recurse | Where-Object { $_.Directory.Name -eq "win-unpacked" } | Select-Object -First 1
@@ -186,18 +180,6 @@ jobs:
           $version = $packageJson.version
           "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
           Write-Host "Package version: $version"
-
-          # Find unsigned installer
-          $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse |
-            Where-Object { $_.Name -notmatch "blockmap" -and $_.Directory.Name -ne "win-unpacked" } |
-            Select-Object -First 1
-
-          if (-not $installer) { 
-            throw "Installer not found. Check electron-builder output." 
-          }
-
-          Write-Host "Found unsigned installer: $($installer.FullName)"
-          "INSTALLER_PATH=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           
           # Find app executable in win-unpacked (CRITICAL for auto-updates)
           $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "Giddh.exe" -Recurse |
@@ -225,47 +207,12 @@ jobs:
           } catch {
             Write-Host "  ⚠️  Could not verify icon: $($_.Exception.Message)"
           }
-          
-          # Find latest.yml
-          $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
-          if ($latestYml) {
-              "LATEST_YML=$($latestYml.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
-              Write-Host "Found latest.yml: $($latestYml.FullName)"
-          } else {
-              Write-Host "⚠️ WARNING: latest.yml not found"
-          }
-          
-          # Get versioned filename (e.g., giddh-test-setup-10.0.14.exe)
-          $versionedExeName = Split-Path -Leaf $installer.FullName
-          "VERSIONED_EXE_NAME=$versionedExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
-          Write-Host "Versioned installer name: $versionedExeName"
-          
-          # Fixed name for latest folder (without version suffix)
-          $latestExeName = "giddh-test-setup.exe"
-          "LATEST_EXE_NAME=$latestExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
-          Write-Host "Latest installer name: $latestExeName"
 
       - name: Create signing output directories
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force -Path "artifacts/signed" | Out-Null
           New-Item -ItemType Directory -Force -Path "artifacts/signed-app" | Out-Null
-          New-Item -ItemType Directory -Force -Path "artifacts/final" | Out-Null
-          Write-Host "✅ Created signing output directories"
-
-      - name: Sign installer with SSL.com eSigner
-        uses: SSLcom/esigner-codesign@v1.3.2
-        with:
-          command: sign
-          username: ${{ secrets.ES_USERNAME }}
-          password: ${{ secrets.ES_PASSWORD }}
-          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
-          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
-          file_path: ${{ env.INSTALLER_PATH }}
-          output_path: artifacts/signed
-          malware_block: false
-          environment_name: PROD
-          override: true
+          Write-Host "✅ Created signing output directory"
 
       - name: Sign app executable with SSL.com eSigner (CRITICAL for auto-updates)
         uses: SSLcom/esigner-codesign@v1.3.2
@@ -281,28 +228,9 @@ jobs:
           environment_name: PROD
           override: true
 
-      - name: Verify signatures and prepare final artifacts
+      - name: Copy signed EXE back and build installer
         shell: pwsh
         run: |
-          # Verify installer signature
-          $signedInstaller = Get-ChildItem -Path "artifacts/signed" -Filter "*.exe" | Select-Object -First 1
-          if (-not $signedInstaller) {
-            throw "Signed installer not found in artifacts/signed"
-          }
-          
-          $installerSig = Get-AuthenticodeSignature $signedInstaller.FullName
-          Write-Host "========================================="
-          Write-Host "INSTALLER Signature Verification:"
-          Write-Host "File: $($signedInstaller.FullName)"
-          Write-Host "Status: $($installerSig.Status)"
-          Write-Host "Signer: $($installerSig.SignerCertificate.Subject)"
-          Write-Host "========================================="
-          
-          if ($installerSig.Status -ne "Valid") {
-            throw "Installer signature verification failed: $($installerSig.StatusMessage)"
-          }
-          Write-Host "✅ Installer is SIGNED"
-          
           # Verify app executable signature (CRITICAL for auto-updates)
           $signedAppExe = Get-ChildItem -Path "artifacts/signed-app" -Filter "Giddh.exe" | Select-Object -First 1
           if (-not $signedAppExe) {
@@ -338,10 +266,101 @@ jobs:
             throw "❌ FATAL: Signed EXE LOST ICON - $($_.Exception.Message)"
           }
           
+          # Verify detailed signature information
+          Write-Host ""
+          Write-Host "🔍 Detailed signature verification..."
+          $sigDetails = Get-AuthenticodeSignature $signedAppExe.FullName
+          Write-Host "  Status: $($sigDetails.Status)"
+          Write-Host "  Status Message: $($sigDetails.StatusMessage)"
+          Write-Host "  Signature Type: $($sigDetails.SignatureType)"
+          Write-Host "  Certificate Subject: $($sigDetails.SignerCertificate.Subject)"
+          Write-Host "  Certificate Issuer: $($sigDetails.SignerCertificate.Issuer)"
+          Write-Host "  Certificate Thumbprint: $($sigDetails.SignerCertificate.Thumbprint)"
+          Write-Host "  Certificate Valid From: $($sigDetails.SignerCertificate.NotBefore)"
+          Write-Host "  Certificate Valid Until: $($sigDetails.SignerCertificate.NotAfter)"
+          Write-Host "  Time Stamper Certificate: $($sigDetails.TimeStamperCertificate.Subject)"
+          
+          # Verify signature is Authenticode (embedded)
+          if ($sigDetails.SignatureType -ne "Authenticode") {
+            Write-Host "  ⚠️  WARNING: Signature type is not Authenticode (embedded)"
+          } else {
+            Write-Host "  ✅ Signature is properly embedded (Authenticode)"
+          }
+          
           # Copy signed app executable back to win-unpacked
           $winUnpackedDir = Split-Path -Parent $env:APP_EXE_PATH
           Copy-Item $signedAppExe.FullName $winUnpackedDir -Force
-          Write-Host "✅ Copied signed app executable back to win-unpacked"
+          Write-Host "✅ Copied signed app executable back to win-unpacked: $winUnpackedDir"
+          
+          # Now build the NSIS installer with the SIGNED EXE
+          Write-Host ""
+          Write-Host "📦 Building NSIS installer with signed EXE..."
+          cd dist/apps/web-giddh
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win nsis
+          cd ../../../
+          
+          # Find the newly built installer
+          $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse |
+            Where-Object { $_.Name -notmatch "blockmap" -and $_.Directory.Name -ne "win-unpacked" -and $_.Name -notlike "*ia32*" } |
+            Select-Object -First 1
+          
+          if (-not $installer) {
+            throw "❌ FATAL: Installer not found after building with signed EXE!"
+          }
+          
+          Write-Host "✅ Built installer with signed EXE: $($installer.FullName)"
+          "UNSIGNED_INSTALLER_PATH=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          
+          # Get versioned filename
+          $versionedExeName = Split-Path -Leaf $installer.FullName
+          "VERSIONED_EXE_NAME=$versionedExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
+          
+          # Fixed name for latest folder
+          $latestExeName = "giddh-test-setup.exe"
+          "LATEST_EXE_NAME=$latestExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
+          
+          # Find latest.yml
+          $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
+          if ($latestYml) {
+            "LATEST_YML=$($latestYml.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+            Write-Host "Found latest.yml: $($latestYml.FullName)"
+          }
+
+      - name: Sign installer with SSL.com eSigner
+        uses: SSLcom/esigner-codesign@v1.3.2
+        with:
+          command: sign
+          username: ${{ secrets.ES_USERNAME }}
+          password: ${{ secrets.ES_PASSWORD }}
+          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
+          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
+          file_path: ${{ env.UNSIGNED_INSTALLER_PATH }}
+          output_path: artifacts/signed-installer
+          malware_block: false
+          environment_name: PROD
+          override: true
+
+      - name: Verify installer signature and prepare final artifacts
+        shell: pwsh
+        run: |
+          # Verify installer signature
+          $signedInstaller = Get-ChildItem -Path "artifacts/signed-installer" -Filter "*.exe" | Select-Object -First 1
+          if (-not $signedInstaller) {
+            throw "Signed installer not found in artifacts/signed-installer"
+          }
+          
+          $installerSig = Get-AuthenticodeSignature $signedInstaller.FullName
+          Write-Host "========================================="
+          Write-Host "INSTALLER Signature Verification:"
+          Write-Host "File: $($signedInstaller.FullName)"
+          Write-Host "Status: $($installerSig.Status)"
+          Write-Host "Signer: $($installerSig.SignerCertificate.Subject)"
+          Write-Host "========================================="
+          
+          if ($installerSig.Status -ne "Valid") {
+            throw "Installer signature verification failed: $($installerSig.StatusMessage)"
+          }
+          Write-Host "✅ Installer is SIGNED"
           
           # Copy signed installer to final artifacts
           New-Item -ItemType Directory -Force -Path "artifacts/final" | Out-Null

@@ -78,7 +78,8 @@
         "icon": "icon.ico",
         "legalTrademarks": "",
         "artifactName": "giddh-test-setup-${version}.${ext}",
-        "signAndEditExecutable": true,
+        "signAndEditExecutable": false,
+        "sign": null,
         "requestedExecutionLevel": "asInvoker",
         "verifyUpdateCodeSignature": false
     },
@@ -98,7 +99,8 @@
         "differentialPackage": false,
         "packElevateHelper": true,
         "allowElevation": true,
-        "displayLanguageSelector": false
+        "displayLanguageSelector": false,
+        "include": "build/installer.nsh"
     },
     "asar": true,
     "asarUnpack": [
