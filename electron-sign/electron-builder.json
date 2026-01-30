@@ -2,7 +2,6 @@
     "appId": "com.giddh.prod",
     "electronVersion": "29.4.6",
     "productName": "Giddh",
-    "icon": "resources/icon.ico",
     "publish": [
         {
             "provider": "s3",
@@ -12,7 +11,7 @@
         }
     ],
     "directories": {
-        "buildResources": "resources",
+        "buildResources": ".",
         "output": "../electrongiddh-packages"
     },
     "files": [
@@ -76,7 +75,7 @@
             },
             "zip"
         ],
-        "icon": "icon.ico",
+        "icon": "resources/icon.ico",
         "legalTrademarks": "",
         "artifactName": "giddh-test-setup-${version}.${ext}",
         "signAndEditExecutable": false,
