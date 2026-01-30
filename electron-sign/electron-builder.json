@@ -109,18 +109,15 @@
     "extraResources": [
         {
             "from": "build/icons",
-            "to": "build/icons",
-            "filter": [
-                "**/*"
-            ]
+            "to": "build/icons"
         },
         {
             "from": "icon.ico",
-            "to": "icon.ico"
+            "to": "."
         },
         {
-            "from": "resources/icon.ico",
-            "to": "resources/icon.ico"
+            "from": "resources",
+            "to": "resources"
         }
     ]
 }

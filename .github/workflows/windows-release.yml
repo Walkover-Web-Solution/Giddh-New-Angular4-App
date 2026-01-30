@@ -55,32 +55,20 @@ jobs:
           node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html
           
           Write-Host "📦 Copying icon files..."
-          $iconSource = "apps/electron-giddh/src/resources/icon.ico"
           
           # Create resources directory in dist
           New-Item -ItemType Directory -Force -Path "dist/apps/web-giddh/resources" | Out-Null
           
-          # Copy icon to resources directory (for electron-builder build)
-          $iconDest = "dist/apps/web-giddh/resources/icon.ico"
+          # Copy all icon files from source resources directory
+          Copy-Item "apps/electron-giddh/src/resources/icon.ico" "dist/apps/web-giddh/resources/icon.ico" -Force
+          Copy-Item "apps/electron-giddh/src/resources/icon.icns" "dist/apps/web-giddh/resources/icon.icns" -Force -ErrorAction SilentlyContinue
           
-          if (Test-Path $iconSource) {
-              $iconSize = (Get-Item $iconSource).Length
-              Write-Host "  Source icon: $iconSource ($iconSize bytes)"
-              Copy-Item $iconSource $iconDest -Force
-              Write-Host "  ✅ Copied to: $iconDest"
-              
-              # Also copy to root for runtime access
-              Copy-Item $iconSource "dist/apps/web-giddh/icon.ico" -Force
-              Write-Host "  ✅ Copied to: dist/apps/web-giddh/icon.ico"
-              
-              if (Test-Path $iconDest) {
-                  $destSize = (Get-Item $iconDest).Length
-                  Write-Host "  ✅ Verified destination: $destSize bytes"
-              }
-          } else {
-              Write-Host "  ❌ ERROR: Source icon not found!"
-              exit 1
-          }
+          # Also copy icon.ico to root for electron-builder
+          Copy-Item "apps/electron-giddh/src/resources/icon.ico" "dist/apps/web-giddh/icon.ico" -Force
+          
+          Write-Host "  ✅ Copied icon.ico to resources/ and root"
+          Write-Host "  icon.ico size: $((Get-Item 'dist/apps/web-giddh/icon.ico').Length) bytes"
+          Write-Host "  resources/icon.ico exists: $(Test-Path 'dist/apps/web-giddh/resources/icon.ico')"
           
           Write-Host "📦 Copying tray icons..."
           New-Item -ItemType Directory -Force -Path "dist/apps/web-giddh/build/icons" | Out-Null
@@ -129,7 +117,17 @@ jobs:
           Write-Host "  ✅ Installed dependencies"
           Write-Host "  node_modules created: $(Test-Path 'node_modules')"
           
-          Write-Host "🔨 Building Windows app with electron-builder..."
+          Write-Host "� Verifying icon files before electron-builder..."
+          Write-Host "  Checking icon.ico: $(Test-Path 'icon.ico')"
+          Write-Host "  Checking resources/icon.ico: $(Test-Path 'resources/icon.ico')"
+          Write-Host "  Checking build/icons directory: $(Test-Path 'build/icons')"
+          if (Test-Path 'build/icons') {
+              $iconFiles = Get-ChildItem 'build/icons/*.png' -ErrorAction SilentlyContinue
+              Write-Host "  Found $($iconFiles.Count) PNG files in build/icons:"
+              $iconFiles | ForEach-Object { Write-Host "    - $($_.Name)" }
+          }
+          
+          Write-Host "� Building Windows app with electron-builder..."
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win
           cd ../../../
           node scripts/build-success-message.js prod
@@ -152,6 +150,24 @@ jobs:
               Write-Host "  ✅ Found app executable: $($appExe.FullName)"
               Write-Host "  Size: $($appExe.Length) bytes"
               Write-Host "  ⚠️  Not signed yet - will be signed by eSigner in next step"
+              
+              # Verify icon files are in the packaged app
+              $winUnpackedDir = Split-Path -Parent $appExe.FullName
+              Write-Host "  🔍 Checking for icon files in win-unpacked..."
+              Write-Host "    icon.ico in app.asar: $(Test-Path (Join-Path $winUnpackedDir 'resources/app.asar'))"
+              
+              # Check extraResources (icons should be here)
+              $resourcesDir = Join-Path (Split-Path -Parent $winUnpackedDir) "resources"
+              Write-Host "    Resources directory: $(Test-Path $resourcesDir)"
+              if (Test-Path $resourcesDir) {
+                  Write-Host "    icon.ico in resources: $(Test-Path (Join-Path $resourcesDir 'icon.ico'))"
+                  Write-Host "    resources/icon.ico: $(Test-Path (Join-Path $resourcesDir 'resources/icon.ico'))"
+                  Write-Host "    build/icons directory: $(Test-Path (Join-Path $resourcesDir 'build/icons'))"
+                  if (Test-Path (Join-Path $resourcesDir 'build/icons')) {
+                      $trayIconsInPackage = Get-ChildItem (Join-Path $resourcesDir 'build/icons/*.png') -ErrorAction SilentlyContinue
+                      Write-Host "    Tray icons in package: $($trayIconsInPackage.Count)"
+                  }
+              }
           } else {
               Write-Host "  ❌ ERROR: App executable not found in win-unpacked!"
               exit 1
