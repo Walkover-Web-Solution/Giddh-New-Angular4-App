@@ -205,6 +205,21 @@ jobs:
           Write-Host "Found unsigned app executable: $($appExe.FullName)"
           "APP_EXE_PATH=$($appExe.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           
+          Write-Host ""
+          Write-Host "🔍 Checking if icon is embedded in unsigned Giddh.exe..."
+          try {
+            Add-Type -AssemblyName System.Drawing
+            $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($appExe.FullName)
+            if ($icon) {
+              Write-Host "  ✅ Icon IS embedded in unsigned executable"
+              Write-Host "  Icon size: $($icon.Width)x$($icon.Height)"
+            } else {
+              Write-Host "  ❌ No icon found in unsigned executable - electron-builder did not embed it!"
+            }
+          } catch {
+            Write-Host "  ⚠️  Could not verify icon: $($_.Exception.Message)"
+          }
+          
           # Find latest.yml
           $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
           if ($latestYml) {
