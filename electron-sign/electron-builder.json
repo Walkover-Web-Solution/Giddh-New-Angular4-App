@@ -79,7 +79,6 @@
         "legalTrademarks": "",
         "artifactName": "giddh-test-setup-${version}.${ext}",
         "signAndEditExecutable": false,
-        "sign": null,
         "requestedExecutionLevel": "asInvoker",
         "verifyUpdateCodeSignature": false
     },
