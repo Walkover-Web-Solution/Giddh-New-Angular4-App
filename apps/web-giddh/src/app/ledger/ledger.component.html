@@ -300,6 +300,43 @@
                                         <i class="icon-dots-three-vertical"></i>
                                     </button>
                                     <mat-menu #menu="matMenu">
+                                        <ng-container *ngIf="!isGocardlessSupportedCountry && isBankAccount && !isBankTransactionLoading">
+                                            <button
+                                                *ngIf="lc.bankTransactionsDebitData?.length || lc.bankTransactionsCreditData?.length"
+                                                aria-label="refresh-bank-transactions"
+                                                mat-menu-item
+                                                (click)="getBankTransactions()"
+                                            >
+                                                <i aria-hidden="true" class="icon-refresh mr-2"></i>
+                                                {{ commonLocaleData?.app_refresh }}
+                                            </button>
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="
+                                                isGocardlessSupportedCountry &&
+                                                hasIntegrationScope &&
+                                                isBankAccount &&
+                                                !isBankTransactionLoading
+                                            "
+                                        >
+                                            <button
+                                                *ngIf="isBankAccountConnected"
+                                                aria-label="refresh-bank-transactions"
+                                                mat-menu-item
+                                                (click)="refreshBankTransactions()"
+                                                [disabled]="isBankRefreshing$ | async"
+                                            >
+                                                <i aria-hidden="true" class="icon-refresh mr-2"></i>
+                                                {{ commonLocaleData?.app_refresh }}
+                                            </button>
+                                            <button aria-label="connect-bank" mat-menu-item (click)="openBankLinkDialog()">
+                                                <i aria-hidden="true" class="icon-plus mr-2"></i>
+                                                {{ localeData?.connect_bank }}
+                                            </button>
+                                        </ng-container>
+                                        <button aria-label="upload" mat-menu-item (click)="showUploadBankStatementModal()">
+                                            {{ localeData?.import_statement }}
+                                        </button>
                                         <button aria-label="share" mat-menu-item>
                                             <a
                                                 aria-label="share"
@@ -321,6 +358,38 @@
                                             >
                                                 {{ commonLocaleData?.app_export }}
                                             </a>
+                                        </button>
+                                        <button
+                                            aria-label="delete"
+                                            mat-menu-item
+                                            (click)="showBulkDeleteBankTransactionsConfirmationModal()"
+                                            *ngIf="
+                                                entryUniqueNamesForBulkAction?.length > 0 ||
+                                                selectedDebitTransactionIds?.size > 0 ||
+                                                selectedCreditTransactionIds?.size > 0
+                                            "
+                                        >
+                                            <i class="icon-trash mr-2"></i>
+                                            {{ localeData?.delete_bank_transactions }}
+                                        </button>
+                                        <button
+                                            aria-label="autopaid"
+                                            *ngIf="
+                                                voucherApiVersion === 2 &&
+                                                enableAutopaid &&
+                                                (currentOrganizationType !== 'COMPANY' ||
+                                                    currentCompanyBranches?.length <= 2 ||
+                                                    isBranchTransactionSelected)
+                                            "
+                                            mat-menu-item
+                                            (click)="showAutopaidModal()"
+                                        >
+                                            <img
+                                                class="autopaid-icon image-as-icon-color mr-2"
+                                                src="{{ imgPath }}autopaid.svg"
+                                                alt="autopaid-icon"
+                                            />
+                                            {{ this.localeData?.autopaid_title }}
                                         </button>
                                     </mat-menu>
                                 </ng-container>

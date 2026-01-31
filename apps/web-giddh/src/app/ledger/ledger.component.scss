@@ -981,6 +981,7 @@ input#ledger-search {
         .ledger-datepicker {
             width: 36px;
             height: 36px;
+            line-height: 36px;
             border: 1px solid var(--border-color);
             text-align: center;
             align-items: center;
@@ -1056,14 +1057,6 @@ input#ledger-search {
 
 .ledger-row .mat-grid-tile:nth-child(3) {
     justify-content: center !important;
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-    .ledger-datepicker {
-        img {
-            padding-top: 5px;
-        }
-    }
 }
 
 .ledger-checkbox {
