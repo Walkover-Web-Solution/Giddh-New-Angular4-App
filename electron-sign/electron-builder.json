@@ -38,14 +38,8 @@
             "dmg",
             "zip"
         ],
-        "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
-        "type": "distribution",
-        "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
-        "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
-        "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
-        "icon": "icon.png",
-        "hardenedRuntime": true,
-        "gatekeeperAssess": false
+        "identity": null,
+        "icon": "icon.icns"
     },
     "dmg": {
         "sign": false
