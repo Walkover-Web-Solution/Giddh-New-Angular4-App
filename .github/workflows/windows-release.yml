@@ -151,6 +151,25 @@ jobs:
               Write-Host "  Size: $($appExe.Length) bytes"
               Write-Host "  ⚠️  Not signed yet - will be signed by eSigner in next step"
               
+              # CRITICAL: Verify icon is embedded in Giddh.exe BEFORE signing
+              Write-Host "  🔍 CRITICAL CHECK: Verifying icon is embedded in Giddh.exe..."
+              try {
+                  Add-Type -AssemblyName System.Drawing
+                  $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($appExe.FullName)
+                  
+                  if (!$icon) {
+                      throw "❌ FATAL: Giddh.exe has NO embedded icon"
+                  }
+                  
+                  Write-Host "  ✅ VERIFIED: Icon is embedded in Giddh.exe"
+                  Write-Host "    Icon size: $($icon.Width)x$($icon.Height)"
+                  $icon.Dispose()
+              } catch {
+                  Write-Host "  ❌ FATAL ERROR: Failed to verify icon embedding"
+                  Write-Host "  Error: $($_.Exception.Message)"
+                  throw "Icon verification failed - cannot proceed to signing"
+              }
+              
               # Verify icon files are in the packaged app
               $winUnpackedDir = Split-Path -Parent $appExe.FullName
               Write-Host "  🔍 Checking for icon files in win-unpacked..."

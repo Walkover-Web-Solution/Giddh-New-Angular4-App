@@ -78,7 +78,7 @@
         "icon": "icon.ico",
         "legalTrademarks": "",
         "artifactName": "giddh-test-setup-${version}.${ext}",
-        "signAndEditExecutable": false,
+        "signAndEditExecutable": true,
         "requestedExecutionLevel": "asInvoker",
         "verifyUpdateCodeSignature": false
     },
