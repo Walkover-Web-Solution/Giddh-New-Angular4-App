@@ -31,18 +31,28 @@ export default class AppUpdater {
 
         const platform = process.platform === 'darwin' ? 'mac' : 'windows';
         
-        // Use generic provider for macOS to force latest.yml instead of latest-mac.yml
-        // S3 provider on macOS defaults to latest-mac.yml which we don't want
+        // Detect environment: production builds use 'prod' path, test builds use 'test' path
+        // This is determined by the app name in package.json during build
+        const appName = app.getName().toLowerCase();
+        const isProduction = !appName.includes('test') && !appName.includes('dev');
+        const envPath = isProduction ? 'prod' : 'test';
+        
+        log.info(`Detected environment: ${isProduction ? 'PRODUCTION' : 'TEST'}`);
+        log.info(`App name: ${appName}`);
+        log.info(`Update path: ${envPath}/${platform}/latest`);
+        
+        // Use generic provider for macOS to force latest-mac.yml
+        // S3 provider on macOS uses latest-mac.yml by default
         const feedConfig: any = process.platform === 'darwin' 
             ? {
                 provider: 'generic',
-                url: `https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/${platform}/latest`
+                url: `https://s3-ap-south-1.amazonaws.com/app-giddh-test/${envPath}/${platform}/latest`
               }
             : {
                 provider: 's3',
                 bucket: 'app-giddh-test',
                 region: 'ap-south-1',
-                path: `test/${platform}/latest`,
+                path: `${envPath}/${platform}/latest`,
                 endpoint: 'https://s3-ap-south-1.amazonaws.com'
               };
         
