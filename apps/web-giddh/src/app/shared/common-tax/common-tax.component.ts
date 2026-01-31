@@ -147,8 +147,8 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
      * Used to detect when these inputs change and trigger re-calculation
      */
     private taxesInputTracker = computed(() => {
-        const taxes = this.taxes();
-        const applicableTaxes = this.applicableTaxes();
+        const taxes = this.taxes() || [];
+        const applicableTaxes = this.applicableTaxes() || [];
         const date = this.date();
         return { taxes, applicableTaxes, date };
     });
@@ -200,6 +200,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                     applicableTaxes: cloneDeep(taxData.applicableTaxes),
                     date: taxData.date
                 };
+                this.internalTaxRenderData.set([]);
                 this.prepareTaxObject();
                 this.change();
             }
@@ -321,7 +322,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
             taxesList = taxesList.filter(f => !this.exceptTaxTypes().includes(f.taxType));
         }
 
-        const renderData = [...this.internalTaxRenderData()];
+        const renderData = [];
         const applicableTaxUniqueNames = this.getApplicableTaxUniqueNames();
         
         taxesList.forEach(tax => {

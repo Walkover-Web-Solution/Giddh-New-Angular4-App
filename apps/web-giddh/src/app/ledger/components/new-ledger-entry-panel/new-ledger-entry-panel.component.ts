@@ -1845,7 +1845,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
         }
         if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {
-            accountDetails.applicableTaxes.unshift(accountDetails.otherApplicableTaxes[0]);
+            accountDetails.applicableTaxes.unshift(...accountDetails.otherApplicableTaxes);
         }
         this.preparePreAppliedDiscounts();
     }

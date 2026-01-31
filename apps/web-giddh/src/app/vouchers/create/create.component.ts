@@ -3474,12 +3474,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 },
                                 amount: {
                                     amountForAccount: giddhRoundOff(
-                                        Number(item.quantity) * Number(item.additional.stock.rate),
+                                        Number(item.quantity) * Number(item.additional.stock?.rate) || 0,
                                         this.company.giddhBalanceDecimalPlaces
                                     ),
                                     amountForCompany:
                                         giddhRoundOff(
-                                            Number(item.quantity) * Number(item.additional.stock.rate),
+                                            Number(item.quantity) * Number(item.additional.stock?.rate) || 0,
                                             this.company.giddhBalanceDecimalPlaces
                                         ) * this.invoiceForm.get("exchangeRate")?.value,
                                 },
@@ -6875,6 +6875,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         transactionFormGroup.get("account.name")?.patchValue(response.name);
         transactionFormGroup.get("account.uniqueName")?.patchValue(response.uniqueName);
+        const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
+        taxesFormArray.clear();
+        const discountsFormArray = entryFormGroup.get("discounts") as FormArray;
+        discountsFormArray.clear();
 
         if (response.stock) {
             transactionFormGroup.get("stock.name")?.patchValue(response.stock.name);
@@ -6939,8 +6943,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .patchValue(rate * transactionFormGroup.get("stock.quantity")?.value);
             }
 
-            const discountsFormArray = entryFormGroup.get("discounts") as FormArray;
-            discountsFormArray.clear();
             if (response.stock.variant?.variantDiscount?.discounts) {
                 response.stock.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
                     this.discountsList?.forEach((discount) => {
@@ -6968,9 +6970,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get("sacNumber")?.patchValue(response.sacNumber);
             entryFormGroup.get("showCodeType")?.patchValue(response.hsnNumber ? "hsn" : "sac");
 
-            const discountsFormArray = entryFormGroup.get("discounts") as FormArray;
-            discountsFormArray.clear();
-
             this.account.applicableDiscounts?.forEach((selectedDiscount) => {
                 this.discountsList?.forEach((discount) => {
                     if (discount?.uniqueName === selectedDiscount?.uniqueName) {
@@ -6986,9 +6985,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             response.taxes ?? [],
             response.groupTaxes ?? []
         );
-
-        const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
-        taxesFormArray.clear();
 
         const selectedTaxes = [];
         let otherTax = null;
