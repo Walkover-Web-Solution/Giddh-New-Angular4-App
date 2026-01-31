@@ -2657,6 +2657,29 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (event?.additional?.stock?.uniqueName) {
                 transactionFormGroup.get("stock.name")?.patchValue(event?.additional?.stock?.name);
                 transactionFormGroup.get("stock.uniqueName")?.patchValue(event?.additional?.stock?.uniqueName);
+
+                if (event.additional.stock.customField1?.value) {
+                    transactionFormGroup.get("stock.customField1")?.patchValue({
+                        key: event.additional.stock.customField1.key || '',
+                        value: event.additional.stock.customField1.value
+                    });
+                } else {
+                    transactionFormGroup.get("stock.customField1")?.patchValue({
+                        key: '',
+                        value: ''
+                    });
+                }
+                if (event.additional.stock.customField2?.value) {
+                    transactionFormGroup.get("stock.customField2")?.patchValue({
+                        key: event.additional.stock.customField2.key || '',
+                        value: event.additional.stock.customField2.value
+                    });
+                } else {
+                    transactionFormGroup.get("stock.customField2")?.patchValue({
+                        key: '',
+                        value: ''
+                    });
+                }
             } else {
                 const stockFormGroup = transactionFormGroup.get("stock") as FormGroup;
                 const newStockFormGroup = this.getStockFormGroup();
