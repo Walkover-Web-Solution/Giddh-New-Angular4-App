@@ -2584,7 +2584,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         try {
             const accountName = transaction?.get('account.name')?.value;
             const stockName = transaction?.get('stock.name')?.value;
-
+            
             if (accountName) {
                 return stockName ? `${accountName} (${stockName})` : accountName;
             }
@@ -2657,6 +2657,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (event?.additional?.stock?.uniqueName) {
                 transactionFormGroup.get("stock.name")?.patchValue(event?.additional?.stock?.name);
                 transactionFormGroup.get("stock.uniqueName")?.patchValue(event?.additional?.stock?.uniqueName);
+            } else {
+                const stockFormGroup = transactionFormGroup.get("stock") as FormGroup;
+                const newStockFormGroup = this.getStockFormGroup();
+                stockFormGroup.patchValue(newStockFormGroup.value);
             }
 
             if (event?.additional?.hasVariants) {
@@ -3110,62 +3114,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         amountForCompany: [entryData ? entryData?.transactions[0]?.amount?.amountForCompany : 0],
                         type: ["DEBIT"],
                     }),
-                    stock: this.formBuilder.group({
-                        name: [entryData ? entryData?.transactions[0]?.stock?.name : ""],
-                        quantity: [entryData ? entryData?.transactions[0]?.stock?.quantity : 1],
-                        maxQuantity: [this.getStockMaxQuantity(entryData)], //temp (for PO linking in PB)
-                        rate: this.formBuilder.group({
-                            rateForAccount: [
-                                entryData
-                                    ? entryData?.transactions[0]?.stock?.rate?.rateForAccount ??
-                                    entryData?.transactions[0]?.stock?.rate?.amountForAccount
-                                    : 1,
-                            ],
-                        }),
-                        stockUnit: this.formBuilder.group({
-                            code: [entryData ? entryData?.transactions[0]?.stock?.stockUnit?.code : ""],
-                            uniqueName: [entryData ? entryData?.transactions[0]?.stock?.stockUnit?.uniqueName : ""],
-                        }),
-                        variant: this.formBuilder.group({
-                            name: [entryData ? entryData?.transactions[0]?.stock?.variant?.name : ""],
-                            uniqueName: [entryData ? entryData?.transactions[0]?.stock?.variant?.uniqueName : ""],
-                            salesTaxInclusive: [
-                                entryData ? entryData?.transactions[0]?.stock?.variant?.salesTaxInclusive : false,
-                            ],
-                            purchaseTaxInclusive: [
-                                entryData ? entryData?.transactions[0]?.stock?.variant?.purchaseTaxInclusive : false,
-                            ],
-                            getParticular: [true],
-                        }),
-                        skuCodeHeading: [entryData ? entryData?.transactions[0]?.stock?.skuCodeHeading : ""],
-                        skuCode: [entryData ? entryData?.transactions[0]?.stock?.sku : ""],
-                        uniqueName: [entryData ? entryData?.transactions[0]?.stock?.uniqueName : ""],
-                        customField1: this.formBuilder.group({
-                            key: [
-                                entryData?.transactions[0]?.stock?.customField1?.value
-                                    ? entryData?.transactions[0]?.stock?.customField1?.key
-                                    : "",
-                            ],
-                            value: [
-                                entryData?.transactions[0]?.stock?.customField1?.value
-                                    ? entryData?.transactions[0]?.stock?.customField1?.value
-                                    : "",
-                            ],
-                        }),
-                        customField2: this.formBuilder.group({
-                            key: [
-                                entryData?.transactions[0]?.stock?.customField2?.value
-                                    ? entryData?.transactions[0]?.stock?.customField2?.key
-                                    : "",
-                            ],
-                            value: [
-                                entryData?.transactions[0]?.stock?.customField2?.value
-                                    ? entryData?.transactions[0]?.stock?.customField2?.value
-                                    : "",
-                            ],
-                        }),
-                        hasVariants: [entryData ? entryData?.transactions[0]?.stock?.hasVariants : false],
-                    }),
+                    stock: this.getStockFormGroup(entryData),
                 }),
             ]),
             total: this.formBuilder.group({
@@ -3199,6 +3148,73 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             name: [discount?.name],
             particular: [""],
             uniqueName: [discount?.uniqueName],
+        });
+    }
+
+    /**
+     * Returns stock form group
+     *
+     * @private
+     * @param {*} [entryData] - Entry data for initialization
+     * @return {*}  {FormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getStockFormGroup(entryData?: any): FormGroup {
+        return this.formBuilder.group({
+            name: [entryData ? entryData?.transactions[0]?.stock?.name : ""],
+            quantity: [entryData ? entryData?.transactions[0]?.stock?.quantity : 1],
+            maxQuantity: [this.getStockMaxQuantity(entryData)], //temp (for PO linking in PB)
+            rate: this.formBuilder.group({
+                rateForAccount: [
+                    entryData
+                        ? entryData?.transactions[0]?.stock?.rate?.rateForAccount ??
+                        entryData?.transactions[0]?.stock?.rate?.amountForAccount
+                        : 1,
+                ],
+            }),
+            stockUnit: this.formBuilder.group({
+                code: [entryData ? entryData?.transactions[0]?.stock?.stockUnit?.code : ""],
+                uniqueName: [entryData ? entryData?.transactions[0]?.stock?.stockUnit?.uniqueName : ""],
+            }),
+            variant: this.formBuilder.group({
+                name: [entryData ? entryData?.transactions[0]?.stock?.variant?.name : ""],
+                uniqueName: [entryData ? entryData?.transactions[0]?.stock?.variant?.uniqueName : ""],
+                salesTaxInclusive: [
+                    entryData ? entryData?.transactions[0]?.stock?.variant?.salesTaxInclusive : false,
+                ],
+                purchaseTaxInclusive: [
+                    entryData ? entryData?.transactions[0]?.stock?.variant?.purchaseTaxInclusive : false,
+                ],
+                getParticular: [true],
+            }),
+            skuCodeHeading: [entryData ? entryData?.transactions[0]?.stock?.skuCodeHeading : ""],
+            skuCode: [entryData ? entryData?.transactions[0]?.stock?.sku : ""],
+            uniqueName: [entryData ? entryData?.transactions[0]?.stock?.uniqueName : ""],
+            customField1: this.formBuilder.group({
+                key: [
+                    entryData?.transactions[0]?.stock?.customField1?.value
+                        ? entryData?.transactions[0]?.stock?.customField1?.key
+                        : "",
+                ],
+                value: [
+                    entryData?.transactions[0]?.stock?.customField1?.value
+                        ? entryData?.transactions[0]?.stock?.customField1?.value
+                        : "",
+                ],
+            }),
+            customField2: this.formBuilder.group({
+                key: [
+                    entryData?.transactions[0]?.stock?.customField2?.value
+                        ? entryData?.transactions[0]?.stock?.customField2?.key
+                        : "",
+                ],
+                value: [
+                    entryData?.transactions[0]?.stock?.customField2?.value
+                        ? entryData?.transactions[0]?.stock?.customField2?.value
+                        : "",
+                ],
+            }),
+            hasVariants: [entryData ? entryData?.transactions[0]?.stock?.hasVariants : false],
         });
     }
 
