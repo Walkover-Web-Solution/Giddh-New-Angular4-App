@@ -6863,7 +6863,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         taxesFormArray.clear();
         const discountsFormArray = entryFormGroup.get("discounts") as FormArray;
         discountsFormArray.clear();
-        console.log(cloneDeep(taxesFormArray));
 
         if (response.stock) {
             transactionFormGroup.get("stock.name")?.patchValue(response.stock.name);
