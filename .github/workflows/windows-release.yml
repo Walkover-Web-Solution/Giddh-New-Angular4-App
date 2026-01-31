@@ -49,7 +49,7 @@ jobs:
           Write-Host "Branch: $branch"
           
           if ($branch -eq "prod-electron-build-gh-action") {
-            "BUILD_ENV=production" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "BUILD_ENV=prod" | Out-File -FilePath $env:GITHUB_ENV -Append
             "S3_PATH_PREFIX=prod" | Out-File -FilePath $env:GITHUB_ENV -Append
             "INSTALLER_NAME=giddh-setup.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
             Write-Host "✅ Production build"
@@ -97,7 +97,7 @@ jobs:
           $pkgPath = "dist/apps/web-giddh/package.json"
           $pkg = Get-Content $pkgPath -Raw | ConvertFrom-Json
           
-          if ("${{ env.BUILD_ENV }}" -eq "production") {
+          if ("${{ env.BUILD_ENV }}" -eq "prod") {
             $pkg.name = "Giddh"
             $pkg.productName = "Giddh"
             Write-Host "  ✅ Set product name: Giddh (production)"
@@ -138,7 +138,7 @@ jobs:
           $configPath = "./../../../electron-sign/electron-builder.json"
           $config = Get-Content $configPath -Raw | ConvertFrom-Json
           
-          if ("${{ env.BUILD_ENV }}" -eq "production") {
+          if ("${{ env.BUILD_ENV }}" -eq "prod") {
             $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-setup-`${version}.`${ext}" -Force
             Write-Host "  ✅ Set artifact name: giddh-setup-VERSION.ext"
           } else {
@@ -250,7 +250,7 @@ jobs:
           $configPath = "./../../../electron-sign/electron-builder.json"
           $config = Get-Content $configPath -Raw | ConvertFrom-Json
           
-          if ("${{ env.BUILD_ENV }}" -eq "production") {
+          if ("${{ env.BUILD_ENV }}" -eq "prod") {
             $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-setup-`${version}.`${ext}" -Force
           } else {
             $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-test-setup-`${version}.`${ext}" -Force
@@ -398,7 +398,7 @@ jobs:
               $ymlContent = Get-Content $YML_FILE -Raw
               
               # Replace versioned filenames with environment-specific fixed name
-              if ("${{ env.BUILD_ENV }}" -eq "production") {
+              if ("${{ env.BUILD_ENV }}" -eq "prod") {
                 $ymlContent = $ymlContent -replace 'giddh-setup-\d+\.\d+\.\d+\.exe', 'giddh-setup.exe'
                 $ymlContent = $ymlContent -replace 'path: giddh-setup-\d+\.\d+\.\d+\.exe', 'path: giddh-setup.exe'
                 $ymlContent = $ymlContent -replace 'url: giddh-setup-\d+\.\d+\.\d+\.exe', 'url: giddh-setup.exe'
