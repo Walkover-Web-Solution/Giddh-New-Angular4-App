@@ -1,0 +1,77 @@
+{
+    "appId": "com.giddh.prod",
+    "electronVersion": "32.2.6",
+    "productName": "Giddh",
+    "publish": [
+        {
+            "provider": "s3",
+            "bucket": "app-giddh-test",
+            "region": "ap-south-1",
+            "path": "test/mac/latest"
+        }
+    ],
+    "directories": {
+        "buildResources": "resources",
+        "output": "../../../dist/apps/electrongiddh-packages"
+    },
+    "files": [
+        "**/*",
+        "index.html",
+        "preload.js",
+        "icon.icns",
+        "resources/icon.icns",
+        "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+        "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+        "!**/node_modules/*.d.ts",
+        "!**/node_modules/.bin",
+        "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+        "!.editorconfig",
+        "!**/._*",
+        "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+        "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+        "!**/{appveyor.yml,.travis.yml,circle.yml}",
+        "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "mac": {
+        "category": "public.app-category.finance",
+        "target": [
+            {
+                "target": "zip",
+                "arch": ["universal"]
+            },
+            {
+                "target": "dmg",
+                "arch": ["universal"]
+            }
+        ],
+        "icon": "resources/icon.icns",
+        "hardenedRuntime": false,
+        "gatekeeperAssess": false,
+        "type": "development",
+        "artifactName": "giddh-test-setup-${version}.${ext}"
+    },
+    "dmg": {
+        "sign": false,
+        "artifactName": "giddh-test-setup-${version}.${ext}",
+        "title": "${productName} ${version}",
+        "icon": "icon.icns",
+        "iconSize": 80,
+        "contents": [
+            {
+                "x": 130,
+                "y": 220
+            },
+            {
+                "x": 410,
+                "y": 220,
+                "type": "link",
+                "path": "/Applications"
+            }
+        ],
+        "window": {
+            "width": 540,
+            "height": 380
+        }
+    },
+    "asar": true
+}

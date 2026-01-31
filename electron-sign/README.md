@@ -38,7 +38,9 @@ This directory contains the configuration files for building, signing, and distr
   "publish": [
     {
       "provider": "s3",
-      "bucket": "giddh-app-builds"
+      "bucket": "app-giddh-test",
+      "region": "ap-south-1",
+      "path": "test/windows/latest"
     }
   ]
 }
@@ -309,7 +311,7 @@ NODE_ENV=production
 
 # Publishing
 PUBLISH_PROVIDER=s3
-S3_BUCKET=giddh-app-builds
+S3_BUCKET=app-giddh-test
 ```
 
 ## Troubleshooting
@@ -438,7 +440,7 @@ npx electron --version
 npx electron-builder --help
 
 # Test S3 connection
-aws s3 ls s3://giddh-app-builds
+aws s3 ls s3://app-giddh-test
 ```
 
 ## Security Considerations
@@ -511,8 +513,9 @@ npm ls --depth=0
   "publish": [
     {
       "provider": "s3",
-      "bucket": "giddh-app-builds",
-      "path": "releases"
+      "bucket": "app-giddh-test",
+      "region": "ap-south-1",
+      "path": "test/windows/latest"
     }
   ]
 }

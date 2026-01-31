@@ -1,19 +1,20 @@
-import { app, ipcMain } from "electron";
-import setMenu from "./AppMenuManager";
+import { app, ipcMain, Tray, Menu, nativeImage } from "electron";
+import AppMenuManager from "./AppMenuManager";
 import { log } from "./util";
 import WindowManager from "./WindowManager";
 import { GoogleLoginElectronConfig } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
+import { getAppUpdater } from "./AppUpdater";
 
 let windowManager: WindowManager = null;
 let STAGING_ENV = false;
 let TEST_ENV = false;
 let LOCAL_ENV = true;
 let PRODUCTION_ENV = false;
-let APP_URL = 'file://' + __dirname + '/index.html';  // Direct path to packaged Angular app
+let APP_URL = 'file://' + __dirname + '/index.html';
 let APP_FOLDER = '';
+let tray: Tray | null = null;
 
-// Electron-specific configuration
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 process.env.NODE_ENV = 'development';
 
@@ -22,9 +23,24 @@ app.on("ready", () => {
         log(arg);
     });
 
-    setMenu();
     windowManager = new WindowManager();
+    const menuManager = new AppMenuManager(windowManager);
+    menuManager.setApplicationMenu();
     windowManager.openWindows();
+    createTray();
+});
+app.on('before-quit', () => {
+    if (tray) {
+        tray.destroy();
+        tray = null;
+    }
+});
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        if (!tray) {
+            app.quit();
+        }
+    }
 });
 ipcMain.on("open-url", (event, arg) => {
     windowManager.openWindows(arg);
@@ -196,3 +212,110 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
             });
     }
 });
+
+ipcMain.on('check-for-updates', () => {
+    const updater = getAppUpdater();
+    updater.checkForUpdates();
+});
+
+ipcMain.on('install-update', () => {
+    const updater = getAppUpdater();
+    updater.quitAndInstall();
+});
+
+function createTray(): void {
+    try {
+        const path = require('path');
+        const fs = require('fs');
+        
+        // Determine tray icon path based on environment
+        let trayIconPath: string;
+        
+        if (app.isPackaged) {
+            // In packaged app, tray icons are in extraResources
+            trayIconPath = path.join(process.resourcesPath, 'build', 'icons', 'tray.png');
+            console.log('🔍 Tray icon path (packaged):', trayIconPath);
+        } else {
+            // In development
+            trayIconPath = path.join(__dirname, 'build', 'icons', 'tray.png');
+            console.log('🔍 Tray icon path (development):', trayIconPath);
+        }
+
+        console.log('  process.resourcesPath:', process.resourcesPath);
+        console.log('  __dirname:', __dirname);
+        console.log('  Icon exists:', fs.existsSync(trayIconPath));
+
+        if (!fs.existsSync(trayIconPath)) {
+            console.error('❌ Tray icon not found at:', trayIconPath);
+            // Try fallback to smaller icon
+            const fallbackPath = app.isPackaged 
+                ? path.join(process.resourcesPath, 'build', 'icons', 'tray-small.png')
+                : path.join(__dirname, 'build', 'icons', 'tray-small.png');
+            
+            if (fs.existsSync(fallbackPath)) {
+                trayIconPath = fallbackPath;
+                console.log('  ✅ Using fallback icon:', fallbackPath);
+            } else {
+                console.error('❌ No tray icon found, skipping tray creation');
+                return;
+            }
+        }
+
+        const image = nativeImage.createFromPath(trayIconPath);
+        if (image.isEmpty()) {
+            console.error('❌ Tray icon image is empty');
+            return;
+        }
+
+        console.log('📐 Image size:', image.getSize());
+        
+        const resizedImage = image.resize({ width: 16, height: 16 });
+        resizedImage.setTemplateImage(false);
+        
+        tray = new Tray(resizedImage);
+        tray.setToolTip('Giddh - Accounting Software');
+
+        const contextMenu = Menu.buildFromTemplate([
+            { 
+                label: 'Open Giddh', 
+                click: () => {
+                    if (windowManager) {
+                        windowManager.openWindows();
+                        windowManager.focusFirstWindow();
+                    }
+                }
+            },
+            { type: 'separator' },
+            { 
+                label: 'About Giddh', 
+                click: () => console.log('About Giddh')
+            },
+            { type: 'separator' },
+            { 
+                label: 'Quit', 
+                click: () => app.quit() 
+            }
+        ]);
+
+        tray.setContextMenu(contextMenu);
+        
+        tray.on('click', () => {
+            if (windowManager) {
+                windowManager.focusFirstWindow();
+            }
+        });
+        
+        tray.on('double-click', () => {
+            if (windowManager) {
+                windowManager.openWindows();
+                windowManager.focusFirstWindow();
+            }
+        });
+
+        console.log('✅ Tray icon created successfully');
+    } catch (error) {
+        console.error('❌ Error creating tray:', error);
+    }
+}
+
+

@@ -1,0 +1,273 @@
+# Author Name: Divyanshu Shrivastava
+# Date: 16th January 2026
+name: macOS DMG (build → unsigned → S3 upload)
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+    branches:
+      - "test-electron-build-gh-action"
+      - "prod-electron-build-gh-action"
+
+permissions:
+  contents: write # needed to push version changes back to repository
+  id-token: write # needed only if you use AWS OIDC (role-to-assume)
+
+concurrency:
+  group: macos-release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build_upload:
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    env:
+      RELEASE_TAG: ${{ github.ref_name }}
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      UPLOAD_LATEST: "true"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Detect build environment from branch
+        shell: bash
+        run: |
+          branch="${{ github.ref_name }}"
+          echo "Branch: $branch"
+          
+          if [ "$branch" = "prod-electron-build-gh-action" ]; then
+            echo "BUILD_ENV=production" >> $GITHUB_ENV
+            echo "S3_PATH_PREFIX=prod" >> $GITHUB_ENV
+            echo "LATEST_ZIP_NAME=giddh.zip" >> $GITHUB_ENV
+            echo "LATEST_DMG_NAME=giddh-setup.dmg" >> $GITHUB_ENV
+            echo "✅ Production build"
+          else
+            echo "BUILD_ENV=test" >> $GITHUB_ENV
+            echo "S3_PATH_PREFIX=test" >> $GITHUB_ENV
+            echo "LATEST_ZIP_NAME=giddh-test.zip" >> $GITHUB_ENV
+            echo "LATEST_DMG_NAME=giddh-test-setup.dmg" >> $GITHUB_ENV
+            echo "✅ Test build"
+          fi
+
+      - name: Install deps
+        run: npm install
+
+      - name: Build macOS Universal App
+        env:
+          ELECTRON_ENV: true
+        run: |
+          node scripts/clean-old-builds.js
+          npm run prepare.electron.giddh
+          node scripts/build-env.js ${{ env.BUILD_ENV }}
+          npx ng build electron-giddh --configuration=${{ env.BUILD_ENV }}
+          node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html
+          
+          echo "📦 Copying icon files..."
+          ICON_SOURCE="apps/electron-giddh/src/resources/icon.icns"
+          mkdir -p "dist/apps/web-giddh/resources"
+          
+          if [ -f "$ICON_SOURCE" ]; then
+              cp "$ICON_SOURCE" "dist/apps/web-giddh/resources/icon.icns"
+              cp "$ICON_SOURCE" "dist/apps/web-giddh/icon.icns"
+              echo "  ✅ Icon files copied"
+          else
+              echo "  ❌ ERROR: Icon not found!"
+              exit 1
+          fi
+          
+          echo "📦 Copying tray icons..."
+          mkdir -p "dist/apps/web-giddh/build/icons"
+          cp apps/web-giddh/src/build/icons/*.png "dist/apps/web-giddh/build/icons/" 2>/dev/null || true
+          cp apps/electron-giddh/src/build/icons/*.png "dist/apps/web-giddh/build/icons/" 2>/dev/null || true
+          echo "  ✅ Tray icons copied"
+          
+          echo "📦 Copying preload.js..."
+          PRELOAD_SOURCE="apps/electron-giddh/src/preload.js"
+          if [ -f "$PRELOAD_SOURCE" ]; then
+              cp "$PRELOAD_SOURCE" "dist/apps/web-giddh/preload.js"
+              echo "  ✅ Preload.js copied"
+          else
+              echo "  ❌ ERROR: preload.js not found!"
+              exit 1
+          fi
+          
+          echo "📦 Copying package.json..."
+          PACKAGE_SOURCE="apps/electron-giddh/src/package.json"
+          if [ -f "$PACKAGE_SOURCE" ]; then
+              cp "$PACKAGE_SOURCE" "dist/apps/web-giddh/package.json"
+              echo "  ✅ Package.json copied"
+          else
+              echo "  ❌ ERROR: package.json not found!"
+              exit 1
+          fi
+          
+          cd dist/apps/web-giddh
+          echo "🔨 Building macOS Universal app..."
+          npx electron-builder build --config ./../../../electron-sign/electron-builder-mac-unsigned.json --mac --universal
+          cd ../../../
+          node scripts/build-success-message.js prod
+          
+          echo "🔍 Verifying artifacts..."
+          ZIP_PATH=$(find dist/apps/electrongiddh-packages -name "*.zip" -type f | head -n 1)
+          DMG_PATH=$(find dist/apps/electrongiddh-packages -name "*.dmg" -type f | head -n 1)
+          
+          if [ -n "$ZIP_PATH" ] && [ -n "$DMG_PATH" ]; then
+              echo "  ✅ Build artifacts created"
+          else
+              echo "  ❌ ERROR: Build artifacts missing"
+              exit 1
+          fi
+
+      - name: Extract version and find build artifacts
+        shell: bash
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+          echo "Package version: $PACKAGE_VERSION"
+
+          ZIP_FILE=$(find dist/apps/electrongiddh-packages -name "*.zip" -type f | head -n 1)
+          if [ -z "$ZIP_FILE" ]; then
+              echo "❌ ERROR: No ZIP found"
+              exit 1
+          fi
+          echo "UNSIGNED_ZIP=$ZIP_FILE" >> $GITHUB_ENV
+
+          DMG_FILE=$(find dist/apps/electrongiddh-packages -name "*.dmg" -type f | head -n 1)
+          if [ -z "$DMG_FILE" ]; then
+              echo "❌ ERROR: No DMG found"
+              exit 1
+          fi
+          echo "UNSIGNED_DMG=$DMG_FILE" >> $GITHUB_ENV
+          
+          LATEST_YML=$(find dist/apps/electrongiddh-packages -name "latest-mac.yml" -type f | head -n 1)
+          if [ -n "$LATEST_YML" ]; then
+              echo "LATEST_MAC_YML=$LATEST_YML" >> $GITHUB_ENV
+          fi
+          
+          echo "VERSIONED_ZIP_NAME=$(basename "$ZIP_FILE")" >> $GITHUB_ENV
+          echo "VERSIONED_DMG_NAME=$(basename "$DMG_FILE")" >> $GITHUB_ENV
+          echo "✅ Artifacts located"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload ZIP and DMG to S3
+        shell: bash
+        run: |
+          VERSION="${{ env.PACKAGE_VERSION }}"
+          BUCKET="${{ env.S3_BUCKET }}"
+          ZIP_FILE="${{ env.UNSIGNED_ZIP }}"
+          DMG_FILE="${{ env.UNSIGNED_DMG }}"
+          PREFIX="${{ env.S3_PATH_PREFIX }}"
+          
+          echo "📤 Uploading to S3 (${{ env.BUILD_ENV }})..."
+          
+          aws s3 cp "$ZIP_FILE" "s3://$BUCKET/$PREFIX/mac/$VERSION/${{ env.VERSIONED_ZIP_NAME }}" \
+            --content-type "application/zip" \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --metadata "version=$VERSION,platform=macos,arch=universal"
+          echo "✅ Uploaded: $PREFIX/mac/$VERSION/${{ env.VERSIONED_ZIP_NAME }}"
+          
+          aws s3 cp "$DMG_FILE" "s3://$BUCKET/$PREFIX/mac/$VERSION/${{ env.VERSIONED_DMG_NAME }}" \
+            --content-type "application/x-apple-diskimage" \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --metadata "version=$VERSION,platform=macos,arch=universal"
+          echo "✅ Uploaded: $PREFIX/mac/$VERSION/${{ env.VERSIONED_DMG_NAME }}"
+          
+          if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
+            aws s3 cp "$ZIP_FILE" "s3://$BUCKET/$PREFIX/mac/latest/${{ env.LATEST_ZIP_NAME }}" \
+              --content-type "application/zip" \
+              --cache-control "no-cache, no-store, must-revalidate" \
+              --metadata "version=$VERSION,platform=macos,arch=universal"
+            echo "✅ Uploaded: $PREFIX/mac/latest/${{ env.LATEST_ZIP_NAME }}"
+            
+            aws s3 cp "$DMG_FILE" "s3://$BUCKET/$PREFIX/mac/latest/${{ env.LATEST_DMG_NAME }}" \
+              --content-type "application/x-apple-diskimage" \
+              --cache-control "no-cache, no-store, must-revalidate" \
+              --metadata "version=$VERSION,platform=macos,arch=universal"
+            echo "✅ Uploaded: $PREFIX/mac/latest/${{ env.LATEST_DMG_NAME }}"
+          fi
+
+      - name: Upload latest-mac.yml to S3
+        if: env.LATEST_MAC_YML != ''
+        shell: bash
+        run: |
+          VERSION="${{ env.PACKAGE_VERSION }}"
+          BUCKET="${{ env.S3_BUCKET }}"
+          YML_FILE="${{ env.LATEST_MAC_YML }}"
+          PREFIX="${{ env.S3_PATH_PREFIX }}"
+          
+          echo "📤 Uploading latest-mac.yml..."
+          
+          aws s3 cp "$YML_FILE" "s3://$BUCKET/$PREFIX/mac/$VERSION/latest-mac.yml" \
+            --content-type "text/yaml" \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --metadata "version=$VERSION,platform=macos"
+          echo "✅ Uploaded: $PREFIX/mac/$VERSION/latest-mac.yml"
+          
+          if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
+            YML_CONTENT=$(cat "$YML_FILE")
+            
+            # Replace versioned filenames with environment-specific fixed names
+            if [ "${{ env.BUILD_ENV }}" = "production" ]; then
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip/giddh.zip/g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh.zip|g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh.zip|g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-setup.dmg/g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-setup.dmg|g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-setup.dmg|g')
+            else
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip/giddh-test.zip/g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh-test.zip|g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh-test.zip|g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test-setup.dmg/g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test-setup.dmg|g')
+              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-test-setup.dmg|g')
+            fi
+            
+            MODIFIED_YML="/tmp/latest-mac-modified.yml"
+            echo "$YML_CONTENT" > "$MODIFIED_YML"
+            
+            aws s3 cp "$MODIFIED_YML" "s3://$BUCKET/$PREFIX/mac/latest/latest-mac.yml" \
+              --content-type "text/yaml" \
+              --cache-control "no-cache, no-store, must-revalidate" \
+              --metadata "version=$VERSION,platform=macos"
+            echo "✅ Uploaded: $PREFIX/mac/latest/latest-mac.yml"
+          fi
+
+      - name: Build Summary
+        if: always()
+        shell: bash
+        run: |
+          echo "========================================="
+          echo "macOS BUILD SUMMARY (${{ env.BUILD_ENV }})"
+          echo "========================================="
+          echo "Version: ${{ env.PACKAGE_VERSION }}"
+          echo "Environment: ${{ env.BUILD_ENV }}"
+          echo "S3 Path: ${{ env.S3_PATH_PREFIX }}/mac/"
+          echo "Architecture: Universal (Intel + Apple Silicon)"
+          echo "========================================="
+          echo "Versioned:"
+          echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_ZIP_NAME }}"
+          echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_DMG_NAME }}"
+          echo "Latest:"
+          echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/latest/${{ env.LATEST_ZIP_NAME }}"
+          echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/latest/${{ env.LATEST_DMG_NAME }}"
+          echo "=========================================="
