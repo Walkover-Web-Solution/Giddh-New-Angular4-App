@@ -49,7 +49,7 @@ jobs:
           Write-Host "Branch: $branch"
           
           if ($branch -eq "prod-electron-build-gh-action") {
-            "BUILD_ENV=production" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "BUILD_ENV=prod" | Out-File -FilePath $env:GITHUB_ENV -Append
             "S3_PATH_PREFIX=prod" | Out-File -FilePath $env:GITHUB_ENV -Append
             "INSTALLER_NAME=giddh-setup.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
             Write-Host "✅ Production build"
