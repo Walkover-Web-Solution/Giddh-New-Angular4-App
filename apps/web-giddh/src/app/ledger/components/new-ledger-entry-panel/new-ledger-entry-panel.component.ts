@@ -624,8 +624,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 setTimeout(() => {
                     if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
                         this.currentTxn.total = !this.isTotalChanged ? giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces) : this.currentTxn.total;
+                        this.isTotalChanged = true;
                         this.calculateAmount();
-                        this.isTotalChangedChange.emit(false);
+                        this.isTotalChangedChange.emit(true);
                         this.isInclusiveEntry = false;
                     } else {
                         this.amountChanged();

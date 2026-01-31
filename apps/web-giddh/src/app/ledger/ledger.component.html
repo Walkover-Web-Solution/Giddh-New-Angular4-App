@@ -2727,6 +2727,7 @@
                     (scrollEnd)="handleScrollEnd()"
                     [readonly]="(currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && currentCompanyBranches?.length > 2"
                     (selectedOption)="
+                        isTotalChanged = false;
                         addBrowserConfirmation();
                         selectAccount($event, txn, false, isBankTransaction, null, cr ? transactionType.Credit : transactionType.Debit);
                         isLedgerEntry && showNewLedgerEntryPopup(txn)
