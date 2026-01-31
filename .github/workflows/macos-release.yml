@@ -48,7 +48,7 @@ jobs:
           echo "Branch: $branch"
           
           if [ "$branch" = "prod-electron-build-gh-action" ]; then
-            echo "BUILD_ENV=production" >> $GITHUB_ENV
+            echo "BUILD_ENV=prod" >> $GITHUB_ENV
             echo "S3_PATH_PREFIX=prod" >> $GITHUB_ENV
             echo "LATEST_ZIP_NAME=giddh.zip" >> $GITHUB_ENV
             echo "LATEST_DMG_NAME=giddh-setup.dmg" >> $GITHUB_ENV
@@ -115,7 +115,7 @@ jobs:
           
           cd dist/apps/web-giddh
           echo "🔨 Building macOS Universal app..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder-mac-unsigned.json --mac --universal
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --mac --universal
           cd ../../../
           node scripts/build-success-message.js prod
           
@@ -226,7 +226,7 @@ jobs:
             YML_CONTENT=$(cat "$YML_FILE")
             
             # Replace versioned filenames with environment-specific fixed names
-            if [ "${{ env.BUILD_ENV }}" = "production" ]; then
+            if [ "${{ env.BUILD_ENV }}" = "prod" ]; then
               YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip/giddh.zip/g')
               YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh.zip|g')
               YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh.zip|g')
