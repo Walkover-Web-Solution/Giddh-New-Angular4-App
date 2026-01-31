@@ -107,15 +107,41 @@ jobs:
           PACKAGE_SOURCE="apps/electron-giddh/src/package.json"
           if [ -f "$PACKAGE_SOURCE" ]; then
               cp "$PACKAGE_SOURCE" "dist/apps/web-giddh/package.json"
-              echo "  ✅ Package.json copied"
+              
+              echo "📝 Setting product name for ${{ env.BUILD_ENV }} build..."
+              PKG_PATH="dist/apps/web-giddh/package.json"
+              
+              if [ "${{ env.BUILD_ENV }}" = "production" ]; then
+                jq '.name = "Giddh" | .productName = "Giddh"' "$PKG_PATH" > temp.json && mv temp.json "$PKG_PATH"
+                echo "  ✅ Set product name: Giddh (production)"
+              else
+                jq '.name = "Giddh-Test" | .productName = "Giddh-Test"' "$PKG_PATH" > temp.json && mv temp.json "$PKG_PATH"
+                echo "  ✅ Set product name: Giddh-Test (test)"
+              fi
+              
+              echo "  ✅ Package.json configured"
           else
               echo "  ❌ ERROR: package.json not found!"
               exit 1
           fi
           
           cd dist/apps/web-giddh
+          
+          echo "📝 Setting artifact name for ${{ env.BUILD_ENV }} build..."
+          CONFIG_PATH="./../../../electron-sign/electron-builder.json"
+          
+          if [ "${{ env.BUILD_ENV }}" = "production" ]; then
+            # Use jq to update the config for production
+            jq '.mac.artifactName = "giddh-setup-${version}.${ext}"' "$CONFIG_PATH" > temp.json && mv temp.json "$CONFIG_PATH"
+            echo "  ✅ Set artifact name: giddh-setup-VERSION.ext"
+          else
+            # Use jq to update the config for test
+            jq '.mac.artifactName = "giddh-test-setup-${version}.${ext}"' "$CONFIG_PATH" > temp.json && mv temp.json "$CONFIG_PATH"
+            echo "  ✅ Set artifact name: giddh-test-setup-VERSION.ext"
+          fi
+          
           echo "🔨 Building macOS Universal app..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder-mac-unsigned.json --mac --universal
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --mac --universal
           cd ../../../
           node scripts/build-success-message.js prod
           

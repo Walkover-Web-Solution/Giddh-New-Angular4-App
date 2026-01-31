@@ -92,6 +92,23 @@ jobs:
           
           Write-Host "📦 Setting up Electron app structure..."
           Copy-Item "apps/electron-giddh/src/package.json" "dist/apps/web-giddh/package.json" -Force
+          
+          Write-Host "📝 Setting product name for ${{ env.BUILD_ENV }} build..."
+          $pkgPath = "dist/apps/web-giddh/package.json"
+          $pkg = Get-Content $pkgPath -Raw | ConvertFrom-Json
+          
+          if ("${{ env.BUILD_ENV }}" -eq "production") {
+            $pkg.name = "Giddh"
+            $pkg.productName = "Giddh"
+            Write-Host "  ✅ Set product name: Giddh (production)"
+          } else {
+            $pkg.name = "Giddh-Test"
+            $pkg.productName = "Giddh-Test"
+            Write-Host "  ✅ Set product name: Giddh-Test (test)"
+          }
+          
+          $pkg | ConvertTo-Json -Depth 10 | Set-Content $pkgPath -Encoding UTF8
+          
           Copy-Item "apps/electron-giddh/src/index.js" "dist/apps/web-giddh/index.js" -Force
           Copy-Item "apps/electron-giddh/src/preload.js" "dist/apps/web-giddh/preload.js" -Force
           Get-ChildItem "apps/electron-giddh/src/*.js" | ForEach-Object {
@@ -117,7 +134,21 @@ jobs:
           }
           Write-Host "  ✅ Icon files verified"
           
-          Write-Host "📦 Building Windows app (dir target)..."
+          Write-Host "� Setting artifact name for ${{ env.BUILD_ENV }} build..."
+          $configPath = "./../../../electron-sign/electron-builder.json"
+          $config = Get-Content $configPath -Raw | ConvertFrom-Json
+          
+          if ("${{ env.BUILD_ENV }}" -eq "production") {
+            $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-setup-`${version}.`${ext}" -Force
+            Write-Host "  ✅ Set artifact name: giddh-setup-VERSION.ext"
+          } else {
+            $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-test-setup-`${version}.`${ext}" -Force
+            Write-Host "  ✅ Set artifact name: giddh-test-setup-VERSION.ext"
+          }
+          
+          $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+          
+          Write-Host "� Building Windows app (dir target)..."
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --dir
           cd ../../../
           
@@ -214,6 +245,19 @@ jobs:
           
           Write-Host "📦 Building NSIS installer..."
           cd dist/apps/web-giddh
+          
+          Write-Host "📝 Re-setting artifact name for installer build..."
+          $configPath = "./../../../electron-sign/electron-builder.json"
+          $config = Get-Content $configPath -Raw | ConvertFrom-Json
+          
+          if ("${{ env.BUILD_ENV }}" -eq "production") {
+            $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-setup-`${version}.`${ext}" -Force
+          } else {
+            $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-test-setup-`${version}.`${ext}" -Force
+          }
+          
+          $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+          
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win nsis
           cd ../../../
           
