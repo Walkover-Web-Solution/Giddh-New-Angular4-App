@@ -1,4 +1,7 @@
 !macro customInstall
+  ; CRITICAL: Set working directory for shortcuts (required for icon display)
+  SetOutPath "$INSTDIR"
+  
   ; Set app executable path
   StrCpy $appExe "$INSTDIR\${APP_EXECUTABLE_FILENAME}"
   
