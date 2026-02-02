@@ -7,6 +7,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
+import { UiSettingsService } from '../../services/ui-settings.service';
 import { AppState } from '../../store';
 import { IOption } from '../../app.constant';
 import { OrganizationProfile } from '../constants/settings.constant';
@@ -55,7 +56,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         taxType: '',
         manageInventory: false,
         withPay: false,
-        ledgerView: LedgerViewEnum.TView
+        ledgerView: LedgerViewEnum.TView,
+        showAccountUniqueName: false
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -85,8 +87,16 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Holds ledger view enum */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
+    /** Tracks showAccountUniqueNameInParticularDropdown UI setting */
+    public showAccountUniqueName: boolean = false;
 
-    constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
+    constructor(
+        private commonActions: CommonActions,
+        private generalService: GeneralService,
+        private store: Store<AppState>,
+        private toasterService: ToasterService,
+        private uiSettingsService: UiSettingsService
+    ) { }
 
     /**
      * Initializes the component
@@ -94,6 +104,12 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public ngOnInit(): void {
+        this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
+        
+        if (this.profileData) {
+            this.profileData.showAccountUniqueName = this.showAccountUniqueName;
+        }
+        
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -237,5 +253,29 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public setActiveTheme(event?: any): void {
         this.store.dispatch(this.commonActions.setActiveTheme({ label: event?.label, value: event?.value }));
+    }
+
+    /**
+     * Toggles showAccountUniqueName setting
+     *
+     * @public
+     * @param {boolean} value - New toggle value
+     * @memberof OtherSettingsComponent
+     */
+    public toggleShowAccountUniqueName(value: boolean): void {
+        this.showAccountUniqueName = value;
+        if (this.profileData) {
+            this.profileData.showAccountUniqueName = value;
+        }
+        const success = this.uiSettingsService.setShowAccountUniqueName(value);
+        
+        if (success) {
+            const message = value 
+                ? this.commonLocaleData?.app_setting_enabled || 'Setting enabled'
+                : this.commonLocaleData?.app_setting_disabled || 'Setting disabled';
+            this.toasterService.successToast(message);
+        } else {
+            this.toasterService.errorToast(this.commonLocaleData?.app_something_went_wrong || 'Failed to save setting');
+        }
     }
 }

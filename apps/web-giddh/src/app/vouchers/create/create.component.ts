@@ -34,6 +34,7 @@ import {
 } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
+import { UiSettingsService } from "../../services/ui-settings.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
 import { CommonActions } from "../../actions/common.actions";
 import { CompanyActions } from "../../actions/company.actions";
@@ -454,6 +455,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public showLoader = signal<boolean>(false);
     /** Holds true if table entry has at least single stock is selected  */
     public hasStock: boolean = false;
+    /** Tracks if account unique name should be shown in dropdowns */
+    public showAccountUniqueName: boolean = false;
     /** This will hold if voucher date is manually changed */
     public isVoucherDateChanged: boolean = false;
     /** True if voucher number field is enabled */
@@ -668,6 +671,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private aiOcrStore: AiOcrStore,
         private store: Store<AppState>,
         private generalService: GeneralService,
+        private uiSettingsService: UiSettingsService,
         private vouchersUtilityService: VouchersUtilityService,
         private commonActions: CommonActions,
         private companyActions: CompanyActions,
@@ -706,6 +710,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ngOnInit(): void {
+        this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
+        
         // Set up global interaction tracking
         this.setupGlobalInteractionTracking();
 

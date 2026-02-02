@@ -53,7 +53,7 @@
                                 >
                                     ({{ country.nativeName }})
                                 </span>
-                                <span class="dial-code text-gray">{{ country.dialCode }}</span>
+                                <span class="dial-code text-light">{{ country.dialCode }}</span>
                             </span>
                         </span>
                     </mat-option>
@@ -86,7 +86,7 @@
             Please enter valid mobile number for {{ selectedCountry?.name }}
         </mat-error> -->
     </mat-form-field>
-    <!-- <p class="font-size-12 text-gray">{{ getFullPhoneNumber() }}</p> -->
+    <!-- <p class="font-size-12 text-light">{{ getFullPhoneNumber() }}</p> -->
     <span class="text-danger" *ngIf="mobileControl.hasError('required')">
         {{ localeData?.mobile_number_required || 'Mobile number is required' }}
     </span>
