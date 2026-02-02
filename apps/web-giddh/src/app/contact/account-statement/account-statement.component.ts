@@ -22,7 +22,7 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
     templateUrl: "account-statement.component.html",
     styleUrls: ["account-statement.component.scss"],
     providers: [ContactComponentStore],
-    standalone:false
+    standalone: false
 })
 export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Angular Material menu trigger for datepicker */
@@ -133,10 +133,10 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                     ? (this.contactActiveTab === 'vendor' && this.responseAccountList.accountSummary.closingBalance.type === this.transactionType.Credit
                         ? ''
                         : this.contactActiveTab === 'vendor'
-                        ? '-'
-                        : this.contactActiveTab === 'customer' && this.responseAccountList.accountSummary.closingBalance.type === this.transactionType.Credit
-                        ? '-'
-                        : '') +
+                            ? '-'
+                            : this.contactActiveTab === 'customer' && this.responseAccountList.accountSummary.closingBalance.type === this.transactionType.Credit
+                                ? '-'
+                                : '') +
                     (this.responseAccountList.accountAddress?.currency?.symbol ?? "") +
                     this.giddhNumberFormatPipe.transform(this.responseAccountList.accountSummary.closingBalance.amount)
                     : "";
@@ -309,10 +309,10 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             });
         }
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
-                    width: '980px',
-                    role: 'alertdialog',
-                    ariaLabel: 'advance'
-                });
+            width: '980px',
+            role: 'alertdialog',
+            ariaLabel: 'advance'
+        });
     }
 
     /**

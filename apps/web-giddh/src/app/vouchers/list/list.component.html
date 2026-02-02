@@ -1350,6 +1350,13 @@
                                         <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
+                                        <button mat-menu-item (click)="generateRecurringVoucher(element)" *ngIf="voucherApiVersion === 2">
+                                            {{
+                                                voucherType === voucherTypeEnum.sales
+                                                    ? localeData?.tabs?.recurring_invoices
+                                                    : localeData?.tabs?.recurring_bills
+                                            }}
+                                        </button>
                                     </mat-menu>
                                 </td>
                             </ng-container>
@@ -3241,6 +3248,13 @@
                                         </button>
                                         <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_delete }}
+                                        </button>
+                                        <button mat-menu-item (click)="generateRecurringVoucher(element)" *ngIf="voucherApiVersion === 2">
+                                            {{
+                                                voucherType === voucherTypeEnum.sales
+                                                    ? localeData?.tabs?.recurring_invoices
+                                                    : localeData?.tabs?.recurring_bills
+                                            }}
                                         </button>
                                     </mat-menu>
                                 </td>
@@ -5596,6 +5610,222 @@
                 </div>
             </mat-tab>
             <!-- template-content-end -->
+
+            <!-- invoice-content-start -->
+            <!-- *ngIf="activeTabGroup === 5" -->
+            <mat-tab
+                [label]="voucherType === voucherTypeEnum.sales ? localeData?.tabs?.recurring_invoices : localeData?.tabs?.recurring_bills"
+                *ngIf="activeTabGroup === 0 || activeTabGroup === 2"
+            >
+                <div
+                    class="vouchers-wrapper p-3 overflow-visible"
+                    *ngIf="
+                        (voucherType === voucherTypeEnum.sales || voucherType === voucherTypeEnum.purchase) &&
+                        activeModule === voucherTypeEnum.recurring
+                    "
+                >
+                    <div class="invoice-header d-flex align-items-center justify-content-between mb-3 flex-wrap row-gap-1">
+                        <div class="d-flex align-items-center column-gap-1">
+                            <button
+                                matButton="filled"
+                                [routerLink]="
+                                    voucherType === voucherTypeEnum.sales
+                                        ? ['/pages/vouchers/sales/create']
+                                        : ['/pages/vouchers/purchase/create']
+                                "
+                                [queryParams]="{ isRecurringVoucher: true }"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                                class="width-200"
+                            >
+                                <span>
+                                    {{
+                                        voucherType === voucherTypeEnum.sales
+                                            ? localeData?.new_recurring_invoice
+                                            : localeData?.new_recurring_bill
+                                    }}
+                                </span>
+                            </button>
+                            <div class="custom-datepicker-wrapper">
+                                <div
+                                    class="custom-datepicker"
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
+                                    <input
+                                        matInput
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <button
+                            matButton="outlined"
+                            (click)="setInitialAdvanceFilter()"
+                            class="mx-auto"
+                            *ngIf="!recurringVouchersLoading() && advanceFiltersApplied"
+                        >
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="table-responsive overflow-visible">
+                        <giddh-page-loader *ngIf="recurringVouchersLoading()"></giddh-page-loader>
+                        <table
+                            mat-table
+                            *ngIf="!recurringVouchersLoading() && (recurringVouchersData().length || isSearching)"
+                            [dataSource]="recurringVouchersData()"
+                            matSort
+                            (matSortChange)="sortChange($event)"
+                            class="w-100"
+                        >
+                            <!-- S No. -->
+                            <ng-container matColumnDef="index">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">#</th>
+                                <td mat-cell *matCellDef="let element; let i = index">
+                                    <div class="invoice-number">
+                                        {{ i + 1 }}
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <!-- Account Name -->
+                            <ng-container matColumnDef="accountName">
+                                <th
+                                    width="15%"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    (clickOutside)="handleClickOutside($event, accountName, 'accountName')"
+                                    #accountName
+                                >
+                                    <div class="d-flex align-items-center column-gap-05">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showAccountSearch,
+                                                    fieldName: 'accountName',
+                                                    voucherType: 'sales',
+                                                    formControl: accountNameInput,
+                                                    title: localeData?.account_name,
+                                                }
+                                            "
+                                        ></ng-container>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <a
+                                        href="javascript:;"
+                                        class="btn-link-2"
+                                        (click)="showRecurringPreview(element?.recurringVoucherUniqueName)"
+                                    >
+                                        {{ element?.accountName }}
+                                    </a>
+                                </td>
+                            </ng-container>
+
+                            <!-- Frequency -->
+                            <ng-container matColumnDef="frequency">
+                                <th mat-header-cell *matHeaderCellDef>{{ localeData?.frequency }}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element?.frequency }}
+                                </td>
+                            </ng-container>
+
+                            <!-- Last Run -->
+                            <ng-container matColumnDef="lastRun">
+                                <th mat-header-cell *matHeaderCellDef>{{ localeData?.last_run }}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element?.lastRun }}
+                                </td>
+                            </ng-container>
+
+                            <!-- Next Run -->
+                            <ng-container matColumnDef="nextRun">
+                                <th mat-header-cell *matHeaderCellDef>{{ localeData?.next_run }}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element?.nextRun }}
+                                </td>
+                            </ng-container>
+
+                            <!-- Amount -->
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="amount">{{ commonLocaleData?.app_amount }}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <amount-field
+                                        [amount]="element?.amount || 0"
+                                        [currencySymbol]="element?.currency?.symbol"
+                                        [currencyCode]="element?.currency?.code"
+                                    ></amount-field>
+                                </td>
+                            </ng-container>
+
+                            <!-- Status -->
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="status">{{ commonLocaleData?.app_status }}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span [ngClass]="{ 'success': element?.status === 'ACTIVE', 'danger': element?.status === 'INACTIVE' }">
+                                        {{ element?.status }}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Actions -->
+                            <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_actions }}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                                        <i class="icon-dots-three-vertical"></i>
+                                    </span>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="resumeRecurringVoucher(element)">
+                                            {{ commonLocaleData?.app_resume }}
+                                        </button>
+                                        <button mat-menu-item (click)="stopRecurringVoucher(element)">
+                                            {{ commonLocaleData?.app_stop }}
+                                        </button>
+                                        <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                            {{ commonLocaleData?.app_delete }}
+                                        </button>
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="recurringVouchersColumns(); sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: recurringVouchersColumns()"></tr>
+                        </table>
+                        <mat-paginator
+                            *ngIf="
+                                !recurringVouchersLoading() &&
+                                recurringVouchersData().length &&
+                                recurringVouchersTotalCount() > pageSizeOptions[0]
+                            "
+                            (page)="handlePageChange($event)"
+                            [length]="recurringVouchersTotalCount()"
+                            [pageSize]="advanceFilters.count"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [hidePageSize]="false"
+                            [pageIndex]="advanceFilters.page - 1"
+                        ></mat-paginator>
+                        <ng-container *ngIf="!recurringVouchersLoading() && !recurringVouchersData().length">
+                            <div class="p-3 text-center">
+                                <p>{{ commonLocaleData?.app_no_data_found }}</p>
+                            </div>
+                        </ng-container>
+                        <section class="mb-5"></section>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- invoice-content-end -->
         </mat-tab-group>
         <div class="video-link position-absolute" *ngIf="activeTabGroup === 0 && selectedTabIndex === 2">
             <watch-video [cssClass]="'text-primary'" [moduleName]="'SALES_PREVIEW'"></watch-video>

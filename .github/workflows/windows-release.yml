@@ -9,6 +9,7 @@ on:
       - "v*.*.*"
     branches:
       - "test-electron-build-gh-action"
+      - "prod-electron-build-gh-action"
 
 permissions:
   contents: write
@@ -41,6 +42,24 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Detect build environment from branch
+        shell: pwsh
+        run: |
+          $branch = "${{ github.ref_name }}"
+          Write-Host "Branch: $branch"
+          
+          if ($branch -eq "prod-electron-build-gh-action") {
+            "BUILD_ENV=prod" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "S3_PATH_PREFIX=prod" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "INSTALLER_NAME=giddh-setup.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
+            Write-Host "✅ Production build"
+          } else {
+            "BUILD_ENV=test" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "S3_PATH_PREFIX=test" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "INSTALLER_NAME=giddh-test-setup.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
+            Write-Host "✅ Test build"
+          }
+
       - name: Install deps
         run: npm install
 
@@ -50,127 +69,106 @@ jobs:
         run: |
           node scripts/clean-old-builds.js
           npm run prepare.electron.giddh
-          node scripts/build-env.js test
-          npx ng build electron-giddh --configuration=test
+          node scripts/build-env.js ${{ env.BUILD_ENV }}
+          npx ng build electron-giddh --configuration=${{ env.BUILD_ENV }}
           node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html
           
           Write-Host "📦 Copying icon files..."
-          
-          # Create resources directory in dist
           New-Item -ItemType Directory -Force -Path "dist/apps/web-giddh/resources" | Out-Null
-          
-          # Copy all icon files from source resources directory
           Copy-Item "apps/electron-giddh/src/resources/icon.ico" "dist/apps/web-giddh/resources/icon.ico" -Force
           Copy-Item "apps/electron-giddh/src/resources/icon.icns" "dist/apps/web-giddh/resources/icon.icns" -Force -ErrorAction SilentlyContinue
-          
-          # Also copy icon.ico to root for electron-builder
           Copy-Item "apps/electron-giddh/src/resources/icon.ico" "dist/apps/web-giddh/icon.ico" -Force
-          
-          Write-Host "  ✅ Copied icon.ico to resources/ and root"
-          Write-Host "  icon.ico size: $((Get-Item 'dist/apps/web-giddh/icon.ico').Length) bytes"
-          Write-Host "  resources/icon.ico exists: $(Test-Path 'dist/apps/web-giddh/resources/icon.ico')"
+          Write-Host "  ✅ Icon files copied"
           
           Write-Host "📦 Copying tray icons..."
           New-Item -ItemType Directory -Force -Path "dist/apps/web-giddh/build/icons" | Out-Null
           Copy-Item "apps/web-giddh/src/build/icons/*.png" "dist/apps/web-giddh/build/icons/" -Force -ErrorAction SilentlyContinue
           Copy-Item "apps/electron-giddh/src/build/icons/*.png" "dist/apps/web-giddh/build/icons/" -Force -ErrorAction SilentlyContinue
-          $trayIcons = Get-ChildItem "dist/apps/web-giddh/build/icons/*.png" -ErrorAction SilentlyContinue
-          Write-Host "  ✅ Copied $($trayIcons.Count) tray icon files"
+          Write-Host "  ✅ Tray icons copied"
           
-          Write-Host "📦 Copying NSIS custom installer script..."
+          Write-Host "📦 Copying NSIS installer script..."
           Copy-Item "build/installer.nsh" "dist/apps/web-giddh/build/installer.nsh" -Force
-          Write-Host "  ✅ Copied installer.nsh for icon cache refresh"
+          Write-Host "  ✅ Installer script copied"
           
           Write-Host "📦 Setting up Electron app structure..."
-          # Copy ALL compiled Electron files from apps/electron-giddh/src to dist/apps/web-giddh
-          Write-Host "  Copying Electron main process files..."
           Copy-Item "apps/electron-giddh/src/package.json" "dist/apps/web-giddh/package.json" -Force
+          
+          Write-Host "📝 Setting product name for ${{ env.BUILD_ENV }} build..."
+          $pkgPath = "dist/apps/web-giddh/package.json"
+          $pkg = Get-Content $pkgPath -Raw | ConvertFrom-Json
+          
+          if ("${{ env.BUILD_ENV }}" -eq "prod") {
+            $pkg.name = "Giddh"
+            $pkg.productName = "Giddh"
+            Write-Host "  ✅ Set product name: Giddh (production)"
+          } else {
+            $pkg.name = "Giddh-Test"
+            $pkg.productName = "Giddh-Test"
+            Write-Host "  ✅ Set product name: Giddh-Test (test)"
+          }
+          
+          $pkg | ConvertTo-Json -Depth 10 | Set-Content $pkgPath -Encoding UTF8
+          
           Copy-Item "apps/electron-giddh/src/index.js" "dist/apps/web-giddh/index.js" -Force
           Copy-Item "apps/electron-giddh/src/preload.js" "dist/apps/web-giddh/preload.js" -Force
-          
-          # Copy all other compiled JS files (AppUpdater, WindowManager, etc.)
           Get-ChildItem "apps/electron-giddh/src/*.js" | ForEach-Object {
               Copy-Item $_.FullName "dist/apps/web-giddh/$($_.Name)" -Force
           }
-          
-          # Copy source maps for debugging
           Get-ChildItem "apps/electron-giddh/src/*.js.map" -ErrorAction SilentlyContinue | ForEach-Object {
               Copy-Item $_.FullName "dist/apps/web-giddh/$($_.Name)" -Force
           }
+          Write-Host "  ✅ Electron files copied"
           
-          Write-Host "  ✅ Copied Electron main process files"
-          Write-Host "  Files in dist/apps/web-giddh:"
-          Get-ChildItem "dist/apps/web-giddh" -File | Select-Object -First 10 | ForEach-Object { Write-Host "    - $($_.Name)" }
-          
-          # Install production dependencies for Electron
-          Write-Host "📦 Installing Electron production dependencies..."
+          Write-Host "📦 Installing Electron dependencies..."
           cd dist/apps/web-giddh
-          
-          # Verify package.json exists and has main entry
-          if (Test-Path "package.json") {
-              $pkg = Get-Content "package.json" | ConvertFrom-Json
-              Write-Host "  Package name: $($pkg.name)"
-              Write-Host "  Main entry: $($pkg.main)"
-              Write-Host "  Version: $($pkg.version)"
-          } else {
+          if (!(Test-Path "package.json")) {
               Write-Host "  ❌ ERROR: package.json not found!"
               exit 1
           }
-          
           npm install --production --no-optional
-          Write-Host "  ✅ Installed dependencies"
-          Write-Host "  node_modules created: $(Test-Path 'node_modules')"
+          Write-Host "  ✅ Dependencies installed"
           
-          Write-Host "🔍 Verifying icon files before electron-builder..."
-          Write-Host "  Checking icon.ico: $(Test-Path 'icon.ico')"
-          Write-Host "  Checking resources/icon.ico: $(Test-Path 'resources/icon.ico')"
-          Write-Host "  Checking build/icons directory: $(Test-Path 'build/icons')"
-          
-          # CRITICAL: Fail build if icon.ico is missing
+          Write-Host "🔍 Verifying icon files..."
           if (!(Test-Path 'icon.ico')) {
-            throw "❌ FATAL: icon.ico missing at build root - electron-builder cannot embed icon!"
+            throw "❌ FATAL: icon.ico missing!"
           }
-          Write-Host "  ✅ icon.ico exists at build root"
-          if (Test-Path 'build/icons') {
-              $iconFiles = Get-ChildItem 'build/icons/*.png' -ErrorAction SilentlyContinue
-              Write-Host "  Found $($iconFiles.Count) PNG files in build/icons:"
-              $iconFiles | ForEach-Object { Write-Host "    - $($_.Name)" }
+          Write-Host "  ✅ Icon files verified"
+          
+          Write-Host "� Setting artifact name for ${{ env.BUILD_ENV }} build..."
+          $configPath = "./../../../electron-sign/electron-builder.json"
+          $config = Get-Content $configPath -Raw | ConvertFrom-Json
+          
+          if ("${{ env.BUILD_ENV }}" -eq "prod") {
+            $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-setup-`${version}.`${ext}" -Force
+            Write-Host "  ✅ Set artifact name: giddh-setup-VERSION.ext"
+          } else {
+            $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-test-setup-`${version}.`${ext}" -Force
+            Write-Host "  ✅ Set artifact name: giddh-test-setup-VERSION.ext"
           }
           
-          Write-Host "📦 Building Windows app with electron-builder (dir target only - no installer yet)..."
+          $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+          
+          Write-Host "� Building Windows app (dir target)..."
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --dir
           cd ../../../
           
-          Write-Host "🔍 Verifying built artifacts..."
-          Write-Host "  ⚠️  Installer not built yet - will be created after signing"
-          
-          # Check app executable in win-unpacked (CRITICAL for auto-updates)
+          Write-Host "🔍 Verifying app executable..."
           $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "Giddh.exe" -Recurse | Where-Object { $_.Directory.Name -eq "win-unpacked" } | Select-Object -First 1
           if ($appExe) {
-              Write-Host "  ✅ Found app executable: $($appExe.FullName)"
-              Write-Host "  Size: $($appExe.Length) bytes"
-              Write-Host "  ⚠️  Not signed yet - will be signed by eSigner in next step"
-              
-              # Verify icon files are in the packaged app
-              $winUnpackedDir = Split-Path -Parent $appExe.FullName
-              Write-Host "  🔍 Checking for icon files in win-unpacked..."
-              Write-Host "    icon.ico in app.asar: $(Test-Path (Join-Path $winUnpackedDir 'resources/app.asar'))"
-              
-              # Check extraResources (icons should be here)
-              $resourcesDir = Join-Path (Split-Path -Parent $winUnpackedDir) "resources"
-              Write-Host "    Resources directory: $(Test-Path $resourcesDir)"
-              if (Test-Path $resourcesDir) {
-                  Write-Host "    icon.ico in resources: $(Test-Path (Join-Path $resourcesDir 'icon.ico'))"
-                  Write-Host "    resources/icon.ico: $(Test-Path (Join-Path $resourcesDir 'resources/icon.ico'))"
-                  Write-Host "    build/icons directory: $(Test-Path (Join-Path $resourcesDir 'build/icons'))"
-                  if (Test-Path (Join-Path $resourcesDir 'build/icons')) {
-                      $trayIconsInPackage = Get-ChildItem (Join-Path $resourcesDir 'build/icons/*.png') -ErrorAction SilentlyContinue
-                      Write-Host "    Tray icons in package: $($trayIconsInPackage.Count)"
+              Write-Host "  ✅ App executable found"
+              try {
+                  Add-Type -AssemblyName System.Drawing
+                  $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($appExe.FullName)
+                  if (!$icon) {
+                      throw "Icon not embedded"
                   }
+                  Write-Host "  ✅ Icon embedded in executable"
+                  $icon.Dispose()
+              } catch {
+                  throw "❌ Icon verification failed: $($_.Exception.Message)"
               }
           } else {
-              Write-Host "  ❌ ERROR: App executable not found in win-unpacked!"
-              exit 1
+              throw "❌ App executable not found!"
           }
 
       - name: Find artifacts and prepare for signing
@@ -193,20 +191,6 @@ jobs:
           Write-Host "Found unsigned app executable: $($appExe.FullName)"
           "APP_EXE_PATH=$($appExe.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           
-          Write-Host ""
-          Write-Host "🔍 Checking if icon is embedded in unsigned Giddh.exe..."
-          try {
-            Add-Type -AssemblyName System.Drawing
-            $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($appExe.FullName)
-            if ($icon) {
-              Write-Host "  ✅ Icon IS embedded in unsigned executable"
-              Write-Host "  Icon size: $($icon.Width)x$($icon.Height)"
-            } else {
-              Write-Host "  ❌ No icon found in unsigned executable - electron-builder did not embed it!"
-            }
-          } catch {
-            Write-Host "  ⚠️  Could not verify icon: $($_.Exception.Message)"
-          }
 
       - name: Create signing output directories
         shell: pwsh
@@ -231,99 +215,67 @@ jobs:
       - name: Copy signed EXE back and build installer
         shell: pwsh
         run: |
-          # Verify app executable signature (CRITICAL for auto-updates)
           $signedAppExe = Get-ChildItem -Path "artifacts/signed-app" -Filter "Giddh.exe" | Select-Object -First 1
           if (-not $signedAppExe) {
-            throw "Signed app executable not found in artifacts/signed-app"
+            throw "Signed app executable not found"
           }
           
           $appSig = Get-AuthenticodeSignature $signedAppExe.FullName
-          Write-Host "========================================="
-          Write-Host "APP EXECUTABLE Signature Verification:"
-          Write-Host "File: $($signedAppExe.FullName)"
-          Write-Host "Status: $($appSig.Status)"
-          Write-Host "Signer: $($appSig.SignerCertificate.Subject)"
-          Write-Host "========================================="
-          
+          Write-Host "App executable signature: $($appSig.Status)"
           if ($appSig.Status -ne "Valid") {
-            throw "App executable signature verification failed: $($appSig.StatusMessage)"
+            throw "App signature verification failed"
           }
-          Write-Host "✅ App executable is SIGNED (auto-updates will work)"
+          Write-Host "✅ App executable signed"
           
-          # CRITICAL: Verify icon is still embedded after signing
-          Write-Host ""
           Write-Host "🔍 Verifying icon preserved after signing..."
           try {
             Add-Type -AssemblyName System.Drawing
             $iconCheck = [System.Drawing.Icon]::ExtractAssociatedIcon($signedAppExe.FullName)
-            if ($iconCheck) {
-              Write-Host "  ✅ Icon PRESERVED after signing"
-              Write-Host "  Icon size: $($iconCheck.Width)x$($iconCheck.Height)"
-            } else {
-              throw "Icon was stripped during signing!"
+            if (!$iconCheck) {
+              throw "Icon was stripped during signing"
             }
+            Write-Host "  ✅ Icon preserved after signing"
           } catch {
-            throw "❌ FATAL: Signed EXE LOST ICON - $($_.Exception.Message)"
+            throw "❌ Signed EXE lost icon: $($_.Exception.Message)"
           }
           
-          # Verify detailed signature information
-          Write-Host ""
-          Write-Host "🔍 Detailed signature verification..."
-          $sigDetails = Get-AuthenticodeSignature $signedAppExe.FullName
-          Write-Host "  Status: $($sigDetails.Status)"
-          Write-Host "  Status Message: $($sigDetails.StatusMessage)"
-          Write-Host "  Signature Type: $($sigDetails.SignatureType)"
-          Write-Host "  Certificate Subject: $($sigDetails.SignerCertificate.Subject)"
-          Write-Host "  Certificate Issuer: $($sigDetails.SignerCertificate.Issuer)"
-          Write-Host "  Certificate Thumbprint: $($sigDetails.SignerCertificate.Thumbprint)"
-          Write-Host "  Certificate Valid From: $($sigDetails.SignerCertificate.NotBefore)"
-          Write-Host "  Certificate Valid Until: $($sigDetails.SignerCertificate.NotAfter)"
-          Write-Host "  Time Stamper Certificate: $($sigDetails.TimeStamperCertificate.Subject)"
-          
-          # Verify signature is Authenticode (embedded)
-          if ($sigDetails.SignatureType -ne "Authenticode") {
-            Write-Host "  ⚠️  WARNING: Signature type is not Authenticode (embedded)"
-          } else {
-            Write-Host "  ✅ Signature is properly embedded (Authenticode)"
-          }
-          
-          # Copy signed app executable back to win-unpacked
           $winUnpackedDir = Split-Path -Parent $env:APP_EXE_PATH
           Copy-Item $signedAppExe.FullName $winUnpackedDir -Force
-          Write-Host "✅ Copied signed app executable back to win-unpacked: $winUnpackedDir"
+          Write-Host "✅ Signed executable copied back"
           
-          # Now build the NSIS installer with the SIGNED EXE
-          Write-Host ""
-          Write-Host "📦 Building NSIS installer with signed EXE..."
+          Write-Host "📦 Building NSIS installer..."
           cd dist/apps/web-giddh
+          
+          Write-Host "📝 Re-setting artifact name for installer build..."
+          $configPath = "./../../../electron-sign/electron-builder.json"
+          $config = Get-Content $configPath -Raw | ConvertFrom-Json
+          
+          if ("${{ env.BUILD_ENV }}" -eq "prod") {
+            $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-setup-`${version}.`${ext}" -Force
+          } else {
+            $config.win | Add-Member -NotePropertyName "artifactName" -NotePropertyValue "giddh-test-setup-`${version}.`${ext}" -Force
+          }
+          
+          $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+          
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win nsis
           cd ../../../
           
-          # Find the newly built installer
           $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse |
             Where-Object { $_.Name -notmatch "blockmap" -and $_.Directory.Name -ne "win-unpacked" -and $_.Name -notlike "*ia32*" } |
             Select-Object -First 1
           
           if (-not $installer) {
-            throw "❌ FATAL: Installer not found after building with signed EXE!"
+            throw "❌ Installer not found!"
           }
           
-          Write-Host "✅ Built installer with signed EXE: $($installer.FullName)"
+          Write-Host "✅ Installer built: $($installer.Name)"
           "UNSIGNED_INSTALLER_PATH=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "VERSIONED_EXE_NAME=$(Split-Path -Leaf $installer.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           
-          # Get versioned filename
-          $versionedExeName = Split-Path -Leaf $installer.FullName
-          "VERSIONED_EXE_NAME=$versionedExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
-          
-          # Fixed name for latest folder
-          $latestExeName = "giddh-test-setup.exe"
-          "LATEST_EXE_NAME=$latestExeName" | Out-File -FilePath $env:GITHUB_ENV -Append
-          
-          # Find latest.yml
           $latestYml = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "latest.yml" -Recurse | Select-Object -First 1
           if ($latestYml) {
             "LATEST_YML=$($latestYml.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
-            Write-Host "Found latest.yml: $($latestYml.FullName)"
           }
 
       - name: Sign installer with SSL.com eSigner
@@ -343,91 +295,56 @@ jobs:
       - name: Verify installer signature and prepare final artifacts
         shell: pwsh
         run: |
-          # Verify installer signature
           $signedInstaller = Get-ChildItem -Path "artifacts/signed-installer" -Filter "*.exe" | Select-Object -First 1
           if (-not $signedInstaller) {
-            throw "Signed installer not found in artifacts/signed-installer"
+            throw "Signed installer not found"
           }
           
           $installerSig = Get-AuthenticodeSignature $signedInstaller.FullName
-          Write-Host "========================================="
-          Write-Host "INSTALLER Signature Verification:"
-          Write-Host "File: $($signedInstaller.FullName)"
-          Write-Host "Status: $($installerSig.Status)"
-          Write-Host "Signer: $($installerSig.SignerCertificate.Subject)"
-          Write-Host "========================================="
-          
+          Write-Host "Installer signature: $($installerSig.Status)"
           if ($installerSig.Status -ne "Valid") {
-            throw "Installer signature verification failed: $($installerSig.StatusMessage)"
+            throw "Installer signature verification failed"
           }
-          Write-Host "✅ Installer is SIGNED"
+          Write-Host "✅ Installer signed"
           
-          # Copy signed installer to final artifacts
           New-Item -ItemType Directory -Force -Path "artifacts/final" | Out-Null
           Copy-Item $signedInstaller.FullName "artifacts/final/" -Force
-          Write-Host "✅ Copied signed installer to artifacts/final/"
-          
           "FINAL_INSTALLER=artifacts/final/$env:VERSIONED_EXE_NAME" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "✅ Signed installer ready"
 
       - name: Prepare latest.yml for upload
         shell: pwsh
         run: |
           if (Test-Path $env:LATEST_YML) {
             Copy-Item $env:LATEST_YML "artifacts/final/latest.yml" -Force
-            Write-Host "✅ Copied latest.yml to artifacts/final/"
-          } else {
-            Write-Host "⚠️ WARNING: latest.yml not found"
+            Write-Host "✅ latest.yml prepared"
           }
 
       - name: Recalculate SHA512 and update latest.yml (after signing)
         shell: pwsh
         run: |
-          Write-Host "📊 Recalculating SHA512 hash for signed installer..."
-          
-          # Get the signed installer file
+          Write-Host "📊 Recalculating SHA512 hash..."
           $signedFile = Get-ChildItem -Path "artifacts/final" -Filter "*.exe" | Select-Object -First 1
-          
           if (-not $signedFile) {
-            throw "Signed installer not found in artifacts/final/"
+            throw "Signed installer not found"
           }
           
-          Write-Host "  Signed file: $($signedFile.FullName)"
-          
-          # Calculate SHA512 hash and convert to Base64
           $hashHex = (Get-FileHash -Path $signedFile.FullName -Algorithm SHA512).Hash
-          Write-Host "  SHA512 (hex): $hashHex"
-          
-          # Convert hex string to byte array then to Base64
           $byteArray = for ($i = 0; $i -lt $hashHex.Length; $i += 2) { 
             [Convert]::ToByte($hashHex.Substring($i, 2), 16) 
           }
           $base64Hash = [Convert]::ToBase64String($byteArray)
-          Write-Host "  SHA512 (base64): $base64Hash"
-          
-          # Get new file size (signing changes file size)
           $newSize = (Get-Item $signedFile.FullName).Length
-          Write-Host "  File size: $newSize bytes"
           
-          # Update latest.yml with new hash and size
           $ymlPath = "artifacts/final/latest.yml"
           if (Test-Path $ymlPath) {
             $content = Get-Content $ymlPath -Raw
-            
-            # Update all sha512 references
             $content = $content -replace 'sha512:\s*[A-Za-z0-9+/=]+', "sha512: $base64Hash"
-            
-            # Update all size references
             $content = $content -replace 'size:\s*\d+', "size: $newSize"
-            
-            # Save updated content
             Set-Content -Path $ymlPath -Value $content -Encoding UTF8 -NoNewline
-            
-            Write-Host "✅ Updated latest.yml with new SHA512 hash and size"
-            Write-Host ""
-            Write-Host "Updated latest.yml content:"
-            Get-Content $ymlPath | Write-Host
+            Write-Host "✅ latest.yml updated with new hash"
           } else {
-            throw "latest.yml not found at $ymlPath"
+            throw "latest.yml not found"
           }
 
       - name: Configure AWS credentials
@@ -444,28 +361,21 @@ jobs:
           $VERSION = "${{ env.PACKAGE_VERSION }}"
           $BUCKET = "${{ env.S3_BUCKET }}"
           $INSTALLER_FILE = "${{ env.FINAL_INSTALLER }}"
+          $PREFIX = "${{ env.S3_PATH_PREFIX }}"
           
-          Write-Host "📤 Uploading Windows installer to S3..."
-          Write-Host "  Version: $VERSION"
-          Write-Host "  Bucket: $BUCKET"
-          Write-Host "  Source: $INSTALLER_FILE"
+          Write-Host "📤 Uploading to S3 (${{ env.BUILD_ENV }})..."
           
-          # Upload to versioned folder with versioned filename
-          aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/$VERSION/${{ env.VERSIONED_EXE_NAME }}" `
+          aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/$PREFIX/windows/$VERSION/${{ env.VERSIONED_EXE_NAME }}" `
             --content-type "application/x-msdownload" `
             --metadata "version=$VERSION,platform=windows,arch=x64"
+          Write-Host "✅ Uploaded: $PREFIX/windows/$VERSION/${{ env.VERSIONED_EXE_NAME }}"
           
-          Write-Host "✅ Uploaded versioned installer: test/windows/$VERSION/${{ env.VERSIONED_EXE_NAME }}"
-          
-          # Upload to latest folder with fixed name for auto-updater (without version)
           if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
-            aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/test/windows/latest/${{ env.LATEST_EXE_NAME }}" `
+            aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/$PREFIX/windows/latest/${{ env.INSTALLER_NAME }}" `
               --content-type "application/x-msdownload" `
               --metadata "version=$VERSION,platform=windows,arch=x64"
-            Write-Host "✅ Uploaded to latest: test/windows/latest/${{ env.LATEST_EXE_NAME }}"
+            Write-Host "✅ Uploaded: $PREFIX/windows/latest/${{ env.INSTALLER_NAME }}"
           }
-          
-          Write-Host "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/windows/$VERSION/${{ env.VERSIONED_EXE_NAME }}"
 
       - name: Upload latest.yml to S3
         if: env.LATEST_YML != ''
@@ -474,45 +384,38 @@ jobs:
           $VERSION = "${{ env.PACKAGE_VERSION }}"
           $BUCKET = "${{ env.S3_BUCKET }}"
           $YML_FILE = "artifacts/final/latest.yml"
+          $PREFIX = "${{ env.S3_PATH_PREFIX }}"
           
           if (Test-Path $YML_FILE) {
-            Write-Host "📤 Uploading latest.yml to S3..."
+            Write-Host "📤 Uploading latest.yml..."
             
-            # Upload original latest.yml to versioned folder
-            aws s3 cp "$YML_FILE" "s3://$BUCKET/test/windows/$VERSION/latest.yml" `
+            aws s3 cp "$YML_FILE" "s3://$BUCKET/$PREFIX/windows/$VERSION/latest.yml" `
               --content-type "text/yaml" `
               --metadata "version=$VERSION,platform=windows"
+            Write-Host "✅ Uploaded: $PREFIX/windows/$VERSION/latest.yml"
             
-            Write-Host "✅ Uploaded latest.yml to versioned folder: test/windows/$VERSION/latest.yml"
-            
-            # For latest folder, modify latest.yml to reference giddh-test-setup.exe
             if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
-              # Read the already-updated latest.yml (SHA512 was recalculated after signing)
               $ymlContent = Get-Content $YML_FILE -Raw
               
-              # Replace versioned exe filenames with fixed name (without version suffix)
-              # electron-builder generates filenames like "giddh-test-setup-10.0.9.exe"
-              $ymlContent = $ymlContent -replace 'giddh-test-setup-\d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
-              $ymlContent = $ymlContent -replace 'path: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
-              $ymlContent = $ymlContent -replace 'url: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'url: giddh-test-setup.exe'
+              # Replace versioned filenames with environment-specific fixed name
+              if ("${{ env.BUILD_ENV }}" -eq "prod") {
+                $ymlContent = $ymlContent -replace 'giddh-setup-\d+\.\d+\.\d+\.exe', 'giddh-setup.exe'
+                $ymlContent = $ymlContent -replace 'path: giddh-setup-\d+\.\d+\.\d+\.exe', 'path: giddh-setup.exe'
+                $ymlContent = $ymlContent -replace 'url: giddh-setup-\d+\.\d+\.\d+\.exe', 'url: giddh-setup.exe'
+              } else {
+                $ymlContent = $ymlContent -replace 'giddh-test-setup-\d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
+                $ymlContent = $ymlContent -replace 'path: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
+                $ymlContent = $ymlContent -replace 'url: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'url: giddh-test-setup.exe'
+              }
               
-              # Save modified content to a new file
               $modifiedYml = "artifacts/final/latest-modified.yml"
               $ymlContent | Set-Content $modifiedYml -NoNewline
               
-              Write-Host "📝 Modified latest.yml content:"
-              Get-Content $modifiedYml | Write-Host
-              
-              # Upload modified latest.yml to latest folder
-              aws s3 cp "$modifiedYml" "s3://$BUCKET/test/windows/latest/latest.yml" `
+              aws s3 cp "$modifiedYml" "s3://$BUCKET/$PREFIX/windows/latest/latest.yml" `
                 --content-type "text/yaml" `
                 --metadata "version=$VERSION,platform=windows"
-              Write-Host "✅ Uploaded modified latest.yml to latest folder: test/windows/latest/latest.yml"
+              Write-Host "✅ Uploaded: $PREFIX/windows/latest/latest.yml"
             }
-            
-            Write-Host "✅ URL: https://s3-${{ env.AWS_REGION }}.amazonaws.com/$BUCKET/test/windows/$VERSION/latest.yml"
-          } else {
-            Write-Host "⚠️ WARNING: latest.yml not found at $YML_FILE"
           }
 
       - name: Build Summary
@@ -520,18 +423,15 @@ jobs:
         shell: pwsh
         run: |
           Write-Host "========================================="
-          Write-Host "WINDOWS BUILD SUMMARY"
+          Write-Host "WINDOWS BUILD SUMMARY (${{ env.BUILD_ENV }})"
           Write-Host "========================================="
           Write-Host "Version: ${{ env.PACKAGE_VERSION }}"
-          Write-Host "Architecture: x64 + ia32"
-          Write-Host "S3 Bucket: ${{ env.S3_BUCKET }}"
+          Write-Host "Environment: ${{ env.BUILD_ENV }}"
+          Write-Host "S3 Path: ${{ env.S3_PATH_PREFIX }}/windows/"
           Write-Host "========================================="
-          Write-Host "Download URLs (Versioned):"
-          Write-Host "  EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_EXE_NAME }}"
-          Write-Host "  YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/${{ env.PACKAGE_VERSION }}/latest.yml"
-          Write-Host ""
-          Write-Host "Download URLs (Latest - Auto-updater):"
-          Write-Host "  EXE: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/${{ env.LATEST_EXE_NAME }}"
-          Write-Host "  YML: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/test/windows/latest/latest.yml"
+          Write-Host "Versioned:"
+          Write-Host "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_EXE_NAME }}"
+          Write-Host "Latest:"
+          Write-Host "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/latest/${{ env.INSTALLER_NAME }}"
           Write-Host "=========================================="
 

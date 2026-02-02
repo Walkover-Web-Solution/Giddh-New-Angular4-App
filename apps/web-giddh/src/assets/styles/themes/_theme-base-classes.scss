@@ -9,9 +9,30 @@ body {
     &.dark-theme {
         --lighter-percent: 20%;
     }
-    --theme-primary-light: color-mix(in oklch, var(--theme-primary-color) var(--lighter-percent), white);
-    --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) var(--lighter-percent), white);
-    --theme-warn-light: color-mix(in oklch, var(--theme-warn-color) var(--lighter-percent), white);
+    /* Using 'none' for hue prevents the 'color shift' bug in Electron/Chromium.
+       It ensures the mix stays within the same color family (e.g., Blue stays Blue).
+    */
+    --color-white-for-oklch: oklch(100% 0 none);
+
+    /* Lighter variants: Mixes the theme color with the 'hue-less' white.
+       The percentage applies to the theme color, meaning these will be 
+       very light (90% white if --lighter-percent is 10%).
+    */
+    --theme-primary-light: color-mix(
+        in oklch,
+        var(--theme-primary-color) var(--lighter-percent),
+        var(--color-white-for-oklch)
+    );
+    --theme-accent-light: color-mix(
+        in oklch,
+        var(--theme-accent-color) var(--lighter-percent),
+        var(--color-white-for-oklch)
+    );
+    --theme-warn-light: color-mix(
+        in oklch,
+        var(--theme-warn-color) var(--lighter-percent),
+        var(--color-white-for-oklch)
+    );
 
     .theme-primary-light {
         background-color: var(--theme-primary-light) !important;

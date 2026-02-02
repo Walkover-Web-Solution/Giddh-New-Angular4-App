@@ -140,16 +140,17 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     private destroyed$ = new ReplaySubject<boolean>(1);
     /** Array of selected tax unique names */
     public selectedTaxUniquenames: string[] = [];
-    /** Cache for tracking changes in taxes and applicableTaxes inputs */
-    private previousTaxesData: { taxes: any[], applicableTaxes: any[] } = { taxes: null, applicableTaxes: null };
+    /** Cache for tracking changes in taxes, applicableTaxes, and date inputs */
+    private previousTaxesData: { taxes: any[], applicableTaxes: any[], date: string } = { taxes: null, applicableTaxes: null, date: null };
     /**
-     * Computed signal that tracks changes in taxes and applicableTaxes inputs
+     * Computed signal that tracks changes in taxes, applicableTaxes, and date inputs
      * Used to detect when these inputs change and trigger re-calculation
      */
     private taxesInputTracker = computed(() => {
-        const taxes = this.taxes();
-        const applicableTaxes = this.applicableTaxes();
-        return { taxes, applicableTaxes };
+        const taxes = this.taxes() || [];
+        const applicableTaxes = this.applicableTaxes() || [];
+        const date = this.date();
+        return { taxes, applicableTaxes, date };
     });
 
     /**
@@ -191,9 +192,15 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
             const taxData = this.taxesInputTracker();
             const taxesChanged = !isEqual(taxData.taxes, this.previousTaxesData.taxes);
             const applicableTaxesChanged = !isEqual(taxData.applicableTaxes, this.previousTaxesData.applicableTaxes);
-            
-            if (taxesChanged || applicableTaxesChanged) {
-                this.previousTaxesData = { taxes: cloneDeep(taxData.taxes), applicableTaxes: cloneDeep(taxData.applicableTaxes) };
+            const dateChanged = taxData.date !== this.previousTaxesData.date;
+
+            if (taxesChanged || applicableTaxesChanged || dateChanged) {
+                this.previousTaxesData = { 
+                    taxes: cloneDeep(taxData.taxes), 
+                    applicableTaxes: cloneDeep(taxData.applicableTaxes),
+                    date: taxData.date
+                };
+                this.internalTaxRenderData.set([]);
                 this.prepareTaxObject();
                 this.change();
             }
@@ -226,6 +233,27 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Helper method to normalize date input to dayjs object
+     * 
+     * Handles both formats:
+     * - string - Date string in DD-MM-YYYY format (GIDDH_DATE_FORMAT)
+     * - Date object - JavaScript Date object
+     */
+    private normalizeDate(date: any): any {
+        if (!date) {
+            return null;
+        }
+        
+        // If it's already a string in DD-MM-YYYY format
+        if (typeof date === 'string') {
+            return dayjs(date, GIDDH_DATE_FORMAT);
+        }
+        
+        // If it's a Date object or other format, convert to dayjs and format
+        return dayjs(date);
     }
 
     /**
@@ -294,7 +322,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
             taxesList = taxesList.filter(f => !this.exceptTaxTypes().includes(f.taxType));
         }
 
-        const renderData = [...this.internalTaxRenderData()];
+        const renderData = [];
         const applicableTaxUniqueNames = this.getApplicableTaxUniqueNames();
         
         taxesList.forEach(tax => {
@@ -307,8 +335,10 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                     renderData[index].isChecked;
                 
                 if (this.date() && tax.taxDetail?.length) {
-                    const isDateValid = dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date(), GIDDH_DATE_FORMAT)) || 
-                                       dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(this.date(), GIDDH_DATE_FORMAT);
+                    const normalizedDate = this.normalizeDate(this.date());
+                    const taxDate = dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT);
+                    const isDateValid = taxDate.isSame(normalizedDate, 'day') || taxDate.isBefore(normalizedDate, 'day');
+                    
                     if (!isDateValid) {
                         renderData[index].isDisabled = true;
                         renderData[index].disableForDate = true;
@@ -321,12 +351,13 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                 taxObj.type = taxObj.taxType;
 
                 if (this.date()) {
+                    const normalizedDate = this.normalizeDate(this.date());
                     const taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
                     
                     const exactDate = taxObject?.filter(p => 
-                        dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date(), GIDDH_DATE_FORMAT))
+                        dayjs(p.date, GIDDH_DATE_FORMAT).isSame(normalizedDate, 'day')
                     );
                     
                     if (exactDate?.length > 0) {
@@ -334,7 +365,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                         taxObj.disableForDate = false;
                     } else {
                         const filteredTaxObject = taxObject?.filter(p => 
-                            dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date(), GIDDH_DATE_FORMAT)
+                            dayjs(p.date, GIDDH_DATE_FORMAT).isBefore(normalizedDate, 'day')
                         );
                         if (filteredTaxObject?.length === 0) {
                             taxObj.isDisabled = true;
@@ -505,9 +536,10 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                     renderData.forEach(taxesApplied => {
                         if (taxType === taxesApplied.type && taxesApplied.isDisabled) {
                             if (this.date() && taxesApplied?.taxDetail?.length) {
+                                const normalizedDate = this.normalizeDate(this.date());
+                                const taxDate = dayjs(taxesApplied.taxDetail[0].date, GIDDH_DATE_FORMAT);
                                 taxesApplied.isDisabled = 
-                                    (dayjs(taxesApplied.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date(), GIDDH_DATE_FORMAT)) || 
-                                     dayjs(taxesApplied.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(this.date(), GIDDH_DATE_FORMAT)) ?
+                                    (taxDate.isSame(normalizedDate, 'day') || taxDate.isBefore(normalizedDate, 'day')) ?
                                     false : true;
                             } else {
                                 taxesApplied.isDisabled = false;

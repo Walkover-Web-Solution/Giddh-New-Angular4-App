@@ -88,4 +88,4 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
     declarations: [VoucherRendererComponent, VoucherComponent],
     providers: [TitleCasePipe],
 })
-export class VoucherModule {}
+export class VoucherModule { }
