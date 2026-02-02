@@ -17,6 +17,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
 import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -3139,7 +3140,7 @@ export class GeneralService {
     public getDateMeta(date: Date): { dayOfMonth: number; weekday: string; weekOfMonth: number } {
         const dayOfMonth = date.getDate();
         const dayOfWeek = date.getDay();
-        const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
+        const weekday = [RecurringWeekday.SUNDAY, RecurringWeekday.MONDAY, RecurringWeekday.TUESDAY, RecurringWeekday.WEDNESDAY, RecurringWeekday.THURSDAY, RecurringWeekday.FRIDAY, RecurringWeekday.SATURDAY][dayOfWeek];
         const weekOfMonth = Math.ceil(dayOfMonth / 7);
         return { dayOfMonth, weekday, weekOfMonth };
     }

@@ -206,7 +206,7 @@ export class VoucherService {
     }
 
     /**
-     * Get voucher details
+     * Gets voucher details
      *
      * @param {string} accountUniqueName
      * @param {ReceiptVoucherDetailsRequest} model
@@ -222,6 +222,10 @@ export class VoucherService {
         requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model?.uniqueName, model?.recurringVoucherUniqueName);
 
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        if (model.isRecurringVoucher) {
+            url += `&isRecurringVoucher=true`;
+            delete model.isRecurringVoucher;
+        }
         return this.http.post(url, requestObj
         ).pipe(
             map((res) => {

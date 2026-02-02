@@ -24,6 +24,7 @@ export class ReceiptVoucherDetailsRequest {
     public voucherType: string;
     public uniqueName?: string;
     public recurringVoucherUniqueName?: string;
+    public isRecurringVoucher?: boolean;
 }
 
 export interface ReceiptAccount {
