@@ -1,9 +1,9 @@
 import { CompanyResponse } from "apps/web-giddh/src/app/models/api-models/Company";
 import { Account, ChildGroup, ClosingBalance } from "apps/web-giddh/src/app/models/api-models/Search";
-import { giddhRoundOff } from "apps/web-giddh/src/app/shared/helpers/helperFunctions";
 import { RecTypePipe } from "apps/web-giddh/src/app/shared/helpers/pipes/recType/recType.pipe";
 import { Total } from "../trial-balance/export-csv/export-csv.component";
 import { forEach, keys, slice } from '../../../../lodash-optimized';
+import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 
 
 export interface IFormatable {
@@ -116,13 +116,13 @@ export class DataFormatter {
                     strIndex += 3;
                 }
                 const key = Object.keys(group.closingBalance)[0];
-                if (group.closingBalance[key].amount !== 0) {
+                if (group.closingBalance[key] !== 0) {
                     let data1: any[] = [];
                     data1.push(group.groupName?.toUpperCase());
                     data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
                     data1.push(group.debitTotal);
                     data1.push(group.creditTotal);
-                    data1.push(`${group.closingBalance[key].amount} ${this.recType.transform(group.closingBalance[key])}`);
+                    data1.push(`${group.closingBalance[key]} ${this.recType.transform(group.closingBalance[key])}`);
                     formatable.setRowData(data1, strIndex);
                     data1 = [];
                     if (group.accounts?.length > 0) {
@@ -132,7 +132,7 @@ export class DataFormatter {
                                 data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
                                 data1.push(acc.debitTotal);
                                 data1.push(acc.creditTotal);
-                                data1.push(`${acc.closingBalance[key].amount}${this.recType.transform(acc.closingBalance[key])}`);
+                                data1.push(`${acc.closingBalance[key]}${this.recType.transform(acc.closingBalance[key])}`);
                                 formatable.setRowData(data1, strIndex);
                                 data1 = [];
                             }
@@ -172,10 +172,10 @@ export class DataFormatter {
         total.cr += group.creditTotal;
         total.dr += group.debitTotal;
         if (decimalPlaces) {
-            total.cr = giddhRoundOff(total.cr, decimalPlaces);
-            total.dr = giddhRoundOff(total.dr, decimalPlaces);
-            total.ob = giddhRoundOff(total.ob, decimalPlaces);
-            total.cb = giddhRoundOff(total.cb, decimalPlaces);
+            total.cr = this.generalService.roundOffValueByCompanyDecimalPlace(total.cr, decimalPlaces);
+            total.dr = this.generalService.roundOffValueByCompanyDecimalPlace(total.dr, decimalPlaces);
+            total.ob = this.generalService.roundOffValueByCompanyDecimalPlace(total.ob, decimalPlaces);
+            total.cb = this.generalService.roundOffValueByCompanyDecimalPlace(total.cb, decimalPlaces);
         }
 
         return total;
@@ -193,10 +193,10 @@ export class DataFormatter {
             total = this.calculateTotal(group, total);
         });
 
-        total.cr = giddhRoundOff(total.cr, 2);
-        total.dr = giddhRoundOff(total.dr, 2);
-        total.ob = giddhRoundOff(total.ob, 2);
-        total.cb = giddhRoundOff(total.cb, 2);
+        total.cr = this.generalService.roundOffValueByCompanyDecimalPlace(total.cr, 2);
+        total.dr = this.generalService.roundOffValueByCompanyDecimalPlace(total.dr, 2);
+        total.ob = this.generalService.roundOffValueByCompanyDecimalPlace(total.ob, 2);
+        total.cb = this.generalService.roundOffValueByCompanyDecimalPlace(total.cb, 2);
 
         return total;
     }
@@ -213,7 +213,8 @@ export class DataFormatter {
 
     constructor(private exportData: ChildGroup[],
         private selectedCompany: CompanyResponse,
-        private recType: RecTypePipe) {
+        private recType: RecTypePipe,
+        private generalService: GeneralService) {
 
     }
 
