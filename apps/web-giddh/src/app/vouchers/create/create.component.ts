@@ -7284,7 +7284,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.componentStore.getVoucherDetails({
                     isCopyVoucher: false,
                     accountUniqueName: params?.accountUniqueName,
-                    payload: { recurringVoucherUniqueName: params?.uniqueName, voucherType: this.voucherType },
+                    payload: { recurringVoucherUniqueName: params?.uniqueName, voucherType: this.voucherType, isRecurringVoucher: true },
                 });
             }
         }
