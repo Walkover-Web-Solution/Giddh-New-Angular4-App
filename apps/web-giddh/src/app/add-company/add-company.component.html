@@ -67,6 +67,7 @@
                                     formControlName="mobile"
                                     [label]="commonLocaleData?.app_mobile_number"
                                     [required]="true"
+                                    [disabled]="isMobileNumberVerified"
                                     [useImageFlags]="true"
                                 ></mobile-number-input>
                             </div>

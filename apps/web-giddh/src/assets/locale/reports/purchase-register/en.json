@@ -28,5 +28,6 @@
     "purchase_account_name": "Purchase Account Name",
      "sales_account": "Sales Account",
     "purchase_register_export":"Export purchase register",
+    "show_tax_bifurcation":"Show tax bifurcation",
     "export_note": "The default columns 'Date, Account , Purchase, Return, Net purchase' will be exported, you also have the option to add custom columns as needed."
 }

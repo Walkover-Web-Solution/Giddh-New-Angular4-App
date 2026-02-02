@@ -26,7 +26,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
  * <common-discount
  *   [commonLocaleData]="localeData"
  *   [discountAccountsDetails]="discounts"
- *   [ledgerAmount]="amount"
+ *   [amountForDiscount]="amount"
  *   [maskInput]="mask"
  *   [prefixInput]="prefix"
  *   [suffixInput]="suffix"
@@ -63,7 +63,19 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      */
     public get defaultDiscount(): LedgerDiscountClass {
         const hasManualDiscount = this.discountAccounts()?.filter(selectedDiscount => !selectedDiscount?.uniqueName);
-        return hasManualDiscount?.[0] || this.discountAccounts()?.[0];
+        return hasManualDiscount?.[0] ?? this.createDefaultManualDiscount();
+    }
+
+    /**
+     * Creates a default manual discount object
+     */
+    private createDefaultManualDiscount(): LedgerDiscountClass {
+        return Object.assign(new LedgerDiscountClass(), {
+            discountValue: 0,
+            amount: 0,
+            discountType: 'PERCENTAGE',
+            isActive: false
+        });
     }
 
     /** Common locale data for translations (Angular 21 signal input) */
@@ -78,8 +90,6 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     /** Amount for discount calculation (Angular 21 signal input) */
     public amountForDiscount = input<number>(0);
     
-    /** Ledger amount for discount calculation (writable signal) */
-    public ledgerAmount = signal<number>(0);
     
     /** Emits when discount total is updated (Angular 21 signal output) */
     public discountTotalUpdated = output<number>();
@@ -167,11 +177,13 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     };
 
     /** Computed signal to track all discount-related inputs */
-    private discountInputTracker = computed(() => ({
-        discountAccountsDetails: this.discountAccountsDetails(),
-        discountsList: this.discountsList(),
-        amountForDiscount: this.amountForDiscount()
-    }));
+    private discountInputTracker = computed(() => {
+        return {
+            discountAccountsDetails: this.discountAccountsDetails() || [],
+            discountsList: this.discountsList() || [],
+            amountForDiscount: this.amountForDiscount() || 0
+        };
+    });
 
     constructor(private cdr: ChangeDetectorRef) {
         // Effect to track discount input changes and process them
@@ -186,7 +198,6 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
                 this.previousDiscountData.discountAccountsDetails = discountData.discountAccountsDetails;
                 this.previousDiscountData.amountForDiscount = discountData.amountForDiscount;
                 this.previousDiscountData.discountsList = discountData.discountsList;
-                this.ledgerAmount.set(this.amountForDiscount());
                 this.prepareDiscountList();
 
                 if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
@@ -259,17 +270,12 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         const accounts: LedgerDiscountClass[] = discountDetails?.length > 0 
             ? discountDetails.map(discount => ({
                 ...discount,
+                amount: discount.amount ?? discount.discountValue,
                 isActive: discount.isActive ?? true,
                 discountUniqueName: discount.discountUniqueName ?? discount.uniqueName,
                 uniqueName: discount.discountUniqueName ?? discount.uniqueName,
             }))
-            : [Object.assign(new LedgerDiscountClass(), {
-                discountValue: 0,
-                amount: 0,
-                discountType: 'PERCENTAGE',
-                isActive: false
-            })];
-        
+            : [this.createDefaultManualDiscount()];
         // Use Set for O(1) lookup instead of array.some() for better performance
         const existingUniqueNames = new Set(
             accounts.map(acc => acc.discountUniqueName ?? acc.uniqueName).filter(Boolean)
@@ -312,6 +318,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         if (!val || !cleanedValue || isNaN(parsedValue)) {
             this.discountFromVal.set(true);
             this.discountFromPer.set(true);
+            this.defaultDiscount.isActive = false;
             this.change();
             return;
         }
@@ -322,6 +329,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
             this.discountFromPer.set(false);
             this.discountFromVal.set(true);
         }
+        this.defaultDiscount.isActive = true;
         this.change();
     }
 
@@ -392,20 +400,10 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      * @returns Total discount amount
      */
     public generateTotal(): number {
-        const accounts = this.discountAccounts();
-        if (accounts && accounts[0]) {
-            if (accounts[0].discountValue) {
-                accounts[0].isActive = true;
-            } else {
-                accounts[0].isActive = false;
-            }
-            this.discountAccounts.set([...accounts]);
-        }
-
         const percentageListTotal = this.getTotalPercentageDiscount();
         const fixedListTotal = this.getTotalFixedDiscount();
 
-        let perFromAmount = ((percentageListTotal * this.ledgerAmount()) / 100);
+        let perFromAmount = ((percentageListTotal * this.amountForDiscount()) / 100);
         return perFromAmount + fixedListTotal;
     }
 
@@ -426,16 +424,17 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      */
     public toggleDiscountMenu(isOpen: boolean = false) {
         if (isOpen) {
-            !this.discountMenu.menuOpen && this.discountMenu?.openMenu();
+            !this.discountMenu?.menuOpen && this.discountMenu?.openMenu();
         } else {
-            this.discountMenu.menuOpen && this.discountMenu?.closeMenu();
+            this.discountMenu?.menuOpen && this.discountMenu?.closeMenu();
         }
     }
 
     /**
      * Emits create new discount event
      */
-    public createNew(): void {
+    protected createNew(): void {
+        this.discountMenu.closeMenu();
         this.createNewDiscount.emit(false);
     }
     

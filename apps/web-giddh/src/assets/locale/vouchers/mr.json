@@ -36,6 +36,7 @@
     "pending": "प्रलंबित",
     "invalid_date": "अवैध तारीख",
     "transaction_reverse_charge": "हा व्यवहार उलट शुल्क लागू आहे का??",
+    "transaction_recurring": "हा व्यवहार आवर्ती लेनदेन के लिए लागू है?",
     "transaction_tourist_scheme": "हा व्यवहार पर्यटक योजनेसाठी लागू आहे का??",
     "passport_number": "पारपत्र क्रमांक",
     "select_account": "खाते निवडण्यासाठी क्लिक करा",
@@ -158,5 +159,13 @@
     "purchase_as_payment_voucher": "पेमेंट व्हाउचर म्हणून खरेदी करा",
     "po_updated": "खरेदी ऑर्डर यशस्वीरित्या अद्यतनित केले",
     "template": "टेम्पलेट",
-    "template_placeholder": "टेम्पलेट निवडा"
+    "template_placeholder": "टेम्पलेट निवडा",
+    "generate_recurring_invoice": "रिकरंग इनवॉइस जनरेट",
+    "generate_recurring_purchase": "रिकरंग खरीद जनरेट",
+    "edit_recurring_invoice": "रिकरंग इनवॉइस संशोधित करा",
+    "edit_recurring_purchase": "रिकरंग खरीद संशोधित करा",
+    "recurring_invoice": "रिकरंग इनवॉइस",
+    "recurring_purchase": "रिकरंग खरीद",
+    "update_recurring_invoice": "रिकरंग इनवॉइस संशोधित करा",
+    "update_recurring_purchase": "रिकरंग खरीद संशोधित करा"
 }
