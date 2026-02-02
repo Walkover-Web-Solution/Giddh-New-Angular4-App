@@ -172,12 +172,22 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 const electron = (window as any).require("electron");
                 if (electron && electron.ipcRenderer) {
                     const { ipcRenderer } = electron;
+                    const whiteLabel = localStorage.getItem('whiteLabel');
+                    let whiteLabelData = null;
+                    if (whiteLabel) {
+                        try {
+                            whiteLabelData = JSON.parse(whiteLabel);
+                        } catch (e) {
+                            console.error('Error parsing whiteLabel from localStorage:', e);
+                        }
+                    }
                     // Send server environment to main process
                     ipcRenderer.send("take-server-environment", {
                         'production': environment.production,
                         'isLocalEnv': !environment.production,
                         'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
-                        'APP_FOLDER': environment.APP_FOLDER
+                        'APP_FOLDER': environment.APP_FOLDER,
+                        'WHITE_LABEL': whiteLabelData
                     });
                     // Handle app close requests
                     ipcRenderer.on('app-close-requested', () => {
@@ -190,12 +200,22 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 } else if ((window as any).electronAPI) {
                     // Fallback: Use secure electronAPI if available
                     const electronAPI = (window as any).electronAPI;
+                    const whiteLabel = localStorage.getItem('whiteLabel');
+                    let whiteLabelData = null;
+                    if (whiteLabel) {
+                        try {
+                            whiteLabelData = JSON.parse(whiteLabel);
+                        } catch (e) {
+                            console.error('Error parsing whiteLabel from localStorage:', e);
+                        }
+                    }
                     // Send server environment to main process
                     electronAPI.send("take-server-environment", {
                         'production': environment.production,
                         'isLocalEnv': !environment.production,
                         'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
-                        'APP_FOLDER': environment.APP_FOLDER
+                        'APP_FOLDER': environment.APP_FOLDER,
+                        'WHITE_LABEL': whiteLabelData
                     });
                     // Handle app close requests (note: electronAPI.on might not support this channel)
                     if (electronAPI.on) {
