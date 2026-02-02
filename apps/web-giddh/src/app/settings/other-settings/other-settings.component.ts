@@ -268,14 +268,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
             this.profileData.showAccountUniqueName = value;
         }
         const success = this.uiSettingsService.setShowAccountUniqueName(value);
-        
-        if (success) {
-            const message = value 
-                ? this.commonLocaleData?.app_setting_enabled || 'Setting enabled'
-                : this.commonLocaleData?.app_setting_disabled || 'Setting disabled';
-            this.toasterService.successToast(message);
-        } else {
-            this.toasterService.errorToast(this.commonLocaleData?.app_something_went_wrong || 'Failed to save setting');
+        if (!success) {
+            this.toasterService.errorToast(this.commonLocaleData?.app_something_went_wrong);
         }
     }
 }
