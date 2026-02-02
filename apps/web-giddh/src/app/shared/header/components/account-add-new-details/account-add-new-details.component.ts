@@ -274,7 +274,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this.isUKCompany = activeCompany.country === CountryNames.UNITED_KINGDOM;
                     this.getCompanyCustomField();
                 }
-                if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
+                if (this.activeCompany.countryV2) {
                     this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                 }
                 this.companyCurrency = clone(this.activeCompany?.baseCurrency);
