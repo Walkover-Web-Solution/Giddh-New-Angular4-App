@@ -24,6 +24,7 @@ import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../m
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { GeneralService } from '../services/general.service';
+import { UiSettingsService } from '../services/ui-settings.service';
 import { LedgerService } from '../services/ledger.service';
 import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
@@ -409,6 +410,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public particularMultiCurrency: boolean = false;
     /** To clear the dropdown list */
     public forceClear$: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
+    /** Tracks if account unique name should be shown in dropdowns */
+    public showAccountUniqueName: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -419,6 +422,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
+        private uiSettingsService: UiSettingsService,
         private loginActions: LoginActions,
         private loaderService: LoaderService,
         private warehouseActions: WarehouseActions,
@@ -605,6 +609,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
 
         /* Here, we filtered the pagination size to a maximum of 50 to avoid performance issues. */
         this.pageSizeOptions = this.pageSizeOptions.filter(size => size <= 50);
