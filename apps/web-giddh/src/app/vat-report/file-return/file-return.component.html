@@ -80,7 +80,7 @@
                 </div>
             </div>
         </div>
-    } @else if (vatReport?.length === 0) {
+    } @else if (!isLoading() && vatReport?.length === 0) {
         <div class="no-data no-report">
             <h2>{{ localeData?.no_vrn_available }}</h2>
         </div>
