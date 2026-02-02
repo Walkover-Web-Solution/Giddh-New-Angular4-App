@@ -205,12 +205,8 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
                 } else if (this.defaultDiscount) {
                     this.discountPercentageModal.set(this.defaultDiscount.discountValue);
                 }
-                
-                // Only call change() if discountsList or amountForDiscount changed
-                // Don't call change() if only discountAccountsDetails changed (prevents circular loop)
-                if (discountsListChanged || amountForDiscountChanged) {
-                    this.change();
-                }
+                    
+                this.change();
             }
         }, { allowSignalWrites: true });
     }
