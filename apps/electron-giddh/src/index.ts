@@ -67,7 +67,7 @@ ipcMain.on("authenticate", (event, arg) => {
             GoogleLoginElectronConfig.clientSecret,
             ['email', 'profile'],
             {
-                successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://test.giddh.com/app-login-success',
+                successRedirectURL: `${PRODUCTION_ENV ? 'https://books.giddh.com' : 'https://test.giddh.com'}/app-login-success`,
                 loopbackInterfaceRedirectionPort: 45587,
                 refocusAfterSuccess: true,
             }
@@ -156,7 +156,7 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
             GoogleLoginElectronConfig.clientSecret,
             ['https://www.googleapis.com/auth/gmail.send'],
             {
-                successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://test.giddh.com/app-login-success',
+                successRedirectURL: `${PRODUCTION_ENV ? 'https://books.giddh.com' : 'https://test.giddh.com'}/app-login-success`,
                 loopbackInterfaceRedirectionPort: 45587,
                 refocusAfterSuccess: true,
             }
