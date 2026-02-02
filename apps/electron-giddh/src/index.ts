@@ -13,6 +13,7 @@ let LOCAL_ENV = true;
 let PRODUCTION_ENV = false;
 let APP_URL = 'file://' + __dirname + '/index.html';
 let APP_FOLDER = '';
+let WHITE_LABEL: any = null;
 let tray: Tray | null = null;
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
@@ -58,6 +59,10 @@ ipcMain.on("take-server-environment", (event, arg) => {
     APP_URL = arg.AppUrl;
     process.env.APP_FOLDER = arg.APP_FOLDER;
     APP_FOLDER = arg.APP_FOLDER;
+    if (arg.WHITE_LABEL) {
+        WHITE_LABEL = arg.WHITE_LABEL;
+        process.env.WHITE_LABEL = JSON.stringify(arg.WHITE_LABEL);
+    }
 });
 
 ipcMain.on("authenticate", (event, arg) => {
@@ -67,7 +72,7 @@ ipcMain.on("authenticate", (event, arg) => {
             GoogleLoginElectronConfig.clientSecret,
             ['email', 'profile'],
             {
-                successRedirectURL: `${PRODUCTION_ENV ? 'https://books.giddh.com' : 'https://test.giddh.com'}/app-login-success`,
+                successRedirectURL: `${WHITE_LABEL?.body?.giddhWhiteLabel?.baseDomain || (!app.isPackaged ? 'https://test.giddh.com' : 'https://books.giddh.com')}/app-login-success`,
                 loopbackInterfaceRedirectionPort: 45587,
                 refocusAfterSuccess: true,
             }
@@ -156,7 +161,7 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
             GoogleLoginElectronConfig.clientSecret,
             ['https://www.googleapis.com/auth/gmail.send'],
             {
-                successRedirectURL: `${PRODUCTION_ENV ? 'https://books.giddh.com' : 'https://test.giddh.com'}/app-login-success`,
+                successRedirectURL: `${WHITE_LABEL?.body?.giddhWhiteLabel?.baseDomain || (!app.isPackaged ? 'https://test.giddh.com' : 'https://books.giddh.com')}/app-login-success`,
                 loopbackInterfaceRedirectionPort: 45587,
                 refocusAfterSuccess: true,
             }
