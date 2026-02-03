@@ -5,7 +5,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL } from "../app.constant";
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -469,8 +469,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.loaderService.show();
 
         let configuration = {
-            widgetId: this.serviceConfig.OTP_WIDGET_ID || '33686b716134333831313239' ,
-            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || '205968TmXguUAwoD633af103P1',
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID_NEW,
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_WIDGET_TOKEN_NEW,
             success: (data: any) => {
                 this.ngZone.run(() => {
                     this.initiateSignup(data);

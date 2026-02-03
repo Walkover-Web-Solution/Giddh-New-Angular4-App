@@ -47,12 +47,7 @@
                                 </a>
                             </mat-list-item>
                             <mat-list-item role="listitem">
-                                <a
-                                    href="https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/mac/latest/giddh-test-setup.dmg"
-                                    target="_blank"
-                                    [title]="localeData?.macos_app"
-                                    aria-label="mac"
-                                >
+                                <a [href]="macDownloadUrl" target="_blank" [title]="localeData?.macos_app" aria-label="mac">
                                     <i class="icon-mac"></i>
                                     {{ localeData?.macos }}
                                 </a>
@@ -71,12 +66,7 @@
                                 </a>
                             </mat-list-item>
                             <mat-list-item role="listitem">
-                                <a
-                                    href="https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/windows/latest/giddh-test-setup.exe"
-                                    target="_blank"
-                                    [title]="localeData?.windows_app"
-                                    aria-label="windows"
-                                >
+                                <a [href]="windowsDownloadUrl" target="_blank" [title]="localeData?.windows_app" aria-label="windows">
                                     <i class="icon-windows"></i>
                                     {{ localeData?.windows }}
                                 </a>
