@@ -25,6 +25,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 import { get } from '../lodash-optimized';
+import { environment } from '../../environments/environment.generated';
 
 @Injectable({
     providedIn: 'root'
@@ -230,15 +231,14 @@ export class AuthenticationService {
     }
 
     /**
-     * Gets environment path for S3 bucket based on API URL
+     * Gets environment path for S3 bucket based on environment configuration
      *
      * @private
      * @returns {string} Environment path ('prod' or 'test')
      * @memberof AuthenticationService
      */
     private getS3EnvironmentPath(): string {
-        const apiUrl = this.config?.apiUrl || '';
-        const isProduction = apiUrl.includes('api.giddh.com') || apiUrl.includes('books.giddh.com');
+        const isProduction = environment.PRODUCTION_ENV;
         return isProduction ? 'prod' : 'test';
     }
 

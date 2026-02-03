@@ -116,8 +116,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      * @memberof AsideHelpSupportComponent
      */
     private setDownloadUrls(): void {
-        const apiUrl = this.serviceConfig?.apiUrl || '';
-        const isProduction = apiUrl.includes('api.giddh.com') || apiUrl.includes('books.giddh.com');
+        const isProduction = environment.PRODUCTION_ENV;
         const envPath = isProduction ? 'prod' : 'test';
         const fileName = isProduction ? 'giddh-setup' : 'giddh-test-setup';
         
