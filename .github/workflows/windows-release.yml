@@ -433,8 +433,4 @@ jobs:
           Write-Host "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_EXE_NAME }}"
           Write-Host "Latest:"
           Write-Host "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/latest/${{ env.INSTALLER_NAME }}"
-<<<<<<< HEAD
           Write-Host "=========================================="
-=======
-          Write-Host "=========================================="
->>>>>>> 60ef7d9afa (fix: sync prod and test change)
