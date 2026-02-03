@@ -601,7 +601,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @type {boolean}
      * @memberof VoucherCreateComponent
      */
-    public showTaxColumn = computed(() => {
+    public get showTaxColumn() {
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             return false;
         }
@@ -637,7 +637,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             return true;
         }
-    });
+    };
 
     /**
      * True if it's UK company
@@ -3517,8 +3517,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                     uniqueName: item.additional?.stock?.uniqueName,
                                     quantity: item.quantity,
                                     rate: {
-                                        rateForAccount: item.rate,
-                                        amountForAccount: item.rate,
+                                        rateForAccount: Number(item.additional.stock?.rate) || 0,
+                                        amountForAccount: Number(item.additional.stock?.rate) || 0,
                                     },
                                     stockUnit: {
                                         code: item.additional?.stock?.variant?.unitRates?.length
@@ -4796,7 +4796,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public updateTotalTax(totalTax: any, entryFormGroup: FormGroup): void {
         entryFormGroup.get("totalTax").patchValue(totalTax);
-        if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
+        if (this.invoiceForm?.get('isAdvanceReceipt')?.value) {
             let amount: number = 0;
             if (entryFormGroup.get("otherTax.type").value === this.otherTaxTypeEnum.TDS) {
                 amount =
@@ -6971,23 +6971,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .get("amount.amountForAccount")
                     .patchValue(rate * transactionFormGroup.get("stock.quantity")?.value);
             }
-
-            if (response.stock.variant?.variantDiscount?.discounts) {
-                response.stock.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
-                    this.discountsList?.forEach((discount) => {
-                        if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
-                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-                        }
+            if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
+                if (response.stock.variant?.variantDiscount?.discounts) {
+                    response.stock.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
+                        this.discountsList?.forEach((discount) => {
+                            if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
+                                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                            }
+                        });
                     });
-                });
-            } else {
-                this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                    this.discountsList?.forEach((discount) => {
-                        if (discount?.uniqueName === selectedDiscount?.uniqueName) {
-                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-                        }
+                } else {
+                    this.account.applicableDiscounts?.forEach((selectedDiscount) => {
+                        this.discountsList?.forEach((discount) => {
+                            if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                            }
+                        });
                     });
-                });
+                }
             }
 
             this.stockUnits[entryIndex] = observableOf(response.stock.variant.unitRates);
@@ -6998,14 +6999,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get("hsnNumber")?.patchValue(response.hsnNumber);
             entryFormGroup.get("sacNumber")?.patchValue(response.sacNumber);
             entryFormGroup.get("showCodeType")?.patchValue(response.hsnNumber ? "hsn" : "sac");
-
-            this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                this.discountsList?.forEach((discount) => {
-                    if (discount?.uniqueName === selectedDiscount?.uniqueName) {
-                        discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-                    }
+            if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
+                this.account.applicableDiscounts?.forEach((selectedDiscount) => {
+                    this.discountsList?.forEach((discount) => {
+                        if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                        }
+                    });
                 });
-            });
+            }
         }
 
         const taxes = this.generalService.fetchTaxesOnPriority(
@@ -7320,7 +7322,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup
                 .get("stock.rate.rateForAccount")
                 ?.patchValue(amount / transactionFormGroup.get("stock.quantity")?.value);
-        }, 10);
+        }, 100);
     }
 
     /**

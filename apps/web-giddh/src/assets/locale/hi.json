@@ -494,6 +494,7 @@
     "app_and": "तथा",
     "app_or": "या",
     "app_no_tax_found": "कोई कर नहीं पाया",
+    "app_no_discount_found": "कोई छूट नहीं पाया",
     "app_on_taxable_value": "कर योग्य मूल्य पर (Amt - Dis)",
     "app_on_total_value": "कुल मूल्य (कर योग्य + जीएसटी + उपकर)",
     "app_tax_applicable": "कर लागू",

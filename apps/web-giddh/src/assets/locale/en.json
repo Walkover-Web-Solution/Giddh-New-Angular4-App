@@ -494,6 +494,7 @@
     "app_and": "AND",
     "app_or": "OR",
     "app_no_tax_found": "No Taxes Found",
+    "app_no_discount_found": "No Discount Found",
     "app_on_taxable_value": "On Taxable Value (Amt - Dis)",
     "app_on_total_value": "On Total Value (Taxable + Gst + Cess)",
     "app_tax_applicable": "Tax applicable",
