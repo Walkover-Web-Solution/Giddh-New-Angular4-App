@@ -34,6 +34,7 @@ import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
 import { GeneralService } from '../../../services/general.service';
+import { UiSettingsService } from '../../../services/ui-settings.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
@@ -345,6 +346,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAdjustmentInfoOpen: boolean = false;
     /** True if last adjustment info is open */
     public isLastAdjustmentInfoOpen: boolean = false;
+    /** Tracks if account unique name should be shown in dropdowns */
+    public showAccountUniqueName: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -353,6 +356,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private companyActions: CompanyActions,
         private ledgerService: LedgerService,
         private generalService: GeneralService,
+        private uiSettingsService: UiSettingsService,
         private ledgerAction: LedgerActions,
         private loaderService: LoaderService,
         private settingsTagService: SettingsTagService,
@@ -395,6 +399,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
