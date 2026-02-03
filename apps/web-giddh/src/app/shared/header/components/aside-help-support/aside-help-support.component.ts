@@ -24,6 +24,10 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public apkVersion: string;
     /** Version of lated mac app  */
     public macAppVersion: string;
+    /** Windows app download URL */
+    public windowsDownloadUrl: string;
+    /** Mac app download URL */
+    public macDownloadUrl: string;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -46,6 +50,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      * @memberof AsideHelpSupportComponent
      */
     public ngOnInit() {
+        this.setDownloadUrls();
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
@@ -102,6 +107,22 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
                 this.macAppVersion = versNum;
             }
         });
+    }
+
+    /**
+     * Sets download URLs based on environment
+     *
+     * @private
+     * @memberof AsideHelpSupportComponent
+     */
+    private setDownloadUrls(): void {
+        const apiUrl = this.serviceConfig?.apiUrl || '';
+        const isProduction = apiUrl.includes('api.giddh.com') || apiUrl.includes('books.giddh.com');
+        const envPath = isProduction ? 'prod' : 'test';
+        const fileName = isProduction ? 'giddh-setup' : 'giddh-test-setup';
+        
+        this.windowsDownloadUrl = `https://s3-ap-south-1.amazonaws.com/app-giddh-test/${envPath}/windows/latest/${fileName}.exe`;
+        this.macDownloadUrl = `https://s3-ap-south-1.amazonaws.com/app-giddh-test/${envPath}/mac/latest/${fileName}.dmg`;
     }
 
     /**

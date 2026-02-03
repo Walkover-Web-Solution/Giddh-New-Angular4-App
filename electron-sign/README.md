@@ -2,35 +2,36 @@
 
 ## Overview
 
-This directory contains the configuration files for building, signing, and distributing the Giddh Electron application across multiple platforms (Windows, macOS, Linux). The configuration supports both development/test builds and production releases with proper code signing and notarization.
+This directory contains the configuration files for building, signing, and distributing the Giddh Electron application across multiple platforms (Windows, macOS, Linux). The configuration supports production releases with proper code signing and notarization.
 
 ## Configuration Files
 
-### Build Configurations
+### Build Configuration
 
 | File | Purpose | Environment |
 | --- | --- | --- |
 | `electron-builder.json` | Production builds with S3 publishing | Production |
-| `electron-builder-test.json` | Test builds without publishing | Development/Testing |
-| `electron-builder-ci.json` | CI/CD builds with automated publishing | CI/CD Pipeline |
 
 ### Code Signing Files
 
 | File | Purpose | Platform |
 | --- | --- | --- |
+| `custom-sign.js` | SSL.com eSigner code signing script | Windows |
 | `notarize.js` | Apple notarization script | macOS |
 | `default.entitlements.mas.plist` | Mac App Store entitlements | macOS |
 | `default.entitlements.mas.inherit.plist` | Inherited entitlements | macOS |
 
-## Build Configurations
+## Build Configuration
 
 ### Production Build (`electron-builder.json`)
 
 **Application Details:**
 - **App ID**: `com.giddh.prod`
-- **Electron Version**: `39.2.7`
+- **Product Name**: `Giddh`
+- **Electron Version**: `29.4.6` (devDependency: `^39.2.7`)
+- **Electron Builder Version**: `^26.0.19`
 - **Output Directory**: `../electrongiddh-packages`
-- **ASAR Packaging**: Enabled
+- **ASAR Packaging**: Enabled (with `**/*.node` unpacked)
 
 **Publishing:**
 ```json
@@ -46,6 +47,12 @@ This directory contains the configuration files for building, signing, and distr
 }
 ```
 
+**Note:** The publish path in `electron-builder.json` is configured for test builds. For production builds, the path structure is:
+- **Test builds**: `s3://app-giddh-test/test/{platform}/latest/`
+- **Production builds**: `s3://app-giddh-test/prod/{platform}/latest/`
+
+Where `{platform}` is `windows`, `mac`, or `linux`.
+
 **Platform Configurations:**
 
 #### macOS Configuration
@@ -53,43 +60,75 @@ This directory contains the configuration files for building, signing, and distr
 {
   "category": "public.app-category.finance",
   "target": ["dmg", "zip"],
-  "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
-  "type": "distribution",
-  "hardenedRuntime": true,
-  "gatekeeperAssess": false
+  "identity": null,
+  "icon": "icon.icns"
+}
+```
+
+**DMG Configuration:**
+```json
+{
+  "sign": false
+}
+```
+
+**Mac App Store (MAS) Configuration:**
+```json
+{
+  "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
+  "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
+  "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile"
 }
 ```
 
 #### Windows Configuration
 ```json
 {
-  "target": ["nsis", "nsis-web", "zip"],
-  "icon": "./resources/icon.ico",
-  "signAndEditExecutable": false
+  "target": [
+    {
+      "target": "nsis",
+      "arch": ["x64", "ia32"]
+    },
+    "zip"
+  ],
+  "icon": "icon.ico",
+  "signAndEditExecutable": true,
+  "requestedExecutionLevel": "asInvoker",
+  "verifyUpdateCodeSignature": false
+}
+```
+
+**NSIS Installer Configuration:**
+```json
+{
+  "oneClick": false,
+  "allowToChangeInstallationDirectory": true,
+  "createDesktopShortcut": true,
+  "createStartMenuShortcut": true,
+  "menuCategory": "Accounting",
+  "shortcutName": "Giddh",
+  "perMachine": true,
+  "installerIcon": "icon.ico",
+  "uninstallerIcon": "icon.ico",
+  "installerHeaderIcon": "icon.ico",
+  "deleteAppDataOnUninstall": false,
+  "runAfterFinish": true,
+  "differentialPackage": false,
+  "packElevateHelper": true,
+  "allowElevation": true,
+  "displayLanguageSelector": false,
+  "include": "build/installer.nsh"
 }
 ```
 
 #### Linux Configuration
 ```json
 {
-  "target": ["AppImage", "snap", "zip"],
-  "maintainer": "Walkover Technologies Pvt Ltd"
+  "icon": "icon.png",
+  "maintainer": "Walkover Technologies Pvt Ltd",
+  "target": ["AppImage", "snap", "zip"]
 }
 ```
-
-### Test Build (`electron-builder-test.json`)
-
-**Key Differences from Production:**
-- **App ID**: `com.giddh.test`
-- **No S3 Publishing**: Local builds only
-- **Simplified Configuration**: Reduced complexity for testing
-
-### CI/CD Build (`electron-builder-ci.json`)
-
-**Features:**
-- **Automated Publishing**: Direct S3 upload
-- **CI/CD Optimized**: Streamlined for automated builds
-- **Environment Variables**: Uses CI environment configuration
 
 ## Build Commands
 
@@ -109,111 +148,117 @@ npm install configstore@5.0.1 --legacy-peer-deps --force
 
 #### Running Electron Application Locally
 
-**On Mac:**
+**Prepare Electron Build:**
 ```bash
-# Build Electron application
-npm run build.electron.giddh
+# Compile TypeScript for Electron
+npm run prepare.electron.giddh
+
+# This runs:
+# 1. npm run postinstall.electron (node tools/electron/postinstall)
+# 2. tsc -p apps/electron-giddh/tsconfig.json
+```
+
+**Run Electron Application:**
+```bash
+# Navigate to the electron app directory
+cd apps/electron-giddh/src
 
 # Run Electron with logging enabled
 npx electron . --enable-logging
-```
-
-**On Windows:**
-```bash
-# Build Electron application
-npm run build.electron.giddh
-
-# Run Electron with logging enabled
-npx electron . --enable-logging
-```
-
-**Alternative Development Commands:**
-```bash
-# Quick development build and run
-npm run build.electron.giddh && npx electron . --enable-logging
 
 # With additional debugging
 npx electron . --enable-logging --inspect=9229
-
-# Run with specific environment
-ELECTRON_ENV=true npx electron . --enable-logging
 ```
 
-### Local Development Builds
-
+**Quick Development Workflow:**
 ```bash
-# Build Electron for test environment
-npm run build.electron.giddh.test
-
-# Package for specific platforms (test)
-npm run package:windows:test
-npm run package:mac:test
+# Prepare and run in one command
+npm run prepare.electron.giddh && cd apps/electron-giddh/src && npx electron . --enable-logging
 ```
 
 ### Production Builds
 
-```bash
-# Build Electron for production
-npm run build.electron.giddh
-
-# Package for specific platforms
-npm run package:windows      # Windows (ia32 + x64)
-npm run package:mac          # macOS (x64)
-npm run package:linux        # Linux (x64)
-
-# Package for all platforms
-npm run package
-```
-
-### CI/CD Builds
+**Note:** Production builds use `electron-builder` with the configuration in `electron-sign/electron-builder.json`.
 
 ```bash
-# Windows CI release
-npm run release:windows:ci
+# Build using electron-builder (from project root)
+electron-builder --config electron-sign/electron-builder.json
 
-# macOS CI release
-npm run release:mac:ci
+# Platform-specific builds
+electron-builder --config electron-sign/electron-builder.json --win
+electron-builder --config electron-sign/electron-builder.json --mac
+electron-builder --config electron-sign/electron-builder.json --linux
 ```
 
 ## Code Signing Setup
 
 ### macOS Code Signing
 
-**Requirements:**
+**Current Configuration:**
+- **Identity**: `null` (signing disabled in current config)
+- **DMG Signing**: `false`
+- **Mac App Store**: Configured with entitlements and provisioning profile
+
+**Requirements for Enabling:**
 - Apple Developer Account
 - Valid Developer ID Application certificate
-- Provisioning profile (for Mac App Store)
+- Update `identity` in `electron-builder.json` to your certificate name
+- Set `dmg.sign` to `true` for signed DMG files
+
+**Notarization Process:**
+The `notarize.js` script handles Apple notarization using `@electron/notarize`:
+
+```javascript
+await electronNotarize.notarize({
+  appBundleId: 'com.giddh.prod',
+  appPath: appPath,
+  appleId: process.env.NOTARIZE_EMAIL,
+  appleIdPassword: process.env.NOTARIZE_PASS,
+  tool: 'notarytool',
+  teamId: "F3U6Z5L2EJ"
+});
+```
+
+**Required Environment Variables:**
+- `NOTARIZE_EMAIL`: Apple ID email
+- `NOTARIZE_PASS`: App-specific password
+
+### Windows Code Signing
+
+**SSL.com eSigner Integration:**
+
+The `custom-sign.js` script provides automated code signing using SSL.com's eSigner service:
+
+**Features:**
+- Signs all executables during build (main app, installer, updates)
+- Uses SSL.com CodeSignTool via npx
+- Automatic signature verification on Windows
+- Graceful fallback for development builds
 
 **Configuration:**
 ```json
 {
-  "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
-  "type": "distribution",
-  "hardenedRuntime": true,
-  "entitlements": "./../../../electron-sign/default.entitlements.mas.plist"
+  "signAndEditExecutable": true,
+  "requestedExecutionLevel": "asInvoker",
+  "verifyUpdateCodeSignature": false
 }
 ```
 
-**Notarization Process:**
-The `notarize.js` script handles Apple notarization:
+**Required Environment Variables:**
+- `ES_USERNAME`: SSL.com eSigner username
+- `ES_PASSWORD`: SSL.com eSigner password
+- `ES_CREDENTIAL_ID`: SSL.com credential ID
+- `ES_TOTP_SECRET`: SSL.com TOTP secret for 2FA
 
-```javascript
-// Automatic notarization after signing
-exports.default = async function notarizing(context) {
-  const { electronPlatformName, appOutDir } = context;
-  if (electronPlatformName !== 'darwin') {
-    return;
-  }
-  // Notarization logic...
-};
-```
+**Signing Process:**
+1. electron-builder calls `custom-sign.js` for each executable
+2. Script checks for required environment variables
+3. If present, uses `@ssl.com/codesigntool` to sign the file
+4. Verifies signature using PowerShell (Windows only)
+5. If variables missing, skips signing (development mode)
 
-### Windows Code Signing
-
-**Configuration:**
-- Code signing disabled by default: `"signAndEditExecutable": false`
-- Can be enabled with proper certificate configuration
-- Supports both EV and standard code signing certificates
+**Development Mode:**
+If environment variables are not set, the script logs a warning and skips signing, allowing local development without certificates.
 
 ### Linux Packaging
 
@@ -221,6 +266,9 @@ exports.default = async function notarizing(context) {
 - **AppImage**: Universal Linux application format
 - **Snap**: Ubuntu/Snapcraft package
 - **ZIP**: Portable archive
+
+**No Code Signing Required:**
+Linux builds do not require code signing for distribution.
 
 ## Entitlements Configuration
 
@@ -248,68 +296,95 @@ Contains entitlements that are inherited by child processes and helper applicati
 
 ### Development/Testing
 
-1. **Build Application**:
+1. **Prepare Electron Build**:
    ```bash
-   npm run build.electron.giddh.test
+   npm run prepare.electron.giddh
    ```
 
-2. **Package for Platform**:
+2. **Test Locally**:
    ```bash
-   npm run package:windows:test
+   cd apps/electron-giddh/src
+   npx electron . --enable-logging
    ```
 
-3. **Test Installation**:
-   - Install generated package
-   - Verify functionality
-   - Test auto-updates (if applicable)
+3. **Verify Functionality**:
+   - Test all features
+   - Check console for errors
+   - Verify OAuth flows (Google authentication)
+   - Test tray icon functionality
 
 ### Production Release
 
 1. **Pre-Release Checklist**:
-   - [ ] Version number updated in `package.json`
-   - [ ] Code signing certificates valid
-   - [ ] S3 bucket accessible
+   - [ ] Version number updated in root `package.json`
+   - [ ] Electron TypeScript compiled (`npm run prepare.electron.giddh`)
+   - [ ] Code signing environment variables configured
+   - [ ] AWS S3 credentials configured
    - [ ] All tests passing
 
 2. **Build and Release**:
    ```bash
-   npm run package:windows
-   npm run package:mac
-   npm run package:linux
+   # From project root
+   electron-builder --config electron-sign/electron-builder.json --win --mac --linux
+   ```
+
+   Or platform-specific:
+   ```bash
+   # Windows only
+   electron-builder --config electron-sign/electron-builder.json --win
+   
+   # macOS only
+   electron-builder --config electron-sign/electron-builder.json --mac
+   
+   # Linux only
+   electron-builder --config electron-sign/electron-builder.json --linux
    ```
 
 3. **Post-Release**:
-   - [ ] Verify uploads to S3
+   - [ ] Verify uploads to S3 bucket:
+     - Test builds: `app-giddh-test/test/{platform}/latest/`
+     - Production builds: `app-giddh-test/prod/{platform}/latest/`
+   - [ ] Verify file names:
+     - Test builds: `giddh-test-setup.exe` / `giddh-test-setup.dmg`
+     - Production builds: `giddh-setup.exe` / `giddh-setup.dmg`
    - [ ] Test auto-update functionality
-   - [ ] Monitor crash reports
+   - [ ] Verify code signatures (Windows: PowerShell, macOS: codesign)
+   - [ ] Monitor crash reports and logs
 
 ## Environment Variables
 
 ### Required for Production Builds
 
+**AWS S3 Publishing:**
 ```bash
-# AWS S3 Publishing
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
-
-# macOS Code Signing
-APPLE_ID=your_apple_id
-APPLE_ID_PASSWORD=your_app_specific_password
-APPLE_TEAM_ID=your_team_id
-
-# Windows Code Signing (optional)
-WIN_CSC_LINK=path_to_certificate.p12
-WIN_CSC_KEY_PASSWORD=certificate_password
 ```
 
-### CI/CD Environment Variables
-
+**macOS Code Signing & Notarization:**
 ```bash
-# Build Configuration
+NOTARIZE_EMAIL=your_apple_id@example.com
+NOTARIZE_PASS=your_app_specific_password
+```
+
+**Windows Code Signing (SSL.com eSigner):**
+```bash
+ES_USERNAME=your_sslcom_username
+ES_PASSWORD=your_sslcom_password
+ES_CREDENTIAL_ID=your_credential_id
+ES_TOTP_SECRET=your_totp_secret
+```
+
+### Optional Environment Variables
+
+**Build Configuration:**
+```bash
 ELECTRON_ENV=true
 NODE_ENV=production
+```
 
-# Publishing
+**Publishing Override:**
+```bash
 PUBLISH_PROVIDER=s3
 S3_BUCKET=app-giddh-test
 ```
@@ -335,11 +410,14 @@ npm install configstore@5.0.1 --legacy-peer-deps --force
 
 **Solutions**:
 ```bash
-# Ensure Electron build is complete
-npm run build.electron.giddh
+# Compile TypeScript first
+npm run prepare.electron.giddh
 
 # Check if main process file exists
 ls -la apps/electron-giddh/src/index.js
+
+# Navigate to correct directory
+cd apps/electron-giddh/src
 
 # Run with verbose logging
 npx electron . --enable-logging --verbose
@@ -349,98 +427,301 @@ npx electron . --enable-logging --verbose
 
 **Solutions**:
 ```bash
-# Ensure you're in the correct directory
-cd /path/to/your/project
+# Ensure TypeScript is compiled
+npm run prepare.electron.giddh
 
-# Rebuild Electron dependencies
+# Verify you're in the electron app directory
+cd apps/electron-giddh/src
+
+# Check if index.js exists
+ls -la index.js
+
+# Rebuild Electron dependencies if needed
 npm run postinstall.electron
-
-# Check package.json main entry
-grep "main" package.json
 ```
 
-#### 2. Platform-Specific Issues
+**Error**: `Tray icon not found`
 
-**Windows Issues**:
+**Solutions**:
 ```bash
-# If npx electron fails on Windows
+# Ensure build/icons directory exists with tray.png
+ls -la apps/electron-giddh/src/build/icons/
+
+# For packaged app, ensure extraResources are configured correctly
+# Check electron-builder.json extraResources section
+```
+
+#### 2. Code Signing Issues
+
+**Windows Signing Errors**:
+
+**Error**: `Missing environment variables for signing`
+
+**Solution**:
+```bash
+# Set SSL.com eSigner environment variables
+export ES_USERNAME="your_username"
+export ES_PASSWORD="your_password"
+export ES_CREDENTIAL_ID="your_credential_id"
+export ES_TOTP_SECRET="your_totp_secret"
+
+# Or create a .env file (not committed to git)
+echo "ES_USERNAME=your_username" >> .env
+echo "ES_PASSWORD=your_password" >> .env
+echo "ES_CREDENTIAL_ID=your_credential_id" >> .env
+echo "ES_TOTP_SECRET=your_totp_secret" >> .env
+```
+
+**Error**: `@ssl.com/codesigntool not found`
+
+**Solution**:
+```bash
+# The tool is installed via npx automatically
+# Ensure you have internet connection during build
+# Or pre-install globally:
+npm install -g @ssl.com/codesigntool
+```
+
+**macOS Signing Errors**:
+
+**Error**: `No identity found`
+
+**Solution**:
+```bash
+# List available identities
+security find-identity -v -p codesigning
+
+# Update electron-builder.json with correct identity
+# Change "identity": null to "identity": "Your Certificate Name"
+```
+
+**Error**: `Notarization failed`
+
+**Solution**:
+```bash
+# Verify environment variables are set
+echo $NOTARIZE_EMAIL
+echo $NOTARIZE_PASS
+
+# Ensure app-specific password is generated from Apple ID
+# Visit: https://appleid.apple.com/account/manage
+```
+
+#### 3. Platform-Specific Issues
+
+
+**Error**: `NSIS installer fails to build`
+
+**Solution**:
+```bash
+# Ensure build/installer.nsh exists
+ls -la apps/electron-giddh/src/build/installer.nsh
+
+# Check NSIS configuration in electron-builder.json
+# Verify all icon files exist (icon.ico)
+```
+
+**Error**: `Code signature verification failed`
+
+**Solution**:
+```bash
+# On Windows, verify signature manually:
+powershell -Command "Get-AuthenticodeSignature 'path/to/Giddh.exe' | Select-Object -ExpandProperty Status"
+
+# Should return: Valid
+# If not, check SSL.com credentials and try re-signing
+```
+
+**Error**: `npx electron fails on Windows`
+
+**Solution**:
+```bash
+# Use full path to electron
 .\node_modules\.bin\electron.cmd . --enable-logging
 
 # PowerShell execution policy issues
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-**Mac Issues**:
+**macOS Issues**:
+
+**Error**: `DMG creation failed`
+
+**Solution**:
 ```bash
-# Permission denied errors
+# Ensure icon.icns exists
+ls -la apps/electron-giddh/src/icon.icns
+
+# Check disk space
+df -h
+
+# Try building without DMG first
+electron-builder --config electron-sign/electron-builder.json --mac --dir
+```
+
+**Error**: `Permission denied errors`
+
+**Solution**:
+```bash
+# Fix electron binary permissions
 chmod +x node_modules/.bin/electron
 
 # Gatekeeper issues during development
 sudo spctl --master-disable
 ```
 
-#### 3. Code Signing Failures (macOS)
+**Linux Issues**:
 
-**Error**: `codesign failed with exit code 1`
+**Error**: `AppImage build failed`
 
-**Solutions**:
+**Solution**:
 ```bash
-# Check certificate validity
-security find-identity -v -p codesigning
+# Install required dependencies
+sudo apt-get install fuse libfuse2
 
-# Clear keychain cache
-security delete-keychain login.keychain
-security create-keychain login.keychain
+# Ensure icon.png exists
+ls -la apps/electron-giddh/src/icon.png
 ```
 
-#### 2. Notarization Failures
-
-**Error**: `Notarization failed`
-
-**Solutions**:
-- Verify Apple ID credentials
-- Check app-specific password
-- Ensure hardened runtime is enabled
-- Review entitlements configuration
-
-#### 3. Windows Build Issues
-
-**Error**: `Cannot find module 'electron-builder'`
-
-**Solutions**:
-```bash
-# Reinstall dependencies
-npm run clean
-npm install
-
-# Check Node.js version
-node --version  # Should be 18+
-```
-
-#### 4. S3 Upload Failures
+#### 4. Publishing Issues
 
 **Error**: `S3 upload failed`
 
-**Solutions**:
-- Verify AWS credentials
-- Check S3 bucket permissions
-- Ensure bucket exists and is accessible
-- Validate AWS region configuration
+**Solution**:
+```bash
+# Verify AWS credentials
+aws s3 ls s3://app-giddh-test/
+
+# Check environment variables
+echo $AWS_ACCESS_KEY_ID
+echo $AWS_SECRET_ACCESS_KEY
+
+# Test S3 access for test builds
+aws s3 ls s3://app-giddh-test/test/windows/latest/
+
+# Test S3 access for production builds
+aws s3 ls s3://app-giddh-test/prod/windows/latest/
+```
+
+**Error**: `Access denied to S3 bucket`
+
+**Solution**:
+```bash
+# Verify IAM permissions include:
+# - s3:PutObject
+# - s3:PutObjectAcl
+# - s3:GetObject
+# For bucket: app-giddh-test
+
+# Test with AWS CLI (test environment)
+aws s3 cp test.txt s3://app-giddh-test/test/windows/
+
+# Test with AWS CLI (production environment)
+aws s3 cp test.txt s3://app-giddh-test/prod/windows/
+```
 
 ### Debug Commands
 
 ```bash
 # Verbose build output
-DEBUG=electron-builder npm run package:windows
+DEBUG=electron-builder electron-builder --config electron-sign/electron-builder.json
 
 # Check Electron version compatibility
 npx electron --version
 
-# Validate configuration
+# Validate electron-builder configuration
 npx electron-builder --help
 
 # Test S3 connection
 aws s3 ls s3://app-giddh-test
+
+# Verify code signing setup (Windows)
+powershell -Command "Get-AuthenticodeSignature 'path/to/file.exe'"
+
+# Verify code signing setup (macOS)
+codesign --verify --deep --strict --verbose=2 path/to/Giddh.app
+```
+
+## S3 Bucket Structure & Environment Detection
+
+### Dynamic Path Structure
+
+The application uses a dynamic S3 path structure based on the environment:
+
+```
+s3://app-giddh-test/
+├── test/
+│   ├── windows/latest/
+│   │   ├── giddh-test-setup.exe
+│   │   ├── latest.yml
+│   │   └── [other build artifacts]
+│   ├── mac/latest/
+│   │   ├── giddh-test-setup.dmg
+│   │   ├── latest-mac.yml
+│   │   └── [other build artifacts]
+│   └── linux/latest/
+│       └── [build artifacts]
+└── prod/
+    ├── windows/latest/
+    │   ├── giddh-setup.exe
+    │   ├── latest.yml
+    │   └── [other build artifacts]
+    ├── mac/latest/
+    │   ├── giddh-setup.dmg
+    │   ├── latest-mac.yml
+    │   └── [other build artifacts]
+    └── linux/latest/
+        └── [build artifacts]
+```
+
+### Environment Detection
+
+**In Electron (AppUpdater.ts):**
+```typescript
+const appName = app.getName().toLowerCase();
+const isProduction = !appName.includes('test') && !appName.includes('dev');
+const envPath = isProduction ? 'prod' : 'test';
+const platform = process.platform === 'darwin' ? 'mac' : 'windows';
+```
+
+**In Web Application (AuthenticationService & Components):**
+```typescript
+const apiUrl = this.config?.apiUrl || '';
+const isProduction = apiUrl.includes('api.giddh.com') || apiUrl.includes('books.giddh.com');
+const envPath = isProduction ? 'prod' : 'test';
+```
+
+### File Naming Convention
+
+| Environment | Windows Installer | Mac Installer |
+|-------------|------------------|---------------|
+| **Production** | `giddh-setup.exe` | `giddh-setup.dmg` |
+| **Test/Dev** | `giddh-test-setup.exe` | `giddh-test-setup.dmg` |
+
+### Auto-Update Configuration
+
+The auto-updater automatically detects the environment and constructs the correct S3 path:
+
+**Production:**
+- Windows: `https://s3-ap-south-1.amazonaws.com/app-giddh-test/prod/windows/latest/`
+- macOS: `https://s3-ap-south-1.amazonaws.com/app-giddh-test/prod/mac/latest/`
+
+**Test/Dev:**
+- Windows: `https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/windows/latest/`
+- macOS: `https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/mac/latest/`
+
+### Download Links
+
+Download links in the web application are dynamically generated based on the API URL:
+
+```typescript
+// Production environment (api.giddh.com or books.giddh.com)
+windowsDownloadUrl = 'https://s3-ap-south-1.amazonaws.com/app-giddh-test/prod/windows/latest/giddh-setup.exe'
+macDownloadUrl = 'https://s3-ap-south-1.amazonaws.com/app-giddh-test/prod/mac/latest/giddh-setup.dmg'
+
+// Test/Dev environment
+windowsDownloadUrl = 'https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/windows/latest/giddh-test-setup.exe'
+macDownloadUrl = 'https://s3-ap-south-1.amazonaws.com/app-giddh-test/test/mac/latest/giddh-test-setup.dmg'
 ```
 
 ## Security Considerations

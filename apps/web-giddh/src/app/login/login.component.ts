@@ -11,7 +11,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { TemplateRef } from "@angular/core";
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, KeyCodesEnum, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -522,8 +522,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     public signInWithOtp(): void {
         this.loaderService.show();
         let configuration = {
-            widgetId: this.serviceConfig?.OTP_WIDGET_ID || environment.OTP_WIDGET_ID,
-            tokenAuth: this.serviceConfig?.OTP_TOKEN_AUTH || environment.OTP_TOKEN_AUTH,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID_NEW ,
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_WIDGET_TOKEN_NEW,
             success: (data: any) => {
                 this.ngZone.run(() => {
 
