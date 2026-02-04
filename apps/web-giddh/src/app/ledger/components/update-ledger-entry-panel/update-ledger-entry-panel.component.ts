@@ -82,7 +82,7 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
     templateUrl: './update-ledger-entry-panel.component.html',
     styleUrls: ['./update-ledger-entry-panel.component.scss'],
     providers: [SalesPersonComponentStore],
-    standalone:false
+    standalone: false
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */

@@ -134,9 +134,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
                     // Hard redirect for books.giddh.com or test.giddh.com domains
                     const currentUrl = path + search;
-
-
-                    // For other paths, extract returnUrl and redirect to login with returnUrl
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
                         returnUrl = currentUrl.split('/pages/')[1] || '';
