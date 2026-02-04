@@ -21,7 +21,7 @@ if (isAWSCodeBuild) {
     // Configure Node.js for AWS CodeBuild
     const currentNodeOptions = process.env.NODE_OPTIONS || '';
     const awsNodeOptions = [
-        '--max-old-space-size=8192',
+        '--max-old-space-size=16000',
         '--max-semi-space-size=128',
         '--optimize-for-size',
         '--gc-interval=100'
