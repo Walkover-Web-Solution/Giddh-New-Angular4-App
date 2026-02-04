@@ -3525,12 +3525,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data.body.stock?.groupTaxes ?? [],
                     data.body.taxes ?? [],
                     data.body.groupTaxes ?? []);
-                if (txn?.taxesVm?.length) {
-                    (Array.isArray(txn?.taxesVm) ? txn?.taxesVm : []).forEach(tax => {
-                        tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
-                        tax.isDisabled = false;
-                    });
-                }
 
                 if (this.profileObj?.baseCurrency === this.lc.activeAccount?.currency) {
                     if (this.lc.activeAccount?.currency !== data.body?.currency.code) {
@@ -3659,20 +3653,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         variantDiscount = stock.variant?.variantDiscount;
                         quantity = txn?.inventory?.quantity || 1;
                     } else {
-                        const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
+                        stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
+                        const defaultUnitRates = (this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates).filter(unitRate => unitRate.stockUnitUniqueName === stockUnitUniqueName);
                         const defaultUnit = {
                             stockUnitCode: defaultUnitRates[0].stockUnitCode,
                             code: defaultUnitRates[0].stockUnitCode,
                             rate: defaultUnitRates[0].rate,
                             name: txn.selectedAccount.stock.name
                         };
-                        const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
+                        const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : txn.selectedAccount.stock?.variant?.unitRates;
                         txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                         stockName = defaultUnit.name;
                         rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                         stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                         unitCode = defaultUnit.code;
-                        stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
 
                         const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
                         if (hasMrpDiscount?.length) {
@@ -3721,6 +3715,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
                 this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
+                this.isTotalChanged = false;
                 this.needToReCalculate.next(true);
                 if (allowChangeDetection) {
                     this.cdRf.detectChanges();
@@ -4180,13 +4175,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private handeLoadDetailsForDuplicateEntry(event: any, txn: any): void {
         txn.showTaxationDiscountBox = false;
-        // Take taxes of parent group and stock's own taxes
-        if (txn?.taxesVm?.length) {
-            (Array.isArray(txn.taxesVm) ? txn.taxesVm : []).forEach(tax => {
-                tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
-                tax.isDisabled = false;
-            });
-        }
         if (!this.isHideBankLedgerPopup) {
             this.lc.currentBlankTxn = txn;
         }

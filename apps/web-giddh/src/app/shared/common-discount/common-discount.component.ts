@@ -61,10 +61,10 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     /**
      * Gets the default discount (manual discount without uniqueName)
      */
-    public get defaultDiscount(): LedgerDiscountClass {
+    public defaultDiscount = computed<LedgerDiscountClass>(() => {
         const hasManualDiscount = this.discountAccounts()?.filter(selectedDiscount => !selectedDiscount?.uniqueName);
         return hasManualDiscount?.[0] ?? this.createDefaultManualDiscount();
-    }
+    });
 
     /**
      * Creates a default manual discount object
@@ -198,12 +198,12 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
                 this.previousDiscountData.discountAccountsDetails = discountData.discountAccountsDetails;
                 this.previousDiscountData.amountForDiscount = discountData.amountForDiscount;
                 this.previousDiscountData.discountsList = discountData.discountsList;
-                this.prepareDiscountList();
+                this.processDiscountList();
 
-                if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
-                    this.discountFixedValueModal.set(this.defaultDiscount.discountValue);
-                } else if (this.defaultDiscount) {
-                    this.discountPercentageModal.set(this.defaultDiscount.discountValue);
+                if (this.defaultDiscount() && this.defaultDiscount().discountType === 'FIX_AMOUNT') {
+                    this.discountFixedValueModal.set(this.defaultDiscount().discountValue);
+                } else if (this.defaultDiscount()) {
+                    this.discountPercentageModal.set(this.defaultDiscount().discountValue);
                 }
                     
                 this.change();
@@ -241,17 +241,6 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         // Effect is now in constructor
     }
 
-
-    /**
-     * Prepares discount list by processing available discounts
-     * Adds missing discounts to discountAccountsDetails
-     */
-    public prepareDiscountList(): void {
-        if (this.discountsList()?.length > 0) {
-            this.processDiscountList();
-        }
-    }
-
     /**
      * Processes discount list and adds new discounts to account details
      * Creates LedgerDiscountClass objects for each discount
@@ -276,23 +265,24 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         const existingUniqueNames = new Set(
             accounts.map(acc => acc.discountUniqueName ?? acc.uniqueName).filter(Boolean)
         );
-        
-        // Add new discounts from discountsList that don't already exist
-        discountsList?.forEach(acc => {
-            if (!existingUniqueNames.has(acc?.uniqueName)) {
-                accounts.push(Object.assign(new LedgerDiscountClass(), {
-                    discountValue: acc.discountValue,
-                    amount: acc.discountValue,
-                    discountType: acc.discountType,
-                    isActive: false,
-                    particular: acc.linkAccount?.uniqueName,
-                    discountUniqueName: acc?.uniqueName,
-                    uniqueName: acc?.uniqueName,
-                    name: acc.name
-                }));
-            }
-        });
-        
+        if(discountsList?.length > 0) {
+            // Add new discounts from discountsList that don't already exist
+            discountsList?.forEach(acc => {
+                if (!existingUniqueNames.has(acc?.uniqueName)) {
+                    accounts.push(Object.assign(new LedgerDiscountClass(), {
+                        discountValue: acc.discountValue,
+                        amount: acc.discountValue,
+                        discountType: acc.discountType,
+                        isActive: false,
+                        particular: acc.linkAccount?.uniqueName,
+                        discountUniqueName: acc?.uniqueName,
+                        uniqueName: acc?.uniqueName,
+                        name: acc.name
+                    }));
+                }
+            });
+        }
+        console.log("accounts", accounts);
         this.discountAccounts.set(accounts);
     }
 
@@ -307,14 +297,14 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         const cleanedValue = String(val || '')?.replace(/[^\d.]/g, '');
         const parsedValue = parseFloat(cleanedValue);
         
-        this.defaultDiscount.discountValue = isNaN(parsedValue) ? 0 : parsedValue;
-        this.defaultDiscount.amount = this.defaultDiscount.discountValue;
-        this.defaultDiscount.discountType = type;
-
-        if (!val || !cleanedValue || isNaN(parsedValue)) {
+        const discount = this.defaultDiscount();
+        discount.discountValue = parsedValue;
+        discount.amount = discount.discountValue;
+        discount.discountType = type;
+        if (!val || !cleanedValue) {
             this.discountFromVal.set(true);
             this.discountFromPer.set(true);
-            this.defaultDiscount.isActive = false;
+            discount.isActive = false;
             this.change();
             return;
         }
@@ -325,7 +315,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
             this.discountFromPer.set(false);
             this.discountFromVal.set(true);
         }
-        this.defaultDiscount.isActive = true;
+        discount.isActive = true;
         this.change();
     }
 
@@ -360,7 +350,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
             }
         });
 
-        return [this.defaultDiscount, ...result];
+        return [this.defaultDiscount(), ...result];
     }
 
     /**
@@ -416,13 +406,13 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     /**
      * Toggles discount menu open/closed state
      * 
-     * @param isOpen - Flag to open (true) or close (false) menu
+     * @param isCurrentlyOpen - Current state of menu (true if open, false if closed)
      */
-    public toggleDiscountMenu(isOpen: boolean = false) {
-        if (isOpen) {
-            !this.discountMenu?.menuOpen && this.discountMenu?.openMenu();
+    public toggleDiscountMenu(isCurrentlyOpen: boolean = false) {
+        if (isCurrentlyOpen) {
+            this.discountMenu?.closeMenu();
         } else {
-            this.discountMenu?.menuOpen && this.discountMenu?.closeMenu();
+            this.discountMenu?.openMenu();
         }
     }
 

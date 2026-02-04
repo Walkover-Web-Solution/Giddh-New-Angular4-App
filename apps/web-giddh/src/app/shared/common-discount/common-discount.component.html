@@ -3,8 +3,8 @@
     <input-field
         *ngIf="showMatFormField()"
         cdkMonitorElementFocus
-        (keydown.enter)="$event.preventDefault(); !disabled() && (isMenuOpened() ? discountMenu.closeMenu() : discountMenu.openMenu())"
-        (keydown.space)="$event.preventDefault(); !disabled() && (isMenuOpened() ? discountMenu.closeMenu() : discountMenu.openMenu())"
+        (keydown.enter)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
+        (keydown.space)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
         id="common-discount"
         [autocomplete]="'off'"
         [prefix]="prefixInput()"
@@ -31,8 +31,8 @@
         class="form-control text-right total-discount-amount"
         tabindex="0"
         cdkMonitorElementFocus
-        (keydown.enter)="$event.preventDefault(); !disabled() && (isMenuOpened() ? discountMenu.closeMenu() : discountMenu.openMenu())"
-        (keydown.space)="$event.preventDefault(); !disabled() && (isMenuOpened() ? discountMenu.closeMenu() : discountMenu.openMenu())"
+        (keydown.enter)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
+        (keydown.space)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
         [matMenuTriggerFor]="!disabled() ? discountMenu : null"
         #menuTrigger="matMenuTrigger"
         [placeholder]="prefixInput() + '0' + suffixInput()"

@@ -1327,21 +1327,29 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    public hideDiscountTax(): void {
+    /**
+    * Open and close discount dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public openAndCloseDiscountDropdown(isOpen: boolean = false): void {
         if (this.discountComponent) {
-            this.discountComponent.closeDiscountMenu();
+            this.discountComponent.toggleDiscountMenu(!isOpen);
         }
     }
 
-    public hideDiscount(): void {
-        if (this.discountComponent) {
-            this.discountComponent.closeDiscountMenu();
-        }
-    }
-
-    public hideTax(): void {
+    /**
+    * Open and close tax dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public openAndCloseTaxDropdown(isOpen: boolean = false): void {
         if (this.commonTaxControll) {
-            this.commonTaxControll?.toggleTaxMenu();
+            this.commonTaxControll?.toggleTaxMenu(isOpen);
         }
     }
 
@@ -2774,12 +2782,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.discountDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getAllDiscounts(() => {
-                    setTimeout(() => {
-                        this.discountComponent?.toggleDiscountMenu(true);
-                    }, 100);
+                    this.openAndCloseDiscountDropdown(true);
                 });
             } else {
-                this.discountComponent?.toggleDiscountMenu(true);
+                this.openAndCloseDiscountDropdown(true);
             }
             this.discountDialogRef = undefined;
         });
@@ -2822,7 +2828,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public closeTaxModal(): void {
         this.store.dispatch(this.companyActions.getTax());
         this.taxAsideMenuRef.close();
-        this.changeDetectorRef.detectChanges();
+        setTimeout(() => {
+            this.openAndCloseTaxDropdown(true);
+        }, 100);
     }
     /**
      * Handle event for next transaction

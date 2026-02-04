@@ -730,7 +730,9 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
         this.isDropdownOpen.set(opened);
         if (opened) {
             this.hideOtherPopups.emit();
-            this.focusSecondOption(selectInstance);
+            setTimeout(() => {
+                this.focusSecondOption(selectInstance);
+            }, 100);
         }
     }
 
