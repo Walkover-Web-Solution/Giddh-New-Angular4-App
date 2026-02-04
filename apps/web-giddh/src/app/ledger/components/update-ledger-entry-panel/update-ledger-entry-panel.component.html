@@ -1433,7 +1433,6 @@
                                         [useMask]="true"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
-                                        (onFocus)="hideDiscountTax()"
                                         [(ngModel)]="vm.totalAmount"
                                         (change)="vm.updateFirstEntryAmount(); vm.inventoryAmountChanged()"
                                     ></input-field>
@@ -1558,7 +1557,6 @@
                                             (selectedTaxEvent)="vm.taxTrxUpdated($event); showTaxError = false"
                                             (taxAmountSumEvent)="calculateTax()"
                                             (createNewTax)="showCreateTaxDialog()"
-                                            (hideOtherPopups)="hideDiscount()"
                                         ></common-tax>
                                     </span>
 
