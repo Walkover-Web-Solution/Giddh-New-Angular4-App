@@ -9,6 +9,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit,
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
+import { UiSettingsService } from './services/ui-settings.service';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -80,12 +81,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private loginActions: LoginActions,
         private invoiceActions: InvoiceActions,
         private warehouseActions: WarehouseActions,
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        private uiSettingsService: UiSettingsService
     ) {
         this.isProdMode = environment.production;
         this.isElectron = Configuration.isElectron;
 
-        // Bind the method for proper event listener cleanup
+        this.initializeUiSettings();
+
         this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
 
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
@@ -536,6 +539,23 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         this._cdr.detectChanges();
+    }
+
+    /**
+     * Initializes UI settings and verifies cache integrity
+     *
+     * @private
+     * @memberof AppComponent
+     */
+    private initializeUiSettings(): void {
+        try {
+            const removedCount = this.uiSettingsService.verifyAndCleanCache();
+            if (removedCount > 0) {
+                console.log(`UI Settings: Cleaned ${removedCount} expired cache entries`);
+            }
+        } catch (error) {
+            console.error('Error initializing UI settings:', error);
+        }
     }
 
     /**
