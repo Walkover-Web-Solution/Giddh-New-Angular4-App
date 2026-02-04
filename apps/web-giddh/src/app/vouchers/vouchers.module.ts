@@ -199,8 +199,7 @@ import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview
         KeyboardNavigationModule,
         ResizableDirective,
         CommonTaxComponent,
-        AsideRecurringVoucherCreateModule,
-        ResizableDirective
+        AsideRecurringVoucherCreateModule
     ],
     exports: [
         VoucherCreateComponent,
