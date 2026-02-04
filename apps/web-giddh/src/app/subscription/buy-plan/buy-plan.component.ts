@@ -600,7 +600,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeRegion = response?.region?.code;
 
             }
-            const value = response?.region?.code !== 'IND' ? 1 : this.firstStepForm.get('duration')?.value === 'MONTHLY' ? 1 : 10;
+            const value = response?.region?.code !== 'IND' ? 1 : (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') ? 1 : 10;
             if (response?.payuHtml) {
                 this.openPayUPayment(response.payuHtml);
             } else if (response && response.dueAmount >= value) {
@@ -1651,7 +1651,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
 
         try {
-            const isChangePlan = this.isChangePlan ? (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') : (request?.duration === 'MONTHLY' || request?.duration === 'DAILY');
+            const isChangePlan = this.isChangePlan ? (
+                this.firstStepForm.get('duration')?.value === 'MONTHLY' 
+                || this.firstStepForm.get('duration')?.value === 'DAILY')
+                : (request?.duration === 'MONTHLY' || request?.duration === 'DAILY');
             this.razorpay = new window['Razorpay']((isChangePlan && request?.region?.code !== 'GBR')
                 ? razorpayRecurringSubscriptionConfig : options);
             setTimeout(() => { this.razorpay?.open(); }, 100);
