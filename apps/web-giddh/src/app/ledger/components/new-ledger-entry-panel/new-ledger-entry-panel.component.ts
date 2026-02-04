@@ -488,10 +488,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountsList = response?.body;
-                this.preparePreAppliedDiscounts();
                 this.cdRef.detectChanges();
             }
-            callback?.();
+            if (callback) {
+                callback();
+            } else {
+                this.preparePreAppliedDiscounts();
+            }
         });
     }
 
@@ -1859,19 +1862,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public preparePreAppliedDiscounts(): void {
-        this.currentTxn.discounts = [];
-        const matchedUnit = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
-        if (matchedUnit?.length && !this.currentTxn?.duplicateEntry) {
-            if (!this.currentTxn.isMrpDiscountApplied) {
-                this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
-                    this.discountsList?.forEach(item => {
-                        if (variantDiscount?.discount?.uniqueName === item?.uniqueName) {
-                            this.currentTxn.discounts.push(item);
-                        }
-                        return item;
-                    });
+        if (!this.currentTxn?.duplicateEntry) {
+            this.currentTxn.discounts = [];
+        }
+        const stockDiscounts = this.currentTxn.selectedAccount?.stock?.variant?.variantDiscount?.discounts
+        if (stockDiscounts?.length && !this.currentTxn.isMrpDiscountApplied) {
+            stockDiscounts?.forEach(variantDiscount => {
+                this.discountsList?.forEach(item => {
+                    if (variantDiscount?.discount?.uniqueName === item?.uniqueName) {
+                        this.currentTxn.discounts.push(item);
+                    }
+                    return item;
                 });
-            }
+            });
         } else {
             if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
                 this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);

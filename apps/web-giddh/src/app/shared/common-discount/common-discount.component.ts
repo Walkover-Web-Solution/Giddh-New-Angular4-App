@@ -282,7 +282,6 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
                 }
             });
         }
-        console.log("accounts", accounts);
         this.discountAccounts.set(accounts);
     }
 
