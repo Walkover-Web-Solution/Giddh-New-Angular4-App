@@ -3,6 +3,7 @@
     <input-field
         *ngIf="showMatFormField()"
         cdkMonitorElementFocus
+        appEnterNext
         (keydown.enter)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
         (keydown.space)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
         id="common-discount"
@@ -20,7 +21,7 @@
         [matMenuTriggerFor]="!disabled() ? discountMenu : null"
         #menuTrigger="matMenuTrigger"
         (menuOpened)="handleMenuOpened()"
-        (menuClosed)="handleMenuClosed($event)"
+        (menuClosed)="handleMenuClosed($event); emitCloseDiscountDropdown()"
         (onFocus)="hideOtherPopups.emit(true)"
     ></input-field>
 
@@ -30,6 +31,8 @@
         type="text"
         class="form-control text-right total-discount-amount"
         tabindex="0"
+        id="common-discount"
+        appEnterNext
         cdkMonitorElementFocus
         (keydown.enter)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
         (keydown.space)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
@@ -42,7 +45,7 @@
         [suffix]="suffixInput()"
         [readonly]="true"
         (menuOpened)="handleMenuOpened()"
-        (menuClosed)="handleMenuClosed($event)"
+        (menuClosed)="handleMenuClosed($event); emitCloseDiscountDropdown()"
         (focus)="hideOtherPopups.emit(true)"
         #discountInput
     />
@@ -73,7 +76,7 @@
                             [(ngModel)]="$any(discountPercentageModal)"
                             [readonly]="discountFixedValueModal() > 0"
                             (input)="discountFromInput('PERCENTAGE', $event.target?.value)"
-                            (keydown.enter)="$event.preventDefault(); menuTrigger?.closeMenu()"
+                            (keydown.enter)="$event.preventDefault(); closeDiscountMenu()"
                         ></input-field>
                     </div>
                     <div class="mb-2">
@@ -93,7 +96,7 @@
                             [(ngModel)]="$any(discountFixedValueModal)"
                             [readonly]="discountPercentageModal() > 0"
                             (input)="discountFromInput('FIX_AMOUNT', $event.target?.value)"
-                            (keydown.enter)="$event.preventDefault(); menuTrigger?.closeMenu()"
+                            (keydown.enter)="$event.preventDefault(); closeDiscountMenu()"
                         ></input-field>
                     </div>
                 </div>
@@ -121,10 +124,14 @@
                                         discountRef.toggle();
                                         change();
                                         focusNextCheckbox($event.target, idx);
-                                        menuTrigger?.closeMenu()
+                                        closeDiscountMenu()
                                     "
                                     (keydown.space)="
-                                        $event.preventDefault(); discountRef.toggle(); change(); focusNextCheckbox($event.target, idx)
+                                        $event.preventDefault();
+                                        discountRef.toggle();
+                                        change();
+                                        focusNextCheckbox($event.target, idx);
+                                        closeDiscountMenu()
                                     "
                                 >
                                     <span class="font-size-15">
@@ -158,5 +165,4 @@
             </div>
         </ng-template>
     </mat-menu>
-    <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
 </div>
