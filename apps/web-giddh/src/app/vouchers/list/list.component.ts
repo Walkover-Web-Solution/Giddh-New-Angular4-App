@@ -3918,9 +3918,11 @@ public generateRecurringVoucher(voucher: any): void {
         this.advanceFilters['q'] = "";
         this.advanceFilters['sortBy'] = "";
         this.advanceFilters['sort'] = "";
-        this.advanceFilters['from'] = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
-        this.advanceFilters['to'] = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
         this.advanceFilters['page'] = this.queryParams.page || 1;
         this.advanceFilters['count'] = this.queryParams.count || PAGINATION_LIMIT;
+        if (this.selectedDateRange) {
+            this.advanceFilters['from'] = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
+            this.advanceFilters['to'] = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
+        }
     }
 }
