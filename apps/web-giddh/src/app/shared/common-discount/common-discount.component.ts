@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, input, output, effect, computed, signal, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, input, output, effect, computed, signal, ChangeDetectorRef, Output } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
@@ -15,6 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DecimalDigitsModule } from '../helpers/directives/decimalDigits/decimalDigits.module';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { EnterNextDirective } from '../helpers/directives/enter-next/enter-next.directive';
 
 /**
  * Common Discount Component (Angular 21)
@@ -53,7 +54,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
         FormFieldsModule,
         DecimalDigitsModule,
         A11yModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        EnterNextDirective
     ]
 })
 export class CommonDiscountComponent implements OnInit, OnDestroy {
@@ -165,6 +167,8 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     
     /** Emits to hide other popups (Angular 21 signal output) */
     public hideOtherPopups = output<boolean>();
+
+    public closeDiscountDropdown = output<any>();
     
     /** Emits selected discounts (Angular 21 signal output) */
     public selectedDiscountsEvent = output<any[]>();
@@ -209,29 +213,6 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
                 this.change();
             }
         }, { allowSignalWrites: true });
-    }
-
-    /**
-     * Handles focus on last div for keyboard navigation
-     * Moves focus to next focusable element in ledger panel
-     * 
-     * @param el - Event element
-     * @returns false to prevent default behavior
-     */
-    public onFocusLastDiv(el): boolean {
-        el.stopPropagation();
-        el.preventDefault();
-        let focussableElements = '.ledger-panel input[type=text]:not([disabled]),.ledger-panel [tabindex]:not([disabled]):not([tabindex="-1"])';
-        let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
-            (element) => {
-                return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
-            });
-        let index = focussable?.indexOf(document.activeElement);
-        if (index > -1) {
-            let nextElement = focussable[index + 1] || focussable[0];
-            nextElement.focus();
-        }
-        return false;
     }
 
     /**
@@ -419,7 +400,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      * Emits create new discount event
      */
     protected createNew(): void {
-        this.discountMenu.closeMenu();
+        this.closeDiscountMenu();
         this.createNewDiscount.emit(false);
     }
     
@@ -496,6 +477,18 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         if (nextCheckbox) {
             setTimeout(() => nextCheckbox.focus(), 100);
         }
+    }
+
+    /**
+     * Emits close discount dropdown event with the trigger element
+     *
+     * @memberof DiscountDropdownComponent
+     */
+    protected emitCloseDiscountDropdown(): void {
+        // Always emit close event for focus management
+        setTimeout(() => {
+            this.closeDiscountDropdown.emit(document.getElementById('common-discount'));
+        }, 50);
     }
 
     /**

@@ -2220,9 +2220,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     *
     * @memberof NewLedgerEntryPanelComponent
     */
-    public openAndCloseTaxDropdown(isOpen: boolean = false): void {
+    public openAndCloseTaxDropdown(): void {
         if (this.taxControl) {
-            this.taxControl?.toggleTaxMenu(isOpen);
+            this.taxControl.focusTaxDropdown()
         }
     }
 
@@ -2236,7 +2236,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.taxDialogRef?.close();
         this.cdRef.detectChanges();
         setTimeout(() => {
-            this.openAndCloseTaxDropdown(true);
+            this.openAndCloseTaxDropdown();
             this.taxDialogRef = undefined;
         }, 100);
     }

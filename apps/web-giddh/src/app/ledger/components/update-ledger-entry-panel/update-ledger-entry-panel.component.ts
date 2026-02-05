@@ -1352,9 +1352,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     *
     * @memberof NewLedgerEntryPanelComponent
     */
-    public openAndCloseTaxDropdown(isOpen: boolean = false): void {
+    public openAndCloseTaxDropdown(): void {
         if (this.commonTaxControll) {
-            this.commonTaxControll?.toggleTaxMenu(isOpen);
+            this.commonTaxControll.focusTaxDropdown();
         }
     }
 
@@ -2834,7 +2834,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.store.dispatch(this.companyActions.getTax());
         this.taxAsideMenuRef.close();
         setTimeout(() => {
-            this.openAndCloseTaxDropdown(true);
+            this.openAndCloseTaxDropdown();
         }, 100);
     }
     /**

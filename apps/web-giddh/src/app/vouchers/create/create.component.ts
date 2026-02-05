@@ -3958,11 +3958,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     *
     * @memberof NewLedgerEntryPanelComponent
     */
-    public openAndCloseTaxDropdown(isOpen: boolean = false): void {
+    public openAndCloseTaxDropdown(): void {
         if (this.activeEntryIndex !== null && this.commonTaxControll) {
             const taxComponent = this.commonTaxControll.toArray()[this.activeEntryIndex];
             if (taxComponent) {
-                taxComponent.toggleTaxMenu(isOpen);
+                taxComponent.focusTaxDropdown();
             }
         }
     }
@@ -6897,7 +6897,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.store.dispatch(this.companyActions.getTax());
         this.taxAsideMenuRef.close();
         setTimeout(() => {
-            this.openAndCloseTaxDropdown(true);
+            this.openAndCloseTaxDropdown();
         }, 100);
     }
 
