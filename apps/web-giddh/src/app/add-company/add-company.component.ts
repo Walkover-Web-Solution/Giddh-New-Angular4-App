@@ -468,9 +468,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public sendOtp(): void {
-        if (this.firstStepForm.get('mobile')?.invalid) {
-            return;
-        }
         this.isMobileNumberVerified = false;
         let mobileNo = this.firstStepForm.value.mobile;
         mobileNo = mobileNo?.replace("+", "");
