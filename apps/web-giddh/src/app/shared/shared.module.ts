@@ -60,7 +60,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { GiddhNumberFormatModule } from './helpers/pipes/number-format/number-format.module';
-import { get } from '../lodash-optimized';
 
 
 const SOCIAL_CONFIG = Configuration.isElectron ? null : new AuthServiceConfig([

@@ -18,7 +18,8 @@ const FUNCTIONAL_KEYS = {
     F8: 'F8',
     F9: 'F9',
     F10: 'F10',
-    F11: 'F11'
+    F11: 'F11',
+    F12: 'F12'
 };
 
 /** Key codes for combination of shortcut with Alt+V, Alt+I and other shortcuts */
@@ -38,21 +39,11 @@ export const KEYS = {
 /** Voucher page shortcut mapping */
 export const PAGE_SHORTCUT_MAPPING = [
     {
-        keyCode: 115, // 'F4',
-        key: FUNCTIONAL_KEYS.F4,
-        altKey: true,
-        inputForFn: {
-            page: 'Contra',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    },
-    {
         keyCode: 116, // 'F5',
         key: FUNCTIONAL_KEYS.F5,
         altKey: true,
         inputForFn: {
-            page: 'Payment',
+            page: 'Contra',
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
@@ -62,8 +53,8 @@ export const PAGE_SHORTCUT_MAPPING = [
         key: FUNCTIONAL_KEYS.F6,
         altKey: true,
         inputForFn: {
-            page: 'Receipt',
-            uniqueName: 'null',
+            page: 'Payment',
+            uniqueName: 'purchases',
             gridType: 'voucher'
         }
     },
@@ -72,8 +63,8 @@ export const PAGE_SHORTCUT_MAPPING = [
         key: FUNCTIONAL_KEYS.F7,
         altKey: true,
         inputForFn: {
-            page: 'Journal',
-            uniqueName: 'purchases',
+            page: 'Receipt',
+            uniqueName: 'null',
             gridType: 'voucher'
         }
     },
@@ -82,7 +73,7 @@ export const PAGE_SHORTCUT_MAPPING = [
         key: FUNCTIONAL_KEYS.F8,
         altKey: true,
         inputForFn: {
-            page: 'Sales',
+            page: 'Journal',
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
@@ -92,7 +83,7 @@ export const PAGE_SHORTCUT_MAPPING = [
         key: FUNCTIONAL_KEYS.F9,
         altKey: true,
         inputForFn: {
-            page: 'Purchase',
+            page: 'Sales',
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
@@ -102,7 +93,7 @@ export const PAGE_SHORTCUT_MAPPING = [
         key: FUNCTIONAL_KEYS.F10,
         altKey: true,
         inputForFn: {
-            page: 'Debit note',
+            page: 'Purchase',
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
@@ -110,6 +101,16 @@ export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 122, // 'F11',
         key: FUNCTIONAL_KEYS.F11,
+        altKey: true,
+        inputForFn: {
+            page: 'Debit note',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
+    {
+        keyCode: 123, // 'F12',
+        key: FUNCTIONAL_KEYS.F12,
         altKey: true,
         inputForFn: {
             page: 'Credit note',

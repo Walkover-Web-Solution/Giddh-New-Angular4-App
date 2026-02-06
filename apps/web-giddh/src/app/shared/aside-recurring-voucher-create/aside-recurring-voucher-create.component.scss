@@ -1,0 +1,15 @@
+.weekday-toggle {
+    button {
+        &.active {
+            background-color: var(--bg-primary-color) !important;
+            color: var(--color-white) !important;
+        }
+    }
+}
+
+.no-dates {
+    padding: 12px;
+    color: var(--color-gray-600);
+    font-style: italic;
+    text-align: center;
+}

@@ -81,6 +81,20 @@
                     </label>
                 </div>
                 <div class="clear-both toggle-gap mb-3">
+                    <label class="export-label">{{ inputData?.localeData?.voucher_type }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showVoucherType">
+                            <span class="pull-left">
+                                {{
+                                    exportForm.get('showVoucherType')?.value
+                                        ? inputData?.commonLocaleData?.app_yes
+                                        : inputData?.commonLocaleData?.app_no
+                                }}
+                            </span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="clear-both toggle-gap mb-3">
                     <label class="export-label">{{ inputData?.localeData?.tax }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showTax">
@@ -94,13 +108,13 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="clear-both toggle-gap mb-3">
-                    <label class="export-label">{{ inputData?.localeData?.voucher_type }}:</label>
+                <div class="clear-both toggle-gap mb-3" *ngIf="exportForm.get('showTax')?.value">
+                    <label class="export-label">{{ inputData?.localeData?.show_tax_bifurcation }}:</label>
                     <label class="radio-inline p-0">
-                        <mat-slide-toggle color="primary" formControlName="showVoucherType">
+                        <mat-slide-toggle color="primary" formControlName="haveToShowTaxBifurcation">
                             <span class="pull-left">
                                 {{
-                                    exportForm.get('showVoucherType')?.value
+                                    exportForm.get('haveToShowTaxBifurcation')?.value
                                         ? inputData?.commonLocaleData?.app_yes
                                         : inputData?.commonLocaleData?.app_no
                                 }}

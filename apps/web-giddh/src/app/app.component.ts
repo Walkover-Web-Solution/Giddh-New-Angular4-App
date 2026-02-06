@@ -9,6 +9,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit,
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
+import { UiSettingsService } from './services/ui-settings.service';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -80,12 +81,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private loginActions: LoginActions,
         private invoiceActions: InvoiceActions,
         private warehouseActions: WarehouseActions,
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        private uiSettingsService: UiSettingsService
     ) {
         this.isProdMode = environment.production;
         this.isElectron = Configuration.isElectron;
 
-        // Bind the method for proper event listener cleanup
+        this.initializeUiSettings();
+
         this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
 
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
@@ -117,7 +120,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                if (environment.production && !Configuration.isElectron && !isLocalHost) {
+                // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
+                const isGiddhDomain = href.includes('books.giddh.com') || href.includes('books.giddh.com/') || href.includes('books.giddh.com/login');
+
+                if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
+                    // Hard redirect for books.giddh.com or test.giddh.com domains
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -129,6 +136,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
                     window.location.href = target;
                 } else {
+                    // Soft redirect for other domains or local development
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -536,6 +544,23 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         this._cdr.detectChanges();
+    }
+
+    /**
+     * Initializes UI settings and verifies cache integrity
+     *
+     * @private
+     * @memberof AppComponent
+     */
+    private initializeUiSettings(): void {
+        try {
+            const removedCount = this.uiSettingsService.verifyAndCleanCache();
+            if (removedCount > 0) {
+                console.log(`UI Settings: Cleaned ${removedCount} expired cache entries`);
+            }
+        } catch (error) {
+            console.error('Error initializing UI settings:', error);
+        }
     }
 
     /**
