@@ -15,7 +15,7 @@
                             [placeholder]="localeData()?.start_on"
                             (dateSelected)="onStartDateChange($event)"
                             [appearance]="'outline'"
-                            [minDate]="minStartDate"
+                            [minDate]="todayDate"
                             formControlName="startDate"
                         ></giddh-datepicker>
                         <mat-form-field appearance="outline" class="full-width">
@@ -116,6 +116,7 @@
                                 </mat-radio-button>
                                 <giddh-datepicker
                                     appEnterNext
+                                    [minDate]="todayDate"
                                     name="endDate"
                                     [label]="localeData()?.ends_on"
                                     [placeholder]="localeData()?.ends_on"
@@ -164,7 +165,7 @@
                         [placeholder]="localeData()?.start_on"
                         (dateSelected)="onStartDateChange($event)"
                         [appearance]="'outline'"
-                        [minDate]="minStartDate"
+                        [minDate]="todayDate"
                         formControlName="startDate"
                     ></giddh-datepicker>
                     <mat-form-field appearance="outline" class="full-width">
@@ -265,6 +266,7 @@
                             </mat-radio-button>
                             <giddh-datepicker
                                 appEnterNext
+                                [minDate]="todayDate"
                                 name="endDate"
                                 [label]="localeData()?.ends_on"
                                 [placeholder]="localeData()?.ends_on"

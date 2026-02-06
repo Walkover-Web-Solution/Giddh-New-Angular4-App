@@ -91,7 +91,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
        DATE CONSTRAINT
     ======================= */
     /** Minimum allowed start date (today at 00:00:00) */
-    public minStartDate: Date = new Date();
+    public todayDate: Date = new Date();
     /** Title displayed in dialog mode */
     public readonly dialogTitle = 'Recurring Voucher';
 
@@ -103,7 +103,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         @Optional() private dialogRef: MatDialogRef<AsideRecurrenceVoucherCreateComponent>,
         @Optional() @Inject(MAT_DIALOG_DATA) public data: any
     ) {
-        this.minStartDate.setHours(0, 0, 0, 0);
+        this.todayDate.setHours(0, 0, 0, 0);
         this.isDialogMode = !!dialogRef;
     }
 
