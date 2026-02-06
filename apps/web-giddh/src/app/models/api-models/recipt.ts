@@ -23,6 +23,8 @@ export class ReceiptVoucherDetailsRequest {
     public invoiceNumber?: string;
     public voucherType: string;
     public uniqueName?: string;
+    public recurringVoucherUniqueName?: string;
+    public isRecurringVoucher?: boolean;
 }
 
 export interface ReceiptAccount {
@@ -202,9 +204,11 @@ export class VoucherRequest {
     public number: string;
     public type: string;
     public uniqueName: string;
-    constructor(voucherNumber: string, type: string, uniqueName?: string) {
+    public recurringVoucherUniqueName?: string;
+    constructor(voucherNumber: string, type: string, uniqueName?: string, recurringVoucherUniqueName?: string) {
         this.number = voucherNumber ?? '';
         this.type = type ?? '';
         this.uniqueName = uniqueName;
+        this.recurringVoucherUniqueName = recurringVoucherUniqueName ?? '';
     }
 }
