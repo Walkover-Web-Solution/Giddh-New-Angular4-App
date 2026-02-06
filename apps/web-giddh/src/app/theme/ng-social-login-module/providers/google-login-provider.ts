@@ -19,20 +19,13 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
     public initialize(): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
-            console.log('Loading Google Identity Services...');
             this.loadScript(this.loginProviderObj, () => {
-                console.log('Google Identity Services loaded');
                 try {
-                    console.log('Initializing Google Identity with Client ID:', this.clientId);
-                    console.log('Current origin:', window.location.origin);
-
                     // Initialize Google Identity Services
                     if (typeof google !== 'undefined' && google.accounts) {
-                        console.log('Using Google Identity Services (GSI)');
                         this.isInitialize = true;
                         resolve(null); // GSI doesn't need pre-authentication
                     } else {
-                        console.log('Falling back to gapi.auth2...');
                         // Fallback to gapi.auth2
                         gapi.load('auth2', () => {
                             try {
@@ -46,7 +39,6 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                                 }
 
                                 this.auth2.then(() => {
-                                    console.log('Google OAuth initialized successfully');
                                     this.isInitialize = true;
                                     if (this.auth2.isSignedIn.get()) {
                                         resolve(this.drawUser());
@@ -85,11 +77,9 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
     public signIn(): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
-            console.log('Starting Google sign-in...');
             try {
                 // Try Google Identity Services first
                 if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
-                    console.log('Using Google Identity Services for sign-in');
                     const client = google.accounts.oauth2.initTokenClient({
                         client_id: this.clientId,
                         scope: 'email profile',
@@ -99,7 +89,6 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                                 reject(new Error(`Google authentication failed: ${response.error}`));
                                 return;
                             }
-                            console.log('GSI sign-in successful:', response);
                             // For GSI, we need to get user info separately
                             this.getUserInfoFromToken(response.access_token).then(resolve).catch(reject);
                         }
@@ -108,12 +97,10 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                     client.requestAccessToken();
 
                 } else if (this.auth2) {
-                    console.log('Using gapi.auth2 for sign-in');
 
                     this.auth2.signIn({
                         prompt: 'select_account'
                     }).then((googleUser: any) => {
-                        console.log('Google sign-in successful:', googleUser);
                         resolve(this.drawUser());
                     }).catch((error: any) => {
                         console.error('Google OAuth Error:', error);
