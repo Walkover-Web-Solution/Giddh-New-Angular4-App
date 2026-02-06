@@ -22,6 +22,12 @@
                         }}
                     </span>
                 </div>
+                <div class="mb-3">
+                    <label>{{ localeData?.show_account_unique_name }}</label>
+                    <span>
+                        {{ profileData?.showAccountUniqueName ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                    </span>
+                </div>
             </div>
             <!-- branch profile element end -->
         </div>
@@ -127,6 +133,18 @@
                         </mat-radio-button>
                     </mat-radio-group>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
+            <div class="form-group d-flex align-items-center justify-content-between">
+                <label class="mb-0">{{ localeData?.show_account_unique_name }}</label>
+                <mat-slide-toggle
+                    color="primary"
+                    [checked]="profileData?.showAccountUniqueName"
+                    (change)="toggleShowAccountUniqueName($event.checked)"
+                ></mat-slide-toggle>
             </div>
         </div>
     </div>

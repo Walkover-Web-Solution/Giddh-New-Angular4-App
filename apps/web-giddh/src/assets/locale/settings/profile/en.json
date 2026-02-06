@@ -95,5 +95,6 @@
     "default_address": "Default Address",
     "module_file_format": "This [module_name] module will be used to export the file name like [file_format]",
     "export_setting_description": "Set the format for exported file names. You can include variables such as the date, account name, entry number, or use custom text",
-    "default_file_format": "Walkover_123_14-08-2025"
+    "default_file_format": "Walkover_123_14-08-2025",
+    "show_account_unique_name": "Display Account Unique Name during Entry/voucher creation"
 }

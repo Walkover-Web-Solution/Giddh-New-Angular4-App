@@ -10,6 +10,7 @@ import {
     OnInit,
     Output,
     Renderer2,
+    signal,
     SimpleChanges,
     TemplateRef,
     ViewChild,
@@ -34,6 +35,7 @@ import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
 import { GeneralService } from '../../../services/general.service';
+import { UiSettingsService } from '../../../services/ui-settings.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
@@ -81,7 +83,7 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
     templateUrl: './update-ledger-entry-panel.component.html',
     styleUrls: ['./update-ledger-entry-panel.component.scss'],
     providers: [SalesPersonComponentStore],
-    standalone:false
+    standalone: false
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
@@ -316,7 +318,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Discount dialog ref */
     public discountDialogRef: MatDialogRef<any>;
     /** List of discounts */
-    public discountsList: any[] = [];
+    public discountsList = signal<any[]>([]);
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Create tax dialog ref  */
@@ -345,6 +347,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAdjustmentInfoOpen: boolean = false;
     /** True if last adjustment info is open */
     public isLastAdjustmentInfoOpen: boolean = false;
+    /** Tracks if account unique name should be shown in dropdowns */
+    public showAccountUniqueName: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -353,6 +357,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private companyActions: CompanyActions,
         private ledgerService: LedgerService,
         private generalService: GeneralService,
+        private uiSettingsService: UiSettingsService,
         private ledgerAction: LedgerActions,
         private loaderService: LoaderService,
         private settingsTagService: SettingsTagService,
@@ -395,6 +400,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
@@ -861,6 +867,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public saveLedgerTransaction() {
+        this.openAndCloseDiscountDropdown(false);
+        this.openAndCloseTaxDropdown(false);
         // due to date picker of Tx entry date format need to change
         if (this.vm.selectedLedger.entryDate) {
             let entryDate = (typeof this.vm.selectedLedger.entryDate === "object") ? dayjs(this.vm.selectedLedger.entryDate) : dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT);
@@ -1327,21 +1335,29 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    public hideDiscountTax(): void {
+    /**
+    * Open and close discount dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public openAndCloseDiscountDropdown(isOpen: boolean = false): void {
         if (this.discountComponent) {
-            this.discountComponent.closeDiscountMenu();
+            this.discountComponent.toggleDiscountMenu(!isOpen);
         }
     }
 
-    public hideDiscount(): void {
-        if (this.discountComponent) {
-            this.discountComponent.closeDiscountMenu();
-        }
-    }
-
-    public hideTax(): void {
+    /**
+    * Open and close tax dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public openAndCloseTaxDropdown(open: boolean = false): void {
         if (this.commonTaxControll) {
-            this.commonTaxControll?.toggleTaxMenu();
+            this.commonTaxControll.toggleTaxMenu(open);
         }
     }
 
@@ -2774,12 +2790,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.discountDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getAllDiscounts(() => {
-                    setTimeout(() => {
-                        this.discountComponent?.toggleDiscountMenu(true);
-                    }, 100);
+                    this.openAndCloseDiscountDropdown(true);
                 });
             } else {
-                this.discountComponent?.toggleDiscountMenu(true);
+                this.openAndCloseDiscountDropdown(true);
             }
             this.discountDialogRef = undefined;
         });
@@ -2795,8 +2809,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private getAllDiscounts(callback?: () => void): void {
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountsList = response?.body;
-                this.changeDetectorRef.detectChanges();
+                this.discountsList.set(response?.body);
             }
             if (callback) {
                 callback();
@@ -2822,7 +2835,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public closeTaxModal(): void {
         this.store.dispatch(this.companyActions.getTax());
         this.taxAsideMenuRef.close();
-        this.changeDetectorRef.detectChanges();
+        setTimeout(() => {
+            this.focusTaxDropdown();
+        }, 100);
+    }
+
+    /**
+     * Focus tax dropdown
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public focusTaxDropdown(): void {
+        if (this.commonTaxControll) {
+            this.commonTaxControll.focusTaxDropdown();
+        }
     }
     /**
      * Handle event for next transaction

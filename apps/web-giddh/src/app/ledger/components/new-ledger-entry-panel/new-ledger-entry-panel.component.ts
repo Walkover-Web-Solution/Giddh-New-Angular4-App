@@ -257,7 +257,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Invoice list observable */
     public invoiceList$: Observable<any[]>;
     /** List of discounts */
-    public discountsList: any[] = [];
+    public discountsList = signal<any[]>([]);
     /** Is advance receipt with tds/tcs */
     public isAdvanceReceiptWithTds: boolean = false;
     /** Enum for dropdown types - exposed to template */
@@ -484,12 +484,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @private
      * @memberof NewLedgerEntryPanelComponent
      */
-    private getAllDiscounts(): void {
+    private getAllDiscounts(callback?: () => void): void {
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountsList = response?.body;
+                this.discountsList.set(response?.body);
+            }
+            if (callback) {
+                callback();
+            } else {
                 this.preparePreAppliedDiscounts();
-                this.cdRef.detectChanges();
             }
         });
     }
@@ -853,6 +856,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        this.hideAllDropdown();
         if ((this.isRcmEntry) && !this.validateTaxes()) {
             this.showRcmEntryError = true;
             return;
@@ -1049,7 +1053,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.closeTaxDropdown();
         }
         if (exceptDropdown !== LedgerDropdownTypeEnum.DISCOUNT) {
-            this.closeDiscountDropdown();
+            this.openAndCloseDiscountDropdown(false);
         }
         if (exceptDropdown !== LedgerDropdownTypeEnum.SALES_PERSON) {
             this.closeSalesPersonDropdown();
@@ -1161,13 +1165,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
-    * Close discount dropdown
+    * Open and close discount dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
     *
     * @memberof NewLedgerEntryPanelComponent
     */
-    public closeDiscountDropdown(): void {
+    public openAndCloseDiscountDropdown(isOpen: boolean = false): void {
         if (this.discountControl) {
-            this.discountControl.closeDiscountMenu();
+            this.discountControl.toggleDiscountMenu(!isOpen);
         }
     }
 
@@ -1856,24 +1862,24 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public preparePreAppliedDiscounts(): void {
-        this.currentTxn.discounts = [];
-        const matchedUnit = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
-        if (matchedUnit?.length && !this.currentTxn?.duplicateEntry) {
-            if (!this.currentTxn.isMrpDiscountApplied) {
-                this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
-                    this.discountsList?.forEach(item => {
-                        if (variantDiscount?.discount?.uniqueName === item?.uniqueName) {
-                            this.currentTxn.discounts.push(item);
-                        }
-                        return item;
-                    });
+        if (!this.currentTxn?.duplicateEntry) {
+            this.currentTxn.discounts = [];
+        }
+        const stockDiscounts = this.currentTxn.selectedAccount?.stock?.variant?.variantDiscount?.discounts
+        if (stockDiscounts?.length && !this.currentTxn.isMrpDiscountApplied) {
+            stockDiscounts?.forEach(variantDiscount => {
+                this.discountsList()?.forEach(item => {
+                    if (variantDiscount?.discount?.uniqueName === item?.uniqueName) {
+                        this.currentTxn.discounts.push(item);
+                    }
+                    return item;
                 });
-            }
+            });
         } else {
             if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
                 this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
                 (Array.isArray(this.currentTxn?.selectedAccount.accountApplicableDiscounts) ? this.currentTxn?.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
-                    this.discountsList?.forEach(item => {
+                    this.discountsList()?.forEach(item => {
                         if (element?.uniqueName === item?.uniqueName) {
                             this.currentTxn.discounts.push(item);
                         }
@@ -1881,7 +1887,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
             } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
                 (Array.isArray(this.accountOtherApplicableDiscount) ? this.accountOtherApplicableDiscount : []).forEach(element => {
-                    this.discountsList?.forEach(item => {
+                    this.discountsList()?.forEach(item => {
                         if (element?.uniqueName === item?.uniqueName) {
                             this.currentTxn.discounts.push(item);
                         }
@@ -2186,8 +2192,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.discountDialogRef.afterClosed().subscribe(response => {
             if (response) {
-                this.getAllDiscounts();
+                this.getAllDiscounts(() => {
+                    this.openAndCloseDiscountDropdown(true);
+                });
+            } else {
+                this.openAndCloseDiscountDropdown(true);
             }
+            
             this.discountDialogRef = undefined;
         });
     }
@@ -2203,6 +2214,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
+    * Open and close tax dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public openAndCloseTaxDropdown(): void {
+        if (this.taxControl) {
+            this.taxControl.focusTaxDropdown()
+        }
+    }
+
+    /**
      * Close tax dialog
      *
      * @memberof NewLedgerEntryPanelComponent
@@ -2212,8 +2236,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.taxDialogRef?.close();
         this.cdRef.detectChanges();
         setTimeout(() => {
+            this.openAndCloseTaxDropdown();
             this.taxDialogRef = undefined;
-        }, 800);
+        }, 100);
     }
 
     /**

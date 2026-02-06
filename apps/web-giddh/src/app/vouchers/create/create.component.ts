@@ -9,8 +9,10 @@ import {
     NgZone,
     OnDestroy,
     OnInit,
+    QueryList,
     TemplateRef,
     ViewChild,
+    ViewChildren,
     signal,
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -34,6 +36,7 @@ import {
 } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
+import { UiSettingsService } from "../../services/ui-settings.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
 import { CommonActions } from "../../actions/common.actions";
 import { CompanyActions } from "../../actions/company.actions";
@@ -169,10 +172,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('addNewDeposit') addNewDeposit!: ElementRef<HTMLSpanElement>;
     /** Reference to the "Add new row/line" span element for focusing */
     @ViewChild('customerVendorDropdown') customerVendorDropdown!: ReactiveDropdownFieldComponent;
-    /** Reference to the tax dropdown component */
-    @ViewChild('commonTaxControll') commonTaxControll!: CommonTaxComponent;
-    /** Reference to the discount dropdown component */
-    @ViewChild('discountDropdown') discountDropdown!: CommonDiscountComponent;
+    /** Reference to all tax dropdown components (one per entry row) */
+    @ViewChildren('commonTaxControll') commonTaxControll!: QueryList<CommonTaxComponent>;
+    /** Reference to all discount dropdown components (one per entry row) */
+    @ViewChildren('discountDropdown') discountDropdowns!: QueryList<CommonDiscountComponent>;
     /** Reference to the recurrence component */
     @ViewChild('asideRecurrenceVoucher') asideRecurrenceVoucher: any;
     /**  This will use for dayjs */
@@ -267,7 +270,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Reference to the current RCM checkbox element for focus management */
     private currentRcmCheckboxElement: any;
     /** Holds company discounts */
-    public discountsList: any[] = [];
+    public discountsList = signal<any[]>([]);
     /** Holds company warehouses */
     public warehouses: Array<any>;
     /** Holds company branches */
@@ -461,6 +464,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public showLoader = signal<boolean>(false);
     /** Holds true if table entry has at least single stock is selected  */
     public hasStock: boolean = false;
+    /** Tracks if account unique name should be shown in dropdowns */
+    public showAccountUniqueName: boolean = false;
     /** This will hold if voucher date is manually changed */
     public isVoucherDateChanged: boolean = false;
     /** True if voucher number field is enabled */
@@ -598,7 +603,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @type {boolean}
      * @memberof VoucherCreateComponent
      */
-    public showTaxColumn = computed(() => {
+    public get showTaxColumn() {
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             return false;
         }
@@ -634,7 +639,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             return true;
         }
-    });
+    };
 
     /**
      * True if it's UK company
@@ -704,6 +709,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private aiOcrStore: AiOcrStore,
         private store: Store<AppState>,
         private generalService: GeneralService,
+        private uiSettingsService: UiSettingsService,
         private vouchersUtilityService: VouchersUtilityService,
         private commonActions: CommonActions,
         private companyActions: CompanyActions,
@@ -744,6 +750,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ngOnInit(): void {
+        this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
+        
         // Set up global interaction tracking
         this.setupGlobalInteractionTracking();
 
@@ -1736,7 +1744,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         });
                     } else {
                         this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                            this.discountsList?.forEach((discount) => {
+                            this.discountsList()?.forEach((discount) => {
                                 if (discount?.uniqueName === selectedDiscount?.uniqueName) {
                                     discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                                 }
@@ -2052,13 +2060,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @private
      * @memberof VoucherCreateComponent
      */
-    private getDiscountsList(): void {
+    private getDiscountsList(callback?: () => void): void {
         this.componentStore.getDiscountsList();
 
         this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe((discountsList) => {
             if (discountsList) {
-                this.discountsList = discountsList;
+                this.discountsList.set(discountsList);
             }
+            callback?.();
         });
     }
 
@@ -3511,8 +3520,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                     uniqueName: item.additional?.stock?.uniqueName,
                                     quantity: item.quantity,
                                     rate: {
-                                        rateForAccount: item.rate,
-                                        amountForAccount: item.rate,
+                                        rateForAccount: Number(item.additional.stock?.rate) || 0,
+                                        amountForAccount: Number(item.additional.stock?.rate) || 0,
                                     },
                                     stockUnit: {
                                         code: item.additional?.stock?.variant?.unitRates?.length
@@ -3552,7 +3561,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     discountsFormArray.clear();
                     if (item.additional?.stock?.variant?.variantDiscount?.discounts) {
                         item.additional?.stock?.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
-                            this.discountsList?.forEach((discount) => {
+                            this.discountsList()?.forEach((discount) => {
                                 if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
                                     discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                                 }
@@ -3560,7 +3569,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         });
                     } else {
                         this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                            this.discountsList?.forEach((discount) => {
+                            this.discountsList()?.forEach((discount) => {
                                 if (discount?.uniqueName === selectedDiscount?.uniqueName) {
                                     discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                                 }
@@ -3943,6 +3952,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+    * Open and close tax dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public openAndCloseTaxDropdown(): void {
+        if (this.activeEntryIndex !== null && this.commonTaxControll) {
+            const taxComponent = this.commonTaxControll.toArray()[this.activeEntryIndex];
+            if (taxComponent) {
+                taxComponent.focusTaxDropdown();
+            }
+        }
+    }
+
+    /**
      * Shows create new tax dialog
      *
      * @memberof VoucherCreateComponent
@@ -3957,12 +3982,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             },
             autoFocus: false
         });
+    }
 
-        this.taxAsideMenuRef.afterClosed().subscribe(() => {
-            if (this.lastInteraction === InteractionType.KEYBOARD && this.commonTaxControll) {
-                this.commonTaxControll.focusTaxDropdown();
+    /**
+    * Open and close discount dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public openAndCloseDiscountDropdown(isOpen: boolean = false): void {
+        if (this.activeEntryIndex !== null && this.discountDropdowns) {
+            const discountComponent = this.discountDropdowns.toArray()[this.activeEntryIndex];
+            if (discountComponent) {
+                discountComponent.toggleDiscountMenu(!isOpen);
             }
-        });
+        }
     }
 
     /**
@@ -3976,10 +4011,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.discountDialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
             if (response) {
-                this.componentStore.getDiscountsList();
-            }
-            if (this.lastInteraction === InteractionType.KEYBOARD && this.discountDropdown) {
-                this.discountDropdown.focusDiscountDropdown();
+                this.getDiscountsList(() => {
+                    this.openAndCloseDiscountDropdown(true);
+                });
+            } else {
+                this.openAndCloseDiscountDropdown(true);
             }
         });
     }
@@ -4790,26 +4826,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public updateTotalTax(totalTax: any, entryFormGroup: FormGroup): void {
         entryFormGroup.get("totalTax").patchValue(totalTax);
-        if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
-            let amount: number = 0;
-            if (entryFormGroup.get("otherTax.type").value === this.otherTaxTypeEnum.TDS) {
-                amount =
-                    (entryFormGroup.get("total.amountForAccount").value ?? 0) +
-                    (entryFormGroup.get("otherTax.amount").value ?? 0) -
-                    totalTax;
-            } else if (entryFormGroup.get("otherTax.type").value === this.otherTaxTypeEnum.TCS) {
-                amount =
-                    (entryFormGroup.get("total.amountForAccount").value ?? 0) -
-                    (entryFormGroup.get("otherTax.amount").value ?? 0) -
-                    totalTax;
-            } else {
-                amount = (entryFormGroup.get("total.amountForAccount").value ?? 0) - totalTax;
-            }
-            entryFormGroup.get("transactions.0.amount.amountForAccount").patchValue(amount);
-
-            this.calculateTotalTax();
-            this.calculateVoucherTotals();
-        }
     }
 
     /**
@@ -6578,7 +6594,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             } else {
                 this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                    this.discountsList?.forEach((discount) => {
+                    this.discountsList()?.forEach((discount) => {
                         if (discount?.uniqueName === selectedDiscount?.uniqueName) {
                             discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                         }
@@ -6880,6 +6896,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public closeTaxModal(): void {
         this.store.dispatch(this.companyActions.getTax());
         this.taxAsideMenuRef.close();
+        setTimeout(() => {
+            this.openAndCloseTaxDropdown();
+        }, 100);
     }
 
     /**
@@ -6965,23 +6984,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .get("amount.amountForAccount")
                     .patchValue(rate * transactionFormGroup.get("stock.quantity")?.value);
             }
-
-            if (response.stock.variant?.variantDiscount?.discounts) {
-                response.stock.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
-                    this.discountsList?.forEach((discount) => {
-                        if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
-                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-                        }
+            if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
+                if (response.stock.variant?.variantDiscount?.discounts) {
+                    response.stock.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
+                        this.discountsList()?.forEach((discount) => {
+                            if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
+                                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                            }
+                        });
                     });
-                });
-            } else {
-                this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                    this.discountsList?.forEach((discount) => {
-                        if (discount?.uniqueName === selectedDiscount?.uniqueName) {
-                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-                        }
+                } else {
+                    this.account.applicableDiscounts?.forEach((selectedDiscount) => {
+                        this.discountsList()?.forEach((discount) => {
+                            if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                            }
+                        });
                     });
-                });
+                }
             }
 
             this.stockUnits[entryIndex] = observableOf(response.stock.variant.unitRates);
@@ -6992,14 +7012,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get("hsnNumber")?.patchValue(response.hsnNumber);
             entryFormGroup.get("sacNumber")?.patchValue(response.sacNumber);
             entryFormGroup.get("showCodeType")?.patchValue(response.hsnNumber ? "hsn" : "sac");
-
-            this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                this.discountsList?.forEach((discount) => {
-                    if (discount?.uniqueName === selectedDiscount?.uniqueName) {
-                        discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-                    }
+            if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
+                this.account.applicableDiscounts?.forEach((selectedDiscount) => {
+                    this.discountsList()?.forEach((discount) => {
+                        if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                        }
+                    });
                 });
-            });
+            }
         }
 
         const taxes = this.generalService.fetchTaxesOnPriority(
@@ -7304,6 +7325,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 entryTotal = Number(entryFormGroup.get("total.amountForAccount")?.value);
             }
 
+            if (this.invoiceForm?.get('isAdvanceReceipt')?.value) {
+                if (entryFormGroup.get("otherTax.type").value === this.otherTaxTypeEnum.TDS) {
+                    entryTotal =
+                        (entryFormGroup.get("total.amountForAccount").value ?? 0) -
+                        (entryFormGroup.get("otherTax.amount").value ?? 0)
+                } else if (entryFormGroup.get("otherTax.type").value === this.otherTaxTypeEnum.TCS) {
+                    entryTotal =
+                        (entryFormGroup.get("total.amountForAccount").value ?? 0) +
+                        (entryFormGroup.get("otherTax.amount").value ?? 0)
+                }
+            }
+
             const amount = this.vouchersUtilityService.calculateInclusiveRate(
                 entryFormGroup?.value,
                 this.companyTaxes,
@@ -7314,7 +7347,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup
                 .get("stock.rate.rateForAccount")
                 ?.patchValue(amount / transactionFormGroup.get("stock.quantity")?.value);
-        }, 10);
+        }, 100);
     }
 
     /**
@@ -7385,7 +7418,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.componentStore.getVoucherDetails({
                     isCopyVoucher: false,
                     accountUniqueName: params?.accountUniqueName,
-                    payload: { recurringVoucherUniqueName: params?.uniqueName, voucherType: this.voucherType },
+                    payload: { recurringVoucherUniqueName: params?.uniqueName, voucherType: this.voucherType, isRecurringVoucher: true },
                 });
             }
         }

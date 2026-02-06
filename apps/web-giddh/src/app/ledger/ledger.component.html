@@ -2813,20 +2813,33 @@
                     [sidebarListView]="ledgerView == ledgerViewEnum.StatementView"
                 >
                     <ng-template #optionTemplate let-option="option">
-                        <ng-container *ngIf="!option.additional?.stock">
+                        @if (!option.additional?.stock) {
                             <a href="javascript:;" class="d-block py-1 theme-foreground-color">
                                 <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
+                                @if (showAccountUniqueName) {
+                                    <div class="font-15 text-light">
+                                        {{ option.additional?.uniqueName }}
+                                    </div>
+                                }
                             </a>
-                        </ng-container>
-                        <ng-container *ngIf="option.additional?.stock">
-                            <a href="javascript:;" class="py-1 theme-foreground-color">
+                        }
+                        @if (option.additional?.stock) {
+                            <a href="javascript:;" class="d-block py-1 theme-foreground-color">
                                 <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
+                                @if (showAccountUniqueName) {
+                                    <div class="font-15 text-light">
+                                        {{ option.additional?.uniqueName }}
+                                    </div>
+                                    <div class="text-light font-12">
+                                        {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.name }}
+                                    </div>
+                                }
                             </a>
-                        </ng-container>
+                        }
                     </ng-template>
                 </reactive-dropdown-field>
             </ng-template>

@@ -47,7 +47,8 @@ export interface OrganizationProfile {
     manageInventory?: boolean;
     portalDomain?: string;
     withPay?: any;
-    ledgerView?: LedgerViewEnum.TView
+    ledgerView?: LedgerViewEnum;
+    showAccountUniqueName?: boolean;
 }
 
 /** Form type in setting aside component */
