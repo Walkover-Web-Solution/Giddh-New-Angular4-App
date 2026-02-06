@@ -45,7 +45,7 @@ export class ChildGroup {
     public forwardedBalance: ForwardedBalance;
     public creditTotal: number;
     public debitTotal: number;
-    public closingBalance: ProfitLossDateRangeResponse<ClosingBalance>;
+    public closingBalance: ProfitLossDateRangeResponse<ClosingBalance> | ClosingBalance;
     public childGroups: ChildGroup[];
     public accounts: Account[];
     public uniqueName: string;

@@ -1,0 +1,154 @@
+<div (clickOutside)="onClickOutside()">
+    <!-- Mat Form Field Input (default) -->
+    <input-field
+        *ngIf="showMatFormField()"
+        cdkMonitorElementFocus
+        (keydown.enter)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
+        (keydown.space)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
+        [id]="id()"
+        [autocomplete]="'off'"
+        [prefix]="prefixInput()"
+        [suffix]="suffixInput()"
+        [mask]="maskInput()"
+        [useMask]="true"
+        [type]="'text'"
+        [cssClass]="'cursor-pointer text-right pr-1'"
+        [name]="'discountTotal'"
+        [(ngModel)]="$any(discountTotal)"
+        [readonly]="true"
+        [label]="commonLocaleData()?.app_discount"
+        [matMenuTriggerFor]="!disabled() ? discountMenu : null"
+        #menuTrigger="matMenuTrigger"
+        (menuOpened)="handleMenuOpened()"
+        (menuClosed)="handleMenuClosed($event); emitCloseDiscountDropdown()"
+        (onFocus)="hideOtherPopups.emit(true)"
+    ></input-field>
+
+    <!-- Plain Input (for voucher/invoice forms) -->
+    <input
+        *ngIf="!showMatFormField()"
+        type="text"
+        class="form-control text-right total-discount-amount"
+        tabindex="0"
+        [id]="id()"
+        cdkMonitorElementFocus
+        (keydown.enter)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
+        (keydown.space)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
+        [matMenuTriggerFor]="!disabled() ? discountMenu : null"
+        #menuTrigger="matMenuTrigger"
+        [placeholder]="prefixInput() + '0' + suffixInput()"
+        [(ngModel)]="$any(discountTotal)"
+        [mask]="maskInput()"
+        [prefix]="prefixInput()"
+        [suffix]="suffixInput()"
+        [readonly]="true"
+        (menuOpened)="handleMenuOpened()"
+        (menuClosed)="handleMenuClosed($event); emitCloseDiscountDropdown()"
+        (focus)="hideOtherPopups.emit(true)"
+        #discountInput
+    />
+
+    <mat-menu #discountMenu="matMenu" [hasBackdrop]="hasBackdrop()">
+        <ng-template matMenuContent>
+            <div
+                (click)="$event.stopPropagation()"
+                class="p-2"
+                (keydown.tab)="$event.stopPropagation()"
+                (keydown.shift.tab)="$event.stopPropagation()"
+                cdkTrapFocus
+                cdkTrapFocusAutoCapture
+            >
+                <div class="value-wrapper">
+                    <div class="mb-2">
+                        <input-field
+                            [type]="'number'"
+                            [id]="'common-discount-percent'"
+                            [name]="'discountPercentageModal'"
+                            [label]="commonLocaleData()?.app_percent"
+                            [disabled]="!discountFromPer()"
+                            [allowDecimalDigitsOnly]="true"
+                            [customDecimalPlaces]="2"
+                            [min]="0"
+                            [cssClass]="'text-right'"
+                            [matSuffix]="'%'"
+                            [(ngModel)]="$any(discountPercentageModal)"
+                            [readonly]="discountFixedValueModal() > 0"
+                            (input)="discountFromInput('PERCENTAGE', $event.target?.value)"
+                            (keydown.enter)="$event.preventDefault(); closeDiscountMenu()"
+                        ></input-field>
+                    </div>
+                    <div class="mb-2">
+                        <input-field
+                            [type]="'text'"
+                            [id]="'common-discount-value'"
+                            [name]="'discountFixedValueModal'"
+                            [label]="commonLocaleData()?.app_value"
+                            [disabled]="!discountFromVal()"
+                            [allowDecimalDigitsOnly]="true"
+                            [prefix]="prefixInput()"
+                            [suffix]="suffixInput()"
+                            [mask]="maskInput()"
+                            [useMask]="true"
+                            [min]="0"
+                            [cssClass]="'text-right'"
+                            [(ngModel)]="$any(discountFixedValueModal)"
+                            [readonly]="discountPercentageModal() > 0"
+                            (input)="discountFromInput('FIX_AMOUNT', $event.target?.value)"
+                            (keydown.enter)="$event.preventDefault(); closeDiscountMenu()"
+                        ></input-field>
+                    </div>
+                </div>
+                <div class="d-flex flex-col justify-content-center" *ngIf="discountAccounts()?.length > 1">
+                    <span class="or-line">{{ commonLocaleData()?.app_and }}</span>
+                </div>
+                <div *ngIf="discountAccounts()?.length > 1">
+                    <ul class="discount-list">
+                        <ng-container *ngFor="let discount of discountAccounts(); trackBy: trackByFn; let idx = index">
+                            <li *ngIf="discount?.uniqueName" class="discount-item cursor-pointer">
+                                <mat-checkbox
+                                    color="primary"
+                                    [id]="'common-discount-checkbox-' + idx"
+                                    name="tax_{{ idx }}"
+                                    [checked]="discount.isActive"
+                                    [(ngModel)]="discount.isActive"
+                                    (change)="change(); focusNextCheckbox($event.target, idx)"
+                                    (click)="$event.stopPropagation()"
+                                    #discountRef
+                                    [attr.data-index]="idx"
+                                    tabindex="0"
+                                    cdkMonitorElementFocus
+                                    (keydown.enter)="$event.preventDefault(); discountRef.toggle(); change(); closeDiscountMenu()"
+                                    (keydown.space)="$event.preventDefault(); discountRef.toggle(); change(); closeDiscountMenu()"
+                                >
+                                    <span class="font-size-15">
+                                        {{ discount?.name }}
+                                        <span>
+                                            ({{
+                                                discount?.discountType === 'PERCENTAGE'
+                                                    ? discount?.discountValue + '%'
+                                                    : prefixInput() + discount?.discountValue + suffixInput()
+                                            }})
+                                        </span>
+                                    </span>
+                                </mat-checkbox>
+                            </li>
+                        </ng-container>
+                    </ul>
+                </div>
+                <div *ngIf="showCreateNew()" class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+                    <span
+                        class="text-primary"
+                        tabindex="0"
+                        role="button"
+                        cdkMonitorElementFocus
+                        [attr.aria-label]="commonLocaleData()?.app_create_new"
+                        (keydown.enter)="$event.preventDefault(); createNew()"
+                        (keydown.space)="$event.preventDefault(); createNew()"
+                    >
+                        {{ commonLocaleData()?.app_create_new }}
+                    </span>
+                </div>
+            </div>
+        </ng-template>
+    </mat-menu>
+</div>

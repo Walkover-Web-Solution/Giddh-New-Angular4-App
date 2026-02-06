@@ -535,7 +535,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     private getRedirectUrl(baseHref: string) {
-        return `${baseHref}pages/invoice/preview/settings`;
+        const baseUrl = baseHref.endsWith('/') ? baseHref : baseHref + '/';
+        return `${baseUrl}pages/invoice/preview/settings`;
     }
 
     /**
