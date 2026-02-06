@@ -257,7 +257,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Invoice list observable */
     public invoiceList$: Observable<any[]>;
     /** List of discounts */
-    public discountsList: any[] = [];
+    public discountsList = signal<any[]>([]);
     /** Is advance receipt with tds/tcs */
     public isAdvanceReceiptWithTds: boolean = false;
     /** Enum for dropdown types - exposed to template */
@@ -487,8 +487,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private getAllDiscounts(callback?: () => void): void {
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountsList = response?.body;
-                this.cdRef.detectChanges();
+                this.discountsList.set(response?.body);
             }
             if (callback) {
                 callback();
@@ -857,6 +856,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        this.hideAllDropdown();
         if ((this.isRcmEntry) && !this.validateTaxes()) {
             this.showRcmEntryError = true;
             return;
@@ -1868,7 +1868,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         const stockDiscounts = this.currentTxn.selectedAccount?.stock?.variant?.variantDiscount?.discounts
         if (stockDiscounts?.length && !this.currentTxn.isMrpDiscountApplied) {
             stockDiscounts?.forEach(variantDiscount => {
-                this.discountsList?.forEach(item => {
+                this.discountsList()?.forEach(item => {
                     if (variantDiscount?.discount?.uniqueName === item?.uniqueName) {
                         this.currentTxn.discounts.push(item);
                     }
@@ -1879,7 +1879,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
                 this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
                 (Array.isArray(this.currentTxn?.selectedAccount.accountApplicableDiscounts) ? this.currentTxn?.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
-                    this.discountsList?.forEach(item => {
+                    this.discountsList()?.forEach(item => {
                         if (element?.uniqueName === item?.uniqueName) {
                             this.currentTxn.discounts.push(item);
                         }
@@ -1887,7 +1887,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
             } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
                 (Array.isArray(this.accountOtherApplicableDiscount) ? this.accountOtherApplicableDiscount : []).forEach(element => {
-                    this.discountsList?.forEach(item => {
+                    this.discountsList()?.forEach(item => {
                         if (element?.uniqueName === item?.uniqueName) {
                             this.currentTxn.discounts.push(item);
                         }
@@ -2220,9 +2220,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     *
     * @memberof NewLedgerEntryPanelComponent
     */
-    public openAndCloseTaxDropdown(isOpen: boolean = false): void {
+    public openAndCloseTaxDropdown(): void {
         if (this.taxControl) {
-            this.taxControl?.toggleTaxMenu(isOpen);
+            this.taxControl.focusTaxDropdown()
         }
     }
 
@@ -2236,7 +2236,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.taxDialogRef?.close();
         this.cdRef.detectChanges();
         setTimeout(() => {
-            this.openAndCloseTaxDropdown(true);
+            this.openAndCloseTaxDropdown();
             this.taxDialogRef = undefined;
         }, 100);
     }

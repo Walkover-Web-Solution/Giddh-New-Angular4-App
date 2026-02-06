@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, input, output, effect, computed, signal, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, input, output, effect, computed, signal, ChangeDetectorRef, Output } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
@@ -15,6 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DecimalDigitsModule } from '../helpers/directives/decimalDigits/decimalDigits.module';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { EnterNextDirective } from '../helpers/directives/enter-next/enter-next.directive';
 
 /**
  * Common Discount Component (Angular 21)
@@ -53,7 +54,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
         FormFieldsModule,
         DecimalDigitsModule,
         A11yModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        EnterNextDirective
     ]
 })
 export class CommonDiscountComponent implements OnInit, OnDestroy {
@@ -157,6 +159,9 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     /** Currency symbol (Angular 21 signal input) */
     public currency = input<string>('');
     
+    /** ID for the component */
+    public id = input<string>('common-discount');
+    
     /** Show mat form field wrapper (Angular 21 signal input) - false shows plain input */
     public showMatFormField = input<boolean>(true);
     
@@ -165,6 +170,8 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     
     /** Emits to hide other popups (Angular 21 signal output) */
     public hideOtherPopups = output<boolean>();
+
+    public closeDiscountDropdown = output<any>();
     
     /** Emits selected discounts (Angular 21 signal output) */
     public selectedDiscountsEvent = output<any[]>();
@@ -193,7 +200,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
             const discountsListChanged = !isEqual(discountData.discountsList, this.previousDiscountData.discountsList);
             const amountForDiscountChanged = discountData.amountForDiscount !== this.previousDiscountData.amountForDiscount;
 
-            
+
             if (discountAccountsChanged || amountForDiscountChanged || discountsListChanged) {
                 this.previousDiscountData.discountAccountsDetails = discountData.discountAccountsDetails;
                 this.previousDiscountData.amountForDiscount = discountData.amountForDiscount;
@@ -209,29 +216,6 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
                 this.change();
             }
         }, { allowSignalWrites: true });
-    }
-
-    /**
-     * Handles focus on last div for keyboard navigation
-     * Moves focus to next focusable element in ledger panel
-     * 
-     * @param el - Event element
-     * @returns false to prevent default behavior
-     */
-    public onFocusLastDiv(el): boolean {
-        el.stopPropagation();
-        el.preventDefault();
-        let focussableElements = '.ledger-panel input[type=text]:not([disabled]),.ledger-panel [tabindex]:not([disabled]):not([tabindex="-1"])';
-        let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
-            (element) => {
-                return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
-            });
-        let index = focussable?.indexOf(document.activeElement);
-        if (index > -1) {
-            let nextElement = focussable[index + 1] || focussable[0];
-            nextElement.focus();
-        }
-        return false;
     }
 
     /**
@@ -252,15 +236,16 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         const discountsList = this.discountsList();
         
         // Initialize from discountAccountsDetails input if provided
-        const accounts: LedgerDiscountClass[] = discountDetails?.length > 0 
-            ? discountDetails.map(discount => ({
+        let accounts: LedgerDiscountClass[] = discountDetails.map(discount => ({
                 ...discount,
                 amount: discount.amount ?? discount.discountValue,
                 isActive: discount.isActive ?? true,
                 discountUniqueName: discount.discountUniqueName ?? discount.uniqueName,
                 uniqueName: discount.discountUniqueName ?? discount.uniqueName,
-            }))
-            : [this.createDefaultManualDiscount()];
+            }));
+        this.discountAccounts.set(accounts);
+        this.discountAccounts.set(this.getActiveDiscounts());
+        accounts = this.discountAccounts();
         // Use Set for O(1) lookup instead of array.some() for better performance
         const existingUniqueNames = new Set(
             accounts.map(acc => acc.discountUniqueName ?? acc.uniqueName).filter(Boolean)
@@ -340,7 +325,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      */
     public getActiveDiscounts(): LedgerDiscountClass[] {
         const accounts = this.discountAccounts();
-        if (!accounts?.length) return [];
+        if (!accounts?.length) return [this.defaultDiscount()];
         
         const result: LedgerDiscountClass[] = [];
         accounts.forEach((discount, index) => {
@@ -419,7 +404,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      * Emits create new discount event
      */
     protected createNew(): void {
-        this.discountMenu.closeMenu();
+        this.closeDiscountMenu();
         this.createNewDiscount.emit(false);
     }
     
@@ -499,16 +484,18 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Focuses the discount dropdown input element
-     * Used for keyboard navigation from parent components
+     * Emits close discount dropdown event with the trigger element
+     *
+     * @memberof DiscountDropdownComponent
      */
-    public focusDiscountDropdown(): void {
+    protected emitCloseDiscountDropdown(): void {
+        // Always emit close event for focus management
         setTimeout(() => {
-            const inputElement = document.getElementById('common-discount') as HTMLElement;
-            if (inputElement) {
-                inputElement.focus();
+            const element = document.getElementById(this.id());
+            if (element) {
+                this.closeDiscountDropdown.emit({ target: element } as any);
             }
-        }, 100);
+        }, 50);
     }
 
     /**
