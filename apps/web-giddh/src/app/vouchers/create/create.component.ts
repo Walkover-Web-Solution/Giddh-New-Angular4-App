@@ -130,6 +130,7 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
 import { Location } from '@angular/common';
+import { RecurringRepeatOption } from "../../models/enums/recurring-voucher.enum";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -776,6 +777,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .subscribe((response) => {
                 if (response) {
                     let params = response[0];
+                    if (params?.uniqueName && params.action !== "copy") {
+                        this.isUpdateMode = true;
+                    }
                     this.isRecurringVoucher = response;
                     if (params?.voucherType) {
                         this.isMainVoucher = true;
@@ -808,7 +812,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.resetVoucherForm(!params?.uniqueName, true);
                         this.invoiceForm.get('isRecurringVoucher')?.patchValue(this.queryParams.isRecurringVoucher ? true : false);
                         // Initialize recurring voucher form after resetVoucherForm creates the form structure
-                        if (this.queryParams.isRecurringVoucher) {
+                        if (this.queryParams.isRecurringVoucher && !this.isUpdateMode) {
                             this.isRecurringVoucherSelected();
                         }
 
@@ -851,7 +855,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             if (params?.action === "copy") {
                                 this.isCopyMode = true;
                             } else {
-                                this.isUpdateMode = true;
                                 this.invoiceForm.get("uniqueName").patchValue(params?.uniqueName);
                             }
                             this.useDefaultAccountDetails = false;
@@ -859,7 +862,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.getUpdateVoucherText();
                         } else {
                             this.depositAccountName = "";
-                        }
+                    }
 
                         if (params?.accountUniqueName === "cash") {
                             this.invoiceType.isCashInvoice = true;
@@ -1397,6 +1400,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                             const startDate = this.convertToDateObject(recurrencePreviewRequest?.startDate || this.invoiceForm.get('recurrencePreviewRequest.startDate')?.value);
                             this.invoiceForm.get('recurrencePreviewRequest.startDate')?.patchValue(startDate);
+                            this.invoiceForm.get('recurrencePreviewRequest.repeatOption')?.patchValue(voucherDetails?.recurrencePreviewRequest?.repeatOption || this.invoiceForm.get('recurrencePreviewRequest.repeatOption')?.value);
 
                             this.invoiceForm.get('recurrencePreviewRequest.frequency.unit')?.patchValue(recurrencePreviewRequest?.frequency?.unit || this.invoiceForm.get('recurrencePreviewRequest.frequency.unit')?.value);
                             this.invoiceForm.get('recurrencePreviewRequest.frequency.interval')?.patchValue(recurrencePreviewRequest?.frequency?.interval || this.invoiceForm.get('recurrencePreviewRequest.frequency.interval')?.value);
@@ -3036,7 +3040,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public fillBillingShippingAddress(entityType: string, addressType: string, address: any, index: number): void {
         this.invoiceForm.controls[entityType]?.get(addressType).get("index").patchValue(index);
-        this.invoiceForm.controls[entityType]?.get(addressType).get("name").patchValue(address.name);
+        this.invoiceForm.controls[entityType]?.get(addressType).get("name").patchValue(address?.name);
         this.invoiceForm.controls[entityType]
             ?.get(addressType)
             .get("address")
@@ -3146,7 +3150,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 end: this.formBuilder.group({
                     type: ['ON_DATE'],
                     endDate: [null],
-                })
+                }),
+                repeatOption: RecurringRepeatOption.MONTHLY_DATE
             }),
             einvoiceGenerated: [false],
             linkedPo: [null], //temp
@@ -3159,15 +3164,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPersonName: [''],
             salesPersonUniqueName: ['']
         });
-
-        // Add listener to isRecurringVoucher checkbox
-        this.invoiceForm.get('isRecurringVoucher')?.valueChanges
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((isChecked) => {
-                if (isChecked) {
-                    this.isRecurringVoucherSelected();
-                }
-            });
     }
 
     /**
@@ -3199,7 +3195,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             end: {
                 type: 'ON_DATE',
                 endDate: today
-            }
+            },
+            repeatOption: RecurringRepeatOption.MONTHLY_DATE
         });
     }
 
@@ -7408,7 +7405,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 },
             });
         } else {
-            if (!this.isRecurringVoucher[1]?.isRecurringVoucher) {
+            if (!this.isRecurringVoucher?.[1]?.isRecurringVoucher) {
                 this.componentStore.getVoucherDetails({
                     isCopyVoucher: false,
                     accountUniqueName: params?.accountUniqueName,
