@@ -3,10 +3,9 @@
     <input-field
         *ngIf="showMatFormField()"
         cdkMonitorElementFocus
-        appEnterNext
         (keydown.enter)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
         (keydown.space)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
-        id="common-discount"
+        [id]="id()"
         [autocomplete]="'off'"
         [prefix]="prefixInput()"
         [suffix]="suffixInput()"
@@ -31,8 +30,7 @@
         type="text"
         class="form-control text-right total-discount-amount"
         tabindex="0"
-        id="common-discount"
-        appEnterNext
+        [id]="id()"
         cdkMonitorElementFocus
         (keydown.enter)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
         (keydown.space)="$event.preventDefault(); !disabled() && toggleDiscountMenu(isMenuOpened())"
@@ -119,20 +117,8 @@
                                     [attr.data-index]="idx"
                                     tabindex="0"
                                     cdkMonitorElementFocus
-                                    (keydown.enter)="
-                                        $event.preventDefault();
-                                        discountRef.toggle();
-                                        change();
-                                        focusNextCheckbox($event.target, idx);
-                                        closeDiscountMenu()
-                                    "
-                                    (keydown.space)="
-                                        $event.preventDefault();
-                                        discountRef.toggle();
-                                        change();
-                                        focusNextCheckbox($event.target, idx);
-                                        closeDiscountMenu()
-                                    "
+                                    (keydown.enter)="$event.preventDefault(); discountRef.toggle(); change(); closeDiscountMenu()"
+                                    (keydown.space)="$event.preventDefault(); discountRef.toggle(); change(); closeDiscountMenu()"
                                 >
                                     <span class="font-size-15">
                                         {{ discount?.name }}

@@ -159,6 +159,9 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     /** Currency symbol (Angular 21 signal input) */
     public currency = input<string>('');
     
+    /** ID for the component */
+    public id = input<string>('common-discount');
+    
     /** Show mat form field wrapper (Angular 21 signal input) - false shows plain input */
     public showMatFormField = input<boolean>(true);
     
@@ -197,7 +200,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
             const discountsListChanged = !isEqual(discountData.discountsList, this.previousDiscountData.discountsList);
             const amountForDiscountChanged = discountData.amountForDiscount !== this.previousDiscountData.amountForDiscount;
 
-            
+
             if (discountAccountsChanged || amountForDiscountChanged || discountsListChanged) {
                 this.previousDiscountData.discountAccountsDetails = discountData.discountAccountsDetails;
                 this.previousDiscountData.amountForDiscount = discountData.amountForDiscount;
@@ -233,15 +236,16 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
         const discountsList = this.discountsList();
         
         // Initialize from discountAccountsDetails input if provided
-        const accounts: LedgerDiscountClass[] = discountDetails?.length > 0 
-            ? discountDetails.map(discount => ({
+        let accounts: LedgerDiscountClass[] = discountDetails.map(discount => ({
                 ...discount,
                 amount: discount.amount ?? discount.discountValue,
                 isActive: discount.isActive ?? true,
                 discountUniqueName: discount.discountUniqueName ?? discount.uniqueName,
                 uniqueName: discount.discountUniqueName ?? discount.uniqueName,
-            }))
-            : [this.createDefaultManualDiscount()];
+            }));
+        this.discountAccounts.set(accounts);
+        this.discountAccounts.set(this.getActiveDiscounts());
+        accounts = this.discountAccounts();
         // Use Set for O(1) lookup instead of array.some() for better performance
         const existingUniqueNames = new Set(
             accounts.map(acc => acc.discountUniqueName ?? acc.uniqueName).filter(Boolean)
@@ -321,7 +325,7 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
      */
     public getActiveDiscounts(): LedgerDiscountClass[] {
         const accounts = this.discountAccounts();
-        if (!accounts?.length) return [];
+        if (!accounts?.length) return [this.defaultDiscount()];
         
         const result: LedgerDiscountClass[] = [];
         accounts.forEach((discount, index) => {
@@ -487,21 +491,11 @@ export class CommonDiscountComponent implements OnInit, OnDestroy {
     protected emitCloseDiscountDropdown(): void {
         // Always emit close event for focus management
         setTimeout(() => {
-            this.closeDiscountDropdown.emit(document.getElementById('common-discount'));
-        }, 50);
-    }
-
-    /**
-     * Focuses the discount dropdown input element
-     * Used for keyboard navigation from parent components
-     */
-    public focusDiscountDropdown(): void {
-        setTimeout(() => {
-            const inputElement = document.getElementById('common-discount') as HTMLElement;
-            if (inputElement) {
-                inputElement.focus();
+            const element = document.getElementById(this.id());
+            if (element) {
+                this.closeDiscountDropdown.emit({ target: element } as any);
             }
-        }, 100);
+        }, 50);
     }
 
     /**
