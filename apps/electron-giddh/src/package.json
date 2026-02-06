@@ -1,7 +1,7 @@
 {
   "name": "Giddh",
   "productName": "Giddh",
-  "version": "10.0.1",
+  "version": "10.0.3",
   "description": "Accounting Software from Giddh.",
   "main": "index.js",
   "author": "Walkover Technologies<info@walkover.in>",
