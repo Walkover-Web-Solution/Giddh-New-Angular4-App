@@ -251,9 +251,9 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit {
         this.activeForm.valueChanges.pipe(
             debounceTime(700),
             takeUntil(this.destroyed$)
-        ).subscribe(() => {
+        ).subscribe((form) => {
             // Check if preview is enabled before calling
-            if (!this.isPreviewPaused()) {
+            if (form?.startDate && !this.isPreviewPaused()) {
                 this.refreshPreview();
             }
         });
