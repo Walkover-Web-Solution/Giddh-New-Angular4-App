@@ -37,7 +37,8 @@ export enum VoucherTypeEnum {
     purchase_order = 'purchase_order',
     estimates = 'estimates',
     proformas = 'proformas',
-    bill ='bill'
+    bill = 'bill',
+    recurring = 'recurring'
 };
 
 export const SearchType = {

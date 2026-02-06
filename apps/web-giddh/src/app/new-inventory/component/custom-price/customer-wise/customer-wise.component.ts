@@ -537,7 +537,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         if (!isTemp) {
             this.inventoryService.deleteDiscountRecord(model).pipe(take(1)).subscribe((response) => {
                 if (response && response?.status === "success") {
-                    this.showSaveDiscardButton = false;
                     this.pagination.stock.page = this.generalService.adjustPageIndex(this.pagination.stock.totalItems, this.pagination.stock.page, this.pagination.stock.count);
                     if (type === 'variant') {
                         const stock = discounts.at(stockFormArrayIndex).get('variants') as UntypedFormArray;

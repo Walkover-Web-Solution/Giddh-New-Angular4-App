@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VatService } from '../../services/vat.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
@@ -21,7 +21,7 @@ export class ViewReturnComponent implements OnInit {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if API Call is in progress */
-    public isLoading: boolean;
+    public isLoading = signal<boolean>(false);
     /** Holds table data for VAT Report */
     public vatReport: any[] = [];
     /** Hold table displayed columns */
@@ -70,9 +70,9 @@ export class ViewReturnComponent implements OnInit {
             to: this.inputData.end,
         };
 
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.vatService.viewVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            this.isLoading = false;
+            this.isLoading.set(false);
             if (res?.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;
             }

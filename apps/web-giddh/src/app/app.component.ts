@@ -120,7 +120,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                if (environment.production && !Configuration.isElectron && !isLocalHost) {
+                // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
+                const isGiddhDomain = href.includes('books.giddh.com') || href.includes('books.giddh.com/') || href.includes('books.giddh.com/login');
+
+                if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
+                    // Hard redirect for books.giddh.com or test.giddh.com domains
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -132,6 +136,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
                     window.location.href = target;
                 } else {
+                    // Soft redirect for other domains or local development
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {

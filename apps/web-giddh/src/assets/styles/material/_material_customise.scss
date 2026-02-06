@@ -122,4 +122,7 @@
             }
         }
     }
+    .cdk-overlay-backdrop:has(+ .cdk-overlay-connected-position-bounding-box .no-backdrop-select) {
+        display: none !important;
+    }
 }
