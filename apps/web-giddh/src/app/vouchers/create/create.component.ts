@@ -267,7 +267,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Reference to the current RCM checkbox element for focus management */
     private currentRcmCheckboxElement: any;
     /** Holds company discounts */
-    public discountsList: any[] = [];
+    public discountsList = signal<any[]>([]);
     /** Holds company warehouses */
     public warehouses: Array<any>;
     /** Holds company branches */
@@ -1665,7 +1665,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         });
                     } else {
                         this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                            this.discountsList?.forEach((discount) => {
+                            this.discountsList()?.forEach((discount) => {
                                 if (discount?.uniqueName === selectedDiscount?.uniqueName) {
                                     discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                                 }
@@ -1986,7 +1986,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe((discountsList) => {
             if (discountsList) {
-                this.discountsList = discountsList;
+                this.discountsList.set(discountsList);
             }
             callback?.();
         });
@@ -3412,7 +3412,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     discountsFormArray.clear();
                     if (item.additional?.stock?.variant?.variantDiscount?.discounts) {
                         item.additional?.stock?.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
-                            this.discountsList?.forEach((discount) => {
+                            this.discountsList()?.forEach((discount) => {
                                 if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
                                     discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                                 }
@@ -3420,7 +3420,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         });
                     } else {
                         this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                            this.discountsList?.forEach((discount) => {
+                            this.discountsList()?.forEach((discount) => {
                                 if (discount?.uniqueName === selectedDiscount?.uniqueName) {
                                     discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                                 }
@@ -6416,7 +6416,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             } else {
                 this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                    this.discountsList?.forEach((discount) => {
+                    this.discountsList()?.forEach((discount) => {
                         if (discount?.uniqueName === selectedDiscount?.uniqueName) {
                             discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                         }
@@ -6809,7 +6809,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
                 if (response.stock.variant?.variantDiscount?.discounts) {
                     response.stock.variant?.variantDiscount?.discounts?.forEach((selectedDiscount) => {
-                        this.discountsList?.forEach((discount) => {
+                        this.discountsList()?.forEach((discount) => {
                             if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
                                 discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                             }
@@ -6817,7 +6817,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     });
                 } else {
                     this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                        this.discountsList?.forEach((discount) => {
+                        this.discountsList()?.forEach((discount) => {
                             if (discount?.uniqueName === selectedDiscount?.uniqueName) {
                                 discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                             }
@@ -6836,7 +6836,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get("showCodeType")?.patchValue(response.hsnNumber ? "hsn" : "sac");
             if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
                 this.account.applicableDiscounts?.forEach((selectedDiscount) => {
-                    this.discountsList?.forEach((discount) => {
+                    this.discountsList()?.forEach((discount) => {
                         if (discount?.uniqueName === selectedDiscount?.uniqueName) {
                             discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                         }

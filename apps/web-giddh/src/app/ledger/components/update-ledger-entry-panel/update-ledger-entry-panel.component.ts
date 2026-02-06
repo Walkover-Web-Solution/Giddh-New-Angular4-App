@@ -10,6 +10,7 @@ import {
     OnInit,
     Output,
     Renderer2,
+    signal,
     SimpleChanges,
     TemplateRef,
     ViewChild,
@@ -317,7 +318,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Discount dialog ref */
     public discountDialogRef: MatDialogRef<any>;
     /** List of discounts */
-    public discountsList: any[] = [];
+    public discountsList = signal<any[]>([]);
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Create tax dialog ref  */
@@ -866,6 +867,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public saveLedgerTransaction() {
+        this.openAndCloseDiscountDropdown(false);
+        this.openAndCloseTaxDropdown(false);
         // due to date picker of Tx entry date format need to change
         if (this.vm.selectedLedger.entryDate) {
             let entryDate = (typeof this.vm.selectedLedger.entryDate === "object") ? dayjs(this.vm.selectedLedger.entryDate) : dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT);
@@ -1352,9 +1355,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     *
     * @memberof NewLedgerEntryPanelComponent
     */
-    public openAndCloseTaxDropdown(): void {
+    public openAndCloseTaxDropdown(open: boolean = false): void {
         if (this.commonTaxControll) {
-            this.commonTaxControll.focusTaxDropdown();
+            this.commonTaxControll.toggleTaxMenu(open);
         }
     }
 
@@ -2806,8 +2809,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private getAllDiscounts(callback?: () => void): void {
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountsList = response?.body;
-                this.changeDetectorRef.detectChanges();
+                this.discountsList.set(response?.body);
             }
             if (callback) {
                 callback();
@@ -2834,8 +2836,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.store.dispatch(this.companyActions.getTax());
         this.taxAsideMenuRef.close();
         setTimeout(() => {
-            this.openAndCloseTaxDropdown();
+            this.focusTaxDropdown();
         }, 100);
+    }
+
+    /**
+     * Focus tax dropdown
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public focusTaxDropdown(): void {
+        if (this.commonTaxControll) {
+            this.commonTaxControll.focusTaxDropdown();
+        }
     }
     /**
      * Handle event for next transaction

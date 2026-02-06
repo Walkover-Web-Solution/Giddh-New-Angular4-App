@@ -1476,7 +1476,7 @@
                                             [commonLocaleData]="commonLocaleData"
                                             [giddhBalanceDecimalPlaces]="vm.giddhBalanceDecimalPlaces"
                                             (discountTotalUpdated)="vm.handleDiscountEntry($event); vm.generateGrandTotal()"
-                                            [discountsList]="discountsList"
+                                            [discountsList]="discountsList()"
                                             [readonly]="isEinvoiceGenerated"
                                             (createNewDiscount)="showCreateDiscountDialog()"
                                             [showCreateNew]="true"
@@ -1536,7 +1536,7 @@
                                                       ? localeData?.tax_rcm
                                                       : ''
                                             "
-                                            [mask]="vm.inputMaskFormat"
+                                            [mask]="vm.inputMaskFormat || ''"
                                             [isMandatory]="isRcmEntry"
                                             [showError]="showTaxError"
                                             [date]="vm.selectedLedger.entryDate"
