@@ -19,6 +19,8 @@ export class ReportsModel {
     public interval?: string;
     public selectedMonth?: string;
     public salesPerson?: {name: string, uniqueName: string};
+    public stateCode?: string;
+    public countryCode?: string;
 }
 /*
 * Report Response Model to be bind with get sales report API
@@ -52,6 +54,8 @@ export class ReportsDetailedRequestFilter {
     public branchUniqueName?: string;
     public salesPersonUniqueName?: string;
     public accountUniqueNames?: string[];
+    public stateCode?: string;
+    public countryCode: string;
 }
 export class Balance {
     public amount: number;
@@ -148,6 +152,8 @@ export class PurchaseReportsModel {
     public interval?: string;
     public selectedMonth?: string;
     public salesPerson?: {name: string, uniqueName: string};
+    public stateCode?: string;
+    public countryCode?: string;
 }
 
 export interface PurchaseRegisteDetailedResponse {
