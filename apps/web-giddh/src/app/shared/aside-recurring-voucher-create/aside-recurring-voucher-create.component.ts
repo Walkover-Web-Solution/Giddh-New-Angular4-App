@@ -292,6 +292,9 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
                         this.showDayThe.set(true);
                     }
                 }
+                
+                this.cdr.detectChanges();
+                
                 this.initialized.set(true);
                 if (this.initialized()) {
                     this.refreshPreview();
@@ -337,18 +340,26 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
      * Sets the repeatOption value after mat-select is fully rendered
      */
     public ngAfterViewInit(): void {
-        if (this.pendingRepeatOption && this.activeForm) {
-            this.activeForm.get('repeatOption')?.patchValue(this.pendingRepeatOption, { emitEvent: false, onlySelf: false });
-            this.pendingRepeatOption = null;
-        }
-        if (this.pendingFrequencyUnit && this.activeForm) {
-            const frequencyGroup = this.activeForm.get('frequency') as FormGroup;
-            if (frequencyGroup) {
-                frequencyGroup.patchValue({ unit: this.pendingFrequencyUnit }, { emitEvent: false, onlySelf: false });
+        setTimeout(() => {
+            if (this.pendingRepeatOption && this.activeForm) {
+                this.activeForm.get('repeatOption')?.setValue(this.pendingRepeatOption, { emitEvent: false });
+                this.pendingRepeatOption = null;
             }
-            this.pendingFrequencyUnit = null;
-        }
-        this.cdr.detectChanges();
+            if (this.pendingFrequencyUnit && this.activeForm) {
+                const frequencyGroup = this.activeForm.get('frequency') as FormGroup;
+                if (frequencyGroup) {
+                    const unitControl = frequencyGroup.get('unit');
+                    if (unitControl) {
+                        const currentValue = unitControl.value;
+                        unitControl.setValue(null, { emitEvent: false });
+                        unitControl.setValue(this.pendingFrequencyUnit || currentValue, { emitEvent: false });
+                        unitControl.updateValueAndValidity({ emitEvent: false });
+                    }
+                }
+                this.pendingFrequencyUnit = null;
+            }
+            this.cdr.detectChanges();
+        }, 200);
     }
 
     /**
