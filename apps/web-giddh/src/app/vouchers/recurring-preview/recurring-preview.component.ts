@@ -212,7 +212,7 @@ export class RecurringPreviewComponent implements OnDestroy {
                 this.isSearching.set(false);
                 this.selectedRecurringVoucher.set(null);
                 this.queryParams.set(queryParams);
-                this.activeAccountUniqueName.set(queryParams?.accountUniqueName);
+                this.activeAccountUniqueName.set(queryParams?.recurringVoucherUniqueName);
 
                 const filters = {
                     page: Number(queryParams.page),
@@ -262,7 +262,7 @@ export class RecurringPreviewComponent implements OnDestroy {
             if (response && response.body) {
                 this.handleGetAllRecurringResponse(response.body);
                 if (response.body.items?.length > 0) {
-                    const recurringVoucherUniqueName = response.body.items[0].recurringVoucherUniqueName;
+                    const recurringVoucherUniqueName = this.activeAccountUniqueName() || response.body.items[0].recurringVoucherUniqueName;
                     this.recurrenceFormService.getRuleDetails(
                         recurringVoucherUniqueName,
                         this.currentBranch()?.uniqueName
@@ -314,7 +314,7 @@ export class RecurringPreviewComponent implements OnDestroy {
             this.getAllApiCallCount.set(this.getAllApiCallCount() + 1);
             if (this.recurringVoucherList()?.length) {
                 const exists = this.recurringVoucherList().some(voucher => voucher.recurringVoucherUniqueName === this.activeAccountUniqueName());
-                if (exists && (this.advanceFilters().q)) {
+                if (exists) {
                     this.selectedRecurringVoucher.set(this.recurringVoucherList()?.find(voucher => voucher?.recurringVoucherUniqueName === this.activeAccountUniqueName()));
                 } else {
                     this.selectedRecurringVoucher.set(this.recurringVoucherList()[0]);

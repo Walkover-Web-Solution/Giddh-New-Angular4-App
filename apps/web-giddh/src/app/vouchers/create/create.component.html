@@ -1320,7 +1320,7 @@
                                 >
                                     <!-- Recurring Voucher Checkbox -->
                                     <div class="col-12">
-                                        <ng-container *ngIf="!queryParams?.isRecurringVoucher">
+                                        @if (!queryParams?.isRecurringVoucher && !isUpdateMode) {
                                             <mat-checkbox
                                                 #recurringCheckbox
                                                 cdkMonitorElementFocus
@@ -1333,7 +1333,7 @@
                                             >
                                                 <label for="recurring-voucher" [innerHTML]="localeData?.transaction_recurring"></label>
                                             </mat-checkbox>
-                                        </ng-container>
+                                        }
                                         <aside-recurrence-voucher-create
                                             #asideRecurrenceVoucher
                                             *ngIf="
