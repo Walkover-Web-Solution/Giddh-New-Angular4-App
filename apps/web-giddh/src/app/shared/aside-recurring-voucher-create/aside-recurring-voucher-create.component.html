@@ -301,19 +301,17 @@
                         </div>
                     </mat-radio-group>
                 </div>
-                <mat-divider></mat-divider>
-                @if (previewDates.length > 0) {
-                    <div class="preview-container">
-                        @for (previewDate of previewDates; track previewDate) {
-                            <div class="preview-row mt-2">
-                                <span class="font-size-16">{{ previewDate }}</span>
-                            </div>
-                        }
-                    </div>
-                }
-                @if (previewDates.length === 0) {
-                    <div class="no-dates">{{ localeData()?.no_preview_dates_available }}</div>
-                }
+                <mat-divider class="mb-3"></mat-divider>
+                <mat-chip-set [aria-label]="previewDate">
+                    @for (previewDate of previewDates; track previewDate) {
+                        <mat-chip>{{ previewDate }}</mat-chip>
+                    } @empty {
+                        <mat-chip>
+                            <span class="text-light">{{ localeData()?.no_preview_dates_available }}</span>
+                        </mat-chip>
+                    }
+                </mat-chip-set>
+                <mat-divider class="mt-3"></mat-divider>
             </div>
         }
     }

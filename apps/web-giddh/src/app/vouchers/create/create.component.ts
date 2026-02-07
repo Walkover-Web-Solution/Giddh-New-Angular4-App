@@ -130,7 +130,7 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
 import { Location } from '@angular/common';
-import { RecurringRepeatOption } from "../../models/enums/recurring-voucher.enum";
+import { RecurringEndType, RecurringRepeatOption, RecurringFrequencyUnit, RecurringRepeatType, RecurringMonthlyMode } from "../../models/enums/recurring-voucher.enum";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -3134,21 +3134,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 startDate: [null, Validators.required],
 
                 frequency: this.formBuilder.group({
-                    unit: ['MONTH', Validators.required],
+                    unit: [RecurringFrequencyUnit.MONTH, Validators.required],
                     interval: [1, [Validators.required, Validators.min(1)]]
                 }),
 
                 repeatOn: this.formBuilder.group({
-                    type: ['DAY_OF_MONTH'],
+                    type: [RecurringRepeatType.DAY_OF_MONTH],
                     weekdays: this.formBuilder.array([]),   // ✅ ALWAYS exists
                     dayOfMonth: [null],
                     nth: [null],
                     weekday: [null],
-                    monthlyMode: ['DAY']
+                    monthlyMode: [RecurringMonthlyMode.DAY]
                 }),
 
                 end: this.formBuilder.group({
-                    type: ['ON_DATE'],
+                    type: [RecurringEndType.NEVER],
                     endDate: [null],
                 }),
                 repeatOption: RecurringRepeatOption.MONTHLY_DATE
@@ -3182,18 +3182,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         recurrenceForm.patchValue({
             startDate: today,
             frequency: {
-                unit: 'MONTH',
+                unit: RecurringFrequencyUnit.MONTH,
                 interval: 1
             },
             repeatOn: {
-                type: 'DAY_OF_MONTH',
+                type: RecurringRepeatType.DAY_OF_MONTH,
                 dayOfMonth: today.getDate(),
                 nth: nth,
                 weekday: weekday,
-                monthlyMode: 'DAY'
+                monthlyMode: RecurringMonthlyMode.DAY
             },
             end: {
-                type: 'ON_DATE',
+                type: RecurringEndType.NEVER,
                 endDate: today
             },
             repeatOption: RecurringRepeatOption.MONTHLY_DATE
@@ -5120,19 +5120,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private redirectToVoucherPreview(): void {
-        const queryParams = {
+        const uniqueName = this.invoiceForm.get("uniqueName").value;
+        const queryParams: any = {
             page: this.queryParams?.page ?? 1,
             count: this.queryParams?.count ?? "",
             from: this.queryParams?.from ?? "",
-            to: this.queryParams?.to ?? "",
+            to: this.queryParams?.to ?? ""
         };
 
         if (this.queryParams?.search?.length) {
-            queryParams["search"] = this.queryParams?.search;
+            queryParams.search = this.queryParams.search;
         }
+
+        const recurringPath = this.isRecurringVoucher ? "/recurring" : "";
+        if (this.isRecurringVoucher) {
+            queryParams.recurringVoucherUniqueName = uniqueName;
+        }
+
         this.router.navigate(
-            [`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get("uniqueName").value}`],
-            { queryParams: queryParams }
+            [`/pages/vouchers/view/${this.urlVoucherType}${recurringPath}/${uniqueName}`],
+            { queryParams }
         );
     }
 

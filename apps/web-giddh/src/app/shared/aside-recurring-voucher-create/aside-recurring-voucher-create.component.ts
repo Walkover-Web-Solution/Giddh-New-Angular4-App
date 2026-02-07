@@ -9,25 +9,53 @@ import {
     Optional,
     ChangeDetectorRef
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
     FormBuilder,
     FormGroup,
     FormArray,
     FormControl,
-    Validators
+    Validators,
+    ReactiveFormsModule
 } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatChipsModule } from '@angular/material/chips';
 import { RecurrenceFormService } from '../../services/aside-recurring-voucher.service';
 import { debounceTime, ReplaySubject, takeUntil, Subject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 import { RecurringFrequencyUnit, RecurringMonthlyMode, RecurringEndType, RecurringRepeatOption, RecurringWeekday, RecurringRepeatType } from '../../models/enums/recurring-voucher.enum';
+import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
+import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepicker.module';
+import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
+import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module';
 
 @Component({
     selector: 'aside-recurrence-voucher-create',
     templateUrl: './aside-recurring-voucher-create.component.html',
     styleUrls: ['./aside-recurring-voucher-create.component.scss'],
-    standalone: false
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatDividerModule,
+        TranslateDirectiveModule,
+        GiddhDatepickerModule,
+        FormFieldsModule,
+        KeyboardNavigationModule,
+        MatChipsModule
+    ]
 })
 /**
  * Component for creating and managing recurring voucher configurations.
@@ -390,7 +418,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
                 weekdays: this.fb.array([])
             }),
             end: this.fb.group({
-                type: [RecurringEndType.ON_DATE],
+                type: [RecurringEndType.NEVER],
                 endDate: [today]
             })
         });
@@ -468,7 +496,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
             }),
 
             end: this.fb.group({
-                type: [RecurringEndType.ON_DATE],
+                type: [RecurringEndType.NEVER],
                 endDate: [today],
             })
         });
@@ -610,7 +638,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
         }
 
         this.activeForm.get('end')?.patchValue({
-            type: RecurringEndType.ON_DATE,
+            type: RecurringEndType.NEVER,
             endDate: date
         }, { emitEvent: false });
     }
@@ -690,7 +718,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
         }
 
         this.activeForm.get('end')?.patchValue({
-            type: RecurringEndType.ON_DATE,
+            type: RecurringEndType.NEVER,
             endDate: startDate
         });
     }
