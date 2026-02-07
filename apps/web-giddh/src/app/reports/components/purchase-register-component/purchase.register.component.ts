@@ -663,8 +663,8 @@ constructor(
             this.groupByOptions = [
                 { label: this.commonLocaleData?.app_duration?.duration, value: GroupBy.Duration },
                 { label: this.commonLocaleData?.app_sales_person, value: GroupBy.SalesPerson },
-                { label: this.localeData?.state || 'State', value: GroupBy.State },
-                { label: this.localeData?.country || 'Country', value: GroupBy.Country }
+                { label: this.commonLocaleData?.app_state, value: GroupBy.State },
+                { label: this.commonLocaleData?.app_country , value: GroupBy.Country }
             ];
         }
     }
@@ -742,34 +742,30 @@ constructor(
 
         if (from != null && to != null) {
             const groupByValue = this.reportForm?.get('groupBy')?.value;
-            let extraParams: any = {};
-
-            if (groupByValue === GroupBy.Duration) {
-                extraParams = {
+            /** Map of query parameters for each group by type */
+            const groupByQueryParams: Record<GroupBy, any> = {
+                [GroupBy.Duration]: {
                     interval: item.interval,
                     selectedMonth: item.selectedMonth
-                };
-            } else if (groupByValue === GroupBy.SalesPerson) {
-                extraParams = {
+                },
+                [GroupBy.SalesPerson]: {
                     salesPersonUniqueName: item.salesPerson?.uniqueName
-                };
-            } else if (groupByValue === GroupBy.State) {
-                extraParams = {
+                },
+                [GroupBy.State]: {
                     stateCode: item.stateCode,
                     countryCode: this.reportForm?.get('countryCode')?.value
-                };
-            } else if (groupByValue === GroupBy.Country) {
-                extraParams = {
+                },
+                [GroupBy.Country]: {
                     countryCode: item.countryCode
-                };
-            }
+                }
+            };
 
             this.router.navigate(['pages', 'reports', 'purchase-detailed-expand'], { 
                 queryParams: { 
-                    from: from, 
-                    to: to, 
+                    from, 
+                    to, 
                     branchUniqueName: this.currentBranch.uniqueName,
-                    ...extraParams
+                    ...(groupByQueryParams[groupByValue] || {})
                 } 
             });
         }
@@ -868,18 +864,26 @@ constructor(
             return;
         }
         this.savePreferences();
-        let requestObject = this.reportForm.value;
-        if (this.reportForm?.get('groupBy')?.value === GroupBy.Duration) {
-            this.removeKeysFromObject(requestObject, ["salesPersonUniqueNames", "countryCode","countryCodes", "stateCodes" ]);
-        } else if (this.reportForm?.get('groupBy')?.value === GroupBy.SalesPerson) {
-            this.removeKeysFromObject(requestObject, ["interval", "countryCode","countryCodes", "stateCodes" ]);
-        } else if (this.reportForm?.get('groupBy')?.value === GroupBy.Country) {
-            this.removeKeysFromObject(requestObject, ["salesPersonUniqueNames", "interval", "countryCode", "stateCodes"]);
-        } else if (this.reportForm?.get('groupBy')?.value === GroupBy.State) {
-            requestObject.country = {
-                code: requestObject.countryCode
-            }
-            this.removeKeysFromObject(requestObject, ["salesPersonUniqueNames", "interval", "countryCodes", "countryCode"]);
+        const requestObject = this.reportForm.value;
+        const groupByValue = this.reportForm?.get('groupBy')?.value;
+
+        /** Map of keys to remove for each group by type */
+        const keysToRemoveByGroupType: Record<GroupBy, string[]> = {
+            [GroupBy.Duration]: ["salesPersonUniqueNames", "countryCode", "countryCodes", "stateCodes"],
+            [GroupBy.SalesPerson]: ["interval", "countryCode", "countryCodes", "stateCodes"],
+            [GroupBy.Country]: ["salesPersonUniqueNames", "interval", "countryCode", "stateCodes"],
+            [GroupBy.State]: ["salesPersonUniqueNames", "interval", "countryCodes", "countryCode"]
+        };
+
+        /** Add country object for State grouping */
+        if (groupByValue === GroupBy.State) {
+            requestObject.country = { code: requestObject.countryCode };
+        }
+
+        /** Remove unnecessary keys based on group by type */
+        const keysToRemove = keysToRemoveByGroupType[groupByValue];
+        if (keysToRemove) {
+            this.removeKeysFromObject(requestObject, keysToRemove);
         }
         this.componentStore.getSalesPurchaseList({
             payload: requestObject,
@@ -946,8 +950,8 @@ constructor(
 
         this.store.pipe(
             select(state => state.general.states),
-            takeUntil(this.destroyed$),
-            filter(Boolean)
+            filter(Boolean),
+            take(1)
         ).subscribe(states => {
             if (states && (states.stateList ?? states.countyList)) {
                 this.stateList.set((states.stateList ?? states.countyList).map(state => ({

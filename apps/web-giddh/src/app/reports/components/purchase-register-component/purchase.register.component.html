@@ -154,7 +154,7 @@
                     @if (reportForm?.get('countryCode')?.value && stateList()?.length) {
                         <div class="dropdown-width">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>{{ localeData?.state || 'State' }}</mat-label>
+                                <mat-label>{{ commonLocaleData?.app_state }}</mat-label>
                                 <mat-select
                                     panelClass="py-0"
                                     name="state"
