@@ -1,0 +1,203 @@
+<div appTranslate [file]="'vouchers/preview'" (localeData)="localeData.set($event)" (commonLocaleData)="commonLocaleData.set($event)">
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+    <giddh-page-loader
+        *ngIf="!isSearching() && !isLoadMore() && (getRecurringVouchersInProgress$ | async)"
+        [cssClass]="'no-data'"
+    ></giddh-page-loader>
+    <div
+        appResizable
+        resizableTarget=".preview-list"
+        [minWidth]="300"
+        [maxWidthRatio]="0.5"
+        [defaultWidthRatio]="0.3"
+        [moduleName]="'recurring-voucher-preview'"
+        class="invoice-preview-wrapper d-flex full-viewport-height"
+        *ngIf="isSearching() || isLoadMore() || !(getRecurringVouchersInProgress$ | async)"
+    >
+        <div class="preview-list pb-3">
+            <div class="mat-grid-wrapper">
+                <div class="mat-list-wrap overflow-auto recurring-voucher-list" *ngIf="(getRecurringVouchersInProgress$ | async) === false">
+                    <mat-list>
+                        @for (item of recurringVoucherList(); track item.recurringVoucherUniqueName; let i = $index; let lastItem = $last) {
+                            <mat-list-item
+                                class="single-invoice-detail cursor-pointer"
+                                [ngClass]="{
+                                    'active': item?.recurringVoucherUniqueName === selectedRecurringVoucher()?.recurringVoucherUniqueName,
+                                    'border-bottom': !lastItem,
+                                }"
+                                (click)="setSelectedRecurringVoucher(item?.recurringVoucherUniqueName, true)"
+                            >
+                                <div class="d-flex justify-content-between align-items-center column-gap-05">
+                                    <div class="flex-grow-1 min-width-0">
+                                        <div class="text-ellipsis w-100">
+                                            <span class="font-size-16 text-primary">
+                                                {{ item?.accountName }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="theme-foreground-color">
+                                            <amount-field
+                                                [amount]="item?.amount"
+                                                [currencySymbol]="item?.currency?.symbol"
+                                                [currencyCode]="item?.currency?.code"
+                                            ></amount-field>
+                                        </span>
+                                    </div>
+                                </div>
+                            </mat-list-item>
+                        }
+                        @if (recurringVoucherList()?.length === 0) {
+                            <mat-list-item>
+                                <p class="text-center light-gray">{{ commonLocaleData()?.app_no_data_found }}</p>
+                            </mat-list-item>
+                        }
+                    </mat-list>
+                </div>
+                <giddh-page-loader
+                    *ngIf="isSearching() && !isLoadMore() && (getRecurringVouchersInProgress$ | async)"
+                    [cssClass]="'no-data'"
+                ></giddh-page-loader>
+            </div>
+        </div>
+        <div class="preview-content flex-grow-1">
+            <section class="preview-header p-3">
+                <div class="d-flex justify-content-between pt-3 align-items-center flex-wrap row-gap-2 flex-row-reverse">
+                    <div class="order-1 mr-auto">
+                        <p class="font-size-16 font-weight-semibold">{{ ruleDetails()?.accountName }}</p>
+                    </div>
+                    <div class="d-flex column-gap-1 flex-wrap row-gap-1">
+                        <div class="d-flex action-btn">
+                            <a
+                                [routerLink]="[
+                                    '/pages/vouchers/' + recurringActiveTab(),
+                                    selectedRecurringVoucher()?.accountUniqueName,
+                                    selectedRecurringVoucher()?.recurringVoucherUniqueName,
+                                    'edit',
+                                ]"
+                                [queryParams]="voucherQueryParams()"
+                                matButton="outlined"
+                                class="btn-stroked-icon"
+                                [matTooltip]="commonLocaleData()?.app_edit"
+                                [matTooltipPosition]="'above'"
+                            >
+                                <i class="icon-edit-pencil"></i>
+                            </a>
+                        </div>
+                        <button matButton="outlined" (click)="redirectToGetAllPage()">
+                            {{ commonLocaleData()?.app_back }}
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <div class="details fill-container noscroll-x mt-3">
+                <div class="details-info">
+                    <div class="toggle-header">
+                        <div class="uppercase fw-light">{{ commonLocaleData()?.app_details }}</div>
+                    </div>
+                    <div class="group">
+                        <div class="row">
+                            <label class="col-lg-6 text-muted">{{ localeData()?.profile_status }}:</label>
+                            <div class="col-lg-6">
+                                <span [ngClass]="ruleDetails()?.ruleStatus === 'ACTIVE' ? 'success' : 'danger'">
+                                    {{ ruleDetails()?.ruleStatus }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <label class="col-lg-6 text-muted">{{ commonLocaleData()?.app_start_date }}:</label>
+                            <div class="col-lg-6">{{ ruleDetails()?.startDate ? ruleDetails()?.startDate : '-' }}</div>
+                        </div>
+                        <div class="row mt-2">
+                            <label class="col-lg-6 text-muted">{{ commonLocaleData()?.app_end_date }}:</label>
+                            <div class="col-lg-6">{{ ruleDetails()?.endDate ? ruleDetails()?.endDate : '-' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="prim-info entity-details">
+                    <div class="recinv-overview-info">
+                        <div class="px-4">
+                            <ul class="list-unstyled row recurringinvoice-arap-details">
+                                <li class="col-lg-4 text-center">
+                                    <h5 class="text-muted mt-2">{{ localeData()?.invoice_amount }}</h5>
+                                    <amount-field
+                                        [amount]="ruleDetails()?.invoiceAmount"
+                                        [currencySymbol]="ruleDetails()?.currency?.symbol"
+                                        [currencyCode]="ruleDetails()?.currency?.code"
+                                    ></amount-field>
+                                </li>
+                                <li class="col-lg-4 text-center">
+                                    <h5 class="text-muted mt-2">{{ localeData()?.next_invoice_date }}</h5>
+                                    {{ ruleDetails()?.nextInvoiceDate ? ruleDetails()?.nextInvoiceDate : '-' }}
+                                </li>
+                                <li class="col-lg-4 text-center">
+                                    <h5 class="text-muted mt-2">{{ localeData()?.recurring_period }}</h5>
+                                    {{ ruleDetails()?.recurringPeriod }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="position-relative d-flex align-items-center mt-3 mb-3">
+                        <span class="visually-hidden ml-2">{{ localeData()?.child_invoices }}</span>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div class="mat-grid-wrapper">
+                        <div class="mat-list-wrap">
+                            <mat-list>
+                                @for (item of ruleDetails()?.childVouchers; track item.uniqueName; let i = $index; let lastItem = $last) {
+                                    <mat-list-item
+                                        class="single-invoice-detail cursor-pointer"
+                                        [ngClass]="{
+                                            'active': item?.uniqueName === selectedInvoice?.uniqueName,
+                                            'border-bottom': !lastItem,
+                                        }"
+                                    >
+                                        <div class="d-flex justify-content-between align-items-center column-gap-05">
+                                            <div class="flex-grow-1 min-width-0">
+                                                <div class="text-ellipsis w-100">
+                                                    <a
+                                                        [routerLink]="[
+                                                            '/pages/vouchers/view/' + recurringActiveTab(),
+                                                            item?.voucherUniqueName,
+                                                        ]"
+                                                        [queryParams]="getVoucherQueryParams(item?.voucherNumber)"
+                                                        class="font-size-16 text-primary"
+                                                    >
+                                                        {{
+                                                            item.voucherNumber ? item.voucherNumber : commonLocaleData()?.app_not_available
+                                                        }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="theme-foreground-color">
+                                                    <amount-field
+                                                        [amount]="item?.amount"
+                                                        [currencySymbol]="ruleDetails()?.currency?.symbol"
+                                                        [currencyCode]="ruleDetails()?.currency?.code"
+                                                    ></amount-field>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </mat-list-item>
+                                }
+                                @if (ruleDetails()?.childVouchers?.length === 0) {
+                                    <mat-list-item>
+                                        <p class="text-center light-gray">{{ commonLocaleData()?.app_no_data_found }}</p>
+                                    </mat-list-item>
+                                }
+                            </mat-list>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Single template for user not found -->
+<ng-template #noContactFound>
+    <div class="text-center contact-no-data-message">
+        <p>{{ localeData?.user_not_found_message }}</p>
+    </div>
+</ng-template>

@@ -463,7 +463,7 @@ export class VouchersUtilityService {
         entry?.taxes?.forEach(selectedTax => {
             companyTaxes?.forEach(tax => {
                 if (tax.uniqueName === selectedTax?.uniqueName) {
-                    taxTotal = Number(tax.taxDetail[0].taxValue);
+                    taxTotal += Number(tax.taxDetail[0].taxValue);
                 }
             });
         });

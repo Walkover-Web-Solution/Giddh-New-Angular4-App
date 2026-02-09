@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { GeneralService } from '../../services/general.service';
 import { PayPalClass, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
 import { cloneDeep, find } from '../../lodash-optimized';
@@ -18,6 +18,7 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerPortalComponentStore } from './utility/customer-portal.store';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'customer-portal',
@@ -86,7 +87,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** This will hold portal url */
-    public portalUrl: string = PORTAL_URL;
+    public portalUrl: string = '';
     /** Stores the profile data of an organization (company or profile) */
     public profileData: OrganizationProfile = {
         name: '',
@@ -180,8 +181,10 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         private clipboardService: ClipboardService,
         public dialog: MatDialog,
         private settingsProfileActions: SettingsProfileActions,
-        private componentStore: CustomerPortalComponentStore
+        private componentStore: CustomerPortalComponentStore,
+        @Inject(ServiceConfig) private serviceConfig,
     ) {
+        this.portalUrl = this.serviceConfig.PORTAL_URL;
         this.initProfileForm();
         this.initPayuForm();
         // For GET

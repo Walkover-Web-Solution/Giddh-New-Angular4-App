@@ -52,20 +52,33 @@
                     [defaultValue]="baseAccountName"
                 >
                     <ng-template #optionTemplate let-option="option">
-                        <ng-container *ngIf="!option.additional?.stock">
-                            <a href="javascript:;" class="d-block py-2" (click)="changeBaseAccount(option)">
+                        @if (!option.additional?.stock) {
+                            <a href="javascript:;" class="d-block py-1" (click)="changeBaseAccount(option)">
                                 <div class="option-label pt-2">
                                     {{ option?.label | titlecase }}
                                 </div>
+                                @if (showAccountUniqueName) {
+                                    <div class="option-value">
+                                        {{ option.additional?.uniqueName }}
+                                    </div>
+                                }
                             </a>
-                        </ng-container>
-                        <ng-container *ngIf="option.additional?.stock">
-                            <a href="javascript:;" class="flex-column" (click)="changeBaseAccount(option)">
+                        }
+                        @if (option.additional?.stock) {
+                            <a href="javascript:;" class="d-block py-1 flex-column" (click)="changeBaseAccount(option)">
                                 <div class="option-label">
                                     {{ option?.label | titlecase }}
                                 </div>
+                                @if (showAccountUniqueName) {
+                                    <div class="option-value">
+                                        {{ option.additional?.uniqueName }}
+                                    </div>
+                                    <div class="option-value-stock font-12">
+                                        {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.name }}
+                                    </div>
+                                }
                             </a>
-                        </ng-container>
+                        }
                     </ng-template>
                 </select-field>
             </div>
@@ -171,20 +184,34 @@
                                                                     [placeholder]="localeData?.to_select_accounts"
                                                                 >
                                                                     <ng-template #optionTemplate let-option="option">
-                                                                        <ng-container *ngIf="!option.additional?.stock">
-                                                                            <a href="javascript:;" class="d-block py-2">
+                                                                        @if (!option.additional?.stock) {
+                                                                            <a href="javascript:;" class="d-block py-1">
                                                                                 <div class="option-label pt-2">
                                                                                     {{ option?.label | titlecase }}
                                                                                 </div>
+                                                                                @if (showAccountUniqueName) {
+                                                                                    <div class="option-value">
+                                                                                        {{ option.additional?.uniqueName }}
+                                                                                    </div>
+                                                                                }
                                                                             </a>
-                                                                        </ng-container>
-                                                                        <ng-container *ngIf="option.additional?.stock">
-                                                                            <a href="javascript:;" class="flex-column">
+                                                                        }
+                                                                        @if (option.additional?.stock) {
+                                                                            <a href="javascript:;" class="d-block py-1 flex-column">
                                                                                 <div class="option-label">
                                                                                     {{ option?.label | titlecase }}
                                                                                 </div>
+                                                                                @if (showAccountUniqueName) {
+                                                                                    <div class="option-value">
+                                                                                        {{ option.additional?.uniqueName }}
+                                                                                    </div>
+                                                                                    <div class="option-value-stock font-12">
+                                                                                        {{ commonLocaleData?.app_stock }}:
+                                                                                        {{ option.additional?.stock?.name }}
+                                                                                    </div>
+                                                                                }
                                                                             </a>
-                                                                        </ng-container>
+                                                                        }
                                                                     </ng-template>
                                                                 </select-field>
                                                             </div>
@@ -445,20 +472,34 @@
                                                                     "
                                                                 >
                                                                     <ng-template #optionTemplate let-option="option">
-                                                                        <ng-container *ngIf="!option.additional?.stock">
-                                                                            <a href="javascript:;" class="d-block py-2">
+                                                                        @if (!option.additional?.stock) {
+                                                                            <a href="javascript:;" class="d-block py-1">
                                                                                 <div class="option-label pt-2">
                                                                                     {{ option?.label | titlecase }}
                                                                                 </div>
+                                                                                @if (showAccountUniqueName) {
+                                                                                    <div class="option-value">
+                                                                                        {{ option.additional?.uniqueName }}
+                                                                                    </div>
+                                                                                }
                                                                             </a>
-                                                                        </ng-container>
-                                                                        <ng-container *ngIf="option.additional?.stock">
-                                                                            <a href="javascript:;" class="flex-column">
+                                                                        }
+                                                                        @if (option.additional?.stock) {
+                                                                            <a href="javascript:;" class="d-block py-1 flex-column">
                                                                                 <div class="option-label">
                                                                                     {{ option?.label | titlecase }}
                                                                                 </div>
+                                                                                @if (showAccountUniqueName) {
+                                                                                    <div class="option-value">
+                                                                                        {{ option.additional?.uniqueName }}
+                                                                                    </div>
+                                                                                    <div class="option-value-stock font-12">
+                                                                                        {{ commonLocaleData?.app_stock }}:
+                                                                                        {{ option.additional?.stock?.name }}
+                                                                                    </div>
+                                                                                }
                                                                             </a>
-                                                                        </ng-container>
+                                                                        }
                                                                     </ng-template>
                                                                 </select-field>
                                                             </div>
@@ -715,20 +756,34 @@
                                                             [cssClass]="'bg-transparent'"
                                                         >
                                                             <ng-template #optionTemplate let-option="option">
-                                                                <ng-container *ngIf="!option.additional?.stock">
-                                                                    <a href="javascript:;" class="d-block py-2">
+                                                                @if (!option.additional?.stock) {
+                                                                    <a href="javascript:;" class="d-block py-1">
                                                                         <div class="option-label pt-2">
                                                                             {{ option?.label | titlecase }}
                                                                         </div>
+                                                                        @if (showAccountUniqueName) {
+                                                                            <div class="option-value">
+                                                                                {{ option.additional?.uniqueName }}
+                                                                            </div>
+                                                                        }
                                                                     </a>
-                                                                </ng-container>
-                                                                <ng-container *ngIf="option.additional?.stock">
-                                                                    <a href="javascript:;" class="flex-column">
+                                                                }
+                                                                @if (option.additional?.stock) {
+                                                                    <a href="javascript:;" class="d-block py-1 flex-column">
                                                                         <div class="option-label">
                                                                             {{ option?.label | titlecase }}
                                                                         </div>
+                                                                        @if (showAccountUniqueName) {
+                                                                            <div class="option-value">
+                                                                                {{ option.additional?.uniqueName }}
+                                                                            </div>
+                                                                            <div class="option-value-stock font-12">
+                                                                                {{ commonLocaleData?.app_stock }}:
+                                                                                {{ option.additional?.stock?.name }}
+                                                                            </div>
+                                                                        }
                                                                     </a>
-                                                                </ng-container>
+                                                                }
                                                             </ng-template>
                                                         </select-field>
                                                     </div>
@@ -976,20 +1031,34 @@
                                                             "
                                                         >
                                                             <ng-template #optionTemplate let-option="option">
-                                                                <ng-container *ngIf="!option.additional?.stock">
-                                                                    <a href="javascript:;" class="d-block py-2">
+                                                                @if (!option.additional?.stock) {
+                                                                    <a href="javascript:;" class="d-block py-1">
                                                                         <div class="option-label pt-2">
                                                                             {{ option?.label | titlecase }}
                                                                         </div>
+                                                                        @if (showAccountUniqueName) {
+                                                                            <div class="option-value">
+                                                                                {{ option.additional?.uniqueName }}
+                                                                            </div>
+                                                                        }
                                                                     </a>
-                                                                </ng-container>
-                                                                <ng-container *ngIf="option.additional?.stock">
-                                                                    <a href="javascript:;" class="flex-column">
+                                                                }
+                                                                @if (option.additional?.stock) {
+                                                                    <a href="javascript:;" class="d-block py-1 flex-column">
                                                                         <div class="option-label">
                                                                             {{ option?.label | titlecase }}
                                                                         </div>
+                                                                        @if (showAccountUniqueName) {
+                                                                            <div class="option-value">
+                                                                                {{ option.additional?.uniqueName }}
+                                                                            </div>
+                                                                            <div class="option-value-stock font-12">
+                                                                                {{ commonLocaleData?.app_stock }}:
+                                                                                {{ option.additional?.stock?.name }}
+                                                                            </div>
+                                                                        }
                                                                     </a>
-                                                                </ng-container>
+                                                                }
                                                             </ng-template>
                                                         </select-field>
                                                     </div>
@@ -1364,7 +1433,6 @@
                                         [useMask]="true"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
-                                        (onFocus)="hideDiscountTax()"
                                         [(ngModel)]="vm.totalAmount"
                                         (change)="vm.updateFirstEntryAmount(); vm.inventoryAmountChanged()"
                                     ></input-field>
@@ -1397,24 +1465,24 @@
                                     class="text-right min-width-0"
                                 >
                                     <span>
-                                        <update-ledger-discount
-                                            id="update-ledger-discount-amount"
+                                        <common-discount
                                             #discount
                                             [disabled]="isEinvoiceGenerated"
                                             [discountAccountsDetails]="vm.discountArray"
-                                            [ledgerAmount]="vm.totalAmount"
+                                            [amountForDiscount]="vm.totalAmount"
                                             [prefixInput]="vm.selectedPrefixForCurrency"
                                             [maskInput]="vm.inputMaskFormat"
                                             [suffixInput]="vm.selectedSuffixForCurrency"
                                             [commonLocaleData]="commonLocaleData"
                                             [giddhBalanceDecimalPlaces]="vm.giddhBalanceDecimalPlaces"
                                             (discountTotalUpdated)="vm.handleDiscountEntry($event); vm.generateGrandTotal()"
-                                            [discountsList]="discountsList"
-                                            (hideOtherPopups)="hideTax()"
+                                            [discountsList]="discountsList()"
                                             [readonly]="isEinvoiceGenerated"
                                             (createNewDiscount)="showCreateDiscountDialog()"
-                                            [cssClass]="'bg-transparent'"
-                                        ></update-ledger-discount>
+                                            [showCreateNew]="true"
+                                            [hasBackdrop]="false"
+                                            (selectedDiscountsEvent)="vm.discountArray = $event"
+                                        ></common-discount>
                                     </span>
 
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
@@ -1457,9 +1525,9 @@
                                     "
                                 >
                                     <span>
-                                        <update-ledger-tax-control
+                                        <common-tax
                                             id="update-ledger-tax-amount"
-                                            #tax
+                                            #commontax
                                             [taxes]="vm.companyTaxesList$ | async"
                                             [customHeading]="
                                                 shouldShowAdvanceReceiptMandatoryFields
@@ -1468,26 +1536,28 @@
                                                       ? localeData?.tax_rcm
                                                       : ''
                                             "
+                                            [mask]="vm.inputMaskFormat || ''"
                                             [isMandatory]="isRcmEntry"
+                                            [showError]="showTaxError"
                                             [date]="vm.selectedLedger.entryDate"
-                                            [taxRenderData]="vm.taxRenderData"
+                                            [applicableTaxes]="vm.selectedLedger.taxes"
                                             [totalForTax]="vm.totalForTax"
-                                            [prefixInput]="vm.selectedPrefixForCurrency"
-                                            [maskInput]="vm.inputMaskFormat"
-                                            [suffixInput]="vm.selectedSuffixForCurrency"
+                                            [prefixInput]="vm.selectedPrefixForCurrency || ''"
+                                            [suffixInput]="vm.selectedSuffixForCurrency || ''"
                                             [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
                                             [calculateTaxInclusively]="vm.isAdvanceReceiptWithTds"
                                             [isAdvanceReceipt]="vm.isAdvanceReceiptWithTds"
                                             [allowedSelectionOfAType]="allowedSelectionOfAType"
-                                            [applicableTaxes]="vm.selectedLedger.taxes"
-                                            [commonLocaleData]="commonLocaleData"
                                             [giddhBalanceDecimalPlaces]="vm.giddhBalanceDecimalPlaces"
-                                            (hideOtherPopups)="hideDiscount()"
-                                            (selectedTaxEvent)="vm.taxTrxUpdated($event)"
+                                            [commonLocaleData]="commonLocaleData"
+                                            [showMatFormField]="true"
+                                            [hasBackdrop]="false"
+                                            [showCreateNew]="true"
+                                            [readonly]="isEinvoiceGenerated"
+                                            (selectedTaxEvent)="vm.taxTrxUpdated($event); showTaxError = false"
                                             (taxAmountSumEvent)="calculateTax()"
                                             (createNewTax)="showCreateTaxDialog()"
-                                            [readonly]="isEinvoiceGenerated"
-                                        ></update-ledger-tax-control>
+                                        ></common-tax>
                                     </span>
 
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">

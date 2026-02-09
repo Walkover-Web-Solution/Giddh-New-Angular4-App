@@ -5,10 +5,11 @@ import { VoucherListComponent } from "./list/list.component";
 import { VouchersPreviewComponent } from "./preview/preview.component";
 import { VoucherCreateComponent } from "./create/create.component";
 import { PageLeaveConfirmationGuard } from "../decorators/page-leave-confirmation-guard";
+// import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview.component";
 
 const routes: Routes = [
     {
-        path: "", 
+        path: "",
         component: MainComponent,
         children: [
             {
@@ -16,6 +17,10 @@ const routes: Routes = [
                 redirectTo: "list",
                 pathMatch: "full"
             },
+            // {
+            //     path: "view/:voucherType/recurring/:recurringVoucherUniqueName",
+            //     component: RecurringPreviewComponent
+            // },
             {
                 path: "view/:voucherType/:voucherUniqueName",
                 component: VouchersPreviewComponent
