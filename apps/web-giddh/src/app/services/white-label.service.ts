@@ -86,7 +86,7 @@ export class WhiteLabelService {
         const whiteLabelPortal = this.whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain;
 
         if (whiteLabelPortal) {
-            return whiteLabelPortal;
+            return `${whiteLabelPortal}/`;
         }
 
         return this.environmentService.portalUrl;

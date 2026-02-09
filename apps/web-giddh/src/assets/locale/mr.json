@@ -494,6 +494,7 @@
     "app_and": "आणि",
     "app_or": "किंवा",
     "app_no_tax_found": "कोणताही कर आढळला नाही",
+    "app_no_discount_found": "कोणताही छूट आढळला नाही",
     "app_on_taxable_value": "करपात्र मूल्यावर (Amt - Dis)",
     "app_on_total_value": "एकूण मूल्ये (करयोग्य + जीएसटी + उपकर)",
     "app_tax_applicable": "कर लागू",
@@ -565,7 +566,8 @@
         "f8": "F8",
         "f9": "F9",
         "f10": "F10",
-        "f11": "F11"
+        "f11": "F11",
+        "f12": "F12"
     },
     "app_alt": "Alt",
     "app_optional": "ऐच्छिक",
@@ -814,5 +816,8 @@
     "app_save_and_next": "जतन करा आणि पुढे",
     "app_export_file_name_change_note": "फाईलचे नाव बदलण्यासाठी कंपनी सेटिंग पेजवर जा",
     "app_unassigned": "नियुक्त न केलेले",
-    "app_field_validation_error": "[FIELD_NAME] रिकामे असू शकत नाही किंवा [MAX_LENGTH] अक्षरांपेक्षा जास्त असू शकत नाही"
+    "app_field_validation_error": "[FIELD_NAME] रिकामे असू शकत नाही किंवा [MAX_LENGTH] अक्षरांपेक्षा जास्त असू शकत नाही",
+    "app_resume": "रिसमूल",
+    "app_stop": "रोका",
+    "app_create_recurring_voucher": "सामान्य वाउचर बनाएं"
 }

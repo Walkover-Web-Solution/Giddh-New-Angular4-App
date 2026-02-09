@@ -389,12 +389,12 @@
                                     appEnterNext
                                     [name]="'pinCodeNum'"
                                     [label]="
-                                        zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode)
+                                        zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode)
                                             ? commonLocaleData?.app_zip_code
                                             : commonLocaleData?.app_pin_code
                                     "
                                     [placeholder]="
-                                        zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode)
+                                        zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode)
                                             ? commonLocaleData?.app_enter_zip_code
                                             : commonLocaleData?.app_enter_pin_code
                                     "
