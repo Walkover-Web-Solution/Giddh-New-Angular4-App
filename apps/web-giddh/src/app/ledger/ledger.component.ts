@@ -3861,7 +3861,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public closeAllAccountDropdown(): void {
-        (Array.isArray(this.dropdowns) ? this.dropdowns : []).forEach((alertInstance, i) => alertInstance?.closeDropdownPanel());
+        (this.dropdowns?.length ? this.dropdowns.toArray() : []).forEach((alertInstance, i) => alertInstance?.closeDropdownPanel());
     }
 
     /**
