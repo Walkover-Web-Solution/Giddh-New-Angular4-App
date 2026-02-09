@@ -15,7 +15,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DecimalDigitsModule } from '../helpers/directives/decimalDigits/decimalDigits.module';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { EnterNextDirective } from '../helpers/directives/enter-next/enter-next.directive';
 
 /**
  * Common Discount Component (Angular 21)
@@ -54,8 +53,7 @@ import { EnterNextDirective } from '../helpers/directives/enter-next/enter-next.
         FormFieldsModule,
         DecimalDigitsModule,
         A11yModule,
-        ClickOutsideModule,
-        EnterNextDirective
+        ClickOutsideModule
     ]
 })
 export class CommonDiscountComponent implements OnInit, OnDestroy {
