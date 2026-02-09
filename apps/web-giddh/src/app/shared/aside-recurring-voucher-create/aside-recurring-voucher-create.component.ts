@@ -249,8 +249,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
             const monthlyMode = this.activeForm.get('repeatOn.monthlyMode')?.value;
 
             if (startDate) {
-                // Set initial minEndDate to the start date
-                this.minEndDate.set(startDate);
+                this.updateMinEndDate(startDate);
 
                 // Store the selected option to be set after view initialization
                 this.pendingRepeatOption = repeatOption;
@@ -316,7 +315,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
             takeUntil(this.destroyed$)
         ).subscribe((startDate: Date) => {
             if (startDate) {
-                this.minEndDate.set(startDate);
+                this.updateMinEndDate(startDate);
             }
         });
         
@@ -844,6 +843,20 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
     /* =======================
        HELPERS
     ======================= */
+
+    /**
+     * Updates minEndDate based on start date
+     * Uses start date if >= today, otherwise uses today
+     * @param {Date} startDate - The start date to evaluate
+     */
+    private updateMinEndDate(startDate: Date): void {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const normalizedStartDate = new Date(startDate);
+        normalizedStartDate.setHours(0, 0, 0, 0);
+        
+        this.minEndDate.set(normalizedStartDate >= today ? startDate : today);
+    }
 
     /**
      * Resets repeat configuration to default values
