@@ -5133,8 +5133,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             queryParams.search = this.queryParams.search;
         }
 
-        const recurringPath = this.isRecurringVoucher ? "/recurring" : "";
-        if (this.isRecurringVoucher) {
+        const recurringPath = this.isRecurringVoucher?.[1]?.isRecurringVoucher ? "/recurring" : "";
+        if (this.isRecurringVoucher?.[1]?.isRecurringVoucher) {
             queryParams.recurringVoucherUniqueName = uniqueName;
         }
 
