@@ -84,7 +84,8 @@ export class RecurrenceFormService {
         // For NTH_WEEKDAY, keep type and nth
         cleaned.repeatOn = {
           type: repeatType,
-          nth: repeatOn.nth
+          nth: repeatOn.nth,
+          weekday: repeatOn.weekday
         };
         break;
 

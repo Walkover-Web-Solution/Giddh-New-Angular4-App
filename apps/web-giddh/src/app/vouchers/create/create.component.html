@@ -1334,14 +1334,15 @@
                                                 <label for="recurring-voucher" [innerHTML]="localeData?.transaction_recurring"></label>
                                             </mat-checkbox>
                                         }
-                                        <aside-recurrence-voucher-create
-                                            #asideRecurrenceVoucher
-                                            *ngIf="
-                                                invoiceForm.get('isRecurringVoucher')?.value &&
-                                                invoiceForm?.get('recurrencePreviewRequest.startDate')?.value
-                                            "
-                                            [recurrenceForm]="recurrenceFormGroup"
-                                        ></aside-recurrence-voucher-create>
+                                        @if (
+                                            invoiceForm.get('isRecurringVoucher')?.value &&
+                                            invoiceForm?.get('recurrencePreviewRequest.startDate')?.value
+                                        ) {
+                                            <aside-recurrence-voucher-create
+                                                #asideRecurrenceVoucher
+                                                [recurrenceForm]="recurrenceFormGroup"
+                                            ></aside-recurrence-voucher-create>
+                                        }
                                     </div>
                                     <!-- Recurring Voucher Checkbox -->
                                     <!-- Reverse Charge Checkbox -->

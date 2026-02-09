@@ -3187,6 +3187,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             },
             repeatOn: {
                 type: RecurringRepeatType.DAY_OF_MONTH,
+                weekdays: [],
                 dayOfMonth: today.getDate(),
                 nth: nth,
                 weekday: weekday,
@@ -5994,9 +5995,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.company.countryName = '';
             this.getCompanyProfile();
         }
-
+        
         this.addNewLineEntry(false);
         this.addNewDepositRow();
+        this.setInitialRecurrencePreviewRequest();
 
         this.voucherTotals = {
             totalAmount: 0,
@@ -8236,5 +8238,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public isAccountChangeInUpdateMode(): boolean {
         return this.isUpdateMode && this.isAccountChanged;
+    }
+
+    /**
+     * Initializes the recurrence preview request based on query parameters
+     * Sets the isRecurringVoucher flag and triggers the recurrence voucher selection logic
+     * 
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setInitialRecurrencePreviewRequest(): void {
+        this.invoiceForm.get('isRecurringVoucher')?.patchValue(Boolean(this.queryParams.isRecurringVoucher));
+        this.isRecurringVoucherSelected();
     }
 }
