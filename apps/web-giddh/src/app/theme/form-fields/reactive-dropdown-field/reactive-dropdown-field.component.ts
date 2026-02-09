@@ -68,8 +68,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public labelValue: string = '';
     /** Holds label of value to show in the field */
     public controlLabelValue: string = this.labelValue;
-    /** Close autocomplete on focus out if true - Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
-    @Input() public closeOnFocusOut: boolean = false;
     /** If we need to clear form control on force clear */
     @Input() public forceClear: boolean = false;
     /** Show or Hide Label */
@@ -793,19 +791,16 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public onBlur(): void {
         setTimeout(() => {
-            // Handle closeOnFocusOut functionality - for sidebarListView, closeOnFocusOut, or normal mat-autocomplete
-            if (this.sidebarListView || this.closeOnFocusOut || !this.sidebarListView) {
-                this.closeDropdownPanel();
-            }
-
-            if (this.allowCustomDropdownValue && !this.searchFormControl?.value && !this.controlLabelValue) {
-                this.selectedOption.emit({ label: '', value: '' });
-            }
-
-            if (this.allowCustomDropdownValue && this.searchFormControl?.value && typeof this.searchFormControl?.value !== "object") {
-                this.value = this.searchFormControl?.value;
-                this.selectedOption.emit({ label: this.value, value: this.value });
-                this.searchFormControl.next('');
+            if (this.allowCustomDropdownValue) {
+                if (!this.searchFormControl?.value && !this.controlLabelValue) {
+                    this.selectedOption.emit({ label: '', value: '' });
+                }
+    
+                if (this.searchFormControl?.value && typeof this.searchFormControl?.value !== "object") {
+                    this.value = this.searchFormControl?.value;
+                    this.selectedOption.emit({ label: this.value, value: this.value });
+                    this.searchFormControl.next('');
+                }
             }
         }, 200);
     }
