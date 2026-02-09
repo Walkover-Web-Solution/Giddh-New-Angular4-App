@@ -259,11 +259,12 @@ export class RecurringPreviewComponent implements OnDestroy {
     /**
      * Fetches all recurring vouchers with pagination support
      * Supports infinite scroll with load more functionality
-     * @private
+     * @public
      * @param {boolean} isLoadMore - Whether this is a load more request
      * @param {boolean} isScrollUp - Whether scrolling up (for previous page)
+     * @memberof RecurringPreviewComponent
      */
-    private readonly getAllRecurringVouchers = (isLoadMore: boolean = false, isScrollUp: boolean = false): void => {
+    public readonly getAllRecurringVouchers = (isLoadMore: boolean = false, isScrollUp: boolean = false): void => {
         if (this.isLoadMore()) {
             return;
         }
