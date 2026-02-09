@@ -268,7 +268,6 @@
                         [commonLocaleData]="commonLocaleData"
                         [showError]="showRcmEntryError && isRcmEntry && !validateTaxes()"
                         [showCreateNew]="true"
-                        (createNewTax)="showCreateTaxDialog()"
                     ></common-tax>
 
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -1112,15 +1111,4 @@
             ></reactive-dropdown-field>
         </div>
     </div>
-</ng-template>
-
-<!-- Create Tax Aside Pane -->
-<ng-template #createTax>
-    <aside-menu-create-tax-component
-        [class]="'in'"
-        [localeData]="localeData"
-        [otherTax]="true"
-        [commonLocaleData]="commonLocaleData"
-        (closeEvent)="closeTaxDialog()"
-    ></aside-menu-create-tax-component>
 </ng-template>

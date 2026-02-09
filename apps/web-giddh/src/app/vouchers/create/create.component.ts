@@ -147,8 +147,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
     /** Instance of aside Menu Product Service modal */
     @ViewChild("asideMenuProductService") asideMenuProductService: TemplateRef<any>;
-    /** Template Reference for Create Tax aside menu */
-    @ViewChild("createTax") public createTax: TemplateRef<any>;
     /* Selector for send email modal */
     @ViewChild("sendEmailModal", { static: true }) public sendEmailModal: any;
     /* Selector for print modal */
@@ -329,8 +327,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public hasUnsavedChanges: boolean = false;
     /** Holds tax types */
     public taxTypes: any = TaxType;
-    /** Create tax dialog ref  */
-    public taxAsideMenuRef: MatDialogRef<any>;
     /** Hold aside menu state for product service  */
     public productServiceAsideMenuRef: MatDialogRef<any>;
     /** Other tax dialog ref */
@@ -3948,38 +3944,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.accountAsideMenuRef?.close();
     }
 
-    /**
-    * Open and close tax dropdown
-    * if isOpen is true it will open the dropdown
-    * if isOpen is false it will close the dropdown
-    *
-    * @memberof NewLedgerEntryPanelComponent
-    */
-    public openAndCloseTaxDropdown(): void {
-        if (this.activeEntryIndex !== null && this.commonTaxControll) {
-            const taxComponent = this.commonTaxControll.toArray()[this.activeEntryIndex];
-            if (taxComponent) {
-                taxComponent.focusTaxDropdown();
-            }
-        }
-    }
-
-    /**
-     * Shows create new tax dialog
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public showCreateTaxDialog(): void {
-        this.storeFocus();
-        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
-        this.taxAsideMenuRef = this.dialog.open(this.createTax, {
-            position: {
-                right: "0",
-                top: "0",
-            },
-            autoFocus: false
-        });
-    }
 
     /**
     * Open and close discount dropdown
@@ -4634,6 +4598,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleOutsideClick(event: any): void {
+        const activeTaxComponent = this.activeEntryIndex !== null && this.commonTaxControll 
+            ? this.commonTaxControll.toArray()[this.activeEntryIndex] 
+            : null;
+
         if (
             typeof event?.target?.className === "string" &&
             event?.target?.className?.indexOf("option") === -1 &&
@@ -4642,7 +4610,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             !this.dialog.getDialogById(this.otherTaxAsideMenuRef?.id) &&
             !this.dialog.getDialogById(this.bulkStockAsideMenuRef?.id) &&
             !this.dialog.getDialogById(this.accountAsideMenuRef?.id) &&
-            !this.dialog.getDialogById(this.taxAsideMenuRef?.id) &&
+            !activeTaxComponent?.isTaxDialogOpen &&
             !this.dialog.getDialogById(this.productServiceAsideMenuRef?.id) &&
             !this.dialog.getDialogById(this.discountDialogRef?.id)
         ) {
@@ -6892,18 +6860,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup.get("otherTax.amount").patchValue(amount);
     }
 
-    /**
-     * Close tax modal
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public closeTaxModal(): void {
-        this.store.dispatch(this.companyActions.getTax());
-        this.taxAsideMenuRef.close();
-        setTimeout(() => {
-            this.openAndCloseTaxDropdown();
-        }, 100);
-    }
 
     /**
      * Prefils entry
