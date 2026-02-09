@@ -17,6 +17,13 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Prefer type inference when the type is obvious
 - Avoid the `any` type; use `unknown` when type is uncertain
 
+## Access Modifiers & Encapsulation
+- **Public**: Use only for properties/methods that must be accessed by external components or services.
+- **Protected**: Use as the **default** for properties and methods accessed by the HTML template. This keeps the component's public API clean while allowing template access.
+- **Private**: Use for internal logic, helper methods, or state management that is never accessed by the template or external classes. 
+- **Readonly**: Always use `readonly` for properties that are not reassigned after initialization (especially injected services).
+- **Hard Privacy**: Use native JS `#private` syntax only when runtime privacy is strictly required; otherwise, prefer TypeScript's `private`.
+
 ## Angular Best Practices
 - Always use standalone components over NgModules
 - Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+.
@@ -62,4 +69,4 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 ## Services
 - Design services around a single responsibility
 - Use the `providedIn: 'root'` option for singleton services
-- Use the `inject()` function instead of constructor injection
+- Use the `inject()` function; define as `private readonly` (e.g., `private readonly http = inject(HttpClient);`)

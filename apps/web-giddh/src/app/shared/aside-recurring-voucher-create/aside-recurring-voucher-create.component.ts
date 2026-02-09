@@ -249,8 +249,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
             const monthlyMode = this.activeForm.get('repeatOn.monthlyMode')?.value;
 
             if (startDate) {
-                // Set initial minEndDate to the start date
-                this.minEndDate.set(startDate);
+                this.updateMinEndDate(startDate);
 
                 // Store the selected option to be set after view initialization
                 this.pendingRepeatOption = repeatOption;
@@ -292,6 +291,9 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
                         this.showDayThe.set(true);
                     }
                 }
+                
+                this.cdr.detectChanges();
+                
                 this.initialized.set(true);
                 if (this.initialized()) {
                     this.refreshPreview();
@@ -313,7 +315,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
             takeUntil(this.destroyed$)
         ).subscribe((startDate: Date) => {
             if (startDate) {
-                this.minEndDate.set(startDate);
+                this.updateMinEndDate(startDate);
             }
         });
         
@@ -337,18 +339,26 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
      * Sets the repeatOption value after mat-select is fully rendered
      */
     public ngAfterViewInit(): void {
-        if (this.pendingRepeatOption && this.activeForm) {
-            this.activeForm.get('repeatOption')?.patchValue(this.pendingRepeatOption, { emitEvent: false, onlySelf: false });
-            this.pendingRepeatOption = null;
-        }
-        if (this.pendingFrequencyUnit && this.activeForm) {
-            const frequencyGroup = this.activeForm.get('frequency') as FormGroup;
-            if (frequencyGroup) {
-                frequencyGroup.patchValue({ unit: this.pendingFrequencyUnit }, { emitEvent: false, onlySelf: false });
+        setTimeout(() => {
+            if (this.pendingRepeatOption && this.activeForm) {
+                this.activeForm.get('repeatOption')?.setValue(this.pendingRepeatOption, { emitEvent: false });
+                this.pendingRepeatOption = null;
             }
-            this.pendingFrequencyUnit = null;
-        }
-        this.cdr.detectChanges();
+            if (this.pendingFrequencyUnit && this.activeForm) {
+                const frequencyGroup = this.activeForm.get('frequency') as FormGroup;
+                if (frequencyGroup) {
+                    const unitControl = frequencyGroup.get('unit');
+                    if (unitControl) {
+                        const currentValue = unitControl.value;
+                        unitControl.setValue(null, { emitEvent: false });
+                        unitControl.setValue(this.pendingFrequencyUnit || currentValue, { emitEvent: false });
+                        unitControl.updateValueAndValidity({ emitEvent: false });
+                    }
+                }
+                this.pendingFrequencyUnit = null;
+            }
+            this.cdr.detectChanges();
+        }, 200);
     }
 
     /**
@@ -833,6 +843,20 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
     /* =======================
        HELPERS
     ======================= */
+
+    /**
+     * Updates minEndDate based on start date
+     * Uses start date if >= today, otherwise uses today
+     * @param {Date} startDate - The start date to evaluate
+     */
+    private updateMinEndDate(startDate: Date): void {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const normalizedStartDate = new Date(startDate);
+        normalizedStartDate.setHours(0, 0, 0, 0);
+        
+        this.minEndDate.set(normalizedStartDate >= today ? startDate : today);
+    }
 
     /**
      * Resets repeat configuration to default values

@@ -253,6 +253,54 @@ export class RecurringPreviewComponent implements OnDestroy {
      * @private
      */
     private readonly fetchRecurringVoucherRuleDetails = (): void => {
+        this.getAllRecurringVouchers();
+    };
+
+    /**
+     * Fetches all recurring vouchers with pagination support
+     * Supports infinite scroll with load more functionality
+     * @public
+     * @param {boolean} isLoadMore - Whether this is a load more request
+     * @param {boolean} isScrollUp - Whether scrolling up (for previous page)
+     * @memberof RecurringPreviewComponent
+     */
+    public readonly getAllRecurringVouchers = (isLoadMore: boolean = false, isScrollUp: boolean = false): void => {
+        if (this.isLoadMore()) {
+            return;
+        }
+        if (isLoadMore) {
+            this.isLoadMore.set(true);
+            if (this.totalPages() > this.advanceFilters().page) {
+                if (isScrollUp) {
+                    const filters = this.advanceFilters();
+                    filters.page = this.pageNumberHistory()[0] - 1;
+                    this.advanceFilters.set(filters);
+                } else {
+                    const history = this.pageNumberHistory();
+                    let lastIndex = history.length - 1;
+                    const filters = this.advanceFilters();
+                    if (history[lastIndex] === filters.page) {
+                        filters.page = filters.page + 1;
+                    } else {
+                        filters.page = history[lastIndex] + 1;
+                    }
+                    this.advanceFilters.set(filters);
+                }
+            } else {
+                return;
+            }
+            if (!isScrollUp && (this.totalPages() < this.advanceFilters().page)) {
+                return;
+            }
+
+            if (isScrollUp && this.advanceFilters().page === 0) {
+                const filters = this.advanceFilters();
+                filters.page = 1;
+                this.advanceFilters.set(filters);
+                return;
+            }
+        }
+
         const voucherType = this.recurringActiveTab() === 'sales' ? 'sales' : 'purchase';
         this.recurrenceFormService.getAll(voucherType, {
             page: this.advanceFilters().page,
@@ -275,6 +323,7 @@ export class RecurringPreviewComponent implements OnDestroy {
                     });
                 }
             }
+            this.isLoadMore.set(false);
         });
     };
 
@@ -308,6 +357,9 @@ export class RecurringPreviewComponent implements OnDestroy {
 
             if (this.advanceFilters().page === 1) {
                 this.recurringVoucherList.set(currentRecurringList);
+                if (this.cdkScrollbar) {
+                    this.cdkScrollbar.scrollToIndex(0);
+                }
             } else {
                 this.recurringVoucherList.set([...this.recurringVoucherList(), ...currentRecurringList]);
             }
