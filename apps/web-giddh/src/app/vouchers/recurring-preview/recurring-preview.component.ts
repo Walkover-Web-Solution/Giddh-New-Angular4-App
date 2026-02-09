@@ -306,6 +306,10 @@ export class RecurringPreviewComponent implements OnDestroy {
                         recurringVoucherUniqueName,
                         this.currentBranch()?.uniqueName
                     ).pipe(takeUntil(this.destroyed$)).subscribe((ruleResponse) => {
+                        const createdAt = response.body.items?.find((item: any) => item.recurringVoucherUniqueName === recurringVoucherUniqueName)?.createdAt;
+                        if (createdAt) {
+                            ruleResponse.body['createdAt']  = createdAt;
+                        }
                         if (ruleResponse) {
                             this.ruleDetails.set(this.formatRuleDetailsDateFields(ruleResponse?.body));
                             this.selectedAccountUniqueName.set(ruleResponse?.body?.account?.uniqueName);
