@@ -359,16 +359,15 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                     applicableTaxUniqueNames.includes(tax?.uniqueName) :
                     renderData[index].isChecked;
                 
-                const isApplicableTax = applicableTaxUniqueNames.includes(tax?.uniqueName);
-                
                 if (this.date() && tax.taxDetail?.length) {
                     const normalizedDate = this.normalizeDate(this.date());
                     const taxDate = dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT);
                     const isDateValid = taxDate.isSame(normalizedDate, 'day') || taxDate.isBefore(normalizedDate, 'day');
                     
-                    if (!isDateValid && !isApplicableTax) {
+                    if (!isDateValid) {
                         renderData[index].isDisabled = true;
                         renderData[index].disableForDate = true;
+                        renderData[index].isChecked = false;
                     } else {
                         renderData[index].disableForDate = false;
                     }
@@ -376,8 +375,8 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
             } else {
                 let taxObj = cloneDeep(tax);
                 taxObj.type = taxObj.taxType;
-
-                const isApplicableTax = applicableTaxUniqueNames.includes(tax?.uniqueName);
+                taxObj.isChecked = applicableTaxUniqueNames.length ? 
+                    applicableTaxUniqueNames.includes(tax?.uniqueName) : false;
 
                 if (this.date()) {
                     const normalizedDate = this.normalizeDate(this.date());
@@ -396,9 +395,10 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                         const filteredTaxObject = taxObject?.filter(p => 
                             dayjs(p.date, GIDDH_DATE_FORMAT).isBefore(normalizedDate, 'day')
                         );
-                        if (filteredTaxObject?.length === 0 && !isApplicableTax) {
+                        if (filteredTaxObject?.length === 0) {
                             taxObj.isDisabled = true;
                             taxObj.disableForDate = true;
+                            taxObj.isChecked = false;
                         } else {
                             taxObj.disableForDate = false;
                         }
@@ -409,8 +409,6 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                 }
                 
                 taxObj.amount = tax.taxDetail[0].taxValue;
-                taxObj.isChecked = applicableTaxUniqueNames.length ? 
-                    applicableTaxUniqueNames.includes(tax?.uniqueName) : false;
                 
                 renderData.push(taxObj);
             }
