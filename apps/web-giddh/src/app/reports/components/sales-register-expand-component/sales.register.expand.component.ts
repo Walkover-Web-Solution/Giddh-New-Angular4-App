@@ -142,6 +142,8 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
                 this.getDetailedsalesRequestFilter.to = this.to;
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.getDetailedsalesRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedsalesRequestFilter.stateCode = params.stateCode;
+                this.getDetailedsalesRequestFilter.countryCode = params.countryCode;
                 this.getDetailedsalesRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
                 this.params = params;
                 this.setDataPickerDateRange();
