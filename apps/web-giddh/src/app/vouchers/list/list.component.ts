@@ -214,7 +214,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Signal for recurring vouchers total count */
     public recurringVouchersTotalCount = signal<number>(0);
     /** Signal for recurring vouchers display columns */
-    public recurringVouchersColumns = signal<string[]>(['index', 'accountName', 'frequency', 'lastRun', 'nextRun', 'amount', 'status', 'actions']);
+    public recurringVouchersColumns = signal<string[]>(['index', 'accountName', 'frequency', 'createdAt', 'lastRun', 'nextRun', 'amount', 'status', 'actions']);
     /** Holds Eway Bill Dialog Ref */
     public ewayBillDialogRef: any;
     /** Holds Advance Search Dialog Ref */

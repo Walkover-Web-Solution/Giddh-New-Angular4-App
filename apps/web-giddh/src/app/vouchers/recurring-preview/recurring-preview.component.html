@@ -115,6 +115,10 @@
                             </div>
                         </div>
                         <div class="row mt-2">
+                            <label class="col-lg-6 text-muted">{{ localeData()?.created_at }}:</label>
+                            <div class="col-lg-6">{{ ruleDetails()?.createdAt ? ruleDetails()?.createdAt : '-' }}</div>
+                        </div>
+                        <div class="row mt-2">
                             <label class="col-lg-6 text-muted">{{ commonLocaleData()?.app_start_date }}:</label>
                             <div class="col-lg-6">{{ ruleDetails()?.startDate ? ruleDetails()?.startDate : '-' }}</div>
                         </div>

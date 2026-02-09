@@ -175,6 +175,7 @@
     "next_run":"अगला रन",
     "last_run":"पिछला रन",
     "frequency":"आवृत्ति",
+    "created_at":"पर बनाया गया",
     "profile_status":"प्रोफ़ाइल स्थिति",
     "invoice_amount":"चालान राशि",
     "next_invoice_date":"अगली चालान तिथि",

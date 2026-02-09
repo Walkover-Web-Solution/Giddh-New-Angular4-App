@@ -3183,6 +3183,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             },
             repeatOn: {
                 type: RecurringRepeatType.DAY_OF_MONTH,
+                weekdays: [],
                 dayOfMonth: today.getDate(),
                 nth: nth,
                 weekday: weekday,
@@ -5100,8 +5101,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             queryParams.search = this.queryParams.search;
         }
 
-        const recurringPath = this.isRecurringVoucher ? "/recurring" : "";
-        if (this.isRecurringVoucher) {
+        const recurringPath = this.isRecurringVoucher?.[1]?.isRecurringVoucher ? "/recurring" : "";
+        if (this.isRecurringVoucher?.[1]?.isRecurringVoucher) {
             queryParams.recurringVoucherUniqueName = uniqueName;
         }
 
@@ -5117,14 +5118,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public cancelUpdateVoucher(): void {
-        if (this.queryParams.isRecurringVoucher) {
-            this.location.back();
+        if (this.redirectUrl) {
+            this.router.navigateByUrl(this.redirectUrl);
         } else {
-            if (this.redirectUrl) {
-                this.router.navigateByUrl(this.redirectUrl);
-            } else {
-                this.redirectToVoucherPreview();
-            }
+            this.redirectToVoucherPreview();
         }
     }
 
@@ -5962,9 +5959,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.company.countryName = '';
             this.getCompanyProfile();
         }
-
+        
         this.addNewLineEntry(false);
         this.addNewDepositRow();
+        this.setInitialRecurrencePreviewRequest();
 
         this.voucherTotals = {
             totalAmount: 0,
@@ -8192,5 +8190,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public isAccountChangeInUpdateMode(): boolean {
         return this.isUpdateMode && this.isAccountChanged;
+    }
+
+    /**
+     * Initializes the recurrence preview request based on query parameters
+     * Sets the isRecurringVoucher flag and triggers the recurrence voucher selection logic
+     * 
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setInitialRecurrencePreviewRequest(): void {
+        this.invoiceForm.get('isRecurringVoucher')?.patchValue(Boolean(this.queryParams.isRecurringVoucher));
+        this.isRecurringVoucherSelected();
     }
 }
