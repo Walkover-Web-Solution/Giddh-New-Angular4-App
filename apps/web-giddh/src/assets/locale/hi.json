@@ -494,6 +494,7 @@
     "app_and": "तथा",
     "app_or": "या",
     "app_no_tax_found": "कोई कर नहीं पाया",
+    "app_no_discount_found": "कोई छूट नहीं पाया",
     "app_on_taxable_value": "कर योग्य मूल्य पर (Amt - Dis)",
     "app_on_total_value": "कुल मूल्य (कर योग्य + जीएसटी + उपकर)",
     "app_tax_applicable": "कर लागू",
@@ -565,7 +566,8 @@
         "f8": "F8",
         "f9": "F9",
         "f10": "F10",
-        "f11": "F11"
+        "f11": "F11",
+        "f12": "F12"
     },
     "app_alt": "Alt",
     "app_optional": "ऐच्छिक",
@@ -813,5 +815,8 @@
     "app_save_and_next": "सहेजें और अगला",
     "app_export_file_name_change_note": "फ़ाइल नाम बदलने के लिए कंपनी सेटिंग पेज पर जाएं",
     "app_unassigned": "सौंपे नहीं गए",
-    "app_field_validation_error": "[FIELD_NAME] खाली नहीं हो सकता या [MAX_LENGTH] अक्षरों से अधिक नहीं हो सकता"
+    "app_field_validation_error": "[FIELD_NAME] खाली नहीं हो सकता या [MAX_LENGTH] अक्षरों से अधिक नहीं हो सकता",
+    "app_resume": "रिसमूल",
+    "app_stop": "रोका",
+    "app_create_recurring_voucher": "सामान्य वाउचर बनाएं"
 }

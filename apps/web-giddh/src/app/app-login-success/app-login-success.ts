@@ -17,7 +17,8 @@ export class AppLoginSuccessComponent {
     public giddhLogoSrc: string = '';
     constructor(private generalService: GeneralService, @Inject(ServiceConfig) private serviceConfig) {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-big-logo.svg';
+        // const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        // this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-big-logo.svg';
+        this.giddhLogoSrc = this.imgPath + 'giddh-big-logo.svg';
     }
 }

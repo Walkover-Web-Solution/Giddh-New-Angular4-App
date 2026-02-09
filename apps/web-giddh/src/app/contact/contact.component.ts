@@ -192,7 +192,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
-    public currentCompanyBranches: Array<any>;
+    public currentCompanyBranches: Array<any> = [];
     /** Stores the current branch */
     public currentBranch: any = { name: "", uniqueName: "" };
     /** Stores the current company */

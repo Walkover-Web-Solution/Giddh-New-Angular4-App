@@ -4,7 +4,7 @@ import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
-import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
+import { CommonDiscountComponent } from '../../../shared/common-discount/common-discount.component';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
@@ -44,7 +44,7 @@ export class UpdateLedgerVm {
     public showNewEntryPanel: boolean = true;
     public selectedTaxes: UpdateLedgerTaxData[] = [];
     public taxRenderData: ITaxControlData[] = [];
-    public discountComponent: UpdateLedgerDiscountComponent;
+    public discountComponent: CommonDiscountComponent;
     public ledgerUnderStandingObj = {
         accountType: '',
         text: {
@@ -141,12 +141,12 @@ export class UpdateLedgerVm {
                 totalAmount = 0;
             }
 
-            this.discountArray?.filter(f => f.isActive && f.amount > 0)?.forEach((dx, index) => {
+            this.discountComponent?.getActiveDiscounts()?.filter(f => f.isActive && f.discountValue > 0)?.forEach((dx, index) => {
                 let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
 
                 trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
                 trx.particular.name = dx.name ? dx.name : 'discount';
-                trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * totalAmount) / 100), this.giddhBalanceDecimalPlaces);
+                trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.discountValue : giddhRoundOff(((dx.discountValue * totalAmount) / 100), this.giddhBalanceDecimalPlaces);
                 trx.convertedAmount = this.calculateConversionRate(trx.amount);
                 trx.isStock = false;
                 trx.isTax = false;
@@ -264,10 +264,6 @@ export class UpdateLedgerVm {
             this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
         }
 
-        if (this.discountComponent) {
-            this.discountComponent.ledgerAmount = this.totalAmount;
-            this.discountComponent.change();
-        }
 
         this.getEntryTotal();
         this.generateGrandTotal();
@@ -382,7 +378,7 @@ export class UpdateLedgerVm {
 
     // FIXME: fix total calculation
     public generateGrandTotal() {
-        let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
+        let taxTotal: number = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
         let total = this.totalAmount - this.discountTrxTotal;
         this.appliedTaxPerTotal = taxTotal;
         this.totalForTax = total;
@@ -446,11 +442,6 @@ export class UpdateLedgerVm {
         this.getEntryTotal();
         this.generatePanelAmount();
 
-        if (this.discountComponent) {
-            this.discountComponent.ledgerAmount = this.totalAmount;
-            this.discountComponent.change();
-        }
-
         this.generateGrandTotal();
         this.generateCompoundTotal();
     }
@@ -466,11 +457,6 @@ export class UpdateLedgerVm {
 
         this.getEntryTotal();
         this.generatePanelAmount();
-
-        if (this.discountComponent) {
-            this.discountComponent.ledgerAmount = this.totalAmount;
-            this.discountComponent.change();
-        }
 
         this.generateGrandTotal();
         this.generateCompoundTotal();
@@ -515,11 +501,6 @@ export class UpdateLedgerVm {
 
         this.getEntryTotal();
 
-        if (this.discountComponent) {
-            this.discountComponent.ledgerAmount = this.totalAmount;
-            this.discountComponent.change();
-        }
-
         this.generateGrandTotal();
         this.generateCompoundTotal();
     }
@@ -529,20 +510,11 @@ export class UpdateLedgerVm {
         let percentageDiscount = 0;
 
         if (this.discountComponent) {
-            percentageDiscount = this.discountComponent.discountAccountsDetails?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'PERCENTAGE')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
-
-            fixDiscount = this.discountComponent.discountAccountsDetails?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'FIX_AMOUNT')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
+            percentageDiscount = this.discountComponent.getTotalPercentageDiscount();
+            fixDiscount = this.discountComponent.getTotalFixedDiscount();
         }
 
-        let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
+        let taxTotal: number = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
         const particularAccount = this.getParticularAccount();
         const ledgerAccount = this.getLedgerAccount(particularAccount);
         if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
@@ -564,10 +536,6 @@ export class UpdateLedgerVm {
             this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
             this.stockTrxEntry.isUpdated = true;
 
-            if (this.discountComponent) {
-                this.discountComponent.ledgerAmount = this.totalAmount;
-                this.discountComponent.change();
-            }
         } else {
             // find account that's from category income || expenses || fixed assets
             let trx: ILedgerTransactionItem = find(this.selectedLedger?.transactions, (t) => {
@@ -580,10 +548,6 @@ export class UpdateLedgerVm {
                 trx.isUpdated = true;
             }
 
-            if (this.discountComponent) {
-                this.discountComponent.ledgerAmount = this.totalAmount;
-                this.discountComponent.change();
-            }
         }
 
         this.getEntryTotal();
@@ -653,7 +617,7 @@ export class UpdateLedgerVm {
     public prepare4Submit(): LedgerResponse {
         let requestObj: any = cloneDeep(this.selectedLedger);
         let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
-        let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
+        let taxes: any[] = cloneDeep(this.selectedTaxes);
         requestObj.voucherType = requestObj?.voucher?.shortCode;
         requestObj.transactions = requestObj?.transactions ? requestObj.transactions.filter(p => p.particular?.uniqueName && !p.isDiscount) : [];
         requestObj.generateInvoice = this.selectedLedger?.generateInvoice;
@@ -663,12 +627,12 @@ export class UpdateLedgerVm {
                 trx.particular.uniqueName = trx.particular?.uniqueName.split('#')[0];
             }
         });
-        requestObj.taxes = [...taxes.map(t => t.particular?.uniqueName)];
+        requestObj.taxes = [...taxes.map(t => t?.uniqueName)];
         if (requestObj.isOtherTaxesApplicable) {
             requestObj.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
         }
 
-        requestObj.discounts = discounts?.filter(p => p.amount && p.isActive).map(m => {
+        requestObj.discounts = discounts?.filter(p => p.discountValue && p.isActive).map(m => {
             m.amount = m.discountValue;
             return m;
         });
