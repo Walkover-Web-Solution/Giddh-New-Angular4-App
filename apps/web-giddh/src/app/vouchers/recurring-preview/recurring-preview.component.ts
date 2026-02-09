@@ -258,7 +258,7 @@ export class RecurringPreviewComponent implements OnDestroy {
 
     /**
      * Fetches all recurring vouchers with pagination support
-     * Supports infinite scroll with load more functionality
+     * Supports bidirectional infinite scroll - load more on scroll down, load previous on scroll up
      * @public
      * @param {boolean} isLoadMore - Whether this is a load more request
      * @param {boolean} isScrollUp - Whether scrolling up (for previous page)
@@ -270,34 +270,25 @@ export class RecurringPreviewComponent implements OnDestroy {
         }
         if (isLoadMore) {
             this.isLoadMore.set(true);
-            if (this.totalPages() > this.advanceFilters().page) {
-                if (isScrollUp) {
-                    const filters = this.advanceFilters();
-                    filters.page = this.pageNumberHistory()[0] - 1;
-                    this.advanceFilters.set(filters);
-                } else {
-                    const history = this.pageNumberHistory();
-                    let lastIndex = history.length - 1;
-                    const filters = this.advanceFilters();
-                    if (history[lastIndex] === filters.page) {
-                        filters.page = filters.page + 1;
-                    } else {
-                        filters.page = history[lastIndex] + 1;
-                    }
-                    this.advanceFilters.set(filters);
-                }
-            } else {
-                return;
-            }
-            if (!isScrollUp && (this.totalPages() < this.advanceFilters().page)) {
-                return;
-            }
+            const history = this.pageNumberHistory();
+            const filters = this.advanceFilters();
 
-            if (isScrollUp && this.advanceFilters().page === 0) {
-                const filters = this.advanceFilters();
-                filters.page = 1;
+            if (isScrollUp) {
+                const firstLoadedPage = history.length > 0 ? Math.min(...history) : 1;
+                if (firstLoadedPage <= 1) {
+                    this.isLoadMore.set(false);
+                    return;
+                }
+                filters.page = firstLoadedPage - 1;
                 this.advanceFilters.set(filters);
-                return;
+            } else {
+                const lastLoadedPage = history.length > 0 ? Math.max(...history) : 1;
+                if (lastLoadedPage >= this.totalPages()) {
+                    this.isLoadMore.set(false);
+                    return;
+                }
+                filters.page = lastLoadedPage + 1;
+                this.advanceFilters.set(filters);
             }
         }
 
@@ -308,8 +299,8 @@ export class RecurringPreviewComponent implements OnDestroy {
             q: this.advanceFilters().q
         }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body) {
-                this.handleGetAllRecurringResponse(response.body);
-                if (response.body.items?.length > 0) {
+                this.handleGetAllRecurringResponse(response.body, isScrollUp, isLoadMore);
+                if (response.body.items?.length > 0 && !isLoadMore) {
                     const recurringVoucherUniqueName = this.activeAccountUniqueName() || response.body.items[0].recurringVoucherUniqueName;
                     this.recurrenceFormService.getRuleDetails(
                         recurringVoucherUniqueName,
@@ -330,10 +321,13 @@ export class RecurringPreviewComponent implements OnDestroy {
     /**
      * Handles the response from the getAll recurring vouchers API
      * Updates the recurring voucher list, handles pagination, and manages selected voucher
+     * Supports bidirectional scrolling by prepending items for scroll up, appending for scroll down
      * @private
      * @param {any} response - The API response containing recurring vouchers data
+     * @param {boolean} isScrollUp - Whether this was a scroll up request (load previous page)
+     * @param {boolean} isLoadMore - Whether this is a load more request (not initial load)
      */
-    private readonly handleGetAllRecurringResponse = (response: any): void => {
+    private readonly handleGetAllRecurringResponse = (response: any, isScrollUp: boolean = false, isLoadMore: boolean = false): void => {
         if (response) {
             const currentRecurringList = [];
             const page = response.page || this.advanceFilters().page;
@@ -355,11 +349,19 @@ export class RecurringPreviewComponent implements OnDestroy {
                 });
             }
 
-            if (this.advanceFilters().page === 1) {
+            if (!isLoadMore && this.recurringVoucherList().length === 0) {
                 this.recurringVoucherList.set(currentRecurringList);
                 if (this.cdkScrollbar) {
                     this.cdkScrollbar.scrollToIndex(0);
                 }
+            } else if (isScrollUp) {
+                const currentScrollIndex = this.cdkScrollbar?.measureScrollOffset('top') || 0;
+                this.recurringVoucherList.set([...currentRecurringList, ...this.recurringVoucherList()]);
+                setTimeout(() => {
+                    if (this.cdkScrollbar) {
+                        this.cdkScrollbar.scrollToIndex(currentRecurringList.length);
+                    }
+                }, 0);
             } else {
                 this.recurringVoucherList.set([...this.recurringVoucherList(), ...currentRecurringList]);
             }
