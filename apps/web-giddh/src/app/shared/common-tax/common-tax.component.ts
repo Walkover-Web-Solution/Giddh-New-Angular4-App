@@ -21,6 +21,7 @@ import { NgxMaskModule } from '../helpers/directives/ngx-mask';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { A11yModule } from '@angular/cdk/a11y';
 import { AsideMenuCreateTaxModule } from '../aside-menu-create-tax/aside-menu-create-tax.module';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 /**
  * Common Tax Component
@@ -832,13 +833,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     public showCreateTaxDialog(): void {
         this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
         this.isTaxDialogOpen = true;
-        this.taxAsideMenuRef = this.dialog.open(this.createTaxTemplate, {
-            position: {
-                right: "0",
-                top: "0",
-            },
-            autoFocus: false
-        });
+        this.taxAsideMenuRef = this.dialog.open(this.createTaxTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
