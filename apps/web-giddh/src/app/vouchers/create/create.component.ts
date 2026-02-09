@@ -5150,14 +5150,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public cancelUpdateVoucher(): void {
-        if (this.queryParams.isRecurringVoucher) {
-            this.location.back();
+        if (this.redirectUrl) {
+            this.router.navigateByUrl(this.redirectUrl);
         } else {
-            if (this.redirectUrl) {
-                this.router.navigateByUrl(this.redirectUrl);
-            } else {
-                this.redirectToVoucherPreview();
-            }
+            this.redirectToVoucherPreview();
         }
     }
 
