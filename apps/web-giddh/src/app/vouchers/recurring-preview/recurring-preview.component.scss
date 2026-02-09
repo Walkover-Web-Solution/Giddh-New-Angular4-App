@@ -11,6 +11,9 @@
 :host ::ng-deep .invoice-preview-wrapper {
     .preview-list {
         overflow-y: auto;
+        .list-viewport {
+            height: calc(100vh - 92px);
+        }
 
         .single-invoice-detail {
             &:hover,
