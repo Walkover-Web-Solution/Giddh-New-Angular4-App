@@ -2880,6 +2880,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Fills default billing and shipping addresses for account
+     *
+     * @private
+     * @param {*} accountData
+     * @memberof VoucherCreateComponent
+     */
+    private fillDefaultAccountAddresses(accountData: any): void {
+        let defaultAddress = null;
+        let accountDefaultAddress = this.vouchersUtilityService.getDefaultAddress(accountData);
+        defaultAddress = accountDefaultAddress.defaultAddress;
+        const index = accountDefaultAddress.defaultAddressIndex;
+
+        if (defaultAddress) {
+            this.fillBillingShippingAddress("account", "billingDetails", defaultAddress, index);
+            this.fillBillingShippingAddress("account", "shippingDetails", defaultAddress, index);
+        }
+    }
+
+    /**
      * Assigns account data in object
      *
      * @private
@@ -2938,24 +2957,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 this.invoiceForm.get("exchangeRate").patchValue(1);
             }
-            let defaultAddress = null;
-            let accountDefaultAddress = this.vouchersUtilityService.getDefaultAddress(accountData);
-            defaultAddress = accountDefaultAddress.defaultAddress;
-            index = accountDefaultAddress.defaultAddressIndex;
-
-            if (defaultAddress) {
-                this.fillBillingShippingAddress("account", "billingDetails", defaultAddress, index);
-                this.fillBillingShippingAddress("account", "shippingDetails", defaultAddress, index);
-            }
+            this.fillDefaultAccountAddresses(accountData);
 
             if (
                 this.invoiceType.isPurchaseOrder ||
                 (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)
             ) {
                 let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
-                defaultAddress = companyDefaultAddress.defaultAddress;
+                let defaultAddress = companyDefaultAddress.defaultAddress;
                 const findIndex = this.company.addresses.findIndex((address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName);
-                index = findIndex > -1 ? findIndex : 0;
+                let index = findIndex > -1 ? findIndex : 0;
 
                 if (defaultAddress) {
                     this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
@@ -3942,6 +3953,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.controls["account"]?.get("uniqueName")?.patchValue(response?.uniqueName);
         this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(response?.name);
         this.updateAccountDataInForm(response, fetchStates);
+        this.fillDefaultAccountAddresses(response);
         this.accountAsideMenuRef?.close();
     }
 
