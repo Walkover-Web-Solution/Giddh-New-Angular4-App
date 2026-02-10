@@ -249,17 +249,7 @@
                         [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
                         [prefixInput]="selectedPrefixForCurrency || ''"
                         [suffixInput]="selectedSuffixForCurrency || ''"
-                        [applicableTaxes]="
-                            currentTxn?.duplicateEntry
-                                ? currentTxn.taxes
-                                : taxListForStock?.length
-                                  ? taxListForStock
-                                  : currentTxn?.selectedAccount?.applicableTaxes?.length
-                                    ? currentTxn?.selectedAccount?.applicableTaxes
-                                    : currentAccountApplicableTaxes?.length
-                                      ? currentAccountApplicableTaxes
-                                      : []
-                        "
+                        [applicableTaxes]="currentTxn?.duplicateEntry ? currentTxn.taxes : currentTxn?.selectedAccount?.applicableTaxes"
                         (taxAmountSumEvent)="calculateTax()"
                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                         [calculateTaxInclusively]="isAdvanceReceiptWithTds || isInclusiveEntry"

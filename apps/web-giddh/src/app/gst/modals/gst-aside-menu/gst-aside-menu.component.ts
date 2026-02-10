@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -33,9 +33,11 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     @Input() public commonLocaleData: any = {};
     public taxProForm: GstSaveGspSessionRequest = new GstSaveGspSessionRequest();
     public reconcileForm: any = {};
-    public saveGspSessionInProcess = false;
+    /** Signal to track if GSP session save is in progress */
+    public saveGspSessionInProcess = signal<boolean>(false);
     public otpSentSuccessFully = false;
-    public authorizeGspSessionOtpInProcess = false;
+    /** Signal to track if GSP session OTP authorization is in progress */
+    public authorizeGspSessionOtpInProcess = signal<boolean>(false);
     public gspSessionOtpAuthorized = false;
     public reconcileOtpInProcess$: Observable<boolean>;
     public reconcileOtpSuccess$: Observable<boolean>;
@@ -95,11 +97,11 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(p => p.gstR.saveGspSessionInProcess), takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
-            this.saveGspSessionInProcess = yes;
+            this.saveGspSessionInProcess.set(yes);
         });
 
         this.store.pipe(select(p => p.gstR.authorizeGspSessionOtpInProcess), takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
-            this.authorizeGspSessionOtpInProcess = yes;
+            this.authorizeGspSessionOtpInProcess.set(yes);
         });
 
         this.store.pipe(select(p => p.gstR.gspSessionOtpAuthorized), takeUntil(this.destroyed$)).subscribe((yes: boolean) => {

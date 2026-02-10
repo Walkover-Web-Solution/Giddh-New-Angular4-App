@@ -57,7 +57,7 @@ function generateEnvScript(envVars) {
         AppUrl: isElectron ? './' : (envVars.APP_URL || 'http://localhost:3000/'),
         ApiUrl: envVars.API_URL || 'https://apitest.giddh.com/',
         UkApiUrl: envVars.UK_API_URL || 'https://gbapi.giddh.com/',
-        PORTAL_URL: envVars.PORTAL_URL || 'https://master.d2n1i21e52r793.amplifyapp.com/',
+        PORTAL_URL: envVars.PORTAL_URL || 'https://testportal.giddh.com/',
         isElectron: isElectron,
         APP_FOLDER: envVars.APP_FOLDER || '',
         GOOGLE_CLIENT_ID: envVars.GOOGLE_CLIENT_ID || envVars.GOOGLE_CLIENT_ID_TEST || '',
