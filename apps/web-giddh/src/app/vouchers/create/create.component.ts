@@ -5713,30 +5713,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (invoiceForm?.account?.uniqueName) {
                 invoiceForm.account.uniqueName = accountUniqueName;
             }
-            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice) {
-                // ✅ ONLY attach recurrencePreviewRequest if checkbox is checked
-                if (this.invoiceForm.get('isRecurringVoucher')?.value) {
-                    // Notify recurrencePreviewRequest component to skip preview calls during form cleaning
+
+            // Handle Recurring Voucher
+            if (this.invoiceForm.get('isRecurringVoucher')?.value && this.isRecurringVoucherSupported()) {
+                if (this.asideRecurrenceVoucher) {
+                    this.asideRecurrenceVoucher.setSubmitting(true);
+                }
+                invoiceForm.recurrencePreviewRequest = this.recurrenceService.getCleanFormValue(this.recurrenceFormGroup);
+                setTimeout(() => {
                     if (this.asideRecurrenceVoucher) {
-                        this.asideRecurrenceVoucher.setSubmitting(true);
+                        this.asideRecurrenceVoucher.setSubmitting(false);
                     }
-
-                    const cleanData = this.recurrenceService.getCleanFormValue(this.recurrenceFormGroup);
-                    invoiceForm.recurrencePreviewRequest = cleanData;
-
-                    // Reset the flag after debounce completes (700ms + buffer)
-                    setTimeout(() => {
-                        if (this.asideRecurrenceVoucher) {
-                            this.asideRecurrenceVoucher.setSubmitting(false);
-                        }
-                    }, 800);
-                } else {
-                    delete invoiceForm.recurrencePreviewRequest;
-                }
-                if (!this.queryParams?.isRecurringVoucher) {
-                    delete invoiceForm.isRecurringVoucher;
-                }
+                }, 800);
+            } else {
+                delete invoiceForm.recurrencePreviewRequest;
             }
+            if (!this.queryParams?.isRecurringVoucher) {
+                delete invoiceForm.isRecurringVoucher;
+            }
+
             if (this.isUpdateMode) {
                 this.voucherService
                     .updateVoucher(invoiceForm)
@@ -8214,5 +8209,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private setInitialRecurrencePreviewRequest(): void {
         this.invoiceForm.get('isRecurringVoucher')?.patchValue(Boolean(this.queryParams.isRecurringVoucher));
         this.isRecurringVoucherSelected();
+    }
+
+    /**
+     * Checks if recurring voucher functionality is supported for the current voucher type
+     * Recurring vouchers are not supported for Estimates, Proformas, and Purchase Orders
+     * 
+     * @protected
+     * @returns {boolean} True if recurring voucher is supported for current voucher type
+     * @memberof VoucherCreateComponent
+     */
+    protected isRecurringVoucherSupported(): boolean {
+        return !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice && !this.invoiceType.isPurchaseOrder;
     }
 }
