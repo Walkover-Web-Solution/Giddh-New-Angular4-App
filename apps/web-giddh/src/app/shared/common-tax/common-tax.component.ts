@@ -310,7 +310,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
      */
     public prepareTaxObject(): void {
         let taxesList = cloneDeep(this.taxes());
-        if (!taxesList) {
+        if (!taxesList?.length) {
             return;
         }
 
