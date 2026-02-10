@@ -313,7 +313,6 @@
                                 <div class="form-group">
                                     <label>{{ commonLocaleData?.app_street }}</label>
                                     <textarea
-                                        appEnterNext
                                         name="gstAddr_{{ i }}"
                                         formControlName="address"
                                         rows="4"
@@ -390,12 +389,12 @@
                                     appEnterNext
                                     [name]="'pinCodeNum'"
                                     [label]="
-                                        zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode)
+                                        zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode)
                                             ? commonLocaleData?.app_zip_code
                                             : commonLocaleData?.app_pin_code
                                     "
                                     [placeholder]="
-                                        zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode)
+                                        zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode)
                                             ? commonLocaleData?.app_enter_zip_code
                                             : commonLocaleData?.app_enter_pin_code
                                     "

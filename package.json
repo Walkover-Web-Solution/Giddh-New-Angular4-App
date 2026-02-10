@@ -1,6 +1,6 @@
 {
   "name": "giddh-workspaces",
-  "version": "9.1.3",
+  "version": "10.0.0",
   "license": "MIT",
   "private": true,
   "main": "dist/apps/web-giddh/index.js",
@@ -8,9 +8,9 @@
     "ng": "ng",
     "start": "npm run postinstall.web && node --max_old_space_size=16000 scripts/build-env.js local && node --max_old_space_size=16000 node_modules/@angular/cli/bin/ng serve web-giddh --configuration=local",
     "build": "npm run postinstall.web && node --max_old_space_size=16000 scripts/build-env.js local && node --max_old_space_size=16000 node_modules/@angular/cli/bin/ng build web-giddh --configuration=local && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html",
-    "build-prod": "npm run postinstall.web && NODE_ENV=production node --max_old_space_size=16000 scripts/build-env.js prod && node --max_old_space_size=16000 node_modules/@angular/cli/bin/ng build web-giddh --configuration=prod --output-hashing=all && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
-    "build-stage": "npm run postinstall.web && NODE_ENV=staging node --max_old_space_size=16000 scripts/build-env.js stage && node --max_old_space_size=16000 node_modules/@angular/cli/bin/ng build web-giddh --configuration=stage --output-hashing=all && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
-    "build-test": "npm run postinstall.web && NODE_ENV=test node --max_old_space_size=16000 scripts/build-env.js test && node --max_old_space_size=16000 node_modules/@angular/cli/bin/ng build web-giddh --configuration=test --output-hashing=all && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
+    "build-prod": "npm run postinstall.web && NODE_ENV=production node --max_old_space_size=12288 --optimize-for-size scripts/build-env.js prod && node --max_old_space_size=12288 --optimize-for-size --gc-interval=100 node_modules/@angular/cli/bin/ng build web-giddh --configuration=prod --output-hashing=all && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
+    "build-stage": "npm run postinstall.web && NODE_ENV=staging node --max_old_space_size=12288 --optimize-for-size scripts/build-env.js stage && node --max_old_space_size=12288 --optimize-for-size --gc-interval=100 node_modules/@angular/cli/bin/ng build web-giddh --configuration=stage --output-hashing=all && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
+    "build-test": "npm run postinstall.web && NODE_ENV=test node --max_old_space_size=12288 --optimize-for-size scripts/build-env.js test && node --max_old_space_size=12288 --optimize-for-size --gc-interval=100 node_modules/@angular/cli/bin/ng build web-giddh --configuration=test --output-hashing=all && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
     "build-dev": "npm run postinstall.web && NODE_ENV=local node --max_old_space_size=16000 scripts/build-env.js local && node --max_old_space_size=16000 node_modules/@angular/cli/bin/ng build web-giddh --configuration=local --output-hashing=all && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
     "bundle:report": "source-map-explorer dist/apps/web-giddh-prod/*.js",
     "rm_bak_files": "find dist -name '*.bak' -exec rm -Rf {} \\;",
@@ -49,30 +49,7 @@
     "postinstall.web": "node tools/web/postinstall",
     "postinstall.electron": "node tools/electron/postinstall",
     "prepare": "husky install",
-    "build.electron.giddh.test": "npm run prepare.electron.giddh && ELECTRON_ENV=true node scripts/build-env.js test && ELECTRON_ENV=true node --max_old_space_size=16000 node_modules/@angular/cli/bin/ng build electron-giddh --configuration=test && node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html",
-    "build.electron.giddh": "npm run prepare.electron.giddh && ELECTRON_ENV=true node scripts/build-env.js prod && ELECTRON_ENV=true node --max_old_space_size=16000 node_modules/@angular/cli/bin/ng build electron-giddh --configuration=prod && node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html",
-    "build.electron.giddh.linux": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --linux",
-    "build.electron.giddh.windows": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --windows",
-    "build.electron.giddh.mac": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --mac",
-    "prepare.electron.giddh": "npm run postinstall.electron && tsc -p apps/electron-giddh/tsconfig.json",
-    "release": "npm run build.electron.giddh && cd dist/apps/web-giddh && cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key npx electron-builder build --config ./../../../electron-sign/electron-builder.json -mwl --x64 --publish always",
-    "package": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  -mw --x64",
-    "package:linux": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder  build --config ./../../../electron-sign/electron-builder.json  --linux --x64 && node ../../../scripts/build-success-message.js prod",
-    "package:mac": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  --macos --x64 && node ../../../scripts/build-success-message.js prod",
-    "package:windows": "node scripts/clean-old-builds.js && npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --ia32 --x64 && node ../../../scripts/build-success-message.js prod",
-    "package:windows:test": "node scripts/clean-old-builds.js && npm run build.electron.giddh.test && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --win --ia32 --x64 && node ../../../scripts/build-success-message.js test",
-    "electron:auto": "node scripts/build-electron-env.js",
-    "electron:auto:dry-run": "node scripts/build-electron-env.js --dry-run",
-    "electron:force-local": "node scripts/build-electron-env.js --force-env=local",
-    "electron:force-prod": "node scripts/build-electron-env.js --force-env=prod",
-    "electron:detect-branch": "node scripts/detect-branch-env.js",
-    "build:electron": "npm run prepare.electron.giddh && ELECTRON_ENV=true node scripts/build-env.js prod && ELECTRON_ENV=true node --max_old_space_size=16000 node_modules/@angular/cli/bin/ng build electron-giddh && node scripts/inject-env-vars.js --electron dist/apps/web-giddh/index.html",
-    "electron:build": "npm run prepare.electron.giddh",
-    "electron:fix": "node scripts/fix-electron-build.js",
-    "electron:build-complete": "npm run build:electron && npm run electron:fix && npm run electron:build",
-    "package:mac:test": "npm run build.electron.giddh.test && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --macos --x64 --publish always && node ../../../scripts/build-success-message.js test",
-    "release:windows:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --win --ia32 --x64 --publish always",
-    "release:mac:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --macos --x64 --publish always"
+    "prepare.electron.giddh": "npm run postinstall.electron && tsc -p apps/electron-giddh/tsconfig.json"
   },
   "dependencies": {
     "@angular/animations": "^21.0.4",
@@ -175,14 +152,14 @@
     "typescript": "~5.9.0",
     "webpack": "^5.94.0"
   },
-"lint-staged": {
-  "*.ts": [
-    "prettier --write"
-  ],
-  "*.{js,json,css,scss,html,md}": [
-    "prettier --write"
-  ]
-},
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write"
+    ],
+    "*.{js,json,css,scss,html,md}": [
+      "prettier --write"
+    ]
+  },
   "xplat": {
     "prefix": "foo"
   }

@@ -47,6 +47,7 @@ export const IPV4_REGEX = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0
 export const APP_DEFAULT_TITLE = '';
 export const SYNC_TALLY_HELP_DOC_URL = 'https://giddh.com/help/sync-with-tally-1591360375828781';
 export const BANK_STATEMENT_HELP_DOC_URL = 'https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh';
+export const SOCKET_FLOW_API = 'https://flow.sokt.io/func/CMEQnVPyk2a8';
 
 /** Restricted modules */
 export enum RestrictedModules {
@@ -995,6 +996,17 @@ export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';
 
 /** Default display format for number formatting */
 export const DEFAULT_NUMBER_DISPLAY_FORMAT = 'IND_COMMA_SEPARATED';
+
+/** Global localStorage key for storing UI preferences and settings */
+export const UI_SETTINGS_STORAGE_KEY = 'giddh-ui-settings';
+
+/** Cache duration constants in milliseconds */
+export const CACHE_DURATION = {
+    ONE_DAY: 24 * 60 * 60 * 1000,
+    SEVEN_DAYS: 7 * 24 * 60 * 60 * 1000,
+    THIRTY_DAYS: 30 * 24 * 60 * 60 * 1000,
+    ONE_YEAR: 365 * 24 * 60 * 60 * 1000
+};
 
 /** Holds all possible field types for form fields */
 export enum FormFieldsType {

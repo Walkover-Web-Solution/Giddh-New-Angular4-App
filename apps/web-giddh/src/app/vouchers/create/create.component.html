@@ -1544,14 +1544,7 @@
                                                                         formControlName="uniqueName"
                                                                         [name]="'transactionAccountUniqueName' + entryIndex"
                                                                         [useCustomLabelValue]="true"
-                                                                        [labelValue]="
-                                                                            transaction.get('stock.name')?.value
-                                                                                ? transaction.get('account.name')?.value +
-                                                                                  ' (' +
-                                                                                  transaction.get('stock.name')?.value +
-                                                                                  ')'
-                                                                                : transaction.get('account.name')?.value
-                                                                        "
+                                                                        [labelValue]="getAccountDisplayLabel(transaction)"
                                                                         [options]="voucherStockResults$ | async"
                                                                         [showCreateNew]="true"
                                                                         [enableDynamicSearch]="true"
@@ -1562,12 +1555,7 @@
                                                                         (dynamicSearchedQuery)="searchStock($event, 1)"
                                                                         (onClear)="selectStock($event, entryIndex, true)"
                                                                         (createOption)="toggleStockAsidePane()"
-                                                                        [openDropdown]="
-                                                                            entryIndex === activeEntryIndex &&
-                                                                            (invoiceType.isCashInvoice
-                                                                                ? invoiceForm.controls['account'].get('customerName')?.value
-                                                                                : invoiceForm.controls['account'].get('uniqueName')?.value)
-                                                                        "
+                                                                        [openDropdown]="shouldOpenDropdown(entryIndex)"
                                                                         [showOptionDivider]="true"
                                                                         [showMatLabel]="false"
                                                                         [showCaretIcon]="false"
@@ -1575,25 +1563,42 @@
                                                                         [forceClear]="forceClear"
                                                                     >
                                                                         <ng-template #optionTemplate let-option="option">
-                                                                            <ng-container *ngIf="!option.additional?.stock">
-                                                                                <a href="javascript:;" class="d-block py-2">
+                                                                            @if (!option.additional?.stock) {
+                                                                                <a href="javascript:;" class="d-block py-1">
                                                                                     <div class="option-label pt-2">
                                                                                         {{ option?.label | titlecase }}
                                                                                     </div>
+                                                                                    @if (showAccountUniqueName) {
+                                                                                        <div class="option-value pb-2">
+                                                                                            {{ option.additional?.uniqueName }}
+                                                                                        </div>
+                                                                                    }
                                                                                 </a>
-                                                                            </ng-container>
-                                                                            <ng-container *ngIf="option.additional?.stock">
-                                                                                <a href="javascript:;" class="flex-column">
+                                                                            }
+                                                                            @if (option.additional?.stock) {
+                                                                                <a href="javascript:;" class="d-block py-1 flex-column">
                                                                                     <div class="option-label">
                                                                                         {{ option?.label | titlecase }}
-                                                                                        <span *ngIf="option?.additional?.stock">
-                                                                                            ({{
-                                                                                                option?.additional?.stock?.name | titlecase
-                                                                                            }})
-                                                                                        </span>
+                                                                                        @if (option?.additional?.stock) {
+                                                                                            <span>
+                                                                                                ({{
+                                                                                                    option?.additional?.stock?.name
+                                                                                                        | titlecase
+                                                                                                }})
+                                                                                            </span>
+                                                                                        }
                                                                                     </div>
+                                                                                    @if (showAccountUniqueName) {
+                                                                                        <div class="option-value">
+                                                                                            {{ option.additional?.uniqueName }}
+                                                                                        </div>
+                                                                                        <div class="option-value-stock font-12">
+                                                                                            {{ commonLocaleData?.app_stock }}:
+                                                                                            {{ option.additional?.stock?.uniqueName }}
+                                                                                        </div>
+                                                                                    }
                                                                                 </a>
-                                                                            </ng-container>
+                                                                            }
                                                                         </ng-template>
                                                                     </reactive-dropdown-field>
                                                                 </ng-container>
@@ -2144,18 +2149,24 @@
                                                                     </div>
                                                                 </ng-container>
                                                                 <div>
-                                                                    <discount-dropdown
+                                                                    <common-discount
                                                                         #discountDropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
-                                                                        [amount]="transaction.get('amount.amountForAccount')?.value"
-                                                                        [companyDecimalPlaces]="company.giddhBalanceDecimalPlaces"
-                                                                        [discountsList]="(discountsList$ | async) ?? []"
+                                                                        [showMatFormField]="false"
+                                                                        [id]="'common-discount_' + entryIndex"
+                                                                        [amountForDiscount]="
+                                                                            transaction.get('amount.amountForAccount')?.value
+                                                                        "
+                                                                        [giddhBalanceDecimalPlaces]="company.giddhBalanceDecimalPlaces"
+                                                                        [discountsList]="discountsList()"
                                                                         [commonLocaleData]="commonLocaleData"
-                                                                        [selectedDiscountsList]="entry.get('discounts')?.value"
-                                                                        [currency]="account.baseCurrencySymbol"
+                                                                        [maskInput]="company.inputMaskFormat"
+                                                                        [discountAccountsDetails]="entry.get('discounts')?.value"
+                                                                        [prefixInput]="account.baseCurrencySymbol"
+                                                                        [suffixInput]="''"
                                                                         (createNewDiscount)="showCreateDiscountDialog()"
-                                                                        (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)"
-                                                                        (totalDiscount)="
+                                                                        (selectedDiscountsEvent)="getSelectedDiscounts(entryIndex, $event)"
+                                                                        (discountTotalUpdated)="
                                                                             updateTotalDiscount(
                                                                                 $event,
                                                                                 entry,
@@ -2163,7 +2174,7 @@
                                                                             )
                                                                         "
                                                                         (closeDiscountDropdown)="focusNextElement($event)"
-                                                                    ></discount-dropdown>
+                                                                    ></common-discount>
                                                                     <span
                                                                         class="font-size-14 text-light mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher"
@@ -2216,27 +2227,29 @@
                                                                     </div>
                                                                 </ng-container>
                                                                 <div>
-                                                                    <tax-dropdown
-                                                                        #taxDropdown
+                                                                    <common-tax
+                                                                        #commonTaxControll
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [date]="invoiceForm.get('date')?.value"
-                                                                        [amount]="
+                                                                        [mask]="company.inputMaskFormat"
+                                                                        [totalForTax]="
                                                                             transaction.get('amount.amountForAccount')?.value -
                                                                             entry.get('totalDiscount')?.value
                                                                         "
-                                                                        [selectedTaxesList]="entry.get('taxes')?.value"
-                                                                        [taxesList]="companyTaxes"
-                                                                        [currency]="account.baseCurrencySymbol"
-                                                                        [calculateTaxInclusively]="
-                                                                            invoiceForm?.get('isAdvanceReceipt')?.value && !isUpdateMode
-                                                                        "
+                                                                        [applicableTaxes]="entry.get('taxes')?.value"
+                                                                        [taxes]="companyTaxes"
+                                                                        [prefixInput]="account.baseCurrencySymbol"
+                                                                        [allowedSelectionOfAType]="allowedSelectionOfAType"
+                                                                        [suffixInput]="''"
                                                                         [commonLocaleData]="commonLocaleData"
-                                                                        [calculateTax]="calculateTaxInTaxDropdown"
+                                                                        [giddhBalanceDecimalPlaces]="company.giddhBalanceDecimalPlaces"
+                                                                        [showMatFormField]="false"
+                                                                        [hasBackdrop]="true"
+                                                                        [showCreateNew]="true"
                                                                         (createNewTax)="showCreateTaxDialog()"
-                                                                        (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
-                                                                        (totalTax)="updateTotalTax($event, entry)"
-                                                                        (closeTaxDropdown)="focusNextElement($event)"
-                                                                    ></tax-dropdown>
+                                                                        (selectedTaxEvent)="getSelectedTaxes(entryIndex, $event)"
+                                                                        (taxAmountSumEvent)="updateTotalTax($event, entry)"
+                                                                    ></common-tax>
                                                                     <span
                                                                         class="font-size-14 text-light mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher"
@@ -3215,7 +3228,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4" *ngIf="isMainVoucher">
                                     <ng-container *ngIf="!isUpdateMode">
                                         <button matButton="outlined" (click)="resetVoucherForm()">

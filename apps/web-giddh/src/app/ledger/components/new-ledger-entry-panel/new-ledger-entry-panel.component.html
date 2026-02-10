@@ -198,21 +198,23 @@
                     *ngIf="showTaxationDiscountBox && currentTxn?.selectedAccount && !shouldShowAdvanceReceiptMandatoryFields"
                     (click)="$event.stopPropagation()"
                 >
-                    <ledger-discount
+                    <common-discount
                         (click)="hideAllDropdown(ledgerDropdownTypeEnum.DISCOUNT)"
                         #discount
-                        id="ledger-discount"
-                        [discountAccountsDetails]="currentTxn?.discounts"
+                        [discountAccountsDetails]="currentTxn.discounts"
                         [maskInput]="inputMaskFormat"
                         [prefixInput]="selectedPrefixForCurrency"
                         [suffixInput]="selectedSuffixForCurrency"
-                        [ledgerAmount]="currentTxn.amount"
-                        [discountsList]="discountsList"
+                        [amountForDiscount]="currentTxn.amount"
+                        [discountsList]="discountsList()"
                         [commonLocaleData]="commonLocaleData"
                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
-                        (discountTotalUpdated)="calculateDiscount($event)"
+                        [showCreateNew]="true"
+                        [hasBackdrop]="false"
+                        (discountTotalUpdated)="currentTxn.discount = $event; calculateDiscount()"
+                        (selectedDiscountsEvent)="currentTxn.discounts = $event"
                         (createNewDiscount)="showCreateDiscountDialog()"
-                    ></ledger-discount>
+                    ></common-discount>
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                         <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                         <span class="d-inline-flex">
@@ -229,13 +231,14 @@
                 </div>
                 <!-- Tax -->
                 <div *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields" (click)="$event.stopPropagation()">
-                    <tax-control
+                    <common-tax
                         (click)="hideAllDropdown(ledgerDropdownTypeEnum.TAX)"
                         id="ledger-tax"
                         #tax
-                        [taxes]="companyTaxesList$ | async"
+                        [taxes]="companyTaxesList"
+                        [mask]="inputMaskFormat"
                         [date]="blankLedger?.entryDate"
-                        [taxRenderData]="currentTxn?.taxesVm"
+                        (selectedTaxEvent)="currentTxn.taxesVm = $event"
                         [totalForTax]="totalForTax"
                         [showMatFormField]="true"
                         [hasBackdrop]="false"
@@ -244,20 +247,21 @@
                         "
                         [isMandatory]="isRcmEntry"
                         [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
-                        [maskInput]="inputMaskFormat"
-                        [prefixInput]="selectedPrefixForCurrency"
-                        [suffixInput]="selectedSuffixForCurrency"
+                        [prefixInput]="selectedPrefixForCurrency || ''"
+                        [suffixInput]="selectedSuffixForCurrency || ''"
                         [applicableTaxes]="
-                            taxListForStock?.length && !currentTxn?.duplicateEntry
-                                ? taxListForStock
-                                : currentTxn?.selectedAccount?.applicableTaxes?.length
-                                  ? currentTxn?.selectedAccount?.applicableTaxes
-                                  : currentAccountApplicableTaxes?.length && !currentTxn?.duplicateEntry
-                                    ? currentAccountApplicableTaxes
-                                    : []
+                            currentTxn?.duplicateEntry
+                                ? currentTxn.taxes
+                                : taxListForStock?.length
+                                  ? taxListForStock
+                                  : currentTxn?.selectedAccount?.applicableTaxes?.length
+                                    ? currentTxn?.selectedAccount?.applicableTaxes
+                                    : currentAccountApplicableTaxes?.length
+                                      ? currentAccountApplicableTaxes
+                                      : []
                         "
                         (taxAmountSumEvent)="calculateTax()"
-                        (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
+                        [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                         [calculateTaxInclusively]="isAdvanceReceiptWithTds || isInclusiveEntry"
                         [isAdvanceReceipt]="isAdvanceReceipt"
                         [allowedSelectionOfAType]="allowedSelectionOfAType"
@@ -265,7 +269,7 @@
                         [showError]="showRcmEntryError && isRcmEntry && !validateTaxes()"
                         [showCreateNew]="true"
                         (createNewTax)="showCreateTaxDialog()"
-                    ></tax-control>
+                    ></common-tax>
 
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                         <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>

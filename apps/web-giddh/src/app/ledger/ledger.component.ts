@@ -24,6 +24,7 @@ import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../m
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { GeneralService } from '../services/general.service';
+import { UiSettingsService } from '../services/ui-settings.service';
 import { LedgerService } from '../services/ledger.service';
 import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
@@ -72,7 +73,7 @@ import { environment } from '../../environments/environment.generated';
     styleUrls: ['./ledger.component.scss'],
     providers: [LedgerComponentStore, BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    standalone: false
 })
 
 export class LedgerComponent implements OnInit, OnDestroy {
@@ -205,14 +206,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public preventDefaultScrollApiCall: boolean = false;
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
-        page: 0,
+        page: 1,
         count: API_BULK_FETCH_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details (required only for passing
      * default search pagination details to Update ledger component) */
     public defaultResultsPaginationData = {
-        page: 0,
+        page: 1,
         count: API_BULK_FETCH_LIMIT,
         query: '',
     };
@@ -273,7 +274,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public paginationObject: any = {
         totalItems: 0,
         itemsPerPage: 0,
-        page: 0,
+        page: 1,
         totalPages: 0,
         showPagination: false,
         prevToken: null,
@@ -409,6 +410,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public particularMultiCurrency: boolean = false;
     /** To clear the dropdown list */
     public forceClear$: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
+    /** Tracks if account unique name should be shown in dropdowns */
+    public showAccountUniqueName: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -419,6 +422,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
+        private uiSettingsService: UiSettingsService,
         private loginActions: LoginActions,
         private loaderService: LoaderService,
         private warehouseActions: WarehouseActions,
@@ -495,7 +499,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let to = dayjs(value.endDate, GIDDH_DATE_FORMAT).toDate();
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-            page: 0,
+            page: 1,
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                 bsRangeValue: [from, to]
             })
@@ -605,6 +609,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
 
         /* Here, we filtered the pagination size to a maximum of 50 to avoid performance issues. */
         this.pageSizeOptions = this.pageSizeOptions.filter(size => size <= 50);
@@ -792,11 +797,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     })
                 });
                 this.advanceSearchRequest.to = to;
-                this.advanceSearchRequest.page = 0;
+                this.advanceSearchRequest.page = 1;
 
                 this.trxRequest.from = from;
                 this.trxRequest.to = to;
-                this.trxRequest.page = 0;
+                this.trxRequest.page = 1;
                 this.isDefaultLoad = false;
             } else {
                 // means ledger is opened normally
@@ -812,11 +817,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         })
                     });
                     this.advanceSearchRequest.to = universalDate[1];
-                    this.advanceSearchRequest.page = 0;
+                    this.advanceSearchRequest.page = 1;
 
                     this.trxRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                     this.trxRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                    this.trxRequest.page = 0;
+                    this.trxRequest.page = 1;
                 } else {
                     this.selectedDateRange = { startDate: dayjs(), endDate: dayjs() };
                     this.selectedDateRangeUi = dayjs().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs().format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -827,8 +832,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             bsRangeValue: []
                         })
                     });
-                    this.advanceSearchRequest.page = 0;
-                    this.trxRequest.page = 0;
+                    this.advanceSearchRequest.page = 1;
+                    this.trxRequest.page = 1;
 
                     // set request from and to, '' because we are depending on api to give us from and to date
                     this.advanceSearchRequest.to = '';
@@ -1018,7 +1023,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             .subscribe(term => {
                 const searchCleared = (this.trxRequest.q && !term);
                 this.trxRequest.q = term;
-                this.trxRequest.page = 0;
+                this.trxRequest.page = 1;
                 this.needToShowLoader = false;
                 if (term || this.trxRequest.q || searchCleared) {
                     this.trxRequest.paginationToken = "";
@@ -1904,7 +1909,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showExportLedgerModal(): void {
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-                page: 0,
+                page: 1,
                 dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                     bsRangeValue: [this.selectedDateRange.startDate, this.selectedDateRange.endDate]
                 })
@@ -2001,7 +2006,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public resetAdvanceSearch() {
         this.searchText = "";
         this.isAdvanceSearchImplemented = false;
-        this.trxRequest.page = 0;
+        this.trxRequest.page = 1;
         let accountUniqueName = this.advanceSearchRequest.accountUniqueName;
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.advanceSearchRequest.accountUniqueName = accountUniqueName;
@@ -2206,7 +2211,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public resetPreviousSearchResults(): void {
         this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
-            page: 0,
+            page: 1,
             count: 0,
             query: ''
         };
@@ -2221,7 +2226,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onOpenAdvanceSearch(): void {
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-                page: 0,
+                page: 1,
                 dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                     bsRangeValue: [this.selectedDateRange.startDate, this.selectedDateRange.endDate]
                 })
@@ -2229,10 +2234,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
-                    width: '980px',
-                    role: 'alertdialog',
-                    ariaLabel: 'advance'
-                });
+            width: '980px',
+            role: 'alertdialog',
+            ariaLabel: 'advance'
+        });
     }
 
     public search(term: string): void {
@@ -2713,7 +2718,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             lodashMap(res?.body?.invoiceList, (o) => {
                 this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
             });
-           uniqBy(this.invoiceList, 'value');
+            uniqBy(this.invoiceList, 'value');
         });
     }
 
@@ -3422,16 +3427,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
         transaction['isAttachment'] = isAttachment;
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
-                    width: '70%',
-                    height: '790px',
-                    maxHeight: '90vh',
-                    role: 'alertdialog',
-                    ariaLabel: 'template',
-                    autoFocus: false
-                });
+            width: '70%',
+            height: '790px',
+            maxHeight: '90vh',
+            role: 'alertdialog',
+            ariaLabel: 'template',
+            autoFocus: false
+        });
 
         dialogRef.afterClosed().subscribe(response => {
-            this.getTransactionData();
+            if (this.isAdvanceSearchImplemented) {
+                this.createLedgerBalance();
+                this.store.dispatch(this.ledgerActions.doAdvanceSearch(cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.trxRequest.from, this.trxRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
+            } else {
+                this.getTransactionData();
+            }
         });
     }
 
@@ -3520,12 +3530,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data.body.stock?.groupTaxes ?? [],
                     data.body.taxes ?? [],
                     data.body.groupTaxes ?? []);
-                if (txn?.taxesVm?.length) {
-                    (Array.isArray(txn?.taxesVm) ? txn?.taxesVm : []).forEach(tax => {
-                        tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
-                        tax.isDisabled = false;
-                    });
-                }
 
                 if (this.profileObj?.baseCurrency === this.lc.activeAccount?.currency) {
                     if (this.lc.activeAccount?.currency !== data.body?.currency.code) {
@@ -3654,20 +3658,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         variantDiscount = stock.variant?.variantDiscount;
                         quantity = txn?.inventory?.quantity || 1;
                     } else {
-                        const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
+                        stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
+                        const defaultUnitRates = (this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates).filter(unitRate => unitRate.stockUnitUniqueName === stockUnitUniqueName);
                         const defaultUnit = {
                             stockUnitCode: defaultUnitRates[0].stockUnitCode,
                             code: defaultUnitRates[0].stockUnitCode,
                             rate: defaultUnitRates[0].rate,
                             name: txn.selectedAccount.stock.name
                         };
-                        const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
+                        const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : txn.selectedAccount.stock?.variant?.unitRates;
                         txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                         stockName = defaultUnit.name;
                         rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                         stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                         unitCode = defaultUnit.code;
-                        stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
 
                         const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
                         if (hasMrpDiscount?.length) {
@@ -3716,6 +3720,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
                 this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
+                this.isTotalChanged = false;
                 this.needToReCalculate.next(true);
                 if (allowChangeDetection) {
                     this.cdRf.detectChanges();
@@ -4175,13 +4180,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private handeLoadDetailsForDuplicateEntry(event: any, txn: any): void {
         txn.showTaxationDiscountBox = false;
-        // Take taxes of parent group and stock's own taxes
-        if (txn?.taxesVm?.length) {
-            (Array.isArray(txn.taxesVm) ? txn.taxesVm : []).forEach(tax => {
-                tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
-                tax.isDisabled = false;
-            });
-        }
         if (!this.isHideBankLedgerPopup) {
             this.lc.currentBlankTxn = txn;
         }
