@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, forwardRef, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, OnInit, OnDestroy, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, Validators, AbstractControl, ValidationErrors, NG_VALIDATORS, Validator } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -165,7 +165,7 @@ function isSequential(number: string): boolean {
     templateUrl: './mobile-number-input.component.html',
     styleUrls: ['./mobile-number-input.component.scss']
 })
-export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+export class MobileNumberInputComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor, Validator {
     /** ViewChild reference to mobile input element */
     @ViewChild('mobileInput', { static: false }) public mobileInput: ElementRef<HTMLInputElement>;
     
@@ -251,6 +251,18 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     public ngOnInit(): void {
         this.loadTranslations();
         this.setupFormControls();
+    }
+
+    /**
+     * Handles changes to input properties
+     *
+     * @param {SimpleChanges} changes - Object containing changed properties
+     * @memberof MobileNumberInputComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes['disabled'] && !changes['disabled'].firstChange) {
+            this.setDisabledState(changes['disabled'].currentValue);
+        }
     }
     
     /**
