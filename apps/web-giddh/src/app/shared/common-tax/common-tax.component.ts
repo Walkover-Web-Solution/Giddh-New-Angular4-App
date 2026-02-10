@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, input, output, signal, computed, effect, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, input, output, signal, computed, effect, ViewChild, HostListener, ElementRef, TemplateRef } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { ITaxControlData, ITaxDetail } from '../../models/interfaces/tax.interface';
@@ -6,6 +6,11 @@ import { giddhRoundOff } from '../helpers/helperFunctions';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { cloneDeep, isEqual, orderBy } from '../../lodash-optimized';
 import { MatSelect } from '@angular/material/select';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
+import { CompanyActions } from '../../actions/company.actions';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
@@ -15,6 +20,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxMaskModule } from '../helpers/directives/ngx-mask';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { A11yModule } from '@angular/cdk/a11y';
+import { AsideMenuCreateTaxModule } from '../aside-menu-create-tax/aside-menu-create-tax.module';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 /**
  * Common Tax Component
@@ -57,7 +64,8 @@ import { A11yModule } from '@angular/cdk/a11y';
         MatTooltipModule,
         NgxMaskModule,
         FormFieldsModule,
-        A11yModule
+        A11yModule,
+        AsideMenuCreateTaxModule
     ]
 })
 export class CommonTaxComponent implements OnDestroy, OnInit {
@@ -110,16 +118,18 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     public taxAmountSumEvent = output<number>();
     /** Emits the array of selected taxes when selection changes */
     public selectedTaxEvent = output<any[]>();
-    /** Emits when "Create New Tax" is clicked */
-    public createNewTax = output<boolean>();
     /** Emits when tax dropdown is opened to hide other popups */
     public hideOtherPopups = output<void>();
+    /** Emits when tax creation modal is closed */
+    public taxModalClosed = output<void>();
 
     // ==================== VIEW CHILDREN ====================
     /** Reference to mat-select when showMatFormField is true */
     @ViewChild('taxSelect') public taxSelect: MatSelect;
     /** Reference to mat-select when showMatFormField is false (input-style) */
     @ViewChild('taxSelectInput') public taxSelectInput: MatSelect;
+    /** Template reference for create tax dialog */
+    @ViewChild('createTaxTemplate') public createTaxTemplate: TemplateRef<any>;
     
     // ==================== SIGNALS ====================
     /** Flag to track if dropdown is currently open */
@@ -139,7 +149,11 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     /** Subject for managing subscriptions */
     private destroyed$ = new ReplaySubject<boolean>(1);
     /** Array of selected tax unique names */
-    public selectedTaxUniquenames: string[] = [];
+    public selectedTaxUniquenames = signal<any[]>([]);
+    /** Create tax dialog reference */
+    public taxAsideMenuRef: MatDialogRef<any>;
+    /** Flag to track if create tax dialog is open */
+    public isTaxDialogOpen: boolean = false;
     /** Cache for tracking changes in taxes, applicableTaxes, and date inputs */
     private previousTaxesData: { taxes: any[], applicableTaxes: any[], date: string } = { taxes: null, applicableTaxes: null, date: null };
     /**
@@ -148,7 +162,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
      */
     private taxesInputTracker = computed(() => {
         const taxes = this.taxes() || [];
-        const applicableTaxes = this.applicableTaxes() || [];
+        const applicableTaxes = this.selectedTaxUniquenames() || [];
         const date = this.date();
         return { taxes, applicableTaxes, date };
     });
@@ -174,11 +188,24 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
      * Initializes the component with required services and sets up reactive effects
      * 
      * @param cdr - Change detector reference for manual change detection
+     * @param elementRef - Element reference for DOM access
+     * @param store - NgRx store for state management
+     * @param dialog - Material dialog service for opening modals
+     * @param settingsTaxesAction - Actions for tax settings
+     * @param companyActions - Actions for company operations
      */
     constructor(
         private cdr: ChangeDetectorRef,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private store: Store<AppState>,
+        private dialog: MatDialog,
+        private settingsTaxesAction: SettingsTaxesActions,
+        private companyActions: CompanyActions
     ) {
+        effect(() => {
+            const tax  = this.applicableTaxes();
+            this.selectedTaxUniquenames.set(this.getApplicableTaxUniqueNames(tax));
+        }, { allowSignalWrites: true });
 
         effect(() => {
             const inclusively = this.calculateTaxInclusively();
@@ -273,8 +300,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
      * // Object array format
      * [{uniqueName: 'tax1'}, {uniqueName: 'tax2'}] => ['tax1', 'tax2']
      */
-    private getApplicableTaxUniqueNames(): string[] {
-        const applicableTaxes = this.applicableTaxes();
+    private getApplicableTaxUniqueNames(applicableTaxes: string[] | any[]): string[] {
         if (!applicableTaxes?.length) {
             return [];
         }
@@ -323,7 +349,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
         }
 
         const renderData = [];
-        const applicableTaxUniqueNames = this.getApplicableTaxUniqueNames();
+        const applicableTaxUniqueNames = this.selectedTaxUniquenames();
         
         taxesList.forEach(tax => {
             const index = renderData?.findIndex(f => f?.uniqueName === tax?.uniqueName);
@@ -342,6 +368,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                     if (!isDateValid) {
                         renderData[index].isDisabled = true;
                         renderData[index].disableForDate = true;
+                        renderData[index].isChecked = false;
                     } else {
                         renderData[index].disableForDate = false;
                     }
@@ -349,6 +376,8 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
             } else {
                 let taxObj = cloneDeep(tax);
                 taxObj.type = taxObj.taxType;
+                taxObj.isChecked = applicableTaxUniqueNames.length ? 
+                    applicableTaxUniqueNames.includes(tax?.uniqueName) : false;
 
                 if (this.date()) {
                     const normalizedDate = this.normalizeDate(this.date());
@@ -370,6 +399,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                         if (filteredTaxObject?.length === 0) {
                             taxObj.isDisabled = true;
                             taxObj.disableForDate = true;
+                            taxObj.isChecked = false;
                         } else {
                             taxObj.disableForDate = false;
                         }
@@ -380,8 +410,6 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                 }
                 
                 taxObj.amount = tax.taxDetail[0].taxValue;
-                taxObj.isChecked = applicableTaxUniqueNames.length ? 
-                    applicableTaxUniqueNames.includes(tax?.uniqueName) : false;
                 
                 renderData.push(taxObj);
             }
@@ -395,9 +423,9 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
         
         this.internalTaxRenderData.set(renderData);
         
-        this.selectedTaxUniquenames = renderData
+        this.selectedTaxUniquenames.set(renderData
             .filter(tax => tax.isChecked)
-            .map(tax => tax.uniqueName);
+            .map(tax => tax.uniqueName));
 
     }
 
@@ -602,7 +630,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
             // Remove 'create-new-option' from the selected values
             selectedUniquenames = selectedUniquenames.filter((value: string) => value !== 'create-new-option');
             // Update the model to exclude 'create-new-option'
-            this.selectedTaxUniquenames = selectedUniquenames;
+            this.selectedTaxUniquenames.set(selectedUniquenames);
             this.createNew();
             return;
         }
@@ -707,7 +735,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     }
 
     /**
-     * Emits event to create a new tax
+     * Opens create new tax dialog
      * 
      * Triggered when user clicks the "Create New" option in the dropdown
      * 
@@ -715,7 +743,7 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
      * @returns void
      */
     public createNew(): void {
-        this.createNewTax.emit(true);
+        this.showCreateTaxDialog();
     }
 
     /**
@@ -792,5 +820,38 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
                 // Silently handle any errors
             }
         }
+    }
+
+    /**
+     * Shows create new tax dialog
+     * 
+     * Opens the create tax aside menu dialog for creating a new tax
+     * 
+     * @public
+     * @memberof CommonTaxComponent
+     */
+    public showCreateTaxDialog(): void {
+        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
+        this.isTaxDialogOpen = true;
+        this.taxAsideMenuRef = this.dialog.open(this.createTaxTemplate, ASIDE_PANE_CONFIG);
+    }
+
+    /**
+     * Close tax modal
+     * 
+     * Closes the create tax dialog and refreshes the tax list
+     * Emits event to notify parent component to reopen dropdown
+     * 
+     * @public
+     * @memberof CommonTaxComponent
+     */
+    public closeTaxModal(): void {
+        this.store.dispatch(this.companyActions.getTax());
+        this.taxAsideMenuRef.close();
+        this.taxModalClosed.emit();
+        setTimeout(() => {
+            this.isTaxDialogOpen = false;
+            this.focusTaxDropdown();
+        }, 100);
     }
 }

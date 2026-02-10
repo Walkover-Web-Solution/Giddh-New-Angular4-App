@@ -130,6 +130,7 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
 import { Location } from '@angular/common';
+import { RecurringEndType, RecurringRepeatOption, RecurringFrequencyUnit, RecurringRepeatType, RecurringMonthlyMode } from "../../models/enums/recurring-voucher.enum";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -146,8 +147,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
     /** Instance of aside Menu Product Service modal */
     @ViewChild("asideMenuProductService") asideMenuProductService: TemplateRef<any>;
-    /** Template Reference for Create Tax aside menu */
-    @ViewChild("createTax") public createTax: TemplateRef<any>;
     /* Selector for send email modal */
     @ViewChild("sendEmailModal", { static: true }) public sendEmailModal: any;
     /* Selector for print modal */
@@ -328,8 +327,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public hasUnsavedChanges: boolean = false;
     /** Holds tax types */
     public taxTypes: any = TaxType;
-    /** Create tax dialog ref  */
-    public taxAsideMenuRef: MatDialogRef<any>;
     /** Hold aside menu state for product service  */
     public productServiceAsideMenuRef: MatDialogRef<any>;
     /** Other tax dialog ref */
@@ -776,6 +773,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .subscribe((response) => {
                 if (response) {
                     let params = response[0];
+                    if (params?.uniqueName && params.action !== "copy") {
+                        this.isUpdateMode = true;
+                    }
                     this.isRecurringVoucher = response;
                     if (params?.voucherType) {
                         this.isMainVoucher = true;
@@ -808,7 +808,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.resetVoucherForm(!params?.uniqueName, true);
                         this.invoiceForm.get('isRecurringVoucher')?.patchValue(this.queryParams.isRecurringVoucher ? true : false);
                         // Initialize recurring voucher form after resetVoucherForm creates the form structure
-                        if (this.queryParams.isRecurringVoucher) {
+                        if (this.queryParams.isRecurringVoucher && !this.isUpdateMode) {
                             this.isRecurringVoucherSelected();
                         }
 
@@ -851,7 +851,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             if (params?.action === "copy") {
                                 this.isCopyMode = true;
                             } else {
-                                this.isUpdateMode = true;
                                 this.invoiceForm.get("uniqueName").patchValue(params?.uniqueName);
                             }
                             this.useDefaultAccountDetails = false;
@@ -859,7 +858,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.getUpdateVoucherText();
                         } else {
                             this.depositAccountName = "";
-                        }
+                    }
 
                         if (params?.accountUniqueName === "cash") {
                             this.invoiceType.isCashInvoice = true;
@@ -1397,6 +1396,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                             const startDate = this.convertToDateObject(recurrencePreviewRequest?.startDate || this.invoiceForm.get('recurrencePreviewRequest.startDate')?.value);
                             this.invoiceForm.get('recurrencePreviewRequest.startDate')?.patchValue(startDate);
+                            this.invoiceForm.get('recurrencePreviewRequest.repeatOption')?.patchValue(voucherDetails?.recurrencePreviewRequest?.repeatOption || this.invoiceForm.get('recurrencePreviewRequest.repeatOption')?.value);
 
                             this.invoiceForm.get('recurrencePreviewRequest.frequency.unit')?.patchValue(recurrencePreviewRequest?.frequency?.unit || this.invoiceForm.get('recurrencePreviewRequest.frequency.unit')?.value);
                             this.invoiceForm.get('recurrencePreviewRequest.frequency.interval')?.patchValue(recurrencePreviewRequest?.frequency?.interval || this.invoiceForm.get('recurrencePreviewRequest.frequency.interval')?.value);
@@ -2880,6 +2880,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Fills default billing and shipping addresses for account
+     *
+     * @private
+     * @param {*} accountData
+     * @memberof VoucherCreateComponent
+     */
+    private fillDefaultAccountAddresses(accountData: any): void {
+        let defaultAddress = null;
+        let accountDefaultAddress = this.vouchersUtilityService.getDefaultAddress(accountData);
+        defaultAddress = accountDefaultAddress.defaultAddress;
+        const index = accountDefaultAddress.defaultAddressIndex;
+
+        if (defaultAddress) {
+            this.fillBillingShippingAddress("account", "billingDetails", defaultAddress, index);
+            this.fillBillingShippingAddress("account", "shippingDetails", defaultAddress, index);
+        }
+    }
+
+    /**
      * Assigns account data in object
      *
      * @private
@@ -2938,24 +2957,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 this.invoiceForm.get("exchangeRate").patchValue(1);
             }
-            let defaultAddress = null;
-            let accountDefaultAddress = this.vouchersUtilityService.getDefaultAddress(accountData);
-            defaultAddress = accountDefaultAddress.defaultAddress;
-            index = accountDefaultAddress.defaultAddressIndex;
-
-            if (defaultAddress) {
-                this.fillBillingShippingAddress("account", "billingDetails", defaultAddress, index);
-                this.fillBillingShippingAddress("account", "shippingDetails", defaultAddress, index);
-            }
+            this.fillDefaultAccountAddresses(accountData);
 
             if (
                 this.invoiceType.isPurchaseOrder ||
                 (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)
             ) {
                 let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
-                defaultAddress = companyDefaultAddress.defaultAddress;
+                let defaultAddress = companyDefaultAddress.defaultAddress;
                 const findIndex = this.company.addresses.findIndex((address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName);
-                index = findIndex > -1 ? findIndex : 0;
+                let index = findIndex > -1 ? findIndex : 0;
 
                 if (defaultAddress) {
                     this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
@@ -3036,7 +3047,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public fillBillingShippingAddress(entityType: string, addressType: string, address: any, index: number): void {
         this.invoiceForm.controls[entityType]?.get(addressType).get("index").patchValue(index);
-        this.invoiceForm.controls[entityType]?.get(addressType).get("name").patchValue(address.name);
+        this.invoiceForm.controls[entityType]?.get(addressType).get("name").patchValue(address?.name);
         this.invoiceForm.controls[entityType]
             ?.get(addressType)
             .get("address")
@@ -3130,23 +3141,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 startDate: [null, Validators.required],
 
                 frequency: this.formBuilder.group({
-                    unit: ['MONTH', Validators.required],
+                    unit: [RecurringFrequencyUnit.MONTH, Validators.required],
                     interval: [1, [Validators.required, Validators.min(1)]]
                 }),
 
                 repeatOn: this.formBuilder.group({
-                    type: ['DAY_OF_MONTH'],
+                    type: [RecurringRepeatType.DAY_OF_MONTH],
                     weekdays: this.formBuilder.array([]),   // ✅ ALWAYS exists
                     dayOfMonth: [null],
                     nth: [null],
                     weekday: [null],
-                    monthlyMode: ['DAY']
+                    monthlyMode: [RecurringMonthlyMode.DAY]
                 }),
 
                 end: this.formBuilder.group({
-                    type: ['ON_DATE'],
+                    type: [RecurringEndType.NEVER],
                     endDate: [null],
-                })
+                }),
+                repeatOption: RecurringRepeatOption.MONTHLY_DATE
             }),
             einvoiceGenerated: [false],
             linkedPo: [null], //temp
@@ -3159,15 +3171,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPersonName: [''],
             salesPersonUniqueName: ['']
         });
-
-        // Add listener to isRecurringVoucher checkbox
-        this.invoiceForm.get('isRecurringVoucher')?.valueChanges
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((isChecked) => {
-                if (isChecked) {
-                    this.isRecurringVoucherSelected();
-                }
-            });
     }
 
     /**
@@ -3186,20 +3189,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         recurrenceForm.patchValue({
             startDate: today,
             frequency: {
-                unit: 'MONTH',
+                unit: RecurringFrequencyUnit.MONTH,
                 interval: 1
             },
             repeatOn: {
-                type: 'DAY_OF_MONTH',
+                type: RecurringRepeatType.DAY_OF_MONTH,
+                weekdays: [],
                 dayOfMonth: today.getDate(),
                 nth: nth,
                 weekday: weekday,
-                monthlyMode: 'DAY'
+                monthlyMode: RecurringMonthlyMode.DAY
             },
             end: {
-                type: 'ON_DATE',
+                type: RecurringEndType.NEVER,
                 endDate: today
-            }
+            },
+            repeatOption: RecurringRepeatOption.MONTHLY_DATE
         });
     }
 
@@ -3948,41 +3953,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.controls["account"]?.get("uniqueName")?.patchValue(response?.uniqueName);
         this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(response?.name);
         this.updateAccountDataInForm(response, fetchStates);
+        this.fillDefaultAccountAddresses(response);
         this.accountAsideMenuRef?.close();
     }
 
-    /**
-    * Open and close tax dropdown
-    * if isOpen is true it will open the dropdown
-    * if isOpen is false it will close the dropdown
-    *
-    * @memberof NewLedgerEntryPanelComponent
-    */
-    public openAndCloseTaxDropdown(): void {
-        if (this.activeEntryIndex !== null && this.commonTaxControll) {
-            const taxComponent = this.commonTaxControll.toArray()[this.activeEntryIndex];
-            if (taxComponent) {
-                taxComponent.focusTaxDropdown();
-            }
-        }
-    }
-
-    /**
-     * Shows create new tax dialog
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public showCreateTaxDialog(): void {
-        this.storeFocus();
-        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
-        this.taxAsideMenuRef = this.dialog.open(this.createTax, {
-            position: {
-                right: "0",
-                top: "0",
-            },
-            autoFocus: false
-        });
-    }
 
     /**
     * Open and close discount dropdown
@@ -4637,6 +4611,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleOutsideClick(event: any): void {
+        const activeTaxComponent = this.activeEntryIndex !== null && this.commonTaxControll 
+            ? this.commonTaxControll.toArray()[this.activeEntryIndex] 
+            : null;
+
         if (
             typeof event?.target?.className === "string" &&
             event?.target?.className?.indexOf("option") === -1 &&
@@ -4645,7 +4623,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             !this.dialog.getDialogById(this.otherTaxAsideMenuRef?.id) &&
             !this.dialog.getDialogById(this.bulkStockAsideMenuRef?.id) &&
             !this.dialog.getDialogById(this.accountAsideMenuRef?.id) &&
-            !this.dialog.getDialogById(this.taxAsideMenuRef?.id) &&
+            !activeTaxComponent?.isTaxDialogOpen &&
             !this.dialog.getDialogById(this.productServiceAsideMenuRef?.id) &&
             !this.dialog.getDialogById(this.discountDialogRef?.id)
         ) {
@@ -5123,19 +5101,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private redirectToVoucherPreview(): void {
-        const queryParams = {
+        const uniqueName = this.invoiceForm.get("uniqueName").value;
+        const queryParams: any = {
             page: this.queryParams?.page ?? 1,
             count: this.queryParams?.count ?? "",
             from: this.queryParams?.from ?? "",
-            to: this.queryParams?.to ?? "",
+            to: this.queryParams?.to ?? ""
         };
 
         if (this.queryParams?.search?.length) {
-            queryParams["search"] = this.queryParams?.search;
+            queryParams.search = this.queryParams.search;
         }
+
+        const recurringPath = this.isRecurringVoucher?.[1]?.isRecurringVoucher ? "/recurring" : "";
+        if (this.isRecurringVoucher?.[1]?.isRecurringVoucher) {
+            queryParams.recurringVoucherUniqueName = uniqueName;
+        }
+
         this.router.navigate(
-            [`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get("uniqueName").value}`],
-            { queryParams: queryParams }
+            [`/pages/vouchers/view/${this.urlVoucherType}${recurringPath}/${uniqueName}`],
+            { queryParams }
         );
     }
 
@@ -5145,14 +5130,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public cancelUpdateVoucher(): void {
-        if (this.queryParams.isRecurringVoucher) {
-            this.location.back();
+        if (this.redirectUrl) {
+            this.router.navigateByUrl(this.redirectUrl);
         } else {
-            if (this.redirectUrl) {
-                this.router.navigateByUrl(this.redirectUrl);
-            } else {
-                this.redirectToVoucherPreview();
-            }
+            this.redirectToVoucherPreview();
         }
     }
 
@@ -5990,9 +5971,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.company.countryName = '';
             this.getCompanyProfile();
         }
-
+        
         this.addNewLineEntry(false);
         this.addNewDepositRow();
+        this.setInitialRecurrencePreviewRequest();
 
         this.voucherTotals = {
             totalAmount: 0,
@@ -6888,18 +6870,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup.get("otherTax.amount").patchValue(amount);
     }
 
-    /**
-     * Close tax modal
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public closeTaxModal(): void {
-        this.store.dispatch(this.companyActions.getTax());
-        this.taxAsideMenuRef.close();
-        setTimeout(() => {
-            this.openAndCloseTaxDropdown();
-        }, 100);
-    }
 
     /**
      * Prefils entry
@@ -7408,7 +7378,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 },
             });
         } else {
-            if (!this.isRecurringVoucher[1]?.isRecurringVoucher) {
+            if (!this.isRecurringVoucher?.[1]?.isRecurringVoucher) {
                 this.componentStore.getVoucherDetails({
                     isCopyVoucher: false,
                     accountUniqueName: params?.accountUniqueName,
@@ -8232,5 +8202,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public isAccountChangeInUpdateMode(): boolean {
         return this.isUpdateMode && this.isAccountChanged;
+    }
+
+    /**
+     * Initializes the recurrence preview request based on query parameters
+     * Sets the isRecurringVoucher flag and triggers the recurrence voucher selection logic
+     * 
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setInitialRecurrencePreviewRequest(): void {
+        this.invoiceForm.get('isRecurringVoucher')?.patchValue(Boolean(this.queryParams.isRecurringVoucher));
+        this.isRecurringVoucherSelected();
     }
 }

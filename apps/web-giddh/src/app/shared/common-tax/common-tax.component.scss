@@ -39,11 +39,6 @@ sup.mandatory-asterisk {
     overflow-y: auto;
 }
 
-// /* Hide backdrop when hasBackdrop is false - mat-select applies panelClass to .mat-mdc-select-panel */
-// :host ::ng-deep .cdk-overlay-container:has(.mat-mdc-select-panel.no-backdrop-select) .cdk-overlay-backdrop {
-//     display: none !important;
-// }
-
 ::ng-deep .no-checkbox {
     .mat-pseudo-checkbox,
     .mdc-checkbox {

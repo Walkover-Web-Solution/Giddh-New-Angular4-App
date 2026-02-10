@@ -12,7 +12,8 @@
         <mat-select
             #taxSelect
             multiple
-            [(ngModel)]="selectedTaxUniquenames"
+            [ngModel]="selectedTaxUniquenames()"
+            (ngModelChange)="selectedTaxUniquenames.set($event)"
             (selectionChange)="onTaxSelectionChange($event)"
             (openedChange)="onSelectOpenedChange($event, taxSelect)"
             [disabled]="readonly()"
@@ -58,7 +59,8 @@
         cdkMonitorElementFocus
         class="form-control"
         multiple
-        [(ngModel)]="selectedTaxUniquenames"
+        [ngModel]="selectedTaxUniquenames()"
+        (ngModelChange)="selectedTaxUniquenames.set($event)"
         (selectionChange)="onTaxSelectionChange($event)"
         (openedChange)="onSelectOpenedChange($event, taxSelectInput)"
         [disabled]="readonly()"
@@ -96,3 +98,7 @@
         </mat-option>
     </mat-select>
 </ng-container>
+
+<ng-template #createTaxTemplate>
+    <aside-menu-create-tax-component [class]="'in'" [otherTax]="true" (closeEvent)="closeTaxModal()"></aside-menu-create-tax-component>
+</ng-template>

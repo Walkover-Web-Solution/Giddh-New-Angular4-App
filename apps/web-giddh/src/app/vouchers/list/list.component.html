@@ -5740,6 +5740,14 @@
                                 </td>
                             </ng-container>
 
+                            <!-- Created At -->
+                            <ng-container matColumnDef="createdAt">
+                                <th mat-header-cell *matHeaderCellDef>{{ localeData?.created_at }}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element?.createdAt }}
+                                </td>
+                            </ng-container>
+
                             <!-- Last Run -->
                             <ng-container matColumnDef="lastRun">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.last_run }}</th>

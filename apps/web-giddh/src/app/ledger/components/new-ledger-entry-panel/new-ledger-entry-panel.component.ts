@@ -288,14 +288,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public tooltipHoveredStatus: boolean = false;
     /** Discount dialog ref */
     public discountDialogRef: MatDialogRef<any>;
-    /** Tax dialog ref */
-    public taxDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
     public deleteAttachedFileDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
     public salesPersonDialogRef: MatDialogRef<any>;
-    /** Template Reference for Create Tax aside menu */
-    @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Reference variant dropdown */
     @ViewChild("variantDropdownRef") public variantDropdownRef: ReactiveDropdownFieldComponent;
     /** Reference warehouse dropdown */
@@ -1207,7 +1203,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxControl?.isTaxDialogOpen || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
             return;
         }
 
@@ -2204,46 +2200,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
-     * Shows create new tax dialog
+     * Sets the blank ledger amount
      *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public showCreateTaxDialog(): void {
-        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
-        this.taxDialogRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
-    }
-
-    /**
-    * Open and close tax dropdown
-    * if isOpen is true it will open the dropdown
-    * if isOpen is false it will close the dropdown
-    *
-    * @memberof NewLedgerEntryPanelComponent
-    */
-    public openAndCloseTaxDropdown(): void {
-        if (this.taxControl) {
-            this.taxControl.focusTaxDropdown()
-        }
-    }
-
-    /**
-     * Close tax dialog
-     *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public closeTaxDialog(): void {
-        this.store.dispatch(this.companyActions.getTax());
-        this.taxDialogRef?.close();
-        this.cdRef.detectChanges();
-        setTimeout(() => {
-            this.openAndCloseTaxDropdown();
-            this.taxDialogRef = undefined;
-        }, 100);
-    }
-
-    /**
-     * Sets the blank ledger amount for statement view
-     *
+     * @private
      * @memberof NewLedgerEntryPanelComponent
      */
     private setBlankLedgerAmount(): void {

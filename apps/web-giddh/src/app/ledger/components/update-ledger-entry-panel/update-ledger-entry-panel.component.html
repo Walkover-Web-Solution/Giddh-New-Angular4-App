@@ -1556,7 +1556,6 @@
                                             [readonly]="isEinvoiceGenerated"
                                             (selectedTaxEvent)="vm.taxTrxUpdated($event); showTaxError = false"
                                             (taxAmountSumEvent)="calculateTax()"
-                                            (createNewTax)="showCreateTaxDialog()"
                                         ></common-tax>
                                     </span>
 
@@ -2377,18 +2376,6 @@
 
     <ng-template #attachments>
         <attachments [selectedItem]="selectedItem"></attachments>
-    </ng-template>
-
-    <!-- Create Tax Aside Pane -->
-    <ng-template #createTax>
-        <aside-menu-create-tax-component
-            [class]="'in'"
-            [tax]="selectedTax"
-            [localeData]="localeData"
-            [otherTax]="true"
-            [commonLocaleData]="commonLocaleData"
-            (closeEvent)="closeTaxModal()"
-        ></aside-menu-create-tax-component>
     </ng-template>
 </div>
 

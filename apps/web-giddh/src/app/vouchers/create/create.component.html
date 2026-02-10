@@ -1320,7 +1320,7 @@
                                 >
                                     <!-- Recurring Voucher Checkbox -->
                                     <div class="col-12">
-                                        <ng-container *ngIf="!queryParams?.isRecurringVoucher">
+                                        @if (!queryParams?.isRecurringVoucher && !isUpdateMode) {
                                             <mat-checkbox
                                                 #recurringCheckbox
                                                 cdkMonitorElementFocus
@@ -1328,16 +1328,21 @@
                                                 color="primary"
                                                 id="recurring-voucher"
                                                 formControlName="isRecurringVoucher"
+                                                (change)="isRecurringVoucherSelected()"
                                                 (keydown.enter)="$event.preventDefault(); recurringCheckbox.toggle()"
                                             >
                                                 <label for="recurring-voucher" [innerHTML]="localeData?.transaction_recurring"></label>
                                             </mat-checkbox>
-                                        </ng-container>
-                                        <aside-recurrence-voucher-create
-                                            #asideRecurrenceVoucher
-                                            *ngIf="invoiceForm.get('isRecurringVoucher')?.value && recurrenceFormGroup"
-                                            [recurrenceForm]="recurrenceFormGroup"
-                                        ></aside-recurrence-voucher-create>
+                                        }
+                                        @if (
+                                            invoiceForm.get('isRecurringVoucher')?.value &&
+                                            invoiceForm?.get('recurrencePreviewRequest.startDate')?.value
+                                        ) {
+                                            <aside-recurrence-voucher-create
+                                                #asideRecurrenceVoucher
+                                                [recurrenceForm]="recurrenceFormGroup"
+                                            ></aside-recurrence-voucher-create>
+                                        }
                                     </div>
                                     <!-- Recurring Voucher Checkbox -->
                                     <!-- Reverse Charge Checkbox -->
@@ -2288,7 +2293,6 @@
                                                                         [showMatFormField]="false"
                                                                         [hasBackdrop]="true"
                                                                         [showCreateNew]="true"
-                                                                        (createNewTax)="showCreateTaxDialog()"
                                                                         (selectedTaxEvent)="getSelectedTaxes(entryIndex, $event)"
                                                                         (taxAmountSumEvent)="updateTotalTax($event, entry)"
                                                                     ></common-tax>
@@ -3436,18 +3440,6 @@
         (updateEvent)="updateAccount($event)"
         (updateViaPatchApi)="updateAccount($event, true)"
     ></generic-aside-menu-account>
-</ng-template>
-
-<!-- Create Tax Aside Pane -->
-<ng-template #createTax>
-    <aside-menu-create-tax-component
-        [class]="'in'"
-        [tax]="selectedTax"
-        [localeData]="localeData"
-        [otherTax]="true"
-        [commonLocaleData]="commonLocaleData"
-        (closeEvent)="closeTaxModal()"
-    ></aside-menu-create-tax-component>
 </ng-template>
 
 <ng-template #asideMenuProductService>

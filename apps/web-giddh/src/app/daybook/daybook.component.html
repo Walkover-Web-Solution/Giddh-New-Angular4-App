@@ -87,6 +87,8 @@
                                 mat-cell
                                 *matCellDef="let entry"
                                 [attr.data-title]="commonLocaleData?.app_particular"
+                                [matTooltip]="entry.particular.name"
+                                matTooltipPosition="left"
                                 class="daybook-w-300 cursor-pointer"
                             >
                                 {{ entry.particular.name }}
@@ -237,7 +239,12 @@
                                             <div class="expansion-cell daybook-w-150"></div>
 
                                             <!-- Particular Column -->
-                                            <div class="expansion-cell daybook-w-300" [attr.data-title]="commonLocaleData?.app_particular">
+                                            <div
+                                                class="expansion-cell daybook-w-300"
+                                                [attr.data-title]="commonLocaleData?.app_particular"
+                                                [matTooltip]="details.particular.name"
+                                                matTooltipPosition="left"
+                                            >
                                                 {{ details.particular.name }}
                                             </div>
 

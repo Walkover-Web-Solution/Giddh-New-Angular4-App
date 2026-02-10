@@ -214,7 +214,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Signal for recurring vouchers total count */
     public recurringVouchersTotalCount = signal<number>(0);
     /** Signal for recurring vouchers display columns */
-    public recurringVouchersColumns = signal<string[]>(['index', 'accountName', 'frequency', 'lastRun', 'nextRun', 'amount', 'status', 'actions']);
+    public recurringVouchersColumns = signal<string[]>(['index', 'accountName', 'frequency', 'createdAt', 'lastRun', 'nextRun', 'amount', 'status', 'actions']);
     /** Holds Eway Bill Dialog Ref */
     public ewayBillDialogRef: any;
     /** Holds Advance Search Dialog Ref */
@@ -518,6 +518,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
+                this.setInitialAdvanceFilter(true);
+                this.resetAdvancedFilter();
                 if (this.activeModule === 'templates') {
                     if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                         this.fetchTemplates(VoucherTypeEnum.purchase_bill);
@@ -558,7 +560,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.sortKeyMap = {};
-                this.setInitialAdvanceFilter(true);
                 if (this.settingResponse?.invoiceSettings) {
                     this.settingForm.patchValue({
                         purchaseBillSettings: this.settingResponse.purchaseBillSettings || {},
@@ -3905,5 +3906,23 @@ public generateRecurringVoucher(voucher: any): void {
         this.router.navigate([`/pages/vouchers/view/${voucherType}/recurring/${recurringVoucherUniqueName}`], {
             queryParams: queryParams
         });
+    }
+
+    /**
+     * Reset Filter on tab change
+     * 
+     * @private
+     * @memberof ContactComponent
+     */
+    private resetAdvancedFilter(): void {
+        this.advanceFilters['q'] = "";
+        this.advanceFilters['sortBy'] = "";
+        this.advanceFilters['sort'] = "";
+        this.advanceFilters['page'] = this.queryParams.page || 1;
+        this.advanceFilters['count'] = this.queryParams.count || PAGINATION_LIMIT;
+        if (this.selectedDateRange) {
+            this.advanceFilters['from'] = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
+            this.advanceFilters['to'] = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
+        }
     }
 }
