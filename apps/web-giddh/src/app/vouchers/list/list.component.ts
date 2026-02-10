@@ -169,7 +169,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds universal date */
     public universalDate: any;
     /** Holds advance Filters keys */
-    public advanceFilters: any = {};
+    protected advanceFilters: any = {};
     /** Holds Sort Key Map */
     public sortKeyMap: object = {};
     /** Holds Advance Filters Applied Status */
@@ -1499,21 +1499,44 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *  Handle Mat table sort event
+     * Toggles sort direction between 'asc' and 'desc'
      *
-     * @param {*} event
+     * @param {string} currentDirection - Current sort direction
+     * @returns {string} Toggled sort direction
+     * @memberof VoucherListComponent
+     */
+    private toggleSortDirection(currentDirection: string): string {
+        return currentDirection === 'desc' ? 'asc' : 'desc';
+    }
+
+    /**
+     * Gets the sort value based on direction with toggle logic
+     *
+     * @param {string} direction - Sort direction from event
+     * @returns {string} Sort value ('asc', 'desc')
+     * @memberof VoucherListComponent
+     */
+    private getSortValue(direction: string): string {
+        return direction ? this.toggleSortDirection(direction) : 'desc';
+    }
+
+    /**
+     * Handle Mat table sort event
+     *
+     * @param {*} event - Sort event from MatSort
      * @memberof VoucherListComponent
      */
     public sortChange(event: any): void {
         if (this.sortKeyMap?.[event?.active]) {
-            const sortValue = this.sortKeyMap?.[event?.active] === 'asc' ? 'desc' : 'asc';
+            const sortValue = this.toggleSortDirection(this.sortKeyMap?.[event?.active]);
             this.advanceFilters.sort = sortValue;
             this.sortKeyMap[event?.active] = sortValue;
         } else {
-            this.advanceFilters.sort = event?.direction ?? 'asc';
+            const sortValue = this.getSortValue(event?.direction);
+            this.advanceFilters.sort = sortValue;
             this.sortKeyMap = {
                 ...this.sortKeyMap,
-                [event?.active]: event?.direction
+                [event?.active]: sortValue
             };
         }
         this.advanceFilters.sortBy = event?.active;

@@ -1315,35 +1315,52 @@
 
                                 <!-- Row 5 -->
                                 <div
-                                    class="row row-gap-15 mb-3"
-                                    [ngClass]="{ 'mt-4': queryParams?.isRecurringVoucher, 'mt-2': !queryParams?.isRecurringVoucher }"
+                                    class="row mb-3"
+                                    [ngClass]="{
+                                        'mt-4': queryParams?.isRecurringVoucher,
+                                        'mt-2': !queryParams?.isRecurringVoucher,
+                                        'row-gap-15':
+                                            invoiceForm.get('isRecurringVoucher')?.value &&
+                                            invoiceForm?.get('recurrencePreviewRequest.startDate')?.value,
+                                    }"
                                 >
                                     <!-- Recurring Voucher Checkbox -->
-                                    <div class="col-12">
-                                        @if (!queryParams?.isRecurringVoucher && !isUpdateMode) {
-                                            <mat-checkbox
-                                                #recurringCheckbox
-                                                cdkMonitorElementFocus
-                                                class="mr-1 mb-3"
-                                                color="primary"
-                                                id="recurring-voucher"
-                                                formControlName="isRecurringVoucher"
-                                                (change)="isRecurringVoucherSelected()"
-                                                (keydown.enter)="$event.preventDefault(); recurringCheckbox.toggle()"
-                                            >
-                                                <label for="recurring-voucher" [innerHTML]="localeData?.transaction_recurring"></label>
-                                            </mat-checkbox>
-                                        }
-                                        @if (
-                                            invoiceForm.get('isRecurringVoucher')?.value &&
-                                            invoiceForm?.get('recurrencePreviewRequest.startDate')?.value
-                                        ) {
-                                            <aside-recurrence-voucher-create
-                                                #asideRecurrenceVoucher
-                                                [recurrenceForm]="recurrenceFormGroup"
-                                            ></aside-recurrence-voucher-create>
-                                        }
-                                    </div>
+                                    @if (isRecurringVoucherSupported()) {
+                                        <div class="col-12">
+                                            @if (!queryParams?.isRecurringVoucher && !isUpdateMode) {
+                                                <mat-checkbox
+                                                    #recurringCheckbox
+                                                    cdkMonitorElementFocus
+                                                    [class]="
+                                                        invoiceForm.get('isRecurringVoucher')?.value &&
+                                                        invoiceForm?.get('recurrencePreviewRequest.startDate')?.value
+                                                            ? 'mr-1 mb-3'
+                                                            : 'mr-1'
+                                                    "
+                                                    color="primary"
+                                                    id="recurring-voucher"
+                                                    formControlName="isRecurringVoucher"
+                                                    (change)="isRecurringVoucherSelected()"
+                                                    (keydown.enter)="$event.preventDefault(); recurringCheckbox.toggle()"
+                                                >
+                                                    <label
+                                                        for="recurring-voucher"
+                                                        [innerHTML]="localeData?.transaction_recurring"
+                                                        (click)="recurringCheckbox.toggle()"
+                                                    ></label>
+                                                </mat-checkbox>
+                                            }
+                                            @if (
+                                                invoiceForm.get('isRecurringVoucher')?.value &&
+                                                invoiceForm?.get('recurrencePreviewRequest.startDate')?.value
+                                            ) {
+                                                <aside-recurrence-voucher-create
+                                                    #asideRecurrenceVoucher
+                                                    [recurrenceForm]="recurrenceFormGroup"
+                                                ></aside-recurrence-voucher-create>
+                                            }
+                                        </div>
+                                    }
                                     <!-- Recurring Voucher Checkbox -->
                                     <!-- Reverse Charge Checkbox -->
                                     <div
