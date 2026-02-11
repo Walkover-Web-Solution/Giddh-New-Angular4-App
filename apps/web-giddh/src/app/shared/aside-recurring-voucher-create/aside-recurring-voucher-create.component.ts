@@ -728,7 +728,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
         }
 
         this.activeForm.get('end')?.patchValue({
-            type: RecurringEndType.NEVER,
+            type: this.activeForm.get('end')?.value?.type || RecurringEndType.NEVER,
             endDate: startDate
         });
     }
