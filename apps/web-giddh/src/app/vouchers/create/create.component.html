@@ -162,6 +162,7 @@
                                             <reactive-dropdown-field
                                                 *ngIf="!invoiceType.isCashInvoice"
                                                 #customerVendorDropdown
+                                                [sidebarListView]="true"
                                                 (keydown.enter)="
                                                     isCustomerVendorSelected() && customerVendorDropdown.focusInputField();
                                                     customerVendorDropdown?.closeDropdownPanel()
@@ -1600,6 +1601,7 @@
                                                                         appEnterNext
                                                                         class="mat-form-field-clean"
                                                                         #accountDropdown
+                                                                        [sidebarListView]="true"
                                                                         (click)="setUserManuallyClicked()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
                                                                         (keydown.enter)="$event.preventDefault()"
