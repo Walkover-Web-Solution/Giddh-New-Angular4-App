@@ -580,7 +580,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
         }
 
-        if (this.activeAccount.applicableTaxes?.length > 0) {
+        if (this.activeAccount?.applicableTaxes?.length > 0) {
             (Array.isArray(this.activeAccount.applicableTaxes) ? this.activeAccount.applicableTaxes : []).forEach(tl => {
                 let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === tl.uniqueName) : undefined;
                 if (tax) {
