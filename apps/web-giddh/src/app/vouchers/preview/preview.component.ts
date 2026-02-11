@@ -1279,14 +1279,26 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public redirectToGetAllPage(): void {
-        this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
-            queryParams: {
-                page: this.queryParams.page ?? 1,
-                count: this.queryParams.count ?? PAGINATION_LIMIT,
-                from: this.advanceFilters.from,
-                to: this.advanceFilters.to
-            }
-        });
+        if (!this.queryParams.isRecurringVoucher) {
+            this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
+                queryParams: {
+                    page: this.queryParams.page ?? 1,
+                    count: this.queryParams.count ?? PAGINATION_LIMIT,
+                    from: this.advanceFilters.from,
+                    to: this.advanceFilters.to
+                }
+            });
+        } else {
+            this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/recurring/${this.queryParams.recurringVoucherUniqueName}`], {
+                queryParams: {
+                    page: this.queryParams.page ?? 1,
+                    count: this.queryParams.count ?? PAGINATION_LIMIT,
+                    from: this.advanceFilters.from,
+                    to: this.advanceFilters.to,
+                    recurringVoucherUniqueName: this.queryParams.recurringVoucherUniqueName
+                }
+            });
+        }
     }
 
     /**

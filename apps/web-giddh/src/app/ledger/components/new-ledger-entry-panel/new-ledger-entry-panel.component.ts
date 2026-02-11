@@ -173,7 +173,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public activeAccount: AccountResponse | AccountResponseV2;
     public currentAccountApplicableTaxes: string[] = [];
     public totalForTax: number = 0;
-    public taxListForStock = []; // New
     public companyIsMultiCurrency: boolean;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
@@ -288,14 +287,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public tooltipHoveredStatus: boolean = false;
     /** Discount dialog ref */
     public discountDialogRef: MatDialogRef<any>;
-    /** Tax dialog ref */
-    public taxDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
     public deleteAttachedFileDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
     public salesPersonDialogRef: MatDialogRef<any>;
-    /** Template Reference for Create Tax aside menu */
-    @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Reference variant dropdown */
     @ViewChild("variantDropdownRef") public variantDropdownRef: ReactiveDropdownFieldComponent;
     /** Reference warehouse dropdown */
@@ -325,7 +320,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.isLedgerCreateInProcess$ = this.store.pipe(select(p => p.ledger.ledgerCreateInProcess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
@@ -487,7 +482,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private getAllDiscounts(callback?: () => void): void {
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountsList.set(response?.body);
+                let discounts = response?.body;
+                discounts.map(discount => {
+                    discount.amount = discount.discountValue;
+                    discount.discountUniqueName = discount.uniqueName;
+                })
+                this.discountsList.set(discounts);
             }
             if (callback) {
                 callback();
@@ -569,33 +569,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public calculatePreAppliedTax(): void {
-        let activeAccountTaxes = [];
-        if (this.activeAccount && this.activeAccount.applicableTaxes) {
-            activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax?.uniqueName);
-            if (this.activeAccount.otherApplicableTaxes?.length && activeAccountTaxes?.length) {
-                if (this.activeAccount.otherApplicableTaxes[0]?.uniqueName !== activeAccountTaxes[0] && activeAccountTaxes.includes(this.activeAccount.otherApplicableTaxes[0]?.uniqueName)) {
-                    activeAccountTaxes = activeAccountTaxes.reverse();
-                }
-            }
-        }
-        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length && !this.currentTxn.duplicateEntry) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
-        } else if (this.currentTxn?.selectedAccount && this.currentTxn.selectedAccount?.parentGroups && this.currentTxn.selectedAccount?.parentGroups.length && !this.currentTxn.duplicateEntry) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
-        } else {
-            this.taxListForStock = [];
-        }
         let companyTaxes: TaxResponse[] = [];
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
-        let appliedTaxes: any[] = [];
 
         if (!this.blankLedger.otherTaxModal) {
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
         }
 
-        if (this.taxListForStock && this.taxListForStock.length > 0) {
-            (Array.isArray(this.taxListForStock) ? this.taxListForStock : []).forEach(tl => {
-                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === tl) : undefined;
+        if (this.activeAccount.applicableTaxes?.length > 0) {
+            (Array.isArray(this.activeAccount.applicableTaxes) ? this.activeAccount.applicableTaxes : []).forEach(tl => {
+                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === tl.uniqueName) : undefined;
                 if (tax) {
                     switch (tax.taxType) {
                         case 'tcsrc':
@@ -608,13 +591,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                             };
                             this.blankLedger.isOtherTaxesApplicable = true;
                             break;
-                        default:
-                            appliedTaxes.push(tax?.uniqueName);
                     }
                 }
             });
         }
-        this.taxListForStock = appliedTaxes;
     }
 
     public ngAfterViewInit(): void {
@@ -1207,7 +1187,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxControl?.isTaxDialogOpen || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
             return;
         }
 
@@ -1746,29 +1726,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         return taxes && taxes.length > 0;
     }
 
-
-    /**
-    * Merges the involved accounts (current ledger account and particular account) taxes
-    *
-    * @private
-    * @param {Array<string>} firstAccountTaxes Taxes array of first account
-    * @param {Array<string>} secondAccountTaxes Taxes array of second account
-    * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
-    * @memberof NewLedgerEntryPanelComponent
-    */
-    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
-        const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
-        if (secondAccountTaxes) {
-            secondAccountTaxes.reverse().forEach((tax: string) => {
-                if (!mergedAccountTaxes.includes(tax)) {
-                    mergedAccountTaxes.push(tax);
-                }
-            });
-
-        }
-        return mergedAccountTaxes;
-    }
-
     /**
      * Prepares the voucher adjustment configuration
      *
@@ -1850,10 +1807,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount?.length)) {
             this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
         }
-        if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {
-            accountDetails.applicableTaxes.unshift(...accountDetails.otherApplicableTaxes);
+        if (!accountDetails.applicableTaxes?.length && accountDetails.otherApplicableTaxes?.length) {
+            accountDetails.applicableTaxes = [...accountDetails.otherApplicableTaxes];
         }
         this.preparePreAppliedDiscounts();
+        this.calculatePreAppliedTax();
+
     }
 
     /**
@@ -2204,46 +2163,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
-     * Shows create new tax dialog
+     * Sets the blank ledger amount
      *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public showCreateTaxDialog(): void {
-        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
-        this.taxDialogRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
-    }
-
-    /**
-    * Open and close tax dropdown
-    * if isOpen is true it will open the dropdown
-    * if isOpen is false it will close the dropdown
-    *
-    * @memberof NewLedgerEntryPanelComponent
-    */
-    public openAndCloseTaxDropdown(): void {
-        if (this.taxControl) {
-            this.taxControl.focusTaxDropdown()
-        }
-    }
-
-    /**
-     * Close tax dialog
-     *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public closeTaxDialog(): void {
-        this.store.dispatch(this.companyActions.getTax());
-        this.taxDialogRef?.close();
-        this.cdRef.detectChanges();
-        setTimeout(() => {
-            this.openAndCloseTaxDropdown();
-            this.taxDialogRef = undefined;
-        }, 100);
-    }
-
-    /**
-     * Sets the blank ledger amount for statement view
-     *
+     * @private
      * @memberof NewLedgerEntryPanelComponent
      */
     private setBlankLedgerAmount(): void {

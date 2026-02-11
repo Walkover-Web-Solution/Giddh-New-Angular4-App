@@ -212,7 +212,7 @@ export class RecurringPreviewComponent implements OnDestroy {
                 this.isSearching.set(false);
                 this.selectedRecurringVoucher.set(null);
                 this.queryParams.set(queryParams);
-                this.activeAccountUniqueName.set(queryParams?.accountUniqueName);
+                this.activeAccountUniqueName.set(queryParams?.recurringVoucherUniqueName);
 
                 const filters = {
                     page: Number(queryParams.page),
@@ -253,6 +253,45 @@ export class RecurringPreviewComponent implements OnDestroy {
      * @private
      */
     private readonly fetchRecurringVoucherRuleDetails = (): void => {
+        this.getAllRecurringVouchers();
+    };
+
+    /**
+     * Fetches all recurring vouchers with pagination support
+     * Supports bidirectional infinite scroll - load more on scroll down, load previous on scroll up
+     * @public
+     * @param {boolean} isLoadMore - Whether this is a load more request
+     * @param {boolean} isScrollUp - Whether scrolling up (for previous page)
+     * @memberof RecurringPreviewComponent
+     */
+    public readonly getAllRecurringVouchers = (isLoadMore: boolean = false, isScrollUp: boolean = false): void => {
+        if (this.isLoadMore()) {
+            return;
+        }
+        if (isLoadMore) {
+            this.isLoadMore.set(true);
+            const history = this.pageNumberHistory();
+            const filters = this.advanceFilters();
+
+            if (isScrollUp) {
+                const firstLoadedPage = history.length > 0 ? Math.min(...history) : 1;
+                if (firstLoadedPage <= 1) {
+                    this.isLoadMore.set(false);
+                    return;
+                }
+                filters.page = firstLoadedPage - 1;
+                this.advanceFilters.set(filters);
+            } else {
+                const lastLoadedPage = history.length > 0 ? Math.max(...history) : 1;
+                if (lastLoadedPage >= this.totalPages()) {
+                    this.isLoadMore.set(false);
+                    return;
+                }
+                filters.page = lastLoadedPage + 1;
+                this.advanceFilters.set(filters);
+            }
+        }
+
         const voucherType = this.recurringActiveTab() === 'sales' ? 'sales' : 'purchase';
         this.recurrenceFormService.getAll(voucherType, {
             page: this.advanceFilters().page,
@@ -260,13 +299,17 @@ export class RecurringPreviewComponent implements OnDestroy {
             q: this.advanceFilters().q
         }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body) {
-                this.handleGetAllRecurringResponse(response.body);
-                if (response.body.items?.length > 0) {
-                    const recurringVoucherUniqueName = response.body.items[0].recurringVoucherUniqueName;
+                this.handleGetAllRecurringResponse(response.body, isScrollUp, isLoadMore);
+                if (response.body.items?.length > 0 && !isLoadMore) {
+                    const recurringVoucherUniqueName = this.activeAccountUniqueName() || response.body.items[0].recurringVoucherUniqueName;
                     this.recurrenceFormService.getRuleDetails(
                         recurringVoucherUniqueName,
                         this.currentBranch()?.uniqueName
                     ).pipe(takeUntil(this.destroyed$)).subscribe((ruleResponse) => {
+                        const createdAt = response.body.items?.find((item: any) => item.recurringVoucherUniqueName === recurringVoucherUniqueName)?.createdAt;
+                        if (createdAt) {
+                            ruleResponse.body['createdAt']  = createdAt;
+                        }
                         if (ruleResponse) {
                             this.ruleDetails.set(this.formatRuleDetailsDateFields(ruleResponse?.body));
                             this.selectedAccountUniqueName.set(ruleResponse?.body?.account?.uniqueName);
@@ -275,16 +318,20 @@ export class RecurringPreviewComponent implements OnDestroy {
                     });
                 }
             }
+            this.isLoadMore.set(false);
         });
     };
 
     /**
      * Handles the response from the getAll recurring vouchers API
      * Updates the recurring voucher list, handles pagination, and manages selected voucher
+     * Supports bidirectional scrolling by prepending items for scroll up, appending for scroll down
      * @private
      * @param {any} response - The API response containing recurring vouchers data
+     * @param {boolean} isScrollUp - Whether this was a scroll up request (load previous page)
+     * @param {boolean} isLoadMore - Whether this is a load more request (not initial load)
      */
-    private readonly handleGetAllRecurringResponse = (response: any): void => {
+    private readonly handleGetAllRecurringResponse = (response: any, isScrollUp: boolean = false, isLoadMore: boolean = false): void => {
         if (response) {
             const currentRecurringList = [];
             const page = response.page || this.advanceFilters().page;
@@ -306,15 +353,26 @@ export class RecurringPreviewComponent implements OnDestroy {
                 });
             }
 
-            if (this.advanceFilters().page === 1) {
+            if (!isLoadMore && this.recurringVoucherList().length === 0) {
                 this.recurringVoucherList.set(currentRecurringList);
+                if (this.cdkScrollbar) {
+                    this.cdkScrollbar.scrollToIndex(0);
+                }
+            } else if (isScrollUp) {
+                const currentScrollIndex = this.cdkScrollbar?.measureScrollOffset('top') || 0;
+                this.recurringVoucherList.set([...currentRecurringList, ...this.recurringVoucherList()]);
+                setTimeout(() => {
+                    if (this.cdkScrollbar) {
+                        this.cdkScrollbar.scrollToIndex(currentRecurringList.length);
+                    }
+                }, 0);
             } else {
                 this.recurringVoucherList.set([...this.recurringVoucherList(), ...currentRecurringList]);
             }
             this.getAllApiCallCount.set(this.getAllApiCallCount() + 1);
             if (this.recurringVoucherList()?.length) {
                 const exists = this.recurringVoucherList().some(voucher => voucher.recurringVoucherUniqueName === this.activeAccountUniqueName());
-                if (exists && (this.advanceFilters().q)) {
+                if (exists) {
                     this.selectedRecurringVoucher.set(this.recurringVoucherList()?.find(voucher => voucher?.recurringVoucherUniqueName === this.activeAccountUniqueName()));
                 } else {
                     this.selectedRecurringVoucher.set(this.recurringVoucherList()[0]);

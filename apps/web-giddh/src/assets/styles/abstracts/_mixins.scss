@@ -1670,3 +1670,14 @@
         @content;
     }
 }
+
+/**
+ * Sets fixed width with min-width and max-width
+ *
+ * @param {String} $width - Width value (e.g., 100px, 200px)
+ */
+@mixin fixed-width($width) {
+    width: $width;
+    min-width: $width;
+    max-width: $width;
+}

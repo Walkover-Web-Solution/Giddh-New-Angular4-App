@@ -249,17 +249,7 @@
                         [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
                         [prefixInput]="selectedPrefixForCurrency || ''"
                         [suffixInput]="selectedSuffixForCurrency || ''"
-                        [applicableTaxes]="
-                            currentTxn?.duplicateEntry
-                                ? currentTxn.taxes
-                                : taxListForStock?.length
-                                  ? taxListForStock
-                                  : currentTxn?.selectedAccount?.applicableTaxes?.length
-                                    ? currentTxn?.selectedAccount?.applicableTaxes
-                                    : currentAccountApplicableTaxes?.length
-                                      ? currentAccountApplicableTaxes
-                                      : []
-                        "
+                        [applicableTaxes]="currentTxn?.duplicateEntry ? currentTxn.taxes : currentTxn?.selectedAccount?.applicableTaxes"
                         (taxAmountSumEvent)="calculateTax()"
                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                         [calculateTaxInclusively]="isAdvanceReceiptWithTds || isInclusiveEntry"
@@ -268,7 +258,6 @@
                         [commonLocaleData]="commonLocaleData"
                         [showError]="showRcmEntryError && isRcmEntry && !validateTaxes()"
                         [showCreateNew]="true"
-                        (createNewTax)="showCreateTaxDialog()"
                     ></common-tax>
 
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -1112,15 +1101,4 @@
             ></reactive-dropdown-field>
         </div>
     </div>
-</ng-template>
-
-<!-- Create Tax Aside Pane -->
-<ng-template #createTax>
-    <aside-menu-create-tax-component
-        [class]="'in'"
-        [localeData]="localeData"
-        [otherTax]="true"
-        [commonLocaleData]="commonLocaleData"
-        (closeEvent)="closeTaxDialog()"
-    ></aside-menu-create-tax-component>
 </ng-template>
