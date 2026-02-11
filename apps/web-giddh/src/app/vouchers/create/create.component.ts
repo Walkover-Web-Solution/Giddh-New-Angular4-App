@@ -128,7 +128,7 @@ import { Platform } from "@angular/cdk/platform";
 import { GeneralActions } from "../../actions/general/general.actions";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CustomFieldsService } from "../../services/custom-fields.service";
-
+import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -3477,8 +3477,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     if (
-                        item.additional.stock?.variant?.salesTaxInclusive ||
-                        item.additional.stock?.variant?.purchaseTaxInclusive
+                        (item.additional.stock?.variant?.salesTaxInclusive && item.additional?.category === AccountCategoryEnum.INCOME) ||
+                        (item.additional.stock?.variant?.purchaseTaxInclusive && item.additional?.category === AccountCategoryEnum.EXPENSE)
                     ) {
                         const amount = this.vouchersUtilityService.calculateInclusiveRate(
                             entryFormGroup?.value,
@@ -6801,7 +6801,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 .get("stock.variant.purchaseTaxInclusive")
                 ?.patchValue(response.stock.variant?.purchaseTaxInclusive);
 
-            if (response.stock.variant?.salesTaxInclusive || response.stock.variant?.purchaseTaxInclusive) {
+            if ((response.stock.variant?.salesTaxInclusive && response.category === AccountCategoryEnum.INCOME) || (response.stock.variant?.purchaseTaxInclusive && response.category === AccountCategoryEnum.EXPENSE)) {
                 transactionFormGroup
                     .get("amount.amountForAccount")
                     .patchValue(rate * transactionFormGroup.get("stock.quantity")?.value);
@@ -6888,7 +6888,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.getSelectedOtherTax(entryIndex, otherTax, otherTax.calculationMethod);
         }
 
-        if (response.stock?.variant?.salesTaxInclusive || response.stock?.variant?.purchaseTaxInclusive) {
+        if ((response.stock?.variant?.salesTaxInclusive && response.category === AccountCategoryEnum.INCOME) || (response.stock?.variant?.purchaseTaxInclusive && response.category === AccountCategoryEnum.EXPENSE)) {
             const amount = this.vouchersUtilityService.calculateInclusiveRate(
                 entryFormGroup?.value,
                 this.companyTaxes,
