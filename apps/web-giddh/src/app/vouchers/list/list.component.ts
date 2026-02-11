@@ -3825,6 +3825,7 @@ public generateRecurringVoucher(voucher: any): void {
             const dialogRef = this.dialog.open(AsideRecurrenceVoucherCreateComponent, {
                 panelClass: ['mat-dialog-md'],
                 disableClose: true,
+                autoFocus: false,
                 data: {
                     title: this.commonLocaleData?.app_create_recurring_voucher,
                     voucher: voucher

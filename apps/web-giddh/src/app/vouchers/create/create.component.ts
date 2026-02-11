@@ -5969,7 +5969,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         
         this.addNewLineEntry(false);
         this.addNewDepositRow();
-        this.setInitialRecurrencePreviewRequest();
+        if (this.invoiceForm.get('recurrencePreviewRequest.startDate')?.value) {
+            this.setInitialRecurrencePreviewRequest();
+        }
 
         this.voucherTotals = {
             totalAmount: 0,
