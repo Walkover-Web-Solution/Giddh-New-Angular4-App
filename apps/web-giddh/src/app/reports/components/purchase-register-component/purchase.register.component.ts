@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
@@ -146,6 +146,16 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
+    /** Supported groupBy values for export functionality */
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration]);
+    /** Current groupBy value selected in the report form */
+    public currentGroupBy = signal<GroupBy>(GroupBy.Duration);
+    /** Computed signal that determines if export button should be visible based on current groupBy */
+    public showExport = computed(() => {
+        const currentGroupBy = this.currentGroupBy();
+        return this.supportedExportGroupBy().includes(currentGroupBy);
+    });
+
 constructor(
         private router: Router,
         private activeRoute: ActivatedRoute,
@@ -765,6 +775,7 @@ constructor(
                     from, 
                     to, 
                     branchUniqueName: this.currentBranch.uniqueName,
+                    groupBy: this.currentGroupBy(),
                     ...(groupByQueryParams[groupByValue] || {})
                 } 
             });
@@ -885,6 +896,7 @@ constructor(
         if (keysToRemove) {
             this.removeKeysFromObject(requestObject, keysToRemove);
         }
+        this.currentGroupBy.set(requestObject.groupBy);
         this.componentStore.getSalesPurchaseList({
             payload: requestObject,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
