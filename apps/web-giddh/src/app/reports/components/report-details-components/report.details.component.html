@@ -187,6 +187,7 @@
             </div>
             <button
                 matButton="filled"
+                *ngIf="showExport()"
                 (click)="export()"
                 color="primary"
                 [matTooltip]="commonLocaleData?.app_export"
