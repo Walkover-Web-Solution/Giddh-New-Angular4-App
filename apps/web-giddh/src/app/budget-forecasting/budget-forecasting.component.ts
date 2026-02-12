@@ -535,11 +535,11 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                         bodyColor: '#fff',
                         titleFont: {
                             size: 12,
-                            weight: '500'
+                            weight: 'normal'
                         },
                         bodyFont: {
                             size: 13,
-                            weight: '600'
+                            weight: 'bold'
                         },
                         padding: 10,
                         displayColors: false,
