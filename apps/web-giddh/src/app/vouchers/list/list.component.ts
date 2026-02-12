@@ -1383,6 +1383,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 4) {
                     voucherType = "sales";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 5) {
+                    voucherType = "sales";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 1) {
                 if (selectedTabIndex === 0) {
@@ -1410,6 +1413,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     activeModule = "templates";
                 } else if (selectedTabIndex === 3) {
                     voucherType = "purchase";
+                    activeModule = "recurring";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "sales";
                     activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 3) {
