@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
     class="forecasting-container full-viewport-height d-flex flex-column"
 >
-    <div class="bg-white d-flex justify-content-between align-items-start border-bottom p-3 position-relative">
+    <div class="d-flex justify-content-between align-items-start border-bottom p-3 position-relative">
         <div class="header-left flex-fill">
             <h1 class="m-0 mb-1 font-size-20 font-weight-500">{{ localeData()?.page_title }}</h1>
             <p class="text-light m-0 font-size-13">{{ localeData()?.page_subtitle }}</p>
@@ -15,7 +15,7 @@
             <span class="light-gray font-size-12">{{ localeData()?.header_info }}</span>
         </div>
         @if (aiQuestion()?.trim()) {
-            <span class="ai-question-badge position-absolute border-radius-16 dark-grey-bg text-white px-3 py-2">
+            <span class="ai-question-badge position-absolute border-radius-16 px-3 py-2">
                 {{ aiQuestion() }}
             </span>
         }
@@ -126,7 +126,7 @@
                                         }})
                                     </h6>
                                 </div>
-                                <div class="bg-white position-relative border-radius-4 p-3">
+                                <div class="position-relative border-radius-4 p-3">
                                     <canvas #forecastChart id="forecastChartCanvas" width="100%" height="200px" class="max-h-200"></canvas>
                                 </div>
                             </div>
@@ -184,7 +184,7 @@
         </div>
     </div>
 
-    <div class="bg-white d-flex align-items-center column-gap-1 border-top p-3">
+    <div class="d-flex align-items-center column-gap-1 border-top p-3">
         <mat-form-field appearance="outline" class="w-100">
             <input
                 matInput
