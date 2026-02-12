@@ -1,4 +1,8 @@
 .forecasting-container {
+    .ai-question-badge {
+        bottom: -40px;
+        right: 10px;
+    }
     .right-panel {
         .results-card,
         .empty-state,
@@ -11,6 +15,66 @@
                     border-radius: var(--mat-card-elevated-container-shape, var(--mat-sys-corner-medium));
                 }
             }
+        }
+    }
+
+    .chart-container {
+        border: 1px solid var(--color-border-medium);
+        background-color: color-mix(in oklch, var(--theme-accent-light) 30%, var(--color-white)) !important;
+
+        h6 {
+            color: var(--color-dark-black);
+            font-weight: 500;
+        }
+
+        .chart-wrapper {
+            background-color: var(--color-white);
+            border-radius: 4px;
+            padding: 16px;
+
+            canvas {
+                max-height: 200px;
+            }
+        }
+    }
+
+    .forecast-list {
+        .mat-mdc-list-item {
+            border-bottom: 1px solid var(--color-border-medium);
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            .forecast-row {
+                padding: 8px 0;
+
+                span {
+                    color: var(--color-dark-gray);
+                }
+
+                .text-right {
+                    p {
+                        color: var(--color-medium-gray);
+                        font-size: 12px;
+                        margin-bottom: 4px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+:host ::ng-deep .summary-wrapper {
+    .mat-mdc-chip {
+        .mdc-evolution-chip__cell {
+            display: block;
+        }
+        &:first-child {
+            background-color: color-mix(in oklch, var(--color-orange) 10%, var(--color-white)) !important;
+        }
+        &:last-child {
+            background-color: color-mix(in oklch, var(--color-green) 10%, var(--color-white)) !important;
         }
     }
 }

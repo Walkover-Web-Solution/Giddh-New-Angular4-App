@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, ViewChild, ElementRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
@@ -10,8 +10,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, startWith } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { BudgetForecastingService } from './utility/budget-forecasting.service';
 import { ForecastGranularity, AnalysisPeriod, ForecastResponse } from './utility/budget-forecasting.model';
@@ -19,7 +21,8 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { SearchService } from '../services/search.service';
 import { API_BULK_FETCH_LIMIT } from '../app.constant';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
-import { ToasterService } from '../services/toaster.service';
+
+Chart.register(...registerables);
 
 @Component({
     selector: 'app-budget-forecasting',
@@ -47,7 +50,6 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     private searchService = inject(SearchService);
     private router = inject(Router);
     private activatedRoute = inject(ActivatedRoute);
-    private toasterService = inject(ToasterService);
     
     /** Default forecast length for daily granularity (in days) */
     private readonly DEFAULT_DAILY_FORECAST_LENGTH = 60;
@@ -57,6 +59,9 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     
     /** Default forecast length for monthly granularity (in months) */
     private readonly DEFAULT_MONTHLY_FORECAST_LENGTH = 12;
+
+    /** Parent group names for account filtering */
+    private readonly PARENT_GROUP_NAMES = "shareholdersfunds, noncurrentliabilities, currentliabilities, fixedassets, noncurrentassets, currentassets, revenuefromoperations, otherincome, operatingcost, indirectexpenses";
     
     /** Locale data for translations */
     public localeData = signal<any>({});
@@ -68,7 +73,42 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     public readonly forecastGranularity = ForecastGranularity;
     
     /** Holds the forecast settings form */
-    public forecastForm: FormGroup;
+    public forecastForm: FormGroup = new FormGroup({
+        account: new FormControl('', Validators.required),
+        granularity: new FormControl(ForecastGranularity.DAILY, Validators.required),
+        forecastLength: new FormControl(this.DEFAULT_DAILY_FORECAST_LENGTH, [Validators.required, Validators.min(1)])
+    });
+
+    /** Selected account value from form control */
+    private selectedAccountValue = toSignal(
+        this.forecastForm.get('account')!.valueChanges.pipe(
+            startWith(this.forecastForm.get('account')!.value)
+        ),
+        { initialValue: '' }
+    );
+
+    /** Computed selected account label */
+    public selectedAccountLabel = computed(() => {
+        const selectedValue = this.selectedAccountValue();
+        const account = this.accountOptions().find(opt => opt.value === selectedValue);
+        return account?.label;
+    });
+
+    /** Granularity value from form control */
+    private granularityValue = toSignal(
+        this.forecastForm.get('granularity')!.valueChanges.pipe(
+            startWith(this.forecastForm.get('granularity')!.value)
+        ),
+        { initialValue: ForecastGranularity.DAILY }
+    );
+
+    /** Computed granularity label based on form control value */
+    public granularityLabel = computed(() => {
+        const granularity = this.granularityValue();
+        if (granularity === ForecastGranularity.DAILY) return this.localeData()?.granularity_daily;
+        if (granularity === ForecastGranularity.WEEKLY) return this.localeData()?.granularity_weekly;
+        return this.localeData()?.granularity_monthly;
+    });
     
     /** Available account options for dropdown */
     public accountOptions = signal([]);
@@ -93,26 +133,20 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     
     /** AI question input */
     public aiQuestion = signal('');
-    
-    /** Computed selected account label */
-    public selectedAccountLabel = computed(() => {
-        const selectedValue = this.forecastForm?.get('account')?.value;
-        const account = this.accountOptions().find(opt => opt.value === selectedValue);
-        return account?.label;
-    });
-    
-    /** Computed granularity label */
-    public granularityLabel = computed(() => {
-        const granularity = this.forecastForm?.get('granularity')?.value;
-        if (granularity === ForecastGranularity.DAILY) return this.localeData()?.granularity_daily;
-        if (granularity === ForecastGranularity.WEEKLY) return this.localeData()?.granularity_weekly;
-        return this.localeData()?.granularity_monthly;
-    });
-    
+
+    /** Canvas element for chart */
+    @ViewChild('forecastChart') private chartCanvas: ElementRef<HTMLCanvasElement>;
+
+    /** Chart.js instance */
+    private chart: Chart | null = null;
+
     /** Computed forecast length */
-    public forecastLength = computed(() => {
-        return this.forecastForm?.get('forecastLength')?.value || 60;
-    });
+    public forecastLength = toSignal(
+    this.forecastForm.get('forecastLength')!.valueChanges.pipe(
+        startWith(this.forecastForm.get('forecastLength')!.value)
+    ),
+    { initialValue: this.DEFAULT_DAILY_FORECAST_LENGTH }
+);
     
     /** Computed analysis period label */
     public analysisPeriodLabel = computed(() => {
@@ -124,10 +158,20 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     private destroyed$ = new Subject<void>();
     
     constructor() {
-        this.forecastForm = new FormGroup({
-            account: new FormControl('', Validators.required),
-            granularity: new FormControl(ForecastGranularity.DAILY, Validators.required),
-            forecastLength: new FormControl(60, [Validators.required, Validators.min(1)])
+        effect(() => {
+            const results = this.forecastResults();
+            if (results?.forecast?.length) {
+                setTimeout(() => {
+                    if (this.chart) {
+                        this.chart.destroy();
+                        this.chart = null;
+                    }
+                    this.initializeChart();
+                    if (this.chart) {
+                        this.updateChart();
+                    }
+                }, 100);
+            }
         });
     }
     
@@ -164,17 +208,17 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
         const queryParams = this.activatedRoute.snapshot.queryParams;
         
         if (queryParams['account']) {
-            this.forecastForm.patchValue({ account: queryParams['account'] }, { emitEvent: false });
+            this.forecastForm.patchValue({ account: queryParams['account'] });
         }
         
         if (queryParams['granularity'] && Object.values(ForecastGranularity).includes(queryParams['granularity'])) {
-            this.forecastForm.patchValue({ granularity: queryParams['granularity'] }, { emitEvent: false });
+            this.forecastForm.patchValue({ granularity: queryParams['granularity'] });
         }
         
         if (queryParams['forecastLength']) {
             const length = parseInt(queryParams['forecastLength'], 10);
             if (!isNaN(length) && length > 0) {
-                this.forecastForm.patchValue({ forecastLength: length }, { emitEvent: false });
+                this.forecastForm.patchValue({ forecastLength: length });
             }
         }
         
@@ -271,11 +315,12 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     private updateAnalysisPeriodLabels(): void {
         const locale = this.localeData();
         this.analysisPeriods.set([
+            { label: locale?.period_last_7_days, value: AnalysisPeriod.LAST_7_DAYS },
             { label: locale?.period_last_30_days, value: AnalysisPeriod.LAST_30_DAYS },
-            { label: locale?.period_last_60_days, value: AnalysisPeriod.LAST_60_DAYS },
-            { label: locale?.period_last_90_days, value: AnalysisPeriod.LAST_90_DAYS },
+            { label: locale?.period_last_3_months, value: AnalysisPeriod.LAST_3_MONTHS },
             { label: locale?.period_last_6_months, value: AnalysisPeriod.LAST_6_MONTHS },
-            { label: locale?.period_last_year, value: AnalysisPeriod.LAST_YEAR }
+            { label: locale?.period_last_1_year, value: AnalysisPeriod.LAST_1_YEAR },
+            { label: locale?.period_lifetime, value: AnalysisPeriod.LIFETIME }
         ]);
     }
     
@@ -293,7 +338,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             count: API_BULK_FETCH_LIMIT,
             branchUniqueName: '',
             q: search,
-            group: "shareholdersfunds, noncurrentliabilities, currentliabilities, fixedassets, noncurrentassets, currentassets, revenuefromoperations, otherincome, operatingcost, indirectexpenses"
+            group: this.PARENT_GROUP_NAMES
         };
         
         this.searchService.searchAccountV3(params)
@@ -325,6 +370,9 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next();
         this.destroyed$.complete();
+        if (this.chart) {
+            this.chart.destroy();
+        }
     }
     
     /**
@@ -357,7 +405,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             defaultLength = this.DEFAULT_MONTHLY_FORECAST_LENGTH;
         }
         
-        this.forecastForm.patchValue({ forecastLength: defaultLength }, { emitEvent: false });
+        this.forecastForm.patchValue({ forecastLength: defaultLength });
     }
     
     /**
@@ -381,9 +429,6 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     public runForecast(): void {
         this.forecastForm.get('account')?.markAsTouched();
         if (this.forecastForm.invalid) {
-            if (!this.forecastForm.value.account) {
-                this.toasterService.showSnackBar('error', this.localeData()?.account + ' ' + (this.localeData()?.is_mandatory || 'is mandatory'));
-            }
             return;
         }
         
@@ -424,11 +469,6 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
      * @memberof BudgetForecastingComponent
      */
     public sendAiQuestion(): void {
-        if (!this.forecastForm.value.account) {
-            this.toasterService.showSnackBar('error', this.localeData()?.account + ' ' + (this.localeData()?.is_mandatory || 'is mandatory'));
-            return;
-        }
-        
         if (this.aiQuestion()?.trim()) {
             if (this.isInitialized) {
                 this.updateQueryParams();
@@ -436,27 +476,137 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             this.runForecast();
         }
     }
-    
+
     /**
-     * Handles click events on empty state message
-     * Triggers forecast if "Run forecast" text is clicked
+     * Initializes the Chart.js line chart
      *
-     * @param {MouseEvent} event - Click event
+     * @private
      * @memberof BudgetForecastingComponent
      */
-    public onEmptyStateClick(event: MouseEvent): void {
-        const target = event.target as HTMLElement;
-        
-        // Check if clicked element has text-primary class (the "Run forecast" span)
-        if (target.classList.contains('text-primary')) {
-            if (!this.forecastForm.value.account) {
-                this.toasterService.showSnackBar('error', this.localeData()?.account + ' ' + (this.localeData()?.is_mandatory || 'is mandatory'));
-                return;
-            }
-            
-            if (this.forecastForm.valid && !this.isLoading()) {
-                this.runForecast();
-            }
+    private initializeChart(): void {
+        if (!this.chartCanvas) {
+            console.warn('Chart canvas not found');
+            return;
         }
+
+        const ctx = this.chartCanvas.nativeElement.getContext('2d');
+        if (!ctx) {
+            console.warn('Canvas context not available');
+            return;
+        }
+
+        const config: ChartConfiguration = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Closing Balance',
+                    data: [],
+                    borderColor: '#4A90E2',
+                    backgroundColor: 'rgba(74, 144, 226, 0.05)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#4A90E2',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: '#4A90E2',
+                    pointHoverBorderColor: '#fff',
+                    pointHoverBorderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        titleFont: {
+                            size: 12,
+                            weight: '500'
+                        },
+                        bodyFont: {
+                            size: 13,
+                            weight: '600'
+                        },
+                        padding: 10,
+                        displayColors: false,
+                        cornerRadius: 4,
+                        callbacks: {
+                            label: (context) => {
+                                return `₹ ${Number(context.parsed.y).toLocaleString('en-IN')}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        border: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#6c757d',
+                            font: {
+                                size: 11
+                            },
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 6
+                        }
+                    },
+                    y: {
+                        display: false,
+                        grid: {
+                            color: '#e9ecef',
+                            lineWidth: 1
+                        },
+                        border: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        };
+
+        this.chart = new Chart(ctx, config);
+    }
+
+    /**
+     * Updates the chart with new forecast data
+     *
+     * @private
+     * @memberof BudgetForecastingComponent
+     */
+    private updateChart(): void {
+        if (!this.chart) return;
+
+        const results = this.forecastResults();
+        if (!results?.forecast) return;
+
+        const labels = results.forecast.map(item => {
+            const date = new Date(item.date);
+            return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+        });
+
+        const data = results.forecast.map(item => parseFloat(item.predicted_amount));
+
+        this.chart.data.labels = labels;
+        this.chart.data.datasets[0].data = data;
+        this.chart.update();
     }
 }

@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
     class="forecasting-container full-viewport-height d-flex flex-column"
 >
-    <div class="bg-white d-flex justify-content-between align-items-start border-bottom p-3">
+    <div class="bg-white d-flex justify-content-between align-items-start border-bottom p-3 position-relative">
         <div class="header-left flex-fill">
             <h1 class="m-0 mb-1 font-size-20 font-weight-500">{{ localeData()?.page_title }}</h1>
             <p class="text-light m-0 font-size-13">{{ localeData()?.page_subtitle }}</p>
@@ -14,6 +14,11 @@
         <div class="header-right">
             <span class="light-gray font-size-12">{{ localeData()?.header_info }}</span>
         </div>
+        @if (aiQuestion()?.trim()) {
+            <span class="ai-question-badge position-absolute border-radius-16 dark-grey-bg text-white px-3 py-2">
+                {{ aiQuestion() }}
+            </span>
+        }
     </div>
 
     <div class="d-flex flex-fill p-3 column-gap-2 overflow-hidden min-h-0">
@@ -92,7 +97,7 @@
 
         <div class="right-panel overflow-y-auto d-flex flex-fill">
             @if (isLoading()) {
-                <mat-card class="loading-state w-100 max-w-600 m-auto d-flex align-items-center justify-content-center">
+                <mat-card class="loading-state w-100 max-w-800 m-auto d-flex align-items-center justify-content-center">
                     <mat-card-content class="d-flex align-items-center justify-content-center">
                         <div class="loading-content min-h-200 d-flex flex-column align-items-center justify-content-center text-center">
                             <mat-spinner diameter="50" class="mb-3"></mat-spinner>
@@ -102,7 +107,7 @@
                 </mat-card>
             } @else {
                 @if (forecastResults()?.forecast?.length) {
-                    <mat-card class="results-card w-100 max-w-600 m-auto">
+                    <mat-card class="results-card w-100 max-w-800 m-auto">
                         <mat-card-header>
                             <mat-card-title class="font-size-16 font-weight-medium text-primary">
                                 {{ localeData()?.forecast_for }} {{ selectedAccountLabel() }} ({{ granularityLabel() }} ·
@@ -113,6 +118,18 @@
                             </mat-card-subtitle>
                         </mat-card-header>
                         <mat-card-content class="overflow-y-auto">
+                            <div class="chart-container mb-4 p-3 bg-light border-radius-8">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="m-0 font-size-14 font-weight-medium">
+                                        {{ granularityLabel() }} {{ commonLocaleData()?.app_closing_balance }} ({{
+                                            commonLocaleData()?.app_preview
+                                        }})
+                                    </h6>
+                                </div>
+                                <div class="chart-wrapper" style="position: relative; height: 200px">
+                                    <canvas #forecastChart id="forecastChartCanvas" width="100%" height="200px"></canvas>
+                                </div>
+                            </div>
                             <mat-list class="forecast-list p-0 mb-4">
                                 @for (item of forecastResults()?.forecast; track item.date) {
                                     <mat-list-item class="py-2 border-bottom">
@@ -132,24 +149,22 @@
                             </mat-list>
 
                             @if (forecastResults()?.summary?.lowest_balance?.amount || forecastResults()?.summary?.highest_inflow?.amount) {
-                                <div class="d-flex column-gap-15 mt-4">
+                                <div class="summary-wrapper d-flex column-gap-15 mt-4">
                                     <mat-chip
-                                        class="flex-grow-1 theme-primary-light min-h-50 font-size-14 column-gap-1 lowest-balance d-flex align-items-center"
+                                        class="flex-grow-1 text-center font-size-14 column-gap-1 lowest-balance d-flex align-items-center"
                                     >
-                                        <span>
+                                        <span class="text-orange">
                                             {{ localeData()?.lowest_balance }}:
-                                            <br />
                                             <amount-field [amount]="forecastResults()?.summary.lowest_balance.amount"></amount-field>
                                             {{ localeData()?.on_date }}
                                             {{ forecastResults()?.summary.lowest_balance.date }}
                                         </span>
                                     </mat-chip>
                                     <mat-chip
-                                        class="flex-grow-1 theme-primary-light min-h-50 font-size-14 column-gap-1 highest-inflow d-flex align-items-center"
+                                        class="flex-grow-1 text-center font-size-14 column-gap-1 highest-inflow d-flex align-items-center"
                                     >
-                                        <span>
+                                        <span class="text-green">
                                             {{ localeData()?.highest_inflow }}:
-                                            <br />
                                             <amount-field [amount]="forecastResults()?.summary.highest_inflow.amount"></amount-field>
                                             {{ localeData()?.on_date }}
                                             {{ forecastResults()?.summary.highest_inflow.date }}
@@ -160,11 +175,11 @@
                         </mat-card-content>
                     </mat-card>
                 } @else {
-                    <mat-card class="empty-state w-100 max-w-600 m-auto d-flex align-items-center justify-content-center">
+                    <mat-card class="empty-state w-100 max-w-800 m-auto d-flex align-items-center justify-content-center">
                         <mat-card-content>
                             <div class="empty-state-content d-flex flex-column align-items-center justify-content-center text-center">
                                 <h3 class="font-size-20 text-light mb-2">{{ localeData()?.no_forecast_data }}</h3>
-                                <p class="m-0" [innerHTML]="localeData()?.configure_settings" (click)="onEmptyStateClick($event)"></p>
+                                <p class="m-0" [innerHTML]="localeData()?.configure_settings"></p>
                             </div>
                         </mat-card-content>
                     </mat-card>

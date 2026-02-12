@@ -13,11 +13,12 @@ export enum ForecastGranularity {
  * Defines the historical time periods used for forecast analysis
  */
 export enum AnalysisPeriod {
+    LAST_7_DAYS = 'LAST_7_DAYS',
     LAST_30_DAYS = 'LAST_30_DAYS',
-    LAST_60_DAYS = 'LAST_60_DAYS',
-    LAST_90_DAYS = 'LAST_90_DAYS',
+    LAST_3_MONTHS = 'LAST_3_MONTHS',
     LAST_6_MONTHS = 'LAST_6_MONTHS',
-    LAST_YEAR = 'LAST_YEAR'
+    LAST_1_YEAR = 'LAST_1_YEAR',
+    LIFETIME = 'LIFETIME'
 }
 
 /**
