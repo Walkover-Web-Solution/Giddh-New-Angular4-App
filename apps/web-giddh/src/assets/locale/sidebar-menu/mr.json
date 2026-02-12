@@ -730,6 +730,12 @@
                     "link": "/pages/email-forwarding",
                     "icon": "icon-mail",
                     "description": "बँक स्टेटमेंट ईमेलपासून ऑटो-वाउचर तयार करा।"
+                },
+                {
+                    "label": "अंदाज सहाय्यक",
+                    "link": "/pages/budget-forecasting",
+                    "icon": "icon-audit-log",
+                    "description": "एआय-संचालित रोख प्रवाह अंदाज आणि भविष्यवाण्या"
                 }
             ]
         }
