@@ -3778,8 +3778,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         };
 
         // Add date range if available
-        params.fromDate = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '';
-        params.toDate = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '';
+        params.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '';
+        params.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '';
 
         // Add search query if available
         params.q = this.advanceFilters.q ?? '';
@@ -3787,8 +3787,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         // Add sorting if available
         params.sortBy = this.advanceFilters.sortBy ?? '';
         params.sort = this.advanceFilters.sort ?? 'asc';
+        params['voucherType']= voucherType;
 
-        this.recurrenceService.getAll(voucherType, params).pipe(
+        this.recurrenceService.getAll(params).pipe(
             takeUntil(this.destroyed$)
         ).subscribe({
             next: (response: any) => {

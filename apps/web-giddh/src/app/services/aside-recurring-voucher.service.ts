@@ -134,42 +134,11 @@ export class RecurrenceFormService {
   /**
    * Retrieves all recurring vouchers for the current company
    * Supports filtering by voucher type and pagination parameters
-   * @param {string} [voucherType] - Optional voucher type filter (e.g., 'sales', 'purchase')
    * @param {any} [params] - Optional query parameters (page, count, fromDate, toDate, q, sortBy, sort)
    * @returns {Observable<BaseResponse<any, any>>} Observable with list of recurring vouchers
    */
-  public getAll(voucherType?: string, params?: any): Observable<BaseResponse<any, any>> {
-    const companyUniqueName = this.generalService.companyUniqueName;
-    let url = this.config.apiUrl +
-      RECURRING_API.GET_ALL.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)) +
-      (voucherType ? `&voucherType=${encodeURIComponent(voucherType)}` : '');
-
-    // Add query parameters if provided
-    if (params) {
-      if (params.page) {
-        url += `&page=${params.page}`;
-      }
-      if (params.count) {
-        url += `&count=${params.count}`;
-      }
-      if (params.fromDate) {
-        url += `&fromDate=${encodeURIComponent(params.fromDate)}`;
-      }
-      if (params.toDate) {
-        url += `&toDate=${encodeURIComponent(params.toDate)}`;
-      }
-      if (params.q) {
-        url += `&q=${encodeURIComponent(params.q)}`;
-      }
-      if (params.sortBy) {
-        url += `&sortBy=${encodeURIComponent(params.sortBy)}`;
-      }
-      if (params.sort) {
-        url += `&sort=${encodeURIComponent(params.sort)}`;
-      }
-    }
-
-    return this.http.get(url).pipe(
+  public getAll(params?: any): Observable<BaseResponse<any, any>> {
+    return this.http.get(this.generalService.replaceUrlPlaceholders(RECURRING_API.GET_ALL, params)).pipe(
       map(res => res as BaseResponse<any, any>),
       catchError(e => this.errorHandler.HandleCatch<any, any>(e))
     );
