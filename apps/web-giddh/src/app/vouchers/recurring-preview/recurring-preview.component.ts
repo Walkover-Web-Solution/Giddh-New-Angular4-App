@@ -107,7 +107,9 @@ export class RecurringPreviewComponent implements OnDestroy {
         count: PAGINATION_LIMIT,
         q: '',
         sort: '',
-        sortBy: ''
+        sortBy: '',
+        from: '',
+        to: ''
     });
 
     // Reference to the dayjs library for date manipulation
@@ -293,10 +295,15 @@ export class RecurringPreviewComponent implements OnDestroy {
         }
 
         const voucherType = this.recurringActiveTab() === 'sales' ? 'sales' : 'purchase';
-        this.recurrenceFormService.getAll(voucherType, {
+        this.recurrenceFormService.getAll({
             page: this.advanceFilters().page,
             count: this.advanceFilters().count,
-            q: this.advanceFilters().q
+            from: this.advanceFilters().from,
+            to: this.advanceFilters().to,
+            sort: this.advanceFilters().sort,
+            sortBy: this.advanceFilters().sortBy,
+            q: this.advanceFilters().q,
+            voucherType: voucherType
         }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body) {
                 this.handleGetAllRecurringResponse(response.body, isScrollUp, isLoadMore);
