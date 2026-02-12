@@ -170,6 +170,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public selectedItemToMap: ReconcileResponse;
     public tags: TagRequest[] = [];
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
+    /* Group active account */
+    public groupActiveAccount$: Observable<AccountResponse | AccountResponseV2>;
     public activeAccount: AccountResponse | AccountResponseV2;
     public currentAccountApplicableTaxes: string[] = [];
     public totalForTax: number = 0;
@@ -320,9 +322,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(state => state.ledger.account), takeUntil(this.destroyed$));
+        this.groupActiveAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), filter(acc => !!acc), takeUntil(this.destroyed$));
         this.isLedgerCreateInProcess$ = this.store.pipe(select(p => p.ledger.ledgerCreateInProcess), takeUntil(this.destroyed$));
-
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
             if (settings) {
                 this.invoiceSettings = settings;
@@ -366,6 +368,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (acc) {
                 this.assignUpdateActiveAccount(acc);
             }
+        });
+
+        this.groupActiveAccount$.subscribe(acc => {
+            this.assignUpdateActiveAccount(acc);
         });
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
