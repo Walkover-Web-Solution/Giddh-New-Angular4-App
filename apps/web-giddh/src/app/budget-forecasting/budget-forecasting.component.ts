@@ -546,7 +546,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                         cornerRadius: 4,
                         callbacks: {
                             label: (context) => {
-                                return `₹ ${Number(context.parsed.y).toLocaleString('en-IN')}`;
+                                return `${Number(context.parsed.y).toLocaleString('en-IN')}`;
                             }
                         }
                     }
