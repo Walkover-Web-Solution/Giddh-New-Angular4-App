@@ -1,5 +1,4 @@
 .forecasting-container {
-    $background-color: color-mix(in oklch, var(--theme-accent-light) 30%, var(--color-white)) !important;
     .ai-question-badge {
         bottom: -40px;
         right: 10px;
@@ -22,7 +21,6 @@
     .forecast-list,
     .chart-container {
         border: 1px solid var(--color-border-medium);
-        background-color: $background-color;
     }
 
     .forecast-list {
@@ -52,6 +50,26 @@
         }
         &:last-child {
             background-color: color-mix(in oklch, var(--color-green) 10%, var(--color-white)) !important;
+        }
+    }
+}
+
+::ng-deep body {
+    &.dark-theme {
+        .ai-question-badge {
+            background-color: var(--color-white) !important;
+            color: var(--color-black) !important;
+        }
+    }
+    &.default-theme {
+        .forecast-list,
+        .chart-container {
+            background-color: color-mix(in oklch, var(--theme-accent-light) 30%, var(--color-white)) !important;
+        }
+
+        .ai-question-badge {
+            background-color: var(--color-black) !important;
+            color: var(--color-white) !important;
         }
     }
 }
