@@ -407,6 +407,8 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                 next: (response) => {
                     if (response.status === 'success' && response.body?.length > 0) {
                         this.forecastResults.set(response.body[0]);
+                    } else {
+                        this.forecastResults.set(null);
                     }
                     this.isLoading.set(false);
                 },
