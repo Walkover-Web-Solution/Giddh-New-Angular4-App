@@ -77,9 +77,14 @@
                                 formControlName="forecastLength"
                                 [label]="localeData()?.forecast_length"
                                 [placeholder]="localeData()?.forecast_length_placeholder"
-                                [matSuffix]="localeData()?.forecast_length_suffix"
+                                [matSuffix]="forecastLengthSuffix()"
+                                [min]="1"
+                                [showError]="forecastForm.get('forecastLength').touched && forecastForm.get('forecastLength').invalid"
                                 class="flex-fill"
                             ></input-field>
+                            @if (forecastForm.get('forecastLength').touched && forecastForm.get('forecastLength').hasError('min')) {
+                                <p class="text-danger mt-1 font-size-12">{{ localeData()?.forecast_length_min_error }}</p>
+                            }
                             <p class="text-mute mt-1 font-size-12">{{ localeData()?.forecast_length_helper }}</p>
                         </div>
                     </form>
@@ -111,7 +116,7 @@
                         <mat-card-header>
                             <mat-card-title class="font-size-16 font-weight-medium text-primary">
                                 {{ localeData()?.forecast_for }} {{ selectedAccountLabel() }} ({{ granularityLabel() }} ·
-                                {{ localeData()?.next_days?.replace('{{days}}', forecastLength()) }})
+                                {{ forecastRangeText() }})
                             </mat-card-title>
                             <mat-card-subtitle class="text-light font-size-12">
                                 {{ localeData()?.analysis_based_on?.replace('{{period}}', analysisPeriodLabel()) }}
@@ -137,11 +142,10 @@
                                             <span class="font-size-14">{{ item.date }}</span>
                                             <div class="text-right">
                                                 <p class="text-light font-size-14 mb-1">{{ localeData()?.closing }}</p>
-                                                <amount-field
-                                                    class="font-size-12"
-                                                    [amount]="item.predicted_amount"
-                                                    [type]="item.balance_type"
-                                                ></amount-field>
+                                                <div class="d-flex align-items-center justify-content-end column-gap-05">
+                                                    <amount-field class="font-size-12" [amount]="item.predicted_amount"></amount-field>
+                                                    <span class="font-size-12 font-weight-medium">{{ item.balance_type }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </mat-list-item>
