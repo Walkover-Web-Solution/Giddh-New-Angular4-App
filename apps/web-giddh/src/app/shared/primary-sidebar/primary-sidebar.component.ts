@@ -849,4 +849,28 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
       public isExpanded(node: any): boolean {
         return node.isExpanded || false;
       }
+
+    /**
+     * Navigates to createNew link with embedded query parameters
+     *
+     * @param {string} link Link with embedded query parameters
+     * @memberof PrimarySidebarComponent
+     */
+    public navigateToCreateNew(link: string): void {
+        if (!link) {
+            return;
+        }
+
+        const [path, queryString] = link.split('?');
+        const queryParams: any = {};
+
+        if (queryString) {
+            queryString.split('&').forEach(param => {
+                const [key, value] = param.split('=');
+                queryParams[key] = value === 'true' ? true : value === 'false' ? false : value;
+            });
+        }
+
+        this.router.navigate([path], { queryParams });
+    }
 }
