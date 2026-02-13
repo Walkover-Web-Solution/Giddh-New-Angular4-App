@@ -21,6 +21,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { SearchService } from '../services/search.service';
 import { API_BULK_FETCH_LIMIT } from '../app.constant';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
+import { ToasterService } from '../services/toaster.service';
 
 Chart.register(...registerables);
 
@@ -50,28 +51,29 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     private searchService = inject(SearchService);
     private router = inject(Router);
     private activatedRoute = inject(ActivatedRoute);
-    
+    private toasterService = inject(ToasterService)
+
     /** Default forecast length for daily granularity (in days) */
     private readonly DEFAULT_DAILY_FORECAST_LENGTH = 60;
-    
+
     /** Default forecast length for weekly granularity (in weeks) */
     private readonly DEFAULT_WEEKLY_FORECAST_LENGTH = 26;
-    
+
     /** Default forecast length for monthly granularity (in months) */
     private readonly DEFAULT_MONTHLY_FORECAST_LENGTH = 12;
 
     /** Parent group names for account filtering */
     private readonly PARENT_GROUP_NAMES = "shareholdersfunds, noncurrentliabilities, currentliabilities, fixedassets, noncurrentassets, currentassets, revenuefromoperations, otherincome, operatingcost, indirectexpenses";
-    
+
     /** Locale data for translations */
     public localeData = signal<any>({});
-    
+
     /** Common locale data for shared translations */
     public commonLocaleData = signal<any>({});
-    
+
     /** Expose ForecastGranularity enum to template */
     public readonly forecastGranularity = ForecastGranularity;
-    
+
     /** Holds the forecast settings form */
     public forecastForm: FormGroup = new FormGroup({
         account: new FormControl('', Validators.required),
@@ -109,28 +111,49 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
         if (granularity === ForecastGranularity.WEEKLY) return this.localeData()?.granularity_weekly;
         return this.localeData()?.granularity_monthly;
     });
-    
+
+    /** Computed forecast length suffix based on selected granularity */
+    public forecastLengthSuffix = computed(() => {
+        const granularity = this.granularityValue();
+        if (granularity === ForecastGranularity.DAILY) return this.localeData()?.suffix_days;
+        if (granularity === ForecastGranularity.WEEKLY) return this.localeData()?.suffix_weeks;
+        return this.localeData()?.suffix_months;
+    });
+
+    /** Computed forecast range text based on selected granularity */
+    public forecastRangeText = computed(() => {
+        const granularity = this.granularityValue();
+        const length = this.forecastLength();
+        if (granularity === ForecastGranularity.DAILY) {
+            return this.localeData()?.next_days?.replace('{{days}}', length);
+        }
+        if (granularity === ForecastGranularity.WEEKLY) {
+            return this.localeData()?.next_weeks?.replace('{{weeks}}', length);
+        }
+        return this.localeData()?.next_months?.replace('{{months}}', length);
+    });
+
     /** Available account options for dropdown */
     public accountOptions = signal([]);
-    
+
     /** Flag to prevent circular updates between form and query params */
     private isUpdatingFromQueryParams = false;
-    
+
     /** Flag to track if component is initialized */
     private isInitialized = false;
-    
+
     /** Available analysis period options */
     public analysisPeriods = signal([]);
-    
+
     /** Selected analysis period */
     public selectedPeriod = signal<AnalysisPeriod>(AnalysisPeriod.LAST_30_DAYS);
-    
+
     /** Forecast results data */
     public forecastResults = signal<ForecastResponse | null>(null);
-    
+
     /** Loading state */
     public isLoading = signal(false);
-    
+
     /** AI question input */
     public aiQuestion = signal('');
 
@@ -142,21 +165,21 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
 
     /** Computed forecast length */
     public forecastLength = toSignal(
-    this.forecastForm.get('forecastLength')!.valueChanges.pipe(
-        startWith(this.forecastForm.get('forecastLength')!.value)
-    ),
-    { initialValue: this.DEFAULT_DAILY_FORECAST_LENGTH }
-);
-    
+        this.forecastForm.get('forecastLength')!.valueChanges.pipe(
+            startWith(this.forecastForm.get('forecastLength')!.value)
+        ),
+        { initialValue: this.DEFAULT_DAILY_FORECAST_LENGTH }
+    );
+
     /** Computed analysis period label */
     public analysisPeriodLabel = computed(() => {
         const period = this.selectedPeriod();
         const periodObj = this.analysisPeriods().find(p => p.value === period);
         return periodObj?.label.toLowerCase();
     });
-    
+
     private destroyed$ = new Subject<void>();
-    
+
     constructor() {
         effect(() => {
             const results = this.forecastResults();
@@ -174,7 +197,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             }
         });
     }
-    
+
     /**
      * Initializes the component and sets up form listeners
      *
@@ -186,7 +209,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
         this.setupQueryParamSync();
         this.getAccounts();
         this.isInitialized = true;
-        
+
         // Auto-run forecast if all required params are present in URL
         const queryParams = this.activatedRoute.snapshot.queryParams;
         if (queryParams['account'] && this.forecastForm.valid) {
@@ -195,7 +218,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             }, 500);
         }
     }
-    
+
     /**
      * Loads filters from URL query parameters
      *
@@ -204,37 +227,33 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
      */
     private loadFiltersFromQueryParams(): void {
         this.isUpdatingFromQueryParams = true;
-        
+
         const queryParams = this.activatedRoute.snapshot.queryParams;
-        
+
         if (queryParams['account']) {
             this.forecastForm.patchValue({ account: queryParams['account'] });
         }
-        
+
         if (queryParams['granularity'] && Object.values(ForecastGranularity).includes(queryParams['granularity'])) {
             this.forecastForm.patchValue({ granularity: queryParams['granularity'] });
         }
-        
+
         if (queryParams['forecastLength']) {
             const length = parseInt(queryParams['forecastLength'], 10);
             if (!isNaN(length) && length > 0) {
                 this.forecastForm.patchValue({ forecastLength: length });
             }
         }
-        
+
         if (queryParams['analysisPeriod'] && Object.values(AnalysisPeriod).includes(queryParams['analysisPeriod'])) {
             this.selectedPeriod.set(queryParams['analysisPeriod'] as AnalysisPeriod);
         }
-        
-        if (queryParams['aiQuestion']) {
-            this.aiQuestion.set(decodeURIComponent(queryParams['aiQuestion']));
-        }
-        
+
         setTimeout(() => {
             this.isUpdatingFromQueryParams = false;
         }, 100);
     }
-    
+
     /**
      * Sets up synchronization between form values and query parameters
      *
@@ -254,7 +273,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                 }
             });
     }
-    
+
     /**
      * Updates URL query parameters based on current filter values
      *
@@ -263,29 +282,25 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
      */
     private updateQueryParams(): void {
         const queryParams: any = {};
-        
+
         const formValue = this.forecastForm.value;
-        
+
         if (formValue.account) {
             queryParams.account = formValue.account;
         }
-        
+
         if (formValue.granularity) {
             queryParams.granularity = formValue.granularity;
         }
-        
+
         if (formValue.forecastLength) {
             queryParams.forecastLength = formValue.forecastLength;
         }
-        
+
         if (this.selectedPeriod()) {
             queryParams.analysisPeriod = this.selectedPeriod();
         }
-        
-        if (this.aiQuestion()) {
-            queryParams.aiQuestion = encodeURIComponent(this.aiQuestion());
-        }
-        
+
         this.router.navigate([], {
             relativeTo: this.activatedRoute,
             queryParams: queryParams,
@@ -293,7 +308,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             replaceUrl: true
         });
     }
-    
+
     /**
      * Handles translation completion event
      *
@@ -305,7 +320,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             this.updateAnalysisPeriodLabels();
         }
     }
-    
+
     /**
      * Updates analysis period labels with translated text
      *
@@ -323,8 +338,8 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             { label: locale?.period_lifetime, value: AnalysisPeriod.LIFETIME }
         ]);
     }
-    
-    
+
+
     /**
      * Fetches accounts from API
      *
@@ -340,7 +355,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             q: search,
             group: this.PARENT_GROUP_NAMES
         };
-        
+
         this.searchService.searchAccountV3(params)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
@@ -352,6 +367,11 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                             additional: account
                         }));
                         this.accountOptions.set(accounts);
+                    } else {
+                        this.accountOptions.set([]);
+                        if (response?.status === 'error' && response?.message) {
+                            this.toasterService.showSnackBar("error", response.message);
+                        }
                     }
                 },
                 error: (error) => {
@@ -360,8 +380,8 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                 }
             });
     }
-    
-    
+
+
     /**
      * Cleanup on component destruction
      *
@@ -374,7 +394,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             this.chart.destroy();
         }
     }
-    
+
     /**
      * Sets up form value change listeners
      *
@@ -388,7 +408,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                 this.updateDefaultForecastLength(granularity);
             });
     }
-    
+
     /**
      * Updates default forecast length based on granularity
      *
@@ -398,16 +418,16 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
      */
     private updateDefaultForecastLength(granularity: ForecastGranularity): void {
         let defaultLength = this.DEFAULT_DAILY_FORECAST_LENGTH;
-        
+
         if (granularity === ForecastGranularity.WEEKLY) {
             defaultLength = this.DEFAULT_WEEKLY_FORECAST_LENGTH;
         } else if (granularity === ForecastGranularity.MONTHLY) {
             defaultLength = this.DEFAULT_MONTHLY_FORECAST_LENGTH;
         }
-        
+
         this.forecastForm.patchValue({ forecastLength: defaultLength });
     }
-    
+
     /**
      * Selects an analysis period
      *
@@ -420,7 +440,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             this.updateQueryParams();
         }
     }
-    
+
     /**
      * Runs the forecast with current settings
      *
@@ -431,9 +451,9 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
         if (this.forecastForm.invalid) {
             return;
         }
-        
+
         this.isLoading.set(true);
-        
+
         const payload = {
             accountUniqueNames: [this.forecastForm.value.account],
             granularity: this.forecastForm.value.granularity,
@@ -441,19 +461,25 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             forecastLength: this.forecastForm.value.forecastLength,
             question: this.aiQuestion()
         };
-        
+
         if (!payload.question) {
             delete payload.question;
         }
-        
+
         this.budgetForecastingService.getForecast(payload)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (response) => {
                     if (response.status === 'success' && response.body?.length > 0) {
                         this.forecastResults.set(response.body[0]);
+                        if (this.aiQuestion()?.trim()) {
+                            this.aiQuestion.set('');
+                        }
                     } else {
                         this.forecastResults.set(null);
+                        if (response?.status === 'error' && response?.message) {
+                            this.toasterService.showSnackBar("error", response.message);
+                        }
                     }
                     this.isLoading.set(false);
                 },
@@ -462,7 +488,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                 }
             });
     }
-    
+
     /**
      * Sends AI question and runs forecast
      *
@@ -470,9 +496,6 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
      */
     public sendAiQuestion(): void {
         if (this.aiQuestion()?.trim()) {
-            if (this.isInitialized) {
-                this.updateQueryParams();
-            }
             this.runForecast();
         }
     }
