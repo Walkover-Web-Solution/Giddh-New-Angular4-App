@@ -5622,38 +5622,39 @@
 
             <!-- invoice-content-start -->
             <!-- *ngIf="activeTabGroup === 5" -->
-            <mat-tab
-                [label]="voucherType === voucherTypeEnum.sales ? localeData?.tabs?.recurring_invoices : localeData?.tabs?.recurring_bills"
-                *ngIf="activeTabGroup === 0 || activeTabGroup === 2"
-            >
-                <div
-                    class="vouchers-wrapper p-3 overflow-visible"
-                    *ngIf="
-                        (voucherType === voucherTypeEnum.sales || voucherType === voucherTypeEnum.purchase) &&
-                        activeModule === voucherTypeEnum.recurring
-                    "
-                >
+            <mat-tab [label]="localeData?.tabs?.recurring" *ngIf="[0, 1, 2, 3, 4].includes(activeTabGroup)">
+                <div class="vouchers-wrapper p-3 overflow-visible" *ngIf="activeModule === voucherTypeEnum.recurring">
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3 flex-wrap row-gap-1">
                         <div class="d-flex align-items-center column-gap-1">
-                            <button
-                                matButton="filled"
-                                [routerLink]="
-                                    voucherType === voucherTypeEnum.sales
-                                        ? ['/pages/vouchers/sales/create']
-                                        : ['/pages/vouchers/purchase/create']
-                                "
-                                [queryParams]="{ isRecurringVoucher: true }"
-                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                                class="width-200"
-                            >
-                                <span>
-                                    {{
-                                        voucherType === voucherTypeEnum.sales
-                                            ? localeData?.new_recurring_invoice
-                                            : localeData?.new_recurring_bill
-                                    }}
-                                </span>
-                            </button>
+                            @if (!isCompany && !isConsolidatedBranch && voucherApiVersion === 2) {
+                                @if (voucherType === voucherTypeEnum.creditNote || voucherType === voucherTypeEnum.debitNote) {
+                                    <button matButton="filled" class="min-w-150" [matMenuTriggerFor]="createNewVoucher">
+                                        <span>{{ localeData?.new_recurring }}</span>
+                                        <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                                    </button>
+                                    <mat-menu #createNewVoucher="matMenu" class="min-w-150">
+                                        <button mat-menu-item (click)="navigateToCreateRecurringVoucher(voucherTypeEnum.debitNote)">
+                                            {{ localeData?.tabs?.debit_note }}
+                                        </button>
+                                        <button mat-menu-item (click)="navigateToCreateRecurringVoucher(voucherTypeEnum.creditNote)">
+                                            {{ localeData?.tabs?.credit_note }}
+                                        </button>
+                                    </mat-menu>
+                                } @else {
+                                    <button matButton="filled" (click)="navigateToCreateRecurringVoucher()" class="min-w-150">
+                                        <span>{{ localeData?.new_recurring }}</span>
+                                    </button>
+                                }
+                            }
+                            @if (voucherType === voucherTypeEnum.creditNote || voucherType === voucherTypeEnum.debitNote) {
+                                <reactive-dropdown-field
+                                    [name]="'invoiceType'"
+                                    [options]="voucherTypes"
+                                    (selectedOption)="voucherType = $event.value; getRecurringVouchers()"
+                                    [labelValue]="voucherType | titlecase"
+                                    [label]="commonLocaleData?.app_voucher_type"
+                                ></reactive-dropdown-field>
+                            }
                             <div class="custom-datepicker-wrapper">
                                 <div
                                     class="custom-datepicker"

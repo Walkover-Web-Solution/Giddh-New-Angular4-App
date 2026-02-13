@@ -164,8 +164,7 @@
     "generate_recurring_purchase": "Generate Recurring Purchase",
     "edit_recurring_invoice": "Edit Recurring Invoice",
     "edit_recurring_purchase": "Edit Recurring Purchase",
-    "recurring_invoice": "Recurring Invoice",
-    "recurring_purchase": "Recurring Purchase",
+    "recurring": "Recurring",
     "update_recurring_invoice": "Update Recurring Invoice",
     "update_recurring_purchase": "Update Recurring Purchase"
 }

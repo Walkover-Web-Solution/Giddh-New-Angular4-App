@@ -12,20 +12,14 @@
                 <mat-card-content cdkTrapFocus>
                     <div class="vouchers-title d-flex align-items-center" [ngClass]="{ 'pb-2': ocrDataEnabled }">
                         <div class="d-flex align-items-center">
-                            <ng-container *ngIf="queryParams.isRecurringVoucher && !isUpdateMode">
+                            @if (queryParams.isRecurringVoucher) {
                                 <p class="voucher-heading">
-                                    {{ invoiceType.isSalesInvoice ? localeData?.recurring_invoice : localeData?.recurring_purchase }}
+                                    @if (isUpdateMode) {
+                                        {{ commonLocaleData?.app_edit }}
+                                    }
+                                    {{ getVoucherDisplayName(true) }}
                                 </p>
-                            </ng-container>
-                            <ng-container *ngIf="queryParams.isRecurringVoucher && isUpdateMode">
-                                <p class="voucher-heading">
-                                    {{
-                                        invoiceType.isSalesInvoice
-                                            ? localeData?.edit_recurring_invoice
-                                            : localeData?.edit_recurring_purchase
-                                    }}
-                                </p>
-                            </ng-container>
+                            }
                             <ng-container *ngIf="!queryParams.isRecurringVoucher">
                                 <p
                                     [ngClass]="{
@@ -46,17 +40,7 @@
                                             : ''
                                     "
                                 >
-                                    {{
-                                        invoiceType.isCashInvoice && invoiceType.isSalesInvoice
-                                            ? localeData?.invoice_types?.cash_invoice
-                                            : invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice
-                                              ? localeData?.invoice_types?.cash_bill
-                                              : invoiceType.isCashInvoice && invoiceType.isDebitNote
-                                                ? localeData?.invoice_types?.cash_debit_note
-                                                : invoiceType.isCashInvoice && invoiceType.isCreditNote
-                                                  ? localeData?.invoice_types?.cash_credit_note
-                                                  : (voucherType | voucherName: localeData | titlecase)
-                                    }}
+                                    {{ getVoucherDisplayName(false) | titlecase }}
                                 </p>
 
                                 <mat-slide-toggle

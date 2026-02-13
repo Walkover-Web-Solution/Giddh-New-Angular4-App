@@ -163,14 +163,11 @@
 		"settings": "सेटिंग्ज",
 		"proformas": "प्रोफार्मा",
 		"invoices": "पावत्या",
-		"recurring": "आवर्ती",
         "receipt": "पावती",
         "payment": "भरणा",
-        "recurring_invoices": "आवर्ती चालान",
-        "recurring_bills": "आवर्ती बिल"
+        "recurring": "आवर्ती"
     },
-    "new_recurring_invoice":"नवीन आवर्ती चालान",
-    "new_recurring_bill":"नवीन आवर्ती बिल",
+    "new_recurring":"+ नवीन आवर्ती",
     "account_name":"खाते नाव",
     "next_run":"पुढील इन्व्हॉइस तारीख",
     "last_run":"शेवटचा इन्व्हॉइस तारीख",

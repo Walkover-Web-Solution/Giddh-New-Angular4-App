@@ -65,6 +65,49 @@ export class VouchersUtilityService {
         return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType?.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
     }
 
+    /**
+     * Converts voucher type to URL-friendly format by replacing spaces with hyphens
+     *
+     * @param {string} voucherType - Voucher type to convert
+     * @returns {string} URL-friendly voucher type
+     * @memberof VouchersUtilityService
+     */
+    public getVoucherTypeUrl(voucherType: string): string {
+        return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType?.toString().replace(/ /g, "-") : VoucherTypeEnum.purchaseOrder;
+    }
+
+    /**
+     * Gets the display name for a voucher with optional recurring prefix
+     *
+     * @param {string} voucherType - Voucher type
+     * @param {*} localeData - Locale data object
+     * @param {*} invoiceType - Invoice type object with flags
+     * @param {boolean} isRecurring - Whether this is a recurring voucher
+     * @returns {string} Display name for the voucher
+     * @memberof VouchersUtilityService
+     */
+    public getVoucherDisplayName(voucherType: string, localeData: any, invoiceType: any, isRecurring: boolean = false): string {
+        let voucherName = "";
+
+        if (invoiceType?.isCashInvoice && invoiceType?.isSalesInvoice) {
+            voucherName = localeData?.invoice_types?.cash_invoice;
+        } else if (invoiceType?.isCashInvoice && invoiceType?.isPurchaseInvoice) {
+            voucherName = localeData?.invoice_types?.cash_bill;
+        } else if (invoiceType?.isCashInvoice && invoiceType?.isDebitNote) {
+            voucherName = localeData?.invoice_types?.cash_debit_note;
+        } else if (invoiceType?.isCashInvoice && invoiceType?.isCreditNote) {
+            voucherName = localeData?.invoice_types?.cash_credit_note;
+        } else {
+            voucherName = this.getVoucherNameByType(voucherType, localeData);
+        }
+
+        if (isRecurring && localeData?.recurring) {
+            return `${localeData.recurring} ${voucherName}`;
+        }
+
+        return voucherName;
+    }
+
     public createQueryString(url: string, model: any): string {
         url += '?';
         Object.keys(model).forEach((key, index) => {
