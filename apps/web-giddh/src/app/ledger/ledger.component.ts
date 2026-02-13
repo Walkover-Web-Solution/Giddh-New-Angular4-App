@@ -1202,7 +1202,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.ledgerComponentStore.isLedgerViewChange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.trxRequest.isTView = this.ledgerView === LedgerViewEnum.TView;
                 if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
                     this.getAdvanceSearchTxn();
                 } else {

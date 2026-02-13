@@ -31,7 +31,7 @@ export const LEDGER_API = {
     MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/entries',
     CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency',
     DELETE_BANK_TRANSACTION: 'company/:companyUniqueName/yodlee/eledgers?transactionId=:transactionId',
-    NEW_GET_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/giddh-ledger?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to&accountCurrency=:accountCurrency&isTView=:isTView',
+    NEW_GET_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/giddh-ledger?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to&accountCurrency=:accountCurrency',
     GET_BALANCE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/balance?q=:q&from=:from&to=:to&accountCurrency=:accountCurrency',
     GET_CURRENCY_RATE: 'currency/rate?from=:from&to=:to&date=:date',
 
