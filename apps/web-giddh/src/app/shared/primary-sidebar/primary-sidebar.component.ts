@@ -413,7 +413,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.genericAsideMenuAccountDialogRef?.close();
             this.showManageGroupsModal(e[1]?.name);
         } else if (e[0] === "account") {
-            this.selectedGroupForCreateAccount = e[1]?.uniqueName;
+            this.selectedGroupForCreateAccount.set(e[1]?.uniqueName);
             this.openAccountAsidePane();
         }
     }
@@ -434,9 +434,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
         if (dbResult) {
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
+                this.accountItemsFromIndexDB.set((dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : []);
             } else {
-                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
+                this.accountItemsFromIndexDB.set((dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : []);
             }
         } else {
             if (!this.activeCompanyForDb) {
