@@ -216,9 +216,9 @@
                                                 <span
                                                     class="ml-auto create-new"
                                                     *ngIf="node?.additional?.createNew"
-                                                    (click)="$event.stopPropagation()"
-                                                    [routerLink]="[node?.additional?.createNew?.link]"
-                                                    [queryParams]="node?.additional?.createNew?.queryParams"
+                                                    (click)="
+                                                        $event.stopPropagation(); navigateToCreateNew(node?.additional?.createNew?.link)
+                                                    "
                                                 >
                                                     {{ node?.additional?.createNew?.label }}
                                                 </span>
