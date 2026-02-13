@@ -17,6 +17,7 @@ import { ServiceConfig } from "../../services/service.config";
 import { ContactComponentStore } from "../../contact/utility/contact.store";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 
 @Component({
     selector: "recurring-preview",
@@ -50,7 +51,7 @@ export class RecurringPreviewComponent implements OnDestroy {
     /** Total number of result pages for contacts */
     public readonly totalPages = signal<number>(0);
     /** Stores route or query parameters relevant to the view */
-    public readonly params = signal<any>({});
+    public readonly params = signal<{ voucherType: string, recurringVoucherUniqueName: string } | null>(null);
     /** Flag indicating if the current mode is company mode */
     public readonly isCompany = signal<boolean>(false);
     /** Flag indicating if the current branch is a consolidated branch */
@@ -137,7 +138,8 @@ export class RecurringPreviewComponent implements OnDestroy {
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
         @Inject(ServiceConfig) private serviceConfig,
-        private recurrenceFormService: RecurrenceFormService
+        private recurrenceFormService: RecurrenceFormService,
+        private vouchersUtilityService: VouchersUtilityService
     ) {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.componentStore.currentCompanyBranches$;
@@ -204,8 +206,9 @@ export class RecurringPreviewComponent implements OnDestroy {
     private readonly initializeRouteParams = (): void => {
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params) {
-                this.params.set(params);
-                this.recurringActiveTab.set(params?.voucherType);
+                const { voucherType, recurringVoucherUniqueName} = params;
+                this.params.set({ voucherType, recurringVoucherUniqueName});
+                this.recurringActiveTab.set(voucherType);
             }
         });
 
@@ -240,8 +243,8 @@ export class RecurringPreviewComponent implements OnDestroy {
                     this.key.set(queryParams.sortBy);
                     this.order.set(queryParams.sort);
                 } else {
-                    this.key.set((this.recurringActiveTab() === "sales") ? "name" : "name");
-                    this.order.set((this.recurringActiveTab() === "sales") ? "desc" : "asc");
+                    this.key.set("name");
+                    this.order.set("asc");
                 }
 
                 this.fetchRecurringVoucherRuleDetails();
@@ -293,8 +296,6 @@ export class RecurringPreviewComponent implements OnDestroy {
                 this.advanceFilters.set(filters);
             }
         }
-
-        const voucherType = this.recurringActiveTab() === 'sales' ? 'sales' : 'purchase';
         this.recurrenceFormService.getAll({
             page: this.advanceFilters().page,
             count: this.advanceFilters().count,
@@ -303,7 +304,7 @@ export class RecurringPreviewComponent implements OnDestroy {
             sort: this.advanceFilters().sort,
             sortBy: this.advanceFilters().sortBy,
             q: this.advanceFilters().q,
-            voucherType: voucherType
+            voucherType: this.vouchersUtilityService.parseVoucherType(this.params()?.voucherType)
         }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body) {
                 this.handleGetAllRecurringResponse(response.body, isScrollUp, isLoadMore);

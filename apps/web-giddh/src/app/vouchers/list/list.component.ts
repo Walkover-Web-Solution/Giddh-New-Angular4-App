@@ -1325,6 +1325,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 4) {
                     voucherType = "debit-note";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 5) {
+                    voucherType = "debit-note";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 2) {
                 if (selectedTabIndex === 0) {
@@ -1353,6 +1356,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 2) {
                     voucherType = this.voucherTypeEnum.receipt;
                     activeModule = "settings";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "receipt";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
@@ -1364,6 +1370,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 2) {
                     voucherType = this.voucherTypeEnum.payment;
                     activeModule = "settings";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "payment";
+                    activeModule = "recurring";
                 }
             }
         } else {
@@ -1400,6 +1409,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 3) {
                     voucherType = "debit-note";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "debit-note";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 2) {
                 if (selectedTabIndex === 0) {
@@ -1425,6 +1437,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = this.voucherTypeEnum.receipt;
                     activeModule = "pending";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = this.voucherTypeEnum.receipt;
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
@@ -1433,6 +1448,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = this.voucherTypeEnum.payment;
                     activeModule = "pending";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = this.voucherTypeEnum.payment;
+                    activeModule = "recurring";
                 }
             }
         }
@@ -3772,9 +3790,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (this.activeModule !== VoucherTypeEnum.recurring) {
             return;
         }
-
-        const voucherType = this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.sales : VoucherTypeEnum.purchase;
-
         this.recurringVouchersLoading.set(true);
 
         // Build query parameters
@@ -3793,7 +3808,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         // Add sorting if available
         params.sortBy = this.advanceFilters.sortBy ?? '';
         params.sort = this.advanceFilters.sort ?? 'asc';
-        params['voucherType']= voucherType;
+        params['voucherType'] = this.voucherType;
 
         this.recurrenceService.getAll(params).pipe(
             takeUntil(this.destroyed$)
@@ -3915,7 +3930,6 @@ public generateRecurringVoucher(voucher: any): void {
         if (!recurringVoucherUniqueName) {
             return;
         }
-        const voucherType = this.voucherType === VoucherTypeEnum.sales ? 'sales' : 'purchase';
         const queryParams = {
             page: this.advanceFilters.page,
             count: this.advanceFilters.count,
@@ -3934,8 +3948,20 @@ public generateRecurringVoucher(voucher: any): void {
             (this.isCompany || this.isConsolidatedBranch)) {
             queryParams['branchUniqueName'] = this.currentBranch?.uniqueName;
         }
-        this.router.navigate([`/pages/vouchers/view/${voucherType}/recurring/${recurringVoucherUniqueName}`], {
+        this.router.navigate([`/pages/vouchers/view/${this.vouchersUtilityService.getVoucherTypeUrl(this.voucherType)}/recurring/${recurringVoucherUniqueName}`], {
             queryParams: queryParams
+        });
+    }
+
+    /**
+     * Navigates to create recurring voucher page
+     *
+     * @memberof VoucherListComponent
+     */
+    public navigateToCreateRecurringVoucher(voucherType: string): void {
+        const route = `/pages/vouchers/${this.vouchersUtilityService.getVoucherTypeUrl(voucherType ? voucherType : this.voucherType)}/create`;
+        this.router.navigate([route], {
+            queryParams: { isRecurringVoucher: true }
         });
     }
 

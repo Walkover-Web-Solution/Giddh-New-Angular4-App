@@ -164,8 +164,7 @@
     "generate_recurring_purchase": "रिकरंग खरीद जनरेट",
     "edit_recurring_invoice": "रिकरंग इनवॉइस संशोधित करें",
     "edit_recurring_purchase": "रिकरंग खरीद संशोधित करें",
-    "recurring_invoice": "रिकरंग इनवॉइस",
-    "recurring_purchase": "रिकरंग खरीद",
+    "recurring": "रिकरंग",
     "update_recurring_invoice": "रिकरंग इनवॉइस संशोधित करें",
     "update_recurring_purchase": "रिकरंग खरीद संशोधित करें"
 }

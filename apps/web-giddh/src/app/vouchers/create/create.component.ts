@@ -8225,4 +8225,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     protected isRecurringVoucherSupported(): boolean {
         return !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice && !this.invoiceType.isPurchaseOrder;
     }
+
+    /**
+     * Gets the display name for the current voucher
+     *
+     * @param {boolean} isRecurring - Whether this is a recurring voucher
+     * @returns {string} Display name for the voucher
+     * @memberof VoucherCreateComponent
+     */
+    public getVoucherDisplayName(isRecurring: boolean = false): string {
+        return this.vouchersUtilityService.getVoucherDisplayName(
+            this.voucherType,
+            this.localeData,
+            this.invoiceType,
+            isRecurring
+        );
+    }
 }
