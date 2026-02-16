@@ -1555,7 +1555,12 @@
                                                                         (dynamicSearchedQuery)="searchStock($event, 1)"
                                                                         (onClear)="selectStock($event, entryIndex, true)"
                                                                         (createOption)="toggleStockAsidePane()"
-                                                                        [openDropdown]="shouldOpenDropdown(entryIndex)"
+                                                                        [openDropdown]="
+                                                                            shouldOpenDropdown(
+                                                                                entryIndex,
+                                                                                transaction.get('account.uniqueName')?.value
+                                                                            )
+                                                                        "
                                                                         [showOptionDivider]="true"
                                                                         [showMatLabel]="false"
                                                                         [showCaretIcon]="false"
