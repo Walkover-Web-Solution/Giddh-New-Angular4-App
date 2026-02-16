@@ -2697,12 +2697,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Determines if dropdown should be opened
-     *
-     * @param {number} entryIndex
+     * 
+     * @param {number} entryIndex - Index of the entry
+     * @param {string} accountUniqueName - Unique name of the account from transaction
      * @returns {boolean}
      * @memberof VoucherCreateComponent
      */
-    public shouldOpenDropdown(entryIndex: number): boolean {
+    public shouldOpenDropdown(entryIndex: number, accountUniqueName: string): boolean {
         try {
             if (entryIndex !== this.activeEntryIndex) {
                 return false;
@@ -2714,9 +2715,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             if (this.invoiceType?.isCashInvoice) {
-                return !!accountControl.get('customerName')?.value;
+                return Boolean(accountControl.get('customerName')?.value) && !Boolean(accountUniqueName);
             } else {
-                return !!accountControl.get('uniqueName')?.value;
+                return Boolean(accountControl.get('uniqueName')?.value) && !Boolean(accountUniqueName);
             }
         } catch (error) {
             return false;
