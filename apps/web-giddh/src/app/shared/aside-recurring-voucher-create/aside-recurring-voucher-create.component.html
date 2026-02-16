@@ -45,7 +45,7 @@
                 </mat-form-field>
             </div>
 
-            @if (showCustom()) {
+            @if (form.get('repeatOption')?.value === RecurringRepeatOption.CUSTOM) {
                 <div class="font-size-16 mb-3">{{ localeData()?.repeat_on }}</div>
                 <div class="d-flex column-gap-1 mb-3 w-100" formGroupName="frequency">
                     <input-field

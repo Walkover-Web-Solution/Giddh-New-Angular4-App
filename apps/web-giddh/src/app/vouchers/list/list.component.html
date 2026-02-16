@@ -1347,19 +1347,17 @@
                                         <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                             {{ commonLocaleData?.app_payment_status?.cancel }}
                                         </button>
-                                        <button mat-menu-item (click)="showEwayBillDialog(element)" *ngIf="voucherApiVersion === 2">
-                                            {{ localeData?.generate_eway_bill }}
-                                        </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
-                                            {{ commonLocaleData?.app_delete }}
-                                        </button>
-                                        <button mat-menu-item (click)="generateRecurringVoucher(element)" *ngIf="voucherApiVersion === 2">
-                                            {{
-                                                voucherType === voucherTypeEnum.sales
-                                                    ? localeData?.tabs?.recurring_invoices
-                                                    : localeData?.tabs?.recurring_bills
-                                            }}
-                                        </button>
+                                        @if (voucherApiVersion === 2) {
+                                            <button mat-menu-item (click)="showEwayBillDialog(element)">
+                                                {{ localeData?.generate_eway_bill }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
+                                            <button mat-menu-item (click)="generateRecurringVoucher(element)">
+                                                {{ localeData?.generate_recurring }}
+                                            </button>
+                                        }
                                     </mat-menu>
                                 </td>
                             </ng-container>
@@ -1796,6 +1794,9 @@
                                         <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
+                                        <button mat-menu-item (click)="generateRecurringVoucher(element)">
+                                            {{ localeData?.generate_recurring }}
+                                        </button>
                                     </mat-menu>
                                 </td>
                             </ng-container>
@@ -2229,6 +2230,9 @@
                                         </button>
                                         <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_delete }}
+                                        </button>
+                                        <button mat-menu-item (click)="generateRecurringVoucher(element)">
+                                            {{ localeData?.generate_recurring }}
                                         </button>
                                     </mat-menu>
                                 </td>
@@ -3253,16 +3257,14 @@
                                         >
                                             {{ commonLocaleData?.app_copy }}
                                         </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
-                                            {{ commonLocaleData?.app_delete }}
-                                        </button>
-                                        <button mat-menu-item (click)="generateRecurringVoucher(element)" *ngIf="voucherApiVersion === 2">
-                                            {{
-                                                voucherType === voucherTypeEnum.sales
-                                                    ? localeData?.tabs?.recurring_invoices
-                                                    : localeData?.tabs?.recurring_bills
-                                            }}
-                                        </button>
+                                        @if (voucherApiVersion === 2) {
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
+                                            <button mat-menu-item (click)="generateRecurringVoucher(element)">
+                                                {{ localeData?.generate_recurring }}
+                                            </button>
+                                        }
                                     </mat-menu>
                                 </td>
                             </ng-container>

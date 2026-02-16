@@ -161,10 +161,16 @@
     "template": "Template",
     "template_placeholder": "Select template",
     "generate_recurring_invoice": "Generate Recurring Invoice",
-    "generate_recurring_purchase": "Generate Recurring Purchase",
-    "edit_recurring_invoice": "Edit Recurring Invoice",
-    "edit_recurring_purchase": "Edit Recurring Purchase",
+    "generate_recurring_bill": "Generate Recurring Bill",
+    "generate_recurring_credit_note": "Generate Recurring Credit Note",
+    "generate_recurring_debit_note": "Generate Recurring Debit Note",
+    "generate_recurring_receipt": "Generate Recurring Receipt",
+    "generate_recurring_payment": "Generate Recurring Payment",
     "recurring": "Recurring",
     "update_recurring_invoice": "Update Recurring Invoice",
-    "update_recurring_purchase": "Update Recurring Purchase"
+    "update_recurring_purchase": "Update Recurring Purchase",
+    "update_recurring_credit_note": "Update Recurring Credit Note",
+    "update_recurring_debit_note": "Update Recurring Debit Note",
+    "update_recurring_receipt": "Update Recurring Receipt",
+    "update_recurring_payment": "Update Recurring Payment"
 }

@@ -168,6 +168,7 @@
         "recurring": "Recurring"
     },
     "new_recurring":"+ New Recurring",
+    "generate_recurring":"Generate Recurring",
     "account_name":"Account Name",
     "next_run":"Next Invoice Date",
     "last_run":"Last Invoice Date",

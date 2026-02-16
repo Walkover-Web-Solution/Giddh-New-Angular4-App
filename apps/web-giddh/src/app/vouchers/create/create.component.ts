@@ -8247,4 +8247,126 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             isRecurring
         );
     }
+
+    /**
+     * Gets the primary action buttons configuration for create mode
+     *
+     * @protected
+     * @returns {Array<{label: string, action: () => void, condition: boolean}>} Array of button configurations
+     * @memberof VoucherCreateComponent
+     */
+    protected getPrimaryActionButtons(): Array<{label: string, action: () => void, condition: boolean}> {
+        return [
+            {
+                label: this.localeData?.generate_sales_update_account,
+                action: () => this.updateAccountAndGenerateVoucher(),
+                condition: this.invoiceType.isSalesInvoice && !this.isPendingEntries && !this.queryParams.isRecurringVoucher
+            },
+            {
+                label: this.commonLocaleData?.app_create,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isEstimateInvoice
+            },
+            {
+                label: this.commonLocaleData?.app_create,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isProformaInvoice
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_invoice : this.localeData?.generate_sales,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isSalesInvoice && !this.isPendingEntries
+            },
+            {
+                label: this.localeData?.generate_invoice,
+                action: () => this.generateVoucher(),
+                condition: this.isPendingEntries && !this.invoiceType.isCashInvoice
+            },
+            {
+                label: this.localeData?.generate_cash,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isCashInvoice && !this.invoiceType.isPurchaseInvoice && !this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_bill : this.localeData?.generate_cash_bill,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
+            },
+            {
+                label: this.localeData?.generate_cn_update_account,
+                action: () => this.updateAccountAndGenerateVoucher(),
+                condition: !this.invoiceType.isCashInvoice && this.invoiceType.isCreditNote && !this.queryParams.isRecurringVoucher
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_credit_note : this.localeData?.generate_cn,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isCreditNote
+            },
+            {
+                label: this.localeData?.generate_dn_update_account,
+                action: () => this.updateAccountAndGenerateVoucher(),
+                condition: !this.invoiceType.isCashInvoice && this.invoiceType.isDebitNote && !this.queryParams.isRecurringVoucher
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_debit_note : this.localeData?.generate_dn,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isDebitNote
+            },
+            {
+                label: this.commonLocaleData?.app_save,
+                action: () => this.generateVoucher(),
+                condition: !this.invoiceType.isCashInvoice && (this.invoiceType.isPurchaseInvoice || this.invoiceType.isPurchaseOrder)
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_receipt : this.localeData?.create_receipt,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isReceiptInvoice
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_payment : this.localeData?.create_payment,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isPaymentInvoice
+            }
+        ];
+    }
+
+    /**
+     * Checks if more options menu should be shown
+     *
+     * @protected
+     * @returns {boolean} True if more options menu should be displayed
+     * @memberof VoucherCreateComponent
+     */
+    protected shouldShowMoreOptions(): boolean {
+        return !this.queryParams.isRecurringVoucher && (
+            this.invoiceType.isSalesInvoice ||
+            this.invoiceType.isEstimateInvoice ||
+            this.invoiceType.isProformaInvoice ||
+            this.invoiceType.isReceiptInvoice ||
+            this.invoiceType.isPaymentInvoice
+        );
+    }
+
+    /**
+     * Gets the update button label text
+     *
+     * @protected
+     * @returns {string} Update button label
+     * @memberof VoucherCreateComponent
+     */
+    protected getUpdateButtonLabel(): string {
+        if (!this.queryParams.isRecurringVoucher) {
+            return this.updateVoucherText;
+        }
+        const recurringLabels = {
+            isSalesInvoice: this.localeData?.update_recurring_invoice,
+            isPurchaseInvoice: this.localeData?.update_recurring_purchase,
+            isCreditNote: this.localeData?.update_recurring_credit_note,
+            isDebitNote: this.localeData?.update_recurring_debit_note,
+            isReceiptInvoice: this.localeData?.update_recurring_receipt,
+            isPaymentInvoice: this.localeData?.update_recurring_payment
+        };
+        const matchedKey = Object.keys(recurringLabels).find(key => this.invoiceType[key]);
+        return matchedKey ? recurringLabels[matchedKey] : this.updateVoucherText;
+    }
 }
