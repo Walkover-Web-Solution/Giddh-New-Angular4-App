@@ -288,7 +288,9 @@
                                                 class="expansion-cell daybook-w-200"
                                                 [attr.data-title]="localeData?.product_service"
                                             >
-                                                {{ details?.inventory?.stock?.name }}
+                                                <div class="text-ellipsis" [matTooltip]="details?.inventory?.stock?.name">
+                                                    {{ details?.inventory?.stock?.name }}
+                                                </div>
                                             </div>
 
                                             <!-- Quantity Column -->
