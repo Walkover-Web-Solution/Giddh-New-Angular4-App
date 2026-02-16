@@ -3345,6 +3345,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
 
+                    // Calculate rate with exchange rate conversion (multicurrency support)
+                    const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value ?? 1;
+                    const baseRate = Number(item.additional.stock?.rate) || 0;
+                    const rateForAccount = giddhRoundOff(baseRate / exchangeRateValue, this.company.giddhBalanceDecimalPlaces);
+                    const amountForAccount = giddhRoundOff(
+                        Number(item.quantity) * rateForAccount,
+                        this.company.giddhBalanceDecimalPlaces
+                    );
+
                     let entry = {
                         hsnNumber: item.additional?.stock?.hsnNumber,
                         sacNumber: item.additional?.stock?.sacNumber,
@@ -3356,23 +3365,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                     uniqueName: item.additional?.uniqueName,
                                 },
                                 amount: {
-                                    amountForAccount: giddhRoundOff(
-                                        Number(item.quantity) * Number(item.additional.stock?.rate) || 0,
+                                    amountForAccount: amountForAccount,
+                                    amountForCompany: giddhRoundOff(
+                                        amountForAccount * exchangeRateValue,
                                         this.company.giddhBalanceDecimalPlaces
                                     ),
-                                    amountForCompany:
-                                        giddhRoundOff(
-                                            Number(item.quantity) * Number(item.additional.stock?.rate) || 0,
-                                            this.company.giddhBalanceDecimalPlaces
-                                        ) * this.invoiceForm.get("exchangeRate")?.value,
                                 },
                                 stock: {
                                     name: item.additional?.stock?.name,
                                     uniqueName: item.additional?.stock?.uniqueName,
                                     quantity: item.quantity,
                                     rate: {
-                                        rateForAccount: Number(item.additional.stock?.rate) || 0,
-                                        amountForAccount: Number(item.additional.stock?.rate) || 0,
+                                        rateForAccount: rateForAccount,
+                                        amountForAccount: rateForAccount,
                                     },
                                     stockUnit: {
                                         code: item.additional?.stock?.variant?.unitRates?.length
@@ -6784,7 +6789,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 baseRate = response.stock.rate;
             }
             const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value ?? 1;
-            const rate = Number((baseRate / exchangeRateValue).toFixed(this.highPrecisionRate));
+            const rate = giddhRoundOff(baseRate / exchangeRateValue, this.company.giddhBalanceDecimalPlaces);
             transactionFormGroup.get("stock.rate.rateForAccount")?.patchValue(rate);
             transactionFormGroup.get("stock.skuCode")?.patchValue(response.stock.skuCode);
             transactionFormGroup.get("stock.skuCodeHeading")?.patchValue(response.stock.skuCodeHeading);
