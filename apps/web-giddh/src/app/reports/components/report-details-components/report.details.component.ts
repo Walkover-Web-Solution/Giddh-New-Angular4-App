@@ -1007,8 +1007,10 @@ constructor(
      */
     public handleCountrySelection(event: IOption): void {
         if (event?.value) {
+            this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
             this.reportForm.get('stateCodes')?.setValue([]);
-            this.getSalesRegister();
+            this.getSalesRegister(this.dateRange.from, this.dateRange.to);
         }
     }
 }
