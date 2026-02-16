@@ -150,8 +150,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
     /* =======================
        UI STATE FLAGS
     ======================= */
-    /** Signal to control visibility of custom repeat options */
-    public readonly showCustom = signal(false);
     /** Signal to control visibility of day/the monthly mode selector */
     public readonly showDayThe = signal(false);
     /** Signal to control visibility of weekday toggle buttons */
@@ -267,7 +265,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
 
                 // Set UI state dynamically based on existing form data
                 if (repeatOption === RecurringRepeatOption.CUSTOM) {
-                    this.showCustom.set(true);
                     // Set visibility flags based on frequency unit
                     if (frequencyUnit === RecurringFrequencyUnit.WEEK) {
                         this.showWeekdayToggle.set(true);
@@ -280,7 +277,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
                         this.showDayThe.set(false);
                     }
                 } else {
-                    this.showCustom.set(false);
                     this.showDayThe.set(false);
                     this.showWeekdayToggle.set(false);
                     
@@ -434,7 +430,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
         });
 
         // Set up initial UI state
-        this.showCustom.set(false);
         this.showDayThe.set(false);
         this.showWeekdayToggle.set(false);
         // this.selectedRepeatOption.set(null);
@@ -576,7 +571,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
 
         const { dayOfMonth, weekday, weekOfMonth } = this.generalService.getDateMeta(date);
         const currentFrequencyUnit = this.activeForm.get('frequency.unit')?.value || 'MONTH';
-        const isCustomMode = this.showCustom();
 
         // if (this.repeatOptions().length > 0 && !this.selectedRepeatOption()) {
         //     const firstOption = this.repeatOptions()[0].value;
@@ -592,7 +586,7 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
         }
 
         // Reset repeat values based on current frequency unit or CUSTOM mode
-        if (isCustomMode) {
+        if (this.activeForm.get('repeatOption')?.value === RecurringRepeatOption.CUSTOM) {
             // CUSTOM mode: Keep MONTH frequency but update day/nth/weekday values
             this.repeatOnForm.patchValue({
                 type: RecurringRepeatType.DAY_OF_MONTH,
@@ -602,7 +596,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
                 weekday: weekday
             }, { emitEvent: false });
             this.monthlyModeControl.setValue(RecurringMonthlyMode.DAY, { emitEvent: false });
-            this.showCustom.set(true);
             this.showDayThe.set(true);
             this.showWeekdayToggle.set(false);
         } else {
@@ -694,15 +687,12 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
             this.monthlyModeControl.setValue(RecurringMonthlyMode.DAY);
 
             queueMicrotask(() => {
-                this.showCustom.set(true);
                 this.showDayThe.set(true);
                 this.showWeekdayToggle.set(false);
             });
 
             return;
         }
-
-        this.showCustom.set(false);
 
         if (option === RecurringRepeatOption.WEEKLY) {
             this.activeForm.get('frequency')?.patchValue({ unit: RecurringFrequencyUnit.WEEK, interval: 1 });
