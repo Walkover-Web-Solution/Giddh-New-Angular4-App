@@ -177,6 +177,24 @@ export class CompanyService {
     }
 
     /**
+     * Get account countries for company
+     *
+     * @return {*}  {Observable<BaseResponse<any[], string>>}
+     * @memberof CompanyService
+     */
+    public getAccountCountries(): Observable<BaseResponse<any[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        if (this.companyUniqueName) {
+            return this.http.get(this.config.apiUrl + COMPANY_API.GET_ACCOUNT_COUNTRIES?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+                let data: BaseResponse<any[], string> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '')));
+        } else {
+            return observableEmpty();
+        }
+    }
+
+    /**
      * Makes API call to set the application date (universal date)
      *
      * @param {{ fromDate?: string, toDate?: string, duration?: number, period?: string, chosenLabel?: string }} dateObj Request object for the API

@@ -287,6 +287,18 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "आवर्ती चालान",
+                    "link": "/pages/vouchers/preview/sales/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "चालान आवर्ती बनवा",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -519,6 +531,18 @@
                     "link": "/pages/vouchers/preview/purchase/templates",
                     "icon": "icon-template",
                     "description": "टेम्पलेटची रचना आणि सामग्री संपादित करा",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "आवर्ती बिल",
+                    "link": "/pages/vouchers/preview/purchase/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "खरेदी बिल आवर्ती बनवा",
                     "alwaysPresent": true,
                     "additional": {
                         "queryParams": {
@@ -985,6 +1009,12 @@
                     "link": "/pages/email-forwarding",
                     "icon": "icon-mail",
                     "description": "बँक स्टेटमेंट ईमेलपासून ऑटो-वाउचर तयार करा।"
+                },
+                {
+                    "label": "अंदाज सहाय्यक",
+                    "link": "/pages/budget-forecasting",
+                    "icon": "icon-audit-log",
+                    "description": "एआय-संचालित रोख प्रवाह अंदाज आणि भविष्यवाण्या"
                 }
             ]
         },

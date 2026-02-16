@@ -287,6 +287,18 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "आवर्ती चालान",
+                    "link": "/pages/vouchers/preview/sales/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "चालान आवर्ती बनाएं",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -519,6 +531,18 @@
                     "link": "/pages/vouchers/preview/purchase/templates",
                     "icon": "icon-template",
                     "description": "टेम्पलेट का डिज़ाइन और सामग्री संपादित करें",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "आवर्ती बिल",
+                    "link": "/pages/vouchers/preview/purchase/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "बिल आवर्ती बनाएं",
                     "alwaysPresent": true,
                     "additional": {
                         "queryParams": {
@@ -985,6 +1009,12 @@
                     "link": "/pages/email-forwarding",
                     "icon": "icon-mail",
                     "description": "बैंक स्टेटमेंट ईमेल से ऑटो-वाउचर बनाएं।"
+                },
+                {
+                    "label": "पूर्वानुमान सहायक",
+                    "link": "/pages/budget-forecasting",
+                    "icon": "icon-audit-log",
+                    "description": "एआई-संचालित नकदी प्रवाह पूर्वानुमान और भविष्यवाणियां"
                 }
             ]
         },

@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { CompanyActions } from "../../../actions/company.actions";
+import { GeneralActions } from "../../../actions/general/general.actions";
 import { CompanyService } from "../../../services/company.service";
 import { PurchaseReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
@@ -103,8 +104,20 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public salesPerson: FormControl = new FormControl();
     /** This will use for instance of account Dropdown */
     public account: FormControl = new FormControl();
+    /** Country list */
+    public countryList = signal<IOption[]>([]);
+    /** State list */
+    public stateList = signal<IOption[]>([]);
+    /** This will use for instance of country search */
+    public countrySearch: FormControl = new FormControl();
+    /** Filtered Country List */
+    public filteredCountryList = signal<IOption[]>([]);
+    /** This will use for instance of state search */
+    public stateSearch: FormControl = new FormControl();
+    /** Filtered State List */
+    public filteredStateList = signal<IOption[]>([]);
     /** Filtered Sales Person List */
-    public filteredSalesPersonList: IOption[] = [];
+    public filteredSalesPersonList = signal<IOption[]>([]);
     /** Group by enum */
     public groupByEnum: typeof GroupBy = GroupBy;
     /** Date range */
@@ -120,7 +133,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         groupBy: new FormControl<GroupBy>(GroupBy.Duration, Validators.required),
         accountUniqueNames: new FormControl<string[]>([]),
         salesPersonUniqueNames: new FormControl<string[]>([]),
-        interval: new FormControl<DurationEnum | null>(null)
+        interval: new FormControl<DurationEnum | null>(null),
+        countryCode: new FormControl<string | null>(null),
+        countryCodes: new FormControl<string[]>([]),
+        stateCodes: new FormControl<string[]>([])
     });
     /** Holds selected date range */
     public selectedDateRange: any;
@@ -130,6 +146,16 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
+    /** Supported groupBy values for export functionality */
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration]);
+    /** Current groupBy value selected in the report form */
+    public currentGroupBy = signal<GroupBy>(GroupBy.Duration);
+    /** Computed signal that determines if export button should be visible based on current groupBy */
+    public showExport = computed(() => {
+        const currentGroupBy = this.currentGroupBy();
+        return this.supportedExportGroupBy().includes(currentGroupBy);
+    });
+
 constructor(
         private router: Router,
         private activeRoute: ActivatedRoute,
@@ -143,7 +169,8 @@ constructor(
         private ledgerService: LedgerService,
         private dialog: MatDialog,
         private componentStore: ReportsComponentStore,
-        private salesPersonStore: SalesPersonComponentStore) {
+        private salesPersonStore: SalesPersonComponentStore,
+        private generalActions: GeneralActions) {
     }
 
     ngOnInit() {
@@ -230,7 +257,7 @@ constructor(
 
         this.getSalesPersonList();
         this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
-            this.filteredSalesPersonList = res as IOption[];
+            this.filteredSalesPersonList.set(res as IOption[]);
         });
 
         /** Search for sales person dropdown */
@@ -238,11 +265,11 @@ constructor(
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res as IOption[];
+                        this.filteredSalesPersonList.set(res as IOption[]);
                     });
                 } else {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
+                        this.filteredSalesPersonList.set(res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[]);
                     });
                 }
             });
@@ -252,6 +279,29 @@ constructor(
         this.account.valueChanges.pipe(debounceTime(700),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 this.getAccounts(search ? search : '');
+            });
+
+        /** Load countries on init */
+        this.loadCountries();
+
+        /** Search for country dropdown */
+        this.countrySearch.valueChanges.pipe(debounceTime(700),
+            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
+                if (!search) {
+                    this.filteredCountryList.set(this.countryList());
+                } else {
+                    this.filteredCountryList.set(this.countryList()?.filter(country => country?.label?.toLowerCase()?.includes(search?.toLowerCase())));
+                }
+            });
+
+        /** Search for state dropdown */
+        this.stateSearch.valueChanges.pipe(debounceTime(700),
+            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
+                if (!search) {
+                    this.filteredStateList.set(this.stateList());
+                } else {
+                    this.filteredStateList.set(this.stateList()?.filter(state => state?.label?.toLowerCase()?.includes(search?.toLowerCase())));
+                }
             });
 
         /** Universal date */
@@ -268,12 +318,19 @@ constructor(
      * @param response
      */
     public handleGroupByChange(response: IOption): void {
+        this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
+        this.reportForm.get('countryCode')?.setValue(null);
+        this.reportForm.get('countryCodes')?.setValue([]);
+        this.reportForm.get('stateCodes')?.setValue([]);
+
         if (response?.value === GroupBy.SalesPerson) {
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
             this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
+        } else if (response?.value === GroupBy.State || response?.value === GroupBy.Country) {
+            this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
         } else {
-            this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
             this.populateRecords(this.interval, this.selectedMonth);
         }
     }
@@ -307,7 +364,17 @@ constructor(
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
             let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
-            if (item?.salesPerson?.name) {
+            if (item?.stateName) {
+                this.setPurchaseRegisterTotal(item);
+                reportsModel.particular = item.stateName
+                reportsModel.stateCode = item.stateCode;
+                reportModelArray.push(reportsModel);
+            } else if (item?.countryName) {
+                this.setPurchaseRegisterTotal(item);
+                reportsModel.countryCode = item.countryCode;
+                reportsModel.particular = item.countryName
+                reportModelArray.push(reportsModel);
+            } else if (item?.salesPerson?.name) {
                 this.setPurchaseRegisterTotal(item);
                 reportsModel.particular = item.salesPerson.name
                 reportModelArray.push(reportsModel);
@@ -367,6 +434,9 @@ constructor(
         let currentGroupBy = '';
         let currentSalesPersonUniqueNames = [];
         let currentAccountUniqueNames = [];
+        let currentCountryCode = '';
+        let currentCountryCodes = [];
+        let currentStateCodes = [];
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params?.interval || params?.selectedMonth) {
@@ -387,6 +457,9 @@ constructor(
             currentSalesPersonUniqueNames = registerReportFilters?.salesPersonUniqueNames ?? [];
             currentAccountUniqueNames = registerReportFilters?.accountUniqueNames ?? [];
             currentGroupBy = registerReportFilters?.groupBy || GroupBy.Duration;
+            currentCountryCode = registerReportFilters?.countryCode ?? '';
+            currentCountryCodes = registerReportFilters?.countryCodes ?? [];
+            currentStateCodes = registerReportFilters?.stateCodes ?? [];
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -420,6 +493,12 @@ constructor(
                 this.reportForm.get('groupBy').patchValue(currentGroupBy);
                 this.reportForm.get('salesPersonUniqueNames').patchValue(currentSalesPersonUniqueNames);
                 this.reportForm.get('accountUniqueNames').patchValue(currentAccountUniqueNames);
+                this.reportForm.get('countryCode').patchValue(currentCountryCode);
+                this.reportForm.get('countryCodes').patchValue(currentCountryCodes);
+                this.reportForm.get('stateCodes').patchValue(currentStateCodes);
+                if (!this.stateList().length && this.reportForm.get('groupBy')?.value === GroupBy.State && this.reportForm.get('countryCode')?.value) {
+                    this.loadStates(this.reportForm.get('countryCode')?.value);
+                }
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.purchaseRegisterTotal.particular = this.getCustomParticular();
                 this.changeDetectorRef.detectChanges();
@@ -464,7 +543,7 @@ constructor(
                 this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
             }
             this.getPurchaseRegister(startDate, endDate);
-        } else if (this.reportForm.get('groupBy')?.value === GroupBy.SalesPerson) {
+        } else if (this.reportForm.get('groupBy')?.value === GroupBy.SalesPerson || this.reportForm.get('groupBy')?.value === GroupBy.State || this.reportForm.get('groupBy')?.value === GroupBy.Country) {
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
             this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
@@ -544,7 +623,15 @@ constructor(
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear?.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType, salesPersonUniqueNames: this.reportForm?.get('salesPersonUniqueNames')?.value, accountUniqueNames: this.reportForm?.get('accountUniqueNames')?.value, groupBy: this.reportForm?.get('groupBy')?.value
+            financialYear: this.currentActiveFinacialYear?.value, 
+            branchUniqueName: this.currentBranch?.uniqueName, 
+            timeFilter: this.selectedType, 
+            salesPersonUniqueNames: this.reportForm?.get('salesPersonUniqueNames')?.value, 
+            accountUniqueNames: this.reportForm?.get('accountUniqueNames')?.value, 
+            groupBy: this.reportForm?.get('groupBy')?.value,
+            countryCode: this.reportForm?.get('countryCode')?.value,
+            countryCodes: this.reportForm?.get('countryCodes')?.value,
+            stateCodes: this.reportForm?.get('stateCodes')?.value
         }));
     }
 
@@ -585,7 +672,9 @@ constructor(
             this.setCurrentFY();
             this.groupByOptions = [
                 { label: this.commonLocaleData?.app_duration?.duration, value: GroupBy.Duration },
-                { label: this.commonLocaleData?.app_sales_person, value: GroupBy.SalesPerson }
+                { label: this.commonLocaleData?.app_sales_person, value: GroupBy.SalesPerson },
+                { label: this.commonLocaleData?.app_state, value: GroupBy.State },
+                { label: this.commonLocaleData?.app_country , value: GroupBy.Country }
             ];
         }
     }
@@ -660,8 +749,36 @@ constructor(
     public gotoDetailedPurchase(item: PurchaseReportsModel) {
         let from = item.from;
         let to = item.to;
+
         if (from != null && to != null) {
-            this.router.navigate(['pages', 'reports', 'purchase-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranch.uniqueName, interval: item.interval, selectedMonth: item.selectedMonth, salesPersonUniqueName: item.salesPerson?.uniqueName } });
+            const groupByValue = this.reportForm?.get('groupBy')?.value;
+            /** Map of query parameters for each group by type */
+            const groupByQueryParams: Record<GroupBy, any> = {
+                [GroupBy.Duration]: {
+                    interval: item.interval,
+                    selectedMonth: item.selectedMonth
+                },
+                [GroupBy.SalesPerson]: {
+                    salesPersonUniqueName: item.salesPerson?.uniqueName
+                },
+                [GroupBy.State]: {
+                    stateCode: item.stateCode,
+                    countryCode: this.reportForm?.get('countryCode')?.value
+                },
+                [GroupBy.Country]: {
+                    countryCode: item.countryCode
+                }
+            };
+
+            this.router.navigate(['pages', 'reports', 'purchase-detailed-expand'], { 
+                queryParams: { 
+                    from, 
+                    to, 
+                    branchUniqueName: this.currentBranch.uniqueName,
+                    groupBy: this.currentGroupBy(),
+                    ...(groupByQueryParams[groupByValue] || {})
+                } 
+            });
         }
     }
 
@@ -757,17 +874,34 @@ constructor(
         if (!from || !to) {
             return;
         }
+        this.savePreferences();
+        const requestObject = this.reportForm.value;
+        const groupByValue = this.reportForm?.get('groupBy')?.value;
 
-        let requestObject = this.reportForm.value;
-        if (this.reportForm?.get('groupBy')?.value === GroupBy.SalesPerson) {
-            requestObject.interval = undefined;
+        /** Map of keys to remove for each group by type */
+        const keysToRemoveByGroupType: Record<GroupBy, string[]> = {
+            [GroupBy.Duration]: ["salesPersonUniqueNames", "countryCode", "countryCodes", "stateCodes"],
+            [GroupBy.SalesPerson]: ["interval", "countryCode", "countryCodes", "stateCodes"],
+            [GroupBy.Country]: ["salesPersonUniqueNames", "interval", "countryCode", "stateCodes"],
+            [GroupBy.State]: ["salesPersonUniqueNames", "interval", "countryCodes", "countryCode"]
+        };
+
+        /** Add country object for State grouping */
+        if (groupByValue === GroupBy.State) {
+            requestObject.country = { code: requestObject.countryCode };
         }
+
+        /** Remove unnecessary keys based on group by type */
+        const keysToRemove = keysToRemoveByGroupType[groupByValue];
+        if (keysToRemove) {
+            this.removeKeysFromObject(requestObject, keysToRemove);
+        }
+        this.currentGroupBy.set(requestObject.groupBy);
         this.componentStore.getSalesPurchaseList({
             payload: requestObject,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
             isSalesRegister: false
         });
-        this.savePreferences();
     }
 
     /**
@@ -783,6 +917,74 @@ constructor(
             const fromDate = dayjs(this.dateRange?.from, GIDDH_DATE_FORMAT);
             const toDate = dayjs(this.dateRange?.to, GIDDH_DATE_FORMAT);
             return `${fromDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}-${toDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}`;
+        }
+    }
+
+    /**
+     * Remove specified keys from object
+     *
+     * @param {any} obj Object to remove keys from
+     * @param {string[]} keysToRemove Array of keys to remove
+     * @memberof PurchaseRegisterComponent
+     */
+    private removeKeysFromObject(obj: any, keysToRemove: string[]): void {
+        keysToRemove.forEach(key => {
+            delete obj[key];
+        });
+    }
+
+    /**
+     * Load countries list
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    private loadCountries(): void {
+        this.companyService.getAccountCountries().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success' && response?.body) {
+                this.countryList.set(response.body.map(country => ({
+                    label: country.countryName || country.name,
+                    value: country.alpha2CountryCode || country.code
+                })));
+                this.filteredCountryList.set(this.countryList());
+            }
+        });
+    }
+
+    /**
+     * Load states based on selected country
+     *
+     * @param {string} countryCode
+     * @memberof PurchaseRegisterComponent
+     */
+    private loadStates(countryCode: string): void {
+        const statesRequest = { country: countryCode };
+        this.store.dispatch(this.generalActions.getAllState(statesRequest));
+
+        this.store.pipe(
+            select(state => state.general.states),
+            filter(Boolean),
+            take(1)
+        ).subscribe(states => {
+            if (states && (states.stateList ?? states.countyList)) {
+                this.stateList.set((states.stateList ?? states.countyList).map(state => ({
+                    label: state.name,
+                    value: state.code
+                })));
+                this.filteredStateList.set(this.stateList());
+            }
+        });
+    }
+
+    /**
+     * Handle country selection for State groupBy
+     *
+     * @param {IOption} event
+     * @memberof PurchaseRegisterComponent
+     */
+    public handleCountrySelection(event: IOption): void {
+        if (event?.value) {
+            this.loadStates(event.value);
+            this.reportForm.get('stateCodes')?.setValue([]);
         }
     }
 }

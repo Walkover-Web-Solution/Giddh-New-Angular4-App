@@ -1,299 +1,173 @@
 <div appTranslate [file]="'vouchers/preview'" (localeData)="localeData.set($event)" (commonLocaleData)="commonLocaleData.set($event)">
-    <!-- aside-recurring-voucher-create.component.html -->
     @if (isDialogMode) {
         <div class="dialog-header">
             <span class="font-size-16">{{ dialogTitle }}</span>
         </div>
         <div mat-dialog-content class="dialog-body">
             @if (activeForm) {
-                <div [formGroup]="activeForm" class="recurring-wrapper">
-                    <div class="d-flex column-gap-1 mb-3 w-100">
-                        <giddh-datepicker
-                            appEnterNext
-                            name="startDate"
-                            [label]="localeData()?.start_on"
-                            [placeholder]="localeData()?.start_on"
-                            (dateSelected)="onStartDateChange($event)"
-                            [appearance]="'outline'"
-                            [minDate]="minStartDate"
-                            formControlName="startDate"
-                        ></giddh-datepicker>
-                        <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>{{ localeData()?.repeat }}</mat-label>
-                            <mat-select [value]="selectedRepeatOption()" (selectionChange)="selectRepeatOption($event.value)">
-                                @for (opt of repeatOptions(); track opt.value) {
-                                    <mat-option [value]="opt.value">
-                                        {{ opt.label }}
-                                    </mat-option>
-                                }
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    @if (showCustom()) {
-                        <div class="font-size-16 mb-3">{{ localeData()?.repeat_on }}</div>
-                        <div class="d-flex column-gap-1 mb-3 w-100" formGroupName="frequency">
-                            <input-field
-                                appEnterNext
-                                [name]="'interval'"
-                                [label]="localeData()?.repeat_every"
-                                [placeholder]="localeData()?.repeat_every"
-                                [type]="'number'"
-                                formControlName="interval"
-                                [min]="1"
-                            ></input-field>
-                            <mat-form-field appearance="outline">
-                                <mat-select formControlName="unit" (selectionChange)="onRepeatUnitChange($event.value)">
-                                    <mat-option [value]="RecurringFrequencyUnit.DAY">{{ localeData()?.day }}</mat-option>
-                                    <mat-option [value]="RecurringFrequencyUnit.WEEK">{{ localeData()?.week }}</mat-option>
-                                    <mat-option [value]="RecurringFrequencyUnit.MONTH">{{ localeData()?.month }}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        @if (showWeekdayToggle()) {
-                            <div class="d-flex column-gap-4 mb-3 w-100 weekday-toggle">
-                                @for (weekday of weekdays; track weekday.value) {
-                                    <button
-                                        mat-raised-button
-                                        type="button"
-                                        [class.active]="isWeekdaySelected(weekday.value)"
-                                        (click)="toggleWeekday(weekday.value)"
-                                    >
-                                        {{ weekday.label }}
-                                    </button>
-                                }
-                            </div>
-                        }
-                        @if (showDayThe()) {
-                            <div formGroupName="repeatOn">
-                                @if (repeatOnForm?.get('monthlyMode')) {
-                                    <mat-radio-group [formControl]="monthlyModeControl" class="d-block" appEnterNext>
-                                        <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
-                                            <mat-radio-button [value]="RecurringMonthlyMode.DAY" (keydown.enter)="$event.target.click()">
-                                                {{ localeData()?.day }}
-                                            </mat-radio-button>
-                                            <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                                                <mat-select formControlName="dayOfMonth">
-                                                    @for (day of monthDays; track day) {
-                                                        <mat-option [value]="day">{{ day }}</mat-option>
-                                                    }
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                        <!-- THE -->
-                                        <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
-                                            <mat-radio-button [value]="RecurringMonthlyMode.THE" (keydown.enter)="$event.target.click()">
-                                                {{ localeData()?.the }}
-                                            </mat-radio-button>
-                                            <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                                                <mat-select formControlName="nth">
-                                                    @for (week of weekOfMonthOptions; track week.value) {
-                                                        <mat-option [value]="week.value">{{ week.label }}</mat-option>
-                                                    }
-                                                </mat-select>
-                                            </mat-form-field>
-
-                                            <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                                                <mat-select formControlName="weekday">
-                                                    @for (weekdayOption of weekdayOptions; track weekdayOption.value) {
-                                                        <mat-option [value]="weekdayOption.value">{{ weekdayOption.label }}</mat-option>
-                                                    }
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                    </mat-radio-group>
-                                }
-                            </div>
-                        }
-                    }
-                    <div formGroupName="end">
-                        <label class="font-size-16 mb-3">{{ localeData()?.ends }} :</label>
-
-                        <mat-radio-group formControlName="type" class="d-block">
-                            <div class="col-6 d-flex align-items-center column-gap-4 mb-3">
-                                <mat-radio-button [value]="RecurringEndType.ON_DATE" (keydown.enter)="$event.target.click()">
-                                    {{ localeData()?.on }}
-                                </mat-radio-button>
-                                <giddh-datepicker
-                                    appEnterNext
-                                    name="endDate"
-                                    [label]="localeData()?.ends_on"
-                                    [placeholder]="localeData()?.ends_on"
-                                    [appearance]="'outline'"
-                                    formControlName="endDate"
-                                ></giddh-datepicker>
-                            </div>
-
-                            <div class="col-6 align-items-center column-gap-4 mb-3">
-                                <mat-radio-button [value]="RecurringEndType.NEVER" (keydown.enter)="$event.target.click()">
-                                    {{ localeData()?.never }}
-                                </mat-radio-button>
-                            </div>
-                        </mat-radio-group>
-                    </div>
-                    <mat-divider></mat-divider>
-                    @if (previewDates.length > 0) {
-                        <div class="preview-container">
-                            @for (previewDate of previewDates; track previewDate) {
-                                <div class="preview-row mt-2">
-                                    <span class="font-size-16">{{ previewDate }}</span>
-                                </div>
-                            }
-                        </div>
-                    }
-                    @if (previewDates.length === 0) {
-                        <div class="no-dates">{{ localeData()?.no_preview_dates_available }}</div>
-                    }
-                    <!-- Add this at the bottom of aside-recurring-voucher-create.component.html -->
-                    <div class="dialog-actions" mat-dialog-actions align="end">
-                        <button mat-button (click)="onCancel()">{{ commonLocaleData()?.app_cancel }}</button>
-                        <button mat-raised-button color="primary" (click)="onSubmit()">{{ commonLocaleData()?.app_save }}</button>
+                <div class="recurring-wrapper">
+                    <ng-container *ngTemplateOutlet="recurringFormContent; context: { $implicit: activeForm }"></ng-container>
+                    <div class="dialog-actions px-0 pb-0" mat-dialog-actions align="end">
+                        <button matButton="outlined" (click)="onCancel()">{{ commonLocaleData()?.app_cancel }}</button>
+                        <button matButton="filled" color="primary" (click)="onSubmit()">{{ commonLocaleData()?.app_save }}</button>
                     </div>
                 </div>
             }
         </div>
+    } @else if (activeForm) {
+        <div class="recurring-wrapper">
+            <ng-container *ngTemplateOutlet="recurringFormContent; context: { $implicit: activeForm }"></ng-container>
+        </div>
     }
-    @if (!isDialogMode) {
-        @if (activeForm) {
-            <div [formGroup]="activeForm" class="recurring-wrapper">
-                <div class="d-flex column-gap-1 mb-3 w-100">
-                    <giddh-datepicker
+
+    <ng-template #recurringFormContent let-form>
+        <div [formGroup]="form">
+            <div class="d-flex column-gap-1 mb-3 w-100">
+                <giddh-datepicker
+                    appEnterNext
+                    name="startDate"
+                    [label]="localeData()?.start_on"
+                    [placeholder]="localeData()?.start_on"
+                    (dateSelected)="onStartDateChange($event)"
+                    [appearance]="'outline'"
+                    [minDate]="todayDate()"
+                    formControlName="startDate"
+                ></giddh-datepicker>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>{{ localeData()?.repeat }}</mat-label>
+                    <mat-select formControlName="repeatOption" (selectionChange)="selectRepeatOption($event.value)">
+                        @for (opt of repeatOptions(); track opt.value) {
+                            <mat-option [value]="opt.value">
+                                {{ opt.label }}
+                            </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            @if (showCustom()) {
+                <div class="font-size-16 mb-3">{{ localeData()?.repeat_on }}</div>
+                <div class="d-flex column-gap-1 mb-3 w-100" formGroupName="frequency">
+                    <input-field
                         appEnterNext
-                        name="startDate"
-                        [label]="localeData()?.start_on"
-                        [placeholder]="localeData()?.start_on"
-                        (dateSelected)="onStartDateChange($event)"
-                        [appearance]="'outline'"
-                        [minDate]="minStartDate"
-                        formControlName="startDate"
-                    ></giddh-datepicker>
-                    <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>{{ localeData()?.repeat }}</mat-label>
-                        <mat-select [value]="selectedRepeatOption()" (selectionChange)="selectRepeatOption($event.value)">
-                            @for (opt of repeatOptions(); track opt.value) {
-                                <mat-option [value]="opt.value">
-                                    {{ opt.label }}
-                                </mat-option>
-                            }
+                        [name]="'interval'"
+                        [label]="localeData()?.repeat_every"
+                        [placeholder]="localeData()?.repeat_every"
+                        [type]="'number'"
+                        formControlName="interval"
+                        [min]="1"
+                    ></input-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>{{ localeData()?.frequency }}</mat-label>
+                        <mat-select formControlName="unit" (selectionChange)="onRepeatUnitChange($event.value)">
+                            <mat-option [value]="RecurringFrequencyUnit.DAY">{{ localeData()?.day }}</mat-option>
+                            <mat-option [value]="RecurringFrequencyUnit.WEEK">{{ localeData()?.week }}</mat-option>
+                            <mat-option [value]="RecurringFrequencyUnit.MONTH">{{ localeData()?.month }}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-
-                @if (showCustom()) {
-                    <div class="font-size-16 mb-3">{{ localeData()?.repeat_on }}</div>
-                    <div class="d-flex column-gap-1 mb-3 w-100" formGroupName="frequency">
-                        <input-field
-                            appEnterNext
-                            [name]="'interval'"
-                            [label]="localeData()?.repeat_every"
-                            [placeholder]="localeData()?.repeat_every"
-                            [type]="'number'"
-                            formControlName="interval"
-                            [min]="1"
-                        ></input-field>
-                        <mat-form-field appearance="outline">
-                            <mat-select formControlName="unit" (selectionChange)="onRepeatUnitChange($event.value)">
-                                <mat-option [value]="RecurringFrequencyUnit.DAY">{{ localeData()?.day }}</mat-option>
-                                <mat-option [value]="RecurringFrequencyUnit.WEEK">{{ localeData()?.week }}</mat-option>
-                                <mat-option [value]="RecurringFrequencyUnit.MONTH">{{ localeData()?.month }}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    @if (showWeekdayToggle()) {
-                        <div class="d-flex column-gap-4 mb-3 w-100 weekday-toggle">
-                            @for (weekday of weekdays; track weekday.value) {
-                                <button
-                                    mat-raised-button
-                                    type="button"
-                                    [class.active]="isWeekdaySelected(weekday.value)"
-                                    (click)="toggleWeekday(weekday.value)"
-                                >
-                                    {{ weekday.label }}
-                                </button>
-                            }
-                        </div>
-                    }
-                    @if (showDayThe()) {
-                        <div formGroupName="repeatOn">
-                            @if (repeatOnForm?.get('monthlyMode')) {
-                                <mat-radio-group [formControl]="monthlyModeControl" class="d-block" appEnterNext>
-                                    <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
-                                        <mat-radio-button [value]="RecurringMonthlyMode.DAY" (keydown.enter)="$event.target.click()">
-                                            {{ localeData()?.day }}
-                                        </mat-radio-button>
-                                        <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                                            <mat-select formControlName="dayOfMonth">
-                                                @for (day of monthDays; track day) {
-                                                    <mat-option [value]="day">{{ day }}</mat-option>
-                                                }
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-                                    <!-- THE -->
-                                    <div class="col-12 d-flex align-items-center column-gap-4 mb-3">
-                                        <mat-radio-button [value]="RecurringMonthlyMode.THE" (keydown.enter)="$event.target.click()">
-                                            {{ localeData()?.the }}
-                                        </mat-radio-button>
-                                        <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                                            <mat-select formControlName="nth">
-                                                @for (week of weekOfMonthOptions; track week.value) {
-                                                    <mat-option [value]="week.value">{{ week.label }}</mat-option>
-                                                }
-                                            </mat-select>
-                                        </mat-form-field>
-
-                                        <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
-                                            <mat-select formControlName="weekday">
-                                                @for (weekdayOption of weekdayOptions; track weekdayOption.value) {
-                                                    <mat-option [value]="weekdayOption.value">{{ weekdayOption.label }}</mat-option>
-                                                }
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-                                </mat-radio-group>
-                            }
-                        </div>
-                    }
-                }
-                <div formGroupName="end">
-                    <label class="font-size-16 mb-3">{{ localeData()?.ends }} :</label>
-
-                    <mat-radio-group formControlName="type" class="d-block">
-                        <div class="col-6 d-flex align-items-center column-gap-4 mb-3">
-                            <mat-radio-button [value]="RecurringEndType.ON_DATE" (keydown.enter)="$event.target.click()">
-                                {{ localeData()?.on }}
-                            </mat-radio-button>
-                            <giddh-datepicker
-                                appEnterNext
-                                name="endDate"
-                                [label]="localeData()?.ends_on"
-                                [placeholder]="localeData()?.ends_on"
-                                [appearance]="'outline'"
-                                formControlName="endDate"
-                            ></giddh-datepicker>
-                        </div>
-
-                        <div class="col-6 align-items-center column-gap-4 mb-3">
-                            <mat-radio-button [value]="RecurringEndType.NEVER" (keydown.enter)="$event.target.click()">
-                                {{ localeData()?.never }}
-                            </mat-radio-button>
-                        </div>
-                    </mat-radio-group>
-                </div>
-                <mat-divider></mat-divider>
-                @if (previewDates.length > 0) {
-                    <div class="preview-container">
-                        @for (previewDate of previewDates; track previewDate) {
-                            <div class="preview-row mt-2">
-                                <span class="font-size-16">{{ previewDate }}</span>
-                            </div>
+                @if (showWeekdayToggle()) {
+                    <div class="d-flex column-gap-4 mb-3 w-100 weekday-toggle">
+                        @for (weekday of weekdays; track weekday.value) {
+                            <button
+                                mat-raised-button
+                                type="button"
+                                [class.active]="isWeekdaySelected(weekday.value)"
+                                (click)="toggleWeekday(weekday.value)"
+                            >
+                                {{ weekday.label }}
+                            </button>
                         }
                     </div>
                 }
-                @if (previewDates.length === 0) {
-                    <div class="no-dates">{{ localeData()?.no_preview_dates_available }}</div>
+                @if (showDayThe()) {
+                    <div formGroupName="repeatOn">
+                        @if (repeatOnForm?.get('monthlyMode')) {
+                            <mat-radio-group [formControl]="monthlyModeControl" class="d-block" appEnterNext>
+                                <div class="col-12 d-flex align-items-center column-gap-4 mb-3 pr-0">
+                                    <mat-radio-button [value]="RecurringMonthlyMode.DAY" (keydown.enter)="$event.target.click()">
+                                        {{ localeData()?.day }}
+                                    </mat-radio-button>
+                                    <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                                        <mat-select
+                                            formControlName="dayOfMonth"
+                                            [disabled]="monthlyModeControl.value !== RecurringMonthlyMode.DAY"
+                                        >
+                                            @for (day of monthDays; track day) {
+                                                <mat-option [value]="day">{{ day }}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 d-flex align-items-center column-gap-4 mb-3 pr-0">
+                                    <mat-radio-button [value]="RecurringMonthlyMode.THE" (keydown.enter)="$event.target.click()">
+                                        {{ localeData()?.the }}
+                                    </mat-radio-button>
+                                    <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                                        <mat-select
+                                            formControlName="nth"
+                                            [disabled]="monthlyModeControl.value !== RecurringMonthlyMode.THE"
+                                        >
+                                            @for (week of weekOfMonthOptions; track week.value) {
+                                                <mat-option [value]="week.value">{{ week.label }}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                                        <mat-select
+                                            formControlName="weekday"
+                                            [disabled]="monthlyModeControl.value !== RecurringMonthlyMode.THE"
+                                        >
+                                            @for (weekdayOption of weekdayOptions; track weekdayOption.value) {
+                                                <mat-option [value]="weekdayOption.value">{{ weekdayOption.label }}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </mat-radio-group>
+                        }
+                    </div>
                 }
+            }
+            <div formGroupName="end">
+                <label class="font-size-16 mb-3">{{ localeData()?.ends }} :</label>
+
+                <mat-radio-group formControlName="type" class="d-block">
+                    <div class="col-6 d-flex align-items-center column-gap-4 mb-3">
+                        <mat-radio-button [value]="RecurringEndType.ON_DATE" (keydown.enter)="$event.target.click()">
+                            {{ localeData()?.on }}
+                        </mat-radio-button>
+                        <giddh-datepicker
+                            appEnterNext
+                            [minDate]="minEndDate()"
+                            name="endDate"
+                            [label]="localeData()?.ends_on"
+                            [placeholder]="localeData()?.ends_on"
+                            [appearance]="'outline'"
+                            formControlName="endDate"
+                        ></giddh-datepicker>
+                    </div>
+
+                    <div class="col-6 align-items-center column-gap-4 mb-3">
+                        <mat-radio-button [value]="RecurringEndType.NEVER" (keydown.enter)="$event.target.click()">
+                            {{ localeData()?.never }}
+                        </mat-radio-button>
+                    </div>
+                </mat-radio-group>
             </div>
-        }
-    }
+        </div>
+
+        <mat-divider class="mb-3"></mat-divider>
+        <mat-chip-set [aria-label]="previewDate">
+            @for (previewDate of previewDates; track previewDate) {
+                <mat-chip>{{ previewDate }}</mat-chip>
+            } @empty {
+                <mat-chip>
+                    <span class="text-light">{{ localeData()?.no_preview_dates_available }}</span>
+                </mat-chip>
+            }
+        </mat-chip-set>
+        <mat-divider class="mt-3"></mat-divider>
+    </ng-template>
 </div>
