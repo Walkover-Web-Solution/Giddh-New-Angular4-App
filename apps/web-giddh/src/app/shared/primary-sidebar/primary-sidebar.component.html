@@ -151,7 +151,6 @@
                                     </span>
                                 </div>
                             </cdk-tree-node>
-
                             <!-- Child nodes (leaf nodes) -->
                             <cdk-tree-node
                                 *cdkTreeNodeDef="let node"
@@ -160,7 +159,7 @@
                                 role="menu"
                                 class="has-no-child"
                                 [ngClass]="{
-                                    'active': isActiveRoute() === node?.link && node?.additional?.queryParams?.tabIndex == queryParams(),
+                                    'active': node?.isActive,
                                 }"
                             >
                                 <!-- Parent menu without children -->

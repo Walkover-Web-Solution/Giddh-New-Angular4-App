@@ -235,7 +235,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         /**Subscribe to queryParams */
         this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams: any) => {
-            this.queryParams.set(queryParams?.tabIndex);
+            this.queryParams.set(queryParams);
         })
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
@@ -676,9 +676,23 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             return;
         }
         
+        // Extract base path without query parameters for comparison
+        const baseUrlWithoutParams = decodeURI(baseUrl).split('?')[0];
+        const currentQueryParams = this.queryParams();
+        
         // First pass: mark active items
         items.forEach(item => {
-            item.isActive = (item.link === decodeURI(baseUrl) || item?.additionalRoutes?.includes(decodeURI(baseUrl)));
+            const itemLink = item.link ? item.link.split('?')[0] : '';
+            let isPathMatch = baseUrlWithoutParams.includes(itemLink) || item?.additionalRoutes?.some(route => route.split('?')[0] === baseUrlWithoutParams);
+            
+            // If item has query params defined, also check if they match current query params
+            if (isPathMatch && item?.additional?.queryParams && currentQueryParams?.tab) {
+                const itemQueryParams = item.additional.queryParams.tabIndex;
+                // Check if all item query params match current query params
+                isPathMatch = itemQueryParams === Number(currentQueryParams?.tabIndex);
+            }
+            
+            item.isActive = isPathMatch;
         });
         
         // Second pass: collapse all parents first (accordion behavior)
