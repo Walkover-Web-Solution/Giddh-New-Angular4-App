@@ -1190,6 +1190,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 3;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'templates') {
                     this.selectedTabIndex = 4;
+                } else if (['debit note', 'credit note'].includes(this.voucherType) && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 5;
                 }
             } else if (this.activeTabGroup === 2) {
                 if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
@@ -1210,6 +1212,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'settings') {
                     this.selectedTabIndex = 2;
+                } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === 'payment' && this.activeModule === 'list') {
@@ -1218,6 +1222,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'settings') {
                     this.selectedTabIndex = 2;
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 3;
                 }
             }
         } else {
@@ -1244,6 +1250,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 3;
+                } else if (['debit note', 'credit note'].includes(this.voucherType) && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 2) {
                 if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
@@ -1254,18 +1262,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'purchase' && this.activeModule === VoucherTypeEnum.recurring) {
                     this.selectedTabIndex = 3;
+                } else if (this.voucherType === 'purchase' && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
+                } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 2;
                 }
             }
         }
