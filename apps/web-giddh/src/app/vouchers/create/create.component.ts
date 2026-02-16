@@ -3501,7 +3501,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     // Calculate rate with exchange rate conversion (multicurrency support)
-                    const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value ?? 1;
+                    const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value || 1;
                     const baseRate = Number(item.additional.stock?.rate) || 0;
                     const rateForAccount = giddhRoundOff(baseRate / exchangeRateValue, this.company.giddhBalanceDecimalPlaces);
                     const amountForAccount = giddhRoundOff(
