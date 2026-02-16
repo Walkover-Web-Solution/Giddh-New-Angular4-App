@@ -168,6 +168,7 @@
         "recurring": "आवर्ती"
     },
     "new_recurring":"+ नई आवर्ती",
+    "generate_recurring":"आवर्ती उत्पन्न करें",
     "account_name":"खाता नाम",
     "next_run":"अगले इनवॉइस की तारीख",
     "last_run":"पिछली इनवॉइस की तारीख",
