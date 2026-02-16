@@ -525,7 +525,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.setLabelValue(event?.option?.value);
         this.onTouched();
         
-        if (!isEqual(previousValue, newValue)) {
+        if (!isEqual(previousValue, newValue) || this.useCustomLabelValue) {
             this.selectedOption.emit(event?.option?.value);
         }
     }
