@@ -249,6 +249,10 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             this.selectedPeriod.set(queryParams['analysisPeriod'] as AnalysisPeriod);
         }
 
+        if (queryParams['aiQuestion']) {
+            this.aiQuestion.set(decodeURIComponent(queryParams['aiQuestion']));
+        }
+
         setTimeout(() => {
             this.isUpdatingFromQueryParams = false;
         }, 100);
@@ -299,6 +303,10 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
 
         if (this.selectedPeriod()) {
             queryParams.analysisPeriod = this.selectedPeriod();
+        }
+
+        if (this.aiQuestion()) {
+            queryParams.aiQuestion = encodeURIComponent(this.aiQuestion());
         }
 
         this.router.navigate([], {
@@ -472,9 +480,6 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                 next: (response) => {
                     if (response.status === 'success' && response.body?.length > 0) {
                         this.forecastResults.set(response.body[0]);
-                        if (this.aiQuestion()?.trim()) {
-                            this.aiQuestion.set('');
-                        }
                     } else {
                         this.forecastResults.set(null);
                         if (response?.status === 'error' && response?.message) {
@@ -496,6 +501,9 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
      */
     public sendAiQuestion(): void {
         if (this.aiQuestion()?.trim()) {
+            if (this.isInitialized) {
+                this.updateQueryParams();
+            }
             this.runForecast();
         }
     }
