@@ -1,7 +1,4 @@
 {
-    "page_title": "Forecasting Assistant",
-    "page_subtitle": "Ask anything like \"Cash balance for next 30 days for HDFC & ICICI\"",
-    "header_info": "Based on past data & upcoming invoices",
     "forecast_settings": "Forecast settings",
     "analysis_period": "Analysis period",
     "period_last_7_days": "Last 7 days",

@@ -154,9 +154,6 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
     /** Loading state */
     public isLoading = signal(false);
 
-    /** AI question input */
-    public aiQuestion = signal('');
-
     /** Canvas element for chart */
     @ViewChild('forecastChart') private chartCanvas: ElementRef<HTMLCanvasElement>;
 
@@ -249,10 +246,6 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             this.selectedPeriod.set(queryParams['analysisPeriod'] as AnalysisPeriod);
         }
 
-        if (queryParams['aiQuestion']) {
-            this.aiQuestion.set(decodeURIComponent(queryParams['aiQuestion']));
-        }
-
         setTimeout(() => {
             this.isUpdatingFromQueryParams = false;
         }, 100);
@@ -303,10 +296,6 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
 
         if (this.selectedPeriod()) {
             queryParams.analysisPeriod = this.selectedPeriod();
-        }
-
-        if (this.aiQuestion()) {
-            queryParams.aiQuestion = encodeURIComponent(this.aiQuestion());
         }
 
         this.router.navigate([], {
@@ -466,13 +455,8 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             accountUniqueNames: [this.forecastForm.value.account],
             granularity: this.forecastForm.value.granularity,
             analysisPeriod: this.selectedPeriod(),
-            forecastLength: this.forecastForm.value.forecastLength,
-            question: this.aiQuestion()
+            forecastLength: this.forecastForm.value.forecastLength
         };
-
-        if (!payload.question) {
-            delete payload.question;
-        }
 
         this.budgetForecastingService.getForecast(payload)
             .pipe(takeUntil(this.destroyed$))
@@ -492,20 +476,6 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
                     this.isLoading.set(false);
                 }
             });
-    }
-
-    /**
-     * Sends AI question and runs forecast
-     *
-     * @memberof BudgetForecastingComponent
-     */
-    public sendAiQuestion(): void {
-        if (this.aiQuestion()?.trim()) {
-            if (this.isInitialized) {
-                this.updateQueryParams();
-            }
-            this.runForecast();
-        }
     }
 
     /**
@@ -630,7 +600,8 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
         if (!results?.forecast) return;
 
         const labels = results.forecast.map(item => {
-            const date = new Date(item.date);
+            const [day, month, year] = item.date.split('-');
+            const date = new Date(Number(year), Number(month) - 1, Number(day));
             return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
         });
 
