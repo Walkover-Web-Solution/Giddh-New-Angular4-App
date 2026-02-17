@@ -29,7 +29,6 @@ export interface ForecastPayload {
     granularity: string;
     analysisPeriod: string;
     forecastLength: number;
-    question: string;
 }
 
 /**

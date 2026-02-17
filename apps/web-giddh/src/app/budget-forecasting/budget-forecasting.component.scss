@@ -1,14 +1,10 @@
 .forecasting-container {
-    .ai-question-badge {
-        bottom: -40px;
-        right: 10px;
-    }
     .right-panel {
         .results-card,
         .empty-state,
         .loading-state {
             &.mat-mdc-card {
-                height: calc(100% - 100px);
+                height: inherit;
 
                 mat-card-header {
                     background-color: var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low));
@@ -55,21 +51,10 @@
 }
 
 ::ng-deep body {
-    &.dark-theme {
-        .ai-question-badge {
-            background-color: var(--color-white) !important;
-            color: var(--color-black) !important;
-        }
-    }
     &.default-theme {
         .forecast-list,
         .chart-container {
             background-color: color-mix(in oklch, var(--theme-accent-light) 30%, var(--color-white)) !important;
-        }
-
-        .ai-question-badge {
-            background-color: var(--color-black) !important;
-            color: var(--color-white) !important;
         }
     }
 }
