@@ -102,7 +102,9 @@
             right: var(--sidebar-list-right-position, 0) !important;
             left: unset !important;
             bottom: unset !important;
-            width: min(40vw, 600px) !important;
+            width: auto !important;
+            max-width: min(40vw, 600px) !important;
+            min-width: 350px !important;
 
             .sidebar-list-view {
                 &.mat-mdc-autocomplete-panel {
@@ -117,6 +119,9 @@
                     transform: unset !important;
                     .mat-divider:last-child {
                         display: none !important;
+                    }
+                    .mdc-list-item__primary-text {
+                        white-space: nowrap !important;
                     }
                 }
             }

@@ -732,7 +732,7 @@
                     "description": "Auto-create vouchers from bank statement emails."
                 },
                 {
-                    "label": "Forecasting Assistant",
+                    "label": "Budget Forecasting",
                     "link": "/pages/budget-forecasting",
                     "icon": "icon-audit-log",
                     "description": "AI-powered cashflow forecasting and predictions"
