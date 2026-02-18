@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, signal, computed, inject, ViewChild, ElementRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,37 +22,39 @@ import { SearchService } from '../services/search.service';
 import { API_BULK_FETCH_LIMIT } from '../app.constant';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { ToasterService } from '../services/toaster.service';
-import { GIDDH_DATE_UI_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GeneralService } from '../services/general.service';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
 
 Chart.register(...registerables);
 
 @Component({
     selector: 'app-budget-forecasting',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatCardModule,
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatChipsModule,
-        MatListModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatProgressSpinnerModule,
-        FormFieldsModule,
-        TranslateDirectiveModule,
-        AmountFieldComponentModule,
-        GiddhDatePipe
-    ],
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatChipsModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    FormFieldsModule,
+    TranslateDirectiveModule,
+    AmountFieldComponentModule,
+    GiddhDatePipe,
+    HamburgerMenuModule
+],
     templateUrl: './budget-forecasting.component.html',
     styleUrls: ['./budget-forecasting.component.scss']
 })
 export class BudgetForecastingComponent implements OnInit, OnDestroy {
     private budgetForecastingService = inject(BudgetForecastingService);
     private searchService = inject(SearchService);
-    private router = inject(Router);
+    private generalService = inject(GeneralService);
     private activatedRoute = inject(ActivatedRoute);
     private toasterService = inject(ToasterService)
 
@@ -301,12 +303,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             queryParams.analysisPeriod = this.selectedPeriod();
         }
 
-        this.router.navigate([], {
-            relativeTo: this.activatedRoute,
-            queryParams: queryParams,
-            queryParamsHandling: 'merge',
-            replaceUrl: true
-        });
+        this.generalService.updateActivatedRouteQueryParams(queryParams);
     }
 
     /**
