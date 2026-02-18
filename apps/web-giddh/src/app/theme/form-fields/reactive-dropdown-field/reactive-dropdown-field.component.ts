@@ -163,7 +163,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             });
         } else {
             this.searchFormControl.pipe(
-                debounceTime(700),
                 filter((search: string) => {
                     // Skip the initial empty value, but allow all subsequent values including empty ones
                     if (skipInitialValue && (!search || search.trim() === '')) {

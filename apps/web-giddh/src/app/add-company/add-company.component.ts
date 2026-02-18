@@ -233,6 +233,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
     /** Holds user module restriction */
     public remainingUsers: number = 0;
+    /** Hold queryParams */
+    private queryParams: any;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -280,6 +282,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.getCountryListBySubscriptionId(res?.subscriptionId);
                 this.getSubscriptionData(res?.subscriptionId);
                 this.isCreateBySubscription = true;
+            }
+        });
+
+        this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+            if (queryParams && Object.keys(queryParams).length > 0) {
+                this.prefillFormFromQueryParams(queryParams);
+                this.queryParams = queryParams;
             }
         });
 
@@ -421,6 +430,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                         additional: response?.body[key]
                     });
                 });
+                this.selectCountryFromQueryParams();
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -843,12 +853,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                             });
                         }
                     });
+                    this.selectStateFromQueryParams();
                 }
 
                 if (response.countyList) {
                     this.countyList = response.countyList?.map(county => {
                         return { label: county.name, value: county.code };
                     });
+                    this.selectStateFromQueryParams();
                 }
             }
         });
@@ -870,6 +882,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                         additional: response[key]
                     });
                 });
+                this.selectCountryFromQueryParams();
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -964,16 +977,37 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.firstStepForm.controls['mobile'].setValue(mobileValue);
             }
 
-            let onboardingFormRequest = new OnboardingFormRequest();
-            onboardingFormRequest.formName = 'onboarding';
-            onboardingFormRequest.country = event.value;
-            this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
-
-            let statesRequest = new StatesRequest();
-            statesRequest.country = event.value;
-            this.store.dispatch(this.generalActions.getAllState(statesRequest));
-            this.changeDetection.detectChanges();
+            this.getOnboardingFormByCountry(event);
+            this.getAllStateByCountry(event);
         }
+    }
+
+    /**
+     * Fetches onboarding form fields for the selected country
+     *
+     * @private
+     * @param {*} event - Event containing country value
+     * @memberof AddCompanyComponent
+     */
+    private getOnboardingFormByCountry(event: any): void {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = event.value;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+    }
+
+    /**
+     * Fetches all states for the selected country
+     *
+     * @private
+     * @param {*} event - Event containing country value
+     * @memberof AddCompanyComponent
+     */
+    private getAllStateByCountry(event: any): void {
+        let statesRequest = new StatesRequest();
+        statesRequest.country = event.value;
+        this.store.dispatch(this.generalActions.getAllState(statesRequest));
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1495,6 +1529,82 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public handleAddNewUser(): void {
         if (this.canAddNewUser()) {
             this.addNewUser();
+        }
+    }
+
+    /**
+     * Prefills form fields from URL query parameters
+     *
+     * @private
+     * @param {*} queryParams - Query parameters from URL
+     * @memberof AddCompanyComponent
+     */
+    private prefillFormFromQueryParams(queryParams: any): void {
+        if (queryParams.companyName) {
+            this.firstStepForm.get('name')?.patchValue(queryParams.companyName);
+        }
+
+        if (queryParams.email) {
+            this.secondStepForm.get('email')?.patchValue(queryParams.email);
+        }
+
+        if (queryParams.mobileNumber) {
+            this.firstStepForm.get('mobile')?.patchValue(queryParams.mobileNumber);
+        }
+
+        if (queryParams.address) {
+            this.secondStepForm.get('address')?.patchValue(queryParams.address);
+        }
+
+        if (queryParams.pincode) {
+            this.secondStepForm.get('pincode')?.patchValue(queryParams.pincode);
+        }
+
+        if (queryParams.taxNumber) {
+            this.secondStepForm.get('gstin')?.patchValue(queryParams.taxNumber);
+        }
+
+        if (queryParams.taxNumber) {
+            this.secondStepForm.get('businessType')?.patchValue(this.businessTypes.Registered);
+            this.secondStepForm.get('gstin')?.patchValue(queryParams.taxNumber);
+        }
+
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Selects country from query parameters if available
+     *
+     * @private
+     * @memberof AddCompanyComponent
+     */
+    private selectCountryFromQueryParams(): void {
+        if (this.queryParams?.country) {
+            const countryObject = this.countries.find((country) => country.value === this.queryParams.country);
+            if (countryObject) {
+                 this.selectedCountry = countryObject.label;
+                this.selectedCountryCode = countryObject.value;
+                this.firstStepForm.controls['country'].setValue(countryObject);
+                this.company.baseCurrency = countryObject?.additional?.currency?.code;
+                this.firstStepForm.controls['currency'].setValue({ label: countryObject?.additional?.currency?.code, value: countryObject?.additional?.currency?.code });
+                this.getOnboardingFormByCountry(countryObject);
+                this.getAllStateByCountry(countryObject);
+            }
+        }
+    }
+
+    /**
+     * Selects state from query parameters if available
+     *
+     * @private
+     * @memberof AddCompanyComponent
+     */
+    private selectStateFromQueryParams(): void {
+        if (this.queryParams?.state) {
+            const stateObject = this.states.find((state) => state.value === this.queryParams.state);
+            if (stateObject) {
+                this.selectState(stateObject);
+            }
         }
     }
 
