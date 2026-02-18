@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { OtherTaxTypeEnum, SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { VoucherForm } from "../../models/api-models/Voucher";
-import { API_BULK_FETCH_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM } from "../../app.constant";
+import { API_BULK_FETCH_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM, ROUND_OFF_THRESHOLD } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
@@ -256,7 +256,7 @@ export class VouchersUtilityService {
             totalCess: 0,
             grandTotal: 0,
             grandTotalMultiCurrency: 0,
-            roundOff: 0,
+            roundOff: { value: 0, isPositive: true },
             tcsTotal: 0,
             tdsTotal: 0,
             balanceDue: 0
@@ -291,10 +291,14 @@ export class VouchersUtilityService {
         voucherTotals.totalTaxableValue = giddhRoundOff(voucherTotals.totalTaxableValue, balanceDecimalPlaces);
         voucherTotals.totalTaxWithoutCess = giddhRoundOff(voucherTotals.totalTaxWithoutCess, balanceDecimalPlaces);
         voucherTotals.totalCess = giddhRoundOff(voucherTotals.totalCess, balanceDecimalPlaces); 
-        voucherTotals.grandTotal = giddhRoundOff(voucherTotals.grandTotal, balanceDecimalPlaces);
+        voucherTotals.roundOff.value = (applyRoundOff) ? Number((voucherTotals.grandTotal - Math.floor(voucherTotals.grandTotal)).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
+        if (voucherTotals.roundOff.value > ROUND_OFF_THRESHOLD) {
+            voucherTotals.roundOff = { value: 1 - voucherTotals.roundOff.value, isPositive: true };
+        } else {
+            voucherTotals.roundOff = { value: voucherTotals.roundOff.value, isPositive: false };
+        }
+        voucherTotals.grandTotal = giddhRoundOff((voucherTotals.roundOff.isPositive ? Math.ceil(voucherTotals.grandTotal) : Math.floor(voucherTotals.grandTotal)), balanceDecimalPlaces);
         voucherTotals.grandTotalMultiCurrency = giddhRoundOff(voucherTotals.grandTotal * exchangeRate, balanceDecimalPlaces); 
-        voucherTotals.roundOff = (applyRoundOff) ? Number((Math.round(voucherTotals.grandTotal) - voucherTotals.grandTotal).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
-
         return voucherTotals;
     }
 
