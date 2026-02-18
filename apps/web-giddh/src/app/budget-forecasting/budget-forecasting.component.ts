@@ -22,6 +22,8 @@ import { SearchService } from '../services/search.service';
 import { API_BULK_FETCH_LIMIT } from '../app.constant';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { ToasterService } from '../services/toaster.service';
+import { GIDDH_DATE_UI_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 Chart.register(...registerables);
 
@@ -41,7 +43,8 @@ Chart.register(...registerables);
         MatProgressSpinnerModule,
         FormFieldsModule,
         TranslateDirectiveModule,
-        AmountFieldComponentModule
+        AmountFieldComponentModule,
+        GiddhDatePipe
     ],
     templateUrl: './budget-forecasting.component.html',
     styleUrls: ['./budget-forecasting.component.scss']
