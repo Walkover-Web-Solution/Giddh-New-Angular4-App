@@ -297,7 +297,7 @@ export class VouchersUtilityService {
         } else {
             voucherTotals.roundOff = { value: voucherTotals.roundOff.value, isPositive: false };
         }
-        voucherTotals.grandTotal = giddhRoundOff((voucherTotals.roundOff.isPositive ? Math.ceil(voucherTotals.grandTotal) : Math.floor(voucherTotals.grandTotal)), balanceDecimalPlaces);
+        voucherTotals.grandTotal = giddhRoundOff((voucherTotals.roundOff.isPositive ? Math.ceil(voucherTotals.grandTotal) : voucherTotals.grandTotal - voucherTotals.roundOff.value), balanceDecimalPlaces);
         voucherTotals.grandTotalMultiCurrency = giddhRoundOff(voucherTotals.grandTotal * exchangeRate, balanceDecimalPlaces); 
         return voucherTotals;
     }
