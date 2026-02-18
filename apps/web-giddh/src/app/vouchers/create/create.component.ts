@@ -385,7 +385,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         totalTaxWithoutCess: 0,
         totalCess: 0,
         grandTotal: 0,
-        roundOff: 0,
+        roundOff: { value: 0, isPositive: true },
         tcsTotal: 0,
         tdsTotal: 0,
         balanceDue: 0,
@@ -428,8 +428,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public totalAdvanceReceiptsAdjustedAmount: number = 0;
     /** To check is selected invoice already adjusted with at least one advance receipts  */
     public isInvoiceAdjustedWithAdvanceReceipts: boolean = false;
-    /**  This will use for deposit amount before update  */
-    public depositAmountBeforeUpdate: number = 0;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
     /** Total pages for reference vouchers */
@@ -5988,7 +5986,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             totalCess: 0,
             grandTotal: 0,
             grandTotalMultiCurrency: 0,
-            roundOff: 0,
+            roundOff: { value: 0, isPositive: true },
             tcsTotal: 0,
             tdsTotal: 0,
             balanceDue: 0,
@@ -6345,11 +6343,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.voucherTotals.balanceDue = giddhRoundOff(
             this.voucherTotals.grandTotal +
-            this.voucherTotals.tcsTotal +
-            this.voucherTotals.roundOff -
+            this.voucherTotals.tcsTotal -
             this.voucherTotals.tdsTotal -
             depositAmount -
-            Number(this.depositAmountBeforeUpdate) -
             this.totalAdvanceReceiptsAdjustedAmount,
             this.company?.giddhBalanceDecimalPlaces
         );
@@ -6361,10 +6357,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         ) {
             this.voucherTotals.balanceDue = giddhRoundOff(
                 this.voucherTotals.grandTotal +
-                this.voucherTotals.tcsTotal +
-                this.voucherTotals.roundOff -
+                this.voucherTotals.tcsTotal -
                 this.voucherTotals.tdsTotal -
-                Number(this.depositAmountBeforeUpdate) -
                 this.totalAdvanceReceiptsAdjustedAmount,
                 this.company?.giddhBalanceDecimalPlaces
             );

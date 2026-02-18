@@ -1467,7 +1467,7 @@
                                             [cssClass]="'form-control'"
                                             [type]="'number'"
                                             [autoFocus]="true"
-                                            [matSuffix]="account?.baseCurrency"
+                                            [matSuffix]="!currencySwitched ? company?.baseCurrency : account?.baseCurrency"
                                             formControlName="exchangeRate"
                                         ></text-field>
                                     </div>
@@ -3162,7 +3162,7 @@
                                                         </tr>
                                                     </ng-container>
                                                 </ng-container>
-                                                <ng-container *ngIf="voucherTotals.roundOff">
+                                                <ng-container *ngIf="applyRoundOff">
                                                     <tr>
                                                         <td>
                                                             {{ commonLocaleData?.app_round_off }}
@@ -3170,7 +3170,11 @@
                                                         <td>
                                                             <amount-field
                                                                 class="d-inline-block"
-                                                                [amount]="voucherTotals.roundOff"
+                                                                [amount]="
+                                                                    voucherTotals.roundOff.isPositive
+                                                                        ? voucherTotals.roundOff.value
+                                                                        : -voucherTotals.roundOff.value
+                                                                "
                                                                 [currencySymbol]="
                                                                     isMultiCurrencyVoucher ? account.baseCurrencySymbol : false
                                                                 "
@@ -3224,7 +3228,11 @@
                                                     <tr>
                                                         <td>
                                                             {{ commonLocaleData?.app_total }}
-                                                            {{ company.baseCurrencySymbol }}
+                                                            {{
+                                                                !currencySwitched
+                                                                    ? company?.baseCurrencySymbol
+                                                                    : account?.baseCurrencySymbol
+                                                            }}
                                                         </td>
                                                         <td>
                                                             <text-field
@@ -3234,7 +3242,11 @@
                                                                 [type]="'text'"
                                                                 [cssClass]="'form-control border'"
                                                                 [name]="'grandTotalMultiCurrency'"
-                                                                [prefix]="company?.baseCurrencySymbol"
+                                                                [prefix]="
+                                                                    !currencySwitched
+                                                                        ? company?.baseCurrencySymbol
+                                                                        : account?.baseCurrencySymbol
+                                                                "
                                                                 [mask]="company?.inputMaskFormat"
                                                                 [useMask]="true"
                                                                 [readonly]="isEinvoiceGenerated"
