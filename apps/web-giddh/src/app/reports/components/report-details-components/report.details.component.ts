@@ -279,7 +279,7 @@ constructor(
             });
 
         /** Load countries on init */
-        this.loadCountries();
+        // this.loadCountries();
 
         /** Search for country dropdown */
         this.countrySearch.valueChanges.pipe(debounceTime(700),
