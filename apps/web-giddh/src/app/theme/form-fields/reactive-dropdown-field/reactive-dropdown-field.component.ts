@@ -1,8 +1,9 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef, inject } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil, take, filter } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { MatAutocomplete } from "@angular/material/autocomplete";
+import { MatDialog } from "@angular/material/dialog";
 import { IOption } from "../../../app.constant";
 import { isEqual } from "../../../lodash-optimized";
 
@@ -20,6 +21,8 @@ import { isEqual } from "../../../lodash-optimized";
     standalone: false
 })
 export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
+    private dialog = inject(MatDialog);
+
     /** Holds template of options on the component itself */
     @ContentChild('optionTemplate', { static: false }) public optionTemplate: TemplateRef<any>;
     /** Trigger instance for auto complete */
@@ -161,7 +164,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             });
         } else {
             this.searchFormControl.pipe(
-                debounceTime(700),
                 filter((search: string) => {
                     // Skip the initial empty value, but allow all subsequent values including empty ones
                     if (skipInitialValue && (!search || search.trim() === '')) {
@@ -181,6 +183,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 this.changeDetection.detectChanges();
             });
         }
+
+        this.dialog.afterOpened.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(() => {
+            if (this.trigger?.panelOpen) {
+                this.closeDropdownPanel();
+            }
+        });
     }
 
     /**
@@ -525,7 +535,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.setLabelValue(event?.option?.value);
         this.onTouched();
         
-        if (!isEqual(previousValue, newValue)) {
+        if (!isEqual(previousValue, newValue) || this.useCustomLabelValue) {
             this.selectedOption.emit(event?.option?.value);
         }
     }

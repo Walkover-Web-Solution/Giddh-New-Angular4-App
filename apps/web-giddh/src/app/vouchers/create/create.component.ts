@@ -131,6 +131,7 @@ import { CustomFieldsService } from "../../services/custom-fields.service";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
 import { Location } from '@angular/common';
 import { RecurringEndType, RecurringRepeatOption, RecurringFrequencyUnit, RecurringRepeatType, RecurringMonthlyMode } from "../../models/enums/recurring-voucher.enum";
+import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -384,7 +385,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         totalTaxWithoutCess: 0,
         totalCess: 0,
         grandTotal: 0,
-        roundOff: 0,
+        roundOff: { value: 0, isPositive: true },
         tcsTotal: 0,
         tdsTotal: 0,
         balanceDue: 0,
@@ -427,8 +428,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public totalAdvanceReceiptsAdjustedAmount: number = 0;
     /** To check is selected invoice already adjusted with at least one advance receipts  */
     public isInvoiceAdjustedWithAdvanceReceipts: boolean = false;
-    /**  This will use for deposit amount before update  */
-    public depositAmountBeforeUpdate: number = 0;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
     /** Total pages for reference vouchers */
@@ -2696,12 +2695,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Determines if dropdown should be opened
-     *
-     * @param {number} entryIndex
+     * 
+     * @param {number} entryIndex - Index of the entry
+     * @param {string} accountUniqueName - Unique name of the account from transaction
      * @returns {boolean}
      * @memberof VoucherCreateComponent
      */
-    public shouldOpenDropdown(entryIndex: number): boolean {
+    public shouldOpenDropdown(entryIndex: number, accountUniqueName: string): boolean {
         try {
             if (entryIndex !== this.activeEntryIndex) {
                 return false;
@@ -2713,9 +2713,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             if (this.invoiceType?.isCashInvoice) {
-                return !!accountControl.get('customerName')?.value;
+                return Boolean(accountControl.get('customerName')?.value) && !Boolean(accountUniqueName);
             } else {
-                return !!accountControl.get('uniqueName')?.value;
+                return Boolean(accountControl.get('uniqueName')?.value) && !Boolean(accountUniqueName);
             }
         } catch (error) {
             return false;
@@ -3499,6 +3499,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
 
+                    // Calculate rate with exchange rate conversion (multicurrency support)
+                    const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value || 1;
+                    const baseRate = Number(item.additional.stock?.rate) || 0;
+                    const rateForAccount = giddhRoundOff(baseRate / exchangeRateValue, this.company.giddhBalanceDecimalPlaces);
+                    const amountForAccount = giddhRoundOff(
+                        Number(item.quantity) * rateForAccount,
+                        this.company.giddhBalanceDecimalPlaces
+                    );
+
                     let entry = {
                         hsnNumber: item.additional?.stock?.hsnNumber,
                         sacNumber: item.additional?.stock?.sacNumber,
@@ -3510,23 +3519,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                     uniqueName: item.additional?.uniqueName,
                                 },
                                 amount: {
-                                    amountForAccount: giddhRoundOff(
-                                        Number(item.quantity) * Number(item.additional.stock?.rate) || 0,
+                                    amountForAccount: amountForAccount,
+                                    amountForCompany: giddhRoundOff(
+                                        amountForAccount * exchangeRateValue,
                                         this.company.giddhBalanceDecimalPlaces
                                     ),
-                                    amountForCompany:
-                                        giddhRoundOff(
-                                            Number(item.quantity) * Number(item.additional.stock?.rate) || 0,
-                                            this.company.giddhBalanceDecimalPlaces
-                                        ) * this.invoiceForm.get("exchangeRate")?.value,
                                 },
                                 stock: {
                                     name: item.additional?.stock?.name,
                                     uniqueName: item.additional?.stock?.uniqueName,
                                     quantity: item.quantity,
                                     rate: {
-                                        rateForAccount: Number(item.additional.stock?.rate) || 0,
-                                        amountForAccount: Number(item.additional.stock?.rate) || 0,
+                                        rateForAccount: rateForAccount,
+                                        amountForAccount: rateForAccount,
                                     },
                                     stockUnit: {
                                         code: item.additional?.stock?.variant?.unitRates?.length
@@ -3631,8 +3636,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     if (
-                        item.additional.stock?.variant?.salesTaxInclusive ||
-                        item.additional.stock?.variant?.purchaseTaxInclusive
+                        (item.additional.stock?.variant?.salesTaxInclusive && item.additional?.category === AccountCategoryEnum.INCOME) ||
+                        (item.additional.stock?.variant?.purchaseTaxInclusive && item.additional?.category === AccountCategoryEnum.EXPENSE)
                     ) {
                         const amount = this.vouchersUtilityService.calculateInclusiveRate(
                             entryFormGroup?.value,
@@ -5713,30 +5718,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (invoiceForm?.account?.uniqueName) {
                 invoiceForm.account.uniqueName = accountUniqueName;
             }
-            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice) {
-                // ✅ ONLY attach recurrencePreviewRequest if checkbox is checked
-                if (this.invoiceForm.get('isRecurringVoucher')?.value) {
-                    // Notify recurrencePreviewRequest component to skip preview calls during form cleaning
+
+            // Handle Recurring Voucher
+            if (this.invoiceForm.get('isRecurringVoucher')?.value && this.isRecurringVoucherSupported()) {
+                if (this.asideRecurrenceVoucher) {
+                    this.asideRecurrenceVoucher.setSubmitting(true);
+                }
+                invoiceForm.recurrencePreviewRequest = this.recurrenceService.getCleanFormValue(this.recurrenceFormGroup);
+                setTimeout(() => {
                     if (this.asideRecurrenceVoucher) {
-                        this.asideRecurrenceVoucher.setSubmitting(true);
+                        this.asideRecurrenceVoucher.setSubmitting(false);
                     }
-
-                    const cleanData = this.recurrenceService.getCleanFormValue(this.recurrenceFormGroup);
-                    invoiceForm.recurrencePreviewRequest = cleanData;
-
-                    // Reset the flag after debounce completes (700ms + buffer)
-                    setTimeout(() => {
-                        if (this.asideRecurrenceVoucher) {
-                            this.asideRecurrenceVoucher.setSubmitting(false);
-                        }
-                    }, 800);
-                } else {
-                    delete invoiceForm.recurrencePreviewRequest;
-                }
-                if (!this.queryParams?.isRecurringVoucher) {
-                    delete invoiceForm.isRecurringVoucher;
-                }
+                }, 800);
+            } else {
+                delete invoiceForm.recurrencePreviewRequest;
             }
+            if (!this.queryParams?.isRecurringVoucher) {
+                delete invoiceForm.isRecurringVoucher;
+            }
+
             if (this.isUpdateMode) {
                 this.voucherService
                     .updateVoucher(invoiceForm)
@@ -5974,7 +5974,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         
         this.addNewLineEntry(false);
         this.addNewDepositRow();
-        this.setInitialRecurrencePreviewRequest();
+        if (!initialLoad) {
+            this.setInitialRecurrencePreviewRequest();
+        }
 
         this.voucherTotals = {
             totalAmount: 0,
@@ -5984,7 +5986,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             totalCess: 0,
             grandTotal: 0,
             grandTotalMultiCurrency: 0,
-            roundOff: 0,
+            roundOff: { value: 0, isPositive: true },
             tcsTotal: 0,
             tdsTotal: 0,
             balanceDue: 0,
@@ -6341,11 +6343,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.voucherTotals.balanceDue = giddhRoundOff(
             this.voucherTotals.grandTotal +
-            this.voucherTotals.tcsTotal +
-            this.voucherTotals.roundOff -
+            this.voucherTotals.tcsTotal -
             this.voucherTotals.tdsTotal -
             depositAmount -
-            Number(this.depositAmountBeforeUpdate) -
             this.totalAdvanceReceiptsAdjustedAmount,
             this.company?.giddhBalanceDecimalPlaces
         );
@@ -6357,10 +6357,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         ) {
             this.voucherTotals.balanceDue = giddhRoundOff(
                 this.voucherTotals.grandTotal +
-                this.voucherTotals.tcsTotal +
-                this.voucherTotals.roundOff -
+                this.voucherTotals.tcsTotal -
                 this.voucherTotals.tdsTotal -
-                Number(this.depositAmountBeforeUpdate) -
                 this.totalAdvanceReceiptsAdjustedAmount,
                 this.company?.giddhBalanceDecimalPlaces
             );
@@ -6932,7 +6930,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 baseRate = response.stock.rate;
             }
             const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value ?? 1;
-            const rate = Number((baseRate / exchangeRateValue).toFixed(this.highPrecisionRate));
+            const rate = giddhRoundOff(baseRate / exchangeRateValue, this.company.giddhBalanceDecimalPlaces);
             transactionFormGroup.get("stock.rate.rateForAccount")?.patchValue(rate);
             transactionFormGroup.get("stock.skuCode")?.patchValue(response.stock.skuCode);
             transactionFormGroup.get("stock.skuCodeHeading")?.patchValue(response.stock.skuCodeHeading);
@@ -6949,7 +6947,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 .get("stock.variant.purchaseTaxInclusive")
                 ?.patchValue(response.stock.variant?.purchaseTaxInclusive);
 
-            if (response.stock.variant?.salesTaxInclusive || response.stock.variant?.purchaseTaxInclusive) {
+            if ((response.stock.variant?.salesTaxInclusive && response.category === AccountCategoryEnum.INCOME) || (response.stock.variant?.purchaseTaxInclusive && response.category === AccountCategoryEnum.EXPENSE)) {
                 transactionFormGroup
                     .get("amount.amountForAccount")
                     .patchValue(rate * transactionFormGroup.get("stock.quantity")?.value);
@@ -7036,7 +7034,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.getSelectedOtherTax(entryIndex, otherTax, otherTax.calculationMethod);
         }
 
-        if (response.stock?.variant?.salesTaxInclusive || response.stock?.variant?.purchaseTaxInclusive) {
+        if ((response.stock?.variant?.salesTaxInclusive && response.category === AccountCategoryEnum.INCOME) || (response.stock?.variant?.purchaseTaxInclusive && response.category === AccountCategoryEnum.EXPENSE)) {
             const amount = this.vouchersUtilityService.calculateInclusiveRate(
                 entryFormGroup?.value,
                 this.companyTaxes,
@@ -8214,5 +8212,155 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private setInitialRecurrencePreviewRequest(): void {
         this.invoiceForm.get('isRecurringVoucher')?.patchValue(Boolean(this.queryParams.isRecurringVoucher));
         this.isRecurringVoucherSelected();
+    }
+
+    /**
+     * Checks if recurring voucher functionality is supported for the current voucher type
+     * Recurring vouchers are not supported for Estimates, Proformas, and Purchase Orders
+     * 
+     * @protected
+     * @returns {boolean} True if recurring voucher is supported for current voucher type
+     * @memberof VoucherCreateComponent
+     */
+    protected isRecurringVoucherSupported(): boolean {
+        return !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice && !this.invoiceType.isPurchaseOrder;
+    }
+
+    /**
+     * Gets the display name for the current voucher
+     *
+     * @param {boolean} isRecurring - Whether this is a recurring voucher
+     * @returns {string} Display name for the voucher
+     * @memberof VoucherCreateComponent
+     */
+    public getVoucherDisplayName(isRecurring: boolean = false): string {
+        return this.vouchersUtilityService.getVoucherDisplayName(
+            this.voucherType,
+            this.localeData,
+            this.invoiceType,
+            isRecurring
+        );
+    }
+
+    /**
+     * Gets the primary action buttons configuration for create mode
+     *
+     * @protected
+     * @returns {Array<{label: string, action: () => void, condition: boolean}>} Array of button configurations
+     * @memberof VoucherCreateComponent
+     */
+    protected getPrimaryActionButtons(): Array<{label: string, action: () => void, condition: boolean}> {
+        return [
+            {
+                label: this.localeData?.generate_sales_update_account,
+                action: () => this.updateAccountAndGenerateVoucher(),
+                condition: this.invoiceType.isSalesInvoice && !this.isPendingEntries && !this.queryParams.isRecurringVoucher
+            },
+            {
+                label: this.commonLocaleData?.app_create,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isEstimateInvoice
+            },
+            {
+                label: this.commonLocaleData?.app_create,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isProformaInvoice
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_invoice : this.localeData?.generate_sales,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isSalesInvoice && !this.isPendingEntries
+            },
+            {
+                label: this.localeData?.generate_invoice,
+                action: () => this.generateVoucher(),
+                condition: this.isPendingEntries && !this.invoiceType.isCashInvoice
+            },
+            {
+                label: this.localeData?.generate_cash,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isCashInvoice && !this.invoiceType.isPurchaseInvoice && !this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_bill : this.localeData?.generate_cash_bill,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
+            },
+            {
+                label: this.localeData?.generate_cn_update_account,
+                action: () => this.updateAccountAndGenerateVoucher(),
+                condition: !this.invoiceType.isCashInvoice && this.invoiceType.isCreditNote && !this.queryParams.isRecurringVoucher
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_credit_note : this.localeData?.generate_cn,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isCreditNote
+            },
+            {
+                label: this.localeData?.generate_dn_update_account,
+                action: () => this.updateAccountAndGenerateVoucher(),
+                condition: !this.invoiceType.isCashInvoice && this.invoiceType.isDebitNote && !this.queryParams.isRecurringVoucher
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_debit_note : this.localeData?.generate_dn,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isDebitNote
+            },
+            {
+                label: this.commonLocaleData?.app_save,
+                action: () => this.generateVoucher(),
+                condition: !this.invoiceType.isCashInvoice && (this.invoiceType.isPurchaseInvoice || this.invoiceType.isPurchaseOrder)
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_receipt : this.localeData?.create_receipt,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isReceiptInvoice
+            },
+            {
+                label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_payment : this.localeData?.create_payment,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isPaymentInvoice
+            }
+        ];
+    }
+
+    /**
+     * Checks if more options menu should be shown
+     *
+     * @protected
+     * @returns {boolean} True if more options menu should be displayed
+     * @memberof VoucherCreateComponent
+     */
+    protected shouldShowMoreOptions(): boolean {
+        return !this.queryParams.isRecurringVoucher && (
+            this.invoiceType.isSalesInvoice ||
+            this.invoiceType.isEstimateInvoice ||
+            this.invoiceType.isProformaInvoice ||
+            this.invoiceType.isReceiptInvoice ||
+            this.invoiceType.isPaymentInvoice
+        );
+    }
+
+    /**
+     * Gets the update button label text
+     *
+     * @protected
+     * @returns {string} Update button label
+     * @memberof VoucherCreateComponent
+     */
+    protected getUpdateButtonLabel(): string {
+        if (!this.queryParams.isRecurringVoucher) {
+            return this.updateVoucherText;
+        }
+        const recurringLabels = {
+            isSalesInvoice: this.localeData?.update_recurring_invoice,
+            isPurchaseInvoice: this.localeData?.update_recurring_purchase,
+            isCreditNote: this.localeData?.update_recurring_credit_note,
+            isDebitNote: this.localeData?.update_recurring_debit_note,
+            isReceiptInvoice: this.localeData?.update_recurring_receipt,
+            isPaymentInvoice: this.localeData?.update_recurring_payment
+        };
+        const matchedKey = Object.keys(recurringLabels).find(key => this.invoiceType[key]);
+        return matchedKey ? recurringLabels[matchedKey] : this.updateVoucherText;
     }
 }

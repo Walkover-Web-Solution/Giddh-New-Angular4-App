@@ -177,6 +177,10 @@
                     "icon": "icon-invoice-new",
                     "description": "चालान आवर्ती बनाएं",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/sales/create?isRecurringVoucher=true"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -370,6 +374,10 @@
                     "icon": "icon-invoice-new",
                     "description": "चालान आवर्ती बनाएं",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/purchase/create?isRecurringVoucher=true"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -730,6 +738,12 @@
                     "link": "/pages/email-forwarding",
                     "icon": "icon-mail",
                     "description": "बैंक स्टेटमेंट ईमेल से ऑटो-वाउचर बनाएं।"
+                },
+                {
+                    "label": "बजट पूर्वानुमान",
+                    "link": "/pages/budget-forecasting",
+                    "icon": "icon-audit-log",
+                    "description": "एआई-संचालित नकदी प्रवाह पूर्वानुमान और भविष्यवाणियां"
                 }
             ]
         }

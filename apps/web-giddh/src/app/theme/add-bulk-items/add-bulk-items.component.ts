@@ -399,6 +399,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     label: item.additional?.name,
                     value: item?.uniqueName,
                     taxes: taxes,
+                    category: data.body.category,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
                     stock: data.body.stock,

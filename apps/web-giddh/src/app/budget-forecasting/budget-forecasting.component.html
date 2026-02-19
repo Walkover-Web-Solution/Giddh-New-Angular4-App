@@ -1,0 +1,173 @@
+<div
+    appTranslate
+    [file]="'budget-forecasting'"
+    (localeData)="localeData.set($event)"
+    (commonLocaleData)="commonLocaleData.set($event)"
+    (translationComplete)="translationComplete($event)"
+    class="forecasting-container full-viewport-height d-flex flex-column"
+>
+    <div class="d-flex flex-fill p-3 column-gap-2 overflow-hidden min-h-0">
+        <hamburger-menu></hamburger-menu>
+        <div class="max-w-350 d-flex flex-column">
+            <mat-card class="h-100">
+                <mat-card-header>
+                    <mat-card-title class="font-size-16 font-weight-medium">{{ localeData()?.forecast_settings }}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="flex-grow-1 overflow-y-auto p-3">
+                    <form [formGroup]="forecastForm">
+                        <div class="settings-section mb-3">
+                            <reactive-dropdown-field
+                                [options]="accountOptions()"
+                                formControlName="account"
+                                [name]="'account'"
+                                [label]="commonLocaleData()?.app_account"
+                                [placeholder]="commonLocaleData()?.app_select_account"
+                                (dynamicSearchedQuery)="getAccounts($event)"
+                                (onClear)="getAccounts()"
+                                [enableDynamicSearch]="true"
+                                [required]="true"
+                                [showError]="forecastForm.get('account').touched && forecastForm.get('account').invalid"
+                            ></reactive-dropdown-field>
+                        </div>
+
+                        <div class="settings-section mb-3">
+                            <label class="font-weight-medium d-block mb-2">{{ localeData()?.analysis_period }}</label>
+                            <mat-chip-listbox class="d-flex flex-wrap" [selectable]="true">
+                                @for (period of analysisPeriods(); track period.value) {
+                                    <mat-chip-option [selected]="selectedPeriod() === period.value" (click)="selectPeriod(period.value)">
+                                        {{ period.label }}
+                                    </mat-chip-option>
+                                }
+                            </mat-chip-listbox>
+                        </div>
+
+                        <div class="settings-section mb-4">
+                            <label class="section-label d-block mb-2">{{ localeData()?.granularity }}</label>
+                            <mat-button-toggle-group formControlName="granularity" aria-label="Granularity">
+                                <mat-button-toggle [value]="forecastGranularity.DAILY">
+                                    {{ localeData()?.granularity_daily }}
+                                </mat-button-toggle>
+                                <mat-button-toggle [value]="forecastGranularity.WEEKLY">
+                                    {{ localeData()?.granularity_weekly }}
+                                </mat-button-toggle>
+                                <mat-button-toggle [value]="forecastGranularity.MONTHLY">
+                                    {{ localeData()?.granularity_monthly }}
+                                </mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+
+                        <div>
+                            <input-field
+                                [name]="'forecastLength'"
+                                [type]="'number'"
+                                formControlName="forecastLength"
+                                [label]="localeData()?.forecast_length"
+                                [placeholder]="localeData()?.forecast_length_placeholder"
+                                [matSuffix]="forecastLengthSuffix()"
+                                [min]="1"
+                                [showError]="forecastForm.get('forecastLength').touched && forecastForm.get('forecastLength').invalid"
+                                class="flex-fill"
+                            ></input-field>
+                            @if (forecastForm.get('forecastLength').touched && forecastForm.get('forecastLength').hasError('min')) {
+                                <p class="text-danger mt-1 font-size-12">{{ localeData()?.forecast_length_min_error }}</p>
+                            }
+                            <p class="text-mute mt-1 font-size-12">{{ localeData()?.forecast_length_helper }}</p>
+                        </div>
+                    </form>
+
+                    <button matButton="filled" class="w-100 mt-3" (click)="runForecast()" [disabled]="forecastForm.invalid || isLoading()">
+                        @if (isLoading()) {
+                            <mat-spinner diameter="20" class="d-inline-block"></mat-spinner>
+                        } @else {
+                            <span>{{ localeData()?.run_forecast }}</span>
+                        }
+                    </button>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        @if (isLoading()) {
+            <mat-card class="loading-state w-100 d-flex align-items-center justify-content-center h-100">
+                <mat-card-content class="d-flex align-items-center justify-content-center">
+                    <div class="loading-content min-h-200 d-flex flex-column align-items-center justify-content-center text-center">
+                        <mat-spinner diameter="50" class="mb-3"></mat-spinner>
+                        <p class="font-size-14 text-grey m-0">{{ localeData()?.generating_forecast }}</p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        } @else {
+            @if (forecastResults()?.forecast?.length) {
+                <mat-card class="results-card w-100 m-auto h-100">
+                    <mat-card-header>
+                        <mat-card-title class="font-size-16 font-weight-medium text-primary">
+                            {{ localeData()?.forecast_for }} {{ selectedAccountLabel() }} ({{ granularityLabel() }} ·
+                            {{ forecastRangeText() }})
+                        </mat-card-title>
+                        <mat-card-subtitle class="text-light font-size-12">
+                            {{ localeData()?.analysis_based_on?.replace('{{period}}', analysisPeriodLabel()) }}
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content class="overflow-y-auto">
+                        <div class="chart-container mb-4 p-3 border-radius-8">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="m-0 font-size-14 font-weight-medium">
+                                    {{ granularityLabel() }} {{ commonLocaleData()?.app_closing_balance }} ({{
+                                        commonLocaleData()?.app_preview
+                                    }})
+                                </h6>
+                            </div>
+                            <div class="position-relative border-radius-4 p-3">
+                                <canvas #forecastChart id="forecastChartCanvas" width="100%" height="200px" class="max-h-200"></canvas>
+                            </div>
+                        </div>
+                        <mat-list class="forecast-list mb-4 border-radius-8">
+                            @for (item of forecastResults()?.forecast; track item.date; let last = $last) {
+                                <mat-list-item class="py-2" [class.border-bottom]="!last">
+                                    <div class="forecast-row py-2 d-flex justify-content-between align-items-center w-100">
+                                        <span class="font-size-14">{{ item.date | giddhDate }}</span>
+                                        <div class="text-right">
+                                            <div class="d-flex align-items-center justify-content-end column-gap-05">
+                                                <amount-field class="font-size-12" [amount]="item.predicted_amount"></amount-field>
+                                                <span class="font-size-12 font-weight-medium">{{ item.balance_type }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </mat-list-item>
+                            }
+                        </mat-list>
+
+                        @if (forecastResults()?.summary?.lowest_balance?.amount || forecastResults()?.summary?.highest_inflow?.amount) {
+                            <div class="summary-wrapper d-flex column-gap-15 mt-4">
+                                <mat-chip class="flex-grow-1 text-center font-size-14 column-gap-1 d-flex align-items-center">
+                                    <span class="text-orange">
+                                        {{ localeData()?.lowest_balance }}:
+                                        <amount-field [amount]="forecastResults()?.summary.lowest_balance.amount"></amount-field>
+                                        {{ localeData()?.on_date }}
+                                        {{ forecastResults()?.summary.lowest_balance.date | giddhDate }}
+                                    </span>
+                                </mat-chip>
+                                <mat-chip class="flex-grow-1 text-center font-size-14 column-gap-1 d-flex align-items-center">
+                                    <span class="text-green">
+                                        {{ localeData()?.highest_inflow }}:
+                                        <amount-field [amount]="forecastResults()?.summary.highest_inflow.amount"></amount-field>
+                                        {{ localeData()?.on_date }}
+                                        {{ forecastResults()?.summary.highest_inflow.date | giddhDate }}
+                                    </span>
+                                </mat-chip>
+                            </div>
+                        }
+                    </mat-card-content>
+                </mat-card>
+            } @else {
+                <mat-card class="empty-state w-100 d-flex align-items-center justify-content-center h-100">
+                    <mat-card-content>
+                        <div class="empty-state-content d-flex flex-column align-items-center justify-content-center text-center">
+                            <h3 class="font-size-20 text-light mb-2">{{ localeData()?.no_forecast_data }}</h3>
+                            <p class="m-0" [innerHTML]="localeData()?.configure_settings"></p>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            }
+        }
+    </div>
+</div>

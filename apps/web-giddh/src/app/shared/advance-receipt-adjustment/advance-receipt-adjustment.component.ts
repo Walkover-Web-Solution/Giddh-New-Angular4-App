@@ -53,8 +53,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public currentVoucherLabel: string;
     @ViewChild('tdsTypeBox', { static: true }) public tdsTypeBox: ElementRef;
     @ViewChild('tdsAmountBox', { static: true }) public tdsAmountBox: ElementRef;
-    /** Flag to control dropdown opening after data is loaded */
-    public shouldOpenDropdown: boolean = false;
 
     public adjustPayment: AdjustAdvancePaymentModal = {
         customerName: '',
@@ -119,6 +117,17 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     private paginationLimit: number = PAGINATION_LIMIT;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+
+    /**
+     * Determines if dropdown should open automatically
+     * Returns true if there is exactly one adjustment and it has no uniqueName
+     *
+     * @returns {boolean}
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    protected get shouldOpenDropdown(): boolean {
+        return this.adjustVoucherForm?.adjustments?.length === 1 && !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName;
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -1197,7 +1206,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
                 }
             }
-            this.shouldOpenDropdown = !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName && this.adjustVoucherForm?.adjustments?.length === 1;
+            
             this.changeDetectionRef.detectChanges();
         });
     }
