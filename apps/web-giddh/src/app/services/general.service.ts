@@ -671,9 +671,14 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getGiddhRegionUrl(): string {
-        const countryRegion = localStorage.getItem('Country-Region');
-        const region = COUNTRY_REGION_MAP[countryRegion] || null;
-        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+        const isGiddhDomain = window.location.href.includes('books.giddh.com');
+        if (isGiddhDomain){
+            const countryRegion = localStorage.getItem('Country-Region');
+            const region = COUNTRY_REGION_MAP[countryRegion] || null;
+            return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+        } else {
+            return `${window.location.origin}/login`;
+        }
     }
 
     /**
