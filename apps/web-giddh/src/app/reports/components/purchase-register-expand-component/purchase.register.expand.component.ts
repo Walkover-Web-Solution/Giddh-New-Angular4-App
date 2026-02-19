@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject, signal, computed } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -22,6 +22,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
 import { forEach, includes, map, set } from '../../../lodash-optimized';
+import { GroupBy } from '../../constants/reports.constant';
 
 @Component({
     selector: "purchase-register-expand",
@@ -95,6 +96,15 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Supported groupBy values for export functionality */
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration]);
+    /** Current groupBy value selected in the report form */
+    public currentGroupBy = signal<GroupBy | null>(null);
+    /** Computed signal that determines if export button should be visible based on current groupBy */
+    public showExport = computed(() => {
+        const currentGroupBy = this.currentGroupBy();
+        return this.supportedExportGroupBy().includes(currentGroupBy);
+    });
 
     constructor(
         private store: Store<AppState>,
@@ -153,7 +163,10 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedPurchaseRequestFilter.to = this.to;
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.getDetailedPurchaseRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedPurchaseRequestFilter.stateCode = params.stateCode;
+                this.getDetailedPurchaseRequestFilter.countryCode = params.countryCode;
                 this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
+                this.currentGroupBy.set(params.groupBy);
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);

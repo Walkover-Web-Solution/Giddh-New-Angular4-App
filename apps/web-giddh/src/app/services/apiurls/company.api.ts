@@ -8,6 +8,7 @@ export const COMPANY_API = {
     TAX: 'company/:companyUniqueName/tax', // get call
     GET_COMPANY_USERS: 'company/:companyUniqueName/users',
     GET_ALL_STATES: 'country/:country',
+    GET_ACCOUNT_COUNTRIES: 'country/company/:companyUniqueName/account-countries',
     UNIVERSAL_DATE: 'company/:companyUniqueName/entry-settings',
     DOWNLOAD_CSV: 'v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance?from=:from&to=:to&sortBy=:sortBy&sort=:sort',
     REGISTER_ACCOUNT: 'company/:companyUniqueName/bank/',

@@ -127,7 +127,7 @@ Create `.env.local`, `.env.test`, `.env.stage`, `.env.prod` files:
 APP_URL=http://localhost:3000/
 API_URL=https://apitest.giddh.com/
 UK_API_URL=https://gbapi.giddh.com/
-PORTAL_URL=https://master.d2n1i21e52r793.amplifyapp.com/
+PORTAL_URL=https://testportal.giddh.com/
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 OTP_WIDGET_ID=your-otp-widget-id

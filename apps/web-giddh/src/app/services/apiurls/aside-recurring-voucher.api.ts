@@ -4,7 +4,7 @@ const RECURRING_VOUCHERS_URL = `${COMMON_URL}recurring-vouchers`;
 
 export const RECURRING_API = {
     PREVIEW: `${RECURRING_VOUCHERS_URL}/preview?voucherVersion=2`, // Get api
-    GET_ALL: `${RECURRING_VOUCHERS_URL}/get-all-recurring-voucher?voucherVersion=2`, // Get api
+    GET_ALL: `${RECURRING_VOUCHERS_URL}/get-all-recurring-voucher?voucherType=:voucherType&page=:page&count=:count&q=:q&sort=:sort&sortBy=:sortBy&from=:from&to=:to&voucherVersion=2`, // Get api
     DELETE: `${RECURRING_VOUCHERS_URL}/:recurringVoucherUniqueName?voucherVersion=2`, // delete api
     RULE_DETAILS: `${RECURRING_VOUCHERS_URL}/:recurringVoucherUniqueName?voucherVersion=2`, // Get api
     VOUCHER_DETAILS: `${RECURRING_VOUCHERS_URL}/:recurringVoucherUniqueName/details?voucherVersion=2`, // Get api

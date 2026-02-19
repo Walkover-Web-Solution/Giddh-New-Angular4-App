@@ -121,7 +121,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
                 // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
-                const isGiddhDomain = href.includes('books.giddh.com') || href.includes('books.giddh.com/') || href.includes('books.giddh.com/login');
+                const isGiddhDomain = this._generalService.isGiddhDomain();
 
                 if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
                     // Hard redirect for books.giddh.com or test.giddh.com domains
@@ -132,9 +132,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     } else {
                         returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
                     }
-                    const regionLogin = this._generalService.getGiddhRegionUrl() + '/login';
-                    const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
-                    window.location.href = target;
+                    const regionLogin = this._generalService.getGiddhRegionUrl();
+                    window.location.href = this.buildLoginTargetUrl(regionLogin, returnUrl);
                 } else {
                     // Soft redirect for other domains or local development
                     const currentUrl = path + search;
@@ -561,6 +560,20 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         } catch (error) {
             console.error('Error initializing UI settings:', error);
         }
+    }
+
+    /**
+     * Constructs the target login URL with optional returnUrl parameter
+     *
+     * @private
+     * @param {string} loginUrl - Base login URL
+     * @param {string} returnUrl - Optional return URL to append as query parameter
+     * @returns {string} Complete target URL with returnUrl if valid
+     * @memberof AppComponent
+     */
+    private buildLoginTargetUrl(loginUrl: string, returnUrl: string): string {
+        const isValidReturnUrl = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '';
+        return isValidReturnUrl ? `${loginUrl}?returnUrl=${encodeURIComponent(returnUrl)}` : loginUrl;
     }
 
     /**

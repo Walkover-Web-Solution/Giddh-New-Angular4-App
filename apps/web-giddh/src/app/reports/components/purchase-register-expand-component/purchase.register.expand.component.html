@@ -58,6 +58,7 @@
                     </button>
                     <button
                         matButton="filled"
+                        *ngIf="showExport()"
                         (click)="export()"
                         [matTooltip]="commonLocaleData?.app_export"
                         [matTooltipPosition]="'above'"
