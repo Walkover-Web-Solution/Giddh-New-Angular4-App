@@ -121,7 +121,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
                 // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
-                const isGiddhDomain = href.includes('books.giddh.com');
+                const isGiddhDomain = this._generalService.isGiddhDomain();
 
                 if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
                     // Hard redirect for books.giddh.com or test.giddh.com domains
