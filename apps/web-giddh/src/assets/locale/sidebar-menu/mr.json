@@ -147,6 +147,52 @@
                     "description": "निव्वळ व संचयी विक्री",
                     "additionalRoutes": [
                         "/pages/reports/sales-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "कालावधीनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-view",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "विक्री व्यक्तीनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "राज्यानुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "देशानुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -337,6 +383,52 @@
                     "description": "निव्वळ आणि संचयी खरेदी",
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "कालावधीनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-view",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "विक्री व्यक्तीनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "राज्यानुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "देशानुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -514,7 +606,8 @@
                         "queryParams": {
                             "tab": "balance-sheet",
                             "tabIndex": 2
-                        }
+                        },
+                        "requiredToMatchQueryParams": true
                     }
                 },
                 {
@@ -532,7 +625,8 @@
                         "queryParams": {
                             "tab": "profit-loss",
                             "tabIndex": 1
-                        }
+                        },
+                        "requiredToMatchQueryParams": true
                     }
                 },
                 {
@@ -550,7 +644,8 @@
                         "queryParams": {
                             "tab": "trial-balance",
                             "tabIndex": 0
-                        }
+                        },
+                        "requiredToMatchQueryParams": true
                     }
                 },
                 {

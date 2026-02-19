@@ -147,6 +147,52 @@
                     "description": "शुद्ध और संचयी बिक्री",
                     "additionalRoutes": [
                         "/pages/reports/sales-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "अवधि के अनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-view",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "विक्रय व्यक्ति के अनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "राज्य के अनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "देश के अनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -337,6 +383,52 @@
                     "description": "शुद्ध और संचयी खरीदारी",
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "अवधि के अनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-view",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "विक्रय व्यक्ति के अनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "राज्य के अनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "देश के अनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "requiredToMatchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -511,6 +603,7 @@
                     "icon": "icon-balance-sheet-new",
                     "description": "एक्सेल में बीएस डाउनलोड करें, कई प्रकार के निर्यात",
                     "additional": {
+                        "requiredToMatchQueryParams": true,
                         "queryParams": {
                             "tab": "balance-sheet",
                             "tabIndex": 2
@@ -529,6 +622,7 @@
                     "icon": "icon-proft-loss-new",
                     "description": "एक्सेल में डेटा डाउनलोड करें, प्रोजेक्ट वार रिपोर्ट",
                     "additional": {
+                        "requiredToMatchQueryParams": true,
                         "queryParams": {
                             "tab": "profit-loss",
                             "tabIndex": 1
@@ -547,6 +641,7 @@
                     "icon": "icon-trial-balance-new",
                     "description": "सभी क्रेडिट और डेबिट बैलेंस डाउनलोड करें",
                     "additional": {
+                        "requiredToMatchQueryParams": true,
                         "queryParams": {
                             "tab": "trial-balance",
                             "tabIndex": 0
