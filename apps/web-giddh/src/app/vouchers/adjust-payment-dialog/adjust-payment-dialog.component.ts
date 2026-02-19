@@ -131,8 +131,17 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     private globalKeydownListener?: (event: KeyboardEvent) => void;
     private globalMousedownListener?: () => void;
     private globalClickListener?: () => void;
-    /** Flag to control dropdown opening after view init */
-    public shouldOpenDropdown: boolean = false;
+
+    /**
+     * Determines if dropdown should open automatically
+     * Returns true if there is exactly one adjustment and it has no uniqueName
+     *
+     * @returns {boolean}
+     * @memberof AdjustPaymentDialogComponent
+     */
+    protected get shouldOpenDropdown(): boolean {
+        return this.adjustVoucherForm?.adjustments?.length === 1 && !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName;
+    }
 
     constructor(
         private componentStore: VoucherComponentStore,
@@ -1167,7 +1176,6 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                     this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
                 }
             }
-            this.shouldOpenDropdown = !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName && this.adjustVoucherForm?.adjustments?.length === 1;
             this.changeDetectorRef.detectChanges();
         });
     }

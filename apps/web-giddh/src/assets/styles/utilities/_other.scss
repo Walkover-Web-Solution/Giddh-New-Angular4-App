@@ -74,7 +74,10 @@
 }
 
 .text-green {
-    color: var(--color-green);
+    color: var(--color-green) !important;
+}
+.text-orange {
+    color: var(--color-orange) !important;
 }
 .text-red {
     color: var(--color-red) !important;
@@ -130,6 +133,9 @@
 }
 .bg-white {
     background: var(--color-white) !important;
+}
+.bg-black {
+    background: var(--color-black) !important;
 }
 .custom-keyboard-dropdown-list-focus {
     background-color: var(--theme-primary-light);

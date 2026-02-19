@@ -82,7 +82,6 @@ export class LedgerService {
             ?.replace(':sort', encodeURIComponent(request.sort))
             ?.replace(':to', encodeURIComponent(request.to))
             ?.replace(':reversePage', request.reversePage?.toString())
-            ?.replace(':isTView', request.isTView?.toString() || '')
             ?.replace(':accountCurrency', request.accountCurrency?.toString());
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
