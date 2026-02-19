@@ -689,9 +689,7 @@ constructor(
             this.getSelectedDuration();
             this.groupByOptions = [
                 { label: this.commonLocaleData?.app_duration?.duration, value: GroupBy.Duration },
-                { label: this.commonLocaleData?.app_sales_person, value: GroupBy.SalesPerson },
-                { label: this.commonLocaleData?.app_state, value: GroupBy.State },
-                { label: this.commonLocaleData?.app_country , value: GroupBy.Country }
+                { label: this.commonLocaleData?.app_sales_person, value: GroupBy.SalesPerson }
             ];
         }
     }

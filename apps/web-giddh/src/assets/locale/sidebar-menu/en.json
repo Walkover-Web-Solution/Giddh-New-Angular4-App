@@ -738,12 +738,6 @@
                     "link": "/pages/email-forwarding",
                     "icon": "icon-mail",
                     "description": "Auto-create vouchers from bank statement emails."
-                },
-                {
-                    "label": "Budget Forecasting",
-                    "link": "/pages/budget-forecasting",
-                    "icon": "icon-audit-log",
-                    "description": "AI-powered cashflow forecasting and predictions"
                 }
             ]
         }
