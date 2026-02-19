@@ -86,7 +86,7 @@
         </div>
 
         @if (isLoading()) {
-            <mat-card class="loading-state w-100 d-flex align-items-center justify-content-center">
+            <mat-card class="loading-state w-100 d-flex align-items-center justify-content-center h-100">
                 <mat-card-content class="d-flex align-items-center justify-content-center">
                     <div class="loading-content min-h-200 d-flex flex-column align-items-center justify-content-center text-center">
                         <mat-spinner diameter="50" class="mb-3"></mat-spinner>
@@ -96,7 +96,7 @@
             </mat-card>
         } @else {
             @if (forecastResults()?.forecast?.length) {
-                <mat-card class="results-card w-100 m-auto">
+                <mat-card class="results-card w-100 m-auto h-100">
                     <mat-card-header>
                         <mat-card-title class="font-size-16 font-weight-medium text-primary">
                             {{ localeData()?.forecast_for }} {{ selectedAccountLabel() }} ({{ granularityLabel() }} ·
@@ -158,7 +158,7 @@
                     </mat-card-content>
                 </mat-card>
             } @else {
-                <mat-card class="empty-state w-100 d-flex align-items-center justify-content-center">
+                <mat-card class="empty-state w-100 d-flex align-items-center justify-content-center h-100">
                     <mat-card-content>
                         <div class="empty-state-content d-flex flex-column align-items-center justify-content-center text-center">
                             <h3 class="font-size-20 text-light mb-2">{{ localeData()?.no_forecast_data }}</h3>
