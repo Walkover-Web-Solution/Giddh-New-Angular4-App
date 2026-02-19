@@ -93,7 +93,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if we need to allow adding of new chips */
-    @Input() private allowAddChip: boolean = true;
+    @Input() public allowAddChip: boolean = true;
     /** Next observable */
     public next$: Subject<void> = new Subject();
     /** Function to be called when the control value changes */

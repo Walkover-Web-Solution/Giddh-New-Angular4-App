@@ -780,7 +780,18 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION:
             return Object.assign({}, state, { createCompanyUserStoreRequestObj: null });
         case CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR:
-            return Object.assign({}, state, { registerReportFilters: { financialYearChosenInReport: action.payload.financialYear, branchChosenInReport: action.payload.branchUniqueName, timeFilter: action.payload.timeFilter, salesPersonUniqueNames: action.payload.salesPersonUniqueNames, accountUniqueNames: action.payload.accountUniqueNames, groupBy: action.payload.groupBy }});
+            return Object.assign({}, state, { 
+                registerReportFilters: { 
+                    financialYearChosenInReport: action.payload.financialYear, 
+                    branchChosenInReport: action.payload.branchUniqueName, 
+                    timeFilter: action.payload.timeFilter, 
+                    salesPersonUniqueNames: action.payload.salesPersonUniqueNames, 
+                    accountUniqueNames: action.payload.accountUniqueNames, 
+                    groupBy: action.payload.groupBy,
+                    countryCode: action.payload.countryCode,
+                    countryCodes: action.payload.countryCodes,
+                    stateCodes: action.payload.stateCodes
+                }});
         case CompanyActions.RESET_USER_CHOSEN_FINANCIAL_YEAR:
             return Object.assign({}, state, { registerReportFilters: null });
         case CompanyActions.SET_COMPANY_BRANCH:

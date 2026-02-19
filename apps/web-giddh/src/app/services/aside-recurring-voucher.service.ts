@@ -10,7 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { RECURRING_API } from './apiurls/aside-recurring-voucher.api';
-import { RecurringRepeatType, RecurringEndType } from '../models/enums/recurring-voucher.enum';
+import { RecurringRepeatType, RecurringEndType, RecurringFrequencyUnit } from '../models/enums/recurring-voucher.enum';
 
 /**
  * Service for managing recurring voucher form operations and API interactions.
@@ -36,67 +36,67 @@ export class RecurrenceFormService {
    * @returns {any} Cleaned form value with only relevant fields for the selected repeat type
    */
   public cleanFormValues(formValue: any): any {
-    // Create a deep copy to avoid mutating the original
     const cleaned = JSON.parse(JSON.stringify(formValue));
-    // Format dates if they exist
+
+    this.formatDates(cleaned);
+    this.cleanRepeatOn(cleaned);
+
+    return cleaned;
+  }
+
+  /**
+   * Formats start and end dates to GIDDH_DATE_FORMAT
+   * @private
+   * @param {any} cleaned - The cleaned form object
+   * @memberof RecurrenceFormService
+   */
+  private formatDates(cleaned: any): void {
     if (cleaned.startDate) {
       cleaned.startDate = dayjs(cleaned.startDate).format(GIDDH_DATE_FORMAT);
     }
-    // Handle end object based on type
-    if (cleaned.end) {
-      if (cleaned.end.type === RecurringEndType.NEVER) {
-        // Remove endDate when type is NEVER
-        delete cleaned.end.endDate;
-      } else if (cleaned.end.type === RecurringEndType.ON_DATE && cleaned.end.endDate) {
-        // Format endDate when type is ON_DATE
-        cleaned.end.endDate = dayjs(cleaned.end.endDate).format(GIDDH_DATE_FORMAT);
-      }
+
+    if (cleaned.end?.type === RecurringEndType.NEVER) {
+      delete cleaned.end.endDate;
+    } else if (cleaned.end?.type === RecurringEndType.ON_DATE && cleaned.end.endDate) {
+      cleaned.end.endDate = dayjs(cleaned.end.endDate).format(GIDDH_DATE_FORMAT);
     }
-    if (!cleaned.repeatOn?.type) return cleaned;
-    const repeatType = cleaned.repeatOn.type;
-    const repeatOn = cleaned.repeatOn;
+  }
 
-    // ... existing code ...
+  /**
+   * Cleans repeatOn object based on frequency unit and repeat type
+   * @private
+   * @param {any} cleaned - The cleaned form object
+   * @memberof RecurrenceFormService
+   */
+  private cleanRepeatOn(cleaned: any): void {
+    if (cleaned.frequency?.unit === RecurringFrequencyUnit.DAY || !cleaned.repeatOn?.type) {
+      delete cleaned.repeatOn;
+      return;
+    }
 
-    switch (repeatType) {
+    const { type, dayOfMonth, weekdays, nth, weekday } = cleaned.repeatOn;
+
+    switch (type) {
       case RecurringRepeatType.EVERY_DAY:
-        // Remove repeatOn object completely for EVERY_DAY
         delete cleaned.repeatOn;
         break;
 
       case RecurringRepeatType.DAY_OF_MONTH:
-        // For DAY_OF_MONTH, keep type and dayOfMonth, remove weekdays
-        cleaned.repeatOn = {
-          type: repeatType,
-          dayOfMonth: repeatOn.dayOfMonth
-        };
+        cleaned.repeatOn = { type, dayOfMonth };
         break;
 
       case RecurringRepeatType.WEEK_DAYS:
-        // For WEEK_DAYS, keep type and weekdays
-        cleaned.repeatOn = {
-          type: repeatType,
-          weekdays: repeatOn.weekdays || []
-        };
+        cleaned.repeatOn = { type, weekdays: weekdays || [] };
         break;
 
       case RecurringRepeatType.NTH_WEEKDAY:
-        // For NTH_WEEKDAY, keep type and nth
-        cleaned.repeatOn = {
-          type: repeatType,
-          nth: repeatOn.nth
-        };
+        cleaned.repeatOn = { type, nth, weekday };
         break;
 
       default:
-        // For any other type, keep only the type
-        cleaned.repeatOn = { type: repeatType };
+        cleaned.repeatOn = { type };
         break;
     }
-
-    // ... rest of the code ...
-
-    return cleaned;
   }
 
   /**
@@ -134,42 +134,11 @@ export class RecurrenceFormService {
   /**
    * Retrieves all recurring vouchers for the current company
    * Supports filtering by voucher type and pagination parameters
-   * @param {string} [voucherType] - Optional voucher type filter (e.g., 'sales', 'purchase')
    * @param {any} [params] - Optional query parameters (page, count, fromDate, toDate, q, sortBy, sort)
    * @returns {Observable<BaseResponse<any, any>>} Observable with list of recurring vouchers
    */
-  public getAll(voucherType?: string, params?: any): Observable<BaseResponse<any, any>> {
-    const companyUniqueName = this.generalService.companyUniqueName;
-    let url = this.config.apiUrl +
-      RECURRING_API.GET_ALL.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)) +
-      (voucherType ? `&voucherType=${encodeURIComponent(voucherType)}` : '');
-
-    // Add query parameters if provided
-    if (params) {
-      if (params.page) {
-        url += `&page=${params.page}`;
-      }
-      if (params.count) {
-        url += `&count=${params.count}`;
-      }
-      if (params.fromDate) {
-        url += `&fromDate=${encodeURIComponent(params.fromDate)}`;
-      }
-      if (params.toDate) {
-        url += `&toDate=${encodeURIComponent(params.toDate)}`;
-      }
-      if (params.q) {
-        url += `&q=${encodeURIComponent(params.q)}`;
-      }
-      if (params.sortBy) {
-        url += `&sortBy=${encodeURIComponent(params.sortBy)}`;
-      }
-      if (params.sort) {
-        url += `&sort=${encodeURIComponent(params.sort)}`;
-      }
-    }
-
-    return this.http.get(url).pipe(
+  public getAll(params?: any): Observable<BaseResponse<any, any>> {
+    return this.http.get(this.generalService.replaceUrlPlaceholders(RECURRING_API.GET_ALL, params)).pipe(
       map(res => res as BaseResponse<any, any>),
       catchError(e => this.errorHandler.HandleCatch<any, any>(e))
     );

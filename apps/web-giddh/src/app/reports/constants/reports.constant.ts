@@ -49,5 +49,7 @@ export enum DurationEnum {
 /** Group by enum */
 export enum GroupBy {
     Duration = 'duration',
-    SalesPerson = 'salesPerson'
+    SalesPerson = 'salesPerson',
+    State = 'state',
+    Country = 'country'
 }

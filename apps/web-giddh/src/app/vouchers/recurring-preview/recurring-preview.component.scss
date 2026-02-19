@@ -11,6 +11,9 @@
 :host ::ng-deep .invoice-preview-wrapper {
     .preview-list {
         overflow-y: auto;
+        .list-viewport {
+            height: calc(100vh - 92px);
+        }
 
         .single-invoice-detail {
             &:hover,
@@ -41,7 +44,6 @@
 
     .details-info {
         border-right: 1px solid var(--border-color);
-        background-color: var(--color-light-gray);
         width: 34%;
         vertical-align: top;
         padding: 10px 20px 70px;
@@ -82,11 +84,6 @@
 .noscroll-x {
     overflow-x: hidden;
 }
-
-.recinv-overview-info {
-    background-color: var(--color-light-gray);
-}
-
 .px-4 {
     padding-right: 15px !important;
     padding-left: 15px !important;
