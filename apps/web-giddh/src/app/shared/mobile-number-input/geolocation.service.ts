@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { COUNTRIES_DATA } from './countries-data';
+import { MOBILE_NUMBER_SELF_URL } from '../../app.constant';
 
 /**
  * Interface for IP geolocation API response
@@ -35,11 +36,7 @@ interface CachedGeolocationData {
 @Injectable({
     providedIn: 'root'
 })
-export class GeolocationService {
-
-    /** API endpoint for IP geolocation */
-    private readonly API_URL = 'https://api.db-ip.com/v2/free/self';
-    
+export class GeolocationService {    
     /** Cache key for localStorage */
     private readonly CACHE_KEY = 'giddh_country_data_cache';
     
@@ -76,7 +73,7 @@ export class GeolocationService {
         }
 
         // Make API call if no valid cache
-        return this.http.get<GeolocationResponse>(this.API_URL).pipe(
+        return this.http.get<GeolocationResponse>(MOBILE_NUMBER_SELF_URL).pipe(
             tap((data) => {
                 if (data) {
                     this.setCachedData(data);
