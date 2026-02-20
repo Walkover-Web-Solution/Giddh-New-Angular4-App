@@ -1,3 +1,5 @@
+@use '../../assets/styles/abstracts/mixins';
+
 .date-range-picker {
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -43,24 +45,20 @@
 }
 
 .daybook-w-100 {
-    width: 100px;
-    min-width: 100px;
+    @include mixins.fixed-width(100px);
 }
 
 .daybook-w-150 {
-    width: 150px;
-    min-width: 150px;
+    @include mixins.fixed-width(150px);
 }
 
 .daybook-w-200 {
-    width: 200px;
-    min-width: 200px;
+    @include mixins.fixed-width(200px);
     text-transform: capitalize;
 }
 
 .daybook-w-300 {
-    width: 300px;
-    min-width: 300px;
+    @include mixins.fixed-width(300px);
 }
 :host ::ng-deep .daybook-table {
     tr.mat-row,

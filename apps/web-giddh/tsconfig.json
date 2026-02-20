@@ -1,12 +1,38 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
+        "outDir": "../../dist/out-tsc",
+        "target": "ES2022",
         "module": "ES2022",
+        "lib": ["ES2022", "dom"],
+        "moduleResolution": "bundler",
         "useDefineForClassFields": false,
-        "moduleResolution": "bundler"
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "isolatedModules": false,
+        "forceConsistentCasingInFileNames": true,
+        "strict": false,
+        "noImplicitReturns": false,
+        "noFallthroughCasesInSwitch": false,
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true
     },
+    "files": [],
     "include": [
         "**/*.ts",
         "hook.js"
-    ]
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts",
+        "**/*.test.ts"
+    ],
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true,
+        "strictTemplates": false,
+        "preserveWhitespaces": false
+    }
 }

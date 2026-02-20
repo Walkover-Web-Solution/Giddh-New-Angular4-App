@@ -161,12 +161,12 @@
                         <select-multiple-fields
                             [label]="localeData?.all_applicable_taxes_label"
                             [commonLocaleData]="commonLocaleData"
-                            [selectedValues]="defaultTaxLabel"
+                            [selectedValues]="defaultTaxLabel()"
                             [placeholder]="commonLocaleData?.app_select"
                             [options]="companyTaxDropDown"
                             [chipListUniqueName]="taxGroupForm.get('taxes')?.value"
                             (selectedOptionUniqueName)="taxesSelected($event)"
-                            (selectedOption)="defaultTaxLabel = $event"
+                            (selectedOption)="defaultTaxLabel.set($event)"
                             class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom mat-form-field-clean"
                         ></select-multiple-fields>
                         <button

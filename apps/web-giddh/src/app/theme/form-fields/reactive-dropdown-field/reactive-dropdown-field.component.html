@@ -61,7 +61,7 @@
                                 {{ option?.label }}
                             </ng-container>
                         </mat-option>
-                        <mat-divider *ngIf="showOptionDivider"></mat-divider>
+                        <mat-divider *ngIf="showOptionDivider || sidebarListView"></mat-divider>
                     </ng-container>
                     <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
                         {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}

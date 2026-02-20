@@ -319,10 +319,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public discountDialogRef: MatDialogRef<any>;
     /** List of discounts */
     public discountsList = signal<any[]>([]);
-    /** Template Reference for Create Tax aside menu */
-    @ViewChild("createTax") public createTax: TemplateRef<any>;
-    /** Create tax dialog ref  */
-    public taxAsideMenuRef: MatDialogRef<any>;
     /** Hold ledger transactions */
     public transaction: ITransactionItem;
     /** Hold ledger transactions index */
@@ -2817,39 +2813,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
-    /**
-     * Shows create new tax dialog
-     *
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public showCreateTaxDialog(): void {
-        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
-        this.taxAsideMenuRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
-    }
-
-    /**
-     * Close tax modal
-     *
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public closeTaxModal(): void {
-        this.store.dispatch(this.companyActions.getTax());
-        this.taxAsideMenuRef.close();
-        setTimeout(() => {
-            this.focusTaxDropdown();
-        }, 100);
-    }
-
-    /**
-     * Focus tax dropdown
-     *
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public focusTaxDropdown(): void {
-        if (this.commonTaxControll) {
-            this.commonTaxControll.focusTaxDropdown();
-        }
-    }
     /**
      * Handle event for next transaction
      *

@@ -177,6 +177,10 @@
                     "icon": "icon-invoice-new",
                     "description": "चालान आवर्ती बनाएं",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/sales/create?isRecurringVoucher=true"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -370,6 +374,10 @@
                     "icon": "icon-invoice-new",
                     "description": "चालान आवर्ती बनाएं",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/purchase/create?isRecurringVoucher=true"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
