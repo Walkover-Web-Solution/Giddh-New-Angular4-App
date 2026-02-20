@@ -527,7 +527,7 @@
                                         <p class="font-size-14">
                                             <span class="text-primary">{{ item?.voucherNumber }}</span>
                                             |
-                                            <span class="light-gray">{{ item?.voucherDate }}</span>
+                                            <span class="light-gray">{{ item?.voucherDate | giddhDate }}</span>
                                         </p>
                                         <p class="customer-name font-size-16">
                                             {{ item?.account?.customerName || item?.account?.name }}

@@ -116,15 +116,15 @@
                         </div>
                         <div class="row mt-2">
                             <label class="col-lg-6 text-muted">{{ localeData()?.created_at }}:</label>
-                            <div class="col-lg-6">{{ ruleDetails()?.createdAt ? ruleDetails()?.createdAt : '-' }}</div>
+                            <div class="col-lg-6">{{ ruleDetails()?.createdAt | giddhDate }}</div>
                         </div>
                         <div class="row mt-2">
                             <label class="col-lg-6 text-muted">{{ commonLocaleData()?.app_start_date }}:</label>
-                            <div class="col-lg-6">{{ ruleDetails()?.startDate ? ruleDetails()?.startDate : '-' }}</div>
+                            <div class="col-lg-6">{{ ruleDetails()?.startDate | giddhDate }}</div>
                         </div>
                         <div class="row mt-2">
                             <label class="col-lg-6 text-muted">{{ commonLocaleData()?.app_end_date }}:</label>
-                            <div class="col-lg-6">{{ ruleDetails()?.endDate ? ruleDetails()?.endDate : '-' }}</div>
+                            <div class="col-lg-6">{{ ruleDetails()?.endDate | giddhDate }}</div>
                         </div>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                                 </li>
                                 <li class="col-lg-4 text-center">
                                     <h5 class="text-muted mt-2">{{ localeData()?.next_invoice_date }}</h5>
-                                    {{ ruleDetails()?.nextInvoiceDate ? ruleDetails()?.nextInvoiceDate : '-' }}
+                                    {{ ruleDetails()?.nextInvoiceDate | giddhDate }}
                                 </li>
                                 <li class="col-lg-4 text-center">
                                     <h5 class="text-muted mt-2">{{ localeData()?.recurring_period }}</h5>

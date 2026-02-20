@@ -89,7 +89,9 @@
                                 <div class="account-date clear-both">
                                     <b>{{ localeData?.entries_from }}</b>
                                     :
-                                    <label for="date_{{ accIdx }}_{{ i }}" class="cursor-pointer">{{ card.transactionDate | date }}</label>
+                                    <label for="date_{{ accIdx }}_{{ i }}" class="cursor-pointer">
+                                        {{ card.transactionDate | giddhDate }}
+                                    </label>
                                     <a href="javascript:void(0)" (click)="card.isDatePickerOpen = !card.isDatePickerOpen">
                                         <input
                                             [(ngModel)]="card.transactionDate"

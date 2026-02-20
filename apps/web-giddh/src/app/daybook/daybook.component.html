@@ -76,7 +76,7 @@
                                 {{ commonLocaleData?.app_date }}
                             </th>
                             <td mat-cell *matCellDef="let entry" class="daybook-w-150" [attr.data-title]="commonLocaleData?.app_date">
-                                {{ entry.entryDate }}
+                                {{ entry.entryDate | giddhDate }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="particular">

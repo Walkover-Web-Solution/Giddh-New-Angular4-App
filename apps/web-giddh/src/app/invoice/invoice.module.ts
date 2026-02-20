@@ -51,6 +51,7 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
 import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { MatDividerModule } from '@angular/material/divider';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -140,7 +141,8 @@ import { MatCardModule } from '@angular/material/card';
         MatSortModule,
         NewConfirmationModalModule,
         MatCardModule,
-        MatDividerModule
+        MatDividerModule,
+        GiddhDatePipe
     ],
     exports: [
         InvoiceRoutingModule,

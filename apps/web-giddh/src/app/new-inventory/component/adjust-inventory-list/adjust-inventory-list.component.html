@@ -268,7 +268,7 @@
                             <th class="date-column-width" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 {{ commonLocaleData?.app_date }}
                             </th>
-                            <td class="date-column-width" mat-cell *matCellDef="let element">{{ element?.date }}</td>
+                            <td class="date-column-width" mat-cell *matCellDef="let element">{{ element?.date | giddhDate }}</td>
                         </div>
 
                         <div matColumnDef="action">

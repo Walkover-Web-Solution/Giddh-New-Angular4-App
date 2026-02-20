@@ -5,7 +5,7 @@
 <mat-dialog-content class="dialog-body">
     <div class="modal-top">
         <p class="font-size-12 text-light mb-2">
-            <span>{{ selectedEntryForApprove?.entryDate }}</span>
+            <span>{{ selectedEntryForApprove?.entryDate | giddhDate }}</span>
             |
             <span>{{ byCreator }}</span>
         </p>

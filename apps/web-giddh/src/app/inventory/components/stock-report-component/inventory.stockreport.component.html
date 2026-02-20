@@ -396,7 +396,7 @@
                 </thead>
                 <tbody *ngIf="!stockReportInProcess && stockReport">
                     <tr *ngFor="let txn of stockReport.transactions">
-                        <td class="border-right" data-title="Date">{{ txn.entryDate }}</td>
+                        <td class="border-right" data-title="Date">{{ txn.entryDate | giddhDate }}</td>
                         <td class="border-right {{ txn.voucherType }}" data-title="Voucher Type">{{ txn.voucherType }}</td>
                         <td class="border-right" data-title="Account Name">{{ txn.account?.name }}</td>
                         <td data-title="Transactions -" class="td-mobile-head"></td>

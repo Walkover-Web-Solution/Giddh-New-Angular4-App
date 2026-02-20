@@ -191,10 +191,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             .subscribe((res: PurchaseRegisteDetailedResponse) => {
                 if (res) {
                     this.PurchaseRegisteDetailedItems = res;
-                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items.map((obj: any) => {
-                        obj.date = this.getDateToDMY(obj.date);
-                        return obj;
-                    });
+                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items;
                     if (this.voucherNumberInput?.value) {
                         setTimeout(() => {
                             if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
