@@ -1434,18 +1434,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (entityCode === 'GBR') {
             if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Exclude Razorpay for monthly GBR
-                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
+                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL, PaymentProvider.PAYU].includes(provider.value));
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for yearly GBR
-                filterProviders([PaymentProvider.RAZORPAY]);
+                filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
             }
         } else if (entityCode !== 'IND') {
             if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Only PayPal for non-IND countries with monthly duration
-                filterProviders([PaymentProvider.PAYPAL]);
+                filterProviders([PaymentProvider.PAYPAL, PaymentProvider.PAYU]);
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for non-IND countries with yearly duration
-                filterProviders([PaymentProvider.RAZORPAY]);
+                filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
             }
         } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
             // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration

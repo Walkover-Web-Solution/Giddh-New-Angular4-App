@@ -963,14 +963,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this.showMobileField && this.firstStepForm.value.mobile) {
                 let mobileValue = this.firstStepForm.value.mobile;
 
-                // Parse the mobile number to extract national number (removes existing country code)
-                let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber(mobileValue);
-                mobileValue = parsedMobileNo?.nationalNumber ?? mobileValue.replace(/^\+\d+/, '');
+                try {
+                    const phoneUtil = PhoneNumberUtil.getInstance();
+                    const parsedNumber = phoneUtil.parse(mobileValue, '');
+                    mobileValue = parsedNumber.getNationalNumber().toString();
+                } catch (error) {
+                    mobileValue = mobileValue.replace(/^\+\d+/, '');
+                }
 
-                // Get current country's dial code from selectedCountryCode
                 const currentDialCode = event?.additional?.callingCode || '';
 
-                // Add current country code to the number
                 if (mobileValue && currentDialCode) {
                     mobileValue = `+${currentDialCode}${mobileValue}`;
                 }
