@@ -1,4 +1,5 @@
-import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, inject, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { UiSettingsService } from '../../services/ui-settings.service';
 
 /**
  * A reusable Angular directive that adds drag-to-resize functionality to any element
@@ -45,9 +46,6 @@ export class ResizableDirective implements OnInit, OnDestroy {
   /** Width of the resizer handle in pixels */
   @Input() resizerWidth: number = 6;
 
-  /** localStorage key for storing UI preferences object */
-  @Input() storageKey: string = 'giddh-ui-settings';
-
   /** Unique identifier for per-page width storage */
   @Input() moduleName: string = 'default';
 
@@ -59,7 +57,8 @@ export class ResizableDirective implements OnInit, OnDestroy {
   private resizerElement: HTMLElement | null = null;
   private justFinishedDrag = false;
   private dragStarted = false;
-  private dragThreshold = 3; // pixels to move before considering it a drag
+  private dragThreshold = 3;
+  private uiSettingsService = inject(UiSettingsService);
 
   constructor(
     private el: ElementRef,
@@ -167,8 +166,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
       return;
     }
 
-    // Try to get saved width percentage from localStorage first
-    const savedWidthRatio = this.getSavedWidthRatio();
+    const savedWidthRatio = this.uiSettingsService.getResizableWidth(this.moduleName);
 
     const widthRatio = savedWidthRatio || this.defaultWidthRatio;
     const initialWidth = window.innerWidth * widthRatio;
@@ -253,34 +251,26 @@ export class ResizableDirective implements OnInit, OnDestroy {
     if (this.isResizing) {
       this.isResizing = false;
 
-      // Only save width if we actually dragged (not just clicked)
       if (this.dragStarted) {
         const widthRatio = this.newWidth / window.innerWidth;
-        this.saveWidthRatio(widthRatio);
+        this.uiSettingsService.setResizableWidth(this.moduleName, widthRatio);
 
-        // Set flag to prevent click event from firing after drag
         this.justFinishedDrag = true;
         setTimeout(() => {
           this.justFinishedDrag = false;
         }, 100);
       }
 
-      // Always restore normal behavior
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      document.body.style.pointerEvents = ''; // Restore pointer events
+      document.body.style.pointerEvents = '';
 
-      // Release pointer capture if it was set
       if (this.resizerElement && this.resizerElement.releasePointerCapture) {
         try {
-          // We need to release all pointer captures, but we don't have the pointerId
-          // This is handled automatically when the mouse is released in most browsers
         } catch (e) {
-
         }
       }
 
-      // Reset drag state
       this.dragStarted = false;
     }
   };
@@ -309,35 +299,29 @@ export class ResizableDirective implements OnInit, OnDestroy {
     this.resizeTimeout = setTimeout(() => {
       this.lastWindowWidth = currentWindowWidth;
 
-      // Get saved ratio from localStorage (user's preferred ratio)
-      const savedRatio = this.getSavedWidthRatio();
+      const savedRatio = this.uiSettingsService.getResizableWidth(this.moduleName);
       const currentRatio = savedRatio || this.defaultWidthRatio;
 
-      // Calculate minimum ratio for new window size
       const newMinRatio = this.minWidth / currentWindowWidth;
 
       let targetWidth: number;
 
-      // Check if current ratio is too small for new window size
       if (currentRatio < newMinRatio) {
         targetWidth = currentWindowWidth * newMinRatio;
       } else if (currentRatio > this.maxWidthRatio) {
         targetWidth = currentWindowWidth * this.maxWidthRatio;
       } else {
-        // Ratio is valid, maintain the same ratio for new window size
         targetWidth = currentWindowWidth * currentRatio;
       }
 
-      // Always update width to maintain user's preferred ratio
       this.renderer.setStyle(this.targetElement, 'width', `${targetWidth}px`);
       this.newWidth = targetWidth;
 
-      // If we had to adjust the ratio due to window constraints, save the new ratio
       if (currentRatio < newMinRatio || currentRatio > this.maxWidthRatio) {
         const finalRatio = targetWidth / currentWindowWidth;
-        this.saveWidthRatio(finalRatio);
+        this.uiSettingsService.setResizableWidth(this.moduleName, finalRatio);
       }
-    }, 150); // Increased debounce time
+    }, 150);
   };
 
   /**
@@ -346,7 +330,6 @@ export class ResizableDirective implements OnInit, OnDestroy {
    * @param event - Mouse click event
    */
   private toggleResize(event: MouseEvent): void {
-    // Add a small delay to prevent click after drag
     setTimeout(() => {
       if (this.isResizing || !this.targetElement || this.justFinishedDrag) {
         return;
@@ -355,85 +338,15 @@ export class ResizableDirective implements OnInit, OnDestroy {
       event.preventDefault();
       event.stopPropagation();
 
-      // Use current width ratio if available, otherwise default ratio
       const currentRatio = this.newWidth > 0 ? (this.newWidth / window.innerWidth) : this.defaultWidthRatio;
       const targetWidth = window.innerWidth * currentRatio;
 
       this.renderer.setStyle(this.targetElement, 'width', `${targetWidth}px`);
       this.renderer.setStyle(this.targetElement, 'flex-shrink', '0');
 
-      // Save the toggled width ratio to localStorage
-      this.saveWidthRatio(currentRatio);
+      this.uiSettingsService.setResizableWidth(this.moduleName, currentRatio);
       this.newWidth = targetWidth;
     }, 50);
   }
 
-  /**
-   * Saves the width ratio to localStorage for the specific voucher type
-   * @private
-   * @param widthRatio - The width ratio to save
-   */
-  private saveWidthRatio(widthRatio: number): void {
-    try {
-      // Get existing UI preferences or create new one
-      let uiPreferences: any = {};
-      const existingData = localStorage.getItem(this.storageKey);
-      if (existingData) {
-        try {
-          uiPreferences = JSON.parse(existingData);
-        } catch (parseError) {
-
-          uiPreferences = {};
-        }
-      }
-
-      // Ensure resizable-width section exists
-      if (!uiPreferences['resizable-width']) {
-        uiPreferences['resizable-width'] = {};
-      }
-
-      // Update the specific voucher type width
-      uiPreferences['resizable-width'][this.moduleName] = widthRatio;
-
-      // Save back to localStorage
-      localStorage.setItem(this.storageKey, JSON.stringify(uiPreferences));
-    } catch (error) {
-
-    }
-  }
-
-  /**
-   * Get saved width ratio (percentage) from localStorage for specific voucher type
-   */
-  private getSavedWidthRatio(): number | null {
-    try {
-      const savedData = localStorage.getItem(this.storageKey);
-
-      if (savedData) {
-        let uiPreferences: any = {};
-        try {
-          uiPreferences = JSON.parse(savedData);
-        } catch (parseError) {
-
-          return null;
-        }
-
-        // Check if resizable-width section exists
-        if (uiPreferences['resizable-width']) {
-          const ratio = uiPreferences['resizable-width'][this.moduleName];
-          if (ratio !== undefined) {
-            // Validate the saved ratio is within acceptable bounds
-            const minRatio = this.minWidth / window.innerWidth;
-
-            if (ratio >= minRatio && ratio <= this.maxWidthRatio) {
-              return ratio;
-            }
-          }
-        }
-      }
-    } catch (error) {
-
-    }
-    return null;
-  }
 }

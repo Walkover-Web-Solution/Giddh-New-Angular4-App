@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject, signal, computed } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -22,6 +22,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
 import { forEach, includes, map, set } from '../../../lodash-optimized';
+import { GroupBy } from '../../constants/reports.constant';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
@@ -97,6 +98,15 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Supported groupBy values for export functionality */
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration]);
+    /** Current groupBy value selected in the report form */
+    public currentGroupBy = signal<GroupBy | null>(null);
+    /** Computed signal that determines if export button should be visible based on current groupBy */
+    public showExport = computed(() => {
+        const currentGroupBy = this.currentGroupBy();
+        return this.supportedExportGroupBy().includes(currentGroupBy);
+    });
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig,
@@ -142,7 +152,10 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
                 this.getDetailedsalesRequestFilter.to = this.to;
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.getDetailedsalesRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedsalesRequestFilter.stateCode = params.stateCode;
+                this.getDetailedsalesRequestFilter.countryCode = params.countryCode;
                 this.getDetailedsalesRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
+                this.currentGroupBy.set(params.groupBy);
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);

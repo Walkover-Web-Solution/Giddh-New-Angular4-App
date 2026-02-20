@@ -170,6 +170,21 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "Recurring Invoice",
+                    "link": "/pages/vouchers/preview/sales/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "Make invoice recurring",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/sales/create?isRecurringVoucher=true"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -348,6 +363,21 @@
                     "icon": "icon-template",
                     "description": "Edit design & content of the template",
                     "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Recurring Bill",
+                    "link": "/pages/vouchers/preview/purchase/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "Make purchase bill recurring",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/purchase/create?isRecurringVoucher=true"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }

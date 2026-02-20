@@ -170,6 +170,21 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "आवर्ती चालान",
+                    "link": "/pages/vouchers/preview/sales/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "चालान आवर्ती बनाएं",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/sales/create?isRecurringVoucher=true"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -348,6 +363,21 @@
                     "icon": "icon-template",
                     "description": "टेम्पलेट का डिज़ाइन और सामग्री संपादित करें",
                     "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "आवर्ती चालान",
+                    "link": "/pages/vouchers/preview/purchase/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "चालान आवर्ती बनाएं",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/purchase/create?isRecurringVoucher=true"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }

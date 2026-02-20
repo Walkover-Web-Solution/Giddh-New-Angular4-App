@@ -43,7 +43,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { VoucherNameModule } from "./utility/pipe/voucher-name/voucher-name.module";
 import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-copy-link.module";
 import { TaxDropdownModule } from "../theme/tax-dropdown/tax-dropdown.module";
-import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-dropdown.module";
+import { CommonDiscountComponent } from "../shared/common-discount/common-discount.component";
 import { TemplatePreviewDialogComponent } from "./template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edit-dialog.component";
 import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
@@ -93,14 +93,18 @@ import { AllTemplatesComponent } from "./template/all-templates/all-templates.co
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
-import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
 import { ResizableDirective } from "../shared/directives/resizable.directive";
+import { CommonTaxComponent } from "../shared/common-tax/common-tax.component";
+import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
+import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview.component";
+import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
 
 @NgModule({
     declarations: [
         MainComponent,
         VoucherListComponent,
         VouchersPreviewComponent,
+        RecurringPreviewComponent,
         VoucherCreateComponent,
         AdvanceSearchComponent,
         BulkExportComponent,
@@ -155,7 +159,7 @@ import { ResizableDirective } from "../shared/directives/resizable.directive";
         VoucherCopyLinkModule,
         MatProgressSpinnerModule,
         TaxDropdownModule,
-        DiscountDropdownModule,
+        CommonDiscountComponent,
         GenericAsideMenuAccountModule,
         KeyboardShortutModule,
         MatBadgeModule,
@@ -193,7 +197,9 @@ import { ResizableDirective } from "../shared/directives/resizable.directive";
         TributeMentionModule,
         MobileNumberInputComponent,
         KeyboardNavigationModule,
-        ResizableDirective
+        ResizableDirective,
+        CommonTaxComponent,
+        AsideRecurrenceVoucherCreateComponent
     ],
     exports: [
         VoucherCreateComponent,

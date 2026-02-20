@@ -997,6 +997,17 @@ export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';
 /** Default display format for number formatting */
 export const DEFAULT_NUMBER_DISPLAY_FORMAT = 'IND_COMMA_SEPARATED';
 
+/** Global localStorage key for storing UI preferences and settings */
+export const UI_SETTINGS_STORAGE_KEY = 'giddh-ui-settings';
+
+/** Cache duration constants in milliseconds */
+export const CACHE_DURATION = {
+    ONE_DAY: 24 * 60 * 60 * 1000,
+    SEVEN_DAYS: 7 * 24 * 60 * 60 * 1000,
+    THIRTY_DAYS: 30 * 24 * 60 * 60 * 1000,
+    ONE_YEAR: 365 * 24 * 60 * 60 * 1000
+};
+
 /** Holds all possible field types for form fields */
 export enum FormFieldsType {
     BOOLEAN = 'BOOLEAN',
@@ -1004,3 +1015,6 @@ export enum FormFieldsType {
     NUMBER = 'NUMBER',
     BARCODE = 'BARCODE'
 }
+
+/** Round off threshold for 4 decimal place precision */
+export const ROUND_OFF_THRESHOLD = 0.5555; 

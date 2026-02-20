@@ -9,6 +9,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit,
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
+import { UiSettingsService } from './services/ui-settings.service';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -80,12 +81,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private loginActions: LoginActions,
         private invoiceActions: InvoiceActions,
         private warehouseActions: WarehouseActions,
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        private uiSettingsService: UiSettingsService
     ) {
         this.isProdMode = environment.production;
         this.isElectron = Configuration.isElectron;
 
-        // Bind the method for proper event listener cleanup
+        this.initializeUiSettings();
+
         this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
 
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
@@ -117,7 +120,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                if (environment.production && !Configuration.isElectron && !isLocalHost) {
+                // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
+                const isGiddhDomain = this._generalService.isGiddhDomain();
+
+                if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
+                    // Hard redirect for books.giddh.com or test.giddh.com domains
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -125,10 +132,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     } else {
                         returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
                     }
-                    const regionLogin = this._generalService.getGiddhRegionUrl() + '/login';
-                    const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
-                    window.location.href = target;
+                    const regionLogin = this._generalService.getGiddhRegionUrl();
+                    window.location.href = this.buildLoginTargetUrl(regionLogin, returnUrl);
                 } else {
+                    // Soft redirect for other domains or local development
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -156,12 +163,22 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 const electron = (window as any).require("electron");
                 if (electron && electron.ipcRenderer) {
                     const { ipcRenderer } = electron;
+                    const whiteLabel = localStorage.getItem('whiteLabel');
+                    let whiteLabelData = null;
+                    if (whiteLabel) {
+                        try {
+                            whiteLabelData = JSON.parse(whiteLabel);
+                        } catch (e) {
+                            console.error('Error parsing whiteLabel from localStorage:', e);
+                        }
+                    }
                     // Send server environment to main process
                     ipcRenderer.send("take-server-environment", {
                         'production': environment.production,
                         'isLocalEnv': !environment.production,
                         'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
-                        'APP_FOLDER': environment.APP_FOLDER
+                        'APP_FOLDER': environment.APP_FOLDER,
+                        'WHITE_LABEL': whiteLabelData
                     });
                     // Handle app close requests
                     ipcRenderer.on('app-close-requested', () => {
@@ -174,12 +191,22 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 } else if ((window as any).electronAPI) {
                     // Fallback: Use secure electronAPI if available
                     const electronAPI = (window as any).electronAPI;
+                    const whiteLabel = localStorage.getItem('whiteLabel');
+                    let whiteLabelData = null;
+                    if (whiteLabel) {
+                        try {
+                            whiteLabelData = JSON.parse(whiteLabel);
+                        } catch (e) {
+                            console.error('Error parsing whiteLabel from localStorage:', e);
+                        }
+                    }
                     // Send server environment to main process
                     electronAPI.send("take-server-environment", {
                         'production': environment.production,
                         'isLocalEnv': !environment.production,
                         'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
-                        'APP_FOLDER': environment.APP_FOLDER
+                        'APP_FOLDER': environment.APP_FOLDER,
+                        'WHITE_LABEL': whiteLabelData
                     });
                     // Handle app close requests (note: electronAPI.on might not support this channel)
                     if (electronAPI.on) {
@@ -516,6 +543,37 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         this._cdr.detectChanges();
+    }
+
+    /**
+     * Initializes UI settings and verifies cache integrity
+     *
+     * @private
+     * @memberof AppComponent
+     */
+    private initializeUiSettings(): void {
+        try {
+            const removedCount = this.uiSettingsService.verifyAndCleanCache();
+            if (removedCount > 0) {
+                console.log(`UI Settings: Cleaned ${removedCount} expired cache entries`);
+            }
+        } catch (error) {
+            console.error('Error initializing UI settings:', error);
+        }
+    }
+
+    /**
+     * Constructs the target login URL with optional returnUrl parameter
+     *
+     * @private
+     * @param {string} loginUrl - Base login URL
+     * @param {string} returnUrl - Optional return URL to append as query parameter
+     * @returns {string} Complete target URL with returnUrl if valid
+     * @memberof AppComponent
+     */
+    private buildLoginTargetUrl(loginUrl: string, returnUrl: string): string {
+        const isValidReturnUrl = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '';
+        return isValidReturnUrl ? `${loginUrl}?returnUrl=${encodeURIComponent(returnUrl)}` : loginUrl;
     }
 
     /**

@@ -68,4 +68,18 @@ export enum DataOperationEnum {
     BULK_DELETE = 'BULK_DELETE'
 }
 
+/** Enum representing account category types used for categorizing accounts and transactions */
+export enum AccountCategoryEnum {
+    /** Income/Revenue category for sales and revenue accounts */
+    INCOME = 'income',
+    /** Expense category for cost and expense accounts (singular form) */
+    EXPENSE = 'expense',
+    /** Expenses category for cost and expense accounts (plural form) */
+    EXPENSES = 'expenses',
+    /** Assets category for asset accounts */
+    ASSETS = 'assets',
+    /** Liabilities category for liability accounts */
+    LIABILITIES = 'liabilities'
+}
+
 

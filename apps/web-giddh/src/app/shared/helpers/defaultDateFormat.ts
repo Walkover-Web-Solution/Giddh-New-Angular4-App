@@ -10,3 +10,4 @@ export const GIDDH_DATE_FORMAT_TIME = "dd-MM-YYYY, hh:mm aa";
 export const GIDDH_DATE_FORMAT_MONTH_YEAR = 'MMMM YYYY';
 export const GIDDH_DATE_FORMAT_WITH_SPACE = 'DD MMM YYYY';
 export const GIDDH_DATE_FORMAT_MMM_YYYY = 'MMMYYYY';
+export const GIDDH_DATE_UI_FORMAT = 'MMM dd, yyyy';

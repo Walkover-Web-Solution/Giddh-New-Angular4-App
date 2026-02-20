@@ -101,7 +101,7 @@ ${environment === 'prod' ? 'import { enableProdMode } from \'@angular/core\';\ne
 export const environment: Environment = {
     production: true,
     showDevModule: false,
-    AppUrl: '${envConfig.AppUrl}',
+    AppUrl: ${envConfig.isElectron ? "'./'" : `'${envConfig.AppUrl}'`},
     ApiUrl: '${envConfig.ApiUrl}',
     UkApiUrl: '${envConfig.UkApiUrl}',
     isElectron: ${envConfig.isElectron},
@@ -195,6 +195,6 @@ function getPortalUrl(config, env) {
         case 'stage': return 'https://portal-stage.giddh.com/';
         case 'local':
         case 'test':
-        default: return 'https://master.d2n1i21e52r793.amplifyapp.com/';
+        default: return 'https://testportal.giddh.com/';
     }
 }

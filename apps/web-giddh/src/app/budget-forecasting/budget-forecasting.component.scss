@@ -1,0 +1,60 @@
+.forecasting-container {
+    .right-panel {
+        .results-card,
+        .empty-state,
+        .loading-state {
+            &.mat-mdc-card {
+                height: inherit;
+
+                mat-card-header {
+                    background-color: var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low));
+                    border-radius: var(--mat-card-elevated-container-shape, var(--mat-sys-corner-medium));
+                }
+            }
+        }
+    }
+
+    .forecast-list,
+    .chart-container {
+        border: 1px solid var(--color-border-medium);
+    }
+
+    .forecast-list {
+        .mat-mdc-list-item {
+            border-bottom: 1px solid var(--color-border-medium);
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            .forecast-row {
+                span {
+                    color: var(--color-dark-gray);
+                }
+            }
+        }
+    }
+}
+
+:host ::ng-deep .summary-wrapper {
+    .mat-mdc-chip {
+        .mdc-evolution-chip__cell {
+            display: block;
+        }
+        &:first-child {
+            background-color: color-mix(in oklch, var(--color-orange) 10%, var(--color-white)) !important;
+        }
+        &:last-child {
+            background-color: color-mix(in oklch, var(--color-green) 10%, var(--color-white)) !important;
+        }
+    }
+}
+
+::ng-deep body {
+    &.default-theme {
+        .forecast-list,
+        .chart-container {
+            background-color: color-mix(in oklch, var(--theme-accent-light) 30%, var(--color-white)) !important;
+        }
+    }
+}

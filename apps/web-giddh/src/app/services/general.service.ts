@@ -17,6 +17,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
 import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -663,6 +664,17 @@ export class GeneralService {
         }
         return null;
     }
+
+    /**
+     * Checks whether the current URL belongs to the Giddh domain
+     *
+     * @returns {boolean} True if the current URL contains 'books.giddh.com', false otherwise
+     * @memberof GeneralService
+     */
+    public isGiddhDomain(): boolean {
+        return window.location.href.includes('books.giddh.com');
+    }
+
     /**
      * This will be use for get giddh region url
      *
@@ -670,9 +682,13 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getGiddhRegionUrl(): string {
-        const countryRegion = localStorage.getItem('Country-Region');
-        const region = COUNTRY_REGION_MAP[countryRegion] || null;
-        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+        if (this.isGiddhDomain()){
+            const countryRegion = localStorage.getItem('Country-Region');
+            const region = COUNTRY_REGION_MAP[countryRegion] || null;
+            return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+        } else {
+            return `${window.location.origin}/login`;
+        }
     }
 
     /**
@@ -859,7 +875,7 @@ export class GeneralService {
         } else if (stockGroupTaxes?.length) {
             return stockGroupTaxes;
         } else if (accountTaxes?.length) {
-            return accountTaxes;
+            return accountTaxes?.filter((tax) => !(accountGroupTaxes ?? []).includes(tax)) ?? [];
         } else if (accountGroupTaxes?.length) {
             return accountGroupTaxes;
         } else {
@@ -1099,8 +1115,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public addVoucherVersion(url: string, voucherVersion: number): string {
-        const delimiter = url.includes('?') ? '&' : '?';
-        return url.concat(`${delimiter}voucherVersion=${voucherVersion}`);
+        return this.appendQueryParam(url, 'voucherVersion', voucherVersion);
     }
 
     /**
@@ -3127,5 +3142,54 @@ export class GeneralService {
         });
 
         return processedMessage;
+    }
+
+    /**
+     * Extracts date metadata from a given date
+     * Calculates day of month, weekday name, and week of month
+     *
+     * @param {Date} date - The date to extract metadata from
+     * @returns {Object} Object containing dayOfMonth, weekday (name), and weekOfMonth
+     * @memberof GeneralService
+     */
+    public getDateMeta(date: Date): { dayOfMonth: number; weekday: string; weekOfMonth: number } {
+        const dayOfMonth = date.getDate();
+        const dayOfWeek = date.getDay();
+        const weekday = [RecurringWeekday.SUNDAY, RecurringWeekday.MONDAY, RecurringWeekday.TUESDAY, RecurringWeekday.WEDNESDAY, RecurringWeekday.THURSDAY, RecurringWeekday.FRIDAY, RecurringWeekday.SATURDAY][dayOfWeek];
+        const weekOfMonth = Math.ceil(dayOfMonth / 7);
+        return { dayOfMonth, weekday, weekOfMonth };
+    }
+
+    /**
+     * Converts a number to its ordinal string representation
+     * Examples: 1 -> "1st", 2 -> "2nd", 3 -> "3rd", 4 -> "4th"
+     *
+     * @param {number} n - The number to convert to ordinal
+     * @returns {string} The ordinal representation of the number
+     * @memberof GeneralService
+     */
+    public getOrdinal(n: number): string {
+        if (n % 100 >= 11 && n % 100 <= 13) return `${n}th`;
+        switch (n % 10) {
+            case 1: return `${n}st`;
+            case 2: return `${n}nd`;
+            case 3: return `${n}rd`;
+            default: return `${n}th`;
+        }
+    }
+
+    /**
+     * Appends a query parameter to a URL
+     * Automatically determines whether to use '?' or '&' based on existing query parameters
+     *
+     * @param {string} url - The base URL to append the parameter to
+     * @param {string} paramName - The name of the query parameter
+     * @param {string | number | boolean} paramValue - The value of the query parameter
+     * @returns {string} The URL with the appended query parameter
+     * @memberof GeneralService
+     */
+    public appendQueryParam(url: string, paramName: string, paramValue: string | number | boolean): string {
+        const delimiter = url.includes('?') ? '&' : '?';
+        return `${url}${delimiter}${paramName}=${paramValue}`;
     }
 }

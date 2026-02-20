@@ -1,3 +1,5 @@
+@use '../../assets/styles/abstracts/mixins';
+
 .date-range-picker {
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -43,24 +45,20 @@
 }
 
 .daybook-w-100 {
-    width: 100px;
-    min-width: 100px;
+    @include mixins.fixed-width(100px);
 }
 
 .daybook-w-150 {
-    width: 150px;
-    min-width: 150px;
+    @include mixins.fixed-width(150px);
 }
 
 .daybook-w-200 {
-    width: 200px;
-    min-width: 200px;
+    @include mixins.fixed-width(200px);
     text-transform: capitalize;
 }
 
 .daybook-w-300 {
-    width: 300px;
-    min-width: 300px;
+    @include mixins.fixed-width(300px);
 }
 :host ::ng-deep .daybook-table {
     tr.mat-row,
@@ -70,17 +68,57 @@
     td.mat-mdc-cell {
         border-top: 1px solid var(--border-color);
     }
-    .nested-table {
-        > tbody {
-            tr {
-                td {
-                    border: 0 !important;
-                    padding: 8px 0;
-                }
-                &:first-child {
-                    border-top: none !important;
-                }
+
+    .expansion-detail-row {
+        background: var(--theme-primary-light) !important;
+        color: var(--color-black) !important;
+        &:hover {
+            background: var(--theme-primary-light) !important;
+            color: var(--color-black) !important;
+        }
+        &.border-none {
+            td {
+                border-top: none !important;
             }
+        }
+    }
+
+    .expansion-detail-cell {
+        padding: 0 !important;
+        border-top: none !important;
+    }
+
+    .expansion-detail-container {
+        width: 100%;
+    }
+
+    .expansion-row-wrapper {
+        display: grid;
+        width: 100%;
+        border-bottom: 1px solid var(--border-color);
+
+        &.grid-column-6 {
+            grid-template-columns: 150px 300px 200px 150px 150px 150px;
+        }
+
+        &.grid-column-13 {
+            grid-template-columns: 150px 300px 200px 150px 150px 150px 200px 100px 100px 150px 100px 100px 200px;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .expansion-cell {
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        border-left: none !important;
+        border-right: none !important;
+
+        &.text-right {
+            justify-content: flex-end;
         }
     }
 }

@@ -10,6 +10,7 @@ import {
     OnInit,
     Output,
     Renderer2,
+    signal,
     SimpleChanges,
     TemplateRef,
     ViewChild,
@@ -34,6 +35,7 @@ import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
 import { GeneralService } from '../../../services/general.service';
+import { UiSettingsService } from '../../../services/ui-settings.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
@@ -41,7 +43,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
-import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
+import { CommonDiscountComponent } from '../../../shared/common-discount/common-discount.component';
 import { UpdateLedgerVm } from './update-ledger.vm';
 import { SearchService } from '../../../services/search.service';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
@@ -71,6 +73,7 @@ import { SettingsDiscountService } from '../../../services/settings.discount.ser
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -80,7 +83,7 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
     templateUrl: './update-ledger-entry-panel.component.html',
     styleUrls: ['./update-ledger-entry-panel.component.scss'],
     providers: [SalesPersonComponentStore],
-    standalone:false
+    standalone: false
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
@@ -119,8 +122,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public isDaybook: boolean = false;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
-    @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
+    @ViewChild('discount', { static: false }) public discountComponent: CommonDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
+    @ViewChild('commontax', { static: false }) public commonTaxControll: CommonTaxComponent;
     /** Element ref for mat menu **/
     @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
     /** Element ref for mat autocomplete **/
@@ -159,6 +163,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * tax types within a company and count upto which they are allowed
      */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
+    /** True, if tax error should be displayed */
+    public showTaxError: boolean = false;
     public tags: TagRequest[] = [];
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -312,11 +318,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Discount dialog ref */
     public discountDialogRef: MatDialogRef<any>;
     /** List of discounts */
-    public discountsList: any[] = [];
-    /** Template Reference for Create Tax aside menu */
-    @ViewChild("createTax") public createTax: TemplateRef<any>;
-    /** Create tax dialog ref  */
-    public taxAsideMenuRef: MatDialogRef<any>;
+    public discountsList = signal<any[]>([]);
     /** Hold ledger transactions */
     public transaction: ITransactionItem;
     /** Hold ledger transactions index */
@@ -341,6 +343,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAdjustmentInfoOpen: boolean = false;
     /** True if last adjustment info is open */
     public isLastAdjustmentInfoOpen: boolean = false;
+    /** Tracks if account unique name should be shown in dropdowns */
+    public showAccountUniqueName: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -349,6 +353,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private companyActions: CompanyActions,
         private ledgerService: LedgerService,
         private generalService: GeneralService,
+        private uiSettingsService: UiSettingsService,
         private ledgerAction: LedgerActions,
         private loaderService: LoaderService,
         private settingsTagService: SettingsTagService,
@@ -391,6 +396,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
@@ -580,13 +586,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.transaction = this.entryTransactionData?.transaction;
         this.index = this.entryTransactionData?.index;
         this.transactionsList = this.entryTransactionData?.transactionsList;
-        if (this.transaction?.entryUniqueName) {
-            setTimeout(() => {
-                this.hideTax();
-                this.hideDiscount();
-            }, 3000);
-            this.changeDetectorRef.detectChanges();
-        }
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -864,6 +863,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public saveLedgerTransaction() {
+        this.openAndCloseDiscountDropdown(false);
+        this.openAndCloseTaxDropdown(false);
         // due to date picker of Tx entry date format need to change
         if (this.vm.selectedLedger.entryDate) {
             let entryDate = (typeof this.vm.selectedLedger.entryDate === "object") ? dayjs(this.vm.selectedLedger.entryDate) : dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT);
@@ -906,12 +907,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         if (this.isRcmEntry && (!requestObj.taxes || requestObj.taxes?.length === 0)) {
-            if (this.taxControll?.taxInputElement?.nativeElement) {
-                // Taxes are mandatory for RCM and Advance Receipt entries
-                this.taxControll.taxInputElement.nativeElement?.classList?.add('error-box');
-                return;
-            }
+            // Taxes are mandatory for RCM and Advance Receipt entries
+            this.showTaxError = true;
+            return;
         }
+        // Reset tax error if validation passes
+        this.showTaxError = false;
         if (requestObj) {
             requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
             requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger?.exchangeRate) : this.vm.selectedLedger?.exchangeRate;
@@ -1330,22 +1331,29 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    public hideDiscountTax(): void {
+    /**
+    * Open and close discount dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public openAndCloseDiscountDropdown(isOpen: boolean = false): void {
         if (this.discountComponent) {
-            this.discountComponent.discountMenu = false;
+            this.discountComponent.toggleDiscountMenu(!isOpen);
         }
     }
 
-    public hideDiscount(): void {
-        if (this.discountComponent) {
-            this.discountComponent?.change();
-            this.discountComponent.discountMenu = false;
-        }
-    }
-
-    public hideTax(): void {
-        if (this.taxControll) {
-            this.taxControll?.change();
+    /**
+    * Open and close tax dropdown
+    * if isOpen is true it will open the dropdown
+    * if isOpen is false it will close the dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public openAndCloseTaxDropdown(open: boolean = false): void {
+        if (this.commonTaxControll) {
+            this.commonTaxControll.toggleTaxMenu(open);
         }
     }
 
@@ -2777,7 +2785,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.discountDialogRef.afterClosed().subscribe(response => {
             if (response) {
-                this.getAllDiscounts();
+                this.getAllDiscounts(() => {
+                    this.openAndCloseDiscountDropdown(true);
+                });
+            } else {
+                this.openAndCloseDiscountDropdown(true);
             }
             this.discountDialogRef = undefined;
         });
@@ -2787,37 +2799,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Get all discounts API call
      *
      * @private
+     * @param callback - Optional callback to execute after API completes
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    private getAllDiscounts(): void {
+    private getAllDiscounts(callback?: () => void): void {
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountsList = response?.body;
-                this.changeDetectorRef.detectChanges();
+                this.discountsList.set(response?.body);
+            }
+            if (callback) {
+                callback();
             }
         });
     }
 
-    /**
-     * Shows create new tax dialog
-     *
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public showCreateTaxDialog(): void {
-        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
-        this.taxAsideMenuRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
-    }
-
-    /**
-     * Close tax modal
-     *
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public closeTaxModal(): void {
-        this.store.dispatch(this.companyActions.getTax());
-        this.taxAsideMenuRef.close();
-        this.changeDetectorRef.detectChanges();
-    }
     /**
      * Handle event for next transaction
      *

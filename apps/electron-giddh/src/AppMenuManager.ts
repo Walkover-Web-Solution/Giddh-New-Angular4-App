@@ -1,188 +1,151 @@
-import { app, BrowserWindow, dialog, Menu, MenuItemConstructorOptions } from 'electron';
+import { app, dialog, Menu, MenuItemConstructorOptions } from 'electron';
 import { checkForUpdates } from './AppUpdater';
 import WindowManager from './WindowManager';
 
 function getAppVersion(): string {
-    try {
-        // Use Electron's app.getVersion() which reads from package.json automatically
-        return app.getVersion();
-    } catch (error) {
-        return '0.0.0'; // fallback to current version
-    }
+    return app.getVersion();
 }
 
-export default function setMenu() {
-    const windowsMenu: MenuItemConstructorOptions = {
-        label: 'Window',
-        role: 'window',
-        submenu: [
-            {
-                label: 'New Window',
-                accelerator: 'CmdOrCtrl+N',
-                click: (menuItem, browserWindow: BrowserWindow, event) => {
-                    const windowManager = new WindowManager();
-                    windowManager.openWindows();
-                }
-            },
-            {
-                label: 'Minimize',
-                accelerator: 'CmdOrCtrl+M',
-                role: 'minimize'
-            },
-            {
-                label: 'Close',
-                accelerator: 'CmdOrCtrl+W',
-                role: 'close'
-            },
-            {
-                label: 'Check For Update',
-                accelerator: 'CmdOrCtrl+U',
-                click: (item: any, focusedWindow: any, event) => {
-                    //
-                    checkForUpdates(item, focusedWindow, event);
-                }
-            },
-            {
-                label: `About Giddh v${getAppVersion()}`,
-                click: async () => {
-                    try {
-                        const result = await dialog.showMessageBox({
-                            type: 'info',
-                            title: 'About Giddh',
-                            message: 'Giddh - Accounting Software',
-                            detail: `Version: ${getAppVersion()}\nElectron: ${process.versions.electron}\n\nBuilt with ❤️ by Walkover Technologies`,
-                            buttons: ['OK']
-                        });
-                    } catch (error) {
-                        console.error('Dialog failed:', error);
-                    }
-                }
-            }
-        ]
-    };
+export default class AppMenuManager {
+    private windowManager: WindowManager;
 
-    const name = app.getName();
-    const template: MenuItemConstructorOptions[] = [
-        {
-            label: 'Edit',
-            submenu: [
-                {
-                    label: 'Undo',
-                    accelerator: 'CmdOrCtrl+Z',
-                    role: 'undo'
-                },
-                {
-                    label: 'Redo',
-                    accelerator: 'Shift+CmdOrCtrl+Z',
-                    role: 'redo'
-                },
-                {
-                    type: 'separator'
-                },
-                {
-                    label: 'Cut',
-                    accelerator: 'CmdOrCtrl+X',
-                    role: 'cut'
-                },
-                {
-                    label: 'Copy',
-                    accelerator: 'CmdOrCtrl+C',
-                    role: 'copy'
-                },
-                {
-                    label: 'Paste',
-                    accelerator: 'CmdOrCtrl+V',
-                    role: 'paste'
-                },
-                {
-                    label: 'Select All',
-                    accelerator: 'CmdOrCtrl+A',
-                    role: 'selectAll'
-                },
-            ]
-        },
-        {
-            label: 'View',
-            submenu: [
-                {
-                    label: 'Reload',
-                    accelerator: 'CmdOrCtrl+R',
-                    click: (item: any, focusedWindow: any) => {
-                        if (focusedWindow != null) {
-                            focusedWindow.reload();
-                        }
-                    }
-                },
-                {
-                    label: 'Enter Full Screen',
-                    accelerator: process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11',
-                    click: (item: any, focusedWindow: any) => {
-                        if (focusedWindow) {
-                            focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
-                        }
-                    }
-                },
-                {
-                    label: 'Open Dev Tool',
-                    accelerator: 'Command+I',
-                    click: (item: any, focusedWindow: any) => {
-                        if (focusedWindow != null) {
-                            focusedWindow.webContents.openDevTools();
-                        }
-                    }
-                }
-            ]
-        },
-        windowsMenu
-    ];
-    if (process.platform === 'darwin') {
-        template.unshift({
-            label: name,
-            submenu: [
-                {
-                    label: 'About ' + name,
-                    role: 'about'
-                },
-                {
-                    type: 'separator'
-                },
-                {
-                    label: 'Hide ' + name,
-                    accelerator: 'Command+H',
-                    role: 'hide'
-                },
-                {
-                    label: 'Hide Others',
-                    accelerator: 'Command+Shift+H',
-                    role: 'hideOthers'
-                },
-                {
-                    label: 'Show All',
-                    role: 'unhide'
-                },
-                {
-                    type: 'separator'
-                },
-                {
-                    label: 'Quit',
-                    accelerator: 'Command+Q',
-                    click: () => {
-                        app.quit();
-                    }
-                }
-            ]
-        });
-
-        ((windowsMenu.submenu) as MenuItemConstructorOptions[]).push(
-            {
-                type: 'separator'
-            },
-            {
-                label: 'Bring All to Front',
-                role: 'front'
-            });
+    constructor(windowManager: WindowManager) {
+        this.windowManager = windowManager;
     }
 
-    const appMenu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(appMenu);
+    public buildMenu(): Menu {
+        const template: MenuItemConstructorOptions[] = [
+            {
+                label: 'File',
+                submenu: [
+                    {
+                        label: 'New Window',
+                        accelerator: 'CmdOrCtrl+N',
+                        click: () => {
+                            this.windowManager.openWindows();
+                        }
+                    },
+                    { type: 'separator' },
+                    {
+                        label: 'Quit',
+                        accelerator: 'CmdOrCtrl+Q',
+                        click: () => {
+                            app.quit();
+                        }
+                    }
+                ]
+            },
+            {
+                label: 'Edit',
+                submenu: [
+                    { role: 'undo' },
+                    { role: 'redo' },
+                    { type: 'separator' },
+                    { role: 'cut' },
+                    { role: 'copy' },
+                    { role: 'paste' },
+                    { role: 'selectAll' }
+                ]
+            },
+            {
+                label: 'View',
+                submenu: [
+                    { role: 'reload' },
+                    { role: 'forceReload' },
+                    { role: 'toggleDevTools' },
+                    { type: 'separator' },
+                    { role: 'resetZoom' },
+                    { role: 'zoomIn' },
+                    { role: 'zoomOut' },
+                    { type: 'separator' },
+                    { role: 'togglefullscreen' }
+                ]
+            },
+            {
+                label: 'Window',
+                submenu: [
+                    { role: 'minimize' },
+                    { role: 'zoom' },
+                    { type: 'separator' },
+                    {
+                        label: 'Check for Updates',
+                        enabled: true,
+                        click: () => {
+                            checkForUpdates();
+                        }
+                    },
+                    { type: 'separator' },
+                    { role: 'close' }
+                ]
+            },
+            {
+                label: 'Help',
+                submenu: [
+                    {
+                        label: 'About',
+                        click: () => {
+                            dialog.showMessageBox({
+                                type: 'info',
+                                title: 'About Giddh',
+                                message: `Giddh Desktop v${getAppVersion()}`,
+                                detail: 'Accounting software for modern businesses',
+                                buttons: ['OK']
+                            });
+                        }
+                    },
+                    {
+                        label: 'Learn More',
+                        click: async () => {
+                            const { shell } = require('electron');
+                            await shell.openExternal('https://giddh.com');
+                        }
+                    }
+                ]
+            }
+        ];
+
+        // Add macOS specific menu items
+        if (process.platform === 'darwin') {
+            template.unshift({
+                label: app.name,
+                submenu: [
+                    {
+                        label: `About ${app.name}`,
+                        click: () => {
+                            dialog.showMessageBox({
+                                type: 'info',
+                                title: `About ${app.name}`,
+                                message: `${app.name} v${getAppVersion()}`,
+                                detail: 'Accounting software for modern businesses',
+                                buttons: ['OK']
+                            });
+                        }
+                    },
+                    { type: 'separator' },
+                    {
+                        label: 'Check for Updates',
+                        enabled: true,
+                        click: () => {
+                            checkForUpdates();
+                        }
+                    },
+                    { type: 'separator' },
+                    { role: 'services' },
+                    { type: 'separator' },
+                    { role: 'hide' },
+                    { role: 'hideOthers' },
+                    { role: 'unhide' },
+                    { type: 'separator' },
+                    { role: 'quit' }
+                ]
+            });
+        }
+
+        return Menu.buildFromTemplate(template);
+    }
+
+    public setApplicationMenu(): void {
+        const menu = this.buildMenu();
+        Menu.setApplicationMenu(menu);
+    }
 }

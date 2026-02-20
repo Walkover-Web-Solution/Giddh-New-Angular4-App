@@ -24,6 +24,7 @@ import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../m
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { GeneralService } from '../services/general.service';
+import { UiSettingsService } from '../services/ui-settings.service';
 import { LedgerService } from '../services/ledger.service';
 import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
@@ -409,6 +410,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public particularMultiCurrency: boolean = false;
     /** To clear the dropdown list */
     public forceClear$: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
+    /** Tracks if account unique name should be shown in dropdowns */
+    public showAccountUniqueName: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -419,6 +422,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
+        private uiSettingsService: UiSettingsService,
         private loginActions: LoginActions,
         private loaderService: LoaderService,
         private warehouseActions: WarehouseActions,
@@ -605,6 +609,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
 
         /* Here, we filtered the pagination size to a maximum of 50 to avoid performance issues. */
         this.pageSizeOptions = this.pageSizeOptions.filter(size => size <= 50);
@@ -3525,12 +3530,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data.body.stock?.groupTaxes ?? [],
                     data.body.taxes ?? [],
                     data.body.groupTaxes ?? []);
-                if (txn?.taxesVm?.length) {
-                    (Array.isArray(txn?.taxesVm) ? txn?.taxesVm : []).forEach(tax => {
-                        tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
-                        tax.isDisabled = false;
-                    });
-                }
 
                 if (this.profileObj?.baseCurrency === this.lc.activeAccount?.currency) {
                     if (this.lc.activeAccount?.currency !== data.body?.currency.code) {
@@ -3659,20 +3658,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         variantDiscount = stock.variant?.variantDiscount;
                         quantity = txn?.inventory?.quantity || 1;
                     } else {
-                        const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
+                        stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
+                        const defaultUnitRates = (this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates).filter(unitRate => unitRate.stockUnitUniqueName === stockUnitUniqueName);
                         const defaultUnit = {
                             stockUnitCode: defaultUnitRates[0].stockUnitCode,
                             code: defaultUnitRates[0].stockUnitCode,
                             rate: defaultUnitRates[0].rate,
                             name: txn.selectedAccount.stock.name
                         };
-                        const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
+                        const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : txn.selectedAccount.stock?.variant?.unitRates;
                         txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                         stockName = defaultUnit.name;
                         rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                         stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                         unitCode = defaultUnit.code;
-                        stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
 
                         const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
                         if (hasMrpDiscount?.length) {
@@ -3721,6 +3720,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
                 this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
+                this.isTotalChanged = false;
                 this.needToReCalculate.next(true);
                 if (allowChangeDetection) {
                     this.cdRf.detectChanges();
@@ -3861,7 +3861,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public closeAllAccountDropdown(): void {
-        (Array.isArray(this.dropdowns) ? this.dropdowns : []).forEach((alertInstance, i) => alertInstance?.closeDropdownPanel());
+        (this.dropdowns?.length ? this.dropdowns.toArray() : []).forEach((alertInstance, i) => alertInstance?.closeDropdownPanel());
     }
 
     /**
@@ -4180,13 +4180,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private handeLoadDetailsForDuplicateEntry(event: any, txn: any): void {
         txn.showTaxationDiscountBox = false;
-        // Take taxes of parent group and stock's own taxes
-        if (txn?.taxesVm?.length) {
-            (Array.isArray(txn.taxesVm) ? txn.taxesVm : []).forEach(tax => {
-                tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
-                tax.isDisabled = false;
-            });
-        }
         if (!this.isHideBankLedgerPopup) {
             this.lc.currentBlankTxn = txn;
         }
