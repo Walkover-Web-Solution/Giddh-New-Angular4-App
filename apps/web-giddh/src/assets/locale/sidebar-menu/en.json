@@ -147,6 +147,52 @@
                     "description": "Net & cumulative sales",
                     "additionalRoutes": [
                         "/pages/reports/sales-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "By Duration",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By Sales Person",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By State",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By Country",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "matchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -337,6 +383,52 @@
                     "description": "Net & cumulative purchases",
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "By Duration",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By Sales Person",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By State",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By Country",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "matchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -511,6 +603,7 @@
                     "icon": "icon-balance-sheet-new",
                     "description": "Download BS in Excel, multiple type of exports",
                     "additional": {
+                        "matchQueryParams": true,
                         "queryParams": {
                             "tab": "balance-sheet",
                             "tabIndex": 2
@@ -529,6 +622,7 @@
                     "icon": "icon-proft-loss-new",
                     "description": "Download data in Excel, project wise report",
                     "additional": {
+                        "matchQueryParams": true,
                         "queryParams": {
                             "tab": "profit-loss",
                             "tabIndex": 1
@@ -547,6 +641,7 @@
                     "icon": "icon-trial-balance-new",
                     "description": "Download of all credit & debit balances",
                     "additional": {
+                        "matchQueryParams": true,
                         "queryParams": {
                             "tab": "trial-balance",
                             "tabIndex": 0

@@ -645,13 +645,31 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 if (item?.additional?.queryParams?.voucherVersion) {
                     delete item?.additional?.queryParams?.voucherVersion;
                 }
+                const hasOptions = item?.options && item.options.length > 0;
                 const childMenu = {
-                    expandable: false, // Set static false due to only one level of menu
+                    expandable: hasOptions,
                     level: 1,
                     isExpanded: false,
                     ...item
                 } as unknown as AllItems;
                 flattenedItems.push(childMenu);
+
+                // Add options as level 2 items
+                if (hasOptions) {
+                    item.options.forEach(option => {
+                        const optionItem = {
+                            expandable: false,
+                            level: 2,
+                            isExpanded: false,
+                            label: option.label,
+                            link: option.link,
+                            icon: option.icon,
+                            additional: option.additional,
+                            isOption: true
+                        } as unknown as AllItems;
+                        flattenedItems.push(optionItem);
+                    });
+                }
             });
         });
         this.allItems.set(flattenedItems);
@@ -685,11 +703,24 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             const itemLink = item.link ? item.link.split('?')[0] : '';
             let isPathMatch = baseUrlWithoutParams.includes(itemLink) || item?.additionalRoutes?.some(route => route.split('?')[0] === baseUrlWithoutParams);
             
-            // If item has query params defined, also check if they match current query params
-            if (isPathMatch && item?.additional?.queryParams && currentQueryParams?.tab) {
-                const itemQueryParams = item.additional.queryParams.tabIndex;
-                // Check if all item query params match current query params
-                isPathMatch = itemQueryParams === Number(currentQueryParams?.tabIndex);
+            // If item has query params defined and requires matching, check if ALL query params match
+            if (isPathMatch && item?.additional?.queryParams && currentQueryParams) {
+                const itemQueryParams = item.additional.queryParams;
+                const requiredToMatchQueryParams = item?.additional?.matchQueryParams;
+                
+                if (requiredToMatchQueryParams) {
+                    // Check if all item query params match current query params
+                    for (const key in itemQueryParams) {
+                        // Convert both values to string for comparison
+                        const itemValue = String(itemQueryParams[key]);
+                        const currentValue = String(currentQueryParams[key] || '');
+                        
+                        if (itemValue !== currentValue) {
+                            isPathMatch = false;
+                            break;
+                        }
+                    }
+                }
             }
             
             item.isActive = isPathMatch;
@@ -702,10 +733,33 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         
-        // Third pass: expand only the parent with active child
+        // Third pass: expand/collapse level 1 items based on active level 2 children
+        items.forEach((item, index) => {
+            if (item.level === 1 && item.expandable) {
+                // Check if any following level 2 items (options) are active
+                let hasActiveOption = false;
+                for (let i = index + 1; i < items.length; i++) {
+                    const nextItem = items[i];
+                    // Stop when we hit another level 1 or level 0 item
+                    if (nextItem.level === 0 || nextItem.level === 1) {
+                        break;
+                    }
+                    // Check if this level 2 option is active
+                    if (nextItem.level === 2 && nextItem.isActive) {
+                        hasActiveOption = true;
+                        break;
+                    }
+                }
+                
+                // Expand if has active child, collapse if not
+                item.isExpanded = hasActiveOption;
+            }
+        });
+        
+        // Fourth pass: expand level 0 parents if any level 1 or level 2 child is active
         items.forEach((item, index) => {
             if (item.level === 0 && item.expandable) {
-                // Check if any following level 1 items (children) are active
+                // Check if any following level 1 or level 2 items are active
                 let hasActiveChild = false;
                 for (let i = index + 1; i < items.length; i++) {
                     const nextItem = items[i];
@@ -713,8 +767,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     if (nextItem.level === 0) {
                         break;
                     }
-                    // Check if this child is active
-                    if (nextItem.level === 1 && nextItem.isActive) {
+                    // Check if this child (level 1 or level 2) is active
+                    if ((nextItem.level === 1 || nextItem.level === 2) && nextItem.isActive) {
                         hasActiveChild = true;
                         break;
                     }
@@ -832,26 +886,26 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
      /**
       * Toggle node expansion with accordion behavior
-      * Only one parent node can be expanded at a time
-      *
-      * @param node Node to toggle
+      * Collapses other items at the same level when expanding
+      * @param {*} node
       * @memberof PrimarySidebarComponent
       */
-      public toggleNode(node: any): void {
-        if (node.expandable || (node?.level === 0)) {
-          if (node.isExpanded) {
-            node.isExpanded = false;
-          } else {
-            (Array.isArray(this.allItems()) ? this.allItems() : []).forEach(item => {
-              if (item.level === 0 && item !== node) {
-                item.isExpanded = false;
-              }
-            });
-            node.isExpanded = node.expandable;
-          }
-          this.dataSource = new ArrayDataSource(this.allItems());
+    public toggleNode(node: any): void {
+        if (node.expandable) {
+            if (node.isExpanded) {
+                node.isExpanded = false;
+            } else {
+                // Collapse other items at the same level (accordion behavior)
+                (Array.isArray(this.allItems()) ? this.allItems() : []).forEach(item => {
+                    if (item.level === node.level && item !== node) {
+                        item.isExpanded = false;
+                    }
+                });
+                node.isExpanded = true;
+            }
+            this.dataSource = new ArrayDataSource(this.allItems());
         }
-      }
+    }
 
       /**
       * Check if node is expanded
@@ -886,5 +940,21 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.router.navigate([path], { queryParams });
+    }
+
+    /**
+     * Navigates to option link with query parameters
+     *
+     * @protected
+     * @param {any} option Option object containing link and queryParams
+     * @memberof PrimarySidebarComponent
+     */
+    protected navigateToOption(option: any): void {
+        if (!option || !option.link) {
+            return;
+        }
+
+        const queryParams = option.additional?.queryParams || {};
+        this.router.navigate([option.link], { queryParams });
     }
 }

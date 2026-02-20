@@ -311,11 +311,7 @@ constructor(
                 this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
-        this.store.pipe(
-            select(state => state.general.states),
-            filter(Boolean),
-            takeUntil(this.destroyed$)
-        ).subscribe(states => {
+        this.store.pipe(select(state => state.general.states), takeUntil(this.destroyed$)).subscribe(states => {
             if (states && (states.stateList ?? states.countyList)) {
                 this.stateList.set((states.stateList ?? states.countyList).map(state => ({
                     label: state.name,
@@ -326,10 +322,7 @@ constructor(
         });
 
         // Subscribe to countryCode changes to automatically load states
-        this.reportForm.get('countryCode')?.valueChanges.pipe(
-            filter(Boolean),
-            takeUntil(this.destroyed$)
-        ).subscribe(countryCode => {
+        this.reportForm.get('countryCode')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(countryCode => {
             if (countryCode) {
                 this.loadStates(countryCode);
             } else {
@@ -337,26 +330,50 @@ constructor(
                 this.filteredStateList.set([]);
             }
         });
+
+        this.reportForm.get('groupBy')?.valueChanges.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(groupBy => {
+            if (groupBy) {
+                this.handleGroupByChange(groupBy);
+                this.generalService.updateActivatedRouteQueryParams({ groupBy });
+            }
+        });
+
+        this.activeRoute.queryParams.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(queryParams => {
+            if (queryParams?.interval || queryParams?.selectedMonth) { 
+                this.selectedType = queryParams.interval;
+                this.interval = queryParams.interval;
+                this.reportForm.get('interval').patchValue(queryParams.interval);
+                this.selectedMonth = queryParams.selectedMonth;
+
+                this.router.navigate(['pages', 'reports', 'purchase-register']);
+            }
+            // Handle groupBy parameter from sidebar navigation
+            if (queryParams?.groupBy && [GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(queryParams.groupBy)) {
+                this.reportForm.get('groupBy')?.patchValue(queryParams.groupBy);
+            } else {
+                this.reportForm.get('groupBy')?.patchValue(GroupBy.Duration);
+            }
+        });
     }
     /**
      * Handle group by change
      *
-     * @param response
+     * @param groupBy
      */
-    public handleGroupByChange(response: IOption): void {
+    public handleGroupByChange(groupBy: GroupBy): void {
         this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
         this.reportForm.get('countryCode')?.setValue(null);
         this.reportForm.get('countryCodes')?.setValue([]);
         this.reportForm.get('stateCodes')?.setValue([]);
 
-        if (response?.value && response.value !== GroupBy.Duration) {
+        if ([GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(groupBy)) {
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-            if (response.value === GroupBy.State) {
+            if (groupBy === GroupBy.State) {
                 this.reportForm.get('countryCode')?.setValue(this.activeCompany.countryV2?.alpha2CountryCode);
             }
             this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
-        } else if (response?.value === GroupBy.Duration) {
+        } else {
             this.populateRecords(this.interval, this.selectedMonth);
         }
     }
@@ -464,16 +481,6 @@ constructor(
         let currentCountryCodes = [];
         let currentStateCodes = [];
 
-        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
-            if (params?.interval || params?.selectedMonth) {
-                this.selectedType = params.interval;
-                this.interval = params.interval;
-                this.reportForm.get('interval').patchValue(params.interval);
-                this.selectedMonth = params.selectedMonth;
-
-                this.router.navigate(['pages', 'reports', 'purchase-register']);
-            }
-        });
 
         // set financial years based on company financial year
         this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
@@ -694,10 +701,10 @@ constructor(
 
             this.setCurrentFY();
             this.groupByOptions = [
-                { label: this.commonLocaleData?.app_duration?.duration, value: GroupBy.Duration },
-                { label: this.commonLocaleData?.app_sales_person, value: GroupBy.SalesPerson },
-                { label: this.commonLocaleData?.app_state, value: GroupBy.State },
-                { label: this.commonLocaleData?.app_country , value: GroupBy.Country }
+                { label: this.localeData?.by_duration, value: GroupBy.Duration },
+                { label: this.localeData?.by_sales_person, value: GroupBy.SalesPerson },
+                { label: this.localeData?.by_state, value: GroupBy.State },
+                { label: this.localeData?.by_country, value: GroupBy.Country }
             ];
         }
     }
