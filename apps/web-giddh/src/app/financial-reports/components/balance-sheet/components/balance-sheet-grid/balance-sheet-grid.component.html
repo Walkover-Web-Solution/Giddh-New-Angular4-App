@@ -67,7 +67,7 @@
                                             <span
                                                 *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from !== 'Invalid date'"
                                             >
-                                                {{ dayjs(bsData?.dates?.from, giddhDateFormat).add(-1, 'day') | giddhDate }}
+                                                {{ bsData?.dates?.from | giddhDate }}
                                             </span>
                                         </th>
                                     </tr>
