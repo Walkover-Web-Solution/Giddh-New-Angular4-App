@@ -157,7 +157,7 @@
                                 "queryParams": {
                                     "groupBy": "duration"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -168,7 +168,7 @@
                                 "queryParams": {
                                     "groupBy": "salesPerson"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -179,7 +179,7 @@
                                 "queryParams": {
                                     "groupBy": "state"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -190,7 +190,7 @@
                                 "queryParams": {
                                     "groupBy": "country"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         }
                     ]
@@ -393,7 +393,7 @@
                                 "queryParams": {
                                     "groupBy": "duration"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -404,7 +404,7 @@
                                 "queryParams": {
                                     "groupBy": "salesPerson"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -415,7 +415,7 @@
                                 "queryParams": {
                                     "groupBy": "state"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -426,7 +426,7 @@
                                 "queryParams": {
                                     "groupBy": "country"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         }
                     ]
@@ -603,7 +603,7 @@
                     "icon": "icon-balance-sheet-new",
                     "description": "Download BS in Excel, multiple type of exports",
                     "additional": {
-                        "requiredToMatchQueryParams": true,
+                        "matchQueryParams": true,
                         "queryParams": {
                             "tab": "balance-sheet",
                             "tabIndex": 2
@@ -622,7 +622,7 @@
                     "icon": "icon-proft-loss-new",
                     "description": "Download data in Excel, project wise report",
                     "additional": {
-                        "requiredToMatchQueryParams": true,
+                        "matchQueryParams": true,
                         "queryParams": {
                             "tab": "profit-loss",
                             "tabIndex": 1
@@ -641,7 +641,7 @@
                     "icon": "icon-trial-balance-new",
                     "description": "Download of all credit & debit balances",
                     "additional": {
-                        "requiredToMatchQueryParams": true,
+                        "matchQueryParams": true,
                         "queryParams": {
                             "tab": "trial-balance",
                             "tabIndex": 0

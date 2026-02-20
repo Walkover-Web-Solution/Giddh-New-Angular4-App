@@ -664,7 +664,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                             label: option.label,
                             link: option.link,
                             icon: option.icon,
-                            additional: option.additional || (option.queryParams ? { queryParams: option.queryParams } : undefined),
+                            additional: option.additional,
                             isOption: true
                         } as unknown as AllItems;
                         flattenedItems.push(optionItem);
@@ -706,20 +706,18 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             // If item has query params defined and requires matching, check if ALL query params match
             if (isPathMatch && item?.additional?.queryParams && currentQueryParams) {
                 const itemQueryParams = item.additional.queryParams;
-                const requiredToMatchQueryParams = item?.additional?.requiredToMatchQueryParams;
+                const requiredToMatchQueryParams = item?.additional?.matchQueryParams;
                 
                 if (requiredToMatchQueryParams) {
                     // Check if all item query params match current query params
                     for (const key in itemQueryParams) {
-                        if (itemQueryParams.hasOwnProperty(key)) {
-                            // Convert both values to string for comparison
-                            const itemValue = String(itemQueryParams[key]);
-                            const currentValue = String(currentQueryParams[key] || '');
-                            
-                            if (itemValue !== currentValue) {
-                                isPathMatch = false;
-                                break;
-                            }
+                        // Convert both values to string for comparison
+                        const itemValue = String(itemQueryParams[key]);
+                        const currentValue = String(currentQueryParams[key] || '');
+                        
+                        if (itemValue !== currentValue) {
+                            isPathMatch = false;
+                            break;
                         }
                     }
                 }

@@ -11,7 +11,6 @@ export interface AllItem {
         label: string;
         link: string;
         icon?: string;
-        queryParams?: any;
         additional?: any;
     }>;
 }

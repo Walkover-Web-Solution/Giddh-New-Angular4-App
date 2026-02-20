@@ -157,7 +157,7 @@
                                 "queryParams": {
                                     "groupBy": "duration"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -168,7 +168,7 @@
                                 "queryParams": {
                                     "groupBy": "salesPerson"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -179,7 +179,7 @@
                                 "queryParams": {
                                     "groupBy": "state"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -190,7 +190,7 @@
                                 "queryParams": {
                                     "groupBy": "country"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         }
                     ]
@@ -393,7 +393,7 @@
                                 "queryParams": {
                                     "groupBy": "duration"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -404,7 +404,7 @@
                                 "queryParams": {
                                     "groupBy": "salesPerson"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -415,7 +415,7 @@
                                 "queryParams": {
                                     "groupBy": "state"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         },
                         {
@@ -426,7 +426,7 @@
                                 "queryParams": {
                                     "groupBy": "country"
                                 },
-                                "requiredToMatchQueryParams": true
+                                "matchQueryParams": true
                             }
                         }
                     ]
@@ -607,7 +607,7 @@
                             "tab": "balance-sheet",
                             "tabIndex": 2
                         },
-                        "requiredToMatchQueryParams": true
+                        "matchQueryParams": true
                     }
                 },
                 {
@@ -626,7 +626,7 @@
                             "tab": "profit-loss",
                             "tabIndex": 1
                         },
-                        "requiredToMatchQueryParams": true
+                        "matchQueryParams": true
                     }
                 },
                 {
@@ -645,7 +645,7 @@
                             "tab": "trial-balance",
                             "tabIndex": 0
                         },
-                        "requiredToMatchQueryParams": true
+                        "matchQueryParams": true
                     }
                 },
                 {
