@@ -11,6 +11,7 @@ import { AppState } from '../../store';
 import { GstReport } from '../constants/gst.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { RestrictedModules, Configuration } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
@@ -286,7 +287,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      */
     public getGstReturnFieldText(): string {
         let text = this.localeData?.filing?.gst_filed_success;
-        text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
+        text = text?.replace("[PERIOD_FROM]", GiddhDatePipe.formatDate(this.currentPeriod?.from))?.replace("[PERIOD_TO]", GiddhDatePipe.formatDate(this.currentPeriod?.to));
         return text;
     }
 

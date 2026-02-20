@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-sm-6">
-                <p class="font-weight-semibold mb-1">{{ selectedItem?.entryDate }} | {{ selectedItem?.baseAccount?.name }}</p>
+                <p class="font-weight-semibold mb-1">{{ selectedItem?.entryDate | giddhDate }} | {{ selectedItem?.baseAccount?.name }}</p>
             </div>
             <div class="col-sm-6 text-right xs-left">
                 <div class="d-flex justify-content-end align-items-center column-gap-1">

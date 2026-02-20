@@ -59,7 +59,7 @@
                                         <th class="text-right font-size-16" width="33.33%">
                                             {{ commonLocaleData?.app_as_of }}
                                             <span *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to !== 'Invalid date'">
-                                                {{ dayjs(bsData?.dates?.to, giddhDateFormat)?.toString() | date: 'dd MMMM yyyy' }}
+                                                {{ bsData?.dates?.to | giddhDate }}
                                             </span>
                                         </th>
                                         <th class="text-right font-size-16" width="33.33%">
@@ -67,10 +67,7 @@
                                             <span
                                                 *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from !== 'Invalid date'"
                                             >
-                                                {{
-                                                    dayjs(bsData?.dates?.from, giddhDateFormat).add(-1, 'day')?.toString()
-                                                        | date: 'dd MMMM yyyy'
-                                                }}
+                                                {{ dayjs(bsData?.dates?.from, giddhDateFormat).add(-1, 'day') | giddhDate }}
                                             </span>
                                         </th>
                                     </tr>

@@ -28,6 +28,7 @@ import { ParticularPipeModule } from '../../ledger/pipes/particular/particular.m
 import { AmountFieldComponentModule } from '../amount-field/amount-field.module';
 import { LedgerModule } from '../../ledger/ledger.module';
 import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledger-paginator.module';
+import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [LedgerStatementComponent],
@@ -60,7 +61,8 @@ import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledg
         ParticularPipeModule,
         AmountFieldComponentModule,
         LedgerModule,
-        GiddhLedgerPaginatorModule
+        GiddhLedgerPaginatorModule,
+        GiddhDatePipe
     ],
     exports: [LedgerStatementComponent]
 })

@@ -321,7 +321,7 @@
                                     {{ localeData?.reports?.date }}
                                 </th>
                                 <td data-title="Date" mat-cell *matCellDef="let element" class="common-column-width">
-                                    {{ element?.entryDate ?? '-' }}
+                                    {{ element?.entryDate | giddhDate }}
                                 </td>
                             </div>
 

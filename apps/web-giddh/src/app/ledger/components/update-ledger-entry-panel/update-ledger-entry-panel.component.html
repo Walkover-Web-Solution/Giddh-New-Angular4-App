@@ -1961,7 +1961,10 @@
                                                                     </div>
                                                                     <div class="option-value">
                                                                         ({{ localeData?.dated }}:
-                                                                        {{ option.additional?.date ?? option.additional?.voucherDate }})
+                                                                        {{
+                                                                            option.additional?.date ?? option.additional?.voucherDate
+                                                                                | giddhDate
+                                                                        }})
                                                                     </div>
                                                                     <div class="option-value">
                                                                         {{ commonLocaleData?.app_amount }}:

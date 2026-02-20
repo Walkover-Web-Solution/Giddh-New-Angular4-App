@@ -45,6 +45,7 @@ import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
@@ -128,7 +129,8 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
         MatExpansionModule,
         MatPaginatorModule,
         ReactiveFormsModule,
-        AmountFieldComponentModule
+        AmountFieldComponentModule,
+        GiddhDatePipe
     ],
     exports: [
         NewInventoryComponent,

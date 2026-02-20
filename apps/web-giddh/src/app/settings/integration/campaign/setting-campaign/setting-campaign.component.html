@@ -121,7 +121,7 @@
                         {{ localeData?.communication?.created_at }}
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.createdAt }}
+                        {{ element.createdAt | giddhDate }}
                     </td>
                 </ng-container>
 

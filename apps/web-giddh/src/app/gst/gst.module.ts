@@ -51,6 +51,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -94,7 +95,8 @@ import { MatListModule } from '@angular/material/list';
         MatCheckboxModule,
         MatPaginatorModule,
         MatMenuModule,
-        MatListModule
+        MatListModule,
+        GiddhDatePipe
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

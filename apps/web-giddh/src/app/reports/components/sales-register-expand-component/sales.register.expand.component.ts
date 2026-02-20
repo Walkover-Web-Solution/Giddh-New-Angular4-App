@@ -178,10 +178,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
-                this.dataSource.data = this.SalesRegisteDetailedItems.items.map((obj: any) => {
-                    obj.date = this.getDateToDMY(obj.date);
-                    return obj;
-                });
+                this.dataSource.data = this.SalesRegisteDetailedItems.items;
                 if (this.voucherNumberInput?.value) {
                     setTimeout(() => {
                         if (this.invoiceSearch && this.invoiceSearch.nativeElement) {

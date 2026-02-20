@@ -26,6 +26,7 @@ import { SharedModule } from '../shared.module';
 import { MatCardModule } from '@angular/material/card';
 import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.module';
 import { FroalaTemplateEditorModule } from '../template-froala/template-froala.module';
+import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { FroalaTemplateEditorModule } from '../template-froala/template-froala.m
         SharedModule,
         MatCardModule,
         ReplaceAllPipeModule,
-        FroalaTemplateEditorModule
+        FroalaTemplateEditorModule,
+        GiddhDatePipe
     ],
     exports: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent],
     declarations: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent]

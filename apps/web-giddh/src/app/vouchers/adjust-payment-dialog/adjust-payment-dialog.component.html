@@ -141,7 +141,10 @@
                                                     {{ option?.label }}
                                                 </p>
                                                 <div class="text-light">
-                                                    <p>({{ commonLocaleData?.app_dated }}: {{ option?.additional.voucherDate }})</p>
+                                                    <p>
+                                                        ({{ commonLocaleData?.app_dated }}:
+                                                        {{ option?.additional.voucherDate | giddhDate }})
+                                                    </p>
                                                     <p class="font-size-12">
                                                         {{ commonLocaleData?.app_amount }}:
                                                         {{ option?.additional?.currency?.symbol }}

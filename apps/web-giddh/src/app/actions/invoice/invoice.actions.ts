@@ -33,6 +33,7 @@ import { RecurringInvoice } from '../../models/interfaces/recurring-invoice';
 import { RecurringVoucherService } from '../../services/recurring-voucher.service';
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { LocaleService } from '../../services/locale.service';
+import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 import { GeneralService } from '../../services/general.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { forEach, isArray } from '../../lodash-optimized';
@@ -589,7 +590,7 @@ export class InvoiceActions {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     let text = this.localeService.translate("app_messages.vehicle_data_updated");
-                    text = text?.replace("[VEHICLE_UPDATE_DATE]", data?.body?.vehUpdDate)?.replace("[VALID_UPTO]", data?.body?.validUpto);
+                    text = text?.replace("[VEHICLE_UPDATE_DATE]", GiddhDatePipe.formatDate(data?.body?.vehUpdDate))?.replace("[VALID_UPTO]", GiddhDatePipe.formatDate(data?.body?.validUpto));
                     this._toasty.successToast(text);
                 }
                 return { type: 'EmptyAction' };

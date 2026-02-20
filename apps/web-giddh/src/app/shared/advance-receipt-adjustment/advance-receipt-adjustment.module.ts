@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { LaddaModule } from 'angular2-ladda';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
+import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { AmountFieldComponentModule } from '../amount-field/amount-field.module';
 import { NgxMaskModule } from '../helpers/directives/ngx-mask';
@@ -33,7 +34,8 @@ import { GiddhNumberFormatModule } from '../helpers/pipes/number-format/number-f
         MatDialogModule,
         MatInputModule,
         MatRadioModule,
-        FormFieldsModule
+        FormFieldsModule,
+        GiddhDatePipe
     ],
     exports: [AdvanceReceiptAdjustmentComponent]
 })

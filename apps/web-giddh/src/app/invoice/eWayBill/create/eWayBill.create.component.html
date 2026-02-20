@@ -250,7 +250,7 @@
                     <mat-card-content>
                         <div class="mb-2">
                             <label>{{ commonLocaleData?.app_date }}:</label>
-                            <span>{{ invoice?.voucherDate }}</span>
+                            <span>{{ invoice?.voucherDate | giddhDate }}</span>
                         </div>
                         <div class="mb-2">
                             <label>{{ commonLocaleData?.app_to }}:</label>

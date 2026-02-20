@@ -29,7 +29,7 @@
             <!-- Date Column -->
             <div matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef>Date</th>
-                <td mat-cell *matCellDef="let element" data-title="Date">{{ element.date }}</td>
+                <td mat-cell *matCellDef="let element" data-title="Date">{{ element.date | giddhDate }}</td>
             </div>
 
             <!-- Voucher Type Column -->

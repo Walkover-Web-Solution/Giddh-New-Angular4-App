@@ -506,7 +506,7 @@
                                                             }}
                                                         </div>
                                                         <div class="item-unique">
-                                                            ({{ localeData?.dated }}: {{ option.additional?.voucherDate }})
+                                                            ({{ localeData?.dated }}: {{ option.additional?.voucherDate | giddhDate }})
                                                         </div>
                                                         <div class="item-unique">
                                                             ({{ commonLocaleData?.app_amount }}:
@@ -702,7 +702,7 @@
                         <table class="table border m-0">
                             <tbody>
                                 <tr *ngFor="let txn of entry.transactions">
-                                    <td>{{ entry?.entryDate }}</td>
+                                    <td>{{ entry?.entryDate | giddhDate }}</td>
                                     <td>{{ txn.particular?.name }}</td>
                                     <td>
                                         <amount-field [amount]="txn.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
