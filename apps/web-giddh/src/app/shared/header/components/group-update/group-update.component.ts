@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input, ElementRef, TemplateRef } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input, ElementRef, TemplateRef, signal } from '@angular/core';
 import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -92,7 +92,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Stores the value of groups */
     public searchedGroups: IOption[];
     /** Stores the list of selected tax labels to display in the UI. */
-    public defaultTaxLabel: string[] = [];
+    public defaultTaxLabel = signal<string[]>([]);
     /** Stores the list of selected discount labels to display in the UI. */
     public defaultDiscountLabel: string[] = [];
     /** Stores the current tax to display in the UI. */
@@ -727,11 +727,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         if (this.companyTaxDropDown?.length) {
             const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
-            this.defaultTaxLabel = selectedTaxes.map((selectTax: any) => {
+            this.defaultTaxLabel.set(selectedTaxes.map((selectTax: any) => {
                 return this.companyTaxDropDown.find(tax => tax.value === selectTax)?.label;
-            });
+            }));
         } else {
-            this.defaultTaxLabel = [];
+            this.defaultTaxLabel.set([]);
         }
     }
 }

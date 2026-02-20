@@ -17,7 +17,7 @@ import { ConfirmModalComponent } from "../new-confirm-modal/confirm-modal.compon
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
-import * as printJS from 'print-js';
+import printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ServiceConfig } from "../../services/service.config";

@@ -66,7 +66,6 @@
                         <!--By and To: Not required in paginated API -->
                         <span class="position-relative form-group option-value-field" *ngIf="item?.value.queryType === 'openingBalance'">
                             <select-field
-                                [closeOnFocusOut]="true"
                                 class="width-balance-type"
                                 [options]="balType"
                                 (selectedOption)="item?.get('openingBalanceType').patchValue($event.value)"
@@ -79,7 +78,6 @@
                         </span>
                         <span class="position-relative form-group option-value-field" *ngIf="item?.value.queryType === 'closingBalance'">
                             <select-field
-                                [closeOnFocusOut]="true"
                                 class="width-balance-type"
                                 [options]="balType"
                                 (selectedOption)="item?.get('closingBalanceType').patchValue($event.value)"
