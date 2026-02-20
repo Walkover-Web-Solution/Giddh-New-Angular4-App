@@ -195,6 +195,6 @@ function getPortalUrl(config, env) {
         case 'stage': return 'https://portal-stage.giddh.com/';
         case 'local':
         case 'test':
-        default: return 'https://master.d2n1i21e52r793.amplifyapp.com/';
+        default: return 'https://testportal.giddh.com/';
     }
 }

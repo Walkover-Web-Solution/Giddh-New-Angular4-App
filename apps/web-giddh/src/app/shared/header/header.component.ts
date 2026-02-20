@@ -825,8 +825,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    const whiteLabel = this.generalService.getDecodedWhiteLabel();
-                    window.location.href = (environment.PRODUCTION_ENV) ? this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ? `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;
+                    window.location.href = this.generalService.getGiddhRegionUrl();
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 

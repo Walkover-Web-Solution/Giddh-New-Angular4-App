@@ -664,6 +664,17 @@ export class GeneralService {
         }
         return null;
     }
+
+    /**
+     * Checks whether the current URL belongs to the Giddh domain
+     *
+     * @returns {boolean} True if the current URL contains 'books.giddh.com', false otherwise
+     * @memberof GeneralService
+     */
+    public isGiddhDomain(): boolean {
+        return window.location.href.includes('books.giddh.com');
+    }
+
     /**
      * This will be use for get giddh region url
      *
@@ -671,9 +682,13 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getGiddhRegionUrl(): string {
-        const countryRegion = localStorage.getItem('Country-Region');
-        const region = COUNTRY_REGION_MAP[countryRegion] || null;
-        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+        if (this.isGiddhDomain()){
+            const countryRegion = localStorage.getItem('Country-Region');
+            const region = COUNTRY_REGION_MAP[countryRegion] || null;
+            return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+        } else {
+            return `${window.location.origin}/login`;
+        }
     }
 
     /**
@@ -860,7 +875,7 @@ export class GeneralService {
         } else if (stockGroupTaxes?.length) {
             return stockGroupTaxes;
         } else if (accountTaxes?.length) {
-            return accountTaxes;
+            return accountTaxes?.filter((tax) => !(accountGroupTaxes ?? []).includes(tax)) ?? [];
         } else if (accountGroupTaxes?.length) {
             return accountGroupTaxes;
         } else {

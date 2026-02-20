@@ -97,7 +97,7 @@ OTP_TOKEN_AUTH=your-msg91-auth-token
 APP_URL=http://localhost:4200/
 API_URL=https://apitest.giddh.com/
 UK_API_URL=https://gbapi.giddh.com/
-PORTAL_URL=https://master.d2n1i21e52r793.amplifyapp.com/
+PORTAL_URL=https://testportal.giddh.com/
 ```
 
 ### Environment Flags
