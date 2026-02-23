@@ -10,6 +10,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
+import { PlanDuration } from '../../app.constant';
 
 @Component({
     selector: 'view-subscription',
@@ -49,6 +50,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public selectedMoveCompany: boolean = false;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** Hold plan duration constant reference for template usage */
+    public readonly planDuration: typeof PlanDuration = PlanDuration;
 
     constructor(
         public dialog: MatDialog,
@@ -215,6 +218,18 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         } else {
             this.router.navigate(['/pages/user-details/subscription/buy-plan/' + this.subscriptionId]);
         }
+    }
+
+    /**
+     * Navigates to the add extra transaction page for the current subscription.
+     *
+     * @memberof ViewSubscriptionComponent
+     */
+    public navigateToAddExtraTransaction(): void {
+        this.router.navigate(
+            ['/pages/user-details/subscription/add-extra-transaction/' + this.subscriptionId],
+            { state: { subscriptionData: this.viewSubscriptionData } }
+        );
     }
 
     /**
