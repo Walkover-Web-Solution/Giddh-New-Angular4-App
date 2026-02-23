@@ -31,5 +31,7 @@ export const SUBSCRIPTION_V2_API = {
     ACTIVATE_PLAN: 'v2/subscription/:subscriptionId/activate?upgrade=true&billingRequestId=:billingRequestId',
     CALCULATION_PLAN_AMOUNT: 'v2/subscription/get-amount',
     SAVE_RAZORPAY_TOKEN: 'v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token?orderId=:orderId',
-    PAYPAL_CAPTURE_PLAN: 'subscription/paypal/order/:orderId/capture?subscriptionId=:subscriptionId'
+    PAYPAL_CAPTURE_PLAN: 'subscription/paypal/order/:orderId/capture?subscriptionId=:subscriptionId',
+    BUY_EXTRA_VOUCHER: 'v2/subscription/buy-extra-voucher',
+    CAPTURE_EXTRA_VOUCHER: 'v2/subscription/:subscriptionId/capture-extra-voucher'
 };
