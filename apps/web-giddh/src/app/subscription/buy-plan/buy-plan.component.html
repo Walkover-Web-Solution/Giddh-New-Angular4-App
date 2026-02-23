@@ -753,7 +753,7 @@
                                                 [providers]="filteredPaymentProviders"
                                                 [label]="localeData?.payment_provider"
                                                 [required]="!isFreePlan(selectedPlan, selectedDuration())"
-                                                [showError]="isFormSubmitted && !thirdStepForm.get('paymentProvider')?.value"
+                                                [showError]="isFormSubmitted() && !thirdStepForm.get('paymentProvider')?.value"
                                                 [errorMessage]="localeData?.select_provider"
                                                 (valueChange)="onPaymentProviderChange()"
                                             ></payment-provider-selector>
@@ -821,7 +821,8 @@
             @if (
                 selectedPlan?.newInvoiceCount > 0 ||
                 selectedPlan?.newBillCount > 0 ||
-                selectedPlan?.extraInvoicesUsed > 0 || selectedPlan?.extraBillUsed > 0
+                selectedPlan?.extraInvoicesUsed > 0 ||
+                selectedPlan?.extraBillUsed > 0
             ) {
                 <mat-card class="outline-card mb-3">
                     <mat-card-content>
@@ -850,7 +851,7 @@
                         @if (selectedPlan?.extraInvoicesUsed > 0 || selectedPlan?.extraBillUsed > 0) {
                             <div class="d-flex justify-content-between pt-3">
                                 <p>{{ localeData?.extra_invoice_count }}</p>
-                                <p>{{ selectedPlan?.extraInvoicesUsed || 0 + selectedPlan?.extraBillUsed || 0 }}</p>
+                                <p>{{ (selectedPlan?.extraInvoicesUsed || 0) + (selectedPlan?.extraBillUsed || 0) }}</p>
                             </div>
                         }
                     </mat-card-content>

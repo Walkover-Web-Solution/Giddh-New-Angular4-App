@@ -1514,68 +1514,71 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const isTrial = type === 'trial';
         this.payType = type;
         this.isFormSubmitted = false;
-        if (this.subscriptionForm.invalid) {
-            this.isFormSubmitted = true;
-            return;
-        }
-        let mobileNumber = this.subscriptionForm.value.secondStepForm.mobileNumber?.replace(/\+/g, '');
-        let request: any = {
-            planUniqueName: this.subscriptionForm.value.firstStepForm.planUniqueName,
-            duration: this.subscriptionForm.value.firstStepForm.duration,
-            userUniqueName: null,
-            billingAccount: {
-                billingName: this.subscriptionForm.value.secondStepForm.billingName,
-                companyName: this.subscriptionForm.value.secondStepForm.companyName,
-                taxNumber: this.subscriptionForm.value.secondStepForm.taxNumber,
-                email: this.subscriptionForm.value.secondStepForm.email,
-                pincode: this.subscriptionForm.value.secondStepForm.pincode,
-                mobileNumber: mobileNumber,
-                country: {
-                    name: this.subscriptionForm.value.secondStepForm.country.label ? this.subscriptionForm.value.secondStepForm.country.label : this.subscriptionForm.value.secondStepForm.country.name,
-                    code: this.subscriptionForm.value.secondStepForm.country.value ? this.subscriptionForm.value.secondStepForm.country.value : this.subscriptionForm.value.secondStepForm.country.code
+
+        setTimeout(() => {
+            if (this.subscriptionForm.invalid) {
+                this.isFormSubmitted = true;
+                return;
+            }
+            let mobileNumber = this.subscriptionForm.value.secondStepForm.mobileNumber?.replace(/\+/g, '');
+            let request: any = {
+                planUniqueName: this.subscriptionForm.value.firstStepForm.planUniqueName,
+                duration: this.subscriptionForm.value.firstStepForm.duration,
+                userUniqueName: null,
+                billingAccount: {
+                    billingName: this.subscriptionForm.value.secondStepForm.billingName,
+                    companyName: this.subscriptionForm.value.secondStepForm.companyName,
+                    taxNumber: this.subscriptionForm.value.secondStepForm.taxNumber,
+                    email: this.subscriptionForm.value.secondStepForm.email,
+                    pincode: this.subscriptionForm.value.secondStepForm.pincode,
+                    mobileNumber: mobileNumber,
+                    country: {
+                        name: this.subscriptionForm.value.secondStepForm.country.label ? this.subscriptionForm.value.secondStepForm.country.label : this.subscriptionForm.value.secondStepForm.country.name,
+                        code: this.subscriptionForm.value.secondStepForm.country.value ? this.subscriptionForm.value.secondStepForm.country.value : this.subscriptionForm.value.secondStepForm.country.code
+                    },
+                    address: this.subscriptionForm.value.secondStepForm.address
                 },
-                address: this.subscriptionForm.value.secondStepForm.address
-            },
-            promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
-            paymentProvider: this.thirdStepForm.value.paymentProvider,
-            subscriptionId: null
-        }
+                promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
+                paymentProvider: this.thirdStepForm.value.paymentProvider,
+                subscriptionId: null
+            }
 
-        if (this.isMonthly()) {
-            request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
-        }
-        if ((this.isMonthly() || this.isDaily()) && this.selectedPlan?.entityCode !== EntityCode.GBR) {
-            request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
-        }
+            if (this.isMonthly()) {
+                request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
+            }
+            if ((this.isMonthly() || this.isDaily()) && this.selectedPlan?.entityCode !== EntityCode.GBR) {
+                request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
+            }
 
-        if (this.subscriptionForm.value.secondStepForm.country.value === 'GB') {
-            request.billingAccount['county'] = {
-                name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
-                code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
-            };
-        } else {
-            request.billingAccount['state'] = {
-                name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
-                code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
-            };
-        }
+            if (this.subscriptionForm.value.secondStepForm.country.value === 'GB') {
+                request.billingAccount['county'] = {
+                    name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
+                    code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
+                };
+            } else {
+                request.billingAccount['state'] = {
+                    name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
+                    code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
+                };
+            }
 
-        request['payNow'] = isTrial;
-        if (isTrial) {
-            delete request.autoPay;
-            delete request.razorpayAuthType;
-            delete request.subscriptionId;
-            delete request.userUniqueName;
-            delete request.paymentProvider;
-            delete request.promoCode;
-        }
-        if (this.subscriptionId && this.isChangePlan) {
-            request.subscriptionId = this.subscriptionId;
-            this.subscriptionRequest = request;
-            this.componentStore.getChangePlanDetails(request);
-        } else {
-            this.componentStore.createSubscription(request);
-        }
+            request['payNow'] = !isTrial;
+            if (isTrial) {
+                delete request.autoPay;
+                delete request.razorpayAuthType;
+                delete request.subscriptionId;
+                delete request.userUniqueName;
+                delete request.paymentProvider;
+                delete request.promoCode;
+            }
+            if (this.subscriptionId && this.isChangePlan) {
+                request.subscriptionId = this.subscriptionId;
+                this.subscriptionRequest = request;
+                this.componentStore.getChangePlanDetails(request);
+            } else {
+                this.componentStore.createSubscription(request);
+            }
+        }, 100);
     }
 
     /**
