@@ -1616,7 +1616,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 };
             }
 
-            request['payNow'] = isTrial;
+            request['payNow'] = !isTrial;
             if (isTrial) {
                 delete request.autoPay;
                 delete request.razorpayAuthType;
