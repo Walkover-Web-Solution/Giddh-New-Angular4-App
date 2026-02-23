@@ -6,6 +6,7 @@ import { ViewSubscriptionComponent } from './view-subscription/view-subscription
 import { BuyPlanComponent } from './buy-plan/buy-plan.component';
 import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
+import { AddExtraTransactionComponent } from './add-extra-transaction/add-extra-transaction.component';
 
 @NgModule({
     imports: [
@@ -33,6 +34,9 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
             },
             {
                 path: 'subscription/call-back', component: CallBackPageComponent
+            },
+            {
+                path: 'subscription/add-extra-transaction/:subscriptionId', component: AddExtraTransactionComponent
             }
         ])
     ],

@@ -334,6 +334,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.isSubscriptionPage =
                     this.router.url.includes("/pages/user-details/subscription/buy-plan") ||
                     this.router.url.includes("/pages/user-details/subscription/view-subscription") ||
+                    this.router.url.includes("/pages/user-details/subscription/add-extra-transaction") ||
                     this.router.url.includes("/pages/user-details/mobile-number") ||
                     this.router.url.includes("/pages/user-details/auth-key") ||
                     this.router.url.includes("/pages/user-details/session");
