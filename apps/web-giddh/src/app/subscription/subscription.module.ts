@@ -56,6 +56,8 @@ import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-me
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
 import { MobileNumberInputComponent } from '../shared/mobile-number-input';
 import { MoveCompanyComponent } from './move-company/move-company.component';
+import { AddExtraTransactionComponent } from './add-extra-transaction/add-extra-transaction.component';
+import { PaymentProviderSelectorComponent } from './components/payment-provider-selector/payment-provider-selector.component';
 
 @NgModule({
     imports: [
@@ -105,7 +107,8 @@ import { MoveCompanyComponent } from './move-company/move-company.component';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        MobileNumberInputComponent
+        MobileNumberInputComponent,
+        PaymentProviderSelectorComponent
 
     ],
     exports: [SubscriptionListComponent,
@@ -131,7 +134,8 @@ import { MoveCompanyComponent } from './move-company/move-company.component';
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
         AllFeaturesComponent,
-        UserDetailsPipe
+        UserDetailsPipe,
+        AddExtraTransactionComponent
     ],
     providers: [
         DecimalPipe

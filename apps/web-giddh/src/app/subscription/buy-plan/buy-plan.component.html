@@ -81,14 +81,14 @@
                                                 (change)="toggleDuration($event)"
                                                 formControlName="duration"
                                             >
-                                                <mat-button-toggle value="MONTHLY">
+                                                <mat-button-toggle [value]="planDuration.MONTHLY">
                                                     {{ commonLocaleData?.app_duration?.month }}
                                                 </mat-button-toggle>
-                                                <mat-button-toggle value="YEARLY">
+                                                <mat-button-toggle [value]="planDuration.YEARLY">
                                                     {{ commonLocaleData?.app_duration?.year }}
                                                 </mat-button-toggle>
                                                 <ng-container *ngIf="!isProdMode">
-                                                    <mat-button-toggle value="DAILY">
+                                                    <mat-button-toggle [value]="planDuration.DAILY">
                                                         {{ commonLocaleData?.app_duration?.daily }}
                                                     </mat-button-toggle>
                                                 </ng-container>
@@ -119,7 +119,7 @@
                                                             </span>
                                                         </p>
 
-                                                        <ng-container *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                                        <ng-container *ngIf="isYearly()">
                                                             <ng-container *ngIf="plan?.yearlyAmount > 0 || plan?.yearlyDiscount">
                                                                 <p
                                                                     *ngIf="plan?.yearlyDiscountAmount > 0"
@@ -157,7 +157,7 @@
                                                                     </span>
                                                                 </p>
                                                             </ng-container>
-                                                            <ng-container *ngIf="plan?.yearlyAmount === 0 && !plan?.yearlyDiscount">
+                                                            <ng-container *ngIf="isFreePlan(plan, planDuration.YEARLY)">
                                                                 <span class="font-size-24 strong">{{ localeData?.free }}</span>
                                                             </ng-container>
                                                             <ng-container
@@ -201,12 +201,7 @@
                                                                 </span>
                                                             </p>
                                                         </ng-container>
-                                                        <ng-container
-                                                            *ngIf="
-                                                                firstStepForm.get('duration')?.value === 'MONTHLY' ||
-                                                                firstStepForm.get('duration')?.value === 'DAILY'
-                                                            "
-                                                        >
+                                                        <ng-container *ngIf="isMonthly() || isDaily()">
                                                             <ng-container *ngIf="plan?.monthlyAmount > 0 || plan?.monthlyDiscount">
                                                                 <p
                                                                     *ngIf="plan?.monthlyDiscountAmount > 0"
@@ -244,7 +239,7 @@
                                                                     </span>
                                                                 </p>
                                                             </ng-container>
-                                                            <ng-container *ngIf="plan?.monthlyAmount === 0 && !plan?.monthlyDiscount">
+                                                            <ng-container *ngIf="isFreePlan(plan, planDuration.MONTHLY)">
                                                                 <span class="font-size-24 strong">{{ localeData?.free }}</span>
                                                             </ng-container>
                                                             <ng-container
@@ -347,11 +342,7 @@
                                                     <span class="sub-plan-name">
                                                         <amount-field
                                                             [useGiddhCurrencyPipe]="false"
-                                                            [amount]="
-                                                                firstStepForm.get('duration')?.value === 'YEARLY'
-                                                                    ? plan?.invoicesAllowed
-                                                                    : plan?.monthlyInvoicesAllowed
-                                                            "
+                                                            [amount]="isYearly() ? plan?.invoicesAllowed : plan?.monthlyInvoicesAllowed"
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         ></amount-field>
@@ -376,11 +367,7 @@
                                                     <span>
                                                         <amount-field
                                                             [useGiddhCurrencyPipe]="false"
-                                                            [amount]="
-                                                                firstStepForm.get('duration')?.value === 'YEARLY'
-                                                                    ? plan?.billsAllowed
-                                                                    : plan?.monthlyBillsAllowed
-                                                            "
+                                                            [amount]="isYearly() ? plan?.billsAllowed : plan?.monthlyBillsAllowed"
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         ></amount-field>
@@ -404,11 +391,7 @@
                                                     <span>
                                                         <amount-field
                                                             [useGiddhCurrencyPipe]="false"
-                                                            [amount]="
-                                                                firstStepForm.get('duration')?.value === 'YEARLY'
-                                                                    ? plan?.companiesLimit
-                                                                    : plan?.monthlyCompaniesLimit
-                                                            "
+                                                            [amount]="isYearly() ? plan?.companiesLimit : plan?.monthlyCompaniesLimit"
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         ></amount-field>
@@ -527,7 +510,7 @@
                                                 </div>
                                             </ng-container>
                                         </div>
-                                        <div class="grid-list-div list-grid" *ngIf="newUserSelectedCountryValue === 'IND'">
+                                        <div class="grid-list-div list-grid" *ngIf="newUserSelectedCountryValue === entityCode.IND">
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
                                                     {{ localeData?.e_invoice }}
@@ -549,7 +532,7 @@
                                                 </div>
                                             </ng-container>
                                         </div>
-                                        <div class="grid-list-div list-grid" *ngIf="newUserSelectedCountryValue === 'IND'">
+                                        <div class="grid-list-div list-grid" *ngIf="newUserSelectedCountryValue === entityCode.IND">
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
                                                     {{ localeData?.gst_direct }}
@@ -760,48 +743,53 @@
                                     class="new-plan mt-4"
                                     *ngIf="
                                         filteredPaymentProviders?.length > 1 ||
-                                        (['DAILY', 'MONTHLY', 'YEARLY'].includes(firstStepForm.get('duration')?.value) &&
-                                            selectedPlan?.entityCode === 'IND')
+                                        ((isMonthly() || isYearly() || isDaily()) && selectedPlan?.entityCode === entityCode.IND)
                                     "
                                 >
                                     <mat-card class="outline-card">
                                         <mat-card-content>
-                                            <div class="form-group mb-1">
-                                                <reactive-dropdown-field
-                                                    [label]="localeData?.payment_provider"
-                                                    [placeholder]="localeData?.select_provider"
-                                                    [labelValue]="thirdStepForm.get('paymentProvider')?.value"
-                                                    [options]="filteredPaymentProviders"
-                                                    formControlName="paymentProvider"
-                                                    (onClear)="thirdStepForm.get('paymentProvider')?.patchValue(null)"
-                                                    [required]="!thirdStepForm.get('paymentProvider')?.value ? true : false"
-                                                    [showError]="isFormSubmitted && !thirdStepForm.get('paymentProvider')?.value"
-                                                ></reactive-dropdown-field>
-                                            </div>
-                                            <ng-container
-                                                *ngIf="
-                                                    (firstStepForm.get('duration')?.value === 'MONTHLY' ||
-                                                        firstStepForm.get('duration')?.value === 'DAILY') &&
-                                                    selectedPlan?.entityCode === 'IND'
-                                                "
-                                            >
-                                                <mat-radio-group
-                                                    *ngIf="thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY"
-                                                    class="d-flex flex-column"
-                                                    formControlName="razorpayAuthType"
-                                                >
+                                            <payment-provider-selector
+                                                formControlName="paymentProvider"
+                                                [providers]="filteredPaymentProviders"
+                                                [label]="localeData?.payment_provider"
+                                                [required]="!isFreePlan(selectedPlan, selectedDuration())"
+                                                [showError]="isFormSubmitted && !thirdStepForm.get('paymentProvider')?.value"
+                                                [errorMessage]="localeData?.select_provider"
+                                                (valueChange)="onPaymentProviderChange()"
+                                            ></payment-provider-selector>
+
+                                            @if (
+                                                (isMonthly() || isDaily()) &&
+                                                selectedPlan?.entityCode === entityCode.IND &&
+                                                thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY
+                                            ) {
+                                                <!-- Make sure in at last Razorpay is show in list -->
+                                                <mat-radio-group class="d-flex flex-column mt-3 ml-4" formControlName="razorpayAuthType">
                                                     <mat-radio-button color="primary" value="CARD">
                                                         {{ localeData?.credit_debit_card }}
                                                     </mat-radio-button>
                                                     <mat-radio-button
                                                         color="primary"
                                                         value="UPI"
-                                                        *ngIf="selectedPlan?.entityCode === 'IND'"
+                                                        *ngIf="selectedPlan?.entityCode === entityCode.IND"
                                                     >
                                                         {{ localeData?.upi }}
                                                     </mat-radio-button>
                                                 </mat-radio-group>
-                                            </ng-container>
+                                            }
+
+                                            @if (isMonthly()) {
+                                                <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                                                    <span class="font-size-14 text-primary font-weight-semibold">
+                                                        {{ localeData?.auto_pay }}
+                                                    </span>
+                                                    <mat-slide-toggle
+                                                        color="primary"
+                                                        formControlName="autoPay"
+                                                        [attr.aria-label]="localeData?.auto_pay"
+                                                    ></mat-slide-toggle>
+                                                </div>
+                                            }
                                         </mat-card-content>
                                     </mat-card>
                                 </div>
@@ -830,23 +818,57 @@
             <p class="font-size-16 mb-3 strong d-flex align-items-center plan-summary-heading">
                 {{ localeData?.plan_summary }}
             </p>
+            @if (
+                selectedPlan?.newInvoiceCount > 0 ||
+                selectedPlan?.newBillCount > 0 ||
+                selectedPlan?.extraInvoicesUsed > 0 || selectedPlan?.extraBillUsed > 0
+            ) {
+                <mat-card class="outline-card mb-3">
+                    <mat-card-content>
+                        @if (selectedPlan?.newInvoiceCount > 0 || selectedPlan?.newBillCount > 0) {}
+                        <div class="pb-3" [class.border-bottom]="selectedPlan?.extraInvoicesUsed > 0 || selectedPlan?.extraBillUsed > 0">
+                            <p class="pb-3">{{ localeData?.total_transaction_count }}</p>
+                            <ul class="pl-4">
+                                <li class="py-1">
+                                    <div class="d-flex justify-content-between">
+                                        <p>
+                                            {{ localeData?.invoice_count }}
+                                        </p>
+                                        <p>{{ selectedPlan?.newInvoiceCount }}</p>
+                                    </div>
+                                </li>
+                                <li class="py-1">
+                                    <div class="d-flex justify-content-between">
+                                        <p>
+                                            {{ localeData?.bill_count }}
+                                        </p>
+                                        <p>{{ selectedPlan?.newBillCount }}</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        @if (selectedPlan?.extraInvoicesUsed > 0 || selectedPlan?.extraBillUsed > 0) {
+                            <div class="d-flex justify-content-between pt-3">
+                                <p>{{ localeData?.extra_invoice_count }}</p>
+                                <p>{{ selectedPlan?.extraInvoicesUsed || 0 + selectedPlan?.extraBillUsed || 0 }}</p>
+                            </div>
+                        }
+                    </mat-card-content>
+                </mat-card>
+            }
             <mat-card class="outline-card">
                 <form name="firstStepForm" autocomplete="off" novalidate [formGroup]="firstStepForm" name="firstStepForm">
                     <mat-card-content>
-                        <div class="d-flex justify-content-between border-bottom pb-3">
+                        <div class="d-flex justify-content-between border-bottom py-3">
                             <span>{{ selectedPlan?.name }}</span>
-                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                            <span *ngIf="isYearly()">
                                 <amount-field
                                     [amount]="selectedPlan?.yearlyAmount"
                                     [currencySymbol]="selectedPlan?.currency?.symbol"
                                     [currencyCode]="selectedPlan?.currency?.code"
                                 ></amount-field>
                             </span>
-                            <span
-                                *ngIf="
-                                    firstStepForm.get('duration')?.value === 'MONTHLY' || firstStepForm.get('duration')?.value === 'DAILY'
-                                "
-                            >
+                            <span *ngIf="isMonthly() || isDaily()">
                                 <amount-field
                                     [amount]="selectedPlan?.monthlyAmount"
                                     [currencySymbol]="selectedPlan?.currency?.symbol"
@@ -857,15 +879,10 @@
                         <div class="border-bottom">
                             <div class="d-flex justify-content-between py-3">
                                 <span>
-                                    <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                    <span *ngIf="isYearly()">
                                         {{ commonLocaleData?.app_duration?.year }}
                                     </span>
-                                    <span
-                                        *ngIf="
-                                            firstStepForm.get('duration')?.value === 'MONTHLY' ||
-                                            firstStepForm.get('duration')?.value === 'DAILY'
-                                        "
-                                    >
+                                    <span *ngIf="isMonthly() || isDaily()">
                                         {{ commonLocaleData?.app_duration?.month }}
                                     </span>
                                     {{ commonLocaleData?.app_amount }}
@@ -898,6 +915,16 @@
                                 [currencyCode]="selectedPlan?.currency?.code"
                             ></amount-field>
                         </div>
+                        @if (selectedPlan?.refundAmount > 0) {
+                            <div class="d-flex justify-content-between border-bottom py-3">
+                                <p>{{ selectedPlan?.upgrade ? localeData?.refund_amount : localeData?.due_amount }}</p>
+                                <amount-field
+                                    [amount]="selectedPlan?.refundAmount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                ></amount-field>
+                            </div>
+                        }
                         <div *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="d-flex justify-content-between py-3">
                                 <p class="strong">{{ localeData?.final_amount }}</p>

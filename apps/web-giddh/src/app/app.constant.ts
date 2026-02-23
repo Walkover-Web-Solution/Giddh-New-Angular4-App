@@ -705,6 +705,19 @@ export const PaymentProvider = {
     PAYU: 'PAYU'
 };
 
+/** Plan duration */
+export const PlanDuration = {
+    MONTHLY: 'MONTHLY',
+    YEARLY: 'YEARLY',
+    DAILY: 'DAILY'
+} as const;
+
+/** Entity/region codes used in subscription and plan logic */
+export const EntityCode = {
+    IND: 'IND',
+    GBR: 'GBR'
+} as const;
+
 /** Weekdays enum */
 export enum WeekdaysEnum {
     DAILY = 'daily',
