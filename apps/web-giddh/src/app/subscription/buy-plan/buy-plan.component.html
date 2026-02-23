@@ -757,7 +757,7 @@
                                                 formControlName="paymentProvider"
                                                 [providers]="filteredPaymentProviders"
                                                 [label]="localeData?.payment_provider"
-                                                [required]="!isFreePlan(selectedPlan, selectedDuration())"
+                                                [required]="false"
                                                 [showError]="isFormSubmitted() && !thirdStepForm.get('paymentProvider')?.value"
                                                 [errorMessage]="localeData?.please_select_payment_provider"
                                                 (valueChange)="onPaymentProviderChange()"
