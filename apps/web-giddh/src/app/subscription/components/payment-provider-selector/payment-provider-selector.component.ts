@@ -2,14 +2,7 @@ import { ChangeDetectionStrategy, Component, forwardRef, input, output, signal }
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
-
-/** Represents a single payment provider option */
-export interface PaymentProviderOption {
-    /** Display label */
-    label: string;
-    /** Provider value key (used for icon filename) */
-    value: string;
-}
+import { IOption } from '../../../app.constant';
 
 @Component({
     selector: 'payment-provider-selector',
@@ -27,7 +20,7 @@ export interface PaymentProviderOption {
 })
 export class PaymentProviderSelectorComponent implements ControlValueAccessor {
     /** List of payment provider options to display */
-    readonly providers = input<PaymentProviderOption[]>([]);
+    readonly providers = input<IOption[]>([]);
     /** Label text shown above the radio group */
     readonly label = input<string>('Payment Provider');
     /** Whether to show the required asterisk */
