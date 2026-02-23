@@ -752,7 +752,9 @@
                                                 formControlName="paymentProvider"
                                                 [providers]="filteredPaymentProviders"
                                                 [label]="localeData?.payment_provider"
-                                                [required]="false"
+                                                [required]="
+                                                    !isFreePlan(selectedPlan, firstStepForm.get('duration')?.value) && payType === 'buy'
+                                                "
                                                 [showError]="isFormSubmitted() && !thirdStepForm.get('paymentProvider')?.value"
                                                 [errorMessage]="localeData?.please_select_payment_provider"
                                                 (valueChange)="onPaymentProviderChange()"
