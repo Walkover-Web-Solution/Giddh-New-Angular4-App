@@ -1552,15 +1552,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /**
      * This will use for on submit company form
      *
+     * @param {('buy' | 'trial')} type
      * @return {*}  {void}
      * @memberof BuyPlanComponent
      */
-    public onSubmit(type: string): void {
+    public onSubmit(type: 'buy' | 'trial'): void {
         const isTrial = type === 'trial';
         this.payType = type;
         this.isFormSubmitted.set(false);
         
-        const isPaymentProviderRequired = this.payType === 'buy' && !this.subscriptionForm.value.thirdStepForm?.paymentProvider;
+        // If the plan is free else payment provider not selected, payment provider is not required
+        const isPaymentProviderRequired = !this.isFreePlan(this.selectedPlan, this.selectedDuration()) && (this.payType === 'buy' && !this.subscriptionForm.value.thirdStepForm?.paymentProvider);
         
         if (isPaymentProviderRequired) {
             this.thirdStepForm.get('paymentProvider')?.setErrors({ required: true });
