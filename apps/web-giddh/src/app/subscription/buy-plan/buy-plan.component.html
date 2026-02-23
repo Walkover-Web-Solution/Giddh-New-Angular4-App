@@ -759,7 +759,7 @@
                                                 [label]="localeData?.payment_provider"
                                                 [required]="!isFreePlan(selectedPlan, selectedDuration())"
                                                 [showError]="isFormSubmitted() && !thirdStepForm.get('paymentProvider')?.value"
-                                                [errorMessage]="localeData?.select_provider"
+                                                [errorMessage]="localeData?.please_select_payment_provider"
                                                 (valueChange)="onPaymentProviderChange()"
                                             ></payment-provider-selector>
 

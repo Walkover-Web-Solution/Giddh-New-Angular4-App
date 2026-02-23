@@ -79,6 +79,8 @@ export class AddExtraTransactionComponent implements OnInit, OnDestroy {
         if (navigation?.extras?.state) {
             this.subscriptionData = navigation.extras.state['subscriptionData'];
             this.regionCode = this.subscriptionData?.region?.code ?? '';
+        } else {
+            this.goBack();
         }
     }
 
@@ -167,8 +169,8 @@ export class AddExtraTransactionComponent implements OnInit, OnDestroy {
         const request = {
             subscriptionId: this.subscriptionId,
             paymentProvider: formValue.paymentProvider,
-            totalInvoicesToPurchase: String(formValue.totalInvoicesToPurchase),
-            totalBillsToPurchase: String(formValue.totalBillsToPurchase),
+            totalInvoicesToPurchase: Number(formValue.totalInvoicesToPurchase ?? 0),
+            totalBillsToPurchase: Number(formValue.totalBillsToPurchase ?? 0),
             duration: PlanDuration.YEARLY
         };
         this.buyExtraVoucherInProgress = true;
