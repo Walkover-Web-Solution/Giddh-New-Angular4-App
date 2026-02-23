@@ -1408,7 +1408,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const entityCode = this.selectedPlan?.entityCode;
 
         const filterProviders = (providers: string[]) => {
-            this.filteredPaymentProviders = this.allPaymentProviders.filter(p => providers.includes(p.value));
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider.value));
             if (this.filteredPaymentProviders?.length === 1) {
                 this.thirdStepForm.get('paymentProvider')?.patchValue(providers[0]);
             }
@@ -1417,7 +1417,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (entityCode === EntityCode.GBR) {
             // GBR: GoCardless/PayPal/PayU for recurring, Razorpay/PayU for yearly
             if (this.isMonthly() || this.isDaily()) {
-                this.filteredPaymentProviders = this.allPaymentProviders.filter(p => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL, PaymentProvider.PAYU].includes(p.value));
+                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL, PaymentProvider.PAYU].includes(provider.value));
             } else if (this.isYearly()) {
                 filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
             }

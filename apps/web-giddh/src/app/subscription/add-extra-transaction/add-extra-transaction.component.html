@@ -1,4 +1,10 @@
-<div appTranslate [file]="'subscription'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
+<div
+    appTranslate
+    [file]="'subscription'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div class="p-4 max-w-1000 mx-auto">
         <div class="mb-4">
             <h2 class="mb-0 font-size-20 font-weight-semibold">{{ localeData?.add_extra_transaction }}</h2>
