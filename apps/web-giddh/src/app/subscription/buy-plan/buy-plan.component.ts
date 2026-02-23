@@ -108,7 +108,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         giddhBalanceDecimalPlaces: 2
     };
     /** True if form is submitted to show error if available */
-    public isFormSubmitted: boolean = false;
+    public isFormSubmitted = signal<boolean>(false);
     /** Hold selected plan*/
     public selectedPlan: any;
     /** Hold session source observable*/
@@ -1248,17 +1248,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public nextStepForm(): void {
-        this.isFormSubmitted = false;
+        this.isFormSubmitted.set(false);
         if (this.selectedStep === 0 && this.firstStepForm.invalid) {
-            this.isFormSubmitted = true;
+            this.isFormSubmitted.set(true);
             return;
         }
         if (this.selectedStep === 1 && this.secondStepForm.invalid) {
-            this.isFormSubmitted = true;
+            this.isFormSubmitted.set(true);
             return;
         }
         if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
-            this.isFormSubmitted = true;
+            this.isFormSubmitted.set(true);
             return;
         }
 
@@ -1507,17 +1507,28 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /**
      * This will use for on submit company form
      *
+     * @param {('buy' | 'trial')} type
      * @return {*}  {void}
      * @memberof BuyPlanComponent
      */
-    public onSubmit(type: string): void {
+    public onSubmit(type: 'buy' | 'trial'): void {
         const isTrial = type === 'trial';
         this.payType = type;
-        this.isFormSubmitted = false;
-
+        this.isFormSubmitted.set(false);
+        
+        // If the plan is free else payment provider not selected, payment provider is not required
+        const isPaymentProviderRequired = !this.isFreePlan(this.selectedPlan, this.selectedDuration()) && (this.payType === 'buy' && !this.subscriptionForm.value.thirdStepForm?.paymentProvider);
+        
+        if (isPaymentProviderRequired) {
+            this.thirdStepForm.get('paymentProvider')?.setErrors({ required: true });
+            this.thirdStepForm.get('paymentProvider')?.markAsTouched();
+        } else {
+            this.thirdStepForm.get('paymentProvider')?.setErrors(null);
+            this.thirdStepForm.get('paymentProvider')?.updateValueAndValidity();
+        }
         setTimeout(() => {
             if (this.subscriptionForm.invalid) {
-                this.isFormSubmitted = true;
+                this.isFormSubmitted.set(true);
                 return;
             }
             let mobileNumber = this.subscriptionForm.value.secondStepForm.mobileNumber?.replace(/\+/g, '');
