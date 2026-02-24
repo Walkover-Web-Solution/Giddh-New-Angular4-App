@@ -485,16 +485,13 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         setTimeout(() => {
             if (item && item.type === 'MENU') {
-                if (item.additional && item.additional.tab) {
+                if (item.additional) {
                     if (item.uniqueName.includes('?')) {
                         // Clean URL by removing query parameters
                         item.uniqueName = item.uniqueName.split('?')[0];
                     }
                     this.router.navigate([item.uniqueName], {
-                        queryParams: {
-                            tab: item.additional.tab,
-                            tabIndex: item.additional.tabIndex
-                        }
+                        queryParams: item.additional
                     });
                 } else {
                     this.router.navigate([item.uniqueName]);
