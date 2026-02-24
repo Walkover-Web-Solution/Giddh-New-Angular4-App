@@ -64,6 +64,7 @@
                             </div>
                             <div class="col-6 mobile-number mobile-number-wrapper" *ngIf="showMobileField">
                                 <mobile-number-input
+                                    #mobileNumberInput
                                     formControlName="mobile"
                                     [label]="commonLocaleData?.app_mobile_number"
                                     [required]="true"
