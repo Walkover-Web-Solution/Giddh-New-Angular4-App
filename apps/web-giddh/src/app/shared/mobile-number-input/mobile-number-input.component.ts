@@ -1194,6 +1194,32 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, OnChanges,
     }
 
     /**
+     * Sets the country flag/dial code programmatically based on a calling code
+     * Used externally (e.g., when country selection changes) to update the flag
+     * without affecting the mobile number value
+     *
+     * @param {string} callingCode - Calling code without '+' (e.g., '91' for India, '44' for UK)
+     * @memberof MobileNumberInputComponent
+     */
+    public setDialCode(callingCode: string): void {
+        if (!callingCode) {
+            return;
+        }
+        const dialCode = callingCode.startsWith('+') ? callingCode : `+${callingCode}`;
+        const country = this.geolocationService.mapCountryCodeToCountry(
+            this.DEFAULT_COUNTRY_MAPPINGS[dialCode]
+        ) ?? this.countries.find(c => c.dialCode === dialCode) ?? null;
+
+        if (country) {
+            this.countrySetProgrammatically = true;
+            this.selectedCountry = country;
+            this.countryControl.setValue(country, { emitEvent: false });
+            this.updateValidators();
+            this.countryChanged.emit(country);
+        }
+    }
+
+    /**
      * Gets the complete phone number with country code
      *
      * @returns {string} Complete phone number
