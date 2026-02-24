@@ -201,6 +201,7 @@
                                     [label]="commonLocaleData?.app_mobile_number"
                                     [formControl]="firstStepForm.get('mobile')"
                                     [required]="false"
+                                    [disabled]="isMobileNumberVerified"
                                     [useImageFlags]="true"
                                 ></mobile-number-input>
                             </div>
