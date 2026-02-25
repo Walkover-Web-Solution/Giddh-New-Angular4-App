@@ -25,7 +25,7 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     selector: 'filing-header',
     templateUrl: 'filing-header.component.html',
     styleUrls: ['filing-header.component.scss'],
-    standalone:false
+    standalone: false
 })
 export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -156,18 +156,24 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
             }
             this.selectedGst = params['return_type'];
+            if (!this.router.url.includes('transaction') && !this.router.url.includes('hsn-summary')) {
+                this.getOverView();
+            }
         });
+    }
 
+    /**
+     * This will get the overview of the gst
+     * 
+     * @memberof FilingHeaderComponent
+     */
+    protected getOverView(): void {
         let request: GstOverViewRequest = new GstOverViewRequest();
         request.from = this.currentPeriod.from;
         request.to = this.currentPeriod.to;
         request.gstin = this.activeCompanyGstNumber;
-        if (this.selectedGst === GstReport.Gstr1) {
-            this.navigateToOverview();
-            this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
-        } else if (this.selectedGst === GstReport.Gstr2) {
-            this.navigateToOverview();
-            this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
+        if (this.selectedGst === GstReport.Gstr1 || this.selectedGst === GstReport.Gstr2) {
+            this.store.dispatch(this.reconcileAction.GetOverView(this.selectedGst, request));
         }
     }
 
@@ -235,7 +241,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (selectedService) {
             this.selectedService = selectedService;
         }
-        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {...ASIDE_PANE_CONFIG, autoFocus: false});
+        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, { ...ASIDE_PANE_CONFIG, autoFocus: false });
     }
 
     /**
@@ -336,11 +342,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             };
             this.isMonthSelected = true;
             this.store.dispatch(this.reconcileAction.SetSelectedPeriod(this.currentPeriod));
-            if (this.selectedGst === GstReport.Gstr1) {
-                this.navigateToOverview();
-            } else {
-                this.navigateToOverview();
-            }
+            this.navigateToOverview();
         }
 
     }
