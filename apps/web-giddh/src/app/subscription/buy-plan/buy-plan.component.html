@@ -785,7 +785,7 @@
                                                 </mat-radio-group>
                                             }
 
-                                            @if (isMonthly()) {
+                                            @if (isMonthly() || isDaily()) {
                                                 <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
                                                     <span class="font-size-14 text-primary font-weight-semibold">
                                                         {{ localeData?.auto_pay }}
