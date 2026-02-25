@@ -1,0 +1,127 @@
+@if (subscriptionData) {
+    <div
+        appTranslate
+        [file]="'subscription'"
+        (commonLocaleData)="commonLocaleData = $event"
+        (localeData)="localeData = $event"
+        (translationComplete)="translationComplete($event)"
+    >
+        <div class="p-4 max-w-1000 mx-auto">
+            <div class="mb-4">
+                <h2 class="mb-0 font-size-20 font-weight-semibold">{{ localeData?.add_extra_transaction }}</h2>
+                <p class="text-light mb-0 font-size-13">{{ localeData?.add_extra_transaction_subtitle }}</p>
+            </div>
+
+            <form [formGroup]="extraTransactionForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+                <div class="row">
+                    <!-- Left: Form -->
+                    <div class="col-md-7">
+                        <!-- Quantity Section -->
+                        <mat-card class="mb-3 min-h-150">
+                            <mat-card-content class="p-3">
+                                <p class="mb-1">{{ localeData?.select_quantity }}</p>
+                                <p class="text-light font-size-12 mb-3">{{ localeData?.select_quantity_hint }}</p>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <mat-label>{{ localeData?.invoice_count }}</mat-label>
+                                            <input
+                                                matInput
+                                                type="number"
+                                                formControlName="totalInvoicesToPurchase"
+                                                placeholder="0"
+                                                min="0"
+                                            />
+                                            @if (extraTransactionForm.get('totalInvoicesToPurchase')?.errors?.['min']) {
+                                                <mat-error>{{ localeData?.must_be_zero_or_more }}</mat-error>
+                                            }
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-6">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <mat-label>{{ localeData?.bill_count }}</mat-label>
+                                            <input matInput type="number" formControlName="totalBillsToPurchase" placeholder="0" min="0" />
+                                            @if (extraTransactionForm.get('totalBillsToPurchase')?.errors?.['min']) {
+                                                <mat-error>{{ localeData?.must_be_zero_or_more }}</mat-error>
+                                            }
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                @if (isFormSubmitted() && extraTransactionForm.errors?.['atLeastOneRequired']) {
+                                    <mat-error class="font-size-12">{{ localeData?.at_least_one_voucher_required }}</mat-error>
+                                }
+                            </mat-card-content>
+                        </mat-card>
+
+                        <!-- Payment Provider Section -->
+                        <mat-card class="outline-card min-h-150">
+                            <mat-card-content class="p-3">
+                                <payment-provider-selector
+                                    formControlName="paymentProvider"
+                                    [providers]="filteredPaymentProviders"
+                                    [label]="localeData?.payment_provider"
+                                    [required]="true"
+                                    [showError]="isFormSubmitted() && !extraTransactionForm.get('paymentProvider')?.value"
+                                    [errorMessage]="localeData?.please_select_payment_provider"
+                                ></payment-provider-selector>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+                    <!-- Right: Order Summary -->
+                    <div class="col-md-5 d-flex flex-column justify-content-between">
+                        <mat-card class="mb-3">
+                            <mat-card-content class="p-3">
+                                <p class="font-size-14 font-weight-semibold mb-3">{{ localeData?.order_summary }}</p>
+
+                                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                    <span class="text-light font-size-13">{{ localeData?.price_per_unit }}</span>
+                                    <amount-field
+                                        [amount]="getPriceInfo().price"
+                                        [currencySymbol]="getPriceInfo().symbol"
+                                        [currencyCode]="getPriceInfo().code"
+                                    ></amount-field>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                    <span class="text-light font-size-13">{{ localeData?.invoices }}</span>
+                                    <span class="font-size-13">{{ extraTransactionForm.get('totalInvoicesToPurchase')?.value || 0 }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                    <span class="text-light font-size-13">{{ localeData?.bills }}</span>
+                                    <span class="font-size-13">{{ extraTransactionForm.get('totalBillsToPurchase')?.value || 0 }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center pt-3">
+                                    <span class="font-size-14 font-weight-semibold">{{ localeData?.total_amount }}</span>
+                                    <amount-field
+                                        [amount]="getTotalAmount()"
+                                        [currencySymbol]="getPriceInfo().symbol"
+                                        [currencyCode]="getPriceInfo().code"
+                                    ></amount-field>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <div class="d-flex flex-column row-gap-1">
+                            <button
+                                matButton="filled"
+                                type="submit"
+                                class="w-100"
+                                [disabled]="buyExtraVoucherInProgress || captureExtraVoucherInProgress"
+                            >
+                                {{ localeData?.proceed_to_pay }}
+                            </button>
+                            <button matButton="outlined" type="button" class="w-100" (click)="goBack()">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
