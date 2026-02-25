@@ -1,4 +1,4 @@
-<div class="add-company-wrapper">
+<div class="add-company-wrapper max-w-1000">
     <div
         appTranslate
         [file]="'create-company'"
@@ -25,7 +25,14 @@
                 class="bg-transparent"
             >
                 <mat-step [stepControl]="firstStepForm" role="tabpanel">
-                    <form [formGroup]="firstStepForm" name="firstStepForm" [autocomplete]="'disabled'" autofill="off" novalidate>
+                    <form
+                        class="max-w-600 mx-auto mt-5"
+                        [formGroup]="firstStepForm"
+                        name="firstStepForm"
+                        [autocomplete]="'disabled'"
+                        autofill="off"
+                        novalidate
+                    >
                         <ng-template matStepLabel>{{ commonLocaleData?.app_company_name }}</ng-template>
                         <div class="row row-gap-15">
                             <div class="col-lg-12">
@@ -47,6 +54,7 @@
                                     [placeholder]="localeData?.enter_country_name"
                                     [options]="countries"
                                     (selectedOption)="selectCountry($event)"
+                                    formControlName="country"
                                     [labelValue]="selectedCountry"
                                     [showError]="isFormSubmitted && !firstStepForm.get('country')?.value"
                                 ></reactive-dropdown-field>
@@ -167,7 +175,7 @@
                     </form>
                 </mat-step>
                 <mat-step [stepControl]="secondStepForm" name="secondStepForm" role="tabpanel">
-                    <form [formGroup]="secondStepForm" autocomplete="off" novalidate>
+                    <form class="max-w-600 mx-auto mt-5" [formGroup]="secondStepForm" autocomplete="off" novalidate>
                         <ng-template matStepLabel>{{ localeData?.company_address }}</ng-template>
                         <div class="row row-gap-15">
                             <div class="col-lg-12 fill-form">
@@ -211,6 +219,7 @@
                                     [label]="localeData?.business_type"
                                     [placeholder]="localeData?.select_business_type"
                                     [options]="businessTypeList"
+                                    formControlName="businessType"
                                     (selectedOption)="selectBusinessType($event.value)"
                                     [labelValue]="isOtherCountry ? businessTypeList[0].label : ''"
                                 ></reactive-dropdown-field>
@@ -375,7 +384,7 @@
                 </mat-step>
                 <ng-container *ngIf="isNewUserLoggedIn">
                     <mat-step [stepControl]="thirdStepForm">
-                        <form [formGroup]="thirdStepForm" name="thirdStepForm" autocomplete="off" novalidate>
+                        <form class="max-w-600 mx-auto mt-5" [formGroup]="thirdStepForm" name="thirdStepForm" autocomplete="off" novalidate>
                             <ng-template matStepLabel>{{ commonLocaleData?.app_share }}</ng-template>
                             <div class="row-gap-15">
                                 <div class="d-flex col-lg-12 pad0">
