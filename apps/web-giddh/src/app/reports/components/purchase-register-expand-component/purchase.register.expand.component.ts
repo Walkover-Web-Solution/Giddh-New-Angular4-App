@@ -355,8 +355,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                     to: params.to,
                     branchUniqueName: params.branchUniqueName,
                     interval: params.interval,
-                    selectedMonth: params.selectedMonth,
-                    groupBy: this.currentGroupBy()
+                    selectedMonth: params.selectedMonth
                 },
             });
         });

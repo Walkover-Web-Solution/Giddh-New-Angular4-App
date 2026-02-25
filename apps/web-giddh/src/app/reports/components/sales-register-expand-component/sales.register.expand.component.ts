@@ -335,7 +335,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
      */
     public gotoSalesRegister(): void {
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
-            this.router.navigate(['pages', 'reports', 'sales-register'], { queryParams: { from: params.from, to: params.to, branchUniqueName: params.branchUniqueName, interval: params.interval, selectedMonth: params.selectedMonth, groupBy: this.currentGroupBy() } });
+            this.router.navigate(['pages', 'reports', 'sales-register'], { queryParams: { from: params.from, to: params.to, branchUniqueName: params.branchUniqueName, interval: params.interval, selectedMonth: params.selectedMonth} });
         });
     }
 
