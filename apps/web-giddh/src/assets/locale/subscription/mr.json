@@ -170,5 +170,6 @@
         "total_transaction_count": "एकूण व्यवहार गणना",
         "extra_invoice_count": "अतिरिक्त चालान गणना",
         "refund_amount": "परतावा रक्कम",
-        "due_amount": "देय रक्कम"
+        "due_amount": "देय रक्कम",
+        "carry_forward_count": "कॅरी फॉरवर्ड गणना"
 	}
