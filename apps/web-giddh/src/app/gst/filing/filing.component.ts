@@ -315,6 +315,8 @@ export class FilingComponent implements OnInit, OnDestroy {
         if (event) {
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
+            // show "Pull from GSTN" button for Reconcilation and File Return tab
+            this.showTaxPro = event.index === 1 || event.index === 2;
         }
     }
 }

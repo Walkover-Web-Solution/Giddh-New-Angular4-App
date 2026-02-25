@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="panel-body pl-0 pr-0 position-relative">
-                            <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
+                            <div class="dashboard-reconnect-block" *ngIf="requestInFlight()">
                                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </div>
                             <div class="chart-div">
@@ -239,8 +239,8 @@
                         </div>
                     </div>
                 </div>
-                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="requestInFlight"></giddh-page-loader>
-                <div [ngClass]="{ 'd-none': requestInFlight }">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="requestInFlight()"></giddh-page-loader>
+                <div [ngClass]="{ 'd-none': requestInFlight() }">
                     <div class="d-flex justify-content-center dashboard-line-chart-container">
                         <canvas id="revenueChartLargeCanvas" width="100%" height="300px" [hidden]="!chart"></canvas>
                     </div>
