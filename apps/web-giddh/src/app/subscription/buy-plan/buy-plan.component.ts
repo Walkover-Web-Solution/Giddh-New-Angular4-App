@@ -1554,7 +1554,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 subscriptionId: null
             }
 
-            if (this.isMonthly()) {
+            if (this.isMonthly() || this.isDaily()) {
                 request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
             }
             if ((this.isMonthly() || this.isDaily()) && this.selectedPlan?.entityCode !== EntityCode.GBR) {
