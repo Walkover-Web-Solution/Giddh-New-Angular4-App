@@ -110,7 +110,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** True if form is submitted to show error if available */
     public isFormSubmitted = signal<boolean>(false);
     /** Hold selected plan*/
-    public selectedPlan: any;
+    public selectedPlan = signal<any>(null);
+    /** Computed ViewModel for plan summary card visibility and section flags */
+    protected readonly planUI = computed(() => {
+        const plan = this.selectedPlan();
+        const hasNew = (plan?.newInvoiceCount ?? 0) > 0 || (plan?.newBillCount ?? 0) > 0;
+        const hasExtra = (plan?.extraInvoicesUsed ?? 0) > 0 || (plan?.extraBillUsed ?? 0) > 0;
+        const hasCarry = (plan?.carryForwardInvoices ?? 0) > 0 || (plan?.carryForwardBills ?? 0) > 0;
+        return {
+            showCard: hasNew || hasExtra || hasCarry,
+            hasNew,
+            hasExtra,
+            hasCarry,
+            totalExtra: (plan?.extraInvoicesUsed ?? 0) + (plan?.extraBillUsed ?? 0)
+        };
+    });
     /** Hold session source observable*/
     public session$: Observable<userLoginStateEnum>;
     /** Hold state source observable*/
@@ -243,7 +257,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Computed signal: true when selected duration is DAILY */
     protected readonly isDaily = computed(() => this.selectedDuration() === PlanDuration.DAILY);
     /** Computed signal: true when selected plan entity code is IND */
-    protected readonly isIndian = computed(() => this.selectedPlan?.entityCode === EntityCode.IND);
+    protected readonly isIndian = computed(() => this.selectedPlan()?.entityCode === EntityCode.IND);
     /** Hold entity code constant reference for template usage */
     public readonly entityCode: typeof EntityCode = EntityCode;
     /** This will hold razorpay key */
@@ -354,15 +368,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
                 this.planList$.pipe(filter(Boolean), take(1)).subscribe(result => {
                     if (result) {
-                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                        this.selectedPlan = { ...this.selectedPlan, ...response };
+                        this.selectedPlan.set(result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value));
+                        this.selectedPlan.set({ ...this.selectedPlan(), ...response });
                     }
                 });
             } else {
                 this.planList$.pipe(filter(Boolean), take(1)).subscribe(result => {
                     if (result) {
-                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                        this.selectedPlan = { ...this.selectedPlan, ...this.calculationResponse };
+                        this.selectedPlan.set(result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value));
+                        this.selectedPlan.set({ ...this.selectedPlan(), ...this.calculationResponse });
                     }
                 });
             }
@@ -1233,8 +1247,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         }
         this.planList$.pipe(filter(Boolean), take(1)).subscribe(result => {
             if (result) {
-                this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                this.isUserManualChangePlan = this.selectedPlan?.uniqueName !== this.viewSubscriptionData?.planUniqueName;
+                this.selectedPlan.set(result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value));
+                this.isUserManualChangePlan = this.selectedPlan()?.uniqueName !== this.viewSubscriptionData?.planUniqueName;
                 this.setFinalAmount();
                 this.changeDetection.detectChanges();
             }
@@ -1264,7 +1278,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.planList$.pipe(filter(Boolean), take(1)).subscribe(result => {
             if (result) {
-                this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                this.selectedPlan.set(result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value));
             }
         });
         if (this.firstStepForm?.get('promoCode')?.value) {
@@ -1351,23 +1365,23 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.inputData = [];
         if (!this.subscriptionId) {
             const filteredPlans = this.isYearly() ? this.yearlyPlans : this.monthlyPlans;
-            this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+            this.selectedPlan.set(filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1]);
             filteredPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
         } else if (isToggle) {
             const filteredPlans = this.isYearly() ? this.yearlyPlans : this.monthlyPlans;
-            this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+            this.selectedPlan.set(filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1]);
             this.inputData.push(...filteredPlans);
         } else {
             let subscriptionPlan = this.allPlans?.filter(plan => plan?.uniqueName === this.viewSubscriptionData?.planUniqueName);
-            this.selectedPlan = subscriptionPlan[0];
+            this.selectedPlan.set(subscriptionPlan[0]);
             const filteredPlans = this.viewSubscriptionData?.period === PlanDuration.YEARLY ? this.yearlyPlans : this.monthlyPlans;
             filteredPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
         }
-        this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
+        this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan()?.uniqueName);
         this.thirdStepForm.get('paymentProvider')?.patchValue(null);
         this.setFinalAmount();
         this.changeDetection.detectChanges();
@@ -1388,16 +1402,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             return;
         }
         const reqObj = {
-            planUniqueName: this.selectedPlan?.uniqueName,
+            planUniqueName: this.selectedPlan()?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
             duration: this.firstStepForm.get('duration').value,
-            countryCode: this.isNewUserLoggedIn ? this.selectedPlan?.entityCode : (this.secondStepForm.get('country').value?.value ?? this.viewSubscriptionData?.region?.code)
+            countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.value ?? this.viewSubscriptionData?.region?.code)
         }
 
         if (this.isChangePlan || this.isRenewPlan) {
             reqObj['subscriptionId'] = this.subscriptionId;
         }
-        if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
+        if (this.selectedPlan()?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
         if (!this.removePromoCode && !this.thirdStepForm.get('paymentProvider')?.value) {
@@ -1405,7 +1419,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.thirdStepForm.get('paymentProvider')?.patchValue(null);
         }
 
-        const entityCode = this.selectedPlan?.entityCode;
+        const entityCode = this.selectedPlan()?.entityCode;
 
         const filterProviders = (providers: string[]) => {
             this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider.value));
@@ -1557,7 +1571,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (this.isMonthly() || this.isDaily()) {
                 request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
             }
-            if ((this.isMonthly() || this.isDaily()) && this.selectedPlan?.entityCode !== EntityCode.GBR) {
+            if ((this.isMonthly() || this.isDaily()) && this.selectedPlan()?.entityCode !== EntityCode.GBR) {
                 request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
             }
 

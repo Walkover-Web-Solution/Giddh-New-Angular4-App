@@ -106,7 +106,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title font-size-15"
                                                     [ngClass]="{
-                                                        'active-plan': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <div class="plan-content d-flex flex-column h-100">
@@ -336,7 +336,7 @@
                                                 <div
                                                     class="grid-title-list font-size-15 plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span class="sub-plan-name">
@@ -361,7 +361,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span>
@@ -385,7 +385,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span>
@@ -409,7 +409,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
@@ -431,7 +431,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <i class="icon-tick"></i>
@@ -448,7 +448,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
@@ -466,7 +466,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <i class="icon-tick"></i>
@@ -481,7 +481,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <i class="icon-tick"></i>
@@ -498,7 +498,7 @@
                                                 <div
                                                     class="grid-title-list bottom-buy-button plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
@@ -520,7 +520,7 @@
                                                 <div
                                                     class="grid-title-list bottom-buy-button plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
@@ -542,8 +542,8 @@
                                                 <div
                                                     class="grid-title-list bottom-buy-button plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
-                                                        'active-plan-td-bottom': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td-bottom': selectedPlan()?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
@@ -743,7 +743,7 @@
                                     class="new-plan mt-4"
                                     *ngIf="
                                         filteredPaymentProviders?.length > 1 ||
-                                        ((isMonthly() || isYearly() || isDaily()) && selectedPlan?.entityCode === entityCode.IND)
+                                        ((isMonthly() || isYearly() || isDaily()) && selectedPlan()?.entityCode === entityCode.IND)
                                     "
                                 >
                                     <mat-card class="outline-card">
@@ -762,7 +762,7 @@
 
                                             @if (
                                                 (isMonthly() || isDaily()) &&
-                                                selectedPlan?.entityCode === entityCode.IND &&
+                                                selectedPlan()?.entityCode === entityCode.IND &&
                                                 thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY
                                             ) {
                                                 <!-- Make sure in at last Razorpay is show in list -->
@@ -773,7 +773,7 @@
                                                     <mat-radio-button
                                                         color="primary"
                                                         value="UPI"
-                                                        *ngIf="selectedPlan?.entityCode === entityCode.IND"
+                                                        *ngIf="selectedPlan()?.entityCode === entityCode.IND"
                                                     >
                                                         {{ localeData?.upi }}
                                                     </mat-radio-button>
@@ -820,40 +820,58 @@
             <p class="font-size-16 mb-3 strong d-flex align-items-center plan-summary-heading">
                 {{ localeData?.plan_summary }}
             </p>
-            @if (
-                selectedPlan?.newInvoiceCount > 0 ||
-                selectedPlan?.newBillCount > 0 ||
-                selectedPlan?.extraInvoicesUsed > 0 ||
-                selectedPlan?.extraBillUsed > 0
-            ) {
+            @if (planUI().showCard) {
                 <mat-card class="outline-card mb-3">
                     <mat-card-content>
-                        @if (selectedPlan?.newInvoiceCount > 0 || selectedPlan?.newBillCount > 0) {}
-                        <div class="pb-3" [class.border-bottom]="selectedPlan?.extraInvoicesUsed > 0 || selectedPlan?.extraBillUsed > 0">
-                            <p class="pb-3">{{ localeData?.total_transaction_count }}</p>
-                            <ul class="pl-4">
-                                <li class="py-1">
-                                    <div class="d-flex justify-content-between">
-                                        <p>
-                                            {{ localeData?.invoice_count }}
-                                        </p>
-                                        <p>{{ selectedPlan?.newInvoiceCount }}</p>
-                                    </div>
-                                </li>
-                                <li class="py-1">
-                                    <div class="d-flex justify-content-between">
-                                        <p>
-                                            {{ localeData?.bill_count }}
-                                        </p>
-                                        <p>{{ selectedPlan?.newBillCount }}</p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        @if (selectedPlan?.extraInvoicesUsed > 0 || selectedPlan?.extraBillUsed > 0) {
-                            <div class="d-flex justify-content-between pt-3">
+                        @if (planUI().hasNew) {
+                            <div
+                                [class.pb-3]="planUI().hasExtra || planUI().hasCarry"
+                                [class.border-bottom]="planUI().hasExtra || planUI().hasCarry"
+                            >
+                                <p class="pb-3">{{ localeData?.total_transaction_count }}</p>
+                                <ul class="pl-4">
+                                    <li class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <p>{{ localeData?.invoice_count }}</p>
+                                            <p>{{ selectedPlan()?.newInvoiceCount }}</p>
+                                        </div>
+                                    </li>
+                                    <li class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <p>{{ localeData?.bill_count }}</p>
+                                            <p>{{ selectedPlan()?.newBillCount }}</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        @if (planUI().hasExtra) {
+                            <div
+                                class="d-flex justify-content-between pt-3"
+                                [class.border-bottom]="planUI().hasCarry"
+                                [class.pb-3]="planUI().hasCarry"
+                            >
                                 <p>{{ localeData?.extra_invoice_count }}</p>
-                                <p>{{ (selectedPlan?.extraInvoicesUsed || 0) + (selectedPlan?.extraBillUsed || 0) }}</p>
+                                <p>{{ planUI().totalExtra }}</p>
+                            </div>
+                        }
+                        @if (planUI().hasCarry) {
+                            <div [class.pt-3]="planUI().hasNew || planUI().hasExtra">
+                                <p class="pb-3">{{ localeData?.carry_forward_count }}</p>
+                                <ul class="pl-4">
+                                    <li class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <p>{{ localeData?.invoice_count }}</p>
+                                            <p>{{ selectedPlan()?.carryForwardInvoices }}</p>
+                                        </div>
+                                    </li>
+                                    <li class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <p>{{ localeData?.bill_count }}</p>
+                                            <p>{{ selectedPlan()?.carryForwardBills }}</p>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         }
                     </mat-card-content>
@@ -863,19 +881,19 @@
                 <form name="firstStepForm" autocomplete="off" novalidate [formGroup]="firstStepForm" name="firstStepForm">
                     <mat-card-content>
                         <div class="d-flex justify-content-between border-bottom py-3">
-                            <span>{{ selectedPlan?.name }}</span>
+                            <span>{{ selectedPlan()?.name }}</span>
                             <span *ngIf="isYearly()">
                                 <amount-field
-                                    [amount]="selectedPlan?.yearlyAmount"
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
+                                    [amount]="selectedPlan()?.yearlyAmount"
+                                    [currencySymbol]="selectedPlan()?.currency?.symbol"
+                                    [currencyCode]="selectedPlan()?.currency?.code"
                                 ></amount-field>
                             </span>
                             <span *ngIf="isMonthly() || isDaily()">
                                 <amount-field
-                                    [amount]="selectedPlan?.monthlyAmount"
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
+                                    [amount]="selectedPlan()?.monthlyAmount"
+                                    [currencySymbol]="selectedPlan()?.currency?.symbol"
+                                    [currencyCode]="selectedPlan()?.currency?.code"
                                 ></amount-field>
                             </span>
                         </div>
@@ -891,40 +909,40 @@
                                     {{ commonLocaleData?.app_amount }}
                                 </span>
                                 <amount-field
-                                    [amount]="selectedPlan?.planAmountBeforeDiscount ?? 0"
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
+                                    [amount]="selectedPlan()?.planAmountBeforeDiscount ?? 0"
+                                    [currencySymbol]="selectedPlan()?.currency?.symbol"
+                                    [currencyCode]="selectedPlan()?.currency?.code"
                                 ></amount-field>
                             </div>
                         </div>
                         <div
                             class="d-flex justify-content-between border-bottom py-3"
-                            *ngIf="selectedPlan?.promoCode || selectedPlan?.discount?.amount?.amountForAccount > 0"
+                            *ngIf="selectedPlan()?.promoCode || selectedPlan()?.discount?.amount?.amountForAccount > 0"
                         >
                             <p>
                                 <span class="strong">{{ commonLocaleData?.app_discount }} {{ commonLocaleData?.app_amount }}</span>
                             </p>
                             <amount-field
-                                [amount]="selectedPlan?.discount?.amount?.amountForAccount"
-                                [currencySymbol]="selectedPlan?.currency?.symbol"
-                                [currencyCode]="selectedPlan?.currency?.code"
+                                [amount]="selectedPlan()?.discount?.amount?.amountForAccount"
+                                [currencySymbol]="selectedPlan()?.currency?.symbol"
+                                [currencyCode]="selectedPlan()?.currency?.code"
                             ></amount-field>
                         </div>
                         <div class="d-flex justify-content-between border-bottom py-3">
                             <p>{{ commonLocaleData?.app_subtotal }}</p>
                             <amount-field
-                                [amount]="selectedPlan?.planAmountBeforeTax ?? 0"
-                                [currencySymbol]="selectedPlan?.currency?.symbol"
-                                [currencyCode]="selectedPlan?.currency?.code"
+                                [amount]="selectedPlan()?.planAmountBeforeTax ?? 0"
+                                [currencySymbol]="selectedPlan()?.currency?.symbol"
+                                [currencyCode]="selectedPlan()?.currency?.code"
                             ></amount-field>
                         </div>
-                        @if (selectedPlan?.refundAmount > 0) {
+                        @if (selectedPlan()?.refundAmount > 0) {
                             <div class="d-flex justify-content-between border-bottom py-3">
-                                <p>{{ selectedPlan?.upgrade ? localeData?.refund_amount : localeData?.due_amount }}</p>
+                                <p>{{ selectedPlan()?.upgrade ? localeData?.refund_amount : localeData?.due_amount }}</p>
                                 <amount-field
-                                    [amount]="selectedPlan?.refundAmount"
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
+                                    [amount]="selectedPlan()?.refundAmount"
+                                    [currencySymbol]="selectedPlan()?.currency?.symbol"
+                                    [currencyCode]="selectedPlan()?.currency?.code"
                                 ></amount-field>
                             </div>
                         }
@@ -934,12 +952,12 @@
                                 <span class="strong">
                                     <amount-field
                                         [amount]="finalPlanAmount"
-                                        [currencySymbol]="selectedPlan?.currency?.symbol"
-                                        [currencyCode]="selectedPlan?.currency?.code"
+                                        [currencySymbol]="selectedPlan()?.currency?.symbol"
+                                        [currencyCode]="selectedPlan()?.currency?.code"
                                     ></amount-field>
                                 </span>
                             </div>
-                            <p class="text-right" *ngIf="selectedPlan?.taxTotal >= 0">
+                            <p class="text-right" *ngIf="selectedPlan()?.taxTotal >= 0">
                                 {{ localeData?.including_tax }}
                             </p>
                         </div>
@@ -956,9 +974,9 @@
                                         />
                                         <div matSuffix>
                                             <span
-                                                *ngIf="!selectedPlan?.promoCode"
+                                                *ngIf="!selectedPlan()?.promoCode"
                                                 [ngClass]="{
-                                                    'promocode-button': selectedPlan?.promoCode,
+                                                    'promocode-button': selectedPlan()?.promoCode,
                                                 }"
                                                 aria-label="promocode"
                                                 class="text-primary cursor-pointer d-block px-1 py-3"
@@ -967,7 +985,7 @@
                                                 {{ commonLocaleData?.app_apply }}
                                             </span>
                                             <span
-                                                *ngIf="selectedPlan?.promoCode"
+                                                *ngIf="selectedPlan()?.promoCode"
                                                 aria-label="Clear"
                                                 class="text-primary cursor-pointer d-block px-1 py-3"
                                                 (click)="applyPromoCode('remove')"

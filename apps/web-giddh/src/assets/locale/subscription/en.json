@@ -170,5 +170,6 @@
         "total_transaction_count": "Total Transaction Count",
         "extra_invoice_count": "Extra Invoice Count",
         "refund_amount": "Refund Amount",
-        "due_amount": "Due Amount"
+        "due_amount": "Due Amount",
+        "carry_forward_count": "Carry Forward Count"
     }
