@@ -170,5 +170,6 @@
         "total_transaction_count": "कुल लेनदेन गणना",
         "extra_invoice_count": "अतिरिक्त चालान गणना",
         "refund_amount": "वापसी राशि",
-        "due_amount": "देय राशि"
+        "due_amount": "देय राशि",
+        "carry_forward_count": "कैरी फॉरवर्ड गणना"
 	}
