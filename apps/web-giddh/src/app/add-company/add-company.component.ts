@@ -32,6 +32,7 @@ import { PhoneNumberUtil } from 'google-libphonenumber';
 import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
 import { ServiceConfig } from "../services/service.config";
 import { environment } from "../../environments/environment.generated";
+import { MobileNumberInputComponent } from "../shared/mobile-number-input";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -49,6 +50,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('stepper') stepperIcon: any;
     /** Mobile number field instance */
     @ViewChild('mobileNoField', { static: false }) mobileNoField: ElementRef;
+    /** Mobile number field instance */
+    @ViewChild('mobileNumberInput', { static: false }) mobileNumberInput: MobileNumberInputComponent;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -960,23 +963,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.company.baseCurrency = event?.additional?.currency?.code;
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
 
-            if (this.showMobileField && this.firstStepForm.value.mobile) {
-                let mobileValue = this.firstStepForm.value.mobile;
-
-                try {
-                    const phoneUtil = PhoneNumberUtil.getInstance();
-                    const parsedNumber = phoneUtil.parse(mobileValue, '');
-                    mobileValue = parsedNumber.getNationalNumber().toString();
-                } catch (error) {
-                    mobileValue = mobileValue.replace(/^\+\d+/, '');
-                }
-
-                const currentDialCode = event?.additional?.callingCode || '';
-
-                if (mobileValue && currentDialCode) {
-                    mobileValue = `+${currentDialCode}${mobileValue}`;
-                }
-                this.firstStepForm.controls['mobile'].setValue(mobileValue);
+            if (this.showMobileField && !this.firstStepForm.value.mobile) {
+                this.mobileNumberInput.setDialCode(event?.additional?.callingCode || '');
             }
 
             this.getOnboardingFormByCountry(event);
