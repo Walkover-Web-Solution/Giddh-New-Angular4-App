@@ -118,6 +118,7 @@
                                     name="salesPerson"
                                     [multiple]="true"
                                     (selectionChange)="getPurchaseRegister(dateRange.from, dateRange.to)"
+                                    (closed)="!filteredSalesPersonList()?.length ? salesPerson.reset() : null"
                                     formControlName="salesPersonUniqueNames"
                                 >
                                     <ngx-mat-select-search
@@ -160,6 +161,7 @@
                                     [multiple]="true"
                                     formControlName="stateCodes"
                                     (selectionChange)="getPurchaseRegister(dateRange.from, dateRange.to)"
+                                    (closed)="!filteredStateList().length ? stateSearch.reset() : null"
                                 >
                                     <ngx-mat-select-search
                                         [placeholderLabel]="commonLocaleData?.app_select"
@@ -189,6 +191,7 @@
                                 [multiple]="true"
                                 formControlName="countryCodes"
                                 (selectionChange)="getPurchaseRegister(dateRange.from, dateRange.to)"
+                                (closed)="!filteredCountryList()?.length ? countrySearch.reset() : null"
                             >
                                 <ngx-mat-select-search
                                     [placeholderLabel]="commonLocaleData?.app_select"
@@ -238,6 +241,7 @@
                             [multiple]="true"
                             formControlName="accountUniqueNames"
                             (selectionChange)="getPurchaseRegister(dateRange.from, dateRange.to)"
+                            (closed)="accountReset()"
                         >
                             <ngx-mat-select-search
                                 [placeholderLabel]="commonLocaleData?.app_select"
