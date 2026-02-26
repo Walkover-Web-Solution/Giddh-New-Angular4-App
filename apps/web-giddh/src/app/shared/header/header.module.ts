@@ -23,6 +23,7 @@ import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { MatDividerModule } from "@angular/material/divider";
 import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
 import { TagsModule } from "../../settings/tags/tags.module";
+import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -56,7 +57,11 @@ import { TagsModule } from "../../settings/tags/tags.module";
         MatDividerModule,
         GenericAsideMenuAccountModule,
         MatTooltipModule,
-        TagsModule
+        TagsModule,
+        GiddhDatePipe
+    ],
+    providers: [
+        GiddhDatePipe
     ],
     exports: [
         HeaderComponent,

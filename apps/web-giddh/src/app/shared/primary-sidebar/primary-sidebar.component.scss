@@ -368,7 +368,7 @@ cdk-tree {
                     padding-top: 10px;
                     padding-bottom: 10px;
 
-                    min-width: 140px;
+                    min-width: 154px;
                     display: flex;
                     align-items: center;
 
@@ -378,6 +378,10 @@ cdk-tree {
 
                         &.icon-right {
                             transform: rotate(90deg);
+                        }
+
+                        &.icon-advance-search {
+                            font-size: 18px;
                         }
                     }
                 }

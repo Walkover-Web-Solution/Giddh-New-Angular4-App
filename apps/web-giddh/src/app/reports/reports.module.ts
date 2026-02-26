@@ -42,6 +42,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
 
 @NgModule({
@@ -97,7 +98,8 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         MatSelectModule,
         NgxMatSelectSearchModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        GiddhDatePipe
     ]
 })
 

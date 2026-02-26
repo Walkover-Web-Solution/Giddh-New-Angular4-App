@@ -1627,7 +1627,7 @@
                                                     (change)="entrySelected($event, txn.entryUniqueName, 'debit')"
                                                 ></mat-checkbox>
                                             </span>
-                                            <span>{{ txn.entryDate }}</span>
+                                            <span>{{ txn.entryDate | giddhDate }}</span>
                                         </div>
                                     </mat-grid-tile>
 
@@ -2024,7 +2024,7 @@
                                                     (change)="entrySelected($event, txn.entryUniqueName, 'credit')"
                                                 ></mat-checkbox>
                                             </span>
-                                            <span>{{ txn.entryDate }}</span>
+                                            <span>{{ txn.entryDate | giddhDate }}</span>
                                         </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile
@@ -3080,7 +3080,7 @@
                                         entrySelected($event, txn.entryUniqueName, txn.type === transactionType.Debit ? 'debit' : 'credit')
                                     "
                                 ></mat-checkbox>
-                                <span class="lh-1">{{ txn.entryDate }}</span>
+                                <span class="lh-1">{{ txn.entryDate | giddhDate }}</span>
                             </div>
                         </mat-grid-tile>
 

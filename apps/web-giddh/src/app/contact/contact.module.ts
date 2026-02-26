@@ -50,6 +50,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ResizableDirective } from '../shared/directives/resizable.directive';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -110,7 +111,8 @@ import { ResizableDirective } from '../shared/directives/resizable.directive';
         MatCardModule,
         AmountFieldComponentModule,
         HamburgerMenuModule,
-        ResizableDirective
+        ResizableDirective,
+        GiddhDatePipe
     ],
     providers: [
         GiddhNumberFormatPipe

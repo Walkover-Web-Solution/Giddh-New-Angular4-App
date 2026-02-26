@@ -26,6 +26,7 @@ import { BankIntegrationModule } from '../shared/bank-integration/bank-integrati
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -65,7 +66,8 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
         MatDialogModule,
         BankIntegrationModule,
         MatTooltipModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        GiddhDatePipe
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

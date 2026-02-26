@@ -37,6 +37,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDividerModule } from "@angular/material/divider";
 import { OnloadDirectiveModule } from "./directive/onload.module";
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 
 @NgModule({
@@ -83,6 +84,7 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         MatExpansionModule,
         MatDividerModule,
         OnloadDirectiveModule,
+        GiddhDatePipe
     ],
     exports: [VoucherComponent],
     declarations: [VoucherRendererComponent, VoucherComponent],

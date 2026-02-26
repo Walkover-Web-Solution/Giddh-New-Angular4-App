@@ -31,6 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -67,7 +68,8 @@ import { FinancialReportsModule } from '../financial-reports/financial-reports.m
         MatProgressSpinnerModule,
         HamburgerMenuModule,
         MatMenuModule,
-        FinancialReportsModule
+        FinancialReportsModule,
+        GiddhDatePipe
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

@@ -171,6 +171,10 @@
     .summary-wrapper {
         width: 320px;
         flex-shrink: 0;
+
+        ul {
+            list-style: disc !important;
+        }
     }
 
     .plan-summary-heading {

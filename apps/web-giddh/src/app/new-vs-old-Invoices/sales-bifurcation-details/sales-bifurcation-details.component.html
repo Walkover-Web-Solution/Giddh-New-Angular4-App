@@ -151,7 +151,7 @@
                         <span class="pl-3">{{ commonLocaleData?.app_date }}</span>
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <span class="pl-3">{{ element.date }}</span>
+                        <span class="pl-3">{{ element.date | giddhDate }}</span>
                     </td>
                 </ng-container>
                 <!-- Invoice Number Column -->

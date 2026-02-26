@@ -23,6 +23,7 @@ import { ActionMenuComponent } from '../shared/action-menu/action-menu.component
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 
 
@@ -58,7 +59,8 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         FroalaTemplateEditorModule,
         MatFormFieldModule,
         MatInputModule,
-        MatIconModule
+        MatIconModule,
+        GiddhDatePipe
     ],
     providers: []
 })

@@ -78,7 +78,7 @@
                                                     <span class="font-size-12 text-primary">
                                                         {{ item.voucherNumber ? item.voucherNumber : commonLocaleData?.app_not_available }}
                                                     </span>
-                                                    <span class="font-size-12 light-gray">| {{ item?.voucherDate }}</span>
+                                                    <span class="font-size-12 light-gray">| {{ item?.voucherDate | giddhDate }}</span>
                                                 </div>
                                                 <p
                                                     class="text-ellipsis w-100"
@@ -328,7 +328,7 @@
                         <ul class="invoice-history-list ml-3">
                             <li *ngFor="let log of filteredVoucherVersions" class="position-relative my-3">
                                 <p>
-                                    {{ log.estimateDate }},
+                                    {{ log.estimateDate | giddhDate }},
                                     <span *ngIf="voucherType === voucherTypeEnum.generateEstimate">{{ localeData?.estimate }}</span>
                                     <span *ngIf="voucherType !== voucherTypeEnum.generateEstimate">{{ voucherType }}</span>
                                     {{ getVoucherLogText(log) }}

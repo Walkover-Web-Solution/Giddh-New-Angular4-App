@@ -41,7 +41,6 @@
                         [options]="groupByOptions"
                         formControlName="groupBy"
                         [required]="true"
-                        (selectedOption)="handleGroupByChange($event)"
                     ></reactive-dropdown-field>
                 </div>
                 @if (reportForm?.get('groupBy')?.value === groupByEnum.Duration) {
